@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/premiumcentraal-boop/Cyclone-Cloak/schema/cloak-profile.schema.json",
+  "title": "Cyclone Cloak device profile",
+  "description": "A fully coherent virtual device identity served to a scoped app by the Cyclone Cloak hook engine.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "id", "name", "seed", "device"],
+  "properties": {
+    "schema_version": { "const": "0.1" },
+    "id": { "$ref": "#/$defs/uuid4" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 64 },
+    "seed": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "device": { "$ref": "#/$defs/device" },
+    "identifiers": { "$ref": "#/$defs/identifiers" },
+    "locale": { "$ref": "#/$defs/locale" },
+    "network": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "egress_hint": { "type": "string", "maxLength": 128 }
+      }
+    },
+    "integrity": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "verdict": { "enum": ["unknown", "basic", "device", "strong"] },
+        "checked_at": { "type": "string" },
+        "keybox_tag": { "type": "string" }
+      }
+    },
+    "meta": { "type": "object", "additionalProperties": true }
+  },
+  "$defs": {
+    "uuid4": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "device": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "manufacturer", "brand", "model", "product", "device", "hardware",
+        "fingerprint", "version_release", "sdk_int", "security_patch",
+        "build_id", "version_incremental", "build_date_utc", "first_api_level"
+      ],
+      "properties": {
+        "manufacturer": { "type": "string", "minLength": 1 },
+        "brand": { "type": "string", "minLength": 1 },
+        "model": { "type": "string", "minLength": 1 },
+        "product": { "type": "string", "minLength": 1 },
+        "device": { "type": "string", "minLength": 1 },
+        "hardware": { "type": "string", "minLength": 1 },
+        "fingerprint": {
+          "type": "string",
+          "pattern": "^[^/]+/[^/]+/[^:]+:[0-9.]+/[^/]+/[^:]+:[^:/]+/(release-keys|dev-keys)$"
+        },
+        "version_release": { "type": "string", "minLength": 1 },
+        "sdk_int": { "type": "integer", "minimum": 26 },
+        "security_patch": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
+        "build_id": { "type": "string", "minLength": 1 },
+        "version_incremental": { "type": "string", "minLength": 1 },
+        "build_date_utc": { "type": "integer", "minimum": 0 },
+        "first_api_level": { "type": "integer", "minimum": 26 },
+        "bootloader": { "type": "string" },
+        "baseband": { "type": "string" }
+      }
+    },
+    "identifiers": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "android_id": { "type": "string", "pattern": "^[0-9a-f]{16}$" },
+        "advertising_id": { "$ref": "#/$defs/uuid4" },
+        "app_set_id": { "$ref": "#/$defs/uuid4" },
+        "mac": { "type": "string", "pattern": "^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$" },
+        "bt_mac": { "type": "string", "pattern": "^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$" },
+        "imei_primary": { "type": "string", "pattern": "^[0-9]{15}$" },
+        "imei_secondary": { "type": "string", "pattern": "^[0-9]{15}$" },
+        "sim_serial": { "type": "string", "pattern": "^[0-9]{19,20}$" },
+        "gsf_id": { "type": "string", "pattern": "^[0-9a-f]{16}$" },
+        "widevine_id": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "serial": { "type": "string", "pattern": "^[0-9A-Z]{6,16}$" }
+      }
+    },
+    "locale": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "language": { "type": "string", "pattern": "^[a-z]{2}$" },
+        "country": { "type": "string", "pattern": "^[A-Z]{2}$" },
+        "timezone": { "type": "string", "pattern": "^[A-Za-z0-9_+-]+(/[A-Za-z0-9_+-]+)*$" }
+      }
+    }
+  }
+}
