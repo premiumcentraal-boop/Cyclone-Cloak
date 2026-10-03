@@ -1,4 +1,4 @@
-name: forge
+name: ci
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  test:
+  forge:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -14,3 +14,24 @@ jobs:
         with:
           python-version: "3.12"
       - run: uv run --with pytest -- python -m pytest forge/tests -q
+
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: android-actions/setup-android@v3
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: "8.11.1"
+      - name: Build companion app and module zip
+        run: gradle -p android :app:assembleDebug :module:packageModule --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cyclone-cloak-0.1
+          path: |
+            android/app/build/outputs/apk/debug/*.apk
+            android/module/build/module/*.zip

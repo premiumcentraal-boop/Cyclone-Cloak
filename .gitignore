@@ -6,3 +6,6 @@ build/
 .gradle/
 local.properties
 *.jks
+cyclone-app/
+vendor/
+.cxx/

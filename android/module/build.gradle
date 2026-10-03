@@ -1,0 +1,60 @@
+plugins {
+    id "com.android.library"
+}
+
+def abis = ["arm64-v8a", "armeabi-v7a"]
+
+android {
+    namespace "dev.cyclone.cloak.module"
+    compileSdk 36
+    ndkVersion "27.0.12077973"
+
+    defaultConfig {
+        minSdk 26
+        externalNativeBuild {
+            ndk {
+                abiFilters "arm64-v8a", "armeabi-v7a"
+            }
+        }
+    }
+
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+            version "3.22.1"
+        }
+    }
+}
+
+// Packages the Zygisk module the way Magisk expects:
+//   module.prop
+//   zygisk/<abi>.so
+tasks.register("packageModule") {
+    group = "cyclone"
+    description = "Assembles the Cyclone Cloak Magisk module zip."
+    dependsOn "assembleRelease"
+    doLast {
+        def outDir = layout.buildDirectory.dir("module").get().asFile
+        outDir.deleteDir()
+        outDir.mkdirs()
+        def stage = new File(outDir, "stage")
+        stage.mkdirs()
+        copy {
+            from("module.prop")
+            into stage
+        }
+        abis.each { abi ->
+            fileTree("build/intermediates/cxx").matching {
+                include "**/RelWithDebInfo/*/obj/${abi}/libcloak.so"
+            }.each { file ->
+                copy {
+                    from file
+                    into new File(stage, "zygisk")
+                    rename { "${abi}.so" }
+                }
+            }
+        }
+        ant.zip(destfile: new File(outDir, "cyclone-cloak-0.1.0.zip"), basedir: stage)
+        println "module zip: ${outDir}/cyclone-cloak-0.1.0.zip"
+    }
+}

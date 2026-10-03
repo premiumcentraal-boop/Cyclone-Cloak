@@ -11,19 +11,21 @@
 - **One milestone, one PR series.** Each phase below lands through reviewed PRs against `main`,
   tracked by milestone issues.
 
-## Phase 0 - Foundation (this commit)
+## Phase 0 - Foundation (done)
 
 - Profile Forge prototype: build.prop dump parsing, coherence validator, stable identifier
   derivation (Luhn-valid IMEIs, UUIDv4 advertising IDs, MAC and serial generators).
 - Profile schema v0.1, hook-surface inventory, architecture and integration contract.
 
-## Phase 1 - Android scaffold
+## Phase 1 - Android scaffold (0.1: code complete, on-device validation pending)
 
-- Companion app (`app/`) and Zygisk module (`module/`) in one Android Studio project; the module
-  loads under Magisk, KernelSU, and APatch via Zygisk Next.
-- Per-app Build field and system property spoofing driven by a Cloak profile.
-- Acceptance: with a profile applied, a probe app reads the spoofed fingerprint and props;
-  unscoped apps still read the real device; hooks are absent from the app's memory after startup.
+- Companion app (`android/app`) as a Cyclone phone connector (contract `cyclone.connector/1`):
+  imports cloak profiles, binds them to Cyclone profiles, writes the module config over su.
+- Zygisk module (`android/module`) with per-app Build field + system property spoofing driven by
+  the bound profile, packaged as a Magisk module zip.
+- Acceptance (issue #1): with a profile bound, a probe app reads the spoofed fingerprint and
+  props; unscoped apps still read the real device; hooks apply once and do not stay resident
+  beyond the SystemProperties binding.
 
 ## Phase 2 - Full identity and integrity
 
@@ -35,8 +37,9 @@
 
 ## Phase 3 - Cyclone orchestration
 
-- Loopback HTTPS API in the companion app: apply, recycle, health, rotate.
-- Cyclone Core driver and profile selector integration: Cloak profiles appear as first-class
+- Loopback API replaced by the connector contract where possible: profile switching events drive
+  per-profile identity rebinding automatically.
+- Cyclone Core driver and profile selector integration: Cloak identities appear as first-class
   Cyclone profiles.
 - Fleet automation: warm-up schedules, pacing rules, per-profile proxy binding.
 

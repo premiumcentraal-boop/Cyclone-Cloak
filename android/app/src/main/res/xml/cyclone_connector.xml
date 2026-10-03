@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<cyclone-connector
+    contract="cyclone.connector/1"
+    id="cyclone-cloak"
+    label="Cyclone Cloak"
+    scopes="profiles.read profiles.apps.read profiles.ext selector.contribute events.profiles"
+    entryActivity=".MainActivity"
+    wakeReceiver=".CycloneWake" />

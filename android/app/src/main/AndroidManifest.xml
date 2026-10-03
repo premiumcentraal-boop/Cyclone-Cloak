@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- The connector client needs to see Cyclone to bind it. -->
+    <queries>
+        <package android:name="com.cyclone.mobile" />
+    </queries>
+
+    <application
+        android:label="@string/app_name"
+        android:icon="@drawable/ic_cloak"
+        android:theme="@style/Theme.Cloak"
+        android:allowBackup="false">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Marker for Cyclone discovery. Cyclone never binds this. -->
+        <service
+            android:name=".CycloneConnect"
+            android:exported="true"
+            android:permission="com.cyclone.mobile.permission.CONNECTOR_HOST">
+            <intent-filter>
+                <action android:name="com.cyclone.connector.CONNECT" />
+            </intent-filter>
+            <meta-data
+                android:name="com.cyclone.connector"
+                android:resource="@xml/cyclone_connector" />
+        </service>
+
+        <!-- Data-free wake when new profile events wait. -->
+        <receiver
+            android:name=".CycloneWake"
+            android:exported="true"
+            android:permission="com.cyclone.mobile.permission.WAKE_CONNECTOR">
+            <intent-filter>
+                <action android:name="com.cyclone.connector.WAKE" />
+            </intent-filter>
+        </receiver>
+    </application>
+</manifest>
