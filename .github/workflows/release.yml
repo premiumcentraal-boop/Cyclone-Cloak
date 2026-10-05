@@ -19,9 +19,14 @@ jobs:
         with:
           gradle-version: '8.11.1'
       - name: Build debug APK
-        run: gradle -p android :app:assembleDebug --no-daemon
+        run: echo "${{ secrets.ANDROID_KEYSTORE_B64 }}" | base64 -d > "$RUNNER_TEMP/cloak.keystore"
+      - name: Build release APK
+        env:
+          CLOAK_KEYSTORE_PATH: ${{ runner.temp }}/cloak.keystore
+          CLOAK_KEYSTORE_PASSWORD: ${{ secrets.CLOAK_KEYSTORE_PASSWORD }}
+        run: gradle -p android :app:assembleRelease --no-daemon
       - name: Attach APK to release
         uses: softprops/action-gh-release@v2
         with:
           prerelease: true
-          files: android/app/build/outputs/apk/debug/*.apk
+          files: android/app/build/outputs/apk/release/*.apk

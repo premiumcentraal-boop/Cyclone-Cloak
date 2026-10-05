@@ -10,10 +10,31 @@ android {
 
     defaultConfig {
         applicationId "dev.cyclone.cloak"
-        minSdk 33
+        minSdk 29
         targetSdk 36
-        versionCode 3
-        versionName "0.2.0-alpha.3"
+        versionCode 4
+        versionName "0.2.0-alpha.4"
+    }
+
+    signingConfigs {
+        release {
+            def ksPath = System.getenv("CLOAK_KEYSTORE_PATH")
+            def ksPass = System.getenv("CLOAK_KEYSTORE_PASSWORD")
+            if (ksPath != null && ksPass != null) {
+                storeFile file(ksPath)
+                storePassword ksPass
+                keyAlias "cloak"
+                keyPassword ksPass
+            }
+        }
+    }
+
+    buildTypes {
+        release {
+            if (System.getenv("CLOAK_KEYSTORE_PATH") != null) {
+                signingConfig signingConfigs.release
+            }
+        }
     }
 
     buildFeatures {
