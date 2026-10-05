@@ -106,3 +106,30 @@ def derive_gsf_id(seed: str) -> str:
 
 def derive_widevine_id(seed: str) -> str:
     return _hex(seed, "widevine_id", 32)
+
+def _digits(seed: str, field: str, length: int) -> str:
+    value = int.from_bytes(_digest(seed, field, 8), "big") % (10 ** length)
+    return str(value).zfill(length)
+
+
+def derive_sim_serial(seed: str) -> str:
+    digits = _digits(seed, "sim_serial", 18)
+    if digits[0] == "0":
+        digits = "9" + digits[1:]
+    return digits + luhn_check_digit(digits)
+
+
+def derive_identifier_bundle(seed: str) -> dict[str, str]:
+    return {
+        "android_id": derive_android_id(seed),
+        "advertising_id": derive_advertising_id(seed),
+        "app_set_id": derive_app_set_id(seed),
+        "mac": derive_mac(seed),
+        "bt_mac": derive_mac(seed, iface="bt"),
+        "imei_primary": derive_imei(seed, slot=0),
+        "imei_secondary": derive_imei(seed, slot=1),
+        "sim_serial": derive_sim_serial(seed),
+        "gsf_id": derive_gsf_id(seed),
+        "widevine_id": derive_widevine_id(seed),
+        "serial": derive_serial(seed),
+    }

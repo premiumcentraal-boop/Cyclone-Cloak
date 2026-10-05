@@ -17,7 +17,7 @@ from .derive import luhn_valid
 ERROR = "error"
 WARNING = "warning"
 
-SCHEMA_VERSION = "0.1"
+SCHEMA_VERSION = "0.2"
 
 _SEED_RE = re.compile(r"^[0-9a-f]{64}$")
 _ANDROID_ID_RE = re.compile(r"^[0-9a-f]{16}$")
@@ -192,5 +192,48 @@ def validate_profile(profile: Mapping[str, Any]) -> list[Finding]:
     _validate_fingerprint(findings, device)
     _validate_patch(findings, device)
     _validate_identifiers(findings, profile.get("identifiers") or {})
+    _validate_telephony(findings, profile.get("telephony") or {})
+    _validate_display(findings, profile.get("display") or {})
     _validate_locale(findings, profile.get("locale") or {})
     return findings
+
+
+
+def _validate_telephony(findings: list[Finding], telephony: Mapping[str, Any]) -> None:
+    if not telephony:
+        return
+    if not isinstance(telephony, Mapping):
+        _add(findings, ERROR, "TELEPHONY", "telephony must be an object")
+        return
+    carrier = telephony.get("carrier_name")
+    if not isinstance(carrier, str) or not carrier.strip():
+        _add(findings, ERROR, "TELEPHONY_CARRIER", "telephony.carrier_name must be a non-empty string")
+    if not _MCC_RE.match(str(telephony.get("mcc", ""))):
+        _add(findings, ERROR, "TELEPHONY_MCC", "telephony.mcc must be three digits")
+    if not _MNC_RE.match(str(telephony.get("mnc", ""))):
+        _add(findings, ERROR, "TELEPHONY_MNC", "telephony.mnc must be two or three digits")
+    if str(telephony.get("network_type", "")) not in _NETWORK_TYPES:
+        _add(findings, ERROR, "TELEPHONY_NETWORK_TYPE", "telephony.network_type must be one of 5G, LTE, HSPA, UMTS, GSM")
+    if str(telephony.get("sim_slot_count", 1)) not in ("1", "2"):
+        _add(findings, ERROR, "TELEPHONY_SLOTS", "telephony.sim_slot_count must be 1 or 2")
+
+
+def _validate_display(findings: list[Finding], display: Mapping[str, Any]) -> None:
+    if not display:
+        return
+    if not isinstance(display, Mapping):
+        _add(findings, ERROR, "DISPLAY", "display must be an object")
+        return
+    for field in ("width", "height", "density", "refresh_rate_hz"):
+        value = display.get(field)
+        if not isinstance(value, int) or value <= 0:
+            _add(findings, ERROR, "DISPLAY_FIELD", f"display.{field} must be a positive integer")
+            continue
+    if str(display.get("screen_size_class", "")) not in _DISPLAY_CLASSES:
+        _add(findings, ERROR, "DISPLAY_CLASS", "display.screen_size_class must be small, normal, or large")
+
+
+_MCC_RE = re.compile(r"^\d{3}$")
+_MNC_RE = re.compile(r"^\d{2,3}$")
+_NETWORK_TYPES = {"5G", "LTE", "HSPA", "UMTS", "GSM"}
+_DISPLAY_CLASSES = {"small", "normal", "large"}

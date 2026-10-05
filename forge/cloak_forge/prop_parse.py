@@ -81,7 +81,7 @@ def draft_profile(name: str, seed: str, build_prop_text: str) -> dict[str, Any]:
     props = parse_build_prop(build_prop_text)
     identity = uuid.uuid5(uuid.NAMESPACE_URL, f"https://cloak.cyclone.dev/{seed}/{name}")
     return {
-        "schema_version": "0.1",
+        "schema_version": "0.2",
         "id": str(identity),
         "name": name,
         "seed": seed,

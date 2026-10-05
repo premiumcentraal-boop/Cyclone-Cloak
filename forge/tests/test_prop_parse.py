@@ -42,6 +42,6 @@ def test_first_api_level_falls_back_to_sdk():
 
 def test_draft_profile_shape():
     profile = cloak_forge.draft_profile("vault", "ab" * 32, PANTHER_PROPS)
-    assert profile["schema_version"] == "0.1"
+    assert profile["schema_version"] == "0.2"
     assert len(profile["id"]) == 36
     assert profile["meta"]["source"] == "build.prop"
