@@ -9,7 +9,7 @@ import java.io.File
 import java.security.MessageDigest
 
 /** Runs on a Binder worker; answer promptly (Cyclone's deadline is 250 ms). */
-abstract class ProfileBehaviorProvider(private val context: Context) : IProfileBehaviorProvider.Stub() {
+abstract class ProfileBehaviorProvider(protected val context: Context) : IProfileBehaviorProvider.Stub() {
     abstract fun beforeLaunch(event: JSONObject): JSONObject?
 
     final override fun beforeLaunch(event: String?, result: IProfileBehaviorResult?) {

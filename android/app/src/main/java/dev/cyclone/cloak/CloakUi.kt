@@ -24,6 +24,7 @@ import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -141,7 +142,9 @@ fun CloakUi(
                             .fillMaxWidth()
                             .clickable { onSelectCloak(id) },
                         shape = RoundedCornerShape(18.dp),
-                        containerColor = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant,
+                        colors = CardDefaults.cardColors(
+                            containerColor = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant,
+                        ),
                     ) {
                         Row(
                             modifier = Modifier.padding(12.dp),
@@ -196,7 +199,9 @@ fun CloakUi(
                             .fillMaxWidth()
                             .clickable { onSelectProfile(profile) },
                         shape = RoundedCornerShape(18.dp),
-                        containerColor = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant,
+                        colors = CardDefaults.cardColors(
+                            containerColor = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surfaceVariant,
+                        ),
                     ) {
                         Row(
                             modifier = Modifier.padding(12.dp),
