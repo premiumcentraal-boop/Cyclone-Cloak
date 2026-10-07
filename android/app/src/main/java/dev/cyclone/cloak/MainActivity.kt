@@ -32,6 +32,8 @@ class MainActivity : ComponentActivity() {
                     onApply = { applySelected() },
                     onSelectCloak = { id -> model.selectedCloakProfile.value = id },
                     onSelectProfile = { profile -> model.selectedCycloneProfile.value = profile },
+                    onToggleBinding = { binding -> toggleBinding(binding) },
+                    onRemoveBinding = { binding -> removeBinding(binding) },
                 )
             }
         }
@@ -54,6 +56,7 @@ class MainActivity : ComponentActivity() {
                             .filter { it.optString("kind") == "profile" && it.optString("state") == "ready" }
                     } ?: emptyList()
                     val cloakProfiles = CloakStore.all(appContext)
+                    val bindingList = CloakBindingStore.all(appContext)
                     val granted = hello.optJSONArray("granted")?.let { array ->
                         (0 until array.length()).map { array.optString(it) }
                     } ?: emptyList()
@@ -62,6 +65,8 @@ class MainActivity : ComponentActivity() {
                         model.profiles.addAll(profileList)
                         model.cloakProfiles.clear()
                         model.cloakProfiles.addAll(cloakProfiles)
+                        model.bindings.clear()
+                        model.bindings.addAll(bindingList)
                         if (model.selectedCloakProfile.value == null && cloakProfiles.isNotEmpty()) {
                             model.selectedCloakProfile.value = cloakProfiles.first().first
                         }
@@ -145,6 +150,7 @@ class MainActivity : ComponentActivity() {
                             state = "ready",
                         )
                         CloakBindingStore.upsert(appContext, binding)
+                        CloakResolver.invalidate(profileId, userId, pkg)
                         cyclone.setConfig(
                             profileId,
                             userId,
@@ -152,6 +158,7 @@ class MainActivity : ComponentActivity() {
                             JSONObject().put("cloakProfileId", cloakId),
                         )
                     }
+                    CloakResolver.rebuildIndex(appContext)
                 }
                 runOnUiThread {
                     toast("Bound ${packages.size} apps.")
@@ -160,6 +167,29 @@ class MainActivity : ComponentActivity() {
             } catch (error: Exception) {
                 runOnUiThread { toast("Bind failed: ${error.message}") }
             }
+        }
+    }
+
+
+    private fun toggleBinding(binding: CloakBinding) {
+        thread {
+            val updated = binding.copy(enabled = !binding.enabled, updatedAt = System.currentTimeMillis())
+            CloakBindingStore.upsert(applicationContext, updated)
+            CloakResolver.invalidate(binding.profileId, binding.androidUserId, binding.packageName)
+            if (!updated.enabled) {
+                CloakResolver.clearState(applicationContext, binding.profileId, binding.androidUserId, binding.packageName)
+            }
+            CloakResolver.rebuildIndex(applicationContext)
+            runOnUiThread { reload() }
+        }
+    }
+
+    private fun removeBinding(binding: CloakBinding) {
+        thread {
+            CloakBindingStore.remove(applicationContext, binding.profileId, binding.androidUserId, binding.packageName)
+            CloakResolver.invalidate(binding.profileId, binding.androidUserId, binding.packageName)
+            CloakResolver.clearState(applicationContext, binding.profileId, binding.androidUserId, binding.packageName)
+            runOnUiThread { reload() }
         }
     }
 

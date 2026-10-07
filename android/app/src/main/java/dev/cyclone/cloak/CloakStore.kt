@@ -33,5 +33,10 @@ object CloakStore {
             ?.map { it.name.removeSuffix(".json") to JSONObject(it.readText()) }
             ?: emptyList()
 
+    /** Loads one stored cloak profile by id, or null when absent. */
+    fun find(context: Context, id: String): JSONObject? =
+        File(dir(context), "${id.replace(Regex("[^A-Za-z0-9_.-]"), "_")}.json")
+            .takeIf { it.isFile }
+            ?.let { runCatching { JSONObject(it.readText()) }.getOrNull() }
     private fun dir(context: Context) = File(context.filesDir, "profiles")
 }

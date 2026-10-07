@@ -58,6 +58,12 @@ object CloakBindingStore {
         write(context, current)
     }
 
+    fun remove(context: Context, profileId: String, androidUserId: Int, packageName: String) {
+        validate(profileId, androidUserId, packageName)
+        val current = all(context).toMutableList()
+        current.removeAll { it.profileId == profileId && it.androidUserId == androidUserId && it.packageName == packageName }
+        write(context, current)
+    }
     fun markState(context: Context, binding: CloakBinding, state: String) {
         val updated = binding.copy(state = state, updatedAt = System.currentTimeMillis())
         upsert(context, updated)

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.CheckCircle
@@ -24,6 +25,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -43,6 +45,7 @@ class CloakUiModel {
     val cloakProfiles = mutableStateListOf<Pair<String, JSONObject>>()
     val selectedCloakProfile = mutableStateOf<String?>(null)
     val selectedCycloneProfile = mutableStateOf<JSONObject?>(null)
+    val bindings = mutableStateListOf<CloakBinding>()
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -54,6 +57,8 @@ fun CloakUi(
     onApply: () -> Unit,
     onSelectCloak: (String) -> Unit,
     onSelectProfile: (JSONObject) -> Unit,
+    onToggleBinding: (CloakBinding) -> Unit,
+    onRemoveBinding: (CloakBinding) -> Unit,
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -123,6 +128,24 @@ fun CloakUi(
                 CloakActionButton("Bind identity", Icons.Rounded.ChevronRight, onApply, Modifier.fillMaxWidth())
             }
 
+            item { CloakSectionTitle("Bindings", model.bindings.size) }
+            if (model.bindings.isEmpty()) {
+                item {
+                    Text(
+                        "No bindings yet. Select a Cyclone profile above, then tap Bind identity.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            } else {
+                items(model.bindings, key = { it.profileId + "/" + it.androidUserId + "/" + it.packageName }) { binding ->
+                    CloakBindingCard(
+                        binding = binding,
+                        onToggle = onToggleBinding,
+                        onRemove = onRemoveBinding,
+                    )
+                }
+            }
             item { CloakSectionTitle("Cloak identities", model.cloakProfiles.size) }
             if (model.cloakProfiles.isEmpty()) {
                 item {
@@ -174,4 +197,34 @@ private fun statusTone(status: String): CloakStatusTone = when {
     status.equals("Connected", ignoreCase = true) || status.equals("ready", ignoreCase = true) -> CloakStatusTone.READY
     status.contains("checking", ignoreCase = true) || status.contains("approval", ignoreCase = true) || status.equals("not registered", ignoreCase = true) -> CloakStatusTone.PENDING
     else -> CloakStatusTone.ERROR
+}
+
+@Composable
+private fun CloakBindingCard(
+    binding: CloakBinding,
+    onToggle: (CloakBinding) -> Unit,
+    onRemove: (CloakBinding) -> Unit,
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(14.dp),
+        colors = CardDefaults.cardColors(
+            containerColor = if (binding.enabled) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.surfaceVariant,
+        ),
+    ) {
+        Row(
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 10.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                Text(binding.packageName, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
+                Text("user ${binding.androidUserId} · ${binding.state}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                TextButton(onClick = { onToggle(binding) }) { Text(if (binding.enabled) "Off" else "On") }
+                TextButton(onClick = { onRemove(binding) }) { Text("Remove") }
+            }
+        }
+    }
 }

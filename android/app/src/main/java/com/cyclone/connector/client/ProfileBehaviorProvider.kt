@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Binder
 import com.cyclone.connector.IProfileBehaviorProvider
 import com.cyclone.connector.IProfileBehaviorResult
+import dev.cyclone.cloak.CloakStateLayout
 import org.json.JSONObject
 import java.io.File
 import java.security.MessageDigest
@@ -27,11 +28,9 @@ abstract class ProfileBehaviorProvider(protected val context: Context) : IProfil
     companion object {
         /** Connector-owned private storage. Stable across updates; removed by uninstall/clear data. */
         fun stateDirectory(context: Context, profileId: String, androidUserId: Int, packageName: String): File {
-            require(Regex("^Cyclone_[a-f0-9]{16}$").matches(profileId) && androidUserId >= 0)
-            require(Regex("^[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z][A-Za-z0-9_]*)+$").matches(packageName))
-            val tuple = "$profileId\n$androidUserId\n$packageName"
-            val key = MessageDigest.getInstance("SHA-256").digest(tuple.toByteArray(Charsets.UTF_8)).joinToString("") { "%02x".format(it) }
-            return File(context.noBackupFilesDir, "cyclone-profile-state-v1/$key").also { check(it.isDirectory || it.mkdirs()) }
+            CloakStateLayout.validateInputs(profileId, androidUserId, packageName)
+            val key = CloakStateLayout.key(profileId, androidUserId, packageName)
+            return File(context.noBackupFilesDir, "${CloakStateLayout.ROOT_DIR}/$key").also { check(it.isDirectory || it.mkdirs()) }
         }
     }
 }

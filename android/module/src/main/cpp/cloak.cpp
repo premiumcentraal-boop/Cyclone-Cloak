@@ -98,34 +98,50 @@ std::string resolve(JNIEnv *env, jstring keyJ) {
     return lookup_prop(key.c_str());
 }
 
-bool load_profile_for(const std::string &pkg) {
+bool load_profile_for(const std::string &user, const std::string &pkg) {
     g_props.clear();
     if (pkg.empty()) {
         return false;
     }
-    std::ifstream file("/data/adb/cyclone_cloak/config.json");
-    if (!file.good()) {
+    // The companion app publishes resolved profiles here (see docs/STATE_LAYOUT.md).
+    const std::string base =
+        "/data/user/" + user + "/dev.cyclone.cloak/no_backup/cyclone-profile-state-v1";
+    std::string stateKey;
+    {
+        std::ifstream indexFile(base + "/index.json");
+        if (!indexFile.good()) {
+            return false;
+        }
+        json index = json::parse(indexFile, nullptr, false);
+        if (index.is_discarded() || !index.is_object()) {
+            LOGI("index unreadable");
+            return false;
+        }
+        auto entries = index.find("entries");
+        if (entries == index.end() || !entries->is_object()) {
+            return false;
+        }
+        auto found = entries->find(user + "/" + pkg);
+        if (found == entries->end() || !found->is_object()) {
+            return false;
+        }
+        auto keyIt = found->find("key");
+        if (keyIt == found->end() || !keyIt->is_string()) {
+            return false;
+        }
+        stateKey = keyIt->get<std::string>();
+    }
+    std::ifstream profileFile(base + "/" + stateKey + "/profile.json");
+    if (!profileFile.good()) {
         return false;
     }
-    json config = json::parse(file, nullptr, false);
-    if (config.is_discarded() || !config.is_object()) {
-        LOGI("config unreadable");
+    json profile = json::parse(profileFile, nullptr, false);
+    if (profile.is_discarded() || !profile.is_object()) {
+        LOGI("profile unreadable");
         return false;
     }
-    auto bindings = config.find("bindings");
-    if (bindings == config.end() || !bindings->is_object()) {
-        return false;
-    }
-    auto colon = pkg.find(':');
-    if (colon == std::string::npos) {
-        return false;
-    }
-    auto entry = bindings->find(pkg);
-    if (entry == bindings->end() || !entry->is_object()) {
-        return false;
-    }
-    auto device = entry->find("device");
-    if (device == entry->end() || !device->is_object()) {
+    auto device = profile.find("device");
+    if (device == profile.end() || !device->is_object()) {
         return false;
     }
     for (const auto &[key, prop] : kDeviceProps) {
@@ -330,9 +346,9 @@ public:
     void preAppSpecialize(AppSpecializeArgs *args) override {
         // app_data_dir looks like /data/user/0/<package>; the last segment is the package.
         g_active_package = string_arg(env, args->app_data_dir);
+        std::string userId = "0";
         auto slash = g_active_package.find_last_of('/');
         if (slash != std::string::npos) {
-            std::string userId = "0";
             auto userSlash = slash > 0 ? g_active_package.find_last_of('/', slash - 1) : std::string::npos;
             if (userSlash != std::string::npos) {
                 std::string candidate = g_active_package.substr(userSlash + 1, slash - userSlash - 1);
@@ -341,9 +357,9 @@ public:
                 }
             }
             g_active_package = g_active_package.substr(slash + 1);
-            g_active_key = userId + ":" + g_active_package;
         }
-        g_active = load_profile_for(g_active_key);
+        g_active_key = userId + ":" + g_active_package;
+        g_active = load_profile_for(userId, g_active_package);
         if (g_active) {
             LOGI("cloaking %s (%zu props)", g_active_key.c_str(), g_props.size());
         }
