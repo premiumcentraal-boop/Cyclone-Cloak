@@ -40,7 +40,13 @@ jobs:
           test -f "$apk"
           apksigner_path="$(find "$ANDROID_HOME/build-tools" -mindepth 2 -maxdepth 2 -name apksigner | sort -V | tail -n 1)"
           test -n "$apksigner_path"
-          "$apksigner_path" verify --verbose "$apk"
+          signature_details="$("$apksigner_path" verify --verbose --print-certs "$apk")"
+          printf '%s\n' "$signature_details"
+          expected_certificate="17ca3617b0cbaf250d2ef03e945b319e57695de6d977c652ded243ad5656f553"
+          if ! grep -Fqx "Signer #1 certificate SHA-256 digest: $expected_certificate" <<<"$signature_details"; then
+            echo "APK was not signed with the Alpha 4 release certificate." >&2
+            exit 1
+          fi
       - name: Attach APK to release
         uses: softprops/action-gh-release@v2
         with:
