@@ -9,6 +9,8 @@ import java.security.MessageDigest
  */
 object CloakStateLayout {
     const val ROOT_DIR = "cyclone-profile-state-v1"
+    const val MODULE_STATE_DIR = "/data/adb/cyclone_cloak/state-v1"
+    const val STAGING_DIR = "state-staging"
     const val PROFILE_FILE = "profile.json"
     const val INDEX_FILE = "index.json"
 

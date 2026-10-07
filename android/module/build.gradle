@@ -54,7 +54,7 @@ tasks.register("packageModule") {
                 }
             }
         }
-        ant.zip(destfile: new File(outDir, "cyclone-cloak-0.4.0-alpha.1.zip"), basedir: stage)
-        println "module zip: ${outDir}/cyclone-cloak-0.4.0-alpha.1.zip"
+        ant.zip(destfile: new File(outDir, "cyclone-cloak-0.5.0-alpha.1.zip"), basedir: stage)
+        println "module zip: ${outDir}/cyclone-cloak-0.5.0-alpha.1.zip"
     }
 }

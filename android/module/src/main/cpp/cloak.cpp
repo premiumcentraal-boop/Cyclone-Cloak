@@ -119,9 +119,9 @@ bool load_profile_for(const std::string &user, const std::string &pkg) {
     if (pkg.empty()) {
         return false;
     }
-    // The companion app publishes resolved profiles here (see docs/STATE_LAYOUT.md).
-    const std::string base =
-        "/data/user/" + user + "/dev.cyclone.cloak/no_backup/cyclone-profile-state-v1";
+    // The companion publishes resolved profiles here via su (see docs/STATE_LAYOUT.md):
+    // root-owned mode 700, so only the still-root preAppSpecialize read can touch it.
+    const std::string base = "/data/adb/cyclone_cloak/state-v1";
     std::string stateKey;
     {
         std::ifstream indexFile(base + "/index.json");

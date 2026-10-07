@@ -18,6 +18,8 @@ class CloakStateLayoutTest {
         assertEquals("cyclone-profile-state-v1", CloakStateLayout.ROOT_DIR)
         assertEquals("profile.json", CloakStateLayout.PROFILE_FILE)
         assertEquals("index.json", CloakStateLayout.INDEX_FILE)
+        assertEquals("/data/adb/cyclone_cloak/state-v1", CloakStateLayout.MODULE_STATE_DIR)
+        assertEquals("state-staging", CloakStateLayout.STAGING_DIR)
     }
 
     @Test
