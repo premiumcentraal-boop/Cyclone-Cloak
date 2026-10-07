@@ -1,4 +1,4 @@
-"""Cloak Forge: generate full coherent device identities from templates."""
+"""Cloak Forge: generate full coherent device profiles from templates."""
 
 from __future__ import annotations
 
@@ -29,10 +29,10 @@ def forge_profile(
     except KeyError as exc:
         raise ForgeError(f"unknown template '{template_name}'") from exc
 
-    identity = uuid.uuid5(uuid.NAMESPACE_URL, f"https://cloak.cyclone.dev/{seed}/{name}")
+    profile = uuid.uuid5(uuid.NAMESPACE_URL, f"https://cloak.cyclone.dev/{seed}/{name}")
     return {
         "schema_version": "0.2",
-        "id": str(identity),
+        "id": str(profile),
         "name": name,
         "seed": seed,
         "device": copy.deepcopy(template["device"]),

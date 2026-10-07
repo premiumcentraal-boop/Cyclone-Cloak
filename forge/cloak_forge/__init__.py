@@ -1,4 +1,4 @@
-"""Cyclone Cloak profile forge: parse dumps, derive identities, enforce coherence."""
+"""Cyclone Cloak profile forge: parse dumps, derive profiles, enforce coherence."""
 
 from .derive import (
     derive_advertising_id,

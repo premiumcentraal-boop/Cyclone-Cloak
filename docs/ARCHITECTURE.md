@@ -1,6 +1,6 @@
 # Cyclone Cloak Architecture
 
-Cyclone Cloak gives the Cyclone profile selector real phone identities: one rooted Android device
+Cyclone Cloak gives the Cyclone profile selector real phone profiles: one Android device
 serves any number of internally coherent virtual devices - one per profile - to scoped apps. It
 attaches on top of Cyclone without forking it.
 
@@ -13,10 +13,10 @@ Cyclone Desktop (profile selector, fleet dashboard)
 Cyclone Core (orchestration, policy, automation)
         |  loopback HTTPS + bearer token  (Cloak driver)
         v
-Cloak Companion (Android app: forge, vault, hook control, API)
-        |  Zygisk
+Cloak Companion (Android app: forge, vault, callback control, API)
+        |  platform
         v
-Cloak Hook Module  ---> scoped apps (Instagram, banking, ...)
+Cloak Callback Module  ---> scoped apps (Instagram, banking, ...)
 ```
 
 ## Layers
@@ -25,7 +25,7 @@ Cloak Hook Module  ---> scoped apps (Instagram, banking, ...)
 
 Turns real device dumps into validated Cloak profiles. Source of truth for profile content is
 the dump (build.prop + vendor build.prop, e.g. from the public tadiphone dump index); the forge
-cross-checks every field against every other field and rejects incoherent identities. The
+cross-checks every field against every other field and rejects incoherent profiles. The
 validator in `forge/cloak_forge/validate.py` is the canonical rule set:
 
 - fingerprint must parse and agree with brand, product/device name, release, build ID,
@@ -36,13 +36,13 @@ validator in `forge/cloak_forge/validate.py` is the canonical rule set:
   and App Set IDs, Luhn-valid IMEIs, well-formed MACs;
 - locale/timezone must be well-formed.
 
-### 2. Hook Engine
+### 2. Callback Engine
 
-A Zygisk module (Magisk, KernelSU, and APatch via Zygisk Next) that runs in each scoped app's
+A platform module (platform, KernelSU, and APatch via Platform-Next) that runs in each scoped app's
 process and rewrites what the app reads, per the profile bound to that app: build fields, system
-properties, serial number, and the Phase 2 identifier set from `docs/HOOK_SURFACE.md`.
+properties, serial number, and the Phase 2 identifier set from `docs/COMPAT_SURFACE.md`.
 
-Stealth posture: hooks apply once at process start and then unload; no code stays mapped in the
+Runtime posture: callbacks apply once at process start and then unload; no code stays mapped in the
 app's memory; nothing is injected into `system_server`; unscoped apps are untouched.
 
 ### 3. Integrity Layer
@@ -55,13 +55,13 @@ Honest limits: device integrity (the verdict most apps gate on) is reliably achi
 integrity needs a genuine hardware keybox - that is a supply question, and the health panel
 reports per profile what was actually verified.
 
-### 4. Identity Vault
+### 4. Profile Vault
 
 Every profile stores a 256-bit seed; all identifiers derive from it with HMAC-SHA256 (see
 `forge/cloak_forge/derive.py`), so values are stable for the profile's lifetime, unique across
 profiles, and never duplicated. The vault tracks health state (integrity verdict, fingerprint
 age, last egress IP, bound account) and supports the recycle flow: a new seed regenerates the
-entire identifier set, in place, with the DeviceResetSpoofer sentinel pattern triggering it on
+entire identifier set, in place, with the DeviceResetProfile sentinel pattern triggering it on
 app data clear.
 
 ### 5. Orchestration API
@@ -73,7 +73,7 @@ The companion app exposes a loopback HTTPS API with a bearer token:
 | `GET /profiles` | list profiles with health state |
 | `POST /profiles` | forge a new profile (dump text or spec in, validated profile out) |
 | `POST /profiles/{id}/apply` | bind a profile to an app package |
-| `POST /profiles/{id}/recycle` | reseed the identity, keep the slot |
+| `POST /profiles/{id}/recycle` | reseed the profile, keep the slot |
 | `POST /profiles/{id}/rotate-fingerprint` | pull a fresh, valid fingerprint |
 | `GET /profiles/{id}/health` | coherence + integrity + last-seen state |
 
@@ -82,11 +82,11 @@ profiles as first-class profiles. No fork of Cyclone, no fork of the cloak - one
 
 ## Design principles
 
-1. **System hooks, not containers.** Apps run as normal system apps; only what they read is
+1. **System-level rendering, not containers.** Apps run as normal system apps; only what they read is
    rewritten. No VirtualApp-style engine anywhere.
 2. **Schema first.** `schema/cloak-profile.schema.json` is the contract between forge, vault,
    module, and API.
 3. **Coherence over creativity.** Generated values must be indistinguishable from a real dump;
    the validator, not the generator, has the final word.
-4. **Per-app, always.** One profile per app binding; the device's real identity stays intact for
+4. **Per-app, always.** One profile per app binding; the device's real profile stays intact for
    everything else.

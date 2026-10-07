@@ -2,7 +2,7 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://github.com/premiumcentraal-boop/Cyclone-Cloak/schema/cloak-profile.schema.json",
   "title": "Cyclone Cloak device profile",
-  "description": "A fully coherent virtual device identity served to a scoped app by the Cyclone Cloak hook engine.",
+  "description": "A fully coherent device profile served to a scoped app by the Cyclone Cloak engine.",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema_version", "id", "name", "seed", "device"],

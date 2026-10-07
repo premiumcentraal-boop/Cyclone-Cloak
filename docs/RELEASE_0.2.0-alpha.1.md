@@ -2,7 +2,7 @@
 
 This is the first 0.2 connector shell. It upgrades Cloak to the Cyclone connector
 surface from Cyclone 5.0.0-alpha.106/107 and establishes the binding chain that the
-rest of the identity engine will build on.
+rest of the profile engine will build on.
 
 ## What is new
 
@@ -15,6 +15,6 @@ rest of the identity engine will build on.
 
 ## Notes
 
-- The startup provider replies with the bound identity reference, but the hook engine
+- The startup provider replies with the bound profile reference, but the profile engine
   itself is still the next sprint.
 - This alpha is intentionally small: it proves the connector path first.

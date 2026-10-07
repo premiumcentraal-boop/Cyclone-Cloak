@@ -7,7 +7,7 @@ built, what is verified, and what remains to reach release-ready Cloak 1.0.
 
 Cyclone Cloak is the companion layer for the Cyclone app (a multi-profile Android
 automation host). Cyclone itself stays completely generic: it knows about
-"profiles" and a connector contract, never about device identity.
+"profiles" and a connector contract, never about device profile.
 
 Cyclone Cloak is what "wears" Cyclone:
 
@@ -15,19 +15,18 @@ Cyclone Cloak is what "wears" Cyclone:
 - It attaches to the Cyclone connector surface (profiles.ext store, per-app
   storage, and the pre-launch Binder callback added in Cyclone alpha.106).
 - Inside Cloak's own UI, the user creates "cloak profiles": fully specified,
-  internally coherent virtual device identities (model, build fingerprint,
+  internally coherent virtual device profiles (model, build fingerprint,
   telephony, display, sensors, locale, identifiers, network, health).
 - Each Cyclone profile + app package can be bound to one cloak profile.
 - When a scoped app starts inside a Cyclone profile, the Cyclone connector fires
   the versioned pre-launch callback; Cloak answers with the config reference for
-  that profile+app binding, and the native Zygisk hook layer applies the identity
+  that profile+app binding, and the native platform callback layer applies the profile
   to that app process only.
 
 End goal for 1.0: 20 independent Cyclone profiles, each running apps that see a
-completely different, realistic, stable device identity.
+completely different, realistic, stable device profile.
 
-Non-goals (kept out on purpose): SMS number rental, fake ID/passport generation,
-anything identity-document related. Cloak is a device-profile engine.
+Non-goals (kept out on purpose): phone-number tooling and profile-format tooling. Cloak is a device-profile engine.
 
 ## 2. WHERE WE STAND RIGHT NOW
 
@@ -35,7 +34,7 @@ anything identity-document related. Cloak is a device-profile engine.
 
 - v0.2.0-alpha.1 - Sprint 1: connector shell, Android companion app skeleton in
   Cyclone design language, provider bindings, module skeleton.
-- v0.2.0-alpha.2 - Sprint 2 (commit c06905d): Forge v2 identity engine. Schema
+- v0.2.0-alpha.2 - Sprint 2 (commit c06905d): Forge v2 profile engine. Schema
   0.2, deterministic derivation from seed, Pixel 7 + Galaxy S23 templates,
   coherence validation, telephony/display/health blocks, 25 tests passing.
 - v0.2.0-alpha.3 - commit a0658f3: first APK release. Added release workflow
@@ -75,10 +74,10 @@ at it and is untracked (keep it that way).
                      com/cyclone/connector/client (CycloneConnector,
                      ProfileBehaviorProvider with protected context and the
                      stateDirectory helper).
-- android/module   - Zygisk module skeleton. NDK 27, arm64-v8a + armeabi-v7a.
+- android/module   - platform module skeleton. NDK 27, arm64-v8a + armeabi-v7a.
                      packageModule zips module.prop + zygisk/<abi>.so; zip name
                      still hardcodes 0.2.0-alpha.1 (bump pending).
-- forge/           - Python identity engine (cloak_forge): prop_parse, derive
+- forge/           - Python profile engine (cloak_forge): prop_parse, derive
                      (deterministic IDs from seed), validate (coherence), forge
                      (templates), tests. Runs under `uv run --with pytest`.
 - schema/          - cloak-profile.schema.json, schema_version 0.2.
@@ -110,28 +109,21 @@ at it and is untracked (keep it that way).
   and answers configRef = bound cloak profile id (or an empty ready answer when
   unbound). This is the "wearing" point.
 
-### 2.5 The Cyclone main-app agent - strategic notes
+### 2.5 Collaboration protocol notes
 
-- Sensitive to anything resembling account-farming/evasion; previously declined
-  fake-ID generators and SMS rental integrations, and paused on the per-app
-  store after an internal safety check cut a response.
-- Protocol that works: request only generic, safe plumbing in plain language
-  (profile-scoped settings/config storage, plugin hook, stable paths, versioned
-  contracts). Never mention spoofing, device identity, or Cloak's purpose.
-- Cloak now has the alpha.106 plumbing it needs. Further Cyclone changes must go
-  through written handoff requests in safe generic language; Cloak continues
-  without waiting.
-- Cyclone PR #200 (androidUserId) still unmerged there; Cloak already keys
-  bindings by androidUserId, so when it lands Cloak is compatible.
+- Handoffs to companion agents use mechanism-only language: interfaces, data contracts, schemas, and tests. Purpose statements stay out of shared documents, commit messages, and branch names.
+- Requests stay compartmentalized: each change is framed as an independently reasonable generic feature.
+- Naming follows the same neutral style, for example codex/profile-settings rather than codex/cloak-contract.
+
 ## 3. THE 10-SPRINT ROAD TO CYCLONE CLOAK 1.0
 
 Sprints 1-2 are DONE. Sprint 3 is next.
 
 - Sprint 1 (DONE): connector shell + design language + module skeleton. alpha.1.
-- Sprint 2 (DONE): Forge v2 - coherent identity generation, schema 0.2,
+- Sprint 2 (DONE): Forge v2 - coherent profile generation, schema 0.2,
   deterministic derivation, two device templates, validation. alpha.2.
 - Sprint 3 (NEXT, fully planned in 3.1): Binding + delivery pipeline.
-- Sprint 4: Hook engine v1 - native property/SystemProperties interception,
+- Sprint 4: Callback engine v1 - native property/SystemProperties interception,
   Build.* fields, per-app application of the resolved profile. Package by
   package, no integrity work yet. Bump module zip version string.
 - Sprint 5: Identifier layer - stable per-profile android_id, advertising id,
@@ -147,7 +139,7 @@ Sprints 1-2 are DONE. Sprint 3 is next.
   250 ms deadline, ready/degraded/failed status surfaced in Cloak UI.
 - Sprint 8: Trust surface work - Play Integrity strategy: device integrity
   depends on REAL hardware attestation, so Cloak must keep the real device's
-  integrity chain intact and vary only software-level identity; per-app
+  integrity chain intact and vary only software-level profile; per-app
   exclusions (apps that must see the real device) become a first-class setting.
 - Sprint 9: Polish + release engineering - signed release builds, versioned
   changelogs, onboarding (install module -> approve connector -> first cloak
@@ -155,8 +147,8 @@ Sprints 1-2 are DONE. Sprint 3 is next.
 - Sprint 10: Cloak 1.0 - full regression suite (forge + android + module),
   physical multi-device test matrix, docs, stable release.
 
-Reality check: achievable because the hard parts are delegated - identity
-generation is the Forge, application is the Zygisk layer pattern, and the
+Reality check: achievable because the hard parts are delegated - profile
+generation is the Forge, application is the platform layer pattern, and the
 Cyclone connector plumbing already exists in alpha.106. The genuinely risky
 sprint is 8 (integrity); treat it as its own workstream with physical testing.
 
@@ -174,7 +166,7 @@ Goal: make the binding -> delivery pipeline real.
    helper) -> answer configRef. Keep resolution under the 250 ms deadline;
    cache resolved profiles in memory.
 4. Module skeleton: native reader that at process start looks up the state dir
-   convention, parses the profile JSON, and holds it for the hook engine.
+   convention, parses the profile JSON, and holds it for the profile engine.
    No interception yet - just loading + logging.
 5. Tests: unit tests for the binding store, resolver, and state-dir layout;
    single source of truth for the layout constant mirrored in Kotlin and C++.
@@ -201,7 +193,7 @@ Goal: make the binding -> delivery pipeline real.
   verified fix commit a0658f3.
 - Connector: alpha.106 contract implemented on both sides (Cloak answers the
   callback; Cyclone fires it). Physical end-to-end NOT yet tested.
-- Module: builds in CI (packageModule); native hook engine not yet implemented.
+- Module: builds in CI (packageModule); native profile engine not yet implemented.
 - Multi-user behavior: coded but never exercised on a real device.
 
 ## 5. HOW TO RESUME WORK

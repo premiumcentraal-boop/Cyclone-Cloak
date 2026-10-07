@@ -79,10 +79,10 @@ def draft_device(props: Mapping[str, str]) -> dict[str, Any]:
 def draft_profile(name: str, seed: str, build_prop_text: str) -> dict[str, Any]:
     """Assemble a full draft profile; the id is deterministic for a given seed and name."""
     props = parse_build_prop(build_prop_text)
-    identity = uuid.uuid5(uuid.NAMESPACE_URL, f"https://cloak.cyclone.dev/{seed}/{name}")
+    profile = uuid.uuid5(uuid.NAMESPACE_URL, f"https://cloak.cyclone.dev/{seed}/{name}")
     return {
         "schema_version": "0.2",
-        "id": str(identity),
+        "id": str(profile),
         "name": name,
         "seed": seed,
         "device": draft_device(props),

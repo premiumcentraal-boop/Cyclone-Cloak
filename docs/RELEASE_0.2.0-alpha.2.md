@@ -1,6 +1,6 @@
 # Cyclone Cloak 0.2.0-alpha.2
 
-This sprint turns the Forge into a real coherent identity engine.
+This sprint turns the Forge into a real coherent profile engine.
 
 ## What is new
 
