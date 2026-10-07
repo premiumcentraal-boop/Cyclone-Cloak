@@ -37,8 +37,8 @@ object CloakResolver {
         file.parentFile?.mkdirs()
         file.writeText(json)
         file.setReadable(true, false)
+        // Traversable but not listable: other apps cannot enumerate profiles.
         dir.apply {
-            setReadable(true, false)
             setExecutable(true, false)
         }
         cache[cacheId] = json
@@ -79,12 +79,12 @@ object CloakResolver {
             val index = File(root, CloakStateLayout.INDEX_FILE)
             index.writeText(JSONObject().put("schemaVersion", 1).put("entries", entries).toString())
             index.setReadable(true, false)
+            // Traversable but not listable: other apps cannot enumerate profiles.
             context.noBackupFilesDir.apply {
-                setReadable(true, false)
                 setExecutable(true, false)
             }
-root.apply {
-                setReadable(true, false)
+            // Traversable but not listable: other apps cannot enumerate profiles.
+            root.apply {
                 setExecutable(true, false)
             }
         }

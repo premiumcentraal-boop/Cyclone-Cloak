@@ -2,10 +2,11 @@
  * Cyclone Cloak 0.1 - Zygisk module.
  *
  * preAppSpecialize runs while the freshly forked process is still root: we resolve the package
- * from its data dir, look it up in /data/adb/cyclone_cloak/config.json (written by the companion
- * app over su) and stash the bound profile's props. postAppSpecialize rewrites android.os.Build
- * statics and hooks android.os.SystemProperties' native methods so every read inside the scoped
- * app returns the bound profile. Unscoped apps are untouched.
+ * from its data dir, look it up in the companion's published state directory (see
+ * docs/STATE_LAYOUT.md) and stash the bound profile's props. postAppSpecialize rewrites
+ * android.os.Build statics and hooks android.os.SystemProperties' native methods so every read
+ * inside the scoped app returns the bound profile, including telephony and display fields.
+ * Unscoped apps are untouched.
  */
 
 #include <sys/stat.h>
@@ -50,6 +51,21 @@ const std::pair<const char *, const char *> kDeviceProps[] = {
     {"sdk_int", "ro.build.version.sdk"},
     {"first_api_level", "ro.build.version.first_api_level"},
     {"build_date_utc", "ro.build.date.utc"},
+    {"bootloader", "ro.bootloader"},
+    {"baseband", "gsm.version.baseband"},
+};
+
+// telephony key -> system property; the operator numeric is assembled from
+// the profile's mcc and mnc in load_profile_for.
+const std::pair<const char *, const char *> kTelephonyProps[] = {
+    {"carrier_name", "gsm.operator.alpha"},
+    {"carrier_name", "gsm.sim.operator.alpha"},
+    {"network_type", "gsm.network.type"},
+};
+
+// display key -> system property.
+const std::pair<const char *, const char *> kDisplayProps[] = {
+    {"density", "ro.sf.lcd_density"},
 };
 
 std::unordered_map<std::string, std::string> g_props;
@@ -169,6 +185,41 @@ bool load_profile_for(const std::string &user, const std::string &pkg) {
                 set_prop("ro.build.tags", tail.substr(slash + 1));
             }
         }
+    }
+    // Telephony identity: carrier alpha plus the combined MCC+MNC numeric for
+    // both the registered network and the SIM.
+    auto telephony = profile.find("telephony");
+    if (telephony != profile.end() && telephony->is_object()) {
+        for (const auto &entry : kTelephonyProps) {
+            auto value = telephony->find(entry.first);
+            if (value != telephony->end() && value->is_string()) {
+                set_prop(entry.second, value->get<std::string>());
+            }
+        }
+        auto mcc = telephony->find("mcc");
+        auto mnc = telephony->find("mnc");
+        if (mcc != telephony->end() && mcc->is_string() &&
+            mnc != telephony->end() && mnc->is_string()) {
+            const std::string numeric = mcc->get<std::string>() + mnc->get<std::string>();
+            set_prop("gsm.operator.numeric", numeric);
+            set_prop("gsm.sim.operator.numeric", numeric);
+        }
+    }
+
+    // Display identity: the profile's density reads straight through.
+    auto display = profile.find("display");
+    if (display != profile.end() && display->is_object()) {
+        for (const auto &entry : kDisplayProps) {
+            auto value = display->find(entry.first);
+            if (value != display->end() && value->is_number_integer()) {
+                set_prop(entry.second, std::to_string(value->get<long long>()));
+            }
+        }
+    }
+
+    // Android names 5G networks NR in gsm.network.type; profiles say 5G.
+    if (auto net = g_props.find("gsm.network.type"); net != g_props.end() && net->second == "5G") {
+        net->second = "NR";
     }
     return !g_props.empty();
 }

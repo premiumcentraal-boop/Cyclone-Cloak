@@ -22,5 +22,6 @@ Input `Cyclone_0123456789abcdef`, user `7`, package `com.example.app` yields key
 - The module reads `/data/user/<user>/dev.cyclone.cloak/no_backup/cyclone-profile-state-v1/`
   during app specialization. The companion must be installed in the same Android
   user as the scoped app.
-- State files are written world-readable for alpha; access is tightened in the
-  isolation sprint.
+- Binding directories are traversable but not listable for other apps; the module
+  resolves known paths (index, then the keyed profile file), so nothing else can
+  enumerate the published profiles.
