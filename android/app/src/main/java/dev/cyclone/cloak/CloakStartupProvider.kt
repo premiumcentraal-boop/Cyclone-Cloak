@@ -10,13 +10,17 @@ class CloakStartupProvider(context: Context) : ProfileBehaviorProvider(context.a
         val androidUserId = event.optInt("androidUserId", -1)
         val packageName = event.optString("packageName")
         val answer = JSONObject().put("version", 1)
+        val binding = CloakBindingStore.find(context, profileId, androidUserId, packageName)
+        if (binding == null || !binding.enabled) {
+            return answer.put("configRef", JSONObject.NULL).put("state", "ready")
+        }
         val outcome = runCatching {
             CloakResolver.resolve(context, profileId, androidUserId, packageName)
         }
         val configRef = outcome.getOrNull()
         return when {
             outcome.isSuccess && configRef != null -> answer.put("configRef", configRef).put("state", "ready")
-            outcome.isSuccess -> answer.put("configRef", JSONObject.NULL).put("state", "ready")
+            outcome.isSuccess -> answer.put("configRef", JSONObject.NULL).put("state", "degraded")
             else -> answer.put("configRef", JSONObject.NULL).put("state", "degraded")
         }
     }
