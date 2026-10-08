@@ -10,6 +10,8 @@
  */
 
 #include <sys/stat.h>
+#include <sys/socket.h>
+#include <unistd.h>
 #include "zygisk.hpp"
 
 #include <android/log.h>
@@ -18,8 +20,10 @@
 
 #include <cctype>
 #include <cerrno>
+#include <cstdint>
 #include <cstring>
 #include <fstream>
+#include <iterator>
 #include <string>
 #include <unordered_map>
 #include <utility>
@@ -114,44 +118,149 @@ std::string resolve(JNIEnv *env, jstring keyJ) {
     return lookup_prop(key.c_str());
 }
 
-bool load_profile_for(const std::string &user, const std::string &pkg) {
-    g_props.clear();
-    if (pkg.empty()) {
+constexpr uint32_t kStateRequestMagic = 0x434C4B31;  // CLK1
+constexpr size_t kMaxProfileBytes = 1024 * 1024;
+
+struct StateRequest {
+    uint32_t magic;
+    char user[16];
+    char packageName[256];
+};
+
+bool read_exact(int fd, void *buffer, size_t size) {
+    auto *cursor = static_cast<unsigned char *>(buffer);
+    while (size > 0) {
+        ssize_t count = read(fd, cursor, size);
+        if (count < 0 && errno == EINTR) continue;
+        if (count <= 0) return false;
+        cursor += count;
+        size -= static_cast<size_t>(count);
+    }
+    return true;
+}
+
+bool write_exact(int fd, const void *buffer, size_t size) {
+    const auto *cursor = static_cast<const unsigned char *>(buffer);
+    while (size > 0) {
+        ssize_t count = send(fd, cursor, size, MSG_NOSIGNAL);
+        if (count < 0 && errno == EINTR) continue;
+        if (count <= 0) return false;
+        cursor += count;
+        size -= static_cast<size_t>(count);
+    }
+    return true;
+}
+
+std::string bounded_string(const char *value, size_t capacity) {
+    const void *end = memchr(value, '\0', capacity);
+    if (!end) return {};
+    return std::string(value, static_cast<const char *>(end) - value);
+}
+
+bool valid_request(const std::string &user, const std::string &pkg) {
+    if (user.empty() || user.size() >= 16 || pkg.empty() || pkg.size() >= 256 ||
+        pkg.find('.') == std::string::npos) {
         return false;
     }
-    // The companion publishes resolved profiles here via su (see docs/STATE_LAYOUT.md):
-    // root-owned mode 700, so only the still-root preAppSpecialize read can touch it.
+    if (user.find_first_not_of("0123456789") != std::string::npos) return false;
+    return pkg.find_first_not_of("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_.") ==
+           std::string::npos;
+}
+
+std::string read_profile_state(const std::string &user, const std::string &pkg) {
     const std::string base = "/data/adb/cyclone_cloak/state-v1";
     std::string stateKey;
     {
         std::ifstream indexFile(base + "/index.json");
         if (!indexFile.good()) {
-            return false;
+            return {};
         }
         json index = json::parse(indexFile, nullptr, false);
         if (index.is_discarded() || !index.is_object()) {
             LOGI("index unreadable");
-            return false;
+            return {};
         }
         auto entries = index.find("entries");
         if (entries == index.end() || !entries->is_object()) {
-            return false;
+            return {};
         }
         auto found = entries->find(user + "/" + pkg);
         if (found == entries->end() || !found->is_object()) {
-            return false;
+            return {};
         }
         auto keyIt = found->find("key");
         if (keyIt == found->end() || !keyIt->is_string()) {
-            return false;
+            return {};
         }
         stateKey = keyIt->get<std::string>();
     }
+    if (stateKey.size() != 64 ||
+        stateKey.find_first_not_of("0123456789abcdef") != std::string::npos) {
+        return {};
+    }
     std::ifstream profileFile(base + "/" + stateKey + "/profile.json");
     if (!profileFile.good()) {
+        return {};
+    }
+    std::string profileJson((std::istreambuf_iterator<char>(profileFile)), std::istreambuf_iterator<char>());
+    if (profileJson.empty() || profileJson.size() > kMaxProfileBytes) {
+        return {};
+    }
+    json profile = json::parse(profileJson, nullptr, false);
+    if (profile.is_discarded() || !profile.is_object() ||
+        !profile.contains("device") || !profile["device"].is_object()) {
+        return {};
+    }
+    return profileJson;
+}
+
+void companion_handler(int socket) {
+    StateRequest request{};
+    if (!read_exact(socket, &request, sizeof(request))) return;
+    if (request.magic != kStateRequestMagic) {
+        const uint32_t empty = 0;
+        write_exact(socket, &empty, sizeof(empty));
+        return;
+    }
+    const std::string user = bounded_string(request.user, sizeof(request.user));
+    const std::string pkg = bounded_string(request.packageName, sizeof(request.packageName));
+    std::string profileJson;
+    if (valid_request(user, pkg)) {
+        profileJson = read_profile_state(user, pkg);
+    }
+    const uint32_t size = profileJson.size() <= kMaxProfileBytes
+        ? static_cast<uint32_t>(profileJson.size())
+        : 0;
+    if (!write_exact(socket, &size, sizeof(size))) return;
+    if (size > 0) write_exact(socket, profileJson.data(), size);
+}
+
+bool load_profile_for(Api *api, const std::string &user, const std::string &pkg) {
+    g_props.clear();
+    if (!api || !valid_request(user, pkg)) {
         return false;
     }
-    json profile = json::parse(profileFile, nullptr, false);
+    StateRequest request{};
+    request.magic = kStateRequestMagic;
+    memcpy(request.user, user.c_str(), user.size() + 1);
+    memcpy(request.packageName, pkg.c_str(), pkg.size() + 1);
+    const int socket = api->connectCompanion();
+    if (socket < 0) {
+        LOGI("root companion connection failed");
+        return false;
+    }
+    uint32_t size = 0;
+    if (!write_exact(socket, &request, sizeof(request)) || !read_exact(socket, &size, sizeof(size)) ||
+        size == 0 || size > kMaxProfileBytes) {
+        close(socket);
+        return false;
+    }
+    std::string profileJson(size, '\0');
+    const bool received = read_exact(socket, profileJson.data(), size);
+    close(socket);
+    if (!received) return false;
+
+    json profile = json::parse(profileJson, nullptr, false);
     if (profile.is_discarded() || !profile.is_object()) {
         LOGI("profile unreadable");
         return false;
@@ -410,7 +519,7 @@ public:
             g_active_package = g_active_package.substr(slash + 1);
         }
         g_active_key = userId + ":" + g_active_package;
-        g_active = load_profile_for(userId, g_active_package);
+        g_active = load_profile_for(api, userId, g_active_package);
         if (g_active) {
             LOGI("cloaking %s (%zu props)", g_active_key.c_str(), g_props.size());
         }
@@ -430,3 +539,4 @@ private:
 }  // namespace
 
 REGISTER_ZYGISK_MODULE(CloakModule)
+REGISTER_ZYGISK_COMPANION(companion_handler)

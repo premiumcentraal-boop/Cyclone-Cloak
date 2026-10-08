@@ -6,7 +6,8 @@ reader. One layout, two implementations; change both in the same commit.
 ## Layout (v2)
 
 - Module state root: `/data/adb/cyclone_cloak/state-v1/` - root-owned, mode 700,
-  written by the companion through `su` with an atomic temp-dir swap.
+  written by the companion app through Magisk `su --mount-master` using a
+  validated temporary tree and fail-fast publish script.
 - Staging root: `<companion cache>/state-staging/` - what the companion builds
   before publishing; never read by the module.
 - Per-binding dir: `<root>/<sha256 key>/profile.json` - the full cloak profile JSON.
@@ -23,11 +24,14 @@ Input `Cyclone_0123456789abcdef`, user `7`, package `com.example.app` yields key
 
 ## Notes
 
-- The module reads the state root during `preAppSpecialize` while the freshly
-  forked process is still root; nothing else can traverse `/data/adb`, so no
-  other app can read published profiles or the index.
+- The module process does not read `/data/adb` directly. During
+  `preAppSpecialize`, it requests the current user/package profile over the
+  Zygisk companion socket; that handler runs in Magisk's root companion process.
+  The request is constrained to the package and Android user being specialized.
+- `preAppSpecialize` runs with Zygote's privilege, not full superuser access.
+  The companion process is the privileged reader for the root-only state tree.
 - The staging tree lives in the companion's private cache and is never read by
-  the module; only the `su` publish copy lands in the root-owned root.
+  the Zygisk module; only the `su` publish copy lands in the root-owned root.
 - On every publish the companion purges legacy world-readable state left by
   pre-0.5 releases under `no_backup`.
 - The key derivation, index shape and profile JSON contract are unchanged from

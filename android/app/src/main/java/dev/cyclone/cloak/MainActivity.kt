@@ -127,6 +127,7 @@ class MainActivity : ComponentActivity() {
         }
         thread {
             try {
+                var publishSucceeded = false
                 val appContext = applicationContext
                 val profileId = profile.getString("id")
                 val userId = profile.optInt("androidUserId", 0)
@@ -147,7 +148,7 @@ class MainActivity : ComponentActivity() {
                             revision = 0,
                             enabled = true,
                             updatedAt = System.currentTimeMillis(),
-                            state = "ready",
+                            state = "pending",
                         )
                         CloakBindingStore.upsert(appContext, binding)
                         CloakResolver.invalidate(profileId, userId, pkg)
@@ -158,10 +159,13 @@ class MainActivity : ComponentActivity() {
                             JSONObject().put("cloakProfileId", cloakId),
                         )
                     }
-                    CloakResolver.rebuildIndex(appContext)
+                    publishSucceeded = CloakResolver.rebuildIndex(appContext)
                 }
                 runOnUiThread {
-                    toast("Bound ${packages.size} apps.")
+                    toast(
+                        if (publishSucceeded) "Bound ${packages.size} apps."
+                        else "Bound ${packages.size} apps, but root publishing failed. Check Magisk access and retry.",
+                    )
                     reload()
                 }
             } catch (error: Exception) {
@@ -176,11 +180,15 @@ class MainActivity : ComponentActivity() {
             val updated = binding.copy(enabled = !binding.enabled, updatedAt = System.currentTimeMillis())
             CloakBindingStore.upsert(applicationContext, updated)
             CloakResolver.invalidate(binding.profileId, binding.androidUserId, binding.packageName)
-            if (!updated.enabled) {
+            val publishSucceeded = if (!updated.enabled) {
                 CloakResolver.clearState(applicationContext, binding.profileId, binding.androidUserId, binding.packageName)
+            } else {
+                CloakResolver.rebuildIndex(applicationContext)
             }
-            CloakResolver.rebuildIndex(applicationContext)
-            runOnUiThread { reload() }
+            runOnUiThread {
+                if (!publishSucceeded) toast("Binding updated, but root publishing failed. Check Magisk access and retry.")
+                reload()
+            }
         }
     }
 
@@ -188,8 +196,11 @@ class MainActivity : ComponentActivity() {
         thread {
             CloakBindingStore.remove(applicationContext, binding.profileId, binding.androidUserId, binding.packageName)
             CloakResolver.invalidate(binding.profileId, binding.androidUserId, binding.packageName)
-            CloakResolver.clearState(applicationContext, binding.profileId, binding.androidUserId, binding.packageName)
-            runOnUiThread { reload() }
+            val publishSucceeded = CloakResolver.clearState(applicationContext, binding.profileId, binding.androidUserId, binding.packageName)
+            runOnUiThread {
+                if (!publishSucceeded) toast("Binding removed, but rooted state could not be refreshed.")
+                reload()
+            }
         }
     }
 

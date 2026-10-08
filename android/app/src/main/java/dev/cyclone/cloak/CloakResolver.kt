@@ -1,6 +1,7 @@
 package dev.cyclone.cloak
 
 import android.content.Context
+import android.util.Log
 import org.json.JSONObject
 import java.io.File
 import java.util.concurrent.ConcurrentHashMap
@@ -42,12 +43,11 @@ object CloakResolver {
             file.parentFile?.mkdirs()
             file.writeText(json)
         }
-        if (!rebuildIndex(context)) {
-            // The module may still serve the previous published tree; the UI shows
-            // the degraded state so the user knows this binding needs attention.
-            CloakBindingStore.markState(context, binding, "degraded")
+        if (rebuildIndex(context)) {
+            cache[cacheId] = json
+        } else {
+            cache.remove(cacheId)
         }
-        cache[cacheId] = json
         return binding.cloakProfileId
     }
 
@@ -55,13 +55,13 @@ object CloakResolver {
         cache.remove(cacheKey(profileId, androidUserId, packageName))
     }
 
-    fun clearState(context: Context, profileId: String, androidUserId: Int, packageName: String) {
+    fun clearState(context: Context, profileId: String, androidUserId: Int, packageName: String): Boolean {
         invalidate(profileId, androidUserId, packageName)
         runCatching {
             stagedFile(context, CloakStateLayout.key(profileId, androidUserId, packageName))
                 .parentFile?.deleteRecursively()
         }
-        rebuildIndex(context)
+        return rebuildIndex(context)
     }
 
     /**
@@ -70,7 +70,7 @@ object CloakResolver {
      */
     fun rebuildIndex(context: Context): Boolean {
         val staging = stagingRoot(context)
-        runCatching {
+        val staged = runCatching {
             staging.deleteRecursively()
             staging.mkdirs()
             val entries = JSONObject()
@@ -91,39 +91,85 @@ object CloakResolver {
             }
             File(staging, CloakStateLayout.INDEX_FILE)
                 .writeText(JSONObject().put("schemaVersion", 2).put("entries", entries).toString())
-        }.onFailure { return false }
-        return publish(context, staging)
+        }.onFailure { Log.e("CloakPublish", "Could not stage profile state", it) }.isSuccess
+        val published = staged && publish(context, staging)
+        for (binding in CloakBindingStore.all(context)) {
+            val state = when {
+                !binding.enabled && published -> "disabled"
+                !published -> "publish failed"
+                CloakStore.find(context, binding.cloakProfileId) == null -> "missing"
+                else -> "ready"
+            }
+            if (binding.state != state) CloakBindingStore.markState(context, binding, state)
+        }
+        return published
     }
 
     /**
-     * Publishes the staged tree via su: copy into a temp dir, flip permissions to
-     * root-only, atomically swap into place, and purge legacy world-readable state
-     * left by older releases.
+     * Publishes the staged tree via Magisk su: copy and validate a private temp
+     * tree, replace the published state, then purge legacy state from older releases.
      */
     private fun publish(context: Context, staging: File): Boolean {
         val legacyDirs = CloakBindingStore.all(context)
             .map { it.androidUserId }.distinct()
             .map { "/data/user/$it/dev.cyclone.cloak/no_backup/${CloakStateLayout.ROOT_DIR}" }
+        val root = "/data/adb/cyclone_cloak"
+        val temp = "${CloakStateLayout.MODULE_STATE_DIR}.tmp"
+        val backup = "${CloakStateLayout.MODULE_STATE_DIR}.previous"
+        fun quote(value: String) = "'" + value.replace("'", "'\\''") + "'"
         val script = buildString {
-            append("mkdir -p '/data/adb/cyclone_cloak'; ")
-            append("rm -rf '/data/adb/cyclone_cloak/state-v1.tmp'; ")
-            append("cp -r '${staging.absolutePath}' '/data/adb/cyclone_cloak/state-v1.tmp'; ")
-            append("chmod 700 '/data/adb/cyclone_cloak' '/data/adb/cyclone_cloak/state-v1.tmp'; ")
-            append("rm -rf '${CloakStateLayout.MODULE_STATE_DIR}'; ")
-            append("mv '/data/adb/cyclone_cloak/state-v1.tmp' '${CloakStateLayout.MODULE_STATE_DIR}'; ")
-            for (dir in legacyDirs) append("rm -rf '$dir'; ")
+            append("set -eu; umask 077; ")
+            append("mkdir -p ${quote(root)}; ")
+            append("rm -rf ${quote(temp)} ${quote(backup)}; ")
+            append("cp -R ${quote(staging.absolutePath)} ${quote(temp)}; ")
+            append("test -s ${quote("$temp/${CloakStateLayout.INDEX_FILE}")}; ")
+            append("chmod -R go-rwx ${quote(temp)}; ")
+            append("chmod 700 ${quote(root)} ${quote(temp)}; ")
+            append("if [ -e ${quote(CloakStateLayout.MODULE_STATE_DIR)} ]; then mv ${quote(CloakStateLayout.MODULE_STATE_DIR)} ${quote(backup)}; fi; ")
+            append("if mv ${quote(temp)} ${quote(CloakStateLayout.MODULE_STATE_DIR)}; then rm -rf ${quote(backup)} || true; ")
+            append("else if [ -e ${quote(backup)} ]; then mv ${quote(backup)} ${quote(CloakStateLayout.MODULE_STATE_DIR)}; fi; exit 1; fi; ")
+            for (dir in legacyDirs) append("rm -rf ${quote(dir)}; ")
+            append("test -s ${quote("${CloakStateLayout.MODULE_STATE_DIR}/${CloakStateLayout.INDEX_FILE}")}")
         }
         return runCatching {
-            val process = ProcessBuilder("su", "-c", script)
+            // App processes may have a private mount namespace that hides /data/adb.
+            val process = ProcessBuilder("su", "--mount-master", "-c", script)
                 .redirectErrorStream(true)
                 .start()
+            val output = StringBuilder()
+            val outputReader = Thread {
+                runCatching {
+                    process.inputStream.bufferedReader().use { reader ->
+                        val buffer = CharArray(512)
+                        while (true) {
+                            val count = reader.read(buffer)
+                            if (count < 0) break
+                            synchronized(output) {
+                                if (output.length < 2048) {
+                                    output.append(buffer, 0, minOf(count, 2048 - output.length))
+                                }
+                            }
+                        }
+                    }
+                }
+            }.apply {
+                isDaemon = true
+                start()
+            }
             val finished = process.waitFor(15, TimeUnit.SECONDS)
             if (!finished) {
                 process.destroyForcibly()
+                process.waitFor(1, TimeUnit.SECONDS)
+                outputReader.join(1000)
+                Log.e("CloakPublish", "Root publish timed out")
                 false
             } else {
-                process.exitValue() == 0
+                outputReader.join(1000)
+                val details = synchronized(output) { output.toString().trim() }
+                val exitCode = process.exitValue()
+                Log.d("CloakPublish", "su finished=true exit=$exitCode output=$details")
+                exitCode == 0
             }
-        }.getOrDefault(false)
+        }.onFailure { Log.e("CloakPublish", "Could not start root publish", it) }.getOrDefault(false)
     }
 }

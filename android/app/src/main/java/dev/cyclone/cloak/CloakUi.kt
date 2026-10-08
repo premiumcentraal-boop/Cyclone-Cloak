@@ -219,7 +219,15 @@ private fun CloakBindingCard(
         ) {
             Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
                 Text(binding.packageName, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
-                Text("user ${binding.androidUserId} · ${binding.state}", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                Text(
+                    "user ${binding.androidUserId} · ${binding.state}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = if (binding.state.contains("failed", ignoreCase = true) || binding.state == "missing") {
+                        MaterialTheme.colorScheme.error
+                    } else {
+                        MaterialTheme.colorScheme.onSurfaceVariant
+                    },
+                )
             }
             Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
                 TextButton(onClick = { onToggle(binding) }) { Text(if (binding.enabled) "Off" else "On") }
