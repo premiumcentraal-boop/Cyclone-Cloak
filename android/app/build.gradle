@@ -12,8 +12,8 @@ android {
         applicationId "dev.cyclone.cloak"
         minSdk 29
         targetSdk 36
-        versionCode 10
-        versionName "0.5.0-alpha.3"
+        versionCode 11
+        versionName "0.5.0-alpha.4"
     }
 
     signingConfigs {
@@ -51,6 +51,29 @@ android {
         jvmTarget = "17"
     }
 }
+
+// Embed the module built from this exact source/version in the app so Root Doctor can repair
+// missing or outdated installs even when the phone has no network connection.
+def cloakModuleZipName = "cyclone-cloak-${android.defaultConfig.versionName}.zip"
+def generatedCloakAssets = layout.buildDirectory.dir("generated/rootDoctorAssets")
+android.sourceSets.main.assets.srcDir(generatedCloakAssets)
+def cloakModuleZip = layout.projectDirectory.file("../module/build/module/${cloakModuleZipName}")
+def embedCloakModule = tasks.register("embedCloakModule") {
+    dependsOn(":module:packageModule")
+    inputs.file(cloakModuleZip)
+    outputs.file(generatedCloakAssets.map { it.file("cyclone-cloak-module.zip") })
+    doLast {
+        if (!cloakModuleZip.asFile.isFile()) {
+            throw new GradleException("The matching module ZIP was not built: ${cloakModuleZip.asFile}")
+        }
+        copy {
+            from cloakModuleZip.asFile
+            into generatedCloakAssets.get().asFile
+            rename { "cyclone-cloak-module.zip" }
+        }
+    }
+}
+tasks.named("preBuild").configure { dependsOn(embedCloakModule) }
 
 dependencies {
     testImplementation "junit:junit:4.13.2"

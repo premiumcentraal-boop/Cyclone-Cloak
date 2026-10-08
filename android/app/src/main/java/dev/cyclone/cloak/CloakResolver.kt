@@ -39,7 +39,7 @@ object CloakResolver {
      */
     fun rebuildIndex(context: Context): Boolean = rebuildIndexDetailed(context).published
 
-    fun rebuildIndexDetailed(context: Context): RootDoctorResult {
+    fun rebuildIndexDetailed(context: Context, repairModule: Boolean = false): RootDoctorResult {
         val staging = stagingRoot(context)
         val staged = runCatching {
             staging.deleteRecursively()
@@ -63,7 +63,11 @@ object CloakResolver {
             File(staging, CloakStateLayout.INDEX_FILE)
                 .writeText(JSONObject().put("schemaVersion", 2).put("entries", entries).toString())
         }.onFailure { Log.e("CloakPublish", "Could not stage profile state", it) }.isSuccess
-        val result = if (staged) CloakRootDoctor.run(context, staging) else RootDoctorResult(RootDoctorCode.PUBLISH_FAILED)
+        val result = if (staged) {
+            CloakRootDoctor.run(context, staging, repairModule)
+        } else {
+            RootDoctorResult(RootDoctorCode.PUBLISH_FAILED)
+        }
         for (binding in CloakBindingStore.all(context)) {
             val state = when {
                 !binding.enabled && result.published -> "disabled"
@@ -78,6 +82,10 @@ object CloakResolver {
                     RootDoctorCode.MODULE_PENDING_REMOVAL -> "module removal pending"
                     RootDoctorCode.MODULE_REBOOT_REQUIRED -> "module update needs reboot"
                     RootDoctorCode.MODULE_OUTDATED -> "module update needed"
+                    RootDoctorCode.MODULE_BUNDLE_INVALID -> "module package invalid"
+                    RootDoctorCode.MODULE_INSTALL_FAILED -> "module install failed"
+                    RootDoctorCode.ZYGISK_DISABLED -> "Zygisk disabled"
+                    RootDoctorCode.ZYGISK_STATUS_UNKNOWN -> "Zygisk status unknown"
                     RootDoctorCode.ABI_UNSUPPORTED -> "unsupported architecture"
                     else -> "publish failed"
                 }
