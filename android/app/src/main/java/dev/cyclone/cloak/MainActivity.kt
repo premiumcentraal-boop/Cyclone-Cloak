@@ -191,7 +191,7 @@ class MainActivity : ComponentActivity() {
                                 profileId,
                                 userId,
                                 pkg,
-                                JSONObject().put("cloakProfileId", cloakId),
+                                CloakIdentity.summary(cloakId, CloakStore.find(appContext, cloakId)),
                             )
                             boundCount++
                         }
@@ -288,7 +288,7 @@ class MainActivity : ComponentActivity() {
                             profileId,
                             userId,
                             pkg,
-                            JSONObject().put("cloakProfileId", cloakId),
+                            CloakIdentity.summary(cloakId, CloakStore.find(appContext, cloakId)),
                         )
                     }
                     publishResult = CloakResolver.rebuildIndexDetailed(appContext)
