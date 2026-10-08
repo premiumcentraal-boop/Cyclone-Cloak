@@ -225,6 +225,8 @@ private fun CloakRootDoctorCard(
         RootDoctorCode.MODULE_DISABLED,
         RootDoctorCode.MODULE_PENDING_REMOVAL,
         RootDoctorCode.MODULE_OUTDATED,
+        RootDoctorCode.MODULE_BUNDLE_INVALID,
+        RootDoctorCode.MODULE_INSTALL_FAILED,
     )
     Card(
         modifier = Modifier.fillMaxWidth(),

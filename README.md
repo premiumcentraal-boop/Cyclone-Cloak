@@ -11,7 +11,7 @@ linked to another install.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.1 (reference release; on-device validation pending)
+## Status: 0.5.0-alpha.4 (pre-release; on-device validation required)
 
 - **Companion app** (`android/app`): a Cyclone connector. Imports cloak profiles (JSON, same
   schema as the forge emits), binds them to Cyclone profiles via the connector contract
@@ -21,6 +21,9 @@ The thin line that turns one playboy billionaire into twenty masked vigilantes.
 - **platform module** (`android/module`): for every app bound to a cloak profile, rewrites the
   `android.os.Build` statics and callbacks `SystemProperties` reads so the app sees the bound device.
   Callbacks apply once at process start; unscoped apps are untouched.
+- **Root Doctor**: checks Magisk, Zygisk, module version and architecture, and profile-state publishing. Its
+  explicit repair action can use the matching module bundled inside the signed app, then explains when a
+  reboot and a second check are needed.
 - **Profile Forge** (`forge/`): reference implementation of the coherence rules (fingerprint vs.
   model vs. patch level vs. API level), dump parsing, and stable identifier derivation
   (HMAC seeds, Luhn-valid IMEIs). Stdlib-only Python, pytest-tested.

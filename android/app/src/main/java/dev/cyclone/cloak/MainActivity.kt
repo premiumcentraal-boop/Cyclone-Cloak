@@ -211,7 +211,7 @@ class MainActivity : ComponentActivity() {
     private fun runRootDoctor() {
         model.rootDoctor.value = RootDoctorResult(RootDoctorCode.CHECKING)
         thread {
-            val result = CloakResolver.rebuildIndexDetailed(applicationContext)
+            val result = CloakResolver.rebuildIndexDetailed(applicationContext, repairModule = true)
             runOnUiThread {
                 model.rootDoctor.value = result
                 reload()
