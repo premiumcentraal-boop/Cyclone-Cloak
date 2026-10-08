@@ -29,6 +29,8 @@ The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
 ## Development
 
+For Android version requirements and release upgrade instructions, see [docs/INSTALL.md](docs/INSTALL.md).
+
 ```sh
 # forge tests
 uv run --with pytest -- python -m pytest forge/tests

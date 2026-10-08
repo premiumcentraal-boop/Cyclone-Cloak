@@ -62,3 +62,25 @@ dependencies {
     implementation "androidx.compose.foundation:foundation"
     implementation platform("androidx.compose:compose-bom:2024.09.00")
 }
+
+// A release built without the stable key would be rejected as an update to Alpha 4.
+// Keep local debug builds available without secrets, but fail every release build closed.
+tasks.register("verifyReleaseSigning") {
+    doLast {
+        def keystorePath = System.getenv("CLOAK_KEYSTORE_PATH")
+        def keystorePassword = System.getenv("CLOAK_KEYSTORE_PASSWORD")
+
+        if (!keystorePath || !keystorePassword) {
+            throw new GradleException("Release builds require CLOAK_KEYSTORE_PATH and CLOAK_KEYSTORE_PASSWORD.")
+        }
+        if (!file(keystorePath).isFile()) {
+            throw new GradleException("Release keystore does not exist at CLOAK_KEYSTORE_PATH.")
+        }
+    }
+}
+
+tasks.configureEach {
+    if (name == "preReleaseBuild") {
+        dependsOn(tasks.named("verifyReleaseSigning"))
+    }
+}
