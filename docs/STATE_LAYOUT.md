@@ -11,6 +11,9 @@ reader. One layout, two implementations; change both in the same commit.
 - Staging root: `<companion cache>/state-staging/` - what the companion builds
   before publishing; never read by the module.
 - Per-binding dir: `<root>/<sha256 key>/profile.json` - the full cloak profile JSON.
+- Per-binding dir: `<root>/<sha256 key>/pif.json` - PIF-style key/value Play Integrity
+  posture derived from the same device block. The module does not read it; a
+  Tricky Store-style consumer does.
 - Module index: `<root>/index.json` - `{"schemaVersion": 2, "entries": {...}}` maps
   `<androidUserId>/<packageName>` to `{"profileId", "cloakProfileId", "key"}`.
   Rebuilt from current enabled bindings on every publish.

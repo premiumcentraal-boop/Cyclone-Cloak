@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
+import java.lang.reflect.Constructor;
 
 import top.canyie.pine.Pine;
 import top.canyie.pine.PineConfig;
@@ -17,7 +18,10 @@ import top.canyie.pine.callback.MethodHook;
  *
  * Vault fields wired here (coverage ledger): identifiers.android_id,
  * identifiers.imei_primary, identifiers.imei_secondary, identifiers.sim_serial,
- * identifiers.mac, identifiers.bt_mac, identifiers.serial, telephony.sim_slot_count.
+ * identifiers.mac, identifiers.bt_mac, identifiers.serial, identifiers.widevine_id,
+ * identifiers.advertising_id, telephony.sim_slot_count and the composed
+ * user agent. The GSF read path is served through a guarded ContentResolver
+ * query rewrite; the advertising id needs the Play services SDK present.
  */
 public final class HookBridge {
     private static final String PROP_IMEI0 = "cloak.imei0";
@@ -34,6 +38,10 @@ public final class HookBridge {
     private static final String PROP_SERIAL = "ro.serialno";
     private static final String PROP_COUNTRY = "persist.sys.country";
     private static final String ANDROID_ID_KEY = "android_id"; // Settings.Secure.ANDROID_ID
+    private static final String PROP_UA = "cloak.ua";
+    private static final String PROP_WIDEVINE = "cloak.widevine_id";
+    private static final String PROP_ADV_ID = "cloak.advertising_id";
+    private static final String PROP_GSF = "cloak.gsf_id";
 
     // Hook kinds. Every identity getter always sets a result, so a call can
     // never fall through to the host device's real value.
@@ -48,6 +56,7 @@ public final class HookBridge {
     private static final int KIND_WIFI_MAC = 8;
     private static final int KIND_BT_MAC = 9;
     private static final int KIND_SERIAL = 10;
+    private static final int KIND_UA = 11;
 
     private static volatile Method sPropGet;
 
@@ -102,6 +111,62 @@ public final class HookBridge {
         } catch (Throwable t) {
             log("serial hooks failed", t);
         }
+        try {
+            installWebView();
+        } catch (Throwable t) {
+            log("webview hooks failed", t);
+        }
+        try {
+            installMediaDrm();
+        } catch (Throwable t) {
+            log("mediadrm hooks failed", t);
+        }
+        try {
+            installAdvertisingId();
+        } catch (Throwable t) {
+            log("advertising id hooks failed", t);
+        }
+        try {
+            installGsf();
+        } catch (Throwable t) {
+            log("gsf hooks failed", t);
+        }
+    }
+
+    private static void installWebView() throws ClassNotFoundException {
+        Class<?> webSettings = Class.forName("android.webkit.WebSettings", false,
+                HookBridge.class.getClassLoader());
+        hookNoArg(webSettings, "getUserAgentString", KIND_UA);
+    }
+
+    private static void installMediaDrm() throws ClassNotFoundException {
+        Class<?> mediaDrm = Class.forName("android.media.MediaDrm", false,
+                HookBridge.class.getClassLoader());
+        // getPropertyByteArray(String propertyName): only the device identity
+        // read is redirected; every other property stays real.
+        hookWith(mediaDrm, "getPropertyByteArray", new DeviceIdHook(), String.class);
+    }
+
+    private static void installAdvertisingId() throws ClassNotFoundException {
+        Class<?> client = Class.forName(
+                "com.google.android.gms.ads.identifier.AdvertisingIdClient", false,
+                HookBridge.class.getClassLoader());
+        hookWith(client, "getAdvertisingIdInfo", new AdvertisingIdHook(), android.content.Context.class);
+    }
+
+    private static void installGsf() throws ClassNotFoundException {
+        Class<?> resolver = Class.forName("android.content.ContentResolver", false,
+                HookBridge.class.getClassLoader());
+        // The classic GSF read is a query against gservices for the android_id
+        // row. Both overloads that accept a Uri are guarded; anything unusual
+        // falls through to the real provider response.
+        hookWith(resolver, "query", new GsfQueryHook(false),
+                android.net.Uri.class, String[].class, String.class, String[].class, String.class);
+        // The bundle overload is absent on some framework levels; hookWith
+        // treats a missing method as a no-op.
+        hookWith(resolver, "query", new GsfQueryHook(true),
+                android.net.Uri.class, String[].class, android.os.Bundle.class,
+                android.os.CancellationSignal.class);
     }
 
     private static void installTelephony() throws ClassNotFoundException {
@@ -187,7 +252,8 @@ public final class HookBridge {
             case KIND_BT_MAC:
                 return orNull(prop(PROP_BT_MAC));
             case KIND_SERIAL:
-                return orNull(prop(PROP_SERIAL));
+                return orNull(prop(PROP_SERIAL));            case KIND_UA:
+                return orNull(prop(PROP_UA));
             default:
                 return null;
         }
@@ -246,6 +312,106 @@ public final class HookBridge {
             i.invoke(null, "CloakModule", "[cloak-hook] " + message + (t == null ? "" : ": " + t));
         } catch (Throwable ignored) {
         }
+    }
+
+    /** DeviceIdHook: MediaDrm DEVICE_ID reads answer from the widevine vault. */
+    private static final class DeviceIdHook extends MethodHook {
+        @Override public void beforeCall(Pine.CallFrame frame) {
+            if (frame.args == null || frame.args.length < 1
+                    || !"deviceId".equals(frame.args[0])) {
+                return;
+            }
+            frame.setResult(hexBytes(prop(PROP_WIDEVINE)));
+        }
+    }
+
+    /** AdvertisingIdHook: rebuilds the SDK Info record from the vault value. */
+    private static final class AdvertisingIdHook extends MethodHook {
+        @Override public void beforeCall(Pine.CallFrame frame) {
+            String value = prop(PROP_ADV_ID);
+            if (value.isEmpty()) {
+                return;
+            }
+            try {
+                Class<?> info = Class.forName(
+                        "com.google.android.gms.ads.identifier.AdvertisingIdClient$Info",
+                        false, HookBridge.class.getClassLoader());
+                Constructor<?> ctor = info.getConstructor(String.class, boolean.class);
+                frame.setResult(ctor.newInstance(value, Boolean.FALSE));
+            } catch (Throwable t) {
+                log("advertising info rebuild failed", t);
+            }
+        }
+    }
+
+    /** GsfQueryHook: guarded rewrite of the gservices android_id row. */
+    private static final class GsfQueryHook extends MethodHook {
+        private final boolean bundleOverload;
+
+        GsfQueryHook(boolean bundleOverload) {
+            this.bundleOverload = bundleOverload;
+        }
+
+        @Override public void afterCall(Pine.CallFrame frame) {
+            try {
+                if (!(frame.getResult() instanceof android.database.Cursor)) {
+                    return;
+                }
+                Object uriArg = frame.args != null && frame.args.length > 0 ? frame.args[0] : null;
+                if (!(uriArg instanceof android.net.Uri)) {
+                    return;
+                }
+                android.net.Uri uri = (android.net.Uri) uriArg;
+                if (!"com.google.android.gsf.gservices".equals(uri.getAuthority())) {
+                    return;
+                }
+                if (frame.args == null || frame.args.length < 4
+                        || !(frame.args[3] instanceof String[])
+                        || !matchesAndroidIdQuery((String[]) frame.args[3])) {
+                    return;
+                }
+                android.database.Cursor original = (android.database.Cursor) frame.getResult();
+                if (!original.moveToFirst()) {
+                    return;
+                }
+                String[] columns = original.getColumnNames();
+                int nameAt = -1;
+                int valueAt = -1;
+                for (int i = 0; i < columns.length; i++) {
+                    if (ANDROID_ID_KEY.equals(columns[i])) nameAt = i;
+                    if ("value".equals(columns[i])) valueAt = i;
+                }
+                if (nameAt < 0 || valueAt < 0) {
+                    return;
+                }
+                android.database.MatrixCursor replacement =
+                        new android.database.MatrixCursor(columns);
+                Object[] row = new Object[columns.length];
+                for (int i = 0; i < columns.length; i++) {
+                    row[i] = i == valueAt ? prop(PROP_GSF) : original.getString(i);
+                }
+                replacement.addRow(row);
+                original.close();
+                frame.setResult(replacement);
+            } catch (Throwable t) {
+                log("gsf rewrite failed", t);
+            }
+        }
+
+        private boolean matchesAndroidIdQuery(String[] names) {
+            return names != null && names.length == 1 && ANDROID_ID_KEY.equals(names[0]);
+        }
+    }
+
+    private static byte[] hexBytes(String hex) {
+        if (hex == null || hex.isEmpty()) return null;
+        int len = hex.length() / 2;
+        byte[] out = new byte[len];
+        for (int i = 0; i < len; i++) {
+            out[i] = (byte) ((Character.digit(hex.charAt(2 * i), 16) << 4)
+                    | Character.digit(hex.charAt(2 * i + 1), 16));
+        }
+        return out;
     }
 
     private static final class IdentityHook extends MethodHook {

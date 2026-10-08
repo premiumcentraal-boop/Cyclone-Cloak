@@ -5,6 +5,8 @@ from __future__ import annotations
 import uuid
 from typing import Any, Mapping
 
+from .derive import derive_chrome_version
+
 _DEVICE_KEYS = {
     "manufacturer": ("ro.product.manufacturer",),
     "brand": ("ro.product.brand", "ro.product.manufacturer"),
@@ -79,12 +81,28 @@ def draft_device(props: Mapping[str, str]) -> dict[str, Any]:
 def draft_profile(name: str, seed: str, build_prop_text: str) -> dict[str, Any]:
     """Assemble a full draft profile; the id is deterministic for a given seed and name."""
     props = parse_build_prop(build_prop_text)
+    device = draft_device(props)
     profile = uuid.uuid5(uuid.NAMESPACE_URL, f"https://cloak.cyclone.dev/{seed}/{name}")
     return {
         "schema_version": "0.2",
         "id": str(profile),
         "name": name,
         "seed": seed,
-        "device": draft_device(props),
+        "device": device,
+        "ua": _draft_ua(device, seed),
         "meta": {"source": "build.prop"},
     }
+
+
+def _draft_ua(device: Mapping[str, Any], seed: str) -> dict[str, str]:
+    """Compose the draft UA from the dumped device block, same as the forge path.
+
+    Dump profiles carry no display class, so they always use the phone form.
+    """
+    major, build, patch = derive_chrome_version(seed)
+    value = (
+        f"Mozilla/5.0 (Linux; Android {device['version_release']}; {device['model']}) "
+        f"AppleWebKit/537.36 (KHTML, like Gecko) Chrome/{major}.0.{build}.{patch} "
+        f"Mobile Safari/537.36"
+    )
+    return {"value": value}

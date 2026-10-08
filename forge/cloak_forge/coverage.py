@@ -44,10 +44,11 @@ APPLIED = frozenset({
     "locale.language",
     "locale.country",
     "locale.timezone",
+    "telephony.sim_slot_count",
+    "ua.value",
 })
 
 PENDING = frozenset({
-    "telephony.sim_slot_count",
     "network.egress_hint",
     "display.width",
     "display.height",

@@ -107,6 +107,19 @@ def derive_gsf_id(seed: str) -> str:
 def derive_widevine_id(seed: str) -> str:
     return _hex(seed, "widevine_id", 32)
 
+def derive_chrome_version(seed: str) -> tuple[int, int, int]:
+    """A plausible Chrome version triplet for an Android 13-era device.
+
+    The major sits in the range current builds of that era shipped, and the
+    build/patch numbers come from the seed so the whole UA is deterministic.
+    """
+    raw = _digest(seed, "chrome_version", 8)
+    value = int.from_bytes(raw, "big")
+    major = 100 + value % 31
+    build = 1000 + (value >> 5) % 9000
+    patch = 1 + (value >> 17) % 99
+    return major, build, patch
+
 def _digits(seed: str, field: str, length: int) -> str:
     value = int.from_bytes(_digest(seed, field, 8), "big") % (10 ** length)
     return str(value).zfill(length)

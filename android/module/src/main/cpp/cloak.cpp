@@ -408,6 +408,16 @@ bool load_profile_for(Api *api, const std::string &user, const std::string &pkg)
         }
     }
 
+    // User agent: the WebView UA reads as one prop; HookBridge serves it
+    // through WebSettings.getUserAgentString().
+    auto ua = profile.find("ua");
+    if (ua != profile.end() && ua->is_object()) {
+        auto value = ua->find("value");
+        if (value != ua->end() && value->is_string()) {
+            set_prop("cloak.ua", value->get<std::string>());
+        }
+    }
+
     // Java callback gate: profiles older than the engine block default to on.
     auto engine = profile.find("engine");
     if (engine != profile.end() && engine->is_object()) {

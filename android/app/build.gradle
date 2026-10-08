@@ -8,12 +8,18 @@ android {
     namespace "dev.cyclone.cloak"
     compileSdk 36
 
+    // JVM tests exercise JSONObject-driven logic against the stub android.jar,
+    // so unmocked framework methods must return defaults instead of throwing.
+    testOptions {
+        unitTests.returnDefaultValues = true
+    }
+
     defaultConfig {
         applicationId "dev.cyclone.cloak"
         minSdk 29
         targetSdk 36
-        versionCode 12
-        versionName "0.6.0-alpha.1"
+        versionCode 13
+        versionName "0.7.0-alpha.1"
     }
 
     signingConfigs {
@@ -77,6 +83,9 @@ tasks.named("preBuild").configure { dependsOn(embedCloakModule) }
 
 dependencies {
     testImplementation "junit:junit:4.13.2"
+    // Real org.json on the JVM: the stub android.jar throws "not mocked" for
+    // JSONObject, while return-defaults breaks chained put() calls.
+    testImplementation "org.json:json:20240303"
     implementation "androidx.activity:activity-compose:1.9.2"
     implementation "androidx.compose.material3:material3"
     implementation "androidx.compose.ui:ui"

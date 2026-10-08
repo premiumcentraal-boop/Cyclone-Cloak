@@ -49,9 +49,11 @@ object CloakResolver {
                 if (!binding.enabled) continue
                 val profile = CloakStore.find(context, binding.cloakProfileId) ?: continue
                 val key = CloakStateLayout.key(binding.profileId, binding.androidUserId, binding.packageName)
-                val file = File(File(staging, key), CloakStateLayout.PROFILE_FILE)
-                file.parentFile?.mkdirs()
-                file.writeText(profile.toString())
+                val bindingDir = File(staging, key)
+                bindingDir.mkdirs()
+                File(bindingDir, CloakStateLayout.PROFILE_FILE).writeText(profile.toString())
+                File(bindingDir, CloakStateLayout.PIF_FILE)
+                    .writeText(CloakPif.fromProfile(profile).toString())
                 entries.put(
                     entryKey(binding.androidUserId, binding.packageName),
                     JSONObject()

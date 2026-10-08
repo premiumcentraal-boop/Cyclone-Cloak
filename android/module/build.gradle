@@ -94,10 +94,42 @@ tasks.register("prepareHookPine") {
     }
 }
 
+// The hook bridge now touches framework types (Uri, Cursor, Context) directly,
+// so javac needs the platform jar on its classpath. Resolve it from the local
+// SDK layout instead of an AGP accessor so CI and local builds behave the same.
+def androidPlatformJar = {
+    def candidates = []
+    for (prop in ["sdk.dir", "ANDROID_SDK_ROOT", "ANDROID_HOME"]) {
+        if (prop == "sdk.dir") {
+            for (lp in [rootProject.file("local.properties"), file("local.properties")]) {
+                if (!lp.exists()) continue
+                def props = new Properties()
+                lp.withInputStream { props.load(it) }
+                def dir = props.getProperty("sdk.dir")
+                if (dir != null && !dir.isBlank()) { candidates << dir; break }
+            }
+        } else {
+            def dir = System.getenv(prop)
+            if (dir != null && !dir.isBlank()) candidates << dir
+        }
+    }
+    for (dir in candidates) {
+        def platforms = new File(dir, "platforms")
+        def installed = platforms.listFiles()
+        if (installed == null) continue
+        def latest = installed.findAll { it.name.startsWith("android-") }
+                .max { it.name.replaceFirst(/^android-/, "").toInteger() }
+        if (latest == null) continue
+        def jar = new File(latest, "android.jar")
+        if (jar.exists()) return jar
+    }
+    throw new GradleException("android.jar not found; set ANDROID_HOME or sdk.dir")
+}.call()
+
 tasks.register("compileHookBridge", JavaCompile) {
     dependsOn "prepareHookPine"
     source "src/hook/java"
-    classpath = files(hookWork.map { it.dir("classes.jar") })
+    classpath = files(hookWork.map { it.dir("classes.jar") }, androidPlatformJar)
     destinationDirectory = hookWork.map { it.dir("classes") }
     options.release.set(11)
 }

@@ -12,6 +12,7 @@ object CloakStateLayout {
     const val MODULE_STATE_DIR = "/data/adb/cyclone_cloak/state-v1"
     const val STAGING_DIR = "state-staging"
     const val PROFILE_FILE = "profile.json"
+    const val PIF_FILE = "pif.json"
     const val INDEX_FILE = "index.json"
 
     private val profileIdRegex = Regex("^Cyclone_[a-f0-9]{16}$")

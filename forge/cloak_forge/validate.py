@@ -32,6 +32,11 @@ _LANG_RE = re.compile(r"^[a-z]{2}$")
 _COUNTRY_RE = re.compile(r"^[A-Z]{2}$")
 _TIMEZONE_RE = re.compile(r"^[A-Za-z0-9_+-]+(/[A-Za-z0-9_+-]+)*$")
 
+_UA_RE = re.compile(
+    r"^Mozilla/5\.0 \(Linux; Android [0-9.]+; [^()]+\) AppleWebKit/537\.36 "
+    r"\(KHTML, like Gecko\) Chrome/[0-9]+\.0\.[0-9]+\.[0-9]+ (Mobile )?Safari/537\.36$"
+)
+
 _FINGERPRINT_RE = re.compile(
     r"^(?P<brand>[^/:\s]+)/(?P<product>[^/:\s]+)/(?P<device>[^/:\s]+)"
     r":(?P<release>[0-9.]+)/(?P<build_id>[^/]+)/(?P<incremental>[^:/]+)"
@@ -195,8 +200,34 @@ def validate_profile(profile: Mapping[str, Any]) -> list[Finding]:
     _validate_telephony(findings, profile.get("telephony") or {})
     _validate_display(findings, profile.get("display") or {})
     _validate_locale(findings, profile.get("locale") or {})
+    ua = profile.get("ua")
+    if ua is None:
+        _add(findings, WARNING, "UA_MISSING", "profile carries no user agent block")
+    else:
+        _validate_ua(findings, ua, device)
     return findings
 
+
+
+def _validate_ua(findings: list[Finding], ua: Mapping[str, Any], device: Mapping[str, Any]) -> None:
+    if not isinstance(ua, Mapping):
+        _add(findings, ERROR, "UA_BLOCK", "ua must be an object")
+        return
+    value = ua.get("value")
+    if not isinstance(value, str) or not _UA_RE.match(value):
+        _add(
+            findings,
+            ERROR,
+            "UA_FORMAT",
+            "ua.value must be a Chrome-on-Android user agent string",
+        )
+        return
+    model = str(device["model"])
+    release = str(device["version_release"])
+    if f"; {model})" not in value:
+        _add(findings, ERROR, "UA_MODEL_MISMATCH", "ua.value model disagrees with device.model")
+    if f"Android {release};" not in value:
+        _add(findings, ERROR, "UA_RELEASE_MISMATCH", "ua.value Android release disagrees with device.version_release")
 
 
 def _validate_telephony(findings: list[Finding], telephony: Mapping[str, Any]) -> None:

@@ -66,5 +66,6 @@ def test_identifier_props_are_namespaced():
         "cloak.sim_serial0",
         "cloak.gsf_id",
         "cloak.widevine_id",
+        "cloak.ua",
     ):
         assert key in source, f"module lost the stable prop key {key}"
