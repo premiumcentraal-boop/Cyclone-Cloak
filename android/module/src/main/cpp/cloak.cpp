@@ -72,6 +72,34 @@ const std::pair<const char *, const char *> kDisplayProps[] = {
     {"density", "ro.sf.lcd_density"},
 };
 
+// identifier key -> system property. serial is listed twice: Build.getSerial()
+// and getprop readers hit ro.serialno, while firmware-level reads use
+// ro.boot.serialno. The cloak.* keys expose every identifier through the same
+// hooked SystemProperties surface so later Java-level callbacks and the
+// companion diagnostics read identical values.
+const std::pair<const char *, const char *> kIdentifierProps[] = {
+    {"serial", "ro.serialno"},
+    {"serial", "ro.boot.serialno"},
+    {"android_id", "cloak.android_id"},
+    {"advertising_id", "cloak.advertising_id"},
+    {"app_set_id", "cloak.app_set_id"},
+    {"mac", "cloak.wifi_mac"},
+    {"bt_mac", "cloak.bt_mac"},
+    {"imei_primary", "cloak.imei0"},
+    {"imei_secondary", "cloak.imei1"},
+    {"sim_serial", "cloak.sim_serial0"},
+    {"gsf_id", "cloak.gsf_id"},
+    {"widevine_id", "cloak.widevine_id"},
+};
+
+// locale key -> system property; language/country also feed the Java-side
+// default-locale rewrite in apply_profile.
+const std::pair<const char *, const char *> kLocaleProps[] = {
+    {"timezone", "persist.sys.timezone"},
+    {"language", "persist.sys.language"},
+    {"country", "persist.sys.country"},
+};
+
 std::unordered_map<std::string, std::string> g_props;
 std::string g_active_package;
 std::string g_active_key;
@@ -326,6 +354,37 @@ bool load_profile_for(Api *api, const std::string &user, const std::string &pkg)
         }
     }
 
+    // Identifier vault: serial gets the real serialno props; every other value
+    // renders under its stable cloak.* key.
+    auto identifiers = profile.find("identifiers");
+    if (identifiers != profile.end() && identifiers->is_object()) {
+        for (const auto &entry : kIdentifierProps) {
+            auto value = identifiers->find(entry.first);
+            if (value != identifiers->end() && value->is_string()) {
+                set_prop(entry.second, value->get<std::string>());
+            }
+        }
+    }
+
+    // Locale and timezone: native props here, Java-side defaults in apply_profile.
+    auto locale = profile.find("locale");
+    if (locale != profile.end() && locale->is_object()) {
+        for (const auto &entry : kLocaleProps) {
+            auto value = locale->find(entry.first);
+            if (value != locale->end() && value->is_string()) {
+                set_prop(entry.second, value->get<std::string>());
+                set_prop(std::string("cloak.locale.") + entry.first, value->get<std::string>());
+            }
+        }
+        auto lang = locale->find("language");
+        auto country = locale->find("country");
+        if (lang != locale->end() && lang->is_string() &&
+            country != locale->end() && country->is_string()) {
+            set_prop("persist.sys.locale",
+                     lang->get<std::string>() + "-" + country->get<std::string>());
+        }
+    }
+
     // Android names 5G networks NR in gsm.network.type; profiles say 5G.
     if (auto net = g_props.find("gsm.network.type"); net != g_props.end() && net->second == "5G") {
         net->second = "NR";
@@ -467,7 +526,58 @@ void apply_profile(JNIEnv *env) {
         env->ExceptionClear();
     }
 
-    // 2. Hook SystemProperties reads for everything that follows process start.
+    // 2. Point the process Java-side defaults at the profile so
+    // Locale.getDefault() and TimeZone.getDefault() agree with the props.
+    const std::string language = lookup_prop("cloak.locale.language");
+    const std::string country = lookup_prop("cloak.locale.country");
+    if (!language.empty() || !country.empty()) {
+        if (jclass system = env->FindClass("java/lang/System")) {
+            if (auto setProperty = env->GetStaticMethodID(system, "setProperty",
+                "(Ljava/lang/String;Ljava/lang/String;)Ljava/lang/String;")) {
+                auto put = [&](const char *key, const std::string &value) {
+                    if (value.empty()) return;
+                    jstring keyStr = env->NewStringUTF(key);
+                    jstring valStr = env->NewStringUTF(value.c_str());
+                    env->CallStaticObjectMethod(system, setProperty, keyStr, valStr);
+                    env->DeleteLocalRef(keyStr);
+                    env->DeleteLocalRef(valStr);
+                };
+                put("user.language", language);
+                put("user.country", country);
+            } else {
+                env->ExceptionClear();
+            }
+            env->DeleteLocalRef(system);
+        } else {
+            env->ExceptionClear();
+        }
+        if (jclass localeClass = env->FindClass("java/util/Locale")) {
+            jmethodID ctor = env->GetMethodID(localeClass, "<init>",
+                "(Ljava/lang/String;Ljava/lang/String;)V");
+            jmethodID setDefault = env->GetStaticMethodID(localeClass, "setDefault",
+                "(Ljava/util/Locale;)V");
+            if (ctor && setDefault) {
+                jstring langStr = env->NewStringUTF(language.c_str());
+                jstring countryStr = env->NewStringUTF(country.c_str());
+                jobject locale = env->NewObject(localeClass, ctor, langStr, countryStr);
+                if (locale) {
+                    env->CallStaticVoidMethod(localeClass, setDefault, locale);
+                    env->DeleteLocalRef(locale);
+                } else {
+                    env->ExceptionClear();
+                }
+                env->DeleteLocalRef(langStr);
+                env->DeleteLocalRef(countryStr);
+            } else {
+                env->ExceptionClear();
+            }
+            env->DeleteLocalRef(localeClass);
+        } else {
+            env->ExceptionClear();
+        }
+    }
+
+    // 3. Hook SystemProperties reads for everything that follows process start.
     jclass sysprops = env->FindClass("android/os/SystemProperties");
     if (!sysprops) {
         env->ExceptionClear();

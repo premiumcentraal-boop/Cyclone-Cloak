@@ -37,3 +37,34 @@ def test_applied_fields_are_referenced_by_the_module():
     for path in sorted(APPLIED):
         key = path.split(".", 1)[1]
         assert key in source, f"module source never references profile key '{key}' ({path})"
+
+def test_identifier_and_locale_read_paths_stay_wired():
+    source = (ROOT / "android" / "module" / "src" / "main" / "cpp" / "cloak.cpp").read_text(encoding="utf-8")
+    for prop in (
+        "ro.serialno",
+        "ro.boot.serialno",
+        "persist.sys.timezone",
+        "persist.sys.language",
+        "persist.sys.country",
+        "persist.sys.locale",
+        "user.language",
+        "user.country",
+    ):
+        assert prop in source, f"module lost the real read path for {prop}"
+
+
+def test_identifier_props_are_namespaced():
+    source = (ROOT / "android" / "module" / "src" / "main" / "cpp" / "cloak.cpp").read_text(encoding="utf-8")
+    for key in (
+        "cloak.android_id",
+        "cloak.advertising_id",
+        "cloak.app_set_id",
+        "cloak.wifi_mac",
+        "cloak.bt_mac",
+        "cloak.imei0",
+        "cloak.imei1",
+        "cloak.sim_serial0",
+        "cloak.gsf_id",
+        "cloak.widevine_id",
+    ):
+        assert key in source, f"module lost the stable prop key {key}"

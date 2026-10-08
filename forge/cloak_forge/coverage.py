@@ -30,11 +30,6 @@ APPLIED = frozenset({
     "telephony.mnc",
     "telephony.network_type",
     "display.density",
-})
-
-PENDING = frozenset({
-    "telephony.sim_slot_count",
-    "network.egress_hint",
     "identifiers.android_id",
     "identifiers.advertising_id",
     "identifiers.app_set_id",
@@ -46,13 +41,18 @@ PENDING = frozenset({
     "identifiers.gsf_id",
     "identifiers.widevine_id",
     "identifiers.serial",
+    "locale.language",
+    "locale.country",
+    "locale.timezone",
+})
+
+PENDING = frozenset({
+    "telephony.sim_slot_count",
+    "network.egress_hint",
     "display.width",
     "display.height",
     "display.refresh_rate_hz",
     "display.screen_size_class",
-    "locale.language",
-    "locale.country",
-    "locale.timezone",
 })
 
 INTERNAL = frozenset({

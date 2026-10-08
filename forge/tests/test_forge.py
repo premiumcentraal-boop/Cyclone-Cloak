@@ -26,3 +26,14 @@ def test_unknown_template_rejected():
     import pytest
     with pytest.raises(cloak_forge.ForgeError):
         forge_profile("vault", SEED, "not-a-template")
+
+
+def test_forge_emits_full_identifier_bundle():
+    from cloak_forge.derive import derive_identifier_bundle
+    profile = forge_profile("Pixel 7 - vault A", SEED, "pixel_7")
+    assert profile["identifiers"] == derive_identifier_bundle(SEED)
+
+
+def test_forge_locale_matches_template():
+    profile = forge_profile("Pixel 7 - vault A", SEED, "pixel_7")
+    assert profile["locale"] == {"language": "en", "country": "US", "timezone": "America/New_York"}

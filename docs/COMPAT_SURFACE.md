@@ -32,3 +32,9 @@ lands. The source of every value is the profile's profile vault entry (see
   profiles never share a value.
 - A callback that cannot be made coherent with the rest of the profile (e.g. a rendered screen size
   that disagrees with the density) is disabled by default and requires an explicit opt-in.
+
+## Status (0.6.0-alpha.1)
+
+- Landed through the property surface: Build fields, telephony operator identity, display density, device serial (`ro.serialno`, `ro.boot.serialno`), and the full identifier vault under stable `cloak.*` keys.
+- Landed in-process: locale and timezone now apply at process start so `Locale.getDefault()` and `TimeZone.getDefault()` follow the profile.
+- Still pending: the Java-API callbacks for Settings provider, TelephonyManager, WifiInfo, BluetoothAdapter, MediaDRM, and GSF reads; these consume the rendered `cloak.*` values in the next sprint.
