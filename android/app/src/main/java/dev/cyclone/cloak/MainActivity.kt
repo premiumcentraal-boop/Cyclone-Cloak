@@ -8,6 +8,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
+import java.util.concurrent.atomic.AtomicInteger
 import androidx.compose.runtime.remember
 import com.cyclone.connector.client.CycloneConnector
 import com.cyclone.connector.client.CycloneConnectorException
@@ -26,6 +27,12 @@ class MainActivity : ComponentActivity() {
                 val importLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
                     if (uri != null) importProfile(uri)
                 }
+                val importFleetLauncher = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+                    if (uri != null) importFleet(uri)
+                }
+                val exportFleetLauncher = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
+                    if (uri != null) exportFleet(uri)
+                }
                 CloakUi(
                     model = model,
                     onImport = { importLauncher.launch(arrayOf("application/json")) },
@@ -38,6 +45,10 @@ class MainActivity : ComponentActivity() {
                     onRootDoctor = { runRootDoctor() },
                     onOpenMagisk = { openMagisk() },
                     onGetModule = { openModuleDownload() },
+                    onForgeFleet = { count -> forgeFleet(count) },
+                    onFleetBind = { fleetBind() },
+                    onExportFleet = { exportFleetLauncher.launch("cyclone-cloak-fleet.json") },
+                    onImportFleet = { importFleetLauncher.launch(arrayOf("application/json")) },
                 )
             }
         }
@@ -114,6 +125,124 @@ class MainActivity : ComponentActivity() {
                 }
             } catch (error: Exception) {
                 runOnUiThread { toast("Import failed: ${error.message}") }
+            }
+        }
+    }
+
+    private fun forgeFleet(count: Int) {
+        val template = model.fleetTemplate.value
+        thread {
+            try {
+                val profiles = CloakFleet.forgeFleet(template, count)
+                val ids = CloakFleet.saveAll(applicationContext, profiles)
+                runOnUiThread {
+                    model.selectedCloakProfile.value = ids.first()
+                    reload()
+                    toast("Forged ${ids.size} identities")
+                }
+            } catch (error: Exception) {
+                runOnUiThread { toast("Fleet forge failed: ${error.message}") }
+            }
+        }
+    }
+
+    private fun fleetBind() {
+        val cloakIds = model.cloakProfiles.map { it.first }
+        val readyProfiles = model.profiles.filter { it.optString("state") == "ready" }
+        val plan = CloakFleet.planBulkBind(cloakIds, readyProfiles, model.bindings.toList())
+        if (plan.assignments.isEmpty()) {
+            val used = model.cloakProfiles.size - plan.unusedCloakProfiles
+            toast(
+                when {
+                    readyProfiles.isEmpty() -> "No ready Cyclone profiles to bind"
+                    plan.unusedCloakProfiles == 0 && used > 0 -> "No unused identities left; forge more first"
+                    else -> "Nothing to bind"
+                },
+            )
+            return
+        }
+        thread {
+            try {
+                val appContext = applicationContext
+                var publishResult = RootDoctorResult(RootDoctorCode.PUBLISH_FAILED)
+                var boundCount = 0
+                CycloneConnector.connect(appContext).use { cyclone ->
+                    for ((profile, cloakId) in plan.assignments) {
+                        val profileId = profile.getString("id")
+                        val userId = profile.optInt("androidUserId", 0)
+                        val packages = profile.optJSONArray("packages")?.let { array ->
+                            (0 until array.length()).map { array.optString(it) }
+                        } ?: emptyList()
+                        for (pkg in packages) {
+                            CloakBindingStore.upsert(
+                                appContext,
+                                CloakBinding(
+                                    profileId = profileId,
+                                    androidUserId = userId,
+                                    packageName = pkg,
+                                    cloakProfileId = cloakId,
+                                    revision = 0,
+                                    enabled = true,
+                                    updatedAt = System.currentTimeMillis(),
+                                    state = "pending",
+                                ),
+                            )
+                            cyclone.setConfig(
+                                profileId,
+                                userId,
+                                pkg,
+                                JSONObject().put("cloakProfileId", cloakId),
+                            )
+                            boundCount++
+                        }
+                    }
+                    publishResult = CloakResolver.rebuildIndexDetailed(appContext)
+                }
+                runOnUiThread {
+                    model.rootDoctor.value = publishResult
+                    val note = if (publishResult.published) "" else " ${publishResult.title}: ${publishResult.message}"
+                    toast("Bound $boundCount apps across ${plan.assignments.size} profiles.$note")
+                    reload()
+                }
+            } catch (error: Exception) {
+                runOnUiThread { toast("Fleet bind failed: ${error.message}") }
+            }
+        }
+    }
+
+    private fun exportFleet(uri: Uri) {
+        thread {
+            try {
+                val profiles = CloakStore.all(applicationContext)
+                if (profiles.isEmpty()) {
+                    runOnUiThread { toast("No identities to export") }
+                    return@thread
+                }
+                val body = CloakFleet.exportFleet(profiles)
+                contentResolver.openOutputStream(uri)?.use { out ->
+                    out.write(body.toString(2).toByteArray(Charsets.UTF_8))
+                } ?: throw IllegalStateException("cannot open output")
+                runOnUiThread { toast("Exported ${profiles.size} identities") }
+            } catch (error: Exception) {
+                runOnUiThread { toast("Export failed: ${error.message}") }
+            }
+        }
+    }
+
+    private fun importFleet(uri: Uri) {
+        thread {
+            try {
+                val text = contentResolver.openInputStream(uri)?.bufferedReader()?.use { it.readText() }
+                    ?: throw IllegalArgumentException("empty file")
+                val profiles = CloakFleet.parseFleet(text)
+                val ids = CloakFleet.saveAll(applicationContext, profiles)
+                runOnUiThread {
+                    model.selectedCloakProfile.value = ids.firstOrNull()
+                    reload()
+                    toast("Imported ${ids.size} identities")
+                }
+            } catch (error: Exception) {
+                runOnUiThread { toast("Fleet import failed: ${error.message}") }
             }
         }
     }

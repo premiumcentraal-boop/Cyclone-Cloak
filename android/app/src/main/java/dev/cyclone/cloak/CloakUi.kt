@@ -16,17 +16,20 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.CheckCircle
+import androidx.compose.material.icons.rounded.Remove
 import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Button
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -48,6 +51,8 @@ class CloakUiModel {
     val selectedCycloneProfile = mutableStateOf<JSONObject?>(null)
     val bindings = mutableStateListOf<CloakBinding>()
     val rootDoctor = mutableStateOf(RootDoctorResult(RootDoctorCode.NOT_CHECKED))
+    val fleetCount = mutableStateOf(20)
+    val fleetTemplate = mutableStateOf("pixel_7")
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,6 +69,10 @@ fun CloakUi(
     onRootDoctor: () -> Unit,
     onOpenMagisk: () -> Unit,
     onGetModule: () -> Unit,
+    onForgeFleet: (Int) -> Unit,
+    onFleetBind: () -> Unit,
+    onExportFleet: () -> Unit,
+    onImportFleet: () -> Unit,
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -140,6 +149,19 @@ fun CloakUi(
             }
             item {
                 CloakActionButton("Bind identity", Icons.Rounded.ChevronRight, onApply, Modifier.fillMaxWidth())
+            }
+
+            item {
+                CloakFleetCard(
+                    count = model.fleetCount.value,
+                    template = model.fleetTemplate.value,
+                    onCountChange = { model.fleetCount.value = it },
+                    onTemplateChange = { model.fleetTemplate.value = it },
+                    onForge = { onForgeFleet(model.fleetCount.value) },
+                    onFleetBind = onFleetBind,
+                    onExport = onExportFleet,
+                    onImport = onImportFleet,
+                )
             }
 
             item { CloakSectionTitle("Bindings", model.bindings.size) }
@@ -254,6 +276,71 @@ private fun CloakRootDoctorCard(
                     if (showModuleLink) {
                         TextButton(onClick = onGetModule, modifier = Modifier.weight(1f)) { Text("Get module ZIP") }
                     }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun CloakFleetCard(
+    count: Int,
+    template: String,
+    onCountChange: (Int) -> Unit,
+    onTemplateChange: (String) -> Unit,
+    onForge: () -> Unit,
+    onFleetBind: () -> Unit,
+    onExport: () -> Unit,
+    onImport: () -> Unit,
+) {
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.large,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+    ) {
+        Column(Modifier.fillMaxWidth().padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text("Fleet forge", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                Button(onClick = { onCountChange((count - 1).coerceIn(1, CloakFleet.MAX_FLEET_SIZE)) }, shape = MaterialTheme.shapes.small) {
+                    Icon(Icons.Rounded.Remove, contentDescription = "Fewer identities")
+                }
+                Text(
+                    "$count identities",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.weight(1f),
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                )
+                Button(onClick = { onCountChange((count + 1).coerceIn(1, CloakFleet.MAX_FLEET_SIZE)) }, shape = MaterialTheme.shapes.small) {
+                    Icon(Icons.Rounded.Add, contentDescription = "More identities")
+                }
+            }
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                listOf("pixel_7" to "Pixel 7", "galaxy_s23" to "Galaxy S23").forEach { (id, label) ->
+                    if (id == template) {
+                        Button(onClick = { onTemplateChange(id) }, modifier = Modifier.weight(1f), shape = MaterialTheme.shapes.small) {
+                            Text(label)
+                        }
+                    } else {
+                        OutlinedButton(onClick = { onTemplateChange(id) }, modifier = Modifier.weight(1f), shape = MaterialTheme.shapes.small) {
+                            Text(label)
+                        }
+                    }
+                }
+            }
+            Button(onClick = onForge, modifier = Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.small) {
+                Text("Generate fleet")
+            }
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Button(onClick = onFleetBind, modifier = Modifier.weight(1f), shape = MaterialTheme.shapes.small) {
+                    Text("Bind fleet")
+                }
+                OutlinedButton(onClick = onExport, modifier = Modifier.weight(0.7f), shape = MaterialTheme.shapes.small) {
+                    Text("Export")
+                }
+                OutlinedButton(onClick = onImport, modifier = Modifier.weight(0.7f), shape = MaterialTheme.shapes.small) {
+                    Text("Import")
                 }
             }
         }
