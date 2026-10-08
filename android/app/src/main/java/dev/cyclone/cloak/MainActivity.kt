@@ -1,5 +1,6 @@
 package dev.cyclone.cloak
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
@@ -34,6 +35,9 @@ class MainActivity : ComponentActivity() {
                     onSelectProfile = { profile -> model.selectedCycloneProfile.value = profile },
                     onToggleBinding = { binding -> toggleBinding(binding) },
                     onRemoveBinding = { binding -> removeBinding(binding) },
+                    onRootDoctor = { runRootDoctor() },
+                    onOpenMagisk = { openMagisk() },
+                    onGetModule = { openModuleDownload() },
                 )
             }
         }
@@ -127,7 +131,7 @@ class MainActivity : ComponentActivity() {
         }
         thread {
             try {
-                var publishSucceeded = false
+                var publishResult = RootDoctorResult(RootDoctorCode.PUBLISH_FAILED)
                 val appContext = applicationContext
                 val profileId = profile.getString("id")
                 val userId = profile.optInt("androidUserId", 0)
@@ -151,7 +155,6 @@ class MainActivity : ComponentActivity() {
                             state = "pending",
                         )
                         CloakBindingStore.upsert(appContext, binding)
-                        CloakResolver.invalidate(profileId, userId, pkg)
                         cyclone.setConfig(
                             profileId,
                             userId,
@@ -159,12 +162,13 @@ class MainActivity : ComponentActivity() {
                             JSONObject().put("cloakProfileId", cloakId),
                         )
                     }
-                    publishSucceeded = CloakResolver.rebuildIndex(appContext)
+                    publishResult = CloakResolver.rebuildIndexDetailed(appContext)
                 }
                 runOnUiThread {
+                    model.rootDoctor.value = publishResult
                     toast(
-                        if (publishSucceeded) "Bound ${packages.size} apps."
-                        else "Bound ${packages.size} apps, but root publishing failed. Check Magisk access and retry.",
+                        if (publishResult.published) "Bound ${packages.size} apps."
+                        else "Bound ${packages.size} apps. ${publishResult.title}: ${publishResult.message}",
                     )
                     reload()
                 }
@@ -179,14 +183,14 @@ class MainActivity : ComponentActivity() {
         thread {
             val updated = binding.copy(enabled = !binding.enabled, updatedAt = System.currentTimeMillis())
             CloakBindingStore.upsert(applicationContext, updated)
-            CloakResolver.invalidate(binding.profileId, binding.androidUserId, binding.packageName)
-            val publishSucceeded = if (!updated.enabled) {
-                CloakResolver.clearState(applicationContext, binding.profileId, binding.androidUserId, binding.packageName)
+            val publishResult = if (!updated.enabled) {
+                CloakResolver.clearStateDetailed(applicationContext)
             } else {
-                CloakResolver.rebuildIndex(applicationContext)
+                CloakResolver.rebuildIndexDetailed(applicationContext)
             }
             runOnUiThread {
-                if (!publishSucceeded) toast("Binding updated, but root publishing failed. Check Magisk access and retry.")
+                model.rootDoctor.value = publishResult
+                if (!publishResult.published) toast("${publishResult.title}: ${publishResult.message}")
                 reload()
             }
         }
@@ -195,13 +199,40 @@ class MainActivity : ComponentActivity() {
     private fun removeBinding(binding: CloakBinding) {
         thread {
             CloakBindingStore.remove(applicationContext, binding.profileId, binding.androidUserId, binding.packageName)
-            CloakResolver.invalidate(binding.profileId, binding.androidUserId, binding.packageName)
-            val publishSucceeded = CloakResolver.clearState(applicationContext, binding.profileId, binding.androidUserId, binding.packageName)
+            val publishResult = CloakResolver.clearStateDetailed(applicationContext)
             runOnUiThread {
-                if (!publishSucceeded) toast("Binding removed, but rooted state could not be refreshed.")
+                model.rootDoctor.value = publishResult
+                if (!publishResult.published) toast("Binding removed. ${publishResult.title}: ${publishResult.message}")
                 reload()
             }
         }
+    }
+
+    private fun runRootDoctor() {
+        model.rootDoctor.value = RootDoctorResult(RootDoctorCode.CHECKING)
+        thread {
+            val result = CloakResolver.rebuildIndexDetailed(applicationContext)
+            runOnUiThread {
+                model.rootDoctor.value = result
+                reload()
+            }
+        }
+    }
+
+    private fun openMagisk() {
+        val intent = packageManager.getLaunchIntentForPackage("com.topjohnwu.magisk")
+        if (intent == null) {
+            toast("Magisk app not found. Install Magisk, then check root setup again.")
+            return
+        }
+        startActivity(intent)
+    }
+
+    private fun openModuleDownload() {
+        @Suppress("DEPRECATION")
+        val version = packageManager.getPackageInfo(packageName, 0).versionName.orEmpty()
+        val asset = "https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/download/v$version/cyclone-cloak-$version.zip"
+        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(asset)))
     }
 
     private fun toast(message: String) = Toast.makeText(this, message, Toast.LENGTH_LONG).show()

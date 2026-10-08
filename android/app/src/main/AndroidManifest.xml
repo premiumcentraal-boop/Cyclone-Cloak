@@ -4,6 +4,7 @@
     <!-- The connector client needs to see Cyclone to bind it. -->
     <queries>
         <package android:name="com.cyclone.mobile" />
+        <package android:name="com.topjohnwu.magisk" />
     </queries>
 
     <application

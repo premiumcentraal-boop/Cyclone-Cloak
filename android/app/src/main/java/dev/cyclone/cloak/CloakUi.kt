@@ -21,6 +21,7 @@ import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -46,6 +47,7 @@ class CloakUiModel {
     val selectedCloakProfile = mutableStateOf<String?>(null)
     val selectedCycloneProfile = mutableStateOf<JSONObject?>(null)
     val bindings = mutableStateListOf<CloakBinding>()
+    val rootDoctor = mutableStateOf(RootDoctorResult(RootDoctorCode.NOT_CHECKED))
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -59,6 +61,9 @@ fun CloakUi(
     onSelectProfile: (JSONObject) -> Unit,
     onToggleBinding: (CloakBinding) -> Unit,
     onRemoveBinding: (CloakBinding) -> Unit,
+    onRootDoctor: () -> Unit,
+    onOpenMagisk: () -> Unit,
+    onGetModule: () -> Unit,
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -93,6 +98,15 @@ fun CloakUi(
                 CloakHeroCard(
                     title = "One identity for every profile",
                     body = "Import a device identity, then bind it to the apps in a Cyclone profile.",
+                )
+            }
+
+            item {
+                CloakRootDoctorCard(
+                    result = model.rootDoctor.value,
+                    onCheck = onRootDoctor,
+                    onOpenMagisk = onOpenMagisk,
+                    onGetModule = onGetModule,
                 )
             }
 
@@ -193,6 +207,57 @@ fun CloakUi(
     }
 }
 
+@Composable
+private fun CloakRootDoctorCard(
+    result: RootDoctorResult,
+    onCheck: () -> Unit,
+    onOpenMagisk: () -> Unit,
+    onGetModule: () -> Unit,
+) {
+    val tone = when (result.code) {
+        RootDoctorCode.READY -> CloakStatusTone.READY
+        RootDoctorCode.NOT_CHECKED, RootDoctorCode.CHECKING -> CloakStatusTone.PENDING
+        else -> CloakStatusTone.ERROR
+    }
+    val showModuleLink = result.code in setOf(
+        RootDoctorCode.NOT_CHECKED,
+        RootDoctorCode.MODULE_MISSING,
+        RootDoctorCode.MODULE_DISABLED,
+        RootDoctorCode.MODULE_PENDING_REMOVAL,
+        RootDoctorCode.MODULE_OUTDATED,
+    )
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.large,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+    ) {
+        Column(Modifier.fillMaxWidth().padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                Text("Root Doctor", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+                CloakStatusPill(result.title, tone)
+            }
+            Text(result.message, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Button(
+                onClick = onCheck,
+                enabled = result.code != RootDoctorCode.CHECKING,
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.small,
+            ) {
+                Text(if (result.code == RootDoctorCode.CHECKING) "Checking…" else if (result.code == RootDoctorCode.NOT_CHECKED) "Check & repair" else "Check again")
+            }
+            if (result.code != RootDoctorCode.READY && result.code != RootDoctorCode.CHECKING) {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    TextButton(onClick = onOpenMagisk, modifier = Modifier.weight(1f)) { Text("Open Magisk") }
+                    if (showModuleLink) {
+                        TextButton(onClick = onGetModule, modifier = Modifier.weight(1f)) { Text("Get module ZIP") }
+                    }
+                }
+            }
+        }
+    }
+}
+
 private fun statusTone(status: String): CloakStatusTone = when {
     status.equals("Connected", ignoreCase = true) || status.equals("ready", ignoreCase = true) -> CloakStatusTone.READY
     status.contains("checking", ignoreCase = true) || status.contains("approval", ignoreCase = true) || status.equals("not registered", ignoreCase = true) -> CloakStatusTone.PENDING
@@ -222,7 +287,7 @@ private fun CloakBindingCard(
                 Text(
                     "user ${binding.androidUserId} · ${binding.state}",
                     style = MaterialTheme.typography.bodySmall,
-                    color = if (binding.state.contains("failed", ignoreCase = true) || binding.state == "missing") {
+                    color = if (binding.state !in setOf("ready", "disabled")) {
                         MaterialTheme.colorScheme.error
                     } else {
                         MaterialTheme.colorScheme.onSurfaceVariant
