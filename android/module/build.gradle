@@ -97,6 +97,13 @@ tasks.register("prepareHookPine") {
 // The hook bridge now touches framework types (Uri, Cursor, Context) directly,
 // so javac needs the platform jar on its classpath. Resolve it from the local
 // SDK layout instead of an AGP accessor so CI and local builds behave the same.
+// Extension-level platform dirs (android-36-ext18) only expose their leading
+// API level to a digit parse, so match on the number, never the whole suffix.
+def platformLevel = { name ->
+    def m = (name.replaceFirst(/^android-/, "") =~ /^(\d+)/)
+    return m.find() ? m.group(1).toInteger() : -1
+}
+
 def androidPlatformJar = {
     def candidates = []
     for (prop in ["sdk.dir", "ANDROID_SDK_ROOT", "ANDROID_HOME"]) {
@@ -117,8 +124,10 @@ def androidPlatformJar = {
         def platforms = new File(dir, "platforms")
         def installed = platforms.listFiles()
         if (installed == null) continue
-        def latest = installed.findAll { it.name.startsWith("android-") }
-                .max { it.name.replaceFirst(/^android-/, "").toInteger() }
+        def exact = new File(platforms, "android-36/android.jar")
+        if (exact.exists()) return exact
+        def latest = installed.findAll { platformLevel(it.name) >= 26 }
+                .max { platformLevel(it.name) }
         if (latest == null) continue
         def jar = new File(latest, "android.jar")
         if (jar.exists()) return jar
