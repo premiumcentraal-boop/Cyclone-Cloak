@@ -31,6 +31,12 @@
 
 #include "json.hpp"
 
+// Hook bridge assets generated at build time by tools/gen_embedded.py.
+extern const unsigned char CLOAK_HOOKS_DEX[];
+extern const size_t CLOAK_HOOKS_DEX_SIZE;
+extern const unsigned char CLOAK_PINE_LIB[];
+extern const size_t CLOAK_PINE_LIB_SIZE;
+
 using json = nlohmann::json;
 using zygisk::Api;
 using zygisk::AppSpecializeArgs;
@@ -104,6 +110,8 @@ std::unordered_map<std::string, std::string> g_props;
 std::string g_active_package;
 std::string g_active_key;
 bool g_active = false;
+std::string g_app_data_dir;
+bool g_java_callbacks = true;
 
 void set_prop(const std::string &key, const std::string &value) {
     if (!value.empty()) {
@@ -265,6 +273,8 @@ void companion_handler(int socket) {
 
 bool load_profile_for(Api *api, const std::string &user, const std::string &pkg) {
     g_props.clear();
+    g_java_callbacks = true;
+    int sim_slots = 1;
     if (!api || !valid_request(user, pkg)) {
         return false;
     }
@@ -341,6 +351,14 @@ bool load_profile_for(Api *api, const std::string &user, const std::string &pkg)
             set_prop("gsm.operator.numeric", numeric);
             set_prop("gsm.sim.operator.numeric", numeric);
         }
+        auto slots = telephony->find("sim_slot_count");
+        if (slots != telephony->end() && slots->is_number_integer()) {
+            int count = slots->get<int>();
+            if (count >= 1 && count <= 2) {
+                sim_slots = count;
+                set_prop("cloak.sim_slot_count", std::to_string(count));
+            }
+        }
     }
 
     // Display identity: the profile's density reads straight through.
@@ -359,6 +377,11 @@ bool load_profile_for(Api *api, const std::string &user, const std::string &pkg)
     auto identifiers = profile.find("identifiers");
     if (identifiers != profile.end() && identifiers->is_object()) {
         for (const auto &entry : kIdentifierProps) {
+            // Single-SIM profiles keep their secondary IMEI vault-only, so the
+            // scoped app sees exactly one identity slot.
+            if (entry.first == std::string("imei_secondary") && sim_slots < 2) {
+                continue;
+            }
             auto value = identifiers->find(entry.first);
             if (value != identifiers->end() && value->is_string()) {
                 set_prop(entry.second, value->get<std::string>());
@@ -382,6 +405,15 @@ bool load_profile_for(Api *api, const std::string &user, const std::string &pkg)
             country != locale->end() && country->is_string()) {
             set_prop("persist.sys.locale",
                      lang->get<std::string>() + "-" + country->get<std::string>());
+        }
+    }
+
+    // Java callback gate: profiles older than the engine block default to on.
+    auto engine = profile.find("engine");
+    if (engine != profile.end() && engine->is_object()) {
+        auto flag = engine->find("java_callbacks");
+        if (flag != engine->end() && flag->is_boolean()) {
+            g_java_callbacks = flag->get<bool>();
         }
     }
 
@@ -469,6 +501,7 @@ void apply_profile(JNIEnv *env) {
         {"MANUFACTURER", "ro.product.manufacturer", false},
         {"BRAND", "ro.product.brand", false},
         {"MODEL", "ro.product.model", false},
+        {"SERIAL", "ro.serialno", false},
         {"DEVICE", "ro.product.device", false},
         {"PRODUCT", "ro.product.name", false},
         {"HARDWARE", "ro.hardware", false},
@@ -606,6 +639,101 @@ void apply_profile(JNIEnv *env) {
     env->DeleteLocalRef(sysprops);
 }
 
+
+// Load the embedded hook bridge (android/module/src/hook/java) and let it
+// install the Java framework callbacks. Fail-open: any failure only logs and
+// leaves the prop-level coverage in place.
+void init_java_hooks(JNIEnv *env, const std::string &app_data_dir) {
+    if (!g_active || !g_java_callbacks) {
+        return;
+    }
+    jobject dexBuffer = env->NewDirectByteBuffer(
+        const_cast<unsigned char *>(CLOAK_HOOKS_DEX),
+        static_cast<jlong>(CLOAK_HOOKS_DEX_SIZE));
+    if (!dexBuffer) {
+        env->ExceptionClear();
+        return;
+    }
+    jclass loaderClass = env->FindClass("dalvik/system/InMemoryDexClassLoader");
+    if (!loaderClass) {
+        env->ExceptionClear();
+        env->DeleteLocalRef(dexBuffer);
+        return;
+    }
+    jmethodID loaderCtor = env->GetMethodID(loaderClass, "<init>",
+        "(Ljava/nio/ByteBuffer;Ljava/lang/ClassLoader;)V");
+    if (!loaderCtor) {
+        env->ExceptionClear();
+        env->DeleteLocalRef(loaderClass);
+        env->DeleteLocalRef(dexBuffer);
+        return;
+    }
+    jobject loader = env->NewObject(loaderClass, loaderCtor, dexBuffer,
+                                    (jobject) nullptr);
+    env->DeleteLocalRef(dexBuffer);
+    if (!loader) {
+        env->ExceptionClear();
+        LOGI("hook bridge classloader failed");
+        env->DeleteLocalRef(loaderClass);
+        return;
+    }
+    jmethodID loadClass = env->GetMethodID(loaderClass, "loadClass",
+        "(Ljava/lang/String;)Ljava/lang/Class;");
+    env->DeleteLocalRef(loaderClass);
+    if (!loadClass) {
+        env->ExceptionClear();
+        env->DeleteLocalRef(loader);
+        return;
+    }
+    jstring bridgeName = env->NewStringUTF("dev.cyclone.cloak.hook.HookBridge");
+    jclass bridge = bridgeName
+        ? (jclass) env->CallObjectMethod(loader, loadClass, bridgeName)
+        : nullptr;
+    if (bridgeName) {
+        env->DeleteLocalRef(bridgeName);
+    }
+    if (!bridge) {
+        env->ExceptionClear();
+        LOGI("hook bridge not loadable");
+        env->DeleteLocalRef(loader);
+        return;
+    }
+    jmethodID init = env->GetStaticMethodID(bridge, "init",
+        "(Ljava/lang/String;[B)V");
+    if (!init) {
+        env->ExceptionClear();
+        env->DeleteLocalRef(bridge);
+        env->DeleteLocalRef(loader);
+        return;
+    }
+    jbyteArray pine = env->NewByteArray(static_cast<jsize>(CLOAK_PINE_LIB_SIZE));
+    if (!pine) {
+        env->ExceptionClear();
+        env->DeleteLocalRef(bridge);
+        env->DeleteLocalRef(loader);
+        return;
+    }
+    env->SetByteArrayRegion(pine, 0, static_cast<jsize>(CLOAK_PINE_LIB_SIZE),
+        reinterpret_cast<const jbyte *>(CLOAK_PINE_LIB));
+    jstring dataDir = env->NewStringUTF(app_data_dir.c_str());
+    if (!dataDir) {
+        env->ExceptionClear();
+        env->DeleteLocalRef(pine);
+        env->DeleteLocalRef(bridge);
+        env->DeleteLocalRef(loader);
+        return;
+    }
+    env->CallStaticVoidMethod(bridge, init, dataDir, pine);
+    if (env->ExceptionCheck()) {
+        env->ExceptionClear();
+        LOGI("hook bridge init reported an error");
+    }
+    env->DeleteLocalRef(dataDir);
+    env->DeleteLocalRef(pine);
+    env->DeleteLocalRef(bridge);
+    env->DeleteLocalRef(loader);
+}
+
 class CloakModule : public zygisk::ModuleBase {
 public:
     void onLoad(Api *api, JNIEnv *env) override {
@@ -615,7 +743,8 @@ public:
 
     void preAppSpecialize(AppSpecializeArgs *args) override {
         // app_data_dir looks like /data/user/0/<package>; the last segment is the package.
-        g_active_package = string_arg(env, args->app_data_dir);
+        g_app_data_dir = string_arg(env, args->app_data_dir);
+        g_active_package = g_app_data_dir;
         std::string userId = "0";
         auto slash = g_active_package.find_last_of('/');
         if (slash != std::string::npos) {
@@ -638,6 +767,7 @@ public:
     void postAppSpecialize(const AppSpecializeArgs *args) override {
         if (g_active) {
             apply_profile(env);
+            init_java_hooks(env, g_app_data_dir);
         }
     }
 

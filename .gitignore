@@ -9,3 +9,4 @@ local.properties
 cyclone-app/
 vendor/
 .cxx/
+android/module/src/main/cpp/embedded/
