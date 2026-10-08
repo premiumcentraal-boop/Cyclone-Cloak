@@ -29,7 +29,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           prerelease: true
-          body_path: docs/RELEASE_0.8.0-alpha.2.md
+          body_path: docs/RELEASE_0.8.0-alpha.3.md
           files: |
             android/app/build/outputs/apk/release/*.apk
             android/module/build/module/*.zip
