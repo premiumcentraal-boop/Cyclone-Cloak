@@ -354,7 +354,7 @@ object CloakRootDoctor {
             append("if command -v magisk >/dev/null 2>&1; then magisk_bin=$(command -v magisk); ")
             append("elif [ -x /data/adb/magisk ]; then magisk_bin=/data/adb/magisk/magisk; ")
             append("else echo CLOAK_DOCTOR=ZYGISK_STATUS_UNKNOWN; exit 55; fi; ")
-            append("zygisk_state=$(\"\$magisk_bin\" --sqlite \"SELECT value FROM settings WHERE key='zygisk';\" 2>/dev/null | tr -d '\\r\\n'); ")
+            append("zygisk_state=$(\"\$magisk_bin\" --sqlite \"SELECT value FROM settings WHERE key='zygisk';\" 2>/dev/null | tr -d '\\r\\n' | sed -n 's/^value=//p'); ")
             append("if [ \"\$zygisk_state\" = 0 ]; then echo CLOAK_DOCTOR=ZYGISK_DISABLED; exit 56; fi; ")
             append("if [ \"\$zygisk_state\" != 1 ]; then echo CLOAK_DOCTOR=ZYGISK_STATUS_UNKNOWN; exit 57; fi; ")
             append("mkdir -p ${quote(root)}; rm -rf ${quote(temp)} ${quote(backup)}; ")
