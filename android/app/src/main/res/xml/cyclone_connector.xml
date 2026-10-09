@@ -1,7 +1,7 @@
 <cyclone-connector
-    contract="cyclone.connector/1"
+    contract="cyclone.connector/1.3"
     id="cyclone-cloak"
     label="Cyclone Cloak"
-    scopes="profiles.read profiles.apps.read profiles.ext profiles.config profiles.startup selector.contribute events.profiles"
+    scopes="profiles.read profiles.apps.read profiles.config events.profiles device.root.read profiles.open.request profiles.startup selector.contribute"
     entryActivity=".MainActivity"
     wakeReceiver=".CycloneWake" />

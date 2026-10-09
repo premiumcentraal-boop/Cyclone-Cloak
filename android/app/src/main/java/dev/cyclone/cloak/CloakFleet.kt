@@ -14,7 +14,7 @@ object CloakFleet {
     const val MAX_FLEET_SIZE = 99
 
     data class BulkBindPlan(
-        val assignments: List<Pair<JSONObject, String>>,
+        val assignments: List<Pair<CycloneProfile, String>>,
         val skippedBound: Int,
         val unusedCloakProfiles: Int,
     )
@@ -36,24 +36,19 @@ object CloakFleet {
      */
     fun planBulkBind(
         cloakProfileIds: List<String>,
-        cycloneProfiles: List<JSONObject>,
+        cycloneProfiles: List<CycloneProfile>,
         existingBindings: List<CloakBinding>,
     ): BulkBindPlan {
         val usedCloak = existingBindings.map { it.cloakProfileId }.toMutableSet()
-        val boundPackageKeys = existingBindings
-            .map { CloakBindingStore.key(it.profileId, it.androidUserId, it.packageName) }
-            .toMutableSet()
-        val assignments = mutableListOf<Pair<JSONObject, String>>()
+        val boundProfiles = existingBindings.map { it.profileId }.toSet()
+        val assignments = mutableListOf<Pair<CycloneProfile, String>>()
         var skippedBound = 0
         for (profile in cycloneProfiles) {
-            val id = profile.optString("id")
-            val userId = profile.optInt("androidUserId", 0)
-            val packages = profile.optJSONArray("packages")?.let { array ->
-                (0 until array.length()).map { array.optString(it) }
-            } ?: emptyList()
+            // Never Main, never a profile without a known Android user number.
+            if (!profile.bindable) continue
+            val packages = profile.packages.orEmpty()
             if (packages.isEmpty()) continue
-            val alreadyBound = packages.any { "$id\n$userId\n$it" in boundPackageKeys }
-            if (alreadyBound) {
+            if (profile.id in boundProfiles) {
                 skippedBound++
                 continue
             }

@@ -3,7 +3,6 @@ package dev.cyclone.cloak
 import org.json.JSONObject
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
-import org.junit.Assert.assertTrue
 import org.junit.Test
 
 class CloakIdentityTest {
@@ -14,7 +13,9 @@ class CloakIdentityTest {
         val summary = CloakIdentity.summary("cloak-1", profile)
         assertEquals(1, summary.getInt("identityVersion"))
         assertEquals("cloak-1", summary.getString("cloakProfileId"))
-        assertTrue(summary.optLong("boundAt") > 0)
+        // Deterministic: reconcile compares it with what Cyclone holds.
+        assertFalse(summary.has("boundAt"))
+        assertEquals(summary.toString(), CloakIdentity.summary("cloak-1", profile).toString())
         assertEquals("Vault 01", summary.getString("name"))
         assertEquals("Google", summary.getString("manufacturer"))
         assertEquals("Pixel 7", summary.getString("model"))

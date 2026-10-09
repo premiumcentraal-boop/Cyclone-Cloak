@@ -102,7 +102,12 @@ object CloakRootDoctor {
      * The explicit Root Doctor action may repair this app's module. Binding changes only verify and publish,
      * so routine UI actions never install software.
      */
-    fun run(context: Context, staging: File, repairModule: Boolean = false): RootDoctorResult {
+    fun run(
+        context: Context,
+        staging: File,
+        repairModule: Boolean = false,
+        scope: PublishScope = PublishScope.forThisInstall(context),
+    ): RootDoctorResult {
         val abi = Build.SUPPORTED_ABIS.firstOrNull { it in supportedAbis }
             ?: return rememberResult(context, RootDoctorResult(RootDoctorCode.ABI_UNSUPPORTED), null)
         @Suppress("DEPRECATION")
@@ -117,7 +122,7 @@ object CloakRootDoctor {
             .map { it.androidUserId }.distinct()
             .map { "/data/user/$it/dev.cyclone.cloak/no_backup/${CloakStateLayout.ROOT_DIR}" }
         val shell = try {
-            runRootScript(publishScript(staging, abi, appVersion, legacyDirs), 25_000)
+            runRootScript(publishScript(staging, abi, appVersion, legacyDirs, scope), 25_000)
         } catch (error: Exception) {
             Log.e("CloakRootDoctor", "Could not run root check", error)
             return rememberResult(context, RootDoctorResult(
@@ -282,7 +287,7 @@ object CloakRootDoctor {
 
     private data class RootShellResult(val output: String, val exitCode: Int?, val timedOut: Boolean)
 
-    private fun runRootScript(script: String, timeoutMs: Long): RootShellResult {
+    private fun runRootScript(script: String, timeoutMs: Long, maxOutput: Int = 4096): RootShellResult {
         val process = ProcessBuilder("su", "--mount-master", "-c", script)
             .redirectErrorStream(true)
             .start()
@@ -295,7 +300,7 @@ object CloakRootDoctor {
                         val count = reader.read(buffer)
                         if (count < 0) break
                         synchronized(output) {
-                            if (output.length < 4096) output.append(buffer, 0, minOf(count, 4096 - output.length))
+                            if (output.length < maxOutput) output.append(buffer, 0, minOf(count, maxOutput - output.length))
                         }
                     }
                 }
@@ -331,11 +336,12 @@ object CloakRootDoctor {
         append("echo CLOAK_DOCTOR=MODULE_INSTALL_FAILED; exit 54")
     }
 
-    internal fun publishScript(staging: File, abi: String, appVersion: String, legacyDirs: List<String>): String {
+    /**
+     * Checks Magisk, the module, the ABI and Zygisk. Shared by publishing and by the read-only mirror; it ends with the
+     * Magisk binary resolved and changes nothing.
+     */
+    internal fun precheckScript(abi: String, appVersion: String): String {
         val module = "/data/adb/modules/cyclone_cloak"
-        val root = "/data/adb/cyclone_cloak"
-        val temp = "${CloakStateLayout.MODULE_STATE_DIR}.tmp"
-        val backup = "${CloakStateLayout.MODULE_STATE_DIR}.previous"
         return buildString {
             append("set -eu; umask 077; ")
             append("uid=$(id -u); if [ \"\$uid\" != 0 ]; then echo CLOAK_DOCTOR=ROOT_REQUIRED; exit 41; fi; ")
@@ -357,16 +363,129 @@ object CloakRootDoctor {
             append("zygisk_state=$(\"\$magisk_bin\" --sqlite \"SELECT value FROM settings WHERE key='zygisk';\" 2>/dev/null | tr -d '\\r\\n' | sed -n 's/^value=//p'); ")
             append("if [ \"\$zygisk_state\" = 0 ]; then echo CLOAK_DOCTOR=ZYGISK_DISABLED; exit 56; fi; ")
             append("if [ \"\$zygisk_state\" != 1 ]; then echo CLOAK_DOCTOR=ZYGISK_STATUS_UNKNOWN; exit 57; fi; ")
-            append("mkdir -p ${quote(root)}; rm -rf ${quote(temp)} ${quote(backup)}; ")
-            append("cp -R ${quote(staging.absolutePath)} ${quote(temp)}; ")
-            append("test -s ${quote("$temp/${CloakStateLayout.INDEX_FILE}")}; chmod -R go-rwx ${quote(temp)}; ")
-            append("chmod 700 ${quote(root)} ${quote(temp)}; ")
-            append("if [ -e ${quote(CloakStateLayout.MODULE_STATE_DIR)} ]; then mv ${quote(CloakStateLayout.MODULE_STATE_DIR)} ${quote(backup)}; fi; ")
-            append("if mv ${quote(temp)} ${quote(CloakStateLayout.MODULE_STATE_DIR)}; then rm -rf ${quote(backup)} || true; ")
-            append("else if [ -e ${quote(backup)} ]; then mv ${quote(backup)} ${quote(CloakStateLayout.MODULE_STATE_DIR)}; fi; echo CLOAK_DOCTOR=PUBLISH_FAILED; exit 48; fi; ")
-            for (dir in legacyDirs) append("rm -rf ${quote(dir)} || true; ")
-            append("test -s ${quote("${CloakStateLayout.MODULE_STATE_DIR}/${CloakStateLayout.INDEX_FILE}")} || { echo CLOAK_DOCTOR=PUBLISH_FAILED; exit 49; }; ")
-            append("echo CLOAK_DOCTOR=READY")
         }
+    }
+
+    internal fun publishScript(
+        staging: File,
+        abi: String,
+        appVersion: String,
+        legacyDirs: List<String>,
+        scope: PublishScope = PublishScope.MAIN_DEFAULT,
+    ): String = buildString {
+        append(precheckScript(abi, appVersion))
+        append(mergePublishScript("/data/adb/cyclone_cloak", staging.absolutePath, scope))
+        for (dir in legacyDirs) append("rm -rf ${quote(dir)} || true; ")
+        append("echo CLOAK_DOCTOR=READY")
+    }
+
+    /**
+     * The device-wide state tree is shared by every Cloak install on the phone (one per Android user, since Cyclone
+     * installs Cloak into every profile). Each install publishes only its own share under `publishers/<user>/`, and the
+     * tree the module reads is assembled from every share, with Main's assembled last so Main wins an app both bound.
+     * Publishing from one profile therefore never drops another install's bindings.
+     *
+     * [root] is a parameter only so tests can run the script against a temporary directory.
+     */
+    internal fun mergePublishScript(root: String, staging: String, scope: PublishScope): String {
+        val pubs = "$root/publishers"
+        val state = "$root/${CloakStateLayout.MODULE_STATE_DIR.substringAfterLast('/')}"
+        val temp = "$state.tmp"
+        val backup = "$state.previous"
+        val me = scope.androidUserId.toString()
+        val legacyOwner = if (scope.isMain) me else "0"
+        val index = CloakStateLayout.INDEX_FILE
+        val part = CloakStateLayout.INDEX_PART_FILE
+        val prefix = "{\"schemaVersion\":2,\"entries\":{"
+        return buildString {
+            append("root=${quote(root)}; pubs=${quote(pubs)}; state=${quote(state)}; temp=${quote(temp)}; backup=${quote(backup)}; ")
+            append("me=${quote(me)}; staging=${quote(staging)}; ")
+            append("mkdir -p \"\$root\"; chmod 700 \"\$root\"; ")
+            // A tree published before shares existed came from Main's Cloak: keep it as Main's share.
+            append("if [ ! -d \"\$pubs\" ] && [ -s \"\$state/$index\" ]; then ")
+            append("legacy=\$(cat \"\$pubs.main\" 2>/dev/null || echo ${quote(legacyOwner)}); mkdir -p \"\$pubs/\$legacy\"; ")
+            append("cp -R \"\$state/.\" \"\$pubs/\$legacy/\"; rm -f \"\$pubs/\$legacy/$index\"; ")
+            // Cloak wrote `{"schemaVersion":2,"entries":{…}}`; accept the other key order too. Anything else is dropped
+            // rather than risk an index the module can't parse. In a basic regular expression `{` and `}` are literal.
+            val swapped = "{\"entries\":{"
+            val swappedTail = "},\"schemaVersion\":2}"
+            append("legacy_index=\$(tr -d '\\n' < \"\$state/$index\"); ")
+            append("case \"\$legacy_index\" in ${quote(prefix)}*'}}') ")
+            append("printf '%s' \"\$legacy_index\" | sed -e ${quote("s/^$prefix//")} -e 's/}}\$//' > \"\$pubs/\$legacy/$part\";; ")
+            append("${quote(swapped)}*${quote(swappedTail)}) ")
+            append("printf '%s' \"\$legacy_index\" | sed -e ${quote("s/^$swapped//")} -e ${quote("s/$swappedTail\$//")} > \"\$pubs/\$legacy/$part\";; ")
+            append("*) : > \"\$pubs/\$legacy/$part\";; esac; fi; ")
+            append("mkdir -p \"\$pubs\"; chmod 700 \"\$pubs\"; ")
+            // Replace this install's share atomically.
+            append("rm -rf \"\$pubs/\$me.tmp\" \"\$pubs/\$me.old\"; cp -R \"\$staging\" \"\$pubs/\$me.tmp\"; ")
+            append("test -f \"\$pubs/\$me.tmp/$part\" || { echo CLOAK_DOCTOR=PUBLISH_FAILED; exit 48; }; ")
+            append("if [ -e \"\$pubs/\$me\" ]; then mv \"\$pubs/\$me\" \"\$pubs/\$me.old\"; fi; ")
+            append("mv \"\$pubs/\$me.tmp\" \"\$pubs/\$me\"; rm -rf \"\$pubs/\$me.old\"; ")
+            if (scope.isMain) {
+                append("echo \"\$me\" > \"\$pubs.main\"; ")
+                // Main knows every live profile: a share left by a removed profile's Cloak must not outlive it, or a
+                // reused Android user number would inherit someone else's identity.
+                scope.liveUsers?.let { live ->
+                    val keep = (live + scope.androidUserId).distinct().joinToString(" ")
+                    append("for d in \"\$pubs\"/*/; do [ -d \"\$d\" ] || continue; n=\$(basename \"\$d\"); ")
+                    append("case \" $keep \" in *\" \$n \"*) ;; *) rm -rf \"\$d\";; esac; done; ")
+                }
+            }
+            append("main=\$(cat \"\$pubs.main\" 2>/dev/null || echo ${quote(legacyOwner)}); ")
+            append("order=''; for d in \"\$pubs\"/*/; do [ -d \"\$d\" ] || continue; n=\$(basename \"\$d\"); ")
+            append("case \"\$n\" in ''|*[!0-9]*) continue;; esac; [ \"\$n\" = \"\$main\" ] || order=\"\$order \$n\"; done; ")
+            append("if [ -d \"\$pubs/\$main\" ]; then order=\"\$order \$main\"; fi; ")
+            append("rm -rf \"\$temp\" \"\$backup\"; mkdir -p \"\$temp\"; ")
+            append("printf '%s' ${quote(prefix)} > \"\$temp/$index\"; sep=''; ")
+            append("for n in \$order; do for k in \"\$pubs/\$n\"/*/; do [ -d \"\$k\" ] || continue; kn=\$(basename \"\$k\"); ")
+            append("case \"\$kn\" in *[!0-9a-f]*) continue;; esac; rm -rf \"\$temp/\$kn\"; cp -R \"\$k\" \"\$temp/\$kn\"; done; ")
+            append("if [ -s \"\$pubs/\$n/$part\" ]; then printf '%s' \"\$sep\" >> \"\$temp/$index\"; cat \"\$pubs/\$n/$part\" >> \"\$temp/$index\"; sep=','; fi; done; ")
+            append("printf '}}' >> \"\$temp/$index\"; ")
+            append("chmod -R go-rwx \"\$temp\"; chmod 700 \"\$temp\"; ")
+            append("if [ -e \"\$state\" ]; then mv \"\$state\" \"\$backup\"; fi; ")
+            append("if mv \"\$temp\" \"\$state\"; then rm -rf \"\$backup\" || true; ")
+            append("else if [ -e \"\$backup\" ]; then mv \"\$backup\" \"\$state\"; fi; echo CLOAK_DOCTOR=PUBLISH_FAILED; exit 48; fi; ")
+            append("test -s \"\$state/$index\" || { echo CLOAK_DOCTOR=PUBLISH_FAILED; exit 49; }; ")
+        }
+    }
+
+    /** Read-only: checks root and the module, then prints the published index between markers. Changes nothing. */
+    internal fun readPublishedScript(abi: String, appVersion: String): String = buildString {
+        append(precheckScript(abi, appVersion))
+        append("echo CLOAK_INDEX_BEGIN; cat ${quote("${CloakStateLayout.MODULE_STATE_DIR}/${CloakStateLayout.INDEX_FILE}")} 2>/dev/null || true; ")
+        append("echo; echo CLOAK_INDEX_END; echo CLOAK_DOCTOR=READY")
+    }
+
+    /** The published index text, if the read worked. Pure. */
+    internal fun publishedIndex(output: String): String? {
+        val begin = output.indexOf("CLOAK_INDEX_BEGIN")
+        val end = output.indexOf("CLOAK_INDEX_END")
+        if (begin < 0 || end < begin) return null
+        return output.substring(begin + "CLOAK_INDEX_BEGIN".length, end).trim()
+    }
+
+    /**
+     * Cloak in a Cyclone profile reads what Cloak in Main published (root only, never prompts from the background:
+     * call it only when this install already passed Root Doctor). Returns the check result and the index text.
+     */
+    fun readPublished(context: Context): Pair<RootDoctorResult, String?> {
+        val abi = Build.SUPPORTED_ABIS.firstOrNull { it in supportedAbis }
+            ?: return RootDoctorResult(RootDoctorCode.ABI_UNSUPPORTED) to null
+        @Suppress("DEPRECATION")
+        val appVersion = runCatching {
+            context.packageManager.getPackageInfo(context.packageName, 0).versionName
+        }.getOrNull().orEmpty()
+        if (!appVersion.matches(Regex("[A-Za-z0-9._-]+"))) return RootDoctorResult(RootDoctorCode.PUBLISH_FAILED) to null
+        val shell = try {
+            runRootScript(readPublishedScript(abi, appVersion), 15_000, maxOutput = 1 shl 20)
+        } catch (error: Exception) {
+            return RootDoctorResult(if (error is IOException) RootDoctorCode.ROOT_UNAVAILABLE else RootDoctorCode.PUBLISH_FAILED) to null
+        }
+        if (shell.timedOut) return RootDoctorResult(RootDoctorCode.ROOT_TIMEOUT) to null
+        val index = publishedIndex(shell.output)
+        // Parse the markers outside the index, which holds owner-chosen names.
+        val markers = index?.let { shell.output.replace(it, "") } ?: shell.output
+        val result = parseResult(markers, shell.exitCode ?: 1)
+        return result to if (result.published) index else null
     }
 }

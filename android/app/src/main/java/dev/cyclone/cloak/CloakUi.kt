@@ -41,6 +41,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -56,16 +57,29 @@ class CloakUiModel {
     val status = mutableStateOf("Checking Cyclone")
     val providerState = mutableStateOf("not registered")
     val message = mutableStateOf("")
-    val profiles = mutableStateListOf<JSONObject>()
+    val profiles = mutableStateListOf<CycloneProfile>()
     val cloakProfiles = mutableStateListOf<Pair<String, JSONObject>>()
     val selectedCloakProfile = mutableStateOf<String?>(null)
-    val selectedCycloneProfile = mutableStateOf<JSONObject?>(null)
+    val selectedCycloneProfile = mutableStateOf<CycloneProfile?>(null)
     val bindings = mutableStateListOf<CloakBinding>()
     val rootDoctor = mutableStateOf(RootDoctorResult(RootDoctorCode.NOT_CHECKED))
     val fleetCount = mutableStateOf(20)
     val fleetTemplate = mutableStateOf("pixel_7")
     val newIdentityName = mutableStateOf("")
     val creatingIdentity = mutableStateOf(false)
+    val loadedOnce = mutableStateOf(false)
+    /** Cloak's own pill per Cyclone profile id (handoff §4.2). */
+    val pills = mutableStateMapOf<String, CloakPill>()
+    /** `profileId\npackageName` → why that binding isn't in Cyclone right now. */
+    val issues = mutableStateMapOf<String, String>()
+    /** Profile ids Cloak may ask Cyclone to open from here. */
+    val openTargets = mutableStateListOf<String>()
+    /** Main, when this Cloak runs inside a Cyclone profile and may ask to go back. */
+    val mainTarget = mutableStateOf<CycloneProfile?>(null)
+    /** Null in Main; this Cyclone profile's id when Cloak runs inside one. */
+    val ownProfileId = mutableStateOf<String?>(null)
+    val canBind = mutableStateOf(false)
+    val opening = mutableStateOf(false)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -76,7 +90,7 @@ fun CloakUi(
     onReload: () -> Unit,
     onApply: () -> Unit,
     onSelectCloak: (String) -> Unit,
-    onSelectProfile: (JSONObject) -> Unit,
+    onSelectProfile: (CycloneProfile) -> Unit,
     onToggleBinding: (CloakBinding) -> Unit,
     onRemoveBinding: (CloakBinding) -> Unit,
     onRootDoctor: () -> Unit,
@@ -87,6 +101,7 @@ fun CloakUi(
     onFleetBind: () -> Unit,
     onExportFleet: () -> Unit,
     onImportFleet: () -> Unit,
+    onOpenInCyclone: (CycloneProfile) -> Unit,
 ) {
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -151,6 +166,14 @@ fun CloakUi(
                         if (model.message.value.isNotBlank()) {
                             Text(model.message.value, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
+                        model.mainTarget.value?.let { main ->
+                            OutlinedButton(
+                                onClick = { onOpenInCyclone(main) },
+                                enabled = !model.opening.value,
+                                modifier = Modifier.fillMaxWidth(),
+                                shape = MaterialTheme.shapes.small,
+                            ) { Text("Open ${main.label} in Cyclone") }
+                        }
                     }
                 }
             }
@@ -209,15 +232,26 @@ fun CloakUi(
                     )
                 }
             } else {
-                items(model.profiles, key = { it.optString("id") }) { profile ->
-                    val selected = model.selectedCycloneProfile.value?.optString("id") == profile.optString("id")
-                    val appCount = profile.optJSONArray("packages")?.length() ?: 0
-                    val userId = profile.optInt("androidUserId", 0)
-                    CloakChoiceCard(
-                        title = profile.optString("label", profile.optString("id")),
-                        subtitle = "$appCount ${if (appCount == 1) "app" else "apps"} · user $userId",
+                items(model.profiles, key = { it.id }) { profile ->
+                    val selected = model.selectedCycloneProfile.value?.id == profile.id
+                    val appCount = profile.packages?.size ?: 0
+                    val where = when {
+                        profile.state == "in_trash" -> "in Recently deleted"
+                        profile.state != "ready" -> "setting up"
+                        profile.androidUserId == null -> "no Android user yet"
+                        else -> "user ${profile.androidUserId}"
+                    }
+                    val own = model.ownProfileId.value
+                    val managedElsewhere = own != null && own != profile.id
+                    CloakProfileCard(
+                        title = profile.label,
+                        subtitle = "$appCount ${if (appCount == 1) "app" else "apps"} · $where" +
+                            if (managedElsewhere) " · bound from Cloak in Main" else "",
+                        pill = model.pills[profile.id],
                         selected = selected,
+                        canOpen = profile.id in model.openTargets && !model.opening.value,
                         onClick = { onSelectProfile(profile) },
+                        onOpen = { onOpenInCyclone(profile) },
                     )
                 }
             }
@@ -226,7 +260,7 @@ fun CloakUi(
                 val identityName = model.selectedCloakProfile.value
                     ?.let { selected -> model.cloakProfiles.firstOrNull { it.first == selected }?.second?.optString("name") }
                     .orEmpty()
-                val cycloneName = model.selectedCycloneProfile.value?.optString("label").orEmpty()
+                val cycloneName = model.selectedCycloneProfile.value?.label.orEmpty()
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(
                         when {
@@ -252,9 +286,11 @@ fun CloakUi(
                     )
                 }
             } else {
-                items(model.bindings, key = { it.profileId + "/" + it.androidUserId + "/" + it.packageName }) { binding ->
+                items(model.bindings, key = { it.profileId + "/" + it.packageName }) { binding ->
                     CloakBindingCard(
                         binding = binding,
+                        profileLabel = model.profiles.firstOrNull { it.id == binding.profileId }?.label ?: binding.profileId,
+                        issue = model.issues[bindingKey(binding.profileId, binding.packageName)],
                         onToggle = onToggleBinding,
                         onRemove = onRemoveBinding,
                     )
@@ -589,11 +625,53 @@ private fun statusTone(status: String): CloakStatusTone = when {
 }
 
 @Composable
+private fun CloakProfileCard(
+    title: String,
+    subtitle: String,
+    pill: CloakPill?,
+    selected: Boolean,
+    canOpen: Boolean,
+    onClick: () -> Unit,
+    onOpen: () -> Unit,
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
+        CloakChoiceCard(title = title, subtitle = subtitle, selected = selected, onClick = onClick)
+        if (pill != null || canOpen) {
+            Row(
+                Modifier.fillMaxWidth().padding(horizontal = 6.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                    if (pill != null) {
+                        CloakStatusPill(
+                            pill.label,
+                            when (pill.tone) {
+                                CloakPillTone.READY -> CloakStatusTone.READY
+                                CloakPillTone.ATTENTION -> CloakStatusTone.ERROR
+                                CloakPillTone.NEUTRAL -> CloakStatusTone.PENDING
+                            },
+                        )
+                        pill.reason?.let {
+                            Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
+                }
+                if (canOpen) TextButton(onClick = onOpen) { Text("Open in Cyclone") }
+            }
+        }
+    }
+}
+
+@Composable
 private fun CloakBindingCard(
     binding: CloakBinding,
+    profileLabel: String,
+    issue: String?,
     onToggle: (CloakBinding) -> Unit,
     onRemove: (CloakBinding) -> Unit,
 ) {
+    val mirrored = binding.origin == CloakBinding.ORIGIN_MAIN
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(14.dp),
@@ -606,21 +684,26 @@ private fun CloakBindingCard(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
                 Text(binding.packageName, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
                 Text(
-                    "user ${binding.androidUserId} · ${binding.state}",
+                    "$profileLabel · ${binding.state}" + if (mirrored) " · managed by Cloak in Main" else "",
                     style = MaterialTheme.typography.bodySmall,
-                    color = if (binding.state !in setOf("ready", "disabled")) {
+                    color = if (binding.state !in setOf("ready", "disabled", "pending", "unknown")) {
                         MaterialTheme.colorScheme.error
                     } else {
                         MaterialTheme.colorScheme.onSurfaceVariant
                     },
                 )
+                if (issue != null) {
+                    Text("Cyclone: $issue", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
+                }
             }
-            Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-                TextButton(onClick = { onToggle(binding) }) { Text(if (binding.enabled) "Off" else "On") }
-                TextButton(onClick = { onRemove(binding) }) { Text("Remove") }
+            if (!mirrored) {
+                Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+                    TextButton(onClick = { onToggle(binding) }) { Text(if (binding.enabled) "Off" else "On") }
+                    TextButton(onClick = { onRemove(binding) }) { Text("Remove") }
+                }
             }
         }
     }

@@ -10,9 +10,6 @@ import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
 import java.util.concurrent.atomic.AtomicBoolean
 import androidx.compose.runtime.remember
-import com.cyclone.connector.client.CycloneConnector
-import com.cyclone.connector.client.CycloneConnectorException
-import org.json.JSONArray
 import org.json.JSONObject
 import java.io.File
 import kotlin.concurrent.thread
@@ -49,6 +46,7 @@ class MainActivity : ComponentActivity() {
                     onCreateIdentity = { name, template -> createIdentity(name, template) },
                     onForgeFleet = { count -> forgeFleet(count) },
                     onFleetBind = { fleetBind() },
+                    onOpenInCyclone = { profile -> openInCyclone(profile) },
                     onExportFleet = { exportFleetLauncher.launch("cyclone-cloak-fleet.json") },
                     onImportFleet = { importFleetLauncher.launch(arrayOf("application/json")) },
                 )
@@ -57,59 +55,119 @@ class MainActivity : ComponentActivity() {
         reload()
     }
 
+    override fun onResume() {
+        super.onResume()
+        // The owner may have just approved Cloak, or switched profiles: look again.
+        if (model.loadedOnce.value) reload()
+    }
+
     private fun reload() {
         model.status.value = "Checking Cyclone"
         thread {
             val appContext = applicationContext
-            try {
-                CycloneConnector.connect(appContext).use { cyclone ->
-                    val hello = cyclone.hello()
-                    val profilesResult = cyclone.profiles()
-                    val providerResult = runCatching {
-                        cyclone.registerProfileProvider(CloakStartupProvider(appContext))
-                    }
-                    val profileList = profilesResult.optJSONArray("profiles")?.let { array ->
-                        (0 until array.length()).mapNotNull { array.optJSONObject(it) }
-                            .filter { it.optString("kind") == "profile" && it.optString("state") == "ready" }
-                    } ?: emptyList()
-                    val cloakProfiles = CloakStore.all(appContext)
-                    val bindingList = CloakBindingStore.all(appContext)
-                    val granted = hello.optJSONArray("granted")?.let { array ->
-                        (0 until array.length()).map { array.optString(it) }
-                    } ?: emptyList()
-                    runOnUiThread {
-                        model.profiles.clear()
-                        model.profiles.addAll(profileList)
-                        model.cloakProfiles.clear()
-                        model.cloakProfiles.addAll(cloakProfiles)
-                        model.bindings.clear()
-                        model.bindings.addAll(bindingList)
-                        if (model.selectedCloakProfile.value == null && cloakProfiles.isNotEmpty()) {
-                            model.selectedCloakProfile.value = cloakProfiles.first().first
-                        }
-                        model.status.value = if (hello.optBoolean("approved")) "Connected" else "Needs approval"
-                        model.message.value = "Scopes: " + granted.joinToString(", ")
-                        model.providerState.value = when {
-                            hello.optInt("minor", 0) < 1 -> "Cyclone too old"
-                            providerResult.isSuccess -> "ready"
-                            else -> providerResult.exceptionOrNull()?.message ?: "failed"
-                        }
-                    }
-                }
-            } catch (error: CycloneConnectorException) {
-                runOnUiThread {
-                    model.status.value = "Connector failed"
-                    model.message.value = "${error.code}: ${error.message}"
-                    model.providerState.value = "not registered"
-                }
-            } catch (error: Exception) {
-                runOnUiThread {
-                    model.status.value = "Connector failed"
-                    model.message.value = error.message ?: "unknown error"
-                    model.providerState.value = "not registered"
+            var providerState = "not registered"
+            val report = CycloneBridge.sync(appContext, foreground = true) { cyclone, report ->
+                // The startup provider lives as long as this process; register it again on every connect (SPEC §11).
+                providerState = when {
+                    report.gate?.approved != true -> "not registered"
+                    report.gate.minor < 1 -> "Cyclone too old"
+                    !report.gate.startup -> "not approved"
+                    else -> runCatching { cyclone.registerProfileProvider(CloakStartupProvider(appContext)) }
+                        .fold({ "ready" }, { it.message ?: "failed" })
                 }
             }
+            showReport(report, providerState)
         }
+    }
+
+    /** Shows one sync: approval, Cloak's own pill per profile, what can be opened, and why a binding isn't in Cyclone. */
+    private fun showReport(report: SyncReport, providerState: String) {
+        val appContext = applicationContext
+        val cloakProfiles = CloakStore.all(appContext)
+        val bindingList = CloakBindingStore.all(appContext)
+        val snapshot = report.snapshot
+        val placement = report.placement
+        val registry = snapshot?.registry.orEmpty()
+        val pills = registry.mapNotNull { profile ->
+            CloakPills.forProfile(profile, bindingList, report.rootFacts[profile.id])?.let { profile.id to it }
+        }.toMap()
+        val openTargets = if (report.gate?.openRequests == true && snapshot != null && placement != null) {
+            OpenRequests.targets(snapshot, placement)
+        } else emptyList()
+        runOnUiThread {
+            model.loadedOnce.value = true
+            model.profiles.clear()
+            model.profiles.addAll(registry)
+            model.cloakProfiles.clear()
+            model.cloakProfiles.addAll(cloakProfiles)
+            model.bindings.clear()
+            model.bindings.addAll(bindingList)
+            model.pills.clear()
+            model.pills.putAll(pills)
+            model.issues.clear()
+            model.issues.putAll(report.issues)
+            model.openTargets.clear()
+            model.openTargets.addAll(openTargets.map { it.id })
+            model.ownProfileId.value = (placement as? Placement.InProfile)?.profile?.id
+            model.mainTarget.value = openTargets.firstOrNull { it.isOwner }
+            model.canBind.value = report.gate?.bindings == true
+            if (model.selectedCloakProfile.value == null && cloakProfiles.isNotEmpty()) {
+                model.selectedCloakProfile.value = cloakProfiles.first().first
+            }
+            model.selectedCycloneProfile.value = model.selectedCycloneProfile.value
+                ?.let { selected -> registry.firstOrNull { it.id == selected.id } }
+            model.status.value = report.headline
+            model.message.value = report.message
+            model.providerState.value = providerState
+        }
+    }
+
+    private fun openInCyclone(profile: CycloneProfile) {
+        if (model.opening.value) return
+        model.opening.value = true
+        thread {
+            val outcome = CycloneBridge.requestOpen(applicationContext, profile)
+            runOnUiThread {
+                model.opening.value = false
+                toast(outcome.message)
+                if (outcome.refreshProfiles) reload()
+            }
+        }
+    }
+
+    /** Profiles this Cloak may bind: Main binds every ready profile, a profile's Cloak only its own. Never Main itself. */
+    private fun bindableHere(profile: CycloneProfile): Boolean =
+        profile.bindable && (model.ownProfileId.value == null || model.ownProfileId.value == profile.id)
+
+    /** Loads Cloak profile [cloakId] onto every app of [profile]. Returns how many apps were bound. */
+    private fun bindLocally(profile: CycloneProfile, cloakId: String): Int {
+        val userId = profile.androidUserId ?: return 0
+        // Inside a profile, apps Cloak in Main already binds stay Main's (Main wins an app both bind).
+        val managedByMain = CloakBindingStore.all(applicationContext)
+            .filter { it.profileId == profile.id && it.origin == CloakBinding.ORIGIN_MAIN }
+            .map { it.packageName }.toSet()
+        val packages = profile.packages.orEmpty().filter { pkg ->
+            pkg !in managedByMain && runCatching { CloakBindingStore.validate(profile.id, userId, pkg) }.isSuccess
+        }
+        val now = System.currentTimeMillis()
+        CloakBindingStore.update(applicationContext) { current ->
+            packages.fold(current) { list, pkg ->
+                CloakBindingStore.upsertIn(
+                    list,
+                    CloakBinding(
+                        profileId = profile.id,
+                        androidUserId = userId,
+                        packageName = pkg,
+                        cloakProfileId = cloakId,
+                        revision = 0,
+                        enabled = true,
+                        updatedAt = now,
+                        state = "pending",
+                    ),
+                )
+            }
+        }
+        return packages.size
     }
 
     private fun importProfile(uri: Uri) {
@@ -182,12 +240,13 @@ class MainActivity : ComponentActivity() {
 
     private fun fleetBind() {
         val cloakIds = model.cloakProfiles.map { it.first }
-        val readyProfiles = model.profiles.filter { it.optString("state") == "ready" }
+        val readyProfiles = model.profiles.filter(::bindableHere)
         val plan = CloakFleet.planBulkBind(cloakIds, readyProfiles, model.bindings.toList())
         if (plan.assignments.isEmpty()) {
             val used = model.cloakProfiles.size - plan.unusedCloakProfiles
             toast(
                 when {
+                    !model.canBind.value -> "Approve Cyclone Cloak's profile settings in Cyclone → Settings → Connectors first"
                     readyProfiles.isEmpty() -> "No ready Cyclone profiles to bind"
                     plan.unusedCloakProfiles == 0 && used > 0 -> "No unused identities left; forge more first"
                     else -> "Nothing to bind"
@@ -198,40 +257,8 @@ class MainActivity : ComponentActivity() {
         thread {
             try {
                 val appContext = applicationContext
-                var publishResult = RootDoctorResult(RootDoctorCode.PUBLISH_FAILED)
-                var boundCount = 0
-                CycloneConnector.connect(appContext).use { cyclone ->
-                    for ((profile, cloakId) in plan.assignments) {
-                        val profileId = profile.getString("id")
-                        val userId = profile.optInt("androidUserId", 0)
-                        val packages = profile.optJSONArray("packages")?.let { array ->
-                            (0 until array.length()).map { array.optString(it) }
-                        } ?: emptyList()
-                        for (pkg in packages) {
-                            CloakBindingStore.upsert(
-                                appContext,
-                                CloakBinding(
-                                    profileId = profileId,
-                                    androidUserId = userId,
-                                    packageName = pkg,
-                                    cloakProfileId = cloakId,
-                                    revision = 0,
-                                    enabled = true,
-                                    updatedAt = System.currentTimeMillis(),
-                                    state = "pending",
-                                ),
-                            )
-                            cyclone.setConfig(
-                                profileId,
-                                userId,
-                                pkg,
-                                CloakIdentity.summary(cloakId, CloakStore.find(appContext, cloakId)),
-                            )
-                            boundCount++
-                        }
-                    }
-                    publishResult = CloakResolver.rebuildIndexDetailed(appContext)
-                }
+                val boundCount = plan.assignments.sumOf { (profile, cloakId) -> bindLocally(profile, cloakId) }
+                val publishResult = CloakResolver.rebuildIndexDetailed(appContext)
                 runOnUiThread {
                     model.rootDoctor.value = publishResult
                     val note = if (publishResult.published) "" else " ${publishResult.title}: ${publishResult.message}"
@@ -292,46 +319,31 @@ class MainActivity : ComponentActivity() {
             toast("Select a Cyclone profile first")
             return
         }
+        if (!model.canBind.value) {
+            toast("Approve Cyclone Cloak's profile settings in Cyclone → Settings → Connectors first")
+            return
+        }
+        if (!bindableHere(profile)) {
+            toast(
+                if (profile.bindable) "Bind ${profile.label} from Cyclone Cloak in Main, or from Cloak inside ${profile.label}."
+                else "${profile.label} isn't ready in Cyclone yet.",
+            )
+            return
+        }
         thread {
             try {
-                var publishResult = RootDoctorResult(RootDoctorCode.PUBLISH_FAILED)
                 val appContext = applicationContext
-                val profileId = profile.getString("id")
-                val userId = profile.optInt("androidUserId", 0)
-                val packages = profile.optJSONArray("packages")?.let { array ->
-                    (0 until array.length()).map { array.optString(it) }
-                } ?: emptyList()
-                if (packages.isEmpty()) {
+                val count = bindLocally(profile, cloakId)
+                if (count == 0) {
                     runOnUiThread { toast("Cyclone shared no apps for this profile.") }
                     return@thread
                 }
-                CycloneConnector.connect(appContext).use { cyclone ->
-                    for (pkg in packages) {
-                        val binding = CloakBinding(
-                            profileId = profileId,
-                            androidUserId = userId,
-                            packageName = pkg,
-                            cloakProfileId = cloakId,
-                            revision = 0,
-                            enabled = true,
-                            updatedAt = System.currentTimeMillis(),
-                            state = "pending",
-                        )
-                        CloakBindingStore.upsert(appContext, binding)
-                        cyclone.setConfig(
-                            profileId,
-                            userId,
-                            pkg,
-                            CloakIdentity.summary(cloakId, CloakStore.find(appContext, cloakId)),
-                        )
-                    }
-                    publishResult = CloakResolver.rebuildIndexDetailed(appContext)
-                }
+                val publishResult = CloakResolver.rebuildIndexDetailed(appContext)
                 runOnUiThread {
                     model.rootDoctor.value = publishResult
                     toast(
-                        if (publishResult.published) "Bound ${packages.size} apps."
-                        else "Bound ${packages.size} apps. ${publishResult.title}: ${publishResult.message}",
+                        if (publishResult.published) "Bound $count apps."
+                        else "Bound $count apps. ${publishResult.title}: ${publishResult.message}",
                     )
                     reload()
                 }
@@ -341,8 +353,11 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-
     private fun toggleBinding(binding: CloakBinding) {
+        if (binding.origin == CloakBinding.ORIGIN_MAIN) {
+            toast("This binding is managed by Cyclone Cloak in Main.")
+            return
+        }
         thread {
             val updated = binding.copy(enabled = !binding.enabled, updatedAt = System.currentTimeMillis())
             CloakBindingStore.upsert(applicationContext, updated)
@@ -360,6 +375,10 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun removeBinding(binding: CloakBinding) {
+        if (binding.origin == CloakBinding.ORIGIN_MAIN) {
+            toast("This binding is managed by Cyclone Cloak in Main.")
+            return
+        }
         thread {
             CloakBindingStore.remove(applicationContext, binding.profileId, binding.androidUserId, binding.packageName)
             val publishResult = CloakResolver.clearStateDetailed(applicationContext)

@@ -17,7 +17,30 @@ reader. One layout, two implementations; change both in the same commit.
 - Module index: `<root>/index.json` - `{"schemaVersion": 2, "entries": {...}}` maps
   `<androidUserId>/<packageName>` to `{"profileId", "cloakProfileId", "key"}`.
   Rebuilt from current enabled bindings on every publish.
+  Each entry may also carry `publisher` (the Android user of the Cloak that published it) and
+  `summary` (the display summary Cloak sends Cyclone). The module reads only `key`.
 - Key: lowercase hex SHA-256 of the tuple `<profileId>\n<androidUserId>\n<packageName>`.
+
+## Shares (since 0.9.0-alpha.1)
+
+Cyclone installs Cloak in every Cyclone profile, and every install publishes into the same
+device-wide tree. So that one install never drops another's bindings, each publishes only its own
+share and the tree the module reads is assembled from all of them:
+
+- `/data/adb/cyclone_cloak/publishers/<androidUser>/` - one install's share: its per-binding dirs and
+  `index.part` (the members of `entries`, without braces). Replaced atomically on that install's
+  publish.
+- `/data/adb/cyclone_cloak/publishers.main` - the Android user of Cloak in Main.
+- Cloak in Main publishes its bindings for every profile; Cloak in a profile publishes only its own
+  apps for its own user.
+- On every publish `state-v1/` is rebuilt from all shares, Main's last: for an app both bound, Main's
+  per-binding dir and index member win (nlohmann/json and Android's org.json both keep the last of
+  a repeated key).
+- Cloak in Main removes the share of any Android user that is no longer a Cyclone profile, so a
+  reused user number never inherits a deleted profile's identity.
+- The first publish after updating from an older release keeps the existing tree as Main's share.
+- Cloak in a profile reads the assembled `index.json` (read-only, through the same su checks) to
+  mirror what Main bound for it.
 
 ## Test vectors
 
