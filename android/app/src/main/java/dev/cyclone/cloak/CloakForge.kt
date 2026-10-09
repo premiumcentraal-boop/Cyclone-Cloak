@@ -4,6 +4,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.math.BigInteger
 import java.security.MessageDigest
+import java.security.SecureRandom
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
@@ -19,7 +20,7 @@ object CloakForge {
 
     // MARK: public surface
 
-    fun templateNames(): List<String> = listOf("pixel_7", "galaxy_s23")
+    fun templateNames(): List<String> = listOf("pixel_4", "pixel_7", "galaxy_s23")
 
     /** Builds a full, coherent, deterministic cloak profile for a seed. */
     fun forgeProfile(name: String, seed: String, templateName: String = "pixel_7"): JSONObject {
@@ -46,6 +47,17 @@ object CloakForge {
             .put("health", JSONObject().put("state", "new").put("last_seen", JSONObject.NULL))
             .put("meta", JSONObject().put("source", "forge").put("forge_version", "0.2.0").put("template", templateName))
         return json
+    }
+
+    /** Creates a fresh on-device identity with an independent cryptographic seed. */
+    fun forgeNewProfile(name: String, templateName: String = "pixel_7"): JSONObject {
+        val cleanName = name.trim()
+        require(cleanName.isNotEmpty()) { "Enter a name for this device identity." }
+        require(cleanName.length <= 64) { "Device identity names can be up to 64 characters." }
+        val seedBytes = ByteArray(32).also(SecureRandom()::nextBytes)
+        val seed = seedBytes.joinToString("") { "%02x".format(it) }
+        seedBytes.fill(0)
+        return forgeProfile(cleanName, seed, templateName)
     }
 
     /** Deterministic fleet seed: same name + template, same identity. */
@@ -175,6 +187,46 @@ object CloakForge {
     // MARK: templates (mirrored from forge/cloak_forge/templates.py)
 
     private val TEMPLATES: Map<String, Map<String, Any>> = mapOf(
+        "pixel_4" to mapOf(
+            "device" to mapOf(
+                "manufacturer" to "Google",
+                "brand" to "google",
+                "model" to "Pixel 4",
+                "product" to "flame",
+                "device" to "flame",
+                "hardware" to "sm8150",
+                "fingerprint" to "google/flame/flame:13/TQ3A.230705.001/10193186:user/release-keys",
+                "version_release" to "13",
+                "sdk_int" to 33,
+                "security_patch" to "2023-07-05",
+                "build_id" to "TQ3A.230705.001",
+                "version_incremental" to "10193186",
+                "build_date_utc" to 1688601600L,
+                "first_api_level" to 29,
+                "bootloader" to "flame-1.0-8769422",
+                "baseband" to "g5123-230712-230712-B10046521",
+            ),
+            "telephony" to mapOf(
+                "sim_slot_count" to 1,
+                "carrier_name" to "T-Mobile",
+                "mcc" to "310",
+                "mnc" to "260",
+                "network_type" to "5G",
+            ),
+            "egress_hint" to "us-east",
+            "display" to mapOf(
+                "width" to 1080,
+                "height" to 2280,
+                "density" to 440,
+                "refresh_rate_hz" to 90,
+                "screen_size_class" to "large",
+            ),
+            "locale" to mapOf(
+                "language" to "en",
+                "country" to "US",
+                "timezone" to "America/New_York",
+            ),
+        ),
         "pixel_7" to mapOf(
             "device" to mapOf(
                 "manufacturer" to "Google",
