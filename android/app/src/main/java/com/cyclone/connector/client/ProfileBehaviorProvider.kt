@@ -4,7 +4,7 @@ import android.content.Context
 import android.os.Binder
 import com.cyclone.connector.IProfileBehaviorProvider
 import com.cyclone.connector.IProfileBehaviorResult
-import dev.cyclone.cloak.CloakStateLayout
+import dev.cyclone.cloak.root.CloakStateLayout
 import org.json.JSONObject
 import java.io.File
 import java.security.MessageDigest

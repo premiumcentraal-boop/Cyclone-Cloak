@@ -1,5 +1,10 @@
 package dev.cyclone.cloak
 
+import dev.cyclone.cloak.data.*
+import dev.cyclone.cloak.forge.*
+import dev.cyclone.cloak.cyclone.*
+import dev.cyclone.cloak.root.*
+import dev.cyclone.cloak.ui.*
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -176,7 +181,7 @@ class MainActivity : ComponentActivity() {
                 val text = contentResolver.openInputStream(uri)?.bufferedReader()?.use { it.readText() }
                     ?: throw IllegalArgumentException("empty file")
                 val profile = JSONObject(text)
-                CloakStore.validate(profile)?.let { reason -> throw IllegalArgumentException(reason) }
+                ProfileCheck.firstProblem(profile)?.let { reason -> throw IllegalArgumentException(reason) }
                 val id = CloakStore.save(applicationContext, profile)
                 runOnUiThread {
                     model.selectedCloakProfile.value = id
@@ -204,7 +209,7 @@ class MainActivity : ComponentActivity() {
                     "An identity with this name already exists. Choose another name."
                 }
                 val profile = CloakForge.forgeNewProfile(cleanName, template)
-                CloakStore.validate(profile)?.let { reason -> throw IllegalArgumentException(reason) }
+                ProfileCheck.firstProblem(profile)?.let { reason -> throw IllegalArgumentException(reason) }
                 val id = CloakStore.save(applicationContext, profile)
                 runOnUiThread {
                     model.newIdentityName.value = ""
@@ -226,7 +231,7 @@ class MainActivity : ComponentActivity() {
         thread {
             try {
                 val profiles = CloakFleet.forgeFleet(template, count)
-                val ids = CloakFleet.saveAll(applicationContext, profiles)
+                val ids = profiles.map { CloakStore.save(applicationContext, it) }
                 runOnUiThread {
                     model.selectedCloakProfile.value = ids.first()
                     reload()
@@ -241,7 +246,7 @@ class MainActivity : ComponentActivity() {
     private fun fleetBind() {
         val cloakIds = model.cloakProfiles.map { it.first }
         val readyProfiles = model.profiles.filter(::bindableHere)
-        val plan = CloakFleet.planBulkBind(cloakIds, readyProfiles, model.bindings.toList())
+        val plan = BulkBind.plan(cloakIds, readyProfiles, model.bindings.toList())
         if (plan.assignments.isEmpty()) {
             val used = model.cloakProfiles.size - plan.unusedCloakProfiles
             toast(
@@ -296,7 +301,7 @@ class MainActivity : ComponentActivity() {
                 val text = contentResolver.openInputStream(uri)?.bufferedReader()?.use { it.readText() }
                     ?: throw IllegalArgumentException("empty file")
                 val profiles = CloakFleet.parseFleet(text)
-                val ids = CloakFleet.saveAll(applicationContext, profiles)
+                val ids = profiles.map { CloakStore.save(applicationContext, it) }
                 runOnUiThread {
                     model.selectedCloakProfile.value = ids.firstOrNull()
                     reload()
