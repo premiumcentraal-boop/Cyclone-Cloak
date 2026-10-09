@@ -53,7 +53,7 @@ class CloakForgeTest {
     fun forgedProfilePassesStoreValidation() {
         for (template in TestPhones.all) {
             val profile = CloakForge.forgeProfile("Vault 01", seed, template)
-            assertNull(ProfileCheck.firstProblem(profile))
+            assertEquals(emptyList<String>(), ProfileValidator.errors(profile))
         }
     }
 
@@ -68,7 +68,7 @@ class CloakForgeTest {
     fun pixel4TemplateForgesAValidProfile() {
         val profile = CloakForge.forgeProfile("Vault 01", seed, TestPhones["pixel_4"])
 
-        assertNull(ProfileCheck.firstProblem(profile))
+        assertEquals(emptyList<String>(), ProfileValidator.errors(profile))
         assertEquals("Pixel 4", profile.getJSONObject("device").getString("model"))
         assertEquals("flame", profile.getJSONObject("device").getString("device"))
     }
@@ -78,8 +78,8 @@ class CloakForgeTest {
         val first = CloakForge.forgeNewProfile("My device", TestPhones["pixel_7"])
         val second = CloakForge.forgeNewProfile("My device", TestPhones["pixel_7"])
 
-        assertNull(ProfileCheck.firstProblem(first))
-        assertNull(ProfileCheck.firstProblem(second))
+        assertEquals(emptyList<String>(), ProfileValidator.errors(first))
+        assertEquals(emptyList<String>(), ProfileValidator.errors(second))
         assertNotEquals(first.getString("seed"), second.getString("seed"))
         assertNotEquals(
             first.getJSONObject("identifiers").getString("android_id"),

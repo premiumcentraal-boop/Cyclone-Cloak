@@ -11,7 +11,7 @@ linked to another install.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.9.0-alpha.1 (pre-release; on-device validation required)
+## Status: 0.10.0-alpha.1 (pre-release; on-device validation required)
 
 - **Companion app** (`android/app`): a Cyclone connector (contract `cyclone.connector/1.3`, Cyclone
   5.0.0-alpha.122 or newer). Imports or creates cloak profiles, binds them to the apps of Cyclone
@@ -31,6 +31,36 @@ The thin line that turns one playboy billionaire into twenty masked vigilantes.
   (HMAC seeds, Luhn-valid IMEIs). Stdlib-only Python, pytest-tested.
 - **Roadmap**: docs/ROADMAP.md. Remaining for Phase 1: on-device validation (issue #1), then
   identifier callbacks and the integrity layer (Phase 2).
+
+## Using the app
+
+Four tabs:
+
+| Tab | What it's for |
+|---|---|
+| **Phones** | The phones identities are made from: three built-in (Pixel 4, Pixel 7, Galaxy S23) and your own. **Build a phone**, **Import** one, **Clone** a phone to change it, **Share** it as a file. |
+| **Identities** | Make an identity from any phone (or a fleet of them), see every value it carries, rename, delete, bind it to a Cyclone profile, export or import them all. |
+| **Profiles** | Your Cyclone profiles with Cloak's pill for each, **Bind all**, **Open in Cyclone**, and every bound app with its health. |
+| **Health** | Root Doctor (Magisk, Zygisk, the module, publishing) and the Cyclone connection. |
+
+### Adding a phone
+
+- **From a real phone:** run `adb shell getprop > phone.txt` on it (or copy its `build.prop`), then
+  Phones → **Import**. Cloak reads the model, build, carrier, network, density, language and time
+  zone, and opens the builder for what a dump can't tell (screen size and refresh rate).
+- **From scratch:** Phones → **Build a phone**. Pick the Android version (the SDK level follows), fill
+  in the device and build fields; the build fingerprint is put together from them, as a real one is.
+- **From a built-in phone:** **Clone** it and change what you need (for example the carrier and
+  locale for another country).
+- **From a file:** a phone someone shared from Cloak, or any Cloak identity (its phone can be fixed in
+  the builder when it doesn't hold together).
+
+The builder checks the same coherence rules as the desktop forge while you type (fingerprint vs.
+model vs. build, release vs. SDK, patch level, carrier codes, screen, locale) and marks each problem
+on its field. A phone saves only when it holds together. Identities keep their own copy of the phone
+they were made from, so editing or deleting a phone never changes an identity.
+
+![Phones, identities, profiles, health and the builder](docs/screenshots/1-phones.png)
 
 ## Working with Cyclone's profiles
 
@@ -87,27 +117,46 @@ remove the bindings in Cloak or uninstall it.
 ## Development
 
 ```sh
-# forge tests
+# forge tests (Python), including the shared vectors
 uv run --with pytest -- python -m pytest forge/tests
+
+# app unit tests: forge rules, Cyclone sync, publishing, and every screen rendered (Robolectric)
+gradle -p android :app:testDebugUnitTest
 
 # android build (needs JDK 17 + Android SDK)
 gradle -p android :app:assembleDebug :module:packageModule
 ```
 
-CI runs both on every push and PR. The module zip lands in the CI artifacts
-(`module/build/module/cyclone-cloak-0.1.0.zip` locally).
+CI runs all of it on every push and PR. The screen tests save a picture of each screen to
+`android/app/build/screenshots` (kept as a CI artifact; copies in `docs/screenshots`).
+
+**One set of rules, two implementations.** The built-in phones live in `catalog/phones.json`, which the
+app packages as an asset and the Python forge loads. The coherence rules and the dump importer exist in
+Python (`forge/cloak_forge`) and Kotlin (`android/app/.../forge`); `forge/tests/vectors` holds cases both
+must answer identically. Change a rule in both, then regenerate the vectors with
+`python3 forge/tools/make_vectors.py`.
 
 ## Repository layout
 
 ```
 android/                  companion app (connector) + platform module
-  app/                    connector app: profile import, binding, su bridge
+  app/src/main/java/dev/cyclone/cloak/
+    forge/                phones, identities, coherence rules, dump import (pure)
+    data/                 storage: identities, your phones, bindings
+    root/                 Root Doctor and publishing for the module
+    cyclone/              the connection to Cyclone: sync, health, events, open requests
+    ui/                   the four tabs, the phone builder, CloakViewModel
   module/                 platform module: Build/props callbacks, platform zip packaging
+catalog/phones.json       the built-in phones (app and forge)
 docs/ARCHITECTURE.md      system design and integration contract
-docs/COMPAT_SURFACE.md      every renderable surface, by phase
+docs/COMPAT_SURFACE.md    every renderable surface, by phase
 forge/                    profile forge: dump parsing, coherence validation, ID derivation
+  tests/vectors/          cases the Python and Kotlin forge must answer the same
 schema/                   profile JSON Schema (v0.1)
 ```
+
+The app's layers only depend downwards (forge and data → root → cyclone → ui); `ArchitectureTest`
+keeps it that way.
 
 ## License and disclaimer
 
