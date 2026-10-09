@@ -11,11 +11,15 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.CheckCircle
+import androidx.compose.material.icons.rounded.ContentCopy
+import androidx.compose.material.icons.rounded.ExpandLess
+import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material.icons.rounded.Remove
 import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.Refresh
@@ -30,14 +34,19 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.unit.dp
 import org.json.JSONObject
 
@@ -105,8 +114,8 @@ fun CloakUi(
         ) {
             item {
                 CloakHeroCard(
-                    title = "One identity for every profile",
-                    body = "Import a device identity, then bind it to the apps in a Cyclone profile.",
+                    title = "Give every profile its own device",
+                    body = "Create or import an identity, review its values, then bind it to a Cyclone profile.",
                 )
             }
 
@@ -142,16 +151,6 @@ fun CloakUi(
             }
 
             item {
-                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                    CloakActionButton("Import profile", Icons.Rounded.Add, onImport, Modifier.weight(1.2f), outlined = true)
-                    CloakActionButton("Reload", Icons.Rounded.Refresh, onReload, Modifier.weight(0.8f), outlined = true)
-                }
-            }
-            item {
-                CloakActionButton("Bind identity", Icons.Rounded.ChevronRight, onApply, Modifier.fillMaxWidth())
-            }
-
-            item {
                 CloakFleetCard(
                     count = model.fleetCount.value,
                     template = model.fleetTemplate.value,
@@ -164,41 +163,29 @@ fun CloakUi(
                 )
             }
 
-            item { CloakSectionTitle("Bindings", model.bindings.size) }
-            if (model.bindings.isEmpty()) {
-                item {
-                    Text(
-                        "No bindings yet. Select a Cyclone profile above, then tap Bind identity.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-            } else {
-                items(model.bindings, key = { it.profileId + "/" + it.androidUserId + "/" + it.packageName }) { binding ->
-                    CloakBindingCard(
-                        binding = binding,
-                        onToggle = onToggleBinding,
-                        onRemove = onRemoveBinding,
-                    )
+            item {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    CloakActionButton("Import identity", Icons.Rounded.Add, onImport, Modifier.weight(1.2f), outlined = true)
+                    CloakActionButton("Refresh", Icons.Rounded.Refresh, onReload, Modifier.weight(0.8f), outlined = true)
                 }
             }
-            item { CloakSectionTitle("Cloak identities", model.cloakProfiles.size) }
+
+            item { CloakSectionTitle("Device identities", model.cloakProfiles.size) }
             if (model.cloakProfiles.isEmpty()) {
                 item {
                     CloakEmptyState(
                         title = "No identities yet",
-                        body = "Import a Cyclone Cloak profile to get started.",
+                        body = "Generate a device identity above or import a Cyclone Cloak profile.",
                         icon = Icons.Rounded.Add,
                     )
                 }
             } else {
                 items(model.cloakProfiles, key = { it.first }) { (id, profile) ->
-                    val selected = model.selectedCloakProfile.value == id
-                    CloakChoiceCard(
-                        title = profile.optString("name", id),
-                        subtitle = if (selected) "Selected for binding" else "Tap to select",
-                        selected = selected,
-                        onClick = { onSelectCloak(id) },
+                    CloakIdentityCard(
+                        id = id,
+                        profile = profile,
+                        selected = model.selectedCloakProfile.value == id,
+                        onSelect = { onSelectCloak(id) },
                     )
                 }
             }
@@ -222,6 +209,45 @@ fun CloakUi(
                         subtitle = "$appCount ${if (appCount == 1) "app" else "apps"} · user $userId",
                         selected = selected,
                         onClick = { onSelectProfile(profile) },
+                    )
+                }
+            }
+
+            item {
+                val identityName = model.selectedCloakProfile.value
+                    ?.let { selected -> model.cloakProfiles.firstOrNull { it.first == selected }?.second?.optString("name") }
+                    .orEmpty()
+                val cycloneName = model.selectedCycloneProfile.value?.optString("label").orEmpty()
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text(
+                        when {
+                            identityName.isNotBlank() && cycloneName.isNotBlank() -> "$identityName → $cycloneName"
+                            identityName.isNotBlank() -> "Choose a Cyclone profile to finish binding"
+                            cycloneName.isNotBlank() -> "Choose a device identity to finish binding"
+                            else -> "Choose a device identity and a Cyclone profile"
+                        },
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    CloakActionButton("Bind selected identity", Icons.Rounded.ChevronRight, onApply, Modifier.fillMaxWidth())
+                }
+            }
+
+            item { CloakSectionTitle("Current bindings", model.bindings.size) }
+            if (model.bindings.isEmpty()) {
+                item {
+                    Text(
+                        "No apps are bound yet. Select an identity and Cyclone profile above, then bind them.",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+            } else {
+                items(model.bindings, key = { it.profileId + "/" + it.androidUserId + "/" + it.packageName }) { binding ->
+                    CloakBindingCard(
+                        binding = binding,
+                        onToggle = onToggleBinding,
+                        onRemove = onRemoveBinding,
                     )
                 }
             }
@@ -300,7 +326,12 @@ private fun CloakFleetCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
     ) {
         Column(Modifier.fillMaxWidth().padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text("Fleet forge", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text("Create device identities", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text(
+                "Choose a device family and quantity. Cloak builds a consistent profile for each identity; open one below to inspect its values.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
                 Button(onClick = { onCountChange((count - 1).coerceIn(1, CloakFleet.MAX_FLEET_SIZE)) }, shape = MaterialTheme.shapes.small) {
                     Icon(Icons.Rounded.Remove, contentDescription = "Fewer identities")
@@ -329,22 +360,188 @@ private fun CloakFleetCard(
                     }
                 }
             }
+            Text(
+                if (template == "pixel_7") "Google · Android 13 · panther" else "Samsung · Android 13 · S23 family",
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+            )
             Button(onClick = onForge, modifier = Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.small) {
-                Text("Generate fleet")
+                Text("Generate $count identities")
             }
+            Text(
+                "Identifiers are generated per profile. They are not readings of your phone’s physical identifiers.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Button(onClick = onFleetBind, modifier = Modifier.weight(1f), shape = MaterialTheme.shapes.small) {
                     Text("Bind fleet")
                 }
-                OutlinedButton(onClick = onExport, modifier = Modifier.weight(0.7f), shape = MaterialTheme.shapes.small) {
-                    Text("Export")
+                OutlinedButton(onClick = onExport, modifier = Modifier.weight(1f), shape = MaterialTheme.shapes.small) {
+                    Text("Export fleet")
                 }
-                OutlinedButton(onClick = onImport, modifier = Modifier.weight(0.7f), shape = MaterialTheme.shapes.small) {
-                    Text("Import")
+                OutlinedButton(onClick = onImport, modifier = Modifier.weight(1f), shape = MaterialTheme.shapes.small) {
+                    Text("Import fleet")
                 }
             }
         }
     }
+}
+
+@Composable
+private fun CloakIdentityCard(
+    id: String,
+    profile: JSONObject,
+    selected: Boolean,
+    onSelect: () -> Unit,
+) {
+    val expanded = remember(id) { mutableStateOf(false) }
+    val device = profile.optJSONObject("device")
+    val deviceSummary = listOf(
+        device.profileValue("manufacturer"),
+        device.profileValue("model"),
+        device.profileValue("version_release").let { if (it == "Not included") "" else "Android $it" },
+    ).filter(String::isNotBlank).joinToString(" · ")
+
+    Card(
+        onClick = onSelect,
+        modifier = Modifier.fillMaxWidth(),
+        shape = MaterialTheme.shapes.large,
+        colors = CardDefaults.cardColors(
+            containerColor = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface,
+        ),
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+    ) {
+        Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
+                    Text(profile.optString("name").ifBlank { id }, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+                    Text(
+                        deviceSummary.ifBlank { "Device details not included" },
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                    Text(
+                        if (selected) "Selected for binding" else "Tap to select",
+                        style = MaterialTheme.typography.labelSmall,
+                        color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
+                    )
+                }
+                if (selected) Icon(Icons.Rounded.CheckCircle, contentDescription = "Selected", tint = MaterialTheme.colorScheme.primary)
+                IconButton(
+                    onClick = { expanded.value = !expanded.value },
+                    modifier = Modifier.size(44.dp),
+                ) {
+                    Icon(
+                        if (expanded.value) Icons.Rounded.ExpandLess else Icons.Rounded.ExpandMore,
+                        contentDescription = if (expanded.value) "Hide profile details" else "Show profile details",
+                    )
+                }
+            }
+            if (expanded.value) {
+                Surface(
+                    modifier = Modifier.fillMaxWidth(),
+                    shape = MaterialTheme.shapes.medium,
+                    color = MaterialTheme.colorScheme.surface,
+                ) {
+                    Column(Modifier.padding(14.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                        Text(
+                            "These are the values stored in this Cloak profile. Bound apps may see these values; they are separate from your phone’s physical identifiers.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                        CloakDetailGroup("Device identity", listOf(
+                            "Manufacturer" to device.profileValue("manufacturer"),
+                            "Brand" to device.profileValue("brand"),
+                            "Model" to device.profileValue("model"),
+                            "Product" to device.profileValue("product"),
+                            "Device codename" to device.profileValue("device"),
+                            "Hardware" to device.profileValue("hardware"),
+                            "Build fingerprint" to device.profileValue("fingerprint"),
+                            "Android release" to device.profileValue("version_release"),
+                            "SDK level" to device.profileValue("sdk_int"),
+                            "Security patch" to device.profileValue("security_patch"),
+                            "Build ID" to device.profileValue("build_id"),
+                            "Build increment" to device.profileValue("version_incremental"),
+                            "Bootloader" to device.profileValue("bootloader"),
+                            "Baseband" to device.profileValue("baseband"),
+                        ))
+                        val identifiers = profile.optJSONObject("identifiers")
+                        CloakDetailGroup("Device identifiers", listOf(
+                            "Android ID" to identifiers.profileValue("android_id"),
+                            "Advertising ID" to identifiers.profileValue("advertising_id"),
+                            "App Set ID" to identifiers.profileValue("app_set_id"),
+                            "Wi-Fi MAC" to identifiers.profileValue("mac"),
+                            "Bluetooth MAC" to identifiers.profileValue("bt_mac"),
+                            "IMEI · SIM 1" to identifiers.profileValue("imei_primary"),
+                            "IMEI · SIM 2" to identifiers.profileValue("imei_secondary"),
+                            "SIM serial" to identifiers.profileValue("sim_serial"),
+                            "GSF ID" to identifiers.profileValue("gsf_id"),
+                            "Widevine ID" to identifiers.profileValue("widevine_id"),
+                            "Device serial" to identifiers.profileValue("serial"),
+                        ))
+                        CloakDetailGroup("SIM & network", listOf(
+                            "SIM slots" to profile.optJSONObject("telephony").profileValue("sim_slot_count"),
+                            "Carrier" to profile.optJSONObject("telephony").profileValue("carrier_name"),
+                            "Mobile country code" to profile.optJSONObject("telephony").profileValue("mcc"),
+                            "Mobile network code" to profile.optJSONObject("telephony").profileValue("mnc"),
+                            "Network type" to profile.optJSONObject("telephony").profileValue("network_type"),
+                            "Egress hint" to profile.optJSONObject("network").profileValue("egress_hint"),
+                        ))
+                        CloakDetailGroup("Display & locale", listOf(
+                            "Resolution" to profile.optJSONObject("display").let { display ->
+                                val width = display.profileValue("width")
+                                val height = display.profileValue("height")
+                                if (width == "Not included" || height == "Not included") "Not included" else "$width × $height"
+                            },
+                            "Density" to profile.optJSONObject("display").profileValue("density"),
+                            "Refresh rate" to profile.optJSONObject("display").profileValue("refresh_rate_hz").let {
+                                if (it == "Not included") it else "$it Hz"
+                            },
+                            "Language" to profile.optJSONObject("locale").profileValue("language"),
+                            "Country" to profile.optJSONObject("locale").profileValue("country"),
+                            "Time zone" to profile.optJSONObject("locale").profileValue("timezone"),
+                            "Browser user agent" to profile.optJSONObject("ua").profileValue("value"),
+                        ))
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun CloakDetailGroup(title: String, values: List<Pair<String, String>>) {
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Bold)
+        values.forEach { (label, value) -> CloakDetailRow(label, value) }
+    }
+}
+
+@Composable
+private fun CloakDetailRow(label: String, value: String) {
+    val clipboard = LocalClipboardManager.current
+    Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+        Column(Modifier.weight(1f).padding(vertical = 5.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            SelectionContainer {
+                Text(value, style = MaterialTheme.typography.bodySmall, fontFamily = FontFamily.Monospace)
+            }
+        }
+        IconButton(
+            onClick = { clipboard.setText(AnnotatedString(value)) },
+            modifier = Modifier.size(40.dp),
+        ) {
+            Icon(Icons.Rounded.ContentCopy, contentDescription = "Copy $label")
+        }
+    }
+}
+
+private fun JSONObject?.profileValue(key: String): String {
+    val value = this?.opt(key)?.takeUnless { it == JSONObject.NULL }?.toString().orEmpty()
+    return value.takeIf { it.isNotBlank() } ?: "Not included"
 }
 
 private fun statusTone(status: String): CloakStatusTone = when {
