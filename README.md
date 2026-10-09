@@ -1,15 +1,33 @@
 # Cyclone Cloak
 
-**One phone, twenty profiles.**
+**Per-profile device characteristics for development, testing, and privacy.**
 
 Cyclone Cloak is the device-profile engine of the [Cyclone](https://github.com/premiumcentraal-boop/Cyclone)
 agent environment. It attaches to Cyclone as a first-class phone connector (contract
-`cyclone.connector/1`): each Cyclone profile on the phone gets its own real, fully coherent device
-profile. A banking app under profile A and the same app under profile B see two completely
-different phones - build fingerprint, properties, identifiers. Nothing is shared, nothing is
-linked to another install.
+`cyclone.connector/1`): each Cyclone profile on the phone can present a chosen, internally
+consistent set of device characteristics — build fingerprint, system properties, and the
+identifiers an app reads — so the code running in that profile behaves as it would on the
+modelled device.
 
-The thin line that turns one playboy billionaire into twenty masked vigilantes.
+The goal is to make one physical phone a useful bench for work that otherwise needs a drawer
+full of handsets:
+
+- **App development and QA.** Run your own app against many device models, build fingerprints
+  and API levels — check layouts, feature gates and compatibility — without buying every phone.
+- **Privacy and anti-tracking research.** Study how apps and SDKs fingerprint a device, and
+  reduce the passive cross-app tracking that device identifiers enable, on a device you own.
+- **A reproducible test bench for Cyclone.** Give each Cyclone profile a stable, documented
+  device identity so automation runs are repeatable and easy to reason about.
+
+### Intended use, and what this is not for
+
+Use Cyclone Cloak only on devices and accounts **you own or are authorised to test**, and only
+where presenting modified device characteristics is permitted. It is **not** a tool for evading
+fraud, abuse, security or anti-cheat controls, for circumventing bans, rate limits, KYC or
+identity checks, or for making multiple accounts or installs look like unrelated people or
+devices to a service that forbids it. Those uses are out of scope, unsupported, and in many
+places against the law or the service's terms. If you are unsure whether a use is allowed, get
+written permission from the device owner and the service operator first.
 
 ## Status: 0.8.0-alpha.5 (pre-release; on-device validation required)
 
@@ -17,7 +35,8 @@ The thin line that turns one playboy billionaire into twenty masked vigilantes.
   schema as the forge emits), binds them to Cyclone profiles via the connector contract
   (`profiles`, `ext.set`, selector entries), and writes the per-app config the module applies
   (over su, to `/data/adb/cyclone_cloak/config.json`).
-- **Per-profile isolation**: bindings are keyed by Android user id and package name, so the`n  same app in two Cyclone profiles cannot collide.
+- **Per-profile isolation**: bindings are keyed by Android user id and package name, so the
+  same app in two Cyclone profiles cannot collide.
 - **platform module** (`android/module`): for every app bound to a cloak profile, rewrites the
   `android.os.Build` statics and callbacks `SystemProperties` reads so the app sees the bound device.
   Callbacks apply once at process start; unscoped apps are untouched.
@@ -57,5 +76,6 @@ schema/                   profile JSON Schema (v0.1)
 
 ## License and disclaimer
 
-MIT. Use only on devices and accounts you own - profile misuse can violate app terms of
-service, and banking apps in particular decide their own risk appetite.
+MIT. You are responsible for how you use it: run it only on devices and accounts you own or are
+authorised to test, and follow the laws and the terms of service that apply to you. See
+"Intended use, and what this is not for" above.
