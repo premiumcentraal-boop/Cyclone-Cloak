@@ -117,13 +117,18 @@ dependencies {
 }
 
 // Robolectric's Android framework, fetched by Gradle (cached, proxy-aware) instead of Robolectric's own downloader.
-configurations { robolectricRuntime }
+// One configuration per jar: both share coordinates, and in one configuration Gradle would keep only the newest.
+configurations {
+    robolectricSdk34
+    robolectricSdk35
+}
 dependencies {
-    robolectricRuntime "org.robolectric:android-all-instrumented:14-robolectric-10818077-i7"
+    robolectricSdk34 "org.robolectric:android-all-instrumented:14-robolectric-10818077-i7"
     // Robolectric loads app resources with its newest framework.
-    robolectricRuntime "org.robolectric:android-all-instrumented:15-robolectric-12650502-i7"
+    robolectricSdk35 "org.robolectric:android-all-instrumented:15-robolectric-12650502-i7"
 }
 tasks.register("copyRobolectricRuntime", Copy) {
-    from configurations.robolectricRuntime
+    from configurations.robolectricSdk34
+    from configurations.robolectricSdk35
     into layout.buildDirectory.dir("robolectric")
 }
