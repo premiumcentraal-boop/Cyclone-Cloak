@@ -15,7 +15,7 @@ from .derive import (
     luhn_valid,
 )
 from .forge import FORGE_VERSION, ForgeError, available_templates, forge_profile
-from .prop_parse import draft_device, draft_profile, parse_build_prop
+from .prop_parse import draft_device, draft_phone, draft_profile, parse_build_prop
 from .validate import ERROR, WARNING, Finding, has_errors, validate_profile
 
 __version__ = FORGE_VERSION
@@ -38,6 +38,7 @@ __all__ = [
     "derive_sim_serial",
     "derive_widevine_id",
     "draft_device",
+    "draft_phone",
     "draft_profile",
     "forge_profile",
     "luhn_check_digit",

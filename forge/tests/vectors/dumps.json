@@ -1,0 +1,70 @@
+{
+  "cases": [
+    {
+      "name": "build.prop",
+      "text": "# a build.prop excerpt\nro.product.manufacturer=Google\nro.product.brand=google\nro.product.model=Pixel 8\nro.product.name=shiba\nro.product.device=shiba\nro.hardware=zuma\nro.build.fingerprint=google/shiba/shiba:14/AP1A.240305.019/11445699:user/release-keys\nro.build.version.release=14\nro.build.version.sdk=34\nro.build.version.security_patch=2024-03-05\nro.build.id=AP1A.240305.019\nro.build.version.incremental=11445699\nro.build.date.utc=1709683200\nro.product.first_api_level=34\nro.bootloader=ripcurrent-14.4-11330117\nro.sf.lcd_density=420\n",
+      "expect": {
+        "device": {
+          "manufacturer": "Google",
+          "brand": "google",
+          "model": "Pixel 8",
+          "product": "shiba",
+          "device": "shiba",
+          "hardware": "zuma",
+          "fingerprint": "google/shiba/shiba:14/AP1A.240305.019/11445699:user/release-keys",
+          "version_release": "14",
+          "sdk_int": 34,
+          "security_patch": "2024-03-05",
+          "build_id": "AP1A.240305.019",
+          "version_incremental": "11445699",
+          "build_date_utc": 1709683200,
+          "first_api_level": 34,
+          "bootloader": "ripcurrent-14.4-11330117",
+          "baseband": ""
+        },
+        "display": {
+          "density": 420
+        }
+      }
+    },
+    {
+      "name": "getprop",
+      "text": "[ro.product.manufacturer]: [samsung]\n[ro.product.brand]: [samsung]\n[ro.product.model]: [SM-S911B]\n[ro.product.name]: [dm1qxxx]\n[ro.product.device]: [dm1q]\n[ro.hardware]: [qcom]\n[ro.build.fingerprint]: [samsung/dm1qxxx/dm1q:14/UP1A.231005.007/S911BXXS3BWK5:user/release-keys]\n[ro.build.version.release]: [14]\n[ro.build.version.sdk]: [34]\n[ro.build.version.security_patch]: [2023-12-01]\n[ro.build.id]: [UP1A.231005.007]\n[ro.build.version.incremental]: [S911BXXS3BWK5]\n[ro.build.date.utc]: [1701936000]\n[ro.product.first_api_level]: [33]\n[gsm.version.baseband]: [S911BXXS3BWK5,S911BXXS3BWK5]\n[gsm.sim.operator.alpha]: [Vodafone.de,]\n[gsm.sim.operator.numeric]: [26202,]\n[gsm.network.type]: [NR_NSA,Unknown]\n[persist.radio.multisim.config]: [dsds]\n[ro.sf.lcd_density]: [450]\n[persist.sys.locale]: [de-DE]\n[persist.sys.timezone]: [Europe/Berlin]\n",
+      "expect": {
+        "device": {
+          "manufacturer": "samsung",
+          "brand": "samsung",
+          "model": "SM-S911B",
+          "product": "dm1qxxx",
+          "device": "dm1q",
+          "hardware": "qcom",
+          "fingerprint": "samsung/dm1qxxx/dm1q:14/UP1A.231005.007/S911BXXS3BWK5:user/release-keys",
+          "version_release": "14",
+          "sdk_int": 34,
+          "security_patch": "2023-12-01",
+          "build_id": "UP1A.231005.007",
+          "version_incremental": "S911BXXS3BWK5",
+          "build_date_utc": 1701936000,
+          "first_api_level": 33,
+          "bootloader": "",
+          "baseband": "S911BXXS3BWK5,S911BXXS3BWK5"
+        },
+        "telephony": {
+          "carrier_name": "Vodafone.de",
+          "mcc": "262",
+          "mnc": "02",
+          "network_type": "5G",
+          "sim_slot_count": 2
+        },
+        "display": {
+          "density": 450
+        },
+        "locale": {
+          "language": "de",
+          "country": "DE",
+          "timezone": "Europe/Berlin"
+        }
+      }
+    }
+  ]
+}
