@@ -8,7 +8,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.compose.setContent
 import androidx.activity.result.contract.ActivityResultContracts
-import java.util.concurrent.atomic.AtomicInteger
+import java.util.concurrent.atomic.AtomicBoolean
 import androidx.compose.runtime.remember
 import com.cyclone.connector.client.CycloneConnector
 import com.cyclone.connector.client.CycloneConnectorException
@@ -19,6 +19,7 @@ import kotlin.concurrent.thread
 
 class MainActivity : ComponentActivity() {
     private val model = CloakUiModel()
+    private val creatingIdentity = AtomicBoolean(false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,6 +46,7 @@ class MainActivity : ComponentActivity() {
                     onRootDoctor = { runRootDoctor() },
                     onOpenMagisk = { openMagisk() },
                     onGetModule = { openModuleDownload() },
+                    onCreateIdentity = { name, template -> createIdentity(name, template) },
                     onForgeFleet = { count -> forgeFleet(count) },
                     onFleetBind = { fleetBind() },
                     onExportFleet = { exportFleetLauncher.launch("cyclone-cloak-fleet.json") },
@@ -125,6 +127,38 @@ class MainActivity : ComponentActivity() {
                 }
             } catch (error: Exception) {
                 runOnUiThread { toast("Import failed: ${error.message}") }
+            }
+        }
+    }
+
+    private fun createIdentity(name: String, template: String) {
+        val cleanName = name.trim()
+        if (cleanName.isBlank()) {
+            toast("Enter a name for this device identity.")
+            return
+        }
+        if (!creatingIdentity.compareAndSet(false, true)) return
+        model.creatingIdentity.value = true
+        thread {
+            try {
+                val existing = CloakStore.all(applicationContext)
+                require(existing.none { it.second.optString("name").equals(cleanName, ignoreCase = true) }) {
+                    "An identity with this name already exists. Choose another name."
+                }
+                val profile = CloakForge.forgeNewProfile(cleanName, template)
+                CloakStore.validate(profile)?.let { reason -> throw IllegalArgumentException(reason) }
+                val id = CloakStore.save(applicationContext, profile)
+                runOnUiThread {
+                    model.newIdentityName.value = ""
+                    model.selectedCloakProfile.value = id
+                    reload()
+                    toast("Created $cleanName")
+                }
+            } catch (error: Exception) {
+                runOnUiThread { toast("Could not create device: ${error.message}") }
+            } finally {
+                creatingIdentity.set(false)
+                runOnUiThread { model.creatingIdentity.value = false }
             }
         }
     }

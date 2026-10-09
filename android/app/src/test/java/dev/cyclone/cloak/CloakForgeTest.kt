@@ -1,6 +1,7 @@
 package dev.cyclone.cloak
 
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertNotEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
 
@@ -60,5 +61,19 @@ class CloakForgeTest {
         val first = CloakForge.forgeProfile("Vault 01", seed, "pixel_7").toString()
         val again = CloakForge.forgeProfile("Vault 01", seed, "pixel_7").toString()
         assertEquals(first, again)
+    }
+
+    @Test
+    fun newDeviceProfilesGetIndependentIdentifiers() {
+        val first = CloakForge.forgeNewProfile("My device", "pixel_7")
+        val second = CloakForge.forgeNewProfile("My device", "pixel_7")
+
+        assertNull(CloakStore.validate(first))
+        assertNull(CloakStore.validate(second))
+        assertNotEquals(first.getString("seed"), second.getString("seed"))
+        assertNotEquals(
+            first.getJSONObject("identifiers").getString("android_id"),
+            second.getJSONObject("identifiers").getString("android_id"),
+        )
     }
 }

@@ -4,6 +4,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.math.BigInteger
 import java.security.MessageDigest
+import java.security.SecureRandom
 import javax.crypto.Mac
 import javax.crypto.spec.SecretKeySpec
 
@@ -46,6 +47,17 @@ object CloakForge {
             .put("health", JSONObject().put("state", "new").put("last_seen", JSONObject.NULL))
             .put("meta", JSONObject().put("source", "forge").put("forge_version", "0.2.0").put("template", templateName))
         return json
+    }
+
+    /** Creates a fresh on-device identity with an independent cryptographic seed. */
+    fun forgeNewProfile(name: String, templateName: String = "pixel_7"): JSONObject {
+        val cleanName = name.trim()
+        require(cleanName.isNotEmpty()) { "Enter a name for this device identity." }
+        require(cleanName.length <= 64) { "Device identity names can be up to 64 characters." }
+        val seedBytes = ByteArray(32).also(SecureRandom()::nextBytes)
+        val seed = seedBytes.joinToString("") { "%02x".format(it) }
+        seedBytes.fill(0)
+        return forgeProfile(cleanName, seed, templateName)
     }
 
     /** Deterministic fleet seed: same name + template, same identity. */

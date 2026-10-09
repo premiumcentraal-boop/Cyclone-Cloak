@@ -35,6 +35,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -62,6 +64,8 @@ class CloakUiModel {
     val rootDoctor = mutableStateOf(RootDoctorResult(RootDoctorCode.NOT_CHECKED))
     val fleetCount = mutableStateOf(20)
     val fleetTemplate = mutableStateOf("pixel_7")
+    val newIdentityName = mutableStateOf("")
+    val creatingIdentity = mutableStateOf(false)
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -78,6 +82,7 @@ fun CloakUi(
     onRootDoctor: () -> Unit,
     onOpenMagisk: () -> Unit,
     onGetModule: () -> Unit,
+    onCreateIdentity: (String, String) -> Unit,
     onForgeFleet: (Int) -> Unit,
     onFleetBind: () -> Unit,
     onExportFleet: () -> Unit,
@@ -151,11 +156,15 @@ fun CloakUi(
             }
 
             item {
-                CloakFleetCard(
+                CloakCreationCard(
                     count = model.fleetCount.value,
                     template = model.fleetTemplate.value,
+                    name = model.newIdentityName.value,
+                    creating = model.creatingIdentity.value,
+                    onNameChange = { value -> if (value.length <= 64) model.newIdentityName.value = value },
                     onCountChange = { model.fleetCount.value = it },
                     onTemplateChange = { model.fleetTemplate.value = it },
+                    onCreate = { onCreateIdentity(model.newIdentityName.value, model.fleetTemplate.value) },
                     onForge = { onForgeFleet(model.fleetCount.value) },
                     onFleetBind = onFleetBind,
                     onExport = onExportFleet,
@@ -309,11 +318,15 @@ private fun CloakRootDoctorCard(
 }
 
 @Composable
-private fun CloakFleetCard(
+private fun CloakCreationCard(
     count: Int,
     template: String,
+    name: String,
+    creating: Boolean,
+    onNameChange: (String) -> Unit,
     onCountChange: (Int) -> Unit,
     onTemplateChange: (String) -> Unit,
+    onCreate: () -> Unit,
     onForge: () -> Unit,
     onFleetBind: () -> Unit,
     onExport: () -> Unit,
@@ -326,27 +339,21 @@ private fun CloakFleetCard(
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
     ) {
         Column(Modifier.fillMaxWidth().padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text("Create device identities", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text("Create a device", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             Text(
-                "Choose a device family and quantity. Cloak builds a consistent profile for each identity; open one below to inspect its values.",
+                "Make a new device identity directly on this phone. Each one gets its own fresh identifier set.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                Button(onClick = { onCountChange((count - 1).coerceIn(1, CloakFleet.MAX_FLEET_SIZE)) }, shape = MaterialTheme.shapes.small) {
-                    Icon(Icons.Rounded.Remove, contentDescription = "Fewer identities")
-                }
-                Text(
-                    "$count identities",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.SemiBold,
-                    modifier = Modifier.weight(1f),
-                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-                )
-                Button(onClick = { onCountChange((count + 1).coerceIn(1, CloakFleet.MAX_FLEET_SIZE)) }, shape = MaterialTheme.shapes.small) {
-                    Icon(Icons.Rounded.Add, contentDescription = "More identities")
-                }
-            }
+            OutlinedTextField(
+                value = name,
+                onValueChange = onNameChange,
+                modifier = Modifier.fillMaxWidth(),
+                label = { Text("Device name") },
+                placeholder = { Text("For example, Work Pixel") },
+                singleLine = true,
+                supportingText = { Text("${name.length}/64 characters") },
+            )
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 listOf("pixel_7" to "Pixel 7", "galaxy_s23" to "Galaxy S23").forEach { (id, label) ->
                     if (id == template) {
@@ -367,14 +374,45 @@ private fun CloakFleetCard(
                 modifier = Modifier.fillMaxWidth(),
                 textAlign = androidx.compose.ui.text.style.TextAlign.Center,
             )
-            Button(onClick = onForge, modifier = Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.small) {
-                Text("Generate $count identities")
-            }
             Text(
                 "Identifiers are generated per profile. They are not readings of your phone’s physical identifiers.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
+            Button(
+                onClick = onCreate,
+                enabled = name.isNotBlank() && !creating,
+                modifier = Modifier.fillMaxWidth(),
+                shape = MaterialTheme.shapes.small,
+            ) {
+                Icon(Icons.Rounded.Add, contentDescription = null)
+                Text(if (creating) "Creating device…" else "Create device identity", modifier = Modifier.padding(start = 8.dp))
+            }
+            HorizontalDivider()
+            Text("Create a fleet", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
+            Text(
+                "Generate multiple uniquely seeded identities from the same device family.",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
+                Button(onClick = { onCountChange((count - 1).coerceIn(1, CloakFleet.MAX_FLEET_SIZE)) }, shape = MaterialTheme.shapes.small) {
+                    Icon(Icons.Rounded.Remove, contentDescription = "Fewer identities")
+                }
+                Text(
+                    "$count identities",
+                    style = MaterialTheme.typography.titleMedium,
+                    fontWeight = FontWeight.SemiBold,
+                    modifier = Modifier.weight(1f),
+                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
+                )
+                Button(onClick = { onCountChange((count + 1).coerceIn(1, CloakFleet.MAX_FLEET_SIZE)) }, shape = MaterialTheme.shapes.small) {
+                    Icon(Icons.Rounded.Add, contentDescription = "More identities")
+                }
+            }
+            Button(onClick = onForge, modifier = Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.small) {
+                Text("Generate $count identities")
+            }
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Button(onClick = onFleetBind, modifier = Modifier.weight(1f), shape = MaterialTheme.shapes.small) {
                     Text("Bind fleet")
