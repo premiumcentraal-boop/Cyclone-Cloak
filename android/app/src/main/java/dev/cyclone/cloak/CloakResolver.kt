@@ -20,6 +20,9 @@ object CloakResolver {
     fun resolve(context: Context, profileId: String, androidUserId: Int, packageName: String): String? {
         val binding = CloakBindingStore.find(context, profileId, androidUserId, packageName) ?: return null
         if (!binding.enabled) return null
+        // Main's binding, mirrored here: its identity file lives in Cloak in Main and in the published state, and the
+        // mirror's own root check set its state.
+        if (binding.origin == CloakBinding.ORIGIN_MAIN) return binding.cloakProfileId.takeIf { binding.state == "ready" }
         if (!CloakRootDoctor.verifiedForCurrentApp(context) || binding.state != "ready") return null
         val profile = CloakStore.find(context, binding.cloakProfileId)
         if (profile == null) {
@@ -39,14 +42,18 @@ object CloakResolver {
      */
     fun rebuildIndex(context: Context): Boolean = rebuildIndexDetailed(context).published
 
-    fun rebuildIndexDetailed(context: Context, repairModule: Boolean = false): RootDoctorResult {
+    fun rebuildIndexDetailed(
+        context: Context,
+        repairModule: Boolean = false,
+        scope: PublishScope = PublishScope.forThisInstall(context),
+    ): RootDoctorResult {
         val staging = stagingRoot(context)
         val staged = runCatching {
             staging.deleteRecursively()
             staging.mkdirs()
             val entries = JSONObject()
             for (binding in CloakBindingStore.all(context)) {
-                if (!binding.enabled) continue
+                if (!binding.enabled || !scope.publishes(binding)) continue
                 val profile = CloakStore.find(context, binding.cloakProfileId) ?: continue
                 val key = CloakStateLayout.key(binding.profileId, binding.androidUserId, binding.packageName)
                 val bindingDir = File(staging, key)
@@ -59,41 +66,52 @@ object CloakResolver {
                     JSONObject()
                         .put("profileId", binding.profileId)
                         .put("cloakProfileId", binding.cloakProfileId)
-                        .put("key", key),
+                        .put("key", key)
+                        // Read by Cloak in the profile (to mirror Main's bindings), never by the module.
+                        .put("publisher", scope.androidUserId)
+                        .put("summary", CloakIdentity.summary(binding.cloakProfileId, profile)),
                 )
             }
-            File(staging, CloakStateLayout.INDEX_FILE)
-                .writeText(JSONObject().put("schemaVersion", 2).put("entries", entries).toString())
+            // This install's share of the shared index; CloakRootDoctor assembles every share into index.json.
+            File(staging, CloakStateLayout.INDEX_PART_FILE).writeText(indexPart(entries))
         }.onFailure { Log.e("CloakPublish", "Could not stage profile state", it) }.isSuccess
         val result = if (staged) {
-            CloakRootDoctor.run(context, staging, repairModule)
+            CloakRootDoctor.run(context, staging, repairModule, scope)
         } else {
             RootDoctorResult(RootDoctorCode.PUBLISH_FAILED)
         }
         for (binding in CloakBindingStore.all(context)) {
+            // Mirrored bindings are Main's to publish; their health comes from the mirror check.
+            if (!scope.publishes(binding)) continue
             val state = when {
                 !binding.enabled && result.published -> "disabled"
                 CloakStore.find(context, binding.cloakProfileId) == null -> "missing"
                 result.published -> "ready"
-                else -> when (result.code) {
-                    RootDoctorCode.ROOT_REQUIRED -> "root approval needed"
-                    RootDoctorCode.ROOT_TIMEOUT -> "Magisk approval timed out"
-                    RootDoctorCode.ROOT_UNAVAILABLE -> "Magisk unavailable"
-                    RootDoctorCode.MODULE_MISSING -> "module missing"
-                    RootDoctorCode.MODULE_DISABLED -> "module disabled"
-                    RootDoctorCode.MODULE_PENDING_REMOVAL -> "module removal pending"
-                    RootDoctorCode.MODULE_REBOOT_REQUIRED -> "module update needs reboot"
-                    RootDoctorCode.MODULE_OUTDATED -> "module update needed"
-                    RootDoctorCode.MODULE_BUNDLE_INVALID -> "module package invalid"
-                    RootDoctorCode.MODULE_INSTALL_FAILED -> "module install failed"
-                    RootDoctorCode.ZYGISK_DISABLED -> "Zygisk disabled"
-                    RootDoctorCode.ZYGISK_STATUS_UNKNOWN -> "Zygisk status unknown"
-                    RootDoctorCode.ABI_UNSUPPORTED -> "unsupported architecture"
-                    else -> "publish failed"
-                }
+                else -> localState(result)
             }
             if (binding.state != state) CloakBindingStore.markState(context, binding, state)
         }
         return result
+    }
+
+    /** The members of [entries] without the surrounding braces, so shares can be joined with commas. Pure. */
+    internal fun indexPart(entries: JSONObject): String = entries.toString().removePrefix("{").removeSuffix("}")
+
+    /** Cloak's local state for a Root Doctor result that didn't publish. */
+    fun localState(result: RootDoctorResult): String = if (result.published) "ready" else when (result.code) {
+        RootDoctorCode.ROOT_REQUIRED -> "root approval needed"
+        RootDoctorCode.ROOT_TIMEOUT -> "Magisk approval timed out"
+        RootDoctorCode.ROOT_UNAVAILABLE -> "Magisk unavailable"
+        RootDoctorCode.MODULE_MISSING -> "module missing"
+        RootDoctorCode.MODULE_DISABLED -> "module disabled"
+        RootDoctorCode.MODULE_PENDING_REMOVAL -> "module removal pending"
+        RootDoctorCode.MODULE_REBOOT_REQUIRED -> "module update needs reboot"
+        RootDoctorCode.MODULE_OUTDATED -> "module update needed"
+        RootDoctorCode.MODULE_BUNDLE_INVALID -> "module package invalid"
+        RootDoctorCode.MODULE_INSTALL_FAILED -> "module install failed"
+        RootDoctorCode.ZYGISK_DISABLED -> "Zygisk disabled"
+        RootDoctorCode.ZYGISK_STATUS_UNKNOWN -> "Zygisk status unknown"
+        RootDoctorCode.ABI_UNSUPPORTED -> "unsupported architecture"
+        else -> "publish failed"
     }
 }
