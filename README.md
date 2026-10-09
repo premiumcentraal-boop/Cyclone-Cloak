@@ -11,7 +11,7 @@ linked to another install.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.5.0-alpha.4 (pre-release; on-device validation required)
+## Status: 0.8.0-alpha.5 (pre-release; on-device validation required)
 
 - **Companion app** (`android/app`): a Cyclone connector. Imports cloak profiles (JSON, same
   schema as the forge emits), binds them to Cyclone profiles via the connector contract
