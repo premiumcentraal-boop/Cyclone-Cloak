@@ -18,8 +18,8 @@ object CloakFleet {
     }
 
     /** Forges a fleet of full coherent profiles; identical names forge identically. */
-    fun forgeFleet(template: String, count: Int): List<JSONObject> =
-        fleetNames(count).map { name -> CloakForge.forgeProfile(name, CloakForge.fleetSeed(template, name), template) }
+    fun forgeFleet(phone: PhoneTemplate, count: Int): List<JSONObject> =
+        fleetNames(count).map { name -> CloakForge.forgeProfile(name, CloakForge.fleetSeed(phone.id, name), phone) }
 
     /** Whole-fleet export body: one JSON file, schema-tagged, versioned. */
     fun exportFleet(profiles: List<Pair<String, JSONObject>>): JSONObject =
@@ -41,7 +41,7 @@ object CloakFleet {
         val array = root.optJSONArray("profiles") ?: throw IllegalArgumentException("fleet file has no profiles")
         val profiles = (0 until array.length()).mapNotNull { array.optJSONObject(it) }
         for (profile in profiles) {
-            ProfileCheck.firstProblem(profile)?.let { reason ->
+            ProfileValidator.errors(profile).firstOrNull()?.let { reason ->
                 throw IllegalArgumentException("profile '${profile.optString("name")}': $reason")
             }
         }

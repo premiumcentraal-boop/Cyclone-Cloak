@@ -58,6 +58,11 @@ android {
     }
 }
 
+// The built-in phone catalog is shared with the Python forge (catalog/phones.json at the repository root).
+android.sourceSets.main.assets.srcDir("../../catalog")
+// JVM tests read the same catalog and the cross-language test vectors.
+android.sourceSets.test.resources.srcDirs += ["../../catalog", "../../forge/tests/vectors"]
+
 // Embed the module built from this exact source/version in the app so Root Doctor can repair
 // missing or outdated installs even when the phone has no network connection.
 def cloakModuleZipName = "cyclone-cloak-${android.defaultConfig.versionName}.zip"

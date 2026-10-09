@@ -208,7 +208,7 @@ class MainActivity : ComponentActivity() {
                 require(existing.none { it.second.optString("name").equals(cleanName, ignoreCase = true) }) {
                     "An identity with this name already exists. Choose another name."
                 }
-                val profile = CloakForge.forgeNewProfile(cleanName, template)
+                val profile = CloakForge.forgeNewProfile(cleanName, phoneById(template))
                 ProfileCheck.firstProblem(profile)?.let { reason -> throw IllegalArgumentException(reason) }
                 val id = CloakStore.save(applicationContext, profile)
                 runOnUiThread {
@@ -230,7 +230,7 @@ class MainActivity : ComponentActivity() {
         val template = model.fleetTemplate.value
         thread {
             try {
-                val profiles = CloakFleet.forgeFleet(template, count)
+                val profiles = CloakFleet.forgeFleet(phoneById(template), count)
                 val ids = profiles.map { CloakStore.save(applicationContext, it) }
                 runOnUiThread {
                     model.selectedCloakProfile.value = ids.first()
@@ -421,6 +421,9 @@ class MainActivity : ComponentActivity() {
         val asset = "https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/download/v$version/cyclone-cloak-$version.zip"
         startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(asset)))
     }
+
+    private fun phoneById(id: String): PhoneTemplate =
+        PhoneCatalog.parse(PhoneStore.catalogText(applicationContext)).first { it.id == id }
 
     private fun toast(message: String) = Toast.makeText(this, message, Toast.LENGTH_LONG).show()
 }

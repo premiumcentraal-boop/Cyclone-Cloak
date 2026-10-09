@@ -104,7 +104,7 @@ class CycloneSyncTest {
             binding(B, 11, APP2, state = "module disabled"),
             binding(C, 12, APP, cloak = "galaxy", state = "root approval needed"),
         ))
-        local.profilesById["pixel-8-work"] = CloakForge.forgeProfile("Work phone", "ab".repeat(32), "pixel_7")
+        local.profilesById["pixel-8-work"] = CloakForge.forgeProfile("Work phone", "ab".repeat(32), TestPhones["pixel_7"])
         val report = engine(api, local).sync()
 
         assertEquals("Connected", report.headline)
@@ -233,7 +233,7 @@ class CycloneSyncTest {
     @Test
     fun cloakInAProfileWritesOnlyItsOwnProfileAndMirrorsMain() {
         val api = cyclone()
-        val summary = CloakIdentity.summary("pixel-8-work", CloakForge.forgeProfile("Work phone", "cd".repeat(32), "pixel_7"))
+        val summary = CloakIdentity.summary("pixel-8-work", CloakForge.forgeProfile("Work phone", "cd".repeat(32), TestPhones["pixel_7"]))
         val index = JSONObject().put("schemaVersion", 2).put("entries", JSONObject()
             .put("12/$APP", JSONObject().put("profileId", C).put("cloakProfileId", "pixel-8-work").put("key", "k")
                 .put("publisher", 0).put("summary", summary))

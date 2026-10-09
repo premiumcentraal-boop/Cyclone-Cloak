@@ -6,7 +6,7 @@ import org.junit.Assert.assertFalse
 import org.junit.Test
 
 class CloakIdentityTest {
-    private val profile = CloakForge.forgeProfile("Vault 01", "ab".repeat(32), "pixel_7")
+    private val profile = CloakForge.forgeProfile("Vault 01", "ab".repeat(32), TestPhones["pixel_7"])
 
     @Test
     fun summaryCarriesOnlyDisplayFields() {

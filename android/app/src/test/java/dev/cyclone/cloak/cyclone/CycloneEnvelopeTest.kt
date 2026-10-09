@@ -22,7 +22,7 @@ class CycloneEnvelopeTest {
         .put("profileId", profileId).put("androidUserId", user).put("packageName", packageName)
         .put("value", value).put("state", "ready")
 
-    private val profile = CloakForge.forgeProfile("Work phone", "ef".repeat(32), "pixel_7")
+    private val profile = CloakForge.forgeProfile("Work phone", "ef".repeat(32), TestPhones["pixel_7"])
 
     @Test
     fun aValidVersionOneSummaryIsBoundAndShown() {

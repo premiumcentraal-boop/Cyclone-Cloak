@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 import uuid
 from typing import Any, Mapping
 
@@ -27,12 +28,24 @@ _DEVICE_KEYS = {
 }
 
 
+_GETPROP_LINE = re.compile(r"^\[([^\]]+)\]:\s*\[(.*)\]$")
+
+
 def parse_build_prop(text: str) -> dict[str, str]:
-    """Parse build.prop text into a key/value mapping, ignoring comments and blanks."""
+    """Parse build.prop text, or `adb shell getprop` output, into a key/value mapping.
+
+    Comments and blanks are ignored. getprop lines look like `[ro.product.model]: [Pixel 7]`.
+    """
     props: dict[str, str] = {}
     for raw in text.splitlines():
         line = raw.strip()
-        if not line or line.startswith("#") or "=" not in line:
+        if not line or line.startswith("#"):
+            continue
+        getprop = _GETPROP_LINE.match(line)
+        if getprop:
+            props[getprop.group(1).strip()] = getprop.group(2).strip()
+            continue
+        if "=" not in line:
             continue
         key, _, value = line.partition("=")
         props[key.strip()] = value.strip()
@@ -106,3 +119,70 @@ def _draft_ua(device: Mapping[str, Any], seed: str) -> dict[str, str]:
         f"Mobile Safari/537.36"
     )
     return {"value": value}
+
+
+_NETWORK_TYPES = {
+    "NR": "5G", "NR_NSA": "5G", "NR_SA": "5G", "5G": "5G",
+    "LTE": "LTE", "LTE_CA": "LTE", "IWLAN": "LTE",
+    "HSPA": "HSPA", "HSPAP": "HSPA", "HSDPA": "HSPA", "HSUPA": "HSPA",
+    "UMTS": "UMTS", "TD_SCDMA": "UMTS",
+    "GSM": "GSM", "EDGE": "GSM", "GPRS": "GSM",
+}
+
+
+def _first_of_list(value: str) -> str:
+    """Dual-SIM properties list both slots: `Vodafone,` or `LTE,Unknown`. Take the first real one."""
+    for part in value.split(","):
+        part = part.strip()
+        if part and part.lower() not in ("unknown", "null"):
+            return part
+    return ""
+
+
+def draft_phone(props: Mapping[str, str]) -> dict[str, Any]:
+    """Every template block a dump can tell: device, telephony, display (density only), locale.
+
+    What a dump cannot tell (screen size, refresh rate, size class, egress) is left out for the owner to fill in.
+    """
+    phone: dict[str, Any] = {"device": draft_device(props)}
+
+    telephony: dict[str, Any] = {}
+    carrier = _first_of_list(props.get("gsm.sim.operator.alpha", "") or props.get("gsm.operator.alpha", ""))
+    if carrier:
+        telephony["carrier_name"] = carrier
+    numeric = _first_of_list(props.get("gsm.sim.operator.numeric", "") or props.get("gsm.operator.numeric", ""))
+    if re.fullmatch(r"\d{5,6}", numeric):
+        telephony["mcc"], telephony["mnc"] = numeric[:3], numeric[3:]
+    network = _NETWORK_TYPES.get(_first_of_list(props.get("gsm.network.type", "")).upper())
+    if network:
+        telephony["network_type"] = network
+    multisim = props.get("persist.radio.multisim.config", "").lower()
+    if multisim in ("dsds", "dsda", "tsts"):
+        telephony["sim_slot_count"] = 2
+    elif multisim or telephony:
+        telephony["sim_slot_count"] = 1
+    if telephony:
+        phone["telephony"] = telephony
+
+    density = _to_int(props.get("ro.sf.lcd_density", ""), 0)
+    if density > 0:
+        phone["display"] = {"density": density}
+
+    locale: dict[str, str] = {}
+    tag = props.get("persist.sys.locale", "") or props.get("ro.product.locale", "")
+    match = re.fullmatch(r"([a-z]{2})[-_]([A-Z]{2}).*", tag)
+    if match:
+        locale["language"], locale["country"] = match.group(1), match.group(2)
+    else:
+        language = props.get("ro.product.locale.language", "")
+        country = props.get("ro.product.locale.region", "")
+        if re.fullmatch(r"[a-z]{2}", language):
+            locale["language"] = language
+        if re.fullmatch(r"[A-Z]{2}", country):
+            locale["country"] = country
+    timezone_name = props.get("persist.sys.timezone", "")
+    if timezone_name:
+        locale["timezone"] = timezone_name
+    if locale:
+        phone["locale"] = locale
+    return phone

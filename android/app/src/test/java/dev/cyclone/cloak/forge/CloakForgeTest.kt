@@ -35,13 +35,13 @@ class CloakForgeTest {
 
     @Test
     fun profileIdMatchesThePythonForge() {
-        val profile = CloakForge.forgeProfile("Vault 01", seed, "pixel_7")
+        val profile = CloakForge.forgeProfile("Vault 01", seed, TestPhones["pixel_7"])
         assertEquals("a15ece73-55a2-5b1d-9b66-c695a95776b7", profile.getString("id"))
     }
 
     @Test
     fun userAgentMatchesThePythonForge() {
-        val profile = CloakForge.forgeProfile("Vault 01", seed, "pixel_7")
+        val profile = CloakForge.forgeProfile("Vault 01", seed, TestPhones["pixel_7"])
         assertEquals(
             "Mozilla/5.0 (Linux; Android 13; Pixel 7) " +
                 "AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36",
@@ -51,7 +51,7 @@ class CloakForgeTest {
 
     @Test
     fun forgedProfilePassesStoreValidation() {
-        for (template in CloakForge.templateNames()) {
+        for (template in TestPhones.all) {
             val profile = CloakForge.forgeProfile("Vault 01", seed, template)
             assertNull(ProfileCheck.firstProblem(profile))
         }
@@ -59,14 +59,14 @@ class CloakForgeTest {
 
     @Test
     fun forgingIsDeterministic() {
-        val first = CloakForge.forgeProfile("Vault 01", seed, "pixel_7").toString()
-        val again = CloakForge.forgeProfile("Vault 01", seed, "pixel_7").toString()
+        val first = CloakForge.forgeProfile("Vault 01", seed, TestPhones["pixel_7"]).toString()
+        val again = CloakForge.forgeProfile("Vault 01", seed, TestPhones["pixel_7"]).toString()
         assertEquals(first, again)
     }
 
     @Test
     fun pixel4TemplateForgesAValidProfile() {
-        val profile = CloakForge.forgeProfile("Vault 01", seed, "pixel_4")
+        val profile = CloakForge.forgeProfile("Vault 01", seed, TestPhones["pixel_4"])
 
         assertNull(ProfileCheck.firstProblem(profile))
         assertEquals("Pixel 4", profile.getJSONObject("device").getString("model"))
@@ -75,8 +75,8 @@ class CloakForgeTest {
 
     @Test
     fun newDeviceProfilesGetIndependentIdentifiers() {
-        val first = CloakForge.forgeNewProfile("My device", "pixel_7")
-        val second = CloakForge.forgeNewProfile("My device", "pixel_7")
+        val first = CloakForge.forgeNewProfile("My device", TestPhones["pixel_7"])
+        val second = CloakForge.forgeNewProfile("My device", TestPhones["pixel_7"])
 
         assertNull(ProfileCheck.firstProblem(first))
         assertNull(ProfileCheck.firstProblem(second))

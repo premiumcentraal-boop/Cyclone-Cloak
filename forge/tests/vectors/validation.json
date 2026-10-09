@@ -1,0 +1,488 @@
+{
+  "about": "Regenerate forge/tests/vectors/*.json from the Python forge.",
+  "seed": "abababababababababababababababababababababababababababababababab",
+  "name": "Vault 01",
+  "today": "2026-01-01",
+  "cases": [
+    {
+      "name": "a forged Pixel 7 is clean",
+      "phone": "pixel_7",
+      "mutations": [],
+      "expect": []
+    },
+    {
+      "name": "a forged Pixel 4 is clean",
+      "phone": "pixel_4",
+      "mutations": [],
+      "expect": []
+    },
+    {
+      "name": "a forged Galaxy S23 is clean",
+      "phone": "galaxy_s23",
+      "mutations": [],
+      "expect": []
+    },
+    {
+      "name": "model changed without the user agent",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.model",
+          "Pixel 8"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "UA_MODEL_MISMATCH"
+        ]
+      ]
+    },
+    {
+      "name": "fingerprint brand disagrees",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.brand",
+          "samsung"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "FP_BRAND_MISMATCH"
+        ]
+      ]
+    },
+    {
+      "name": "fingerprint grammar broken",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.fingerprint",
+          "not a fingerprint"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "FINGERPRINT_FORMAT"
+        ]
+      ]
+    },
+    {
+      "name": "debug build type",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.fingerprint",
+          "google/panther/panther:13/TQ3A.230805.001/10193186:userdebug/release-keys"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "BUILD_TYPE"
+        ]
+      ]
+    },
+    {
+      "name": "dev-keys is only a warning",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.fingerprint",
+          "google/panther/panther:13/TQ3A.230805.001/10193186:user/dev-keys"
+        ]
+      ],
+      "expect": [
+        [
+          "warning",
+          "TAGS"
+        ]
+      ]
+    },
+    {
+      "name": "release and sdk disagree",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.sdk_int",
+          34
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "RELEASE_SDK_MISMATCH"
+        ]
+      ]
+    },
+    {
+      "name": "sdk out of range",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.sdk_int",
+          20
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "SDK_RANGE"
+        ],
+        [
+          "error",
+          "RELEASE_SDK_MISMATCH"
+        ],
+        [
+          "error",
+          "FIRST_API_LEVEL"
+        ]
+      ]
+    },
+    {
+      "name": "first api above sdk",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.first_api_level",
+          34
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "FIRST_API_LEVEL"
+        ]
+      ]
+    },
+    {
+      "name": "patch not a date",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.security_patch",
+          "August"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "PATCH_DATE"
+        ]
+      ]
+    },
+    {
+      "name": "patch in the future",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.security_patch",
+          "2027-01-05"
+        ]
+      ],
+      "expect": [
+        [
+          "warning",
+          "PATCH_FUTURE"
+        ],
+        [
+          "warning",
+          "PATCH_AFTER_BUILD"
+        ]
+      ]
+    },
+    {
+      "name": "patch newer than the build",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.security_patch",
+          "2023-12-05"
+        ]
+      ],
+      "expect": [
+        [
+          "warning",
+          "PATCH_AFTER_BUILD"
+        ]
+      ]
+    },
+    {
+      "name": "missing device field stops early",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.hardware"
+        ],
+        [
+          "device.model",
+          "Pixel 8"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "MISSING_DEVICE_FIELD"
+        ]
+      ]
+    },
+    {
+      "name": "bad seed",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "seed",
+          "xyz"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "SEED"
+        ]
+      ]
+    },
+    {
+      "name": "wrong schema",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "schema_version",
+          "0.1"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "SCHEMA_VERSION"
+        ]
+      ]
+    },
+    {
+      "name": "blank name",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "name",
+          "  "
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "NAME"
+        ]
+      ]
+    },
+    {
+      "name": "imei fails luhn",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "identifiers.imei_primary",
+          "472186978248630"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "IDENTIFIER_CHECKSUM"
+        ]
+      ]
+    },
+    {
+      "name": "android id format",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "identifiers.android_id",
+          "XYZ"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "IDENTIFIER_FORMAT"
+        ]
+      ]
+    },
+    {
+      "name": "unknown identifier",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "identifiers.oaid",
+          "abc"
+        ]
+      ],
+      "expect": [
+        [
+          "warning",
+          "UNKNOWN_IDENTIFIER"
+        ]
+      ]
+    },
+    {
+      "name": "carrier mcc mnc network slots",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "telephony.carrier_name",
+          ""
+        ],
+        [
+          "telephony.mcc",
+          "31"
+        ],
+        [
+          "telephony.mnc",
+          "2"
+        ],
+        [
+          "telephony.network_type",
+          "6G"
+        ],
+        [
+          "telephony.sim_slot_count",
+          3
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "TELEPHONY_CARRIER"
+        ],
+        [
+          "error",
+          "TELEPHONY_MCC"
+        ],
+        [
+          "error",
+          "TELEPHONY_MNC"
+        ],
+        [
+          "error",
+          "TELEPHONY_NETWORK_TYPE"
+        ],
+        [
+          "error",
+          "TELEPHONY_SLOTS"
+        ]
+      ]
+    },
+    {
+      "name": "display fields",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "display.width",
+          0
+        ],
+        [
+          "display.screen_size_class",
+          "huge"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "DISPLAY_FIELD"
+        ],
+        [
+          "error",
+          "DISPLAY_CLASS"
+        ]
+      ]
+    },
+    {
+      "name": "locale",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "locale.language",
+          "EN"
+        ],
+        [
+          "locale.country",
+          "us"
+        ],
+        [
+          "locale.timezone",
+          "New York"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "LOCALE"
+        ],
+        [
+          "error",
+          "LOCALE"
+        ],
+        [
+          "error",
+          "LOCALE"
+        ]
+      ]
+    },
+    {
+      "name": "ua missing",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "ua"
+        ]
+      ],
+      "expect": [
+        [
+          "warning",
+          "UA_MISSING"
+        ]
+      ]
+    },
+    {
+      "name": "ua format",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "ua.value",
+          "curl/8"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "UA_FORMAT"
+        ]
+      ]
+    },
+    {
+      "name": "ua release",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.version_release",
+          "14"
+        ],
+        [
+          "device.sdk_int",
+          34
+        ],
+        [
+          "device.fingerprint",
+          "google/panther/panther:14/TQ3A.230805.001/10193186:user/release-keys"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "UA_RELEASE_MISMATCH"
+        ]
+      ]
+    }
+  ]
+}
