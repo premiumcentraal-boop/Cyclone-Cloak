@@ -1,13 +1,14 @@
 # Upgrade to 0.10.0-rc.2
 
-This candidate is local and unpublished. Do not use the unsigned release APK as
-an installed signed upgrade. Device steps below are **unverified**.
+RC2 is a published prerelease with a signed APK and module ZIP. Use the published
+signed APK for upgrade; a local unsigned build is not a signed upgrade.
+Device steps below are **unverified**.
 
 1. Preserve app data. If using RC2 backups, export the library to Downloads and
    explicitly include identifiers/seeds if exact identity restoration is needed.
    Default exports restore fresh values. Bindings are not backed up. Private
    backups disappear on uninstall/data clear; keep a separate Downloads copy.
-2. After release approval, upgrade using an APK signed with the existing key.
+2. Upgrade using an APK signed with the existing key.
    Upgrade every Cloak install in Main and Cyclone profiles together. Profile
    schema 0.2, binding schema 2 and reader keys require no migration.
 3. Install matching `cyclone-cloak-0.10.0-rc.2.zip`, or explicitly queue the

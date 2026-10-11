@@ -1,10 +1,12 @@
 # Cyclone Cloak 0.10.0-rc.2
 
-Prepared on 2026-10-12 from development after RC1. Publication was authorized
-on 2026-10-12. The release workflow must pass full Android/module and Python
-tests before building and attaching both artifacts. Local Android/Compose
-execution was dependency-blocked; see [CURRENT-STATE.md](CURRENT-STATE.md)
-and the release workflow result for verification evidence.
+Published on 2026-10-12 (Berlin; 2026-10-11 UTC) as a
+[prerelease](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.10.0-rc.2) from `b9d8606`.
+[Release workflow](https://github.com/premiumcentraal-boop/Cyclone-Cloak/actions/runs/38180047567) passed full Android/module tests, **185 Python tests**,
+signed APK/module builds and artifact verification before upload.
+Main CI also passed. Physical-device behavior remains **unverified**.
+Local Android/Compose execution remains dependency-blocked; CI supplied the full
+suite verification. This is not a claim of complete device compatibility.
 
 ## Versions and packaging
 
@@ -16,7 +18,7 @@ and the release workflow result for verification evidence.
   `cyclone.connector/1.3` remain compatible.
 - Release workflow runs Python and Android/module tests, builds a signed APK and
   `cyclone-cloak-0.10.0-rc.2.zip`, verifies metadata/ARM payloads and identical
-  embedded module bytes, then attaches both. Publication uses this test-gated workflow.
+  embedded module bytes, then attaches both. This test-gated workflow completed successfully for RC2.
   Local release builds are unsigned; signing remains a CI credential requirement.
 
 ## Major improvements

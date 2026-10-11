@@ -11,13 +11,13 @@ not prove that every inspection API sees it.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.10.0-rc.2 (local candidate; not published)
+## Status: 0.10.0-rc.2 (published prerelease; device verification pending)
 
 [Release notes](docs/RELEASE_0.10.0-rc.2.md) · [Upgrade guide](docs/UPGRADE_0.10.0-rc.2.md).
-App and module use version code 23. Latest published prerelease remains
-[v0.10.0-rc.1](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.10.0-rc.1).
-RC2 physical-device behavior is unverified; local test results and remaining
-release gates are recorded in [CURRENT-STATE.md](docs/CURRENT-STATE.md).
+[Published RC2](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.10.0-rc.2) includes the signed APK and module ZIP; both use code 23.
+[Release CI](https://github.com/premiumcentraal-boop/Cyclone-Cloak/actions/runs/38180047567) passed full Android/module and Python tests, signed builds
+and artifact checks. Physical-device behavior remains unverified. See
+[CURRENT-STATE.md](docs/CURRENT-STATE.md) for evidence and limitations.
 
 - **Companion app** (`android/app`): a Cyclone connector (contract `cyclone.connector/1.3`, Cyclone
   5.0.0-alpha.122 or newer). Imports or creates cloak profiles, binds them to the apps of Cyclone

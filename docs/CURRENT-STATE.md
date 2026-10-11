@@ -1,10 +1,12 @@
 # Current state
 
-Updated 2026-10-12. Local candidate **v0.10.0-rc.2 / versionCode 23** is
-**unpublished**. Latest published prerelease remains
-[v0.10.0-rc.1](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.10.0-rc.1)
-(commit `433779f`). Current checkout is `main` at `a240456` with accumulated
-uncommitted development changes; RC2 has no tag or published commit.
+Updated 2026-10-12. **v0.10.0-rc.2 / versionCode 23** is a
+[published prerelease](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.10.0-rc.2) from commit `b9d8606`.
+[Release CI](https://github.com/premiumcentraal-boop/Cyclone-Cloak/actions/runs/38180047567) passed full Android/module and Python tests, signed builds
+and artifact checks before attaching the APK and module ZIP. Main CI on the same
+commit also passed. The checkout is on `main`; later documentation commits record
+publication evidence without changing the released payload.
+
 [RC2 release notes](RELEASE_0.10.0-rc.2.md) · [Upgrade guide](UPGRADE_0.10.0-rc.2.md).
 
 ## Versions and major components
@@ -67,30 +69,35 @@ git -c core.safecrlf=false diff --check
 - Supplemental JVM suites: profile **100**, sync/publication **117**, binding
   **12**, backup **20** passed. Suites overlap; these are not a total unique count.
   Sync includes fourteen real WSL kernel-lock/recovery cases. They do not replace
-  full Android/Compose/Robolectric tests.
+  full Android/Compose/Robolectric tests, which now passed in release CI.
 - Full app/module combined test command: **blocked** at
   `:app:copyRobolectricRuntime`: no cached
   `org.robolectric:android-all-instrumented:14-robolectric-10818077-i7` JAR in
-  offline mode. Full current app/Compose suite has not passed locally. Prior RC1
-  CI results apply only to RC1; current development has not been submitted to CI.
+  offline mode. Full current app/Compose suite has not passed locally; the same released source
+  passed full Android/module tests in GitHub release CI on 2026-10-12.
+  The first CI attempt exposed a corrupted progress-label ellipsis; the text
+  encoding was fixed without removing the assertion, then the full suite passed.
 - Debug APK, unsigned release APK and module ZIP build locally. Artifact checking
   checks versions/code, both ARM ELFs, ZIP integrity and exact embedded module.
   A first check caught a mismatch after overlapping Gradle commands regenerated
   the module ZIP; the final sequential rebuild and artifact verification passed.
   Final build: 50 seconds, 123 tasks (18 executed).
 - Release workflow tests both targets and builds/verifies/attaches APK and ZIP.
-  RC2 workflow was not dispatched; signed RC2 production and upload are unverified.
+  RC2 release CI built and verified the signed APK and module ZIP and published
+  both. Android/module tests passed in 1m43s; signed builds passed in 1m30s.
 
 Local outputs: `android/app/build/outputs/apk/debug/app-debug.apk`,
 `android/app/build/outputs/apk/release/app-release-unsigned.apk`,
 `android/module/build/module/cyclone-cloak-0.10.0-rc.2.zip`.
-No compiler/build warnings in successful builds or fresh module tests. The missing
+No compiler/build warnings in successful builds or fresh module tests. CI tooling
+warned about Node20/setup-java v4 and Node API deprecations, an unmatched uv
+cache glob and a future Ubuntu runner migration. The missing
 Robolectric dependency is a test blocker, not a compiler warning.
 
 ## Unresolved release gates and limitations
 
-- Full local Android/Compose tests must run with resolved dependencies before
-  claiming all tests pass. No tests were removed or bypassed.
+- Full Android/module tests passed in release CI; local app execution still needs
+  resolved Robolectric dependencies. No tests were removed or bypassed.
 - **RC2 physical-device behavior is unverified**: signed upgrades, activation
   after reboot, Android Toybox publication/recovery, multi-user health/bindings,
   secondary-user root reads, MediaStore Downloads and backup/import UI behavior.
@@ -111,4 +118,5 @@ Robolectric dependency is a test blocker, not a compiler warning.
 - Attestation/keybox management, automatic fingerprint rotation/reset reseeding,
   uptime offsets and network-egress behavior are not implemented.
 
-Detailed run report: [HANDOFF-2026-10-12-RC2.md](HANDOFF-2026-10-12-RC2.md).
+Preparation report: [HANDOFF-2026-10-12-RC2.md](HANDOFF-2026-10-12-RC2.md).
+Publication evidence: [HANDOFF-2026-10-12-PUBLISH-RC2.md](HANDOFF-2026-10-12-PUBLISH-RC2.md).

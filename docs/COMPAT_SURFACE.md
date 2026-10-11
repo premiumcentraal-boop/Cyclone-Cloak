@@ -1,7 +1,7 @@
 # Cyclone Cloak Compatibility Surface
 
 Compatibility inventory and planned phases, not a claim that every listed read
-is intercepted. Current published prerelease: `v0.10.0-rc.1`; see
+is intercepted. Current published prerelease: `v0.10.0-rc.2`; see
 [ARCHITECTURE.md](ARCHITECTURE.md) and [CURRENT-STATE.md](CURRENT-STATE.md).
 Callback values come from the stored identity, not fresh generation at read time.
 

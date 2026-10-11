@@ -1,6 +1,7 @@
 # Cyclone Cloak Architecture
 
-Current local candidate: `v0.10.0-rc.2` (not published). Latest published prerelease: `v0.10.0-rc.1`, based on `v0.10.0-alpha.1`. See [CURRENT-STATE.md](CURRENT-STATE.md)
+Current published prerelease: `v0.10.0-rc.2`, commit `b9d8606`, following RC1 and
+`v0.10.0-alpha.1`. See [CURRENT-STATE.md](CURRENT-STATE.md)
 for versions, local verification and unresolved items. Dated release reports and
 checkpoints describe their historical releases.
 
