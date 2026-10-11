@@ -1,24 +1,18 @@
 # Current state
 
-Verified locally on 2026-10-11; baseline is the latest published GitHub release,
-[v0.10.0-alpha.1](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.10.0-alpha.1)
-(pre-release, published 2026-10-10 00:40:42 Europe/Berlin). Local `main` was
-fast-forwarded from `v0.8.0-alpha.6` to release commit
-`67274690ab83e6c38fe89ddbde9b3f92646e0993`. Local changes update documentation and
-strengthen existing Python/Android validation, expand the shared phone catalog,
-add runtime diagnostics and targeted hook fixes, and improve the phone builder;
-see [VALIDATION.md](VALIDATION.md) and [CATALOG-SOURCES.md](CATALOG-SOURCES.md).
-The local RC now bumps app/module metadata; profile/binding schemas and identity
-storage formats remain unchanged.
+Updated on 2026-10-11. The latest published release is
+[v0.10.0-rc.1](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.10.0-rc.1), a prerelease built from
+commit `433779f` on GitHub `main`. Source baseline: `v0.10.0-alpha.1`.
+Profile/binding schemas and identity storage formats remain unchanged.
 
 ## Release candidate
 
-Prepared locally: **v0.10.0-rc.1**, not tagged or published. The latest published
-release above remains the source baseline; no RC device checks have run.
+Published: **v0.10.0-rc.1**. The release includes a signed APK and module ZIP;
+no RC device checks have run.
 [Release notes](RELEASE_0.10.0-rc.1.md) and [upgrade guide](UPGRADE_0.10.0-rc.1.md)
-state the evidence boundary. Release workflow requires full Android/module and
-Python tests, matching version metadata, and both verified artifacts before
-attachment. It has not been dispatched locally.
+state the evidence boundary. [Release workflow run](https://github.com/premiumcentraal-boop/Cyclone-Cloak/actions/runs/38100436479)
+passed Android/module and Python tests, checked matching metadata and both
+artifacts, and published them. Main CI also passed.
 
 ## Versions and components
 
@@ -93,93 +87,33 @@ gradle -p android :app:testDebugUnitTest --no-daemon
 gradle -p android :app:assembleDebug :module:packageModule --no-daemon
 ```
 
-- Python forge: **138 passed**, including catalog/runtime harness checks and
-  16 coverage checks tying every Health claim to device evidence, checking the
-  recorded module hash and rejecting stale generated documentation.
-- Coverage parser JVM tests: **6 passed** against the bundled JSON, including
-  missing/duplicate areas and unsupported date/proof/callback claims. Two new
-  `CoverageMatrixScreenTest` cases cover rendering all areas and honest fallback
-  on unavailable data; rendering execution requires the Robolectric dependency.
-- Health Doctor JVM tests: **10 passed**, including verdict precedence, every
-  root code, release matching, queued/unconfirmed versions, disabled bindings,
-  missing/unknown profiles, permission/provider conditions and allowlist-based
-  redaction against injected private values. Three new doctor rendering tests
-  and the updated Health screenshot test await the Robolectric dependency.
-- Binding-review JVM tests: **5 passed**, compiled directly with Kotlin/JUnit
-  against the real binding model. These exercise combined filters, stable IDs,
-  whitespace/case handling, retention of disabled rows, unchanged binding objects
-  and the known-snapshot requirement for missing-profile warnings. Three new
-  `BindingListScreenTest` rendering/interaction tests are pending the Robolectric
-  dependency download; they cover filter/reset controls, health/missing-profile
-  rows, action arguments and mirrored management restrictions.
-- Pure Android forge/validation tests run directly on the JVM: **44 passed**,
-  including exact Python/Kotlin parity for the shared diagnostic vectors.
-- Runtime sprint app/module/probe build and module callback tests: **BUILD SUCCESSFUL**,
-  31 s, 124 tasks (28 executed), using `:module:testDebugUnitTest
-  :app:assembleDebug :module:packageModule :probe:assembleDebug
-  -PprobeAdvertisingSdk=true --offline --no-daemon`. Five module callback tests
-  passed. Both ARM
-  native targets were checked and the debug APK and module ZIP were produced.
-  The APK packages the expanded catalog; its bundled module metadata and both
-  libraries match the module ZIP payloads.
-- Phone-builder app/module build: **BUILD SUCCESSFUL**, 37 s, 86 tasks
-  (15 executed), using `:app:assembleDebug :module:packageModule
-  :module:testDebugUnitTest --offline --no-daemon`. The five passing module
-  callback tests were up to date. No warnings were emitted by this build.
-- Binding-review app/module build: **BUILD SUCCESSFUL**, 26 s, 74 tasks
-  (14 executed), using `:app:assembleDebug :module:packageModule --offline
-  --no-daemon`. No warnings were emitted by the build or blocked test attempt.
-- Health-matrix app/module build: **BUILD SUCCESSFUL**, 41 s, 74 tasks
-  (17 executed), using `:app:assembleDebug :module:packageModule --offline
-  --no-daemon`. The packaged coverage asset matches the checked-in JSON byte for
-  byte. No build warnings were emitted.
-- Health Doctor v2 app/module build: **BUILD SUCCESSFUL**, 38 s, 74 tasks
-  (15 executed), using `:app:assembleDebug :module:packageModule --offline
-  --no-daemon`. No build warnings were emitted.
-- Publication sprint: **40 JVM tests passed** (11 recovery/concurrency,
-  9 existing merge, 8 Root Doctor, 12 Health Doctor), compiling production Kotlin
-  sources directly and exercising the real publication shell with WSL Ubuntu
-  kernel locks. **138 Python tests passed**. App/module build succeeded;
-  no build warnings. Device checks remain deferred.
-- Reconciliation sprint: **61 JVM tests passed**, including 18 focused cases
-  and existing sync/vector/storage tests; **138 Python tests passed**. App/module
-  build succeeded with no warnings. No phone tests were run.
-- RC preparation: debug and unsigned release APK plus module ZIP build locally;
-  APK manifest reports RC/22 and both ARM ABI libraries are present. The APK
-  embeds the byte-identical packaged module ZIP. Final sequential RC build: **BUILD SUCCESSFUL**, 49 s, 123 tasks
-  (18 executed); artifact verification passed. No build warnings were emitted.
-  Cached module callback tests remain **5 passed** (`UP-TO-DATE`).
-  App/module release names and codes match (`0.10.0-rc.1` / 22).
-  **148 Python tests passed**, including 10 release artifact validation cases;
-  **61 reconciliation JVM tests** and **40 publication/diagnostics JVM tests**
-  rerun against current sources. Release artifacts are checked with
-  `uv run -- python tools/verify_release.py --tag v0.10.0-rc.1 --artifacts`.
-- Android unit/screen tests: **blocked before test execution** at
-  `:app:copyRobolectricRuntime` in the offline RC run (54 s),
-  due to the uncached `android-all-instrumented-14-robolectric-10818077-i7.jar`.
-  The earlier phone-builder online attempt stalled downloading the framework
-  and was interrupted.
-  Earlier runs also lacked Robolectric and Compose test dependencies.
-  Four new `PhoneEditorScreenTest` cases cover summary edits/label fallback,
-  inline errors and recovery of both save actions, nonblocking warnings, and
-  busy state; they have not executed because of the dependency blocker.
-  Rerun the normal test command when downloads can complete. No tests were
-  removed or bypassed.
-- Documentation links and `git diff --check`: passed. Runtime sources have local
-  fixes; identity storage and profile schema remain identical to the
-  release tag. See [RUNTIME-COVERAGE.md](RUNTIME-COVERAGE.md) for device evidence.
+- GitHub release CI: **192 app unit/screen tests, 5 module callback tests,
+  and 148 Python tests passed**, including 10 release artifact validation cases.
+  Full app tests include the new builder, binding, Health and coverage screens.
+  An inline error visibility assertion now scrolls the field into view; no
+  tests were removed or bypassed.
+- Local direct JVM runs: **61 reconciliation tests** and **40 publication/diagnostics
+  tests passed**, including real shell publication concurrency/recovery under WSL.
+- Final local debug/unsigned-release APK and module build: **BUILD SUCCESSFUL**,
+  49 s, 123 tasks (18 executed). Artifact verification confirmed RC/22 metadata,
+  both ARM ABIs and byte-identical module ZIP embedding. No build warnings.
+- GitHub built the signed release APK and module ZIP and passed
+  `python3 tools/verify_release.py --tag v0.10.0-rc.1 --artifacts` before upload.
+- Earlier local offline app tests were blocked by an uncached Robolectric framework;
+  CI resolved that dependency and ran the full suite successfully.
+- Runtime/device verification remains scoped to the older recorded binary;
+  see [RUNTIME-COVERAGE.md](RUNTIME-COVERAGE.md). RC device checks are unverified.
 
-Build warnings: none emitted by the successful build. Earlier combined runs
-were interrupted during dependency downloads; those are not successful test
-runs. No release APK signing was performed. Phone-builder checks are local;
-runtime device evidence and the deferred reboot checks are documented separately.
-The blocked builder test attempt emitted `Detected multiple Kotlin daemon
-sessions`; it did not execute tests.
+Build warnings: no compiler/build warnings in the successful release run.
+Workflow tooling warned about deprecated setup-java v4 / Node 20 actions and
+Node APIs, and an unmatched uv cache dependency glob. Earlier interrupted local
+testing reported multiple Kotlin daemon sessions.
 
-Outputs: `android/app/build/outputs/apk/debug/app-debug.apk` and
+Published artifacts: `app-release.apk` (signed) and `cyclone-cloak-0.10.0-rc.1.zip`.
+Local outputs include `android/app/build/outputs/apk/debug/app-debug.apk`,
+`android/app/build/outputs/apk/release/app-release-unsigned.apk`, and
 `android/module/build/module/cyclone-cloak-0.10.0-rc.1.zip`.
-The RC also builds `android/app/build/outputs/apk/release/app-release-unsigned.apk`;
-release signing and signed upgrade remain unverified locally.
+Signed upgrade behavior remains unverified on a device.
 
 ## Known unresolved items
 

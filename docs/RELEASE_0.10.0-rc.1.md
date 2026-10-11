@@ -1,8 +1,8 @@
 # Cyclone Cloak 0.10.0-rc.1
 
-Release candidate prepared on 2026-10-11 from `v0.10.0-alpha.1`. This is a
-prerelease, not a declaration of full device compatibility. The RC has not been
-tagged, published, installed or tested on a phone.
+Release candidate published on 2026-10-11 from `v0.10.0-alpha.1`. This is a
+[prerelease](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.10.0-rc.1), not a declaration of full device compatibility.
+The RC has not been installed or tested on a phone.
 
 ## Versions and artifacts
 
@@ -11,7 +11,7 @@ tagged, published, installed or tested on a phone.
 - Release workflow builds the release APK and `cyclone-cloak-0.10.0-rc.1.zip`,
   embeds that exact ZIP in the APK, checks both artifacts and attaches both.
   CI signs the APK with the configured release keystore; the local release APK
-  is unsigned. The workflow has not been dispatched for this RC.
+  is unsigned. The release workflow completed successfully and published both artifacts.
 
 ## Major fixes and diagnostics
 
@@ -45,9 +45,14 @@ tagged, published, installed or tested on a phone.
   passed, including 10 release artifact gates; see [CURRENT-STATE.md](CURRENT-STATE.md).
 - Local debug/release APK and module builds passed; artifact verification confirms
   RC/22 metadata, both ARM ABIs and byte-identical embedding. No build warnings.
-- Full Android unit/screen tests are **not verified locally**: Gradle is blocked
-  by an uncached Robolectric framework. The release workflow requires these tests
-  to pass before building/publishing; the local subset is not a substitute.
+- GitHub release CI passed the full Android app unit/screen suite (192 tests),
+  module callback suite (5 tests), and Python suite (148 tests), then built and
+  verified both release artifacts. The earlier local offline Robolectric dependency
+  blocker was resolved in CI. One screen assertion was corrected to scroll its
+  inline error into view before checking visibility; no tests were bypassed.
+- No compiler/build warnings were emitted. Workflow tooling reported deprecated
+  setup-java v4 / Node 20 actions and Node APIs, plus an unmatched uv cache dependency
+  glob; these did not prevent testing, signing or publication.
 - The 70-read API36 device baseline belongs to an older installed binary:
   **13 verified, 39 failed, 7 blocked, 8 coincidental matches, 3 unmapped**.
   Its module version label does not establish byte identity with this RC.

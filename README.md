@@ -11,10 +11,10 @@ not prove that every inspection API sees it.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.10.0-rc.1 (local release candidate; device verification pending)
+## Status: 0.10.0-rc.1 (published prerelease; device verification pending)
 
 [Release notes](docs/RELEASE_0.10.0-rc.1.md) · [Upgrade guide](docs/UPGRADE_0.10.0-rc.1.md).
-Not yet tagged or published. App and module both use version code 22.
+[Published release](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.10.0-rc.1) includes the signed APK and module ZIP. App and module both use version code 22.
 
 - **Companion app** (`android/app`): a Cyclone connector (contract `cyclone.connector/1.3`, Cyclone
   5.0.0-alpha.122 or newer). Imports or creates cloak profiles, binds them to the apps of Cyclone
