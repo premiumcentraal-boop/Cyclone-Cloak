@@ -21,6 +21,3 @@ $tests=@(Get-ChildItem android/app/src/test/java/dev/cyclone/cloak/forge -Filter
 $tests+=@("dev.cyclone.cloak.ui.ProfileGenerationTest", "dev.cyclone.cloak.ui.HealthDiagnosticsTest", "dev.cyclone.cloak.ui.ReadinessDoctorFactsTest")
 & $java -cp "$jar;$cp;catalog;forge/tests/vectors" org.junit.runner.JUnitCore @tests
 exit $LASTEXITCODE
-
-
-

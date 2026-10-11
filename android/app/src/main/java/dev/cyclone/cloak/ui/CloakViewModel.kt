@@ -68,7 +68,7 @@ data class CloakState(
     val syncing: Boolean = false,
     val providerState: String = "not registered",
     val rootDoctor: RootDoctorResult = RootDoctorResult(RootDoctorCode.NOT_CHECKED),
-    /** What is running right now ("Creating identityÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦"), or null. */
+    /** What is running right now ("Creating identity…"), or null. */
     val busy: String? = null,
     val opening: Boolean = false,
     val editor: PhoneEditor? = null,
@@ -218,7 +218,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         val editor = _state.value.editor ?: return
         val firstError = editor.findings.firstOrNull { it.isError }
         if (firstError != null) return say("Fix this first: ${firstError.message}")
-        launchWork("Saving phoneÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
+        launchWork("Saving phone…") {
             val phone = editor.draft.toTemplate()
             PhoneStore.save(app, phone.toJson())
             _state.update { it.copy(editor = null) }
@@ -228,7 +228,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
 
     fun deletePhone(phone: PhoneTemplate) {
         if (phone.builtIn) return
-        launchWork("Deleting phoneÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
+        launchWork("Deleting phone…") {
             PhoneStore.delete(app, phone.id)
             say("Deleted ${phone.label}. Identities made from it keep their own copy.")
         }
@@ -244,7 +244,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         }
         // Set synchronously so repeated taps cannot enqueue more than one generation.
         _state.update { it.copy(generation = ProfileGeneration.Result.Running) }
-        launchWork("Generating profileÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
+        launchWork("Generating profile…") {
             val result = try {
                 ProfileGeneration.generate(phone, CloakStore.all(app), save = { CloakStore.save(app, it) })
             } catch (_: Exception) {
@@ -262,7 +262,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
 
     // ---- Import and export ------------------------------------------------------------------------------------------
 
-    fun import(uri: Uri) = launchWork("Reading fileÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
+    fun import(uri: Uri) = launchWork("Reading file…") {
         val text = app.contentResolver.openInputStream(uri)?.bufferedReader(Charsets.UTF_8)?.use { readBounded(it, 20_000_000) }
             ?: throw IllegalArgumentException("Couldn't open that file.")
         require(text.isNotBlank()) { "That file is empty." }
@@ -293,7 +293,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
     fun saveReviewed() {
         val review = _state.value.review ?: return
         if (!review.canSave) return say("This profile has errors, so it can't be used as it is.")
-        launchWork("Saving identityÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
+        launchWork("Saving identity…") {
             val currentFindings = ProfileUniqueness(CloakStore.all(app)).findings(review.profile)
             if (currentFindings != review.findings.filter { it.code == "DUPLICATE_IDENTIFIER" }) {
                 _state.update { it.copy(review = review.copy(findings = ProfileValidator.validateProfile(review.profile) + currentFindings)) }
@@ -325,7 +325,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
             generation = if (it.generation is ProfileGeneration.Result.NeedsReview) null else it.generation)
     }
 
-    fun exportPhone(phone: PhoneTemplate, uri: Uri) = launchWork("Exporting phoneÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
+    fun exportPhone(phone: PhoneTemplate, uri: Uri) = launchWork("Exporting phone…") {
         write(uri, Imports.exportPhone(phone).toString(2))
         say("Exported ${phone.label}.")
     }
@@ -403,7 +403,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun regenerateReviewed(field: String) = launchWork("Regenerating valueÃ¢â‚¬Â¦") {
+    fun regenerateReviewed(field: String) = launchWork("Regenerating value…") {
         val review = _state.value.review ?: return@launchWork
         val index = ProfileUniqueness(CloakStore.all(app))
         val draft = index.regenerate(review.profile, field)
@@ -411,13 +411,13 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
             findings = ProfileValidator.validateProfile(draft) + index.findings(draft))) }
     }
 
-    fun reviewIdentity(id: String) = launchWork("Checking identityÃ¢â‚¬Â¦") {
+    fun reviewIdentity(id: String) = launchWork("Checking identity…") {
         val profile = CloakStore.find(app, id) ?: error("That identity is gone.")
         _state.update { it.copy(review = ImportReview(profile,
             ProfileValidator.validateProfile(profile) + ProfileUniqueness(CloakStore.all(app)).findings(profile), "Updated")) }
     }
 
-    fun duplicateIdentity(id: String) = launchWork("Duplicating identityÃ¢â‚¬Â¦") {
+    fun duplicateIdentity(id: String) = launchWork("Duplicating identity…") {
         val source = CloakStore.find(app, id) ?: error("That identity is gone.")
         val draft = JSONObject(source.toString()).put("id", java.util.UUID.randomUUID().toString())
         val names = CloakStore.all(app).map { it.second.optString("name").lowercase() }.toSet()
@@ -430,7 +430,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
 
     fun createIdentity(name: String, phoneId: String) {
         val phone = _state.value.phone(phoneId) ?: return say("Choose a phone first.")
-        launchWork("Creating identityÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
+        launchWork("Creating identity…") {
             val profile = CloakForge.forgeNewProfile(name, phone)
             ProfileValidator.errors(profile).firstOrNull()?.let { throw IllegalArgumentException(it) }
             saveIdentity(profile, "Created")
@@ -439,7 +439,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
 
     fun forgeFleet(phoneId: String, count: Int) {
         val phone = _state.value.phone(phoneId) ?: return say("Choose a phone first.")
-        launchWork("Creating $count identitiesÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
+        launchWork("Creating $count identities…") {
             val profiles = CloakFleet.forgeFleet(phone, count)
             saveBatch(profiles, "Created")
         }
@@ -448,7 +448,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
     fun renameIdentity(id: String, name: String) {
         val clean = name.trim()
         if (clean.isEmpty() || clean.length > 64) return say("Names are 1 to 64 characters.")
-        launchWork("RenamingÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
+        launchWork("Renaming…") {
             val profile = CloakStore.find(app, id) ?: throw IllegalStateException("That identity is gone.")
             saveIdentity(profile.put("name", clean), "Renamed to")
 
@@ -458,7 +458,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
     fun deleteIdentity(id: String) {
         val bound = _state.value.bindingsOf(id)
         if (bound.isNotEmpty()) return say("It's bound to ${bound.size} apps. Remove those bindings first.")
-        launchWork("Deleting identityÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
+        launchWork("Deleting identity…") {
             // Check the store itself: the screen's list may be a moment old.
             val stillBound = CloakBindingStore.all(app).count { it.cloakProfileId == id }
             require(stillBound == 0) { "It's bound to $stillBound apps. Remove those bindings first." }
@@ -581,13 +581,13 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
     fun bind(identityId: String, profile: CycloneProfile) {
         val state = _state.value
         when {
-            !state.canBind -> return say("Approve Cyclone Cloak's profile settings in Cyclone ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ Settings ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ Connectors first.")
+            !state.canBind -> return say("Approve Cyclone Cloak's profile settings in Cyclone → Settings → Connectors first.")
             !state.bindableHere(profile) -> return say(
                 if (profile.bindable) "Bind ${profile.label} from Cyclone Cloak in Main, or from Cloak inside ${profile.label}."
                 else "${profile.label} isn't ready in Cyclone yet.",
             )
         }
-        launchWork("BindingÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
+        launchWork("Binding…") {
             val count = bindLocally(profile, identityId)
             if (count == 0) return@launchWork say("Cyclone shared no apps for ${profile.label}.")
             val result = publishAndSync()
@@ -597,7 +597,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
 
     fun bulkBind() {
         val state = _state.value
-        if (!state.canBind) return say("Approve Cyclone Cloak's profile settings in Cyclone ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ Settings ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ Connectors first.")
+        if (!state.canBind) return say("Approve Cyclone Cloak's profile settings in Cyclone → Settings → Connectors first.")
         val ready = state.registry.filter(state::bindableHere)
         val plan = BulkBind.plan(state.identities.map { it.first }, ready, state.bindings)
         if (plan.assignments.isEmpty()) {
@@ -607,7 +607,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
                 else -> "Every ready profile is bound already."
             })
         }
-        launchWork("Binding ${plan.assignments.size} profilesÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
+        launchWork("Binding ${plan.assignments.size} profiles…") {
             val count = plan.assignments.sumOf { (profile, id) -> bindLocally(profile, id) }
             val result = publishAndSync()
             val note = if (result.published) "" else " ${result.title}: ${result.message}"
@@ -617,7 +617,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
 
     fun toggleBinding(binding: CloakBinding) {
         if (binding.origin == CloakBinding.ORIGIN_MAIN) return say("This binding is managed by Cyclone Cloak in Main.")
-        launchWork(if (binding.enabled) "Turning offÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦" else "Turning onÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
+        launchWork(if (binding.enabled) "Turning off…" else "Turning on…") {
             CloakBindingStore.upsert(app, binding.copy(enabled = !binding.enabled, updatedAt = System.currentTimeMillis()))
             publishAndSync()
         }
@@ -625,7 +625,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
 
     fun removeBinding(binding: CloakBinding) {
         if (binding.origin == CloakBinding.ORIGIN_MAIN) return say("This binding is managed by Cyclone Cloak in Main.")
-        launchWork("Removing bindingÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
+        launchWork("Removing binding…") {
             CloakBindingStore.remove(app, binding.profileId, binding.androidUserId, binding.packageName)
             publishAndSync()
         }
@@ -662,7 +662,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
 
     fun runRootDoctor() {
         _state.update { it.copy(rootDoctor = RootDoctorResult(RootDoctorCode.CHECKING)) }
-        launchWork("Checking rootÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
+        launchWork("Checking root…") {
             val result = CloakResolver.rebuildIndexDetailed(app, repairModule = true)
             _state.update { it.copy(rootDoctor = result) }
             _state.update { it.copy(report = CycloneBridge.sync(app, foreground = true)) }

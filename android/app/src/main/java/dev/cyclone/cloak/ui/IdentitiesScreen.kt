@@ -103,7 +103,7 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
                     HorizontalDivider()
                     Text("A fleet", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
                     Text(
-                        "Several identities from the same phone, named ${CloakFleet.FLEET_PREFIX} 01, 02, â€¦ Making the same fleet again gives the same identities.",
+                        "Several identities from the same phone, named ${CloakFleet.FLEET_PREFIX} 01, 02, … Making the same fleet again gives the same identities.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )

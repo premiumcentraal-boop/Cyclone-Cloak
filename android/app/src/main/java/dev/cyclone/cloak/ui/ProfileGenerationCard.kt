@@ -62,7 +62,7 @@ internal fun ProfileGenerationCard(
                 enabled = selected != null && !busy && !running,
                 modifier = Modifier.fillMaxWidth(),
                 shape = MaterialTheme.shapes.small,
-            ) { Text(if (running) "Generating profileâ€¦" else "Generate profile") }
+            ) { Text(if (running) "Generating profile…" else "Generate profile") }
             when (result) {
                 is ProfileGeneration.Result.Saved -> {
                     CloakStatusPill("Saved", CloakStatusTone.READY)
