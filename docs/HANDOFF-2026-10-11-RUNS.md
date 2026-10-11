@@ -1,8 +1,8 @@
 # Cyclone Cloak — per-run handoff, 2026-10-11
 
-Repository: `C:/Users/Agent/Cyclone/cloak-repo`  
-GitHub: https://github.com/premiumcentraal-boop/Cyclone-Cloak  
-Branch: `main`  
+Repository: `C:/Users/Agent/Cyclone/cloak-repo`
+GitHub: https://github.com/premiumcentraal-boop/Cyclone-Cloak
+Branch: `main`
 Published prerelease: [v0.10.0-rc.1](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.10.0-rc.1)
 
 ## How to read this handoff
