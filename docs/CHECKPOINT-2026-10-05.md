@@ -1,7 +1,12 @@
 # CYCLONE CLOAK - FULL CHECKPOINT (2026-10-05)
 
-This file is the single source of truth for where Cyclone Cloak stands, what is
-built, what is verified, and what remains to reach release-ready Cloak 1.0.
+Historical checkpoint for 2026-10-05; the snapshot and sprint plan below are
+retained as history. Use [CURRENT-STATE.md](CURRENT-STATE.md) and
+[ARCHITECTURE.md](ARCHITECTURE.md) for the current `v0.10.0-alpha.1` release.
+The app now has Phones, Identities, Profiles and Health tabs and separate
+`forge`, `data`, `root`, `cyclone` and `ui` packages. The native module is
+implemented. The old skeleton, version and next-sprint claims below do not
+describe the current release or authorize new work.
 
 ## 1. WHAT CYCLONE CLOAK IS
 

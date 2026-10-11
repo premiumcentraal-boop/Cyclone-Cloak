@@ -1,6 +1,8 @@
 package dev.cyclone.cloak.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,9 +14,17 @@ import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.Layers
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.cyclone.cloak.cyclone.bindingKey
@@ -24,6 +34,12 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
     val pills = state.pills
     val openTargets = state.openTargets
     val mainTarget = openTargets.firstOrNull { it.isOwner }
+    var profileFilter by rememberSaveable { mutableStateOf<String?>(null) }
+    var packageQuery by rememberSaveable { mutableStateOf("") }
+    val profiles = state.registry.associateBy { it.id }
+    val knownProfileIds = state.report?.snapshot?.registry?.map { it.id }?.toSet()
+    val visibleBindings = filterBindings(state.bindings, profileFilter, packageQuery)
+    val profileChoices = (profiles.keys + state.bindings.map { it.profileId }).sorted()
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
@@ -94,6 +110,28 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
         }
 
         item { CloakSectionTitle("Bound apps", state.bindings.size) }
+        if (state.bindings.isNotEmpty()) {
+            item {
+                Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    BindingFilters(
+                        profileFilter = profileFilter,
+                        profileChoices = profileChoices,
+                        profileLabel = { profiles[it]?.label ?: it },
+                        onProfileChange = { profileFilter = it },
+                        packageQuery = packageQuery,
+                        onPackageChange = { packageQuery = it },
+                        onClear = { profileFilter = null; packageQuery = "" },
+                    )
+                    Text("Showing ${visibleBindings.size} of ${state.bindings.size} bindings", style = MaterialTheme.typography.bodySmall)
+                    if (knownProfileIds == null) {
+                        Text("Profile availability not checked. Refresh to load Cyclone profiles.", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    }
+                    if (visibleBindings.isEmpty()) {
+                        Text("No bindings match these filters.", style = MaterialTheme.typography.bodyMedium)
+                    }
+                }
+            }
+        }
         if (state.bindings.isEmpty()) {
             item {
                 Text(
@@ -103,14 +141,66 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
                 )
             }
         }
-        items(state.bindings.sortedWith(compareBy({ it.profileId }, { it.packageName })), key = { it.profileId + "/" + it.packageName }) { binding ->
+        items(visibleBindings, key = { it.profileId + "/" + it.packageName }) { binding ->
             CloakBindingCard(
                 binding = binding,
-                profileLabel = state.registry.firstOrNull { it.id == binding.profileId }?.label ?: binding.profileId,
+                profileLabel = profiles[binding.profileId]?.label ?: binding.profileId,
                 issue = state.report?.issues?.get(bindingKey(binding.profileId, binding.packageName)),
+                profileMissing = bindingProfileMissing(binding.profileId, knownProfileIds),
+                identityLabel = state.identities.firstOrNull { it.first == binding.cloakProfileId }?.second?.optString("name")
+                    ?.takeIf { it.isNotBlank() } ?: binding.cloakProfileId,
                 onToggle = vm::toggleBinding,
                 onRemove = vm::removeBinding,
             )
+        }
+    }
+}
+
+@Composable
+internal fun BindingFilters(
+    profileFilter: String?,
+    profileChoices: List<String>,
+    profileLabel: (String) -> String,
+    onProfileChange: (String?) -> Unit,
+    packageQuery: String,
+    onPackageChange: (String) -> Unit,
+    onClear: () -> Unit,
+) {
+    var expanded by rememberSaveable { mutableStateOf(false) }
+    Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text("Filter bindings", style = MaterialTheme.typography.titleMedium)
+        Box {
+            OutlinedButton(onClick = { expanded = true }, modifier = Modifier.fillMaxWidth()) {
+                Text(profileFilter?.let { "Cyclone profile: ${profileLabel(it)}" } ?: "All Cyclone profiles")
+            }
+            DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
+                DropdownMenuItem(text = { Text("All Cyclone profiles") }, onClick = {
+                    onProfileChange(null)
+                    expanded = false
+                })
+                profileChoices.forEach { id ->
+                    DropdownMenuItem(text = {
+                        Column {
+                            Text(profileLabel(id))
+                            Text(id, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }, onClick = {
+                        onProfileChange(id)
+                        expanded = false
+                    })
+                }
+            }
+        }
+        OutlinedTextField(
+            value = packageQuery,
+            onValueChange = onPackageChange,
+            label = { Text("App package filter") },
+            placeholder = { Text("For example, com.example") },
+            singleLine = true,
+            modifier = Modifier.fillMaxWidth(),
+        )
+        if (profileFilter != null || packageQuery.isNotEmpty()) {
+            TextButton(onClick = onClear) { Text("Clear filters") }
         }
     }
 }

@@ -29,6 +29,7 @@ import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material.icons.rounded.Remove
 import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -316,6 +317,8 @@ internal fun CloakBindingCard(
     binding: CloakBinding,
     profileLabel: String,
     issue: String?,
+    profileMissing: Boolean = false,
+    identityLabel: String = binding.cloakProfileId,
     onToggle: (CloakBinding) -> Unit,
     onRemove: (CloakBinding) -> Unit,
 ) {
@@ -327,24 +330,40 @@ internal fun CloakBindingCard(
             containerColor = if (binding.enabled) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.surfaceVariant,
         ),
     ) {
-        Row(
+        Column(
             modifier = Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 10.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
+            verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 Text(binding.packageName, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
                 Text(
-                    "$profileLabel · ${binding.state}" + if (mirrored) " · managed by Cloak in Main" else "",
+                    "$profileLabel · user ${binding.androidUserId}",
                     style = MaterialTheme.typography.bodySmall,
-                    color = if (binding.state !in setOf("ready", "disabled", "pending", "unknown")) {
-                        MaterialTheme.colorScheme.error
-                    } else {
-                        MaterialTheme.colorScheme.onSurfaceVariant
-                    },
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
+                Text("Cloak: $identityLabel", style = MaterialTheme.typography.bodySmall)
+                Text(if (binding.enabled) "Enabled" else "Disabled", style = MaterialTheme.typography.labelLarge,
+                    color = if (binding.enabled) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onSurfaceVariant)
+                Text("Health", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                CloakStatusPill(binding.state, when (binding.state) {
+                    "ready" -> CloakStatusTone.READY
+                    "disabled", "pending", "unknown" -> CloakStatusTone.PENDING
+                    else -> CloakStatusTone.ERROR
+                })
+                if (mirrored) {
+                    Text("managed by Cloak in Main", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
                 if (issue != null) {
                     Text("Cyclone: $issue", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
+                }
+            }
+            if (profileMissing) {
+                Surface(color = MaterialTheme.colorScheme.tertiaryContainer, shape = MaterialTheme.shapes.small) {
+                    Row(Modifier.fillMaxWidth().padding(10.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Icon(Icons.Rounded.Warning, contentDescription = null, tint = MaterialTheme.colorScheme.onTertiaryContainer)
+                        Text("Cyclone profile no longer present: ${binding.profileId}", style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onTertiaryContainer)
+                    }
                 }
             }
             if (!mirrored) {

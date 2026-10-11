@@ -1,0 +1,253 @@
+{
+  "format": 1,
+  "baseline": "Pixel 8 / Android API 36 / measured installed module",
+  "scope_note": "Bundled evidence, not a live device check. Partial proof applies only to listed reads on the measured baseline. Local runtime fixes await device verification; reboot checks are deferred.",
+  "device_evidence": "docs/runtime-evidence/release-api36-advertising.json",
+  "baseline_sha256": "137c9e084fd6825c2e506b0f4b4ae8078bdc742184bd886ea2d0c19610847f75",
+  "rows": [
+    {
+      "id": "build",
+      "area": "Build fields",
+      "implementation_status": "partial",
+      "test_status": "partial_device_proof",
+      "last_verified_utc": "2026-10-10",
+      "note": "Nine Build fields and SDK/release/patch passed on the measured baseline. Incremental, bootloader and radio remain incomplete; local fixes await a device run.",
+      "device_reads": [
+        "build.MANUFACTURER",
+        "build.BRAND",
+        "build.MODEL",
+        "build.DEVICE",
+        "build.PRODUCT",
+        "build.HARDWARE",
+        "build.FINGERPRINT",
+        "build.ID",
+        "build.BOOTLOADER",
+        "build.TIME",
+        "build.TYPE",
+        "build.TAGS",
+        "version.SDK_INT",
+        "version.RELEASE",
+        "version.INCREMENTAL",
+        "version.SECURITY_PATCH",
+        "build.getRadioVersion"
+      ],
+      "verified_reads": [
+        "build.MANUFACTURER",
+        "build.BRAND",
+        "build.MODEL",
+        "build.DEVICE",
+        "build.PRODUCT",
+        "build.HARDWARE",
+        "build.FINGERPRINT",
+        "build.ID",
+        "build.TIME",
+        "version.SDK_INT",
+        "version.RELEASE",
+        "version.SECURITY_PATCH"
+      ],
+      "unit_evidence": []
+    },
+    {
+      "id": "properties",
+      "area": "System properties",
+      "implementation_status": "partial",
+      "test_status": "device_failed",
+      "last_verified_utc": null,
+      "note": "Java/native identity reads failed. Local JNI registration fixes await a device run; native property paths remain uncovered.",
+      "device_reads": [
+        "properties.java.ro.product.model",
+        "properties.native.ro.product.model",
+        "properties.java.ro.build.version.sdk",
+        "properties.native.ro.build.version.sdk",
+        "properties.java.ro.build.fingerprint",
+        "properties.native.ro.build.fingerprint",
+        "properties.java.ro.serialno",
+        "properties.native.ro.serialno",
+        "properties.java.ro.sf.lcd_density",
+        "properties.native.ro.sf.lcd_density",
+        "properties.java.persist.sys.timezone",
+        "properties.native.persist.sys.timezone"
+      ],
+      "verified_reads": [],
+      "unit_evidence": []
+    },
+    {
+      "id": "telephony",
+      "area": "Telephony",
+      "implementation_status": "partial",
+      "test_status": "unit_passed_device_failed",
+      "last_verified_utc": null,
+      "note": "Count/type/slot callbacks have JVM tests. Baseline identifiers/operators failed and counts/types were blocked; ART installation remains unverified.",
+      "device_reads": [
+        "telephony.imei0",
+        "telephony.imei1",
+        "telephony.deviceId",
+        "telephony.simSerial",
+        "telephony.phoneCount",
+        "telephony.activeModemCount",
+        "telephony.networkType",
+        "telephony.dataNetworkType",
+        "operator.networkNumeric",
+        "operator.simNumeric",
+        "operator.networkName",
+        "operator.simName",
+        "operator.networkCountry",
+        "operator.simCountry",
+        "telephony.subscriberId"
+      ],
+      "verified_reads": [],
+      "unit_evidence": [
+        "android/module/src/test/java/dev/cyclone/cloak/hook/HookBridgeTest.java"
+      ]
+    },
+    {
+      "id": "android_id",
+      "area": "Android ID",
+      "implementation_status": "partial",
+      "test_status": "unit_passed_device_failed",
+      "last_verified_utc": null,
+      "note": "Getter and unrelated-key guard have callback tests. Baseline getter/provider reads failed; local provider fix awaits a device run.",
+      "device_reads": [
+        "settings.secure.androidId",
+        "settings.provider.androidId"
+      ],
+      "verified_reads": [],
+      "unit_evidence": [
+        "android/module/src/test/java/dev/cyclone/cloak/hook/HookBridgeTest.java"
+      ]
+    },
+    {
+      "id": "serial",
+      "area": "Serial",
+      "implementation_status": "partial",
+      "test_status": "partial_device_proof",
+      "last_verified_utc": "2026-10-10",
+      "note": "Build.SERIAL passed on the measured baseline; Build.getSerial failed. The whole serial area is not verified.",
+      "device_reads": [
+        "build.SERIAL",
+        "build.getSerial"
+      ],
+      "verified_reads": [
+        "build.SERIAL"
+      ],
+      "unit_evidence": []
+    },
+    {
+      "id": "advertising_id",
+      "area": "Advertising ID",
+      "implementation_status": "partial",
+      "test_status": "device_failed",
+      "last_verified_utc": null,
+      "note": "The real Google SDK read failed. Deferred app-class-loader hook awaits device verification.",
+      "device_reads": [
+        "advertising.id"
+      ],
+      "verified_reads": [],
+      "unit_evidence": []
+    },
+    {
+      "id": "display",
+      "area": "Display",
+      "implementation_status": "partial",
+      "test_status": "device_failed",
+      "last_verified_utc": null,
+      "note": "Geometry and refresh hooks are incomplete. Height/refresh failed; matching density/width do not prove a hook.",
+      "device_reads": [
+        "display.resources.width",
+        "display.resources.height",
+        "display.resources.density",
+        "display.real.width",
+        "display.real.height",
+        "display.real.density",
+        "display.refresh"
+      ],
+      "verified_reads": [],
+      "unit_evidence": []
+    },
+    {
+      "id": "locale_timezone",
+      "area": "Locale/timezone",
+      "implementation_status": "partial",
+      "test_status": "device_failed",
+      "last_verified_utc": null,
+      "note": "Default/resource locale and timezone did not match both profiles. Local startup/resource fixes await a device run.",
+      "device_reads": [
+        "locale.default.language",
+        "locale.default.country",
+        "locale.resources.language",
+        "locale.resources.country",
+        "timezone.default"
+      ],
+      "verified_reads": [],
+      "unit_evidence": []
+    },
+    {
+      "id": "wifi",
+      "area": "Wi-Fi identity",
+      "implementation_status": "partial",
+      "test_status": "device_failed_and_blocked",
+      "last_verified_utc": null,
+      "note": "MAC callback exists but object getter failed; service MAC and SSID were permission blocked. SSID/BSSID are not profile fields.",
+      "device_reads": [
+        "wifi.objectMac",
+        "wifi.serviceMac",
+        "wifi.ssid"
+      ],
+      "verified_reads": [],
+      "unit_evidence": []
+    },
+    {
+      "id": "bluetooth",
+      "area": "Bluetooth identity",
+      "implementation_status": "partial",
+      "test_status": "device_failed_and_blocked",
+      "last_verified_utc": null,
+      "note": "Address callback exists but failed on the baseline; name read was permission blocked and has no profile field.",
+      "device_reads": [
+        "bluetooth.address",
+        "bluetooth.name"
+      ],
+      "verified_reads": [],
+      "unit_evidence": []
+    },
+    {
+      "id": "camera",
+      "area": "Camera metadata",
+      "implementation_status": "not_implemented",
+      "test_status": "unmapped",
+      "last_verified_utc": null,
+      "note": "Probe enumerates host characteristics only. No profile expectation or verified metadata hook exists.",
+      "device_reads": [
+        "camera.characteristics"
+      ],
+      "verified_reads": [],
+      "unit_evidence": []
+    },
+    {
+      "id": "sensors",
+      "area": "Sensor metadata",
+      "implementation_status": "not_implemented",
+      "test_status": "unmapped",
+      "last_verified_utc": null,
+      "note": "Probe enumerates host sensors only. No profile expectation or verified metadata hook exists.",
+      "device_reads": [
+        "sensors.list"
+      ],
+      "verified_reads": [],
+      "unit_evidence": []
+    },
+    {
+      "id": "drm",
+      "area": "DRM identifier",
+      "implementation_status": "partial",
+      "test_status": "device_failed",
+      "last_verified_utc": null,
+      "note": "Widevine deviceUniqueId callback exists but failed on the baseline. Other DRM properties and attestation are not covered.",
+      "device_reads": [
+        "drm.deviceUniqueId"
+      ],
+      "verified_reads": [],
+      "unit_evidence": []
+    }
+  ]
+}

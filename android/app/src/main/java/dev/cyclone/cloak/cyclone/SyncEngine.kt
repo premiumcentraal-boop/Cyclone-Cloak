@@ -94,7 +94,9 @@ class CycloneSyncEngine(
         }
 
         var plan = ReconcilePlanner.plan(placement, snapshot, local.bindings(), local::summaryFor)
-        val forget = plan.forgotten + batch?.removed.orEmpty().filter { placement.isMain || it == (placement as? Placement.InProfile)?.profile?.id }
+        val forget = plan.forgotten + batch?.removed.orEmpty().filter {
+            snapshot.byId(it) == null && (placement.isMain || it == (placement as? Placement.InProfile)?.profile?.id)
+        }
         if (plan.moves.isNotEmpty() || forget.isNotEmpty()) {
             val changed = local.updateBindings { current ->
                 var next = current
@@ -117,7 +119,7 @@ class CycloneSyncEngine(
 
         var reconcile: BindingReconciler.Result? = null
         if (gate.bindings) {
-            reconcile = reconciler.reconcile(plan.desired, local.pushed, plan.sweep)
+            reconcile = reconciler.reconcile(plan.desired, local.pushed, plan.sweep, plan.preserve)
             local.pushed = reconcile.pushed
             issues += reconcile.issues
             when (reconcile.stoppedBy) {

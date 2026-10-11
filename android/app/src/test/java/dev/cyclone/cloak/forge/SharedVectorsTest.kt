@@ -36,8 +36,8 @@ class SharedVectorsTest {
                 CloakForge.forgeProfile(vectors.getString("name"), vectors.getString("seed"), TestPhones[case.getString("phone")]),
                 case.getJSONArray("mutations"),
             )
-            val got = ProfileValidator.validateProfile(profile, today).map { listOf(it.severity, it.code) }
-            val expect = case.getJSONArray("expect").let { a -> (0 until a.length()).map { a.getJSONArray(it).let { p -> listOf(p.getString(0), p.getString(1)) } } }
+            val got = ProfileValidator.validateProfile(profile, today).map { listOf(it.severity, it.code, it.field, it.message) }
+            val expect = case.getJSONArray("expect").let { a -> (0 until a.length()).map { a.getJSONArray(it).let { p -> (0 until 4).map(p::getString) } } }
             assertEquals(case.getString("name"), expect, got)
         }
     }

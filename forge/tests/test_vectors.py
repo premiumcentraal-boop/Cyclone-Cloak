@@ -35,7 +35,7 @@ def test_validation_vectors(monkeypatch):
     monkeypatch.setattr(validate_module, "date", FixedDate)
     for case in vectors["cases"]:
         profile = _apply(copy.deepcopy(cloak_forge.forge_profile(vectors["name"], vectors["seed"], case["phone"])), case["mutations"])
-        got = [[f.severity, f.code] for f in cloak_forge.validate_profile(profile)]
+        got = [[f.severity, f.code, f.field, f.message] for f in cloak_forge.validate_profile(profile)]
         assert got == case["expect"], case["name"]
 
 

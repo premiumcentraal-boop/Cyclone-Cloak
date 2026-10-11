@@ -11,7 +11,7 @@ Answer to the Cyclone handoff `docs/handoff/CLOAK_CONNECTOR_COMPAT.md` (Cyclone 
 | §0 kit | Client library synced byte for byte to alpha.122 (`rootStatus`, `requestOpenProfile`) | `com/cyclone/connector/client/CycloneConnector.kt` |
 | §2.2 approval | `hello` on start, on every wake, and again after `profile.switched`; not approved → the one approve line, nothing else | `CycloneSyncEngine` |
 | §3 bindings | Reconcile: read each tuple, write only when different, report health, clear what Cloak no longer binds (off, removed, moved); first run sweeps stale Cloak tuples. Main writes every profile, a profile's Cloak only its own. Never Main; never a profile without an integer user number | `ReconcilePlanner`, `BindingReconciler` |
-| §3.5 | Bindings keyed by profile id + package; user number follows the profile and the module state is republished; `profile.removed` / absent from Main's list → forgotten; trashed → kept | `CloakBindingStore`, engine |
+| §3.5 | Bindings keyed by profile id + package; user number follows the profile and the module state is republished; `profile.removed` confirmed by current-list absence → forgotten; absence alone, trashed profiles and ambiguous duplicates → kept with warning | `CloakBindingStore`, engine |
 | §4.1 health | Local states mapped to `ready` / `unknown` / `degraded` / `failed` | `CloakHealth` |
 | §4.2 Cloak's pill | Rooted ✓ / Rooted ! (reason) / Rooted (unchecked) / Native; nothing for setting up or trashed | `CloakPills`, `CloakUi` |
 | §5 open request | "Open in Cyclone" per profile, "Open This phone in Cyclone" from a profile; gated on minor ≥ 3 and the scope; every error code mapped; never retried | `OpenRequests` |
@@ -33,6 +33,15 @@ display summary. Cloak inside profile C reads that published index (read-only, t
 background only after this install has passed Root Doctor), mirrors the entries for its own profile and user as
 read-only bindings, and writes them to C's Cyclone. C's Cloak may bind C's own apps too; for an app both bound, Main
 wins.
+
+## Reconciliation regression update (2026-10-11)
+
+[RECONCILIATION-TESTS.md](RECONCILIATION-TESTS.md) covers 18 focused cases and the
+small preservation fixes they exposed. Snapshot absence alone no longer deletes
+local bindings; ambiguous/deferred bindings are protected from remote cleanup.
+The historical results below describe the original 0.9.0 sprint, not a fresh
+full Gradle run. Current Android test execution is blocked by Robolectric runtime
+downloads; 61 reconciliation-related JVM tests pass via direct compilation.
 
 ## What passed (no phone)
 

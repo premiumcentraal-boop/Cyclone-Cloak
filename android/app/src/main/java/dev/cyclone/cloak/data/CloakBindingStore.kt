@@ -115,11 +115,14 @@ object CloakBindingStore {
         return runCatching { parse(target.readText()) }.getOrDefault(emptyList())
     }
 
-    /** Older files were keyed by user number too; keep only the newest record per profile + app. Pure. */
+    /** Older files were keyed by user number too; keep the newest record, retaining ambiguous timestamp ties. Pure. */
     internal fun parse(text: String): List<CloakBinding> {
         val array = JSONObject(text).optJSONArray("bindings") ?: JSONArray()
         val parsed = (0 until array.length()).mapNotNull { array.optJSONObject(it)?.let(::fromJson) }
-        return parsed.groupBy { it.profileId to it.packageName }.values.map { group -> group.maxBy { it.updatedAt } }
+        return parsed.groupBy { it.profileId to it.packageName }.values.flatMap { group ->
+            val newest = group.maxOf { it.updatedAt }
+            group.filter { it.updatedAt == newest }
+        }
     }
 
     internal fun serialize(bindings: List<CloakBinding>): String = JSONObject()

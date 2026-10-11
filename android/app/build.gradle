@@ -26,8 +26,8 @@ android {
         applicationId "dev.cyclone.cloak"
         minSdk 29
         targetSdk 36
-        versionCode 21
-        versionName "0.10.0-alpha.1"
+        versionCode 22
+        versionName "0.10.0-rc.1"
     }
 
     signingConfigs {
@@ -70,6 +70,8 @@ android {
 android.sourceSets.main.assets.srcDir("../../catalog")
 // JVM tests read the same catalog and the cross-language test vectors.
 android.sourceSets.test.resources.srcDirs += ["../../catalog", "../../forge/tests/vectors"]
+// Coverage parser/screen tests consume the same bundled facts as the Health tab.
+android.sourceSets.test.resources.srcDir("src/main/assets")
 
 // Embed the module built from this exact source/version in the app so Root Doctor can repair
 // missing or outdated installs even when the phone has no network connection.

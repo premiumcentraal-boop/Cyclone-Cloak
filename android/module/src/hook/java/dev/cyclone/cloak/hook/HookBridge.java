@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Constructor;
+import java.util.Locale;
+import java.util.TimeZone;
 
 import top.canyie.pine.Pine;
 import top.canyie.pine.PineConfig;
@@ -57,6 +59,7 @@ public final class HookBridge {
     private static final int KIND_BT_MAC = 9;
     private static final int KIND_SERIAL = 10;
     private static final int KIND_UA = 11;
+    private static final int KIND_NETWORK_TYPE = 12;
 
     private static volatile Method sPropGet;
 
@@ -94,6 +97,11 @@ public final class HookBridge {
             log("settings hooks failed", t);
         }
         try {
+            installLocale();
+        } catch (Throwable t) {
+            log("locale hooks failed", t);
+        }
+        try {
             hookNoArg(Class.forName("android.net.wifi.WifiInfo", false, HookBridge.class.getClassLoader()),
                     "getMacAddress", KIND_WIFI_MAC);
         } catch (Throwable t) {
@@ -122,7 +130,7 @@ public final class HookBridge {
             log("mediadrm hooks failed", t);
         }
         try {
-            installAdvertisingId();
+            installApplicationHooks();
         } catch (Throwable t) {
             log("advertising id hooks failed", t);
         }
@@ -147,11 +155,33 @@ public final class HookBridge {
         hookWith(mediaDrm, "getPropertyByteArray", new DeviceIdHook(), String.class);
     }
 
-    private static void installAdvertisingId() throws ClassNotFoundException {
+    private static void installAdvertisingId(ClassLoader appLoader) throws ClassNotFoundException {
         Class<?> client = Class.forName(
                 "com.google.android.gms.ads.identifier.AdvertisingIdClient", false,
-                HookBridge.class.getClassLoader());
-        hookWith(client, "getAdvertisingIdInfo", new AdvertisingIdHook(), android.content.Context.class);
+                appLoader);
+        hookWith(client, "getAdvertisingIdInfo", new AdvertisingIdHook(appLoader), android.content.Context.class);
+    }
+
+    private static void installApplicationHooks() throws ClassNotFoundException {
+        // App SDK classes are unavailable in the bridge's boot-loader parent
+        // at postAppSpecialize time. Install their callbacks before app startup.
+        Class<?> instrumentation = Class.forName("android.app.Instrumentation");
+        hookWith(instrumentation, "callApplicationOnCreate", new MethodHook() {
+            @Override public void beforeCall(Pine.CallFrame frame) {
+                android.app.Application app = (android.app.Application) frame.args[0];
+                try {
+                    installAdvertisingId(app.getClassLoader());
+                } catch (ClassNotFoundException ignored) {
+                    // The SDK is optional; this app does not use it.
+                }
+                String language = prop("persist.sys.language");
+                String country = prop(PROP_COUNTRY);
+                if (!language.isEmpty()) Locale.setDefault(Locale.forLanguageTag(
+                    language + (country.isEmpty() ? "" : "-" + country)));
+                String zone = prop("persist.sys.timezone");
+                if (!zone.isEmpty()) TimeZone.setDefault(TimeZone.getTimeZone(zone));
+            }
+        }, android.app.Application.class);
     }
 
     private static void installGsf() throws ClassNotFoundException {
@@ -184,6 +214,8 @@ public final class HookBridge {
         hookTm(tm, "getSimCountryIso", KIND_COUNTRY);
         hookNoArg(tm, "getPhoneCount", KIND_SLOT_COUNT);
         hookNoArg(tm, "getActiveModemCount", KIND_SLOT_COUNT);
+        hookTm(tm, "getNetworkType", KIND_NETWORK_TYPE);
+        hookTm(tm, "getDataNetworkType", KIND_NETWORK_TYPE);
     }
 
     private static void installSettings() throws ClassNotFoundException {
@@ -191,6 +223,34 @@ public final class HookBridge {
         Class<?> resolver = Class.forName("android.content.ContentResolver", false, HookBridge.class.getClassLoader());
         hookWith(settings, "getString", new IdentityHook(KIND_ANDROID_ID), resolver, String.class);
         hookWith(settings, "getStringForUser", new IdentityHook(KIND_ANDROID_ID), resolver, String.class, int.class);
+        hookWith(resolver, "query", new SettingsQueryHook(), android.net.Uri.class,
+                String[].class, String.class, String[].class, String.class);
+        hookWith(resolver, "query", new SettingsQueryHook(), android.net.Uri.class,
+                String[].class, String.class, String[].class, String.class,
+                android.os.CancellationSignal.class);
+    }
+
+    private static void installLocale() throws ClassNotFoundException {
+        Class<?> resources = Class.forName("android.content.res.Resources");
+        hookWith(resources, "getConfiguration", new MethodHook() {
+            @Override public void afterCall(Pine.CallFrame frame) {
+                String language = prop("persist.sys.language");
+                String country = prop(PROP_COUNTRY);
+                if (language.isEmpty() || frame.hasThrowable()) return;
+                android.content.res.Configuration source =
+                    (android.content.res.Configuration) frame.getResult();
+                if (source == null) return;
+                android.content.res.Configuration result = new android.content.res.Configuration(source);
+                result.setLocale(Locale.forLanguageTag(language + (country.isEmpty() ? "" : "-" + country)));
+                frame.setResult(result);
+            }
+        });
+        hookWith(TimeZone.class, "getDefault", new MethodHook() {
+            @Override public void beforeCall(Pine.CallFrame frame) {
+                String zone = prop("persist.sys.timezone");
+                if (!zone.isEmpty()) frame.setResult(TimeZone.getTimeZone(zone));
+            }
+        });
     }
 
     private static void hookTm(Class<?> clazz, String name, int kind) {
@@ -239,7 +299,7 @@ public final class HookBridge {
                 return orNull(firstNonEmpty(prop(PROP_CARRIER_NUMERIC), prop(PROP_SIM_NUMERIC)));
             case KIND_COUNTRY: {
                 String country = prop(PROP_COUNTRY);
-                return country.isEmpty() ? null : country.toLowerCase();
+                return country.isEmpty() ? null : country.toLowerCase(Locale.ROOT);
             }
             case KIND_SLOT_COUNT: {
                 String count = prop(PROP_SIM_SLOT_COUNT);
@@ -252,8 +312,18 @@ public final class HookBridge {
             case KIND_BT_MAC:
                 return orNull(prop(PROP_BT_MAC));
             case KIND_SERIAL:
-                return orNull(prop(PROP_SERIAL));            case KIND_UA:
+                return orNull(prop(PROP_SERIAL));
+            case KIND_UA:
                 return orNull(prop(PROP_UA));
+            case KIND_NETWORK_TYPE:
+                switch (prop("gsm.network.type")) {
+                    case "NR": return "20";
+                    case "LTE": return "13";
+                    case "HSPA": return "10";
+                    case "UMTS": return "3";
+                    case "GSM": return "16";
+                    default: return "0";
+                }
             default:
                 return null;
         }
@@ -327,6 +397,10 @@ public final class HookBridge {
 
     /** AdvertisingIdHook: rebuilds the SDK Info record from the vault value. */
     private static final class AdvertisingIdHook extends MethodHook {
+        private final ClassLoader appLoader;
+
+        AdvertisingIdHook(ClassLoader appLoader) { this.appLoader = appLoader; }
+
         @Override public void beforeCall(Pine.CallFrame frame) {
             String value = prop(PROP_ADV_ID);
             if (value.isEmpty()) {
@@ -335,7 +409,7 @@ public final class HookBridge {
             try {
                 Class<?> info = Class.forName(
                         "com.google.android.gms.ads.identifier.AdvertisingIdClient$Info",
-                        false, HookBridge.class.getClassLoader());
+                        false, appLoader);
                 Constructor<?> ctor = info.getConstructor(String.class, boolean.class);
                 frame.setResult(ctor.newInstance(value, Boolean.FALSE));
             } catch (Throwable t) {
@@ -414,6 +488,32 @@ public final class HookBridge {
         return out;
     }
 
+    /** Only the single Android-ID row; never redirects general settings queries. */
+    private static final class SettingsQueryHook extends MethodHook {
+        @Override public void beforeCall(Pine.CallFrame frame) {
+            if (frame.args == null || frame.args.length < 5
+                    || !(frame.args[0] instanceof android.net.Uri)
+                    || !(frame.args[2] instanceof String)
+                    || !(frame.args[3] instanceof String[])) return;
+            android.net.Uri uri = (android.net.Uri) frame.args[0];
+            String[] names = (String[]) frame.args[3];
+            if (!"settings".equals(uri.getAuthority()) || !"/secure".equals(uri.getPath())
+                    || !((String) frame.args[2]).matches("\\s*name\\s*=\\s*\\?\\s*")
+                    || names.length != 1 || !ANDROID_ID_KEY.equals(names[0])) return;
+            String[] columns = frame.args[1] == null ? new String[]{"name", "value"}
+                : (String[]) frame.args[1];
+            Object[] row = new Object[columns.length];
+            for (int i = 0; i < columns.length; i++) {
+                if ("name".equals(columns[i])) row[i] = ANDROID_ID_KEY;
+                else if ("value".equals(columns[i])) row[i] = orNull(prop(PROP_ANDROID_ID));
+                else return;
+            }
+            android.database.MatrixCursor cursor = new android.database.MatrixCursor(columns);
+            cursor.addRow(row);
+            frame.setResult(cursor);
+        }
+    }
+
     private static final class IdentityHook extends MethodHook {
         private final int kind;
 
@@ -422,11 +522,19 @@ public final class HookBridge {
         }
 
         @Override public void beforeCall(Pine.CallFrame frame) {
+            // Every other Settings.Secure key must retain its provider result.
+            if (kind == KIND_ANDROID_ID && (frame.args == null || frame.args.length < 2
+                    || !ANDROID_ID_KEY.equals(frame.args[1]))) return;
             int slot = 0;
             if (frame.args != null && frame.args.length > 0 && frame.args[0] instanceof Integer) {
                 slot = (Integer) frame.args[0];
             }
-            frame.setResult(resolve(kind, slot));
+            String value = resolve(kind, slot);
+            if (kind == KIND_SLOT_COUNT || kind == KIND_NETWORK_TYPE) {
+                frame.setResult(Integer.valueOf(value));
+            } else {
+                frame.setResult(value);
+            }
         }
     }
 }

@@ -29,6 +29,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -50,7 +51,8 @@ internal fun PhoneEditorScreen(
     val d = editor.draft
     val findings = editor.findings
     val byField = findings.filter { it.field != null }.groupBy { it.field!! }
-    fun problem(path: String): String? = byField[path]?.joinToString("\n") { it.message }
+    fun problem(path: String): List<ProfileValidator.Finding> = byField[path].orEmpty()
+    val canSave = findings.none { it.isError } && !busy
 
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
@@ -61,7 +63,7 @@ internal fun PhoneEditorScreen(
                     IconButton(onClick = onClose) { Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = "Back") }
                 },
                 actions = {
-                    Button(onClick = onSave, enabled = editor.canSave && !busy, modifier = Modifier.padding(end = 8.dp)) { Text("Save") }
+                    Button(onClick = onSave, enabled = canSave, modifier = Modifier.padding(end = 8.dp)) { Text("Save") }
                 },
             )
         },
@@ -70,14 +72,14 @@ internal fun PhoneEditorScreen(
             Modifier.fillMaxSize().padding(inner).verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.spacedBy(14.dp),
         ) {
+            ProfileSummary(d, findings)
             editor.note?.let { Text(it, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) }
-            StatusLine(findings)
 
-            Section("Name") {
+            Section("Phone name", "How this template appears in Cloak.") {
                 Field("Name in Cloak", d.label, { onChange(d.copy(label = it)) }, hint = "For example, Pixel 8 Germany")
             }
 
-            Section("Device") {
+            Section("Device identity", "Manufacturer, model and hardware names.") {
                 Field("Manufacturer", d.manufacturer, { onChange(d.copy(manufacturer = it)) }, problem("device.manufacturer"), "Google")
                 Field("Brand", d.brand, { onChange(d.copy(brand = it)) }, problem("device.brand"), "google")
                 Field("Model", d.model, { onChange(d.copy(model = it)) }, problem("device.model"), "Pixel 8")
@@ -86,21 +88,24 @@ internal fun PhoneEditorScreen(
                 Field("Hardware", d.hardware, { onChange(d.copy(hardware = it)) }, problem("device.hardware"), "zuma")
             }
 
-            Section("Android build") {
+            Section("Android version", "Release, API levels and security patch.") {
                 Text("Android version", style = MaterialTheme.typography.labelLarge)
                 Chips(RELEASES, d.versionRelease) { onChange(d.withRelease(it)) }
                 Field("Android version", d.versionRelease, { onChange(d.withRelease(it)) }, problem("device.version_release"), "14")
                 Field("SDK level", d.sdkInt, { onChange(d.copy(sdkInt = it)) }, problem("device.sdk_int"), "34", number = true)
                 Field("Security patch", d.securityPatch, { onChange(d.copy(securityPatch = it)) }, problem("device.security_patch"), "2024-03-05")
+                Field("First API level", d.firstApiLevel, { onChange(d.copy(firstApiLevel = it)) }, problem("device.first_api_level"), "Empty: the SDK level", number = true)
+            }
+
+            Section("Build identity", "Build identifiers and the resulting fingerprint.") {
                 Field("Build ID", d.buildId, { onChange(d.copy(buildId = it)) }, problem("device.build_id"), "AP1A.240305.019")
                 Field("Build number (incremental)", d.versionIncremental, { onChange(d.copy(versionIncremental = it)) }, problem("device.version_incremental"), "11445699")
                 Field(
                     "Build date (Unix seconds)", d.buildDateUtc, { onChange(d.copy(buildDateUtc = it)) }, problem("device.build_date_utc"),
                     "Empty: the security patch day", number = true,
                 )
-                Field("First API level", d.firstApiLevel, { onChange(d.copy(firstApiLevel = it)) }, problem("device.first_api_level"), "Empty: the SDK level", number = true)
-                Field("Bootloader", d.bootloader, { onChange(d.copy(bootloader = it)) }, null, "Optional")
-                Field("Baseband", d.baseband, { onChange(d.copy(baseband = it)) }, null, "Optional")
+                Field("Bootloader", d.bootloader, { onChange(d.copy(bootloader = it)) }, hint = "Optional")
+                Field("Baseband", d.baseband, { onChange(d.copy(baseband = it)) }, hint = "Optional")
                 Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
                     Column(Modifier.weight(1f)) {
                         Text("Build fingerprint from the fields above", style = MaterialTheme.typography.bodyMedium)
@@ -116,13 +121,13 @@ internal fun PhoneEditorScreen(
                 }
                 if (d.autoFingerprint) {
                     Text(d.composedFingerprint, style = MaterialTheme.typography.bodySmall, fontFamily = FontFamily.Monospace)
-                    problem("device.fingerprint")?.let { ErrorText(it) }
+                    problem("device.fingerprint").takeIf { it.isNotEmpty() }?.let { FieldFeedback(it) }
                 } else {
                     Field("Build fingerprint", d.fingerprint, { onChange(d.copy(fingerprint = it)) }, problem("device.fingerprint"), "brand/product/device:14/…:user/release-keys")
                 }
             }
 
-            Section("Mobile network") {
+            Section("Mobile network", "Carrier, operator codes and SIM configuration.") {
                 Field("Carrier", d.carrierName, { onChange(d.copy(carrierName = it)) }, problem("telephony.carrier_name"), "Vodafone")
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Field("MCC", d.mcc, { onChange(d.copy(mcc = it)) }, problem("telephony.mcc"), "262", number = true, modifier = Modifier.weight(1f))
@@ -130,14 +135,14 @@ internal fun PhoneEditorScreen(
                 }
                 Text("Network", style = MaterialTheme.typography.labelLarge)
                 Chips(ProfileValidator.NETWORK_TYPES, d.networkType) { onChange(d.copy(networkType = it)) }
-                problem("telephony.network_type")?.let { ErrorText(it) }
+                problem("telephony.network_type").takeIf { it.isNotEmpty() }?.let { FieldFeedback(it) }
                 Text("SIM slots", style = MaterialTheme.typography.labelLarge)
                 Chips(listOf("1", "2"), d.simSlots) { onChange(d.copy(simSlots = it)) }
-                problem("telephony.sim_slot_count")?.let { ErrorText(it) }
-                Field("Region hint", d.egressHint, { onChange(d.copy(egressHint = it)) }, null, "Optional, for example eu-central")
+                problem("telephony.sim_slot_count").takeIf { it.isNotEmpty() }?.let { FieldFeedback(it) }
+                Field("Region hint", d.egressHint, { onChange(d.copy(egressHint = it)) }, hint = "Optional, for example eu-central")
             }
 
-            Section("Screen") {
+            Section("Display", "Pixel dimensions, density and refresh rate.") {
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Field("Width", d.width, { onChange(d.copy(width = it)) }, problem("display.width"), "1080", number = true, modifier = Modifier.weight(1f))
                     Field("Height", d.height, { onChange(d.copy(height = it)) }, problem("display.height"), "2400", number = true, modifier = Modifier.weight(1f))
@@ -148,10 +153,10 @@ internal fun PhoneEditorScreen(
                 }
                 Text("Size class", style = MaterialTheme.typography.labelLarge)
                 Chips(ProfileValidator.DISPLAY_CLASSES, d.screenClass) { onChange(d.copy(screenClass = it)) }
-                problem("display.screen_size_class")?.let { ErrorText(it) }
+                problem("display.screen_size_class").takeIf { it.isNotEmpty() }?.let { FieldFeedback(it) }
             }
 
-            Section("Language and region") {
+            Section("Language and region", "Language, country and time zone reported by the profile.") {
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Field("Language", d.language, { onChange(d.copy(language = it)) }, problem("locale.language"), "de", modifier = Modifier.weight(1f))
                     Field("Country", d.country, { onChange(d.copy(country = it)) }, problem("locale.country"), "DE", modifier = Modifier.weight(1f))
@@ -166,9 +171,36 @@ internal fun PhoneEditorScreen(
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
-            Button(onClick = onSave, enabled = editor.canSave && !busy, modifier = Modifier.fillMaxWidth()) {
-                Text(if (editor.canSave) "Save phone" else "Fix the marked fields to save")
+            Button(onClick = onSave, enabled = canSave, modifier = Modifier.fillMaxWidth()) {
+                Text(when {
+                    busy -> "Please wait…"
+                    findings.any { it.isError } -> "Fix the marked fields to save"
+                    else -> "Save phone"
+                })
             }
+        }
+    }
+}
+
+/** Preview the same normalized template the existing save path creates. */
+@Composable
+private fun ProfileSummary(draft: PhoneDraft, findings: List<ProfileValidator.Finding>) {
+    val phone = draft.toTemplate()
+    fun value(text: String) = text.trim().ifBlank { "Not set" }
+    Card(
+        modifier = Modifier.fillMaxWidth().testTag("phone-summary"),
+        shape = MaterialTheme.shapes.large,
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+    ) {
+        Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
+            Text("Profile summary", style = MaterialTheme.typography.labelLarge)
+            Text(phone.label, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
+            Text("${value(draft.manufacturer)} · ${value(draft.model)}", style = MaterialTheme.typography.bodyMedium)
+            Text("Android ${value(draft.versionRelease)} · API ${value(draft.sdkInt)}", style = MaterialTheme.typography.bodySmall)
+            Text("${value(draft.width)} × ${value(draft.height)} px · ${value(draft.density)} dpi · ${value(draft.refreshRate)} Hz", style = MaterialTheme.typography.bodySmall)
+            Text("${value(draft.carrierName)} · ${value(draft.networkType)} · ${value(draft.simSlots)} SIM", style = MaterialTheme.typography.bodySmall)
+            Text("${value(draft.language)}-${value(draft.country)} · ${value(draft.timezone)}", style = MaterialTheme.typography.bodySmall)
+            StatusLine(findings)
         }
     }
 }
@@ -193,7 +225,7 @@ private fun StatusLine(findings: List<ProfileValidator.Finding>) {
 }
 
 @Composable
-private fun Section(title: String, content: @Composable () -> Unit) {
+private fun Section(title: String, description: String = "", content: @Composable () -> Unit) {
     Card(
         modifier = Modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.large,
@@ -202,6 +234,9 @@ private fun Section(title: String, content: @Composable () -> Unit) {
     ) {
         Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            if (description.isNotEmpty()) {
+                Text(description, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
             content()
         }
     }
@@ -212,7 +247,7 @@ private fun Field(
     label: String,
     value: String,
     onValue: (String) -> Unit,
-    problem: String? = null,
+    problem: List<ProfileValidator.Finding> = emptyList(),
     hint: String = "",
     number: Boolean = false,
     modifier: Modifier = Modifier.fillMaxWidth(),
@@ -224,8 +259,8 @@ private fun Field(
         label = { Text(label) },
         placeholder = { if (hint.isNotEmpty()) Text(hint) },
         singleLine = true,
-        isError = problem != null,
-        supportingText = problem?.let { { Text(it) } },
+        isError = problem.any { it.isError },
+        supportingText = if (problem.isEmpty()) null else { { FieldFeedback(problem) } },
         keyboardOptions = if (number) KeyboardOptions(keyboardType = KeyboardType.Number) else KeyboardOptions.Default,
     )
 }
@@ -241,8 +276,16 @@ private fun Chips(options: List<String>, selected: String, onSelect: (String) ->
 }
 
 @Composable
-private fun ErrorText(text: String) {
-    Text(text, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
+private fun FieldFeedback(findings: List<ProfileValidator.Finding>) {
+    Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        findings.sortedBy { if (it.isError) 0 else 1 }.forEach { finding ->
+            Text(
+                "${if (finding.isError) "Error" else "Check"}: ${finding.message}",
+                style = MaterialTheme.typography.bodySmall,
+                color = if (finding.isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.tertiary,
+            )
+        }
+    }
 }
 
 /** Findings as plain lines, errors first. */

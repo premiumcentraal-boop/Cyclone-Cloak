@@ -133,6 +133,182 @@
         "country": "DE",
         "timezone": "Europe/Berlin"
       }
+    },
+    {
+      "id": "pixel_6",
+      "label": "Pixel 6",
+      "device": {
+        "manufacturer": "Google",
+        "brand": "google",
+        "model": "Pixel 6",
+        "product": "oriole",
+        "device": "oriole",
+        "hardware": "gs101",
+        "fingerprint": "google/oriole/oriole:14/UP1A.231005.007/catalog.20231005:user/release-keys",
+        "version_release": "14",
+        "sdk_int": 34,
+        "security_patch": "2023-10-05",
+        "build_id": "UP1A.231005.007",
+        "version_incremental": "catalog.20231005",
+        "build_date_utc": 1697068800,
+        "first_api_level": 31,
+        "bootloader": "",
+        "baseband": ""
+      },
+      "telephony": {
+        "sim_slot_count": 2,
+        "carrier_name": "T-Mobile",
+        "mcc": "310",
+        "mnc": "260",
+        "network_type": "5G"
+      },
+      "network": {
+        "egress_hint": "us-east"
+      },
+      "display": {
+        "width": 1080,
+        "height": 2400,
+        "density": 420,
+        "refresh_rate_hz": 90,
+        "screen_size_class": "normal"
+      },
+      "locale": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      }
+    },
+    {
+      "id": "pixel_6a",
+      "label": "Pixel 6a",
+      "device": {
+        "manufacturer": "Google",
+        "brand": "google",
+        "model": "Pixel 6a",
+        "product": "bluejay",
+        "device": "bluejay",
+        "hardware": "gs101",
+        "fingerprint": "google/bluejay/bluejay:14/UP1A.231005.007/catalog.20231005:user/release-keys",
+        "version_release": "14",
+        "sdk_int": 34,
+        "security_patch": "2023-10-05",
+        "build_id": "UP1A.231005.007",
+        "version_incremental": "catalog.20231005",
+        "build_date_utc": 1697068800,
+        "first_api_level": 31,
+        "bootloader": "",
+        "baseband": ""
+      },
+      "telephony": {
+        "sim_slot_count": 2,
+        "carrier_name": "T-Mobile",
+        "mcc": "310",
+        "mnc": "260",
+        "network_type": "5G"
+      },
+      "network": {
+        "egress_hint": "us-east"
+      },
+      "display": {
+        "width": 1080,
+        "height": 2400,
+        "density": 420,
+        "refresh_rate_hz": 60,
+        "screen_size_class": "normal"
+      },
+      "locale": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      }
+    },
+    {
+      "id": "pixel_7a",
+      "label": "Pixel 7a",
+      "device": {
+        "manufacturer": "Google",
+        "brand": "google",
+        "model": "Pixel 7a",
+        "product": "lynx",
+        "device": "lynx",
+        "hardware": "gs201",
+        "fingerprint": "google/lynx/lynx:14/UP1A.231005.007/catalog.20231005:user/release-keys",
+        "version_release": "14",
+        "sdk_int": 34,
+        "security_patch": "2023-10-05",
+        "build_id": "UP1A.231005.007",
+        "version_incremental": "catalog.20231005",
+        "build_date_utc": 1697068800,
+        "first_api_level": 33,
+        "bootloader": "",
+        "baseband": ""
+      },
+      "telephony": {
+        "sim_slot_count": 2,
+        "carrier_name": "T-Mobile",
+        "mcc": "310",
+        "mnc": "260",
+        "network_type": "5G"
+      },
+      "network": {
+        "egress_hint": "us-east"
+      },
+      "display": {
+        "width": 1080,
+        "height": 2400,
+        "density": 420,
+        "refresh_rate_hz": 90,
+        "screen_size_class": "normal"
+      },
+      "locale": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      }
+    },
+    {
+      "id": "pixel_8",
+      "label": "Pixel 8",
+      "device": {
+        "manufacturer": "Google",
+        "brand": "google",
+        "model": "Pixel 8",
+        "product": "shiba",
+        "device": "shiba",
+        "hardware": "zuma",
+        "fingerprint": "google/shiba/shiba:14/UD1A.230803.022.A5/catalog.20230905:user/release-keys",
+        "version_release": "14",
+        "sdk_int": 34,
+        "security_patch": "2023-09-05",
+        "build_id": "UD1A.230803.022.A5",
+        "version_incremental": "catalog.20230905",
+        "build_date_utc": 1697068800,
+        "first_api_level": 34,
+        "bootloader": "",
+        "baseband": ""
+      },
+      "telephony": {
+        "sim_slot_count": 2,
+        "carrier_name": "T-Mobile",
+        "mcc": "310",
+        "mnc": "260",
+        "network_type": "5G"
+      },
+      "network": {
+        "egress_hint": "us-east"
+      },
+      "display": {
+        "width": 1080,
+        "height": 2400,
+        "density": 420,
+        "refresh_rate_hz": 120,
+        "screen_size_class": "normal"
+      },
+      "locale": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      }
     }
   ]
 }

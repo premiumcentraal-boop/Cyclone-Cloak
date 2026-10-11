@@ -21,6 +21,9 @@ android {
         }
     }
 
+    testOptions { unitTests.returnDefaultValues = true }
+    sourceSets.test.java.srcDir("src/hook/java")
+
     externalNativeBuild {
         cmake {
             path "src/main/cpp/CMakeLists.txt"
@@ -75,6 +78,8 @@ configurations {
 dependencies {
     hookEmbed "top.canyie.pine:core:0.3.0"
     hookD8 "com.android.tools:r8:8.13.25"
+    testImplementation "top.canyie.pine:core:0.3.0"
+    testImplementation "junit:junit:4.13.2"
 }
 
 def hookWork = layout.buildDirectory.dir("hook")

@@ -1,0 +1,239 @@
+package dev.cyclone.cloak.probe;
+
+import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
+import android.database.Cursor;
+import android.hardware.Sensor;
+import android.hardware.SensorManager;
+import android.hardware.camera2.CameraCharacteristics;
+import android.hardware.camera2.CameraManager;
+import android.media.MediaDrm;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
+import android.os.Build;
+import android.os.Bundle;
+import android.provider.Settings;
+import android.telephony.TelephonyManager;
+import android.util.DisplayMetrics;
+import android.view.Display;
+import android.widget.ScrollView;
+import android.widget.TextView;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Locale;
+import java.util.TimeZone;
+import java.util.UUID;
+
+/** Independent consumer: actual values only come from Android APIs, never the fixture. */
+@SuppressWarnings("deprecation")
+public final class ProbeActivity extends Activity {
+    private interface Read { Object get() throws Exception; }
+    private final JSONArray rows = new JSONArray();
+    private JSONObject profile;
+    private TextView matrix;
+    static { System.loadLibrary("probe"); }
+    private static native String nativeProperty(String key);
+
+    @Override public void onCreate(Bundle state) {
+        super.onCreate(state);
+        matrix = new TextView(this);
+        matrix.setPadding(24, 24, 24, 24);
+        matrix.setTextIsSelectable(true);
+        matrix.setText("Reading Android inspection surfaces…");
+        ScrollView scroll = new ScrollView(this);
+        scroll.addView(matrix);
+        setContentView(scroll);
+        // AdvertisingIdClient requires a worker thread. One failed read never
+        // prevents subsequent rows from being measured.
+        new Thread(() -> {
+            try {
+                String fixture = getIntent().getStringExtra("fixture");
+                if (!"b".equals(fixture)) fixture = "a";
+                try (java.io.InputStream stream = getAssets().open("profile-" + fixture + ".json")) {
+                    java.io.ByteArrayOutputStream bytes = new java.io.ByteArrayOutputStream();
+                    byte[] chunk = new byte[4096];
+                    int count;
+                    while ((count = stream.read(chunk)) != -1) bytes.write(chunk, 0, count);
+                    profile = new JSONObject(bytes.toString(StandardCharsets.UTF_8.name()));
+                }
+                collect();
+                JSONObject report = new JSONObject().put("format", 1)
+                    .put("fixture", fixture).put("package", getPackageName())
+                    .put("uid", android.os.Process.myUid()).put("rows", rows);
+                File output = new File(getFilesDir(), "report.json");
+                Files.write(output.toPath(), report.toString(2).getBytes(StandardCharsets.UTF_8));
+                StringBuilder visible = new StringBuilder("Cloak Runtime Probe\n\n");
+                for (int i = 0; i < rows.length(); i++) {
+                    JSONObject row = rows.getJSONObject(i);
+                    visible.append(row.getString("status")).append("  ")
+                        .append(row.getString("id")).append("\n")
+                        .append(row.getString("reason")).append("\n\n");
+                }
+                runOnUiThread(() -> matrix.setText(visible));
+            } catch (Exception failure) {
+                runOnUiThread(() -> matrix.setText("Probe failed: " + failure.getClass().getSimpleName()));
+            }
+        }, "cloak-probe").start();
+    }
+
+    private Object expected(String path) throws Exception {
+        if (path == null) return null;
+        String[] parts = path.split("\\.");
+        Object value = profile;
+        for (String part : parts) value = ((JSONObject) value).get(part);
+        return value;
+    }
+
+    private void read(String id, String path, Read operation) throws Exception {
+        compare(id, expected(path), operation);
+    }
+
+    private void compare(String id, Object expected, Read operation) throws Exception {
+        JSONObject row = new JSONObject().put("id", id)
+            .put("expected", expected == null ? JSONObject.NULL : expected);
+        try {
+            Object value = operation.get();
+            row.put("actual", value == null ? JSONObject.NULL : value);
+            boolean unspecified = expected == null || expected.toString().isEmpty();
+            boolean matches = !unspecified && expected.toString().equals(String.valueOf(value));
+            row.put("status", unspecified ? "OBSERVED" : matches ? "PASS" : "FAIL")
+                .put("reason", unspecified ? "NO_PROFILE_EXPECTATION" : matches ? "MATCH" : "VALUE_MISMATCH");
+        } catch (Exception | LinkageError error) {
+            Throwable cause = error instanceof InvocationTargetException ? error.getCause() : error;
+            String reason = cause.getClass().getSimpleName();
+            if (cause instanceof ClassNotFoundException) reason = "SDK_OR_API_ABSENT";
+            row.put("status", "BLOCKED").put("reason", reason);
+        }
+        rows.put(row);
+    }
+
+    private void collect() throws Exception {
+        String[][] fields = {
+            {"MANUFACTURER", "manufacturer"}, {"BRAND", "brand"}, {"MODEL", "model"},
+            {"DEVICE", "device"}, {"PRODUCT", "product"}, {"HARDWARE", "hardware"},
+            {"FINGERPRINT", "fingerprint"}, {"ID", "build_id"}, {"BOOTLOADER", "bootloader"},
+        };
+        for (String[] field : fields) read("build." + field[0], "device." + field[1],
+            () -> Build.class.getField(field[0]).get(null));
+        read("build.SERIAL", "identifiers.serial", () -> Build.SERIAL);
+        read("build.getSerial", "identifiers.serial", Build::getSerial);
+        compare("build.TIME", ((Number) expected("device.build_date_utc")).longValue() * 1000, () -> Build.TIME);
+        compare("build.TYPE", "user", () -> Build.TYPE);
+        compare("build.TAGS", "release-keys", () -> Build.TAGS);
+        read("version.SDK_INT", "device.sdk_int", () -> Build.VERSION.SDK_INT);
+        read("version.RELEASE", "device.version_release", () -> Build.VERSION.RELEASE);
+        read("version.INCREMENTAL", "device.version_incremental", () -> Build.VERSION.INCREMENTAL);
+        read("version.SECURITY_PATCH", "device.security_patch", () -> Build.VERSION.SECURITY_PATCH);
+        read("build.getRadioVersion", "device.baseband", Build::getRadioVersion);
+
+        String[][] properties = {
+            {"ro.product.model", "device.model"}, {"ro.build.version.sdk", "device.sdk_int"},
+            {"ro.build.fingerprint", "device.fingerprint"}, {"ro.serialno", "identifiers.serial"},
+            {"ro.sf.lcd_density", "display.density"}, {"persist.sys.timezone", "locale.timezone"},
+        };
+        for (String[] prop : properties) {
+            read("properties.java." + prop[0], prop[1], () -> Class.forName("android.os.SystemProperties")
+                .getMethod("get", String.class).invoke(null, prop[0]));
+            read("properties.native." + prop[0], prop[1], () -> nativeProperty(prop[0]));
+        }
+
+        TelephonyManager tm = getSystemService(TelephonyManager.class);
+        read("telephony.imei0", "identifiers.imei_primary", () -> tm.getImei(0));
+        if (((Number) expected("telephony.sim_slot_count")).intValue() == 1)
+            compare("telephony.imei1", JSONObject.NULL, () -> tm.getImei(1));
+        else read("telephony.imei1", "identifiers.imei_secondary", () -> tm.getImei(1));
+        read("telephony.deviceId", "identifiers.imei_primary", tm::getDeviceId);
+        read("telephony.simSerial", "identifiers.sim_serial", tm::getSimSerialNumber);
+        read("telephony.phoneCount", "telephony.sim_slot_count", tm::getPhoneCount);
+        read("telephony.activeModemCount", "telephony.sim_slot_count", tm::getActiveModemCount);
+        int networkType;
+        switch (expected("telephony.network_type").toString()) {
+            case "5G": networkType = TelephonyManager.NETWORK_TYPE_NR; break;
+            case "LTE": networkType = TelephonyManager.NETWORK_TYPE_LTE; break;
+            case "HSPA": networkType = TelephonyManager.NETWORK_TYPE_HSPA; break;
+            case "UMTS": networkType = TelephonyManager.NETWORK_TYPE_UMTS; break;
+            default: networkType = TelephonyManager.NETWORK_TYPE_GSM;
+        }
+        compare("telephony.networkType", networkType, tm::getNetworkType);
+        compare("telephony.dataNetworkType", networkType, tm::getDataNetworkType);
+        String operator = expected("telephony.mcc").toString() + expected("telephony.mnc");
+        compare("operator.networkNumeric", operator, tm::getNetworkOperator);
+        compare("operator.simNumeric", operator, tm::getSimOperator);
+        read("operator.networkName", "telephony.carrier_name", tm::getNetworkOperatorName);
+        read("operator.simName", "telephony.carrier_name", tm::getSimOperatorName);
+        String country = expected("locale.country").toString().toLowerCase(Locale.ROOT);
+        compare("operator.networkCountry", country, tm::getNetworkCountryIso);
+        compare("operator.simCountry", country, tm::getSimCountryIso);
+        String serial = expected("identifiers.sim_serial").toString();
+        compare("telephony.subscriberId", operator + serial.substring(serial.length() - (15 - operator.length())), tm::getSubscriberId);
+        read("settings.secure.androidId", "identifiers.android_id",
+            () -> Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
+        read("settings.provider.androidId", "identifiers.android_id", () -> {
+            try (Cursor cursor = getContentResolver().query(Settings.Secure.CONTENT_URI,
+                    new String[]{"value"}, "name=?", new String[]{"android_id"}, null)) {
+                return cursor != null && cursor.moveToFirst() ? cursor.getString(0) : null;
+            }
+        });
+        compare("settings.unrelatedControl", null,
+            () -> Settings.Secure.getString(getContentResolver(), "accessibility_enabled"));
+        // Builder isolates the getter hook from service permission requirements.
+        read("wifi.objectMac", "identifiers.mac", () -> new WifiInfo.Builder().build().getMacAddress());
+        read("wifi.serviceMac", "identifiers.mac", () -> getSystemService(WifiManager.class).getConnectionInfo().getMacAddress());
+        compare("wifi.ssid", null, () -> getSystemService(WifiManager.class).getConnectionInfo().getSSID());
+        read("bluetooth.address", "identifiers.bt_mac", () -> BluetoothAdapter.getDefaultAdapter().getAddress());
+        compare("bluetooth.name", null, () -> BluetoothAdapter.getDefaultAdapter().getName());
+        read("advertising.id", "identifiers.advertising_id", () -> {
+            Class<?> client = Class.forName("com.google.android.gms.ads.identifier.AdvertisingIdClient");
+            Object info = client.getMethod("getAdvertisingIdInfo", Context.class).invoke(null, this);
+            return info.getClass().getMethod("getId").invoke(info);
+        });
+        read("drm.deviceUniqueId", "identifiers.widevine_id", () -> {
+            try (MediaDrm drm = new MediaDrm(UUID.fromString("edef8ba9-79d6-4ace-a3c8-27dcd51d21ed"))) {
+                byte[] value = drm.getPropertyByteArray(MediaDrm.PROPERTY_DEVICE_UNIQUE_ID);
+                if (value == null) return null;
+                StringBuilder hex = new StringBuilder();
+                for (byte b : value) hex.append(String.format(Locale.ROOT, "%02x", b & 255));
+                return hex.toString();
+            }
+        });
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        read("display.resources.width", "display.width", () -> metrics.widthPixels);
+        read("display.resources.height", "display.height", () -> metrics.heightPixels);
+        read("display.resources.density", "display.density", () -> metrics.densityDpi);
+        Display display = getWindowManager().getDefaultDisplay();
+        DisplayMetrics real = new DisplayMetrics();
+        display.getRealMetrics(real);
+        read("display.real.width", "display.width", () -> real.widthPixels);
+        read("display.real.height", "display.height", () -> real.heightPixels);
+        read("display.real.density", "display.density", () -> real.densityDpi);
+        compare("display.refresh", ((Number) expected("display.refresh_rate_hz")).floatValue(), display::getRefreshRate);
+        compare("camera.characteristics", null, () -> {
+            CameraManager cameras = getSystemService(CameraManager.class);
+            JSONArray result = new JSONArray();
+            for (String id : cameras.getCameraIdList()) {
+                CameraCharacteristics c = cameras.getCameraCharacteristics(id);
+                result.put(new JSONObject().put("id", id).put("facing", c.get(CameraCharacteristics.LENS_FACING))
+                    .put("level", c.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL))
+                    .put("pixelArray", String.valueOf(c.get(CameraCharacteristics.SENSOR_INFO_PIXEL_ARRAY_SIZE))));
+            }
+            return result;
+        });
+        compare("sensors.list", null, () -> {
+            JSONArray result = new JSONArray();
+            for (Sensor sensor : getSystemService(SensorManager.class).getSensorList(Sensor.TYPE_ALL))
+                result.put(new JSONObject().put("type", sensor.getType()).put("name", sensor.getName())
+                    .put("vendor", sensor.getVendor()));
+            return result;
+        });
+        read("locale.default.language", "locale.language", () -> Locale.getDefault().getLanguage());
+        read("locale.default.country", "locale.country", () -> Locale.getDefault().getCountry());
+        read("locale.resources.language", "locale.language", () -> getResources().getConfiguration().getLocales().get(0).getLanguage());
+        read("locale.resources.country", "locale.country", () -> getResources().getConfiguration().getLocales().get(0).getCountry());
+        read("timezone.default", "locale.timezone", () -> TimeZone.getDefault().getID());
+    }
+}

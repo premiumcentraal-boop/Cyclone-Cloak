@@ -67,7 +67,7 @@ class FakeCyclone(
     private fun answer(key: String, profileId: String, user: Int, pkg: String): JSONObject {
         val stored = config[key]
         return JSONObject().put("version", 1).put("profileId", profileId).put("androidUserId", user).put("packageName", pkg)
-            .put("storageKey", key.hashCode().toString()).put("value", stored?.opt("value") ?: JSONObject.NULL)
+            .put("storageKey", key.hashCode().toString()).put("value", stored?.optJSONObject("value")?.let { JSONObject(it.toString()) } ?: JSONObject.NULL)
             .put("state", stored?.optString("state", "unknown") ?: "unknown")
     }
 

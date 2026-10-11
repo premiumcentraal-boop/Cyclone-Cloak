@@ -54,6 +54,43 @@ CASES = [
     ("ua release", "pixel_7", [["device.version_release", "14"], ["device.sdk_int", 34], ["device.fingerprint", "google/panther/panther:14/TQ3A.230805.001/10193186:user/release-keys"]]),
 ]
 
+# Malformed JSON types, suspicious but allowable hardware, and exact field/reason parity.
+for path, value in [
+    ("device.sdk_int", True), ("device.sdk_int", "33"), ("device.sdk_int", 33.5),
+    ("device.sdk_int", 1099511627776), ("device.first_api_level", 0),
+    ("device.first_api_level", "oops"), ("device.build_date_utc", -1),
+    ("device.build_date_utc", "oops"), ("device.build_date_utc", 253402300800),
+    ("device.build_date_utc", 1893456000), ("device.version_release", "13..0"),
+    ("device.model", 123), ("device.model", "   "), ("device.manufacturer", "Samsung"),
+    ("device.security_patch", "20230805"), ("device.security_patch", "2023-02-29"),
+    ("display.width", True), ("display.width", 1080.5), ("display.width", 100),
+    ("display.width", 1099511627776), ("display.density", "420"), ("display.density", 1600),
+    ("display.height", -1), ("display.height", 6000), ("display.refresh_rate_hz", 500),
+    ("locale.language", "en\n"), ("locale.language", None), ("locale.country", "usa"),
+    ("locale.timezone", "Europe//Berlin"), ("locale.timezone", "Europe/../Berlin"),
+    ("locale.timezone", "NotAZone"), ("locale.timezone", "UTC"),
+    ("locale.timezone", "Etc/GMT+5"), ("locale.timezone", "America/Argentina/Buenos_Aires"),
+    ("locale.timezone", "Japan"), ("locale.timezone", "NZ-CHAT"), ("locale.timezone", "GMT+0"),
+    ("identifiers.android_id", "0123456789abcdef\n"), ("identifiers.android_id", "0" * 16),
+    ("identifiers.mac", "01:23:45:67:89:AB"), ("identifiers.bt_mac", "FF:FF:FF:FF:FF:FF"),
+    ("identifiers.app_set_id", "00000000-0000-1000-8000-000000000000"),
+    ("identifiers", []), ("display", "1080x2400"), ("locale", False),
+]:
+    CASES.append((f"{path} = {value!r}", "pixel_7", [[path, value]]))
+CASES.append(("broken fingerprint still checks APIs", "pixel_7", [
+    ["device.fingerprint", "broken"], ["device.sdk_int", "invalid"], ["device.first_api_level", 1]]))
+CASES.append(("landscape dimensions are valid", "pixel_7", [["display.width", 2400], ["display.height", 1080]]))
+CASES.append(("unknown OEM is valid", "pixel_7", [["device.manufacturer", "Acme"]]))
+CASES.append(("duplicate IMEIs warn", "pixel_7", [
+    ["identifiers.imei_primary", "490154203237518"], ["identifiers.imei_secondary", "490154203237518"]]))
+for release, sdk in [("8.0", 26), ("8.1", 27), ("9", 28), ("10", 29), ("11", 30),
+    ("12", 31), ("12", 32), ("13", 33), ("14", 34), ("15", 35), ("16", 36), ("13.0", 33)]:
+    base = forge_profile("Vault 01", SEED, "pixel_7")
+    CASES.append((f"valid Android {release} API {sdk}", "pixel_7", [
+        ["device.version_release", release], ["device.sdk_int", sdk], ["device.first_api_level", 26],
+        ["device.fingerprint", base["device"]["fingerprint"].replace(":13/", f":{release}/")],
+        ["ua.value", base["ua"]["value"].replace("Android 13;", f"Android {release};")]]))
+
 DUMP = """# a build.prop excerpt
 ro.product.manufacturer=Google
 ro.product.brand=google
@@ -127,7 +164,7 @@ def main() -> None:
             "name": name,
             "phone": phone,
             "mutations": mutations,
-            "expect": [[f.severity, f.code] for f in findings],
+            "expect": [[f.severity, f.code, f.field, f.message] for f in findings],
         })
     out = ROOT / "tests" / "vectors"
     out.mkdir(parents=True, exist_ok=True)

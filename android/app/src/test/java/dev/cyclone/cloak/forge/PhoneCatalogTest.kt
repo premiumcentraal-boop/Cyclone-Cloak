@@ -8,7 +8,10 @@ import org.junit.Test
 class PhoneCatalogTest {
     @Test
     fun theBuiltInPhonesLoadAndAreCoherent() {
-        assertEquals(listOf("pixel_4", "pixel_7", "galaxy_s23"), TestPhones.all.map { it.id })
+        val ids = TestPhones.all.map { it.id }
+        assertEquals(listOf("pixel_4", "pixel_7", "galaxy_s23"), ids.take(3))
+        assertTrue(ids.containsAll(listOf("pixel_6", "pixel_6a", "pixel_7a", "pixel_8")))
+        assertEquals("catalog ids must be unique", ids.size, ids.toSet().size)
         for (phone in TestPhones.all) {
             assertTrue(phone.builtIn)
             assertEquals(phone.id, emptyList<ProfileValidator.Finding>(), ProfileValidator.validatePhone(phone))

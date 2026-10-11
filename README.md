@@ -3,15 +3,18 @@
 **One phone, twenty profiles.**
 
 Cyclone Cloak is the device-profile engine of the [Cyclone](https://github.com/premiumcentraal-boop/Cyclone)
-agent environment. It attaches to Cyclone as a first-class phone connector (contract
-`cyclone.connector/1.3`): each Cyclone profile on the phone gets its own real, fully coherent device
-profile. A banking app under profile A and the same app under profile B see two completely
-different phones - build fingerprint, properties, identifiers. Nothing is shared, nothing is
-linked to another install.
+agent environment. It attaches as a phone connector (contract `cyclone.connector/1.3`)
+and stores coherent device configurations bound to apps in Cyclone profiles.
+Runtime inspection coverage is partial; the [evidence matrix](docs/RUNTIME-COVERAGE.md)
+records which reads were verified on the measured binary. Creating a profile does
+not prove that every inspection API sees it.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.10.0-alpha.1 (pre-release; on-device validation required)
+## Status: 0.10.0-rc.1 (local release candidate; device verification pending)
+
+[Release notes](docs/RELEASE_0.10.0-rc.1.md) · [Upgrade guide](docs/UPGRADE_0.10.0-rc.1.md).
+Not yet tagged or published. App and module both use version code 22.
 
 - **Companion app** (`android/app`): a Cyclone connector (contract `cyclone.connector/1.3`, Cyclone
   5.0.0-alpha.122 or newer). Imports or creates cloak profiles, binds them to the apps of Cyclone
@@ -21,7 +24,7 @@ The thin line that turns one playboy billionaire into twenty masked vigilantes.
 - **Per-profile isolation**: bindings are keyed by Cyclone profile id and package name; the Android
   user number follows the profile (a profile restored under a new user keeps its bindings).
 - **platform module** (`android/module`): for every app bound to a cloak profile, rewrites the
-  `android.os.Build` statics and callbacks `SystemProperties` reads so the app sees the bound device.
+  `android.os.Build` statics and callbacks `SystemProperties` reads with partial measured coverage; RC runtime changes remain unverified.
   Callbacks apply once at process start; unscoped apps are untouched.
 - **Root Doctor**: checks Magisk, Zygisk, module version and architecture, and profile-state publishing. Its
   explicit repair action can use the matching module bundled inside the signed app, then explains when a
@@ -29,8 +32,12 @@ The thin line that turns one playboy billionaire into twenty masked vigilantes.
 - **Profile Forge** (`forge/`): reference implementation of the coherence rules (fingerprint vs.
   model vs. patch level vs. API level), dump parsing, and stable identifier derivation
   (HMAC seeds, Luhn-valid IMEIs). Stdlib-only Python, pytest-tested.
-- **Roadmap**: docs/ROADMAP.md. Remaining for Phase 1: on-device validation (issue #1), then
-  identifier callbacks and the integrity layer (Phase 2).
+- **Current state**: [docs/CURRENT-STATE.md](docs/CURRENT-STATE.md) records local verification and
+  remaining work. Identifier callbacks exist; physical-device validation and integrity verification
+  remain unresolved.
+- **Runtime proof**: [coverage matrix](docs/RUNTIME-COVERAGE.md) and the independent
+  `android/probe` test app distinguish measured hooks, failures and blocked reads.
+  Profile generation alone does not establish runtime coverage.
 
 ## Using the app
 
@@ -38,10 +45,10 @@ Four tabs:
 
 | Tab | What it's for |
 |---|---|
-| **Phones** | The phones identities are made from: three built-in (Pixel 4, Pixel 7, Galaxy S23) and your own. **Build a phone**, **Import** one, **Clone** a phone to change it, **Share** it as a file. |
+| **Phones** | The phones identities are made from: seven built-in (Pixel 4, Pixel 6, Pixel 6a, Pixel 7, Pixel 7a, Pixel 8, Galaxy S23) and your own. See [catalog sources and confidence](docs/CATALOG-SOURCES.md). **Build a phone**, **Import** one, **Clone** a phone to change it, **Share** it as a file. |
 | **Identities** | Make an identity from any phone (or a fleet of them), see every value it carries, rename, delete, bind it to a Cyclone profile, export or import them all. |
 | **Profiles** | Your Cyclone profiles with Cloak's pill for each, **Bind all**, **Open in Cyclone**, and every bound app with its health. |
-| **Health** | Root Doctor (Magisk, Zygisk, the module, publishing) and the Cyclone connection. |
+| **Health** | Health Doctor v2 readiness, per-check reasons, redacted diagnostics, module/version checks, publication and the local coverage matrix. |
 
 ### Adding a phone
 
@@ -152,7 +159,7 @@ docs/ARCHITECTURE.md      system design and integration contract
 docs/COMPAT_SURFACE.md    every renderable surface, by phase
 forge/                    profile forge: dump parsing, coherence validation, ID derivation
   tests/vectors/          cases the Python and Kotlin forge must answer the same
-schema/                   profile JSON Schema (v0.1)
+schema/                   profile JSON Schema (schema_version 0.2)
 ```
 
 The app's layers only depend downwards (forge and data → root → cyclone → ui); `ArchitectureTest`

@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Tag to create and release, e.g. v0.10.0-alpha.1 (must match versionName)'
+        description: 'Tag to create and release, e.g. v0.10.0-rc.1 (must match versionName)'
         required: true
 
 jobs:
@@ -22,17 +22,25 @@ jobs:
         env:
           TAG: ${{ inputs.tag || github.ref_name }}
         run: |
-          version=$(sed -n 's/^ *versionName "\(.*\)"/\1/p' android/app/build.gradle)
-          module=$(sed -n 's/^version=//p' android/module/module.prop)
-          echo "tag=$TAG app=v$version module=$module"
-          [ "$TAG" = "v$version" ] && [ "$TAG" = "$module" ] || { echo "::error::tag $TAG does not match app v$version / module $module"; exit 1; }
+          python3 tools/verify_release.py --tag "$TAG"
+          echo "RELEASE_NOTES=docs/RELEASE_${TAG#v}.md" >> "$GITHUB_ENV"
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
       - uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '8.11.1'
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: '3.12'
+      - name: Test release candidate
+        run: |
+          uv run --with pytest -- python -m pytest forge/tests -q
+          gradle -p android :app:testDebugUnitTest :module:testDebugUnitTest --no-daemon
       - name: Decode Android release keystore
         run: echo "${{ secrets.ANDROID_KEYSTORE_B64 }}" | base64 -d > "$RUNNER_TEMP/cloak.keystore"
       - name: Build release APK
@@ -40,13 +48,18 @@ jobs:
           CLOAK_KEYSTORE_PATH: ${{ runner.temp }}/cloak.keystore
           CLOAK_KEYSTORE_PASSWORD: ${{ secrets.CLOAK_KEYSTORE_PASSWORD }}
         run: gradle -p android :app:assembleRelease :module:packageModule --no-daemon
-      - name: Attach APK to release
+      - name: Verify APK and module artifacts
+        env:
+          TAG: ${{ inputs.tag || github.ref_name }}
+        run: python3 tools/verify_release.py --tag "$TAG" --artifacts
+      - name: Attach APK and module ZIP to release
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ inputs.tag || github.ref_name }}
           target_commitish: ${{ github.sha }}
           prerelease: true
-          body_path: docs/RELEASE_0.10.0-alpha.1.md
+          body_path: ${{ env.RELEASE_NOTES }}
+          fail_on_unmatched_files: true
           files: |
             android/app/build/outputs/apk/release/*.apk
             android/module/build/module/*.zip

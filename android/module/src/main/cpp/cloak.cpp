@@ -517,7 +517,8 @@ void apply_profile(JNIEnv *env) {
         {"HARDWARE", "ro.hardware", false},
         {"FINGERPRINT", "ro.build.fingerprint", false},
         {"ID", "ro.build.id", false},
-        {"INCREMENTAL", "ro.build.version.incremental", false},
+        {"BOOTLOADER", "ro.bootloader", false},
+        {"RADIO", "gsm.version.baseband", false},
         {"TYPE", "ro.build.type", false},
         {"TAGS", "ro.build.tags", false},
         {"TIME", "ro.build.date.utc", true},
@@ -545,6 +546,15 @@ void apply_profile(JNIEnv *env) {
     }
     // Android reports the API level from a nested class, so it needs its own pass.
     if (jclass version = env->FindClass("android/os/Build$VERSION")) {
+        if (auto it = g_props.find("ro.build.version.incremental"); it != g_props.end()) {
+            if (jfieldID field = env->GetStaticFieldID(version, "INCREMENTAL", "Ljava/lang/String;")) {
+                jstring value = env->NewStringUTF(it->second.c_str());
+                env->SetStaticObjectField(version, field, value);
+                env->DeleteLocalRef(value);
+            } else {
+                env->ExceptionClear();
+            }
+        }
         if (auto it = g_props.find("ro.build.version.sdk"); it != g_props.end()) {
             if (auto field = env->GetStaticFieldID(version, "SDK_INT", "I")) {
                 env->SetStaticIntField(version, field, static_cast<jint>(strtol(it->second.c_str(), nullptr, 10)));
@@ -626,12 +636,27 @@ void apply_profile(JNIEnv *env) {
         env->ExceptionClear();
         return;
     }
-    std::vector<JNINativeMethod> methods;
     auto add = [&](const char *name, const char *sig, void *fn) {
-        if (env->GetStaticMethodID(sysprops, name, sig) != nullptr) {
-            methods.push_back({const_cast<char *>(name), const_cast<char *>(sig), fn});
-        } else {
+        jmethodID method = env->GetStaticMethodID(sysprops, name, sig);
+        if (!method) {
             env->ExceptionClear();
+            return;
+        }
+        // Modern Android retains native_get(String) as a Java forwarding
+        // wrapper. Registering it as native rejects the entire batch.
+        jobject reflected = env->ToReflectedMethod(sysprops, method, JNI_TRUE);
+        jclass methodClass = env->FindClass("java/lang/reflect/Method");
+        jmethodID modifiers = methodClass ? env->GetMethodID(methodClass, "getModifiers", "()I") : nullptr;
+        bool isNative = reflected && modifiers &&
+            (env->CallIntMethod(reflected, modifiers) & 0x0100) != 0;
+        if (env->ExceptionCheck()) { env->ExceptionClear(); isNative = false; }
+        if (reflected) env->DeleteLocalRef(reflected);
+        if (methodClass) env->DeleteLocalRef(methodClass);
+        if (!isNative) return;
+        JNINativeMethod replacement{const_cast<char *>(name), const_cast<char *>(sig), fn};
+        if (env->RegisterNatives(sysprops, &replacement, 1) < 0) {
+            env->ExceptionClear();
+            LOGI("RegisterNatives failed for %s%s", name, sig);
         }
     };
     add("native_get", "(Ljava/lang/String;)Ljava/lang/String;",
@@ -641,11 +666,6 @@ void apply_profile(JNIEnv *env) {
     add("native_get_int", "(Ljava/lang/String;I)I", reinterpret_cast<void *>(native_get_int));
     add("native_get_long", "(Ljava/lang/String;J)J", reinterpret_cast<void *>(native_get_long));
     add("native_get_boolean", "(Ljava/lang/String;Z)Z", reinterpret_cast<void *>(native_get_boolean));
-    if (!methods.empty() &&
-        env->RegisterNatives(sysprops, methods.data(), static_cast<jint>(methods.size())) < 0) {
-        env->ExceptionClear();
-        LOGI("RegisterNatives failed");
-    }
     env->DeleteLocalRef(sysprops);
 }
 

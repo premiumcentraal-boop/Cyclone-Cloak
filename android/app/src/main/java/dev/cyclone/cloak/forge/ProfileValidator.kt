@@ -31,7 +31,7 @@ object ProfileValidator {
     private val IMEI = Regex("^[0-9]{15}$")
     private val LANG = Regex("^[a-z]{2}$")
     private val COUNTRY = Regex("^[A-Z]{2}$")
-    private val TIMEZONE = Regex("^[A-Za-z0-9_+-]+(/[A-Za-z0-9_+-]+)*$")
+    private val TIMEZONE = Regex("^(?:UTC|GMT|GMT0|GMT[+-]0|Greenwich|UCT|Universal|Zulu|CET|EET|MET|WET|EST|HST|MST|EST5EDT|CST6CDT|MST7MDT|PST8PDT|Cuba|Egypt|Eire|GB|GB-Eire|Hongkong|Iceland|Iran|Israel|Jamaica|Japan|Kwajalein|Libya|Navajo|NZ|NZ-CHAT|Poland|Portugal|PRC|ROC|ROK|Singapore|Turkey|W-SU|[A-Za-z]+/[A-Za-z0-9_+-]+(?:/[A-Za-z0-9_+-]+)*)$")
     private val MCC = Regex("^\\d{3}$")
     private val MNC = Regex("^\\d{2,3}$")
     private val UA = Regex(
@@ -41,7 +41,7 @@ object ProfileValidator {
 
     /** brand/product/device:release/build_id/incremental:build_type/tags */
     val FINGERPRINT = Regex(
-        "^([^/:\\s]+)/([^/:\\s]+)/([^/:\\s]+):([0-9.]+)/([^/]+)/([^:/]+):([^:/]+)/(release-keys|dev-keys)$",
+        "^([^/:\\s]+)/([^/:\\s]+)/([^/:\\s]+):([0-9]+(?:\\.[0-9]+){0,2})/([^/:\\s]+)/([^/:\\s]+):([^/:\\s]+)/(release-keys|dev-keys)$",
     )
 
     val REQUIRED_DEVICE_FIELDS = listOf(
@@ -49,8 +49,8 @@ object ProfileValidator {
         "sdk_int", "security_patch", "build_id", "version_incremental", "build_date_utc", "first_api_level",
     )
 
-    /** Unambiguous release → SDK pairs; older releases vary across OEMs. */
-    val RELEASE_TO_SDK = mapOf("11" to 30, "12" to 31, "12L" to 32, "13" to 33, "14" to 34, "15" to 35, "16" to 36)
+    /** Default SDK for the builder; validation also accepts API 32 for Android 12 (12L). */
+    val RELEASE_TO_SDK = mapOf("8" to 26, "8.0" to 26, "8.1" to 27, "9" to 28, "10" to 29, "11" to 30, "12" to 31, "12L" to 32, "13" to 33, "14" to 34, "15" to 35, "16" to 36)
     val NETWORK_TYPES = listOf("5G", "LTE", "HSPA", "UMTS", "GSM")
     val DISPLAY_CLASSES = listOf("small", "normal", "large")
 
@@ -74,16 +74,17 @@ object ProfileValidator {
         if (profile.opt("schema_version") != SCHEMA_VERSION) {
             findings.error("SCHEMA_VERSION", "schema_version must be $SCHEMA_VERSION", "schema_version")
         }
-        if (!SEED.matches(profile.optString("seed"))) findings.error("SEED", "seed must be 64 lowercase hex characters", "seed")
+        if (profile.opt("seed") !is String || !SEED.matches(profile.optString("seed"))) findings.error("SEED", "seed must be 64 lowercase hex characters", "seed")
         if ((profile.opt("name") as? String).isNullOrBlank()) findings.error("NAME", "profile name must be a non-empty string", "name")
-        val device = profile.optJSONObject("device") ?: JSONObject()
+        val device = block(findings, profile, "device")
         requiredDevice(findings, device)
         if (findings.any { it.isError }) return findings
 
         // Same order as validate.py, so both list the same findings in the same order.
         fingerprint(findings, device)
+        versions(findings, device)
         patch(findings, device, today)
-        identifiers(findings, profile.optJSONObject("identifiers") ?: JSONObject())
+        identifiers(findings, block(findings, profile, "identifiers"))
         surroundings(findings, profile)
         val ua = profile.opt("ua")
         if (ua == null || ua == JSONObject.NULL) {
@@ -104,6 +105,7 @@ object ProfileValidator {
         if (findings.any { it.isError }) return findings
         val asProfile = JSONObject().put("telephony", phone.telephony).put("display", phone.display).put("locale", phone.locale)
         fingerprint(findings, phone.device)
+        versions(findings, phone.device)
         patch(findings, phone.device, today)
         surroundings(findings, asProfile)
         return findings
@@ -117,14 +119,24 @@ object ProfileValidator {
             val value = device.opt(field)
             if (value == null || value == JSONObject.NULL || value == "") {
                 findings.error("MISSING_DEVICE_FIELD", "device.$field is required", "device.$field")
+            } else if (field !in setOf("sdk_int", "first_api_level", "build_date_utc") &&
+                (value !is String || value.isBlank() || value.any { it.code < 32 || it.code == 127 })) {
+                findings.error("DEVICE_FIELD", "device.$field must be non-blank text without control characters", "device.$field")
             }
         }
     }
 
     private fun surroundings(findings: MutableList<Finding>, profile: JSONObject) {
-        telephony(findings, profile.optJSONObject("telephony") ?: JSONObject())
-        display(findings, profile.optJSONObject("display") ?: JSONObject())
-        locale(findings, profile.optJSONObject("locale") ?: JSONObject())
+        telephony(findings, block(findings, profile, "telephony"))
+        display(findings, block(findings, profile, "display"))
+        locale(findings, block(findings, profile, "locale"))
+    }
+
+    private fun block(findings: MutableList<Finding>, profile: JSONObject, key: String): JSONObject {
+        if (!profile.has(key)) return JSONObject()
+        return profile.optJSONObject(key) ?: JSONObject().also {
+            findings.error("BLOCK_TYPE", "$key must be an object", key)
+        }
     }
 
     private fun fingerprint(findings: MutableList<Finding>, device: JSONObject) {
@@ -151,41 +163,71 @@ object ProfileValidator {
         if (parts[8] != "release-keys") {
             findings.warning("TAGS", "dev-keys fingerprints look like development builds", "device.fingerprint")
         }
-        val sdk = device.number("sdk_int")
-        if (sdk == null || sdk !in 26..36) {
-            findings.error("SDK_RANGE", "sdk_int must be between 26 (Android 8.0) and 36 (Android 16)", "device.sdk_int")
+    }
+
+    private fun versions(findings: MutableList<Finding>, device: JSONObject) {
+        val numbers = mutableMapOf<String, Long>()
+        for (field in listOf("sdk_int", "first_api_level")) {
+            val value = device.integer(field)
+            if (value == null) findings.error("API_TYPE", "device.$field must be an integer", "device.$field")
+            else {
+                numbers[field] = value
+                if (value !in 26L..36L) findings.error(if (field == "sdk_int") "SDK_RANGE" else "FIRST_API_RANGE",
+                    "device.$field must be between 26 and 36", "device.$field")
+            }
         }
-        val expected = RELEASE_TO_SDK[device.text("version_release")]
-        if (expected != null && sdk != null && expected != sdk) {
-            findings.error(
-                "RELEASE_SDK_MISMATCH",
-                "release '${device.text("version_release")}' implies SDK $expected, profile says $sdk",
-                "device.sdk_int",
-            )
+        val sdk = numbers["sdk_int"]
+        val firstApi = numbers["first_api_level"]
+        val release = device.text("version_release")
+        if (!Regex("[0-9]+(?:\\.[0-9]+){0,2}").matches(release)) {
+            findings.error("RELEASE_FORMAT", "device.version_release must be a numeric Android version such as 8.1 or 14", "device.version_release")
+        } else {
+            val canonical = release.replace(Regex("(?:\\.0)+$"), "")
+            val expected = RELEASE_TO_SDK[canonical]
+            val allowed = if (canonical == "12") setOf(31L, 32L) else expected?.let { setOf(it.toLong()) } ?: emptySet()
+            if (allowed.isEmpty()) findings.warning("RELEASE_UNKNOWN", "device.version_release is not in the supported Android 8–16 release map", "device.version_release")
+            else if (sdk != null && sdk !in allowed) findings.error("RELEASE_SDK_MISMATCH",
+                "device.sdk_int must be ${allowed.sorted().joinToString("/")} for Android $release; got $sdk", "device.sdk_int")
         }
-        val firstApi = device.number("first_api_level")
-        if (firstApi != null && sdk != null && firstApi > sdk) {
-            findings.error("FIRST_API_LEVEL", "first_api_level cannot exceed sdk_int", "device.first_api_level")
+        if (firstApi != null && sdk != null && firstApi > sdk) findings.error("FIRST_API_LEVEL",
+            "device.first_api_level cannot exceed device.sdk_int", "device.first_api_level")
+        val model = device.text("model")
+        val manufacturer = device.text("manufacturer").lowercase(java.util.Locale.ROOT)
+        val brand = device.text("brand").lowercase(java.util.Locale.ROOT)
+        val expectedManufacturer = when {
+            Regex("^Pixel(?:\\s|$)", RegexOption.IGNORE_CASE).containsMatchIn(model) -> "google"
+            Regex("^(?:SM-|GT-|Galaxy(?:\\s|$))", RegexOption.IGNORE_CASE).containsMatchIn(model) -> "samsung"
+            else -> null
         }
+        val aliases = mapOf("google" to setOf("google", "google llc", "google inc."), "samsung" to setOf("samsung", "samsung electronics"))
+        if (expectedManufacturer != null && manufacturer !in aliases.getValue(expectedManufacturer)) findings.warning(
+            "MODEL_MANUFACTURER_MISMATCH", "device.manufacturer is unusual for device.model; expected $expectedManufacturer", "device.manufacturer")
+        if (brand in aliases && manufacturer in aliases.values.flatten() && manufacturer !in aliases.getValue(brand)) findings.warning(
+            "BRAND_MANUFACTURER_MISMATCH", "device.manufacturer disagrees with the known device.brand family", "device.manufacturer")
     }
 
     private fun patch(findings: MutableList<Finding>, device: JSONObject, today: LocalDate) {
-        val patch = runCatching { LocalDate.parse(device.text("security_patch")) }.getOrNull()
+        val timestamp = device.integer("build_date_utc")
+        val built = if (timestamp == null || timestamp !in 0L..253402300799L) {
+            findings.error("BUILD_DATE", "device.build_date_utc must be integer Unix seconds between 0 and 253402300799", "device.build_date_utc")
+            null
+        } else Instant.ofEpochSecond(timestamp).atZone(ZoneOffset.UTC).toLocalDate().also {
+            if (it.isAfter(today)) findings.warning("BUILD_FUTURE", "device.build_date_utc is in the future", "device.build_date_utc")
+        }
+        val patch = device.text("security_patch").takeIf { Regex("[0-9]{4}-[0-9]{2}-[0-9]{2}").matches(it) }
+            ?.let { runCatching { LocalDate.parse(it) }.getOrNull() }
         if (patch == null) {
             findings.error("PATCH_DATE", "security_patch must be an ISO date (YYYY-MM-DD)", "device.security_patch")
             return
         }
         if (patch.isAfter(today)) findings.warning("PATCH_FUTURE", "security_patch is in the future", "device.security_patch")
-        val built = device.long("build_date_utc")?.let {
-            runCatching { Instant.ofEpochSecond(it).atZone(ZoneOffset.UTC).toLocalDate() }.getOrNull()
-        } ?: return
-        if (patch.isAfter(built)) {
+        if (built != null && patch.isAfter(built)) {
             findings.warning("PATCH_AFTER_BUILD", "security patch is newer than the build date", "device.security_patch")
         }
     }
 
     private fun identifiers(findings: MutableList<Finding>, identifiers: JSONObject) {
-        for (key in identifiers.keys()) {
+        for (key in identifiers.keys().asSequence().sorted()) {
             val value = identifiers.opt(key)
             if (value !is String) {
                 findings.error("IDENTIFIER_FORMAT", "identifiers.$key must be a string", "identifiers.$key")
@@ -202,7 +244,15 @@ object ProfileValidator {
             if (key.startsWith("imei_") && !luhnValid(value)) {
                 findings.error("IDENTIFIER_CHECKSUM", "identifiers.$key fails the IMEI Luhn check", "identifiers.$key")
             }
+            if (key in setOf("mac", "bt_mac") && (value.take(2).toInt(16) and 1) != 0) {
+                findings.error("IDENTIFIER_ADDRESS", "identifiers.$key must be a unicast address (first octet's low bit must be zero)", "identifiers.$key")
+            } else if (value.replace(":", "").toSet() == setOf('0')) {
+                findings.warning("IDENTIFIER_PLACEHOLDER", "identifiers.$key is an all-zero placeholder", "identifiers.$key")
+            }
         }
+        val primary = identifiers.opt("imei_primary")
+        if (primary is String && primary.isNotEmpty() && primary == identifiers.opt("imei_secondary")) findings.warning(
+            "IDENTIFIER_DUPLICATE", "identifiers.imei_secondary duplicates identifiers.imei_primary", "identifiers.imei_secondary")
     }
 
     private fun userAgent(findings: MutableList<Finding>, ua: Any, device: JSONObject) {
@@ -247,7 +297,21 @@ object ProfileValidator {
             val value = display.opt(field)
             if (value !is Int && value !is Long || (value as Number).toLong() <= 0) {
                 findings.error("DISPLAY_FIELD", "display.$field must be a positive integer", "display.$field")
+                continue
             }
+            val (low, high) = when (field) { "width", "height" -> 120L to 8192L; "density" -> 72L to 1000L; else -> 24L to 240L }
+            if (value.toLong() !in low..high) findings.warning("DISPLAY_SUSPICIOUS", "display.$field is outside the usual range $low–$high", "display.$field")
+        }
+        val width = display.integer("width")
+        val height = display.integer("height")
+        val density = display.integer("density")
+        if (width != null && height != null && density != null && width > 0 && height > 0 && density > 0) {
+            // Floating point avoids overflowing Long for malformed, very large JSON integers.
+            if (maxOf(width, height).toDouble() / minOf(width, height) > 4) findings.warning(
+                "DISPLAY_ASPECT", "display.width and display.height imply an aspect ratio above 4:1", "display.width")
+            val dp = minOf(width, height).toDouble() * 160 / density
+            if (dp !in 120.0..1600.0) findings.warning("DISPLAY_DENSITY_MISMATCH",
+                "display.density implies a shortest edge outside 120–1600 dp for these dimensions", "display.density")
         }
         if (display.text("screen_size_class") !in DISPLAY_CLASSES) {
             findings.error("DISPLAY_CLASS", "display.screen_size_class must be small, normal, or large", "display.screen_size_class")
@@ -255,22 +319,26 @@ object ProfileValidator {
     }
 
     private fun locale(findings: MutableList<Finding>, locale: JSONObject) {
-        locale.textOrNull("language")?.let {
-            if (!LANG.matches(it)) findings.error("LOCALE", "locale.language must be a two-letter lowercase code", "locale.language")
-        }
-        locale.textOrNull("country")?.let {
-            if (!COUNTRY.matches(it)) findings.error("LOCALE", "locale.country must be a two-letter uppercase code", "locale.country")
-        }
-        locale.textOrNull("timezone")?.let {
-            if (!TIMEZONE.matches(it)) findings.error("LOCALE", "locale.timezone must be an IANA zone like Europe/Berlin", "locale.timezone")
+        for ((field, pattern, description) in listOf(Triple("language", LANG, "a two-letter lowercase code"),
+            Triple("country", COUNTRY, "a two-letter uppercase code"), Triple("timezone", TIMEZONE, "an IANA zone like Europe/Berlin"))) {
+            if (locale.has(field) && (locale.opt(field) !is String || !pattern.matches(locale.text(field)))) {
+                findings.error("LOCALE", "locale.$field must be $description", "locale.$field")
+            }
         }
     }
 
     fun luhnValid(digits: String): Boolean = digits.isNotEmpty() && digits.all { it.isDigit() } &&
         CloakForge.luhnCheckDigit(digits.dropLast(1)) == digits.last() - '0'
 
-    private fun MutableList<Finding>.error(code: String, message: String, field: String?) = add(Finding(ERROR, code, message, field))
-    private fun MutableList<Finding>.warning(code: String, message: String, field: String?) = add(Finding(WARNING, code, message, field))
+    private fun messageAt(message: String, field: String?) = if (field != null && !message.startsWith(field)) "$field: $message" else message
+    private fun MutableList<Finding>.error(code: String, message: String, field: String?) = add(Finding(ERROR, code, messageAt(message, field), field))
+    private fun MutableList<Finding>.warning(code: String, message: String, field: String?) = add(Finding(WARNING, code, messageAt(message, field), field))
+
+    private fun JSONObject.integer(key: String): Long? = when (val value = opt(key)) {
+        is Int -> value.toLong()
+        is Long -> value
+        else -> null
+    }
 
     /** Python's str(): numbers print without a fraction. */
     private fun JSONObject.text(key: String): String = when (val v = opt(key)) {
@@ -279,17 +347,4 @@ object ProfileValidator {
         else -> v.toString()
     }
 
-    private fun JSONObject.textOrNull(key: String): String? = opt(key)?.takeIf { it != JSONObject.NULL }?.let { text(key) }
-
-    private fun JSONObject.number(key: String): Int? = when (val v = opt(key)) {
-        is Number -> v.toInt()
-        is String -> v.trim().toIntOrNull()
-        else -> null
-    }
-
-    private fun JSONObject.long(key: String): Long? = when (val v = opt(key)) {
-        is Number -> v.toLong()
-        is String -> v.trim().toLongOrNull()
-        else -> null
-    }
 }

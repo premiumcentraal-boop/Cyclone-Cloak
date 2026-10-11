@@ -115,7 +115,7 @@ class ScreensTest {
     @Test
     fun health() {
         compose.setContent { Screen { HealthScreen(state(), vm) } }
-        compose.onNodeWithText("Reboot required").assertIsDisplayed()
+        compose.onNodeWithText("Health Doctor v2").assertIsDisplayed()
         shot("4-health")
     }
 

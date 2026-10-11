@@ -1,8 +1,15 @@
 # Cyclone Cloak Compatibility Surface
 
-Every surface an scoped app can read, how Cloak rewrites it, and the phase in which the callback
-lands. The source of every value is the profile's profile vault entry (see
-`docs/ARCHITECTURE.md`); callbacks never generate values on the fly.
+Compatibility inventory and planned phases, not a claim that every listed read
+is intercepted. Current source candidate: `v0.10.0-rc.1` (unpublished); see
+[ARCHITECTURE.md](ARCHITECTURE.md) and [CURRENT-STATE.md](CURRENT-STATE.md).
+Callback values come from the stored identity, not fresh generation at read time.
+
+On-device measurements now supersede the source-only implementation claims
+below: see [RUNTIME-COVERAGE.md](RUNTIME-COVERAGE.md) and the
+[70-read matrix](RUNTIME-MEASUREMENTS.md). The installed API36 binary fails many
+callbacks despite reporting successful installation. Local fixes are built;
+their device verification remains pending a module install and reboot.
 
 | # | Surface | Typical read | Callback approach | Phase |
 | --- | --- | --- | --- | --- |
@@ -24,18 +31,32 @@ lands. The source of every value is the profile's profile vault entry (see
 | 16 | Sensors | `SensorManager` name/vendor enumeration | Optional rename pass only; never invent or drop sensors | 3 |
 | 17 | Root / attestation | Play Integrity verdict, key attestation | PIF-style pif.json per profile + Tricky Store keybox | 2 |
 
+## Release candidate evidence boundary
+
+The RC has **no device verification**. The existing 70-read results describe the
+older API36 installed binary by its recorded hash, not this candidate: 13 verified,
+39 failed, 7 blocked, 8 coincidental matches and 3 unmapped. Local callback/JVM
+success and packaged ARM libraries establish build/test results, not hook
+installation or full device compatibility. Camera/sensor metadata and display
+geometry are incomplete. Read the [RC notes](RELEASE_0.10.0-rc.1.md) and
+[deferred device checklist](DEFERRED-DEVICE-CHECKS.md) before upgrading.
+
 ## Rules
 
 - Callbacks run only for scoped apps. The host device keeps its real profile for everything else.
-- Callbacks apply once at process start, then unload. Nothing stays resident.
-- Values come from the vault; two apps bound to the same profile see identical values, two
-  profiles never share a value.
-- A callback that cannot be made coherent with the rest of the profile (e.g. a rendered screen size
-  that disagrees with the density) is disabled by default and requires an explicit opt-in.
+- Build fields are applied at process start; native property and Pine Java callbacks
+  remain available for later reads. The module does not implement unloading.
+- Values come from the stored identity; intended equality across bindings and
+  identifier separation require per-API runtime evidence.
+- Planned display/sensor work must preserve coherent geometry and density.
+  These pending areas are not evidence of available opt-in hooks.
 
-## Status (0.7.0-alpha.1)
+## Status (0.10.0-rc.1; source implementation, device verification pending)
 
 - Landed through the property surface: Build fields, telephony operator identity, display density, device serial (`ro.serialno`, `ro.boot.serialno`), and the full identifier vault under stable `cloak.*` keys.
 - Landed in-process: locale/timezone, the Pine callbacks for TelephonyManager, Settings.Secure ANDROID_ID, WifiInfo, BluetoothAdapter, Build.getSerial, MediaDRM device id, the advertising-id read path, the WebView user agent, and the guarded GSF gservices query rewrite.
 - Per binding, the companion now also publishes `pif.json` (PIF-style Play Integrity posture) next to `profile.json`.
+- `app_set_id` is stored and exposed as a `cloak.*` property; the Java bridge does not
+  implement an App Set SDK callback. Publishing `pif.json` does not verify attestation
+  or implement keybox management or automatic fingerprint rotation.
 - Still pending (phase 3): display geometry, uptime offset, sensor renaming, and the network egress hint.

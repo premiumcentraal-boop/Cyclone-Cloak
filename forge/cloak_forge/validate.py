@@ -30,7 +30,7 @@ _SIM_SERIAL_RE = re.compile(r"^[0-9]{19,20}$")
 _IMEI_RE = re.compile(r"^[0-9]{15}$")
 _LANG_RE = re.compile(r"^[a-z]{2}$")
 _COUNTRY_RE = re.compile(r"^[A-Z]{2}$")
-_TIMEZONE_RE = re.compile(r"^[A-Za-z0-9_+-]+(/[A-Za-z0-9_+-]+)*$")
+_TIMEZONE_RE = re.compile(r"^(?:UTC|GMT|GMT0|GMT[+-]0|Greenwich|UCT|Universal|Zulu|CET|EET|MET|WET|EST|HST|MST|EST5EDT|CST6CDT|MST7MDT|PST8PDT|Cuba|Egypt|Eire|GB|GB-Eire|Hongkong|Iceland|Iran|Israel|Jamaica|Japan|Kwajalein|Libya|Navajo|NZ|NZ-CHAT|Poland|Portugal|PRC|ROC|ROK|Singapore|Turkey|W-SU|[A-Za-z]+/[A-Za-z0-9_+-]+(?:/[A-Za-z0-9_+-]+)*)$")
 
 _UA_RE = re.compile(
     r"^Mozilla/5\.0 \(Linux; Android [0-9.]+; [^()]+\) AppleWebKit/537\.36 "
@@ -39,8 +39,8 @@ _UA_RE = re.compile(
 
 _FINGERPRINT_RE = re.compile(
     r"^(?P<brand>[^/:\s]+)/(?P<product>[^/:\s]+)/(?P<device>[^/:\s]+)"
-    r":(?P<release>[0-9.]+)/(?P<build_id>[^/]+)/(?P<incremental>[^:/]+)"
-    r":(?P<build_type>[^:/]+)/(?P<tags>release-keys|dev-keys)$"
+    r":(?P<release>[0-9]+(?:\.[0-9]+){0,2})/(?P<build_id>[^/:\s]+)/(?P<incremental>[^/:\s]+)"
+    r":(?P<build_type>[^/:\s]+)/(?P<tags>release-keys|dev-keys)$"
 )
 
 _REQUIRED_DEVICE_FIELDS = (
@@ -60,9 +60,8 @@ _REQUIRED_DEVICE_FIELDS = (
     "first_api_level",
 )
 
-# Unambiguous release -> SDK pairs. Older devices (SDK 26-29) are skipped
-# because their release strings vary across OEMs.
-_RELEASE_TO_SDK = {"11": 30, "12": 31, "12L": 32, "13": 33, "14": 34, "15": 35, "16": 36}
+# Release -> SDK defaults; validation allows both API 31 and 32 for Android 12.
+_RELEASE_TO_SDK = {"8": 26, "8.0": 26, "8.1": 27, "9": 28, "10": 29, "11": 30, "12": 31, "12L": 32, "13": 33, "14": 34, "15": 35, "16": 36}
 
 _IDENTIFIER_CHECKS = {
     "android_id": (_ANDROID_ID_RE, "16 lowercase hex characters"),
@@ -84,18 +83,30 @@ class Finding:
     severity: str
     code: str
     message: str
+    field: str | None = None
 
 
 def has_errors(findings: list[Finding]) -> bool:
     return any(finding.severity == ERROR for finding in findings)
 
 
-def _add(findings: list[Finding], severity: str, code: str, message: str) -> None:
-    findings.append(Finding(severity, code, message))
+def _add(findings: list[Finding], severity: str, code: str, message: str, field: str | None = None) -> None:
+    if field is None:
+        path = re.search(r"(?:device|identifiers|display|locale|telephony|ua)\.[A-Za-z0-9_]+", message)
+        field = path.group() if path else {
+            "SCHEMA_VERSION": "schema_version", "SEED": "seed", "NAME": "name",
+            "FINGERPRINT_FORMAT": "device.fingerprint", "BUILD_TYPE": "device.fingerprint",
+            "TAGS": "device.fingerprint", "PATCH_DATE": "device.security_patch",
+            "PATCH_FUTURE": "device.security_patch", "PATCH_AFTER_BUILD": "device.security_patch",
+            "UA_MISSING": "ua", "UA_BLOCK": "ua", "TELEPHONY": "telephony", "DISPLAY": "display",
+        }.get(code)
+    if field and not message.startswith(field):
+        message = f"{field}: {message}"
+    findings.append(Finding(severity, code, message, field))
 
 
 def _validate_fingerprint(findings: list[Finding], device: Mapping[str, Any]) -> None:
-    match = _FINGERPRINT_RE.match(str(device["fingerprint"]))
+    match = _FINGERPRINT_RE.fullmatch(str(device["fingerprint"]))
     if not match:
         _add(findings, ERROR, "FINGERPRINT_FORMAT", "fingerprint does not match the AOSP grammar")
         return
@@ -115,91 +126,134 @@ def _validate_fingerprint(findings: list[Finding], device: Mapping[str, Any]) ->
     if parts["tags"] != "release-keys":
         _add(findings, WARNING, "TAGS", "dev-keys fingerprints look like development builds")
 
-    sdk = int(device["sdk_int"])
-    if not 26 <= sdk <= 36:
-        _add(findings, ERROR, "SDK_RANGE", "sdk_int must be between 26 (Android 8.0) and 36 (Android 16)")
-    expected_sdk = _RELEASE_TO_SDK.get(str(device["version_release"]))
-    if expected_sdk is not None and expected_sdk != sdk:
-        _add(
-            findings,
-            ERROR,
-            "RELEASE_SDK_MISMATCH",
-            f"release '{device['version_release']}' implies SDK {expected_sdk}, profile says {sdk}",
-        )
-    first_api = int(device["first_api_level"])
-    if first_api > sdk:
-        _add(findings, ERROR, "FIRST_API_LEVEL", "first_api_level cannot exceed sdk_int")
+def _validate_versions(findings: list[Finding], device: Mapping[str, Any]) -> None:
+    numbers = {}
+    for field in ("sdk_int", "first_api_level"):
+        value = device[field]
+        if type(value) is not int:
+            _add(findings, ERROR, "API_TYPE", f"device.{field} must be an integer")
+        else:
+            numbers[field] = value
+            if not 26 <= value <= 36:
+                code = "SDK_RANGE" if field == "sdk_int" else "FIRST_API_RANGE"
+                _add(findings, ERROR, code, f"device.{field} must be between 26 and 36")
+    sdk, first_api = numbers.get("sdk_int"), numbers.get("first_api_level")
+    release = device["version_release"]
+    if not re.fullmatch(r"[0-9]+(?:\.[0-9]+){0,2}", release):
+        _add(findings, ERROR, "RELEASE_FORMAT", "device.version_release must be a numeric Android version such as 8.1 or 14")
+    else:
+        canonical = re.sub(r"(?:\.0)+$", "", release)
+        expected = _RELEASE_TO_SDK.get(canonical)
+        allowed = {31, 32} if canonical == "12" else {expected} if expected is not None else set()
+        if not allowed:
+            _add(findings, WARNING, "RELEASE_UNKNOWN", "device.version_release is not in the supported Android 8–16 release map")
+        elif sdk is not None and sdk not in allowed:
+            levels = "/".join(str(level) for level in sorted(allowed))
+            _add(findings, ERROR, "RELEASE_SDK_MISMATCH", f"device.sdk_int must be {levels} for Android {release}; got {sdk}")
+    if first_api is not None and sdk is not None and first_api > sdk:
+        _add(findings, ERROR, "FIRST_API_LEVEL", "device.first_api_level cannot exceed device.sdk_int")
+    model, manufacturer, brand = device["model"], device["manufacturer"].lower(), device["brand"].lower()
+    expected_manufacturer = "google" if re.match(r"^Pixel(?:\s|$)", model, re.I) else "samsung" if re.match(r"^(?:SM-|GT-|Galaxy(?:\s|$))", model, re.I) else None
+    aliases = {"google": {"google", "google llc", "google inc."}, "samsung": {"samsung", "samsung electronics"}}
+    if expected_manufacturer and manufacturer not in aliases[expected_manufacturer]:
+        _add(findings, WARNING, "MODEL_MANUFACTURER_MISMATCH", f"device.manufacturer is unusual for device.model; expected {expected_manufacturer}", "device.manufacturer")
+    if brand in aliases and manufacturer in set.union(*aliases.values()) and manufacturer not in aliases[brand]:
+        _add(findings, WARNING, "BRAND_MANUFACTURER_MISMATCH", "device.manufacturer disagrees with the known device.brand family", "device.manufacturer")
 
 
 def _validate_patch(findings: list[Finding], device: Mapping[str, Any]) -> None:
+    timestamp = device["build_date_utc"]
+    built = None
+    if type(timestamp) is not int or not 0 <= timestamp <= 253402300799:
+        _add(findings, ERROR, "BUILD_DATE", "device.build_date_utc must be integer Unix seconds between 0 and 253402300799")
+    else:
+        built = datetime.fromtimestamp(timestamp, tz=timezone.utc).date()
+        if built > date.today():
+            _add(findings, WARNING, "BUILD_FUTURE", "device.build_date_utc is in the future")
     try:
+        if not re.fullmatch(r"[0-9]{4}-[0-9]{2}-[0-9]{2}", str(device["security_patch"])):
+            raise ValueError("date format")
         patch = date.fromisoformat(str(device["security_patch"]))
     except (TypeError, ValueError):
         _add(findings, ERROR, "PATCH_DATE", "security_patch must be an ISO date (YYYY-MM-DD)")
         return
     if patch > date.today():
         _add(findings, WARNING, "PATCH_FUTURE", "security_patch is in the future")
-    try:
-        built = datetime.fromtimestamp(int(device["build_date_utc"]), tz=timezone.utc).date()
-    except (OverflowError, OSError, ValueError):
-        return
-    if patch > built:
+    if built is not None and patch > built:
         _add(findings, WARNING, "PATCH_AFTER_BUILD", "security patch is newer than the build date")
 
 
 def _validate_identifiers(findings: list[Finding], identifiers: Mapping[str, Any]) -> None:
-    for key, value in identifiers.items():
+    for key, value in sorted(identifiers.items()):
         if not isinstance(value, str):
-            _add(findings, ERROR, "IDENTIFIER_FORMAT", f"identifiers.{key} must be a string")
+            _add(findings, ERROR, "IDENTIFIER_FORMAT", f"identifiers.{key} must be a string", f"identifiers.{key}")
             continue
         check = _IDENTIFIER_CHECKS.get(key)
         if check is None:
-            _add(findings, WARNING, "UNKNOWN_IDENTIFIER", f"identifiers.{key} is not part of the v0 identifier set")
+            _add(findings, WARNING, "UNKNOWN_IDENTIFIER", f"identifiers.{key} is not part of the v0 identifier set", f"identifiers.{key}")
             continue
         pattern, description = check
-        if not pattern.match(value):
+        if not pattern.fullmatch(value):
             _add(findings, ERROR, "IDENTIFIER_FORMAT", f"identifiers.{key} must be {description}")
             continue
         if key in ("imei_primary", "imei_secondary") and not luhn_valid(value):
             _add(findings, ERROR, "IDENTIFIER_CHECKSUM", f"identifiers.{key} fails the IMEI Luhn check")
+        if key in ("mac", "bt_mac") and int(value[:2], 16) & 1:
+            _add(findings, ERROR, "IDENTIFIER_ADDRESS", f"identifiers.{key} must be a unicast address (first octet's low bit must be zero)")
+        elif set(value.replace(":", "")) == {"0"}:
+            _add(findings, WARNING, "IDENTIFIER_PLACEHOLDER", f"identifiers.{key} is an all-zero placeholder")
+    if isinstance(identifiers.get("imei_primary"), str) and identifiers.get("imei_primary") and identifiers.get("imei_primary") == identifiers.get("imei_secondary"):
+        _add(findings, WARNING, "IDENTIFIER_DUPLICATE", "identifiers.imei_secondary duplicates identifiers.imei_primary", "identifiers.imei_secondary")
 
 
 def _validate_locale(findings: list[Finding], locale: Mapping[str, Any]) -> None:
     language = locale.get("language")
     country = locale.get("country")
     tz_name = locale.get("timezone")
-    if language is not None and not _LANG_RE.match(str(language)):
+    if "language" in locale and (not isinstance(language, str) or not _LANG_RE.fullmatch(language)):
         _add(findings, ERROR, "LOCALE", "locale.language must be a two-letter lowercase code")
-    if country is not None and not _COUNTRY_RE.match(str(country)):
+    if "country" in locale and (not isinstance(country, str) or not _COUNTRY_RE.fullmatch(country)):
         _add(findings, ERROR, "LOCALE", "locale.country must be a two-letter uppercase code")
-    if tz_name is not None and not _TIMEZONE_RE.match(str(tz_name)):
+    if "timezone" in locale and (not isinstance(tz_name, str) or not _TIMEZONE_RE.fullmatch(tz_name)):
         _add(findings, ERROR, "LOCALE", "locale.timezone must be an IANA zone like Europe/Berlin")
 
 
 def validate_profile(profile: Mapping[str, Any]) -> list[Finding]:
     findings: list[Finding] = []
+    if not isinstance(profile, Mapping):
+        _add(findings, ERROR, "BLOCK_TYPE", "profile must be an object", "profile")
+        return findings
+    def block(key: str) -> Mapping[str, Any]:
+        value = profile.get(key, {})
+        if not isinstance(value, Mapping):
+            _add(findings, ERROR, "BLOCK_TYPE", f"{key} must be an object", key)
+            return {}
+        return value
     if profile.get("schema_version") != SCHEMA_VERSION:
         _add(findings, ERROR, "SCHEMA_VERSION", f"schema_version must be {SCHEMA_VERSION}")
-    if not _SEED_RE.match(str(profile.get("seed", ""))):
+    if not isinstance(profile.get("seed"), str) or not _SEED_RE.fullmatch(profile["seed"]):
         _add(findings, ERROR, "SEED", "seed must be 64 lowercase hex characters")
     name = profile.get("name")
     if not isinstance(name, str) or not name.strip():
         _add(findings, ERROR, "NAME", "profile name must be a non-empty string")
 
-    device = profile.get("device") or {}
+    device = block("device")
     for field_name in _REQUIRED_DEVICE_FIELDS:
         value = device.get(field_name)
         if value is None or value == "":
             _add(findings, ERROR, "MISSING_DEVICE_FIELD", f"device.{field_name} is required")
+        elif field_name not in ("sdk_int", "first_api_level", "build_date_utc") and (not isinstance(value, str) or not value.strip() or any(ord(c) < 32 or ord(c) == 127 for c in value)):
+            _add(findings, ERROR, "DEVICE_FIELD", f"device.{field_name} must be non-blank text without control characters")
     if has_errors(findings):
         return findings
 
     _validate_fingerprint(findings, device)
+    _validate_versions(findings, device)
     _validate_patch(findings, device)
-    _validate_identifiers(findings, profile.get("identifiers") or {})
-    _validate_telephony(findings, profile.get("telephony") or {})
-    _validate_display(findings, profile.get("display") or {})
-    _validate_locale(findings, profile.get("locale") or {})
+    _validate_identifiers(findings, block("identifiers"))
+    _validate_telephony(findings, block("telephony"))
+    _validate_display(findings, block("display"))
+    _validate_locale(findings, block("locale"))
     ua = profile.get("ua")
     if ua is None:
         _add(findings, WARNING, "UA_MISSING", "profile carries no user agent block")
@@ -257,9 +311,19 @@ def _validate_display(findings: list[Finding], display: Mapping[str, Any]) -> No
         return
     for field in ("width", "height", "density", "refresh_rate_hz"):
         value = display.get(field)
-        if not isinstance(value, int) or value <= 0:
+        if type(value) is not int or value <= 0:
             _add(findings, ERROR, "DISPLAY_FIELD", f"display.{field} must be a positive integer")
             continue
+        bounds = {"width": (120, 8192), "height": (120, 8192), "density": (72, 1000), "refresh_rate_hz": (24, 240)}
+        low, high = bounds[field]
+        if not low <= value <= high:
+            _add(findings, WARNING, "DISPLAY_SUSPICIOUS", f"display.{field} is outside the usual range {low}–{high}")
+    width, height, density = (display.get(field) for field in ("width", "height", "density"))
+    if all(type(value) is int and value > 0 for value in (width, height, density)):
+        if max(width, height) > 4 * min(width, height):
+            _add(findings, WARNING, "DISPLAY_ASPECT", "display.width and display.height imply an aspect ratio above 4:1", "display.width")
+        if not 120 * density <= min(width, height) * 160 <= 1600 * density:
+            _add(findings, WARNING, "DISPLAY_DENSITY_MISMATCH", "display.density implies a shortest edge outside 120–1600 dp for these dimensions", "display.density")
     if str(display.get("screen_size_class", "")) not in _DISPLAY_CLASSES:
         _add(findings, ERROR, "DISPLAY_CLASS", "display.screen_size_class must be small, normal, or large")
 

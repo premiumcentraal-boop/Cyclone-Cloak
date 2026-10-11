@@ -34,7 +34,9 @@
       "expect": [
         [
           "error",
-          "UA_MODEL_MISMATCH"
+          "UA_MODEL_MISMATCH",
+          "ua.value",
+          "ua.value model disagrees with device.model"
         ]
       ]
     },
@@ -50,7 +52,15 @@
       "expect": [
         [
           "error",
-          "FP_BRAND_MISMATCH"
+          "FP_BRAND_MISMATCH",
+          "device.brand",
+          "device.brand: fingerprint brand disagrees with device.brand"
+        ],
+        [
+          "warning",
+          "BRAND_MANUFACTURER_MISMATCH",
+          "device.manufacturer",
+          "device.manufacturer disagrees with the known device.brand family"
         ]
       ]
     },
@@ -66,7 +76,9 @@
       "expect": [
         [
           "error",
-          "FINGERPRINT_FORMAT"
+          "FINGERPRINT_FORMAT",
+          "device.fingerprint",
+          "device.fingerprint: fingerprint does not match the AOSP grammar"
         ]
       ]
     },
@@ -82,7 +94,9 @@
       "expect": [
         [
           "error",
-          "BUILD_TYPE"
+          "BUILD_TYPE",
+          "device.fingerprint",
+          "device.fingerprint: fingerprint build type must be 'user'"
         ]
       ]
     },
@@ -98,7 +112,9 @@
       "expect": [
         [
           "warning",
-          "TAGS"
+          "TAGS",
+          "device.fingerprint",
+          "device.fingerprint: dev-keys fingerprints look like development builds"
         ]
       ]
     },
@@ -114,7 +130,9 @@
       "expect": [
         [
           "error",
-          "RELEASE_SDK_MISMATCH"
+          "RELEASE_SDK_MISMATCH",
+          "device.sdk_int",
+          "device.sdk_int must be 33 for Android 13; got 34"
         ]
       ]
     },
@@ -130,15 +148,21 @@
       "expect": [
         [
           "error",
-          "SDK_RANGE"
+          "SDK_RANGE",
+          "device.sdk_int",
+          "device.sdk_int must be between 26 and 36"
         ],
         [
           "error",
-          "RELEASE_SDK_MISMATCH"
+          "RELEASE_SDK_MISMATCH",
+          "device.sdk_int",
+          "device.sdk_int must be 33 for Android 13; got 20"
         ],
         [
           "error",
-          "FIRST_API_LEVEL"
+          "FIRST_API_LEVEL",
+          "device.first_api_level",
+          "device.first_api_level cannot exceed device.sdk_int"
         ]
       ]
     },
@@ -154,7 +178,9 @@
       "expect": [
         [
           "error",
-          "FIRST_API_LEVEL"
+          "FIRST_API_LEVEL",
+          "device.first_api_level",
+          "device.first_api_level cannot exceed device.sdk_int"
         ]
       ]
     },
@@ -170,7 +196,9 @@
       "expect": [
         [
           "error",
-          "PATCH_DATE"
+          "PATCH_DATE",
+          "device.security_patch",
+          "device.security_patch: security_patch must be an ISO date (YYYY-MM-DD)"
         ]
       ]
     },
@@ -186,11 +214,15 @@
       "expect": [
         [
           "warning",
-          "PATCH_FUTURE"
+          "PATCH_FUTURE",
+          "device.security_patch",
+          "device.security_patch: security_patch is in the future"
         ],
         [
           "warning",
-          "PATCH_AFTER_BUILD"
+          "PATCH_AFTER_BUILD",
+          "device.security_patch",
+          "device.security_patch: security patch is newer than the build date"
         ]
       ]
     },
@@ -206,7 +238,9 @@
       "expect": [
         [
           "warning",
-          "PATCH_AFTER_BUILD"
+          "PATCH_AFTER_BUILD",
+          "device.security_patch",
+          "device.security_patch: security patch is newer than the build date"
         ]
       ]
     },
@@ -225,7 +259,9 @@
       "expect": [
         [
           "error",
-          "MISSING_DEVICE_FIELD"
+          "MISSING_DEVICE_FIELD",
+          "device.hardware",
+          "device.hardware is required"
         ]
       ]
     },
@@ -241,7 +277,9 @@
       "expect": [
         [
           "error",
-          "SEED"
+          "SEED",
+          "seed",
+          "seed must be 64 lowercase hex characters"
         ]
       ]
     },
@@ -257,7 +295,9 @@
       "expect": [
         [
           "error",
-          "SCHEMA_VERSION"
+          "SCHEMA_VERSION",
+          "schema_version",
+          "schema_version must be 0.2"
         ]
       ]
     },
@@ -273,7 +313,9 @@
       "expect": [
         [
           "error",
-          "NAME"
+          "NAME",
+          "name",
+          "name: profile name must be a non-empty string"
         ]
       ]
     },
@@ -289,7 +331,9 @@
       "expect": [
         [
           "error",
-          "IDENTIFIER_CHECKSUM"
+          "IDENTIFIER_CHECKSUM",
+          "identifiers.imei_primary",
+          "identifiers.imei_primary fails the IMEI Luhn check"
         ]
       ]
     },
@@ -305,7 +349,9 @@
       "expect": [
         [
           "error",
-          "IDENTIFIER_FORMAT"
+          "IDENTIFIER_FORMAT",
+          "identifiers.android_id",
+          "identifiers.android_id must be 16 lowercase hex characters"
         ]
       ]
     },
@@ -321,7 +367,9 @@
       "expect": [
         [
           "warning",
-          "UNKNOWN_IDENTIFIER"
+          "UNKNOWN_IDENTIFIER",
+          "identifiers.oaid",
+          "identifiers.oaid is not part of the v0 identifier set"
         ]
       ]
     },
@@ -353,23 +401,33 @@
       "expect": [
         [
           "error",
-          "TELEPHONY_CARRIER"
+          "TELEPHONY_CARRIER",
+          "telephony.carrier_name",
+          "telephony.carrier_name must be a non-empty string"
         ],
         [
           "error",
-          "TELEPHONY_MCC"
+          "TELEPHONY_MCC",
+          "telephony.mcc",
+          "telephony.mcc must be three digits"
         ],
         [
           "error",
-          "TELEPHONY_MNC"
+          "TELEPHONY_MNC",
+          "telephony.mnc",
+          "telephony.mnc must be two or three digits"
         ],
         [
           "error",
-          "TELEPHONY_NETWORK_TYPE"
+          "TELEPHONY_NETWORK_TYPE",
+          "telephony.network_type",
+          "telephony.network_type must be one of 5G, LTE, HSPA, UMTS, GSM"
         ],
         [
           "error",
-          "TELEPHONY_SLOTS"
+          "TELEPHONY_SLOTS",
+          "telephony.sim_slot_count",
+          "telephony.sim_slot_count must be 1 or 2"
         ]
       ]
     },
@@ -389,11 +447,15 @@
       "expect": [
         [
           "error",
-          "DISPLAY_FIELD"
+          "DISPLAY_FIELD",
+          "display.width",
+          "display.width must be a positive integer"
         ],
         [
           "error",
-          "DISPLAY_CLASS"
+          "DISPLAY_CLASS",
+          "display.screen_size_class",
+          "display.screen_size_class must be small, normal, or large"
         ]
       ]
     },
@@ -417,15 +479,21 @@
       "expect": [
         [
           "error",
-          "LOCALE"
+          "LOCALE",
+          "locale.language",
+          "locale.language must be a two-letter lowercase code"
         ],
         [
           "error",
-          "LOCALE"
+          "LOCALE",
+          "locale.country",
+          "locale.country must be a two-letter uppercase code"
         ],
         [
           "error",
-          "LOCALE"
+          "LOCALE",
+          "locale.timezone",
+          "locale.timezone must be an IANA zone like Europe/Berlin"
         ]
       ]
     },
@@ -440,7 +508,9 @@
       "expect": [
         [
           "warning",
-          "UA_MISSING"
+          "UA_MISSING",
+          "ua",
+          "ua: profile carries no user agent block"
         ]
       ]
     },
@@ -456,7 +526,9 @@
       "expect": [
         [
           "error",
-          "UA_FORMAT"
+          "UA_FORMAT",
+          "ua.value",
+          "ua.value must be a Chrome-on-Android user agent string"
         ]
       ]
     },
@@ -480,9 +552,1244 @@
       "expect": [
         [
           "error",
-          "UA_RELEASE_MISMATCH"
+          "UA_RELEASE_MISMATCH",
+          "ua.value",
+          "ua.value Android release disagrees with device.version_release"
         ]
       ]
+    },
+    {
+      "name": "device.sdk_int = True",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.sdk_int",
+          true
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "API_TYPE",
+          "device.sdk_int",
+          "device.sdk_int must be an integer"
+        ]
+      ]
+    },
+    {
+      "name": "device.sdk_int = '33'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.sdk_int",
+          "33"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "API_TYPE",
+          "device.sdk_int",
+          "device.sdk_int must be an integer"
+        ]
+      ]
+    },
+    {
+      "name": "device.sdk_int = 33.5",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.sdk_int",
+          33.5
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "API_TYPE",
+          "device.sdk_int",
+          "device.sdk_int must be an integer"
+        ]
+      ]
+    },
+    {
+      "name": "device.sdk_int = 1099511627776",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.sdk_int",
+          1099511627776
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "SDK_RANGE",
+          "device.sdk_int",
+          "device.sdk_int must be between 26 and 36"
+        ],
+        [
+          "error",
+          "RELEASE_SDK_MISMATCH",
+          "device.sdk_int",
+          "device.sdk_int must be 33 for Android 13; got 1099511627776"
+        ]
+      ]
+    },
+    {
+      "name": "device.first_api_level = 0",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.first_api_level",
+          0
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "FIRST_API_RANGE",
+          "device.first_api_level",
+          "device.first_api_level must be between 26 and 36"
+        ]
+      ]
+    },
+    {
+      "name": "device.first_api_level = 'oops'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.first_api_level",
+          "oops"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "API_TYPE",
+          "device.first_api_level",
+          "device.first_api_level must be an integer"
+        ]
+      ]
+    },
+    {
+      "name": "device.build_date_utc = -1",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.build_date_utc",
+          -1
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "BUILD_DATE",
+          "device.build_date_utc",
+          "device.build_date_utc must be integer Unix seconds between 0 and 253402300799"
+        ]
+      ]
+    },
+    {
+      "name": "device.build_date_utc = 'oops'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.build_date_utc",
+          "oops"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "BUILD_DATE",
+          "device.build_date_utc",
+          "device.build_date_utc must be integer Unix seconds between 0 and 253402300799"
+        ]
+      ]
+    },
+    {
+      "name": "device.build_date_utc = 253402300800",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.build_date_utc",
+          253402300800
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "BUILD_DATE",
+          "device.build_date_utc",
+          "device.build_date_utc must be integer Unix seconds between 0 and 253402300799"
+        ]
+      ]
+    },
+    {
+      "name": "device.build_date_utc = 1893456000",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.build_date_utc",
+          1893456000
+        ]
+      ],
+      "expect": [
+        [
+          "warning",
+          "BUILD_FUTURE",
+          "device.build_date_utc",
+          "device.build_date_utc is in the future"
+        ]
+      ]
+    },
+    {
+      "name": "device.version_release = '13..0'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.version_release",
+          "13..0"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "FP_RELEASE_MISMATCH",
+          "device.version_release",
+          "device.version_release: fingerprint release disagrees with device.version_release"
+        ],
+        [
+          "error",
+          "RELEASE_FORMAT",
+          "device.version_release",
+          "device.version_release must be a numeric Android version such as 8.1 or 14"
+        ],
+        [
+          "error",
+          "UA_RELEASE_MISMATCH",
+          "ua.value",
+          "ua.value Android release disagrees with device.version_release"
+        ]
+      ]
+    },
+    {
+      "name": "device.model = 123",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.model",
+          123
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "DEVICE_FIELD",
+          "device.model",
+          "device.model must be non-blank text without control characters"
+        ]
+      ]
+    },
+    {
+      "name": "device.model = '   '",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.model",
+          "   "
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "DEVICE_FIELD",
+          "device.model",
+          "device.model must be non-blank text without control characters"
+        ]
+      ]
+    },
+    {
+      "name": "device.manufacturer = 'Samsung'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.manufacturer",
+          "Samsung"
+        ]
+      ],
+      "expect": [
+        [
+          "warning",
+          "MODEL_MANUFACTURER_MISMATCH",
+          "device.manufacturer",
+          "device.manufacturer is unusual for device.model; expected google"
+        ],
+        [
+          "warning",
+          "BRAND_MANUFACTURER_MISMATCH",
+          "device.manufacturer",
+          "device.manufacturer disagrees with the known device.brand family"
+        ]
+      ]
+    },
+    {
+      "name": "device.security_patch = '20230805'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.security_patch",
+          "20230805"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "PATCH_DATE",
+          "device.security_patch",
+          "device.security_patch: security_patch must be an ISO date (YYYY-MM-DD)"
+        ]
+      ]
+    },
+    {
+      "name": "device.security_patch = '2023-02-29'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.security_patch",
+          "2023-02-29"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "PATCH_DATE",
+          "device.security_patch",
+          "device.security_patch: security_patch must be an ISO date (YYYY-MM-DD)"
+        ]
+      ]
+    },
+    {
+      "name": "display.width = True",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "display.width",
+          true
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "DISPLAY_FIELD",
+          "display.width",
+          "display.width must be a positive integer"
+        ]
+      ]
+    },
+    {
+      "name": "display.width = 1080.5",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "display.width",
+          1080.5
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "DISPLAY_FIELD",
+          "display.width",
+          "display.width must be a positive integer"
+        ]
+      ]
+    },
+    {
+      "name": "display.width = 100",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "display.width",
+          100
+        ]
+      ],
+      "expect": [
+        [
+          "warning",
+          "DISPLAY_SUSPICIOUS",
+          "display.width",
+          "display.width is outside the usual range 120\u20138192"
+        ],
+        [
+          "warning",
+          "DISPLAY_ASPECT",
+          "display.width",
+          "display.width and display.height imply an aspect ratio above 4:1"
+        ],
+        [
+          "warning",
+          "DISPLAY_DENSITY_MISMATCH",
+          "display.density",
+          "display.density implies a shortest edge outside 120\u20131600 dp for these dimensions"
+        ]
+      ]
+    },
+    {
+      "name": "display.width = 1099511627776",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "display.width",
+          1099511627776
+        ]
+      ],
+      "expect": [
+        [
+          "warning",
+          "DISPLAY_SUSPICIOUS",
+          "display.width",
+          "display.width is outside the usual range 120\u20138192"
+        ],
+        [
+          "warning",
+          "DISPLAY_ASPECT",
+          "display.width",
+          "display.width and display.height imply an aspect ratio above 4:1"
+        ]
+      ]
+    },
+    {
+      "name": "display.density = '420'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "display.density",
+          "420"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "DISPLAY_FIELD",
+          "display.density",
+          "display.density must be a positive integer"
+        ]
+      ]
+    },
+    {
+      "name": "display.density = 1600",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "display.density",
+          1600
+        ]
+      ],
+      "expect": [
+        [
+          "warning",
+          "DISPLAY_SUSPICIOUS",
+          "display.density",
+          "display.density is outside the usual range 72\u20131000"
+        ],
+        [
+          "warning",
+          "DISPLAY_DENSITY_MISMATCH",
+          "display.density",
+          "display.density implies a shortest edge outside 120\u20131600 dp for these dimensions"
+        ]
+      ]
+    },
+    {
+      "name": "display.height = -1",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "display.height",
+          -1
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "DISPLAY_FIELD",
+          "display.height",
+          "display.height must be a positive integer"
+        ]
+      ]
+    },
+    {
+      "name": "display.height = 6000",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "display.height",
+          6000
+        ]
+      ],
+      "expect": [
+        [
+          "warning",
+          "DISPLAY_ASPECT",
+          "display.width",
+          "display.width and display.height imply an aspect ratio above 4:1"
+        ]
+      ]
+    },
+    {
+      "name": "display.refresh_rate_hz = 500",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "display.refresh_rate_hz",
+          500
+        ]
+      ],
+      "expect": [
+        [
+          "warning",
+          "DISPLAY_SUSPICIOUS",
+          "display.refresh_rate_hz",
+          "display.refresh_rate_hz is outside the usual range 24\u2013240"
+        ]
+      ]
+    },
+    {
+      "name": "locale.language = 'en\\n'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "locale.language",
+          "en\n"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "LOCALE",
+          "locale.language",
+          "locale.language must be a two-letter lowercase code"
+        ]
+      ]
+    },
+    {
+      "name": "locale.language = None",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "locale.language",
+          null
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "LOCALE",
+          "locale.language",
+          "locale.language must be a two-letter lowercase code"
+        ]
+      ]
+    },
+    {
+      "name": "locale.country = 'usa'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "locale.country",
+          "usa"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "LOCALE",
+          "locale.country",
+          "locale.country must be a two-letter uppercase code"
+        ]
+      ]
+    },
+    {
+      "name": "locale.timezone = 'Europe//Berlin'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "locale.timezone",
+          "Europe//Berlin"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "LOCALE",
+          "locale.timezone",
+          "locale.timezone must be an IANA zone like Europe/Berlin"
+        ]
+      ]
+    },
+    {
+      "name": "locale.timezone = 'Europe/../Berlin'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "locale.timezone",
+          "Europe/../Berlin"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "LOCALE",
+          "locale.timezone",
+          "locale.timezone must be an IANA zone like Europe/Berlin"
+        ]
+      ]
+    },
+    {
+      "name": "locale.timezone = 'NotAZone'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "locale.timezone",
+          "NotAZone"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "LOCALE",
+          "locale.timezone",
+          "locale.timezone must be an IANA zone like Europe/Berlin"
+        ]
+      ]
+    },
+    {
+      "name": "locale.timezone = 'UTC'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "locale.timezone",
+          "UTC"
+        ]
+      ],
+      "expect": []
+    },
+    {
+      "name": "locale.timezone = 'Etc/GMT+5'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "locale.timezone",
+          "Etc/GMT+5"
+        ]
+      ],
+      "expect": []
+    },
+    {
+      "name": "locale.timezone = 'America/Argentina/Buenos_Aires'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "locale.timezone",
+          "America/Argentina/Buenos_Aires"
+        ]
+      ],
+      "expect": []
+    },
+    {
+      "name": "locale.timezone = 'Japan'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "locale.timezone",
+          "Japan"
+        ]
+      ],
+      "expect": []
+    },
+    {
+      "name": "locale.timezone = 'NZ-CHAT'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "locale.timezone",
+          "NZ-CHAT"
+        ]
+      ],
+      "expect": []
+    },
+    {
+      "name": "locale.timezone = 'GMT+0'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "locale.timezone",
+          "GMT+0"
+        ]
+      ],
+      "expect": []
+    },
+    {
+      "name": "identifiers.android_id = '0123456789abcdef\\n'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "identifiers.android_id",
+          "0123456789abcdef\n"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "IDENTIFIER_FORMAT",
+          "identifiers.android_id",
+          "identifiers.android_id must be 16 lowercase hex characters"
+        ]
+      ]
+    },
+    {
+      "name": "identifiers.android_id = '0000000000000000'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "identifiers.android_id",
+          "0000000000000000"
+        ]
+      ],
+      "expect": [
+        [
+          "warning",
+          "IDENTIFIER_PLACEHOLDER",
+          "identifiers.android_id",
+          "identifiers.android_id is an all-zero placeholder"
+        ]
+      ]
+    },
+    {
+      "name": "identifiers.mac = '01:23:45:67:89:AB'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "identifiers.mac",
+          "01:23:45:67:89:AB"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "IDENTIFIER_ADDRESS",
+          "identifiers.mac",
+          "identifiers.mac must be a unicast address (first octet's low bit must be zero)"
+        ]
+      ]
+    },
+    {
+      "name": "identifiers.bt_mac = 'FF:FF:FF:FF:FF:FF'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "identifiers.bt_mac",
+          "FF:FF:FF:FF:FF:FF"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "IDENTIFIER_ADDRESS",
+          "identifiers.bt_mac",
+          "identifiers.bt_mac must be a unicast address (first octet's low bit must be zero)"
+        ]
+      ]
+    },
+    {
+      "name": "identifiers.app_set_id = '00000000-0000-1000-8000-000000000000'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "identifiers.app_set_id",
+          "00000000-0000-1000-8000-000000000000"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "IDENTIFIER_FORMAT",
+          "identifiers.app_set_id",
+          "identifiers.app_set_id must be a UUIDv4"
+        ]
+      ]
+    },
+    {
+      "name": "identifiers = []",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "identifiers",
+          []
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "BLOCK_TYPE",
+          "identifiers",
+          "identifiers must be an object"
+        ]
+      ]
+    },
+    {
+      "name": "display = '1080x2400'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "display",
+          "1080x2400"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "BLOCK_TYPE",
+          "display",
+          "display must be an object"
+        ]
+      ]
+    },
+    {
+      "name": "locale = False",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "locale",
+          false
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "BLOCK_TYPE",
+          "locale",
+          "locale must be an object"
+        ]
+      ]
+    },
+    {
+      "name": "broken fingerprint still checks APIs",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.fingerprint",
+          "broken"
+        ],
+        [
+          "device.sdk_int",
+          "invalid"
+        ],
+        [
+          "device.first_api_level",
+          1
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "FINGERPRINT_FORMAT",
+          "device.fingerprint",
+          "device.fingerprint: fingerprint does not match the AOSP grammar"
+        ],
+        [
+          "error",
+          "API_TYPE",
+          "device.sdk_int",
+          "device.sdk_int must be an integer"
+        ],
+        [
+          "error",
+          "FIRST_API_RANGE",
+          "device.first_api_level",
+          "device.first_api_level must be between 26 and 36"
+        ]
+      ]
+    },
+    {
+      "name": "landscape dimensions are valid",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "display.width",
+          2400
+        ],
+        [
+          "display.height",
+          1080
+        ]
+      ],
+      "expect": []
+    },
+    {
+      "name": "unknown OEM is valid",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.manufacturer",
+          "Acme"
+        ]
+      ],
+      "expect": [
+        [
+          "warning",
+          "MODEL_MANUFACTURER_MISMATCH",
+          "device.manufacturer",
+          "device.manufacturer is unusual for device.model; expected google"
+        ]
+      ]
+    },
+    {
+      "name": "duplicate IMEIs warn",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "identifiers.imei_primary",
+          "490154203237518"
+        ],
+        [
+          "identifiers.imei_secondary",
+          "490154203237518"
+        ]
+      ],
+      "expect": [
+        [
+          "warning",
+          "IDENTIFIER_DUPLICATE",
+          "identifiers.imei_secondary",
+          "identifiers.imei_secondary duplicates identifiers.imei_primary"
+        ]
+      ]
+    },
+    {
+      "name": "valid Android 8.0 API 26",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.version_release",
+          "8.0"
+        ],
+        [
+          "device.sdk_int",
+          26
+        ],
+        [
+          "device.first_api_level",
+          26
+        ],
+        [
+          "device.fingerprint",
+          "google/panther/panther:8.0/TQ3A.230805.001/10193186:user/release-keys"
+        ],
+        [
+          "ua.value",
+          "Mozilla/5.0 (Linux; Android 8.0; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
+        ]
+      ],
+      "expect": []
+    },
+    {
+      "name": "valid Android 8.1 API 27",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.version_release",
+          "8.1"
+        ],
+        [
+          "device.sdk_int",
+          27
+        ],
+        [
+          "device.first_api_level",
+          26
+        ],
+        [
+          "device.fingerprint",
+          "google/panther/panther:8.1/TQ3A.230805.001/10193186:user/release-keys"
+        ],
+        [
+          "ua.value",
+          "Mozilla/5.0 (Linux; Android 8.1; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
+        ]
+      ],
+      "expect": []
+    },
+    {
+      "name": "valid Android 9 API 28",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.version_release",
+          "9"
+        ],
+        [
+          "device.sdk_int",
+          28
+        ],
+        [
+          "device.first_api_level",
+          26
+        ],
+        [
+          "device.fingerprint",
+          "google/panther/panther:9/TQ3A.230805.001/10193186:user/release-keys"
+        ],
+        [
+          "ua.value",
+          "Mozilla/5.0 (Linux; Android 9; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
+        ]
+      ],
+      "expect": []
+    },
+    {
+      "name": "valid Android 10 API 29",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.version_release",
+          "10"
+        ],
+        [
+          "device.sdk_int",
+          29
+        ],
+        [
+          "device.first_api_level",
+          26
+        ],
+        [
+          "device.fingerprint",
+          "google/panther/panther:10/TQ3A.230805.001/10193186:user/release-keys"
+        ],
+        [
+          "ua.value",
+          "Mozilla/5.0 (Linux; Android 10; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
+        ]
+      ],
+      "expect": []
+    },
+    {
+      "name": "valid Android 11 API 30",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.version_release",
+          "11"
+        ],
+        [
+          "device.sdk_int",
+          30
+        ],
+        [
+          "device.first_api_level",
+          26
+        ],
+        [
+          "device.fingerprint",
+          "google/panther/panther:11/TQ3A.230805.001/10193186:user/release-keys"
+        ],
+        [
+          "ua.value",
+          "Mozilla/5.0 (Linux; Android 11; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
+        ]
+      ],
+      "expect": []
+    },
+    {
+      "name": "valid Android 12 API 31",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.version_release",
+          "12"
+        ],
+        [
+          "device.sdk_int",
+          31
+        ],
+        [
+          "device.first_api_level",
+          26
+        ],
+        [
+          "device.fingerprint",
+          "google/panther/panther:12/TQ3A.230805.001/10193186:user/release-keys"
+        ],
+        [
+          "ua.value",
+          "Mozilla/5.0 (Linux; Android 12; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
+        ]
+      ],
+      "expect": []
+    },
+    {
+      "name": "valid Android 12 API 32",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.version_release",
+          "12"
+        ],
+        [
+          "device.sdk_int",
+          32
+        ],
+        [
+          "device.first_api_level",
+          26
+        ],
+        [
+          "device.fingerprint",
+          "google/panther/panther:12/TQ3A.230805.001/10193186:user/release-keys"
+        ],
+        [
+          "ua.value",
+          "Mozilla/5.0 (Linux; Android 12; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
+        ]
+      ],
+      "expect": []
+    },
+    {
+      "name": "valid Android 13 API 33",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.version_release",
+          "13"
+        ],
+        [
+          "device.sdk_int",
+          33
+        ],
+        [
+          "device.first_api_level",
+          26
+        ],
+        [
+          "device.fingerprint",
+          "google/panther/panther:13/TQ3A.230805.001/10193186:user/release-keys"
+        ],
+        [
+          "ua.value",
+          "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
+        ]
+      ],
+      "expect": []
+    },
+    {
+      "name": "valid Android 14 API 34",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.version_release",
+          "14"
+        ],
+        [
+          "device.sdk_int",
+          34
+        ],
+        [
+          "device.first_api_level",
+          26
+        ],
+        [
+          "device.fingerprint",
+          "google/panther/panther:14/TQ3A.230805.001/10193186:user/release-keys"
+        ],
+        [
+          "ua.value",
+          "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
+        ]
+      ],
+      "expect": []
+    },
+    {
+      "name": "valid Android 15 API 35",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.version_release",
+          "15"
+        ],
+        [
+          "device.sdk_int",
+          35
+        ],
+        [
+          "device.first_api_level",
+          26
+        ],
+        [
+          "device.fingerprint",
+          "google/panther/panther:15/TQ3A.230805.001/10193186:user/release-keys"
+        ],
+        [
+          "ua.value",
+          "Mozilla/5.0 (Linux; Android 15; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
+        ]
+      ],
+      "expect": []
+    },
+    {
+      "name": "valid Android 16 API 36",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.version_release",
+          "16"
+        ],
+        [
+          "device.sdk_int",
+          36
+        ],
+        [
+          "device.first_api_level",
+          26
+        ],
+        [
+          "device.fingerprint",
+          "google/panther/panther:16/TQ3A.230805.001/10193186:user/release-keys"
+        ],
+        [
+          "ua.value",
+          "Mozilla/5.0 (Linux; Android 16; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
+        ]
+      ],
+      "expect": []
+    },
+    {
+      "name": "valid Android 13.0 API 33",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.version_release",
+          "13.0"
+        ],
+        [
+          "device.sdk_int",
+          33
+        ],
+        [
+          "device.first_api_level",
+          26
+        ],
+        [
+          "device.fingerprint",
+          "google/panther/panther:13.0/TQ3A.230805.001/10193186:user/release-keys"
+        ],
+        [
+          "ua.value",
+          "Mozilla/5.0 (Linux; Android 13.0; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
+        ]
+      ],
+      "expect": []
     }
   ]
 }

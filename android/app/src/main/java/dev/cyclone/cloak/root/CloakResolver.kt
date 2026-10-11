@@ -16,7 +16,10 @@ import java.io.File
 object CloakResolver {
     fun entryKey(androidUserId: Int, packageName: String) = "$androidUserId/$packageName"
 
-    private fun stagingRoot(context: Context) = File(context.cacheDir, CloakStateLayout.STAGING_DIR)
+    // Every invocation owns its staging snapshot, including callers in another app process.
+    private fun stagingRoot(context: Context) = java.nio.file.Files.createTempDirectory(
+        context.cacheDir.toPath(), "${CloakStateLayout.STAGING_DIR}-",
+    ).toFile()
 
     /** Returns the bound cloak-profile id, or null when unbound or missing. */
     fun resolve(context: Context, profileId: String, androidUserId: Int, packageName: String): String? {
@@ -49,7 +52,10 @@ object CloakResolver {
         repairModule: Boolean = false,
         scope: PublishScope = PublishScope.forThisInstall(context),
     ): RootDoctorResult {
-        val staging = stagingRoot(context)
+        val staging = runCatching { stagingRoot(context) }.getOrElse {
+            Log.e("CloakPublish", "Could not create staging snapshot", it)
+            return RootDoctorResult(RootDoctorCode.PUBLISH_FAILED, publicationReason = PublicationReason.FAILED)
+        }
         val staged = runCatching {
             staging.deleteRecursively()
             staging.mkdirs()
@@ -80,8 +86,9 @@ object CloakResolver {
         val result = if (staged) {
             CloakRootDoctor.run(context, staging, repairModule, scope)
         } else {
-            RootDoctorResult(RootDoctorCode.PUBLISH_FAILED)
+            RootDoctorResult(RootDoctorCode.PUBLISH_FAILED, publicationReason = PublicationReason.FAILED)
         }
+        staging.deleteRecursively()
         for (binding in CloakBindingStore.all(context)) {
             // Mirrored bindings are Main's to publish; their health comes from the mirror check.
             if (!scope.publishes(binding)) continue

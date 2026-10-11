@@ -29,10 +29,18 @@ enum class RootDoctorCode {
     PUBLISH_FAILED,
 }
 
+enum class PublicationReason(val message: String) {
+    LOCKED("Another publisher holds the publication lock. Retry after it finishes."),
+    FAILED("Publication failed. Retry to recover or complete publication."),
+    RECOVERED("An interrupted publication was recovered and publication completed."),
+    COMPLETED("Profile publication completed."),
+}
+
 data class RootDoctorResult(
     val code: RootDoctorCode,
     val moduleVersion: String? = null,
     val diagnostic: String? = null,
+    val publicationReason: PublicationReason? = null,
 ) {
     val published: Boolean get() = code == RootDoctorCode.READY
 
@@ -76,8 +84,9 @@ data class RootDoctorResult(
             RootDoctorCode.ABI_UNSUPPORTED -> "This release has no Zygisk library for this device's Android architecture."
             RootDoctorCode.PUBLISH_FAILED -> "Root access worked, but profile state could not be published."
         }
+        val withPublication = publicationReason?.let { "$base\n${it.message}" } ?: base
         return diagnostic?.takeIf { code in setOf(RootDoctorCode.PUBLISH_FAILED, RootDoctorCode.MODULE_BUNDLE_INVALID, RootDoctorCode.MODULE_INSTALL_FAILED) }
-            ?.let { "$base\nDetail: $it" } ?: base
+            ?.let { "$withPublication\nDetail: $it" } ?: withPublication
     }
 }
 
@@ -264,7 +273,11 @@ object CloakRootDoctor {
             }
         }
         val resultCode = if (marker == "READY" && exitCode != 0) RootDoctorCode.PUBLISH_FAILED else code
-        return RootDoctorResult(resultCode, moduleVersion, diagnosticText(output))
+        val publication = Regex("CLOAK_PUBLICATION=([A-Z_]+)").findAll(output).lastOrNull()
+            ?.groupValues?.get(1)?.let { value -> PublicationReason.entries.find { it.name == value } }
+        val reason = if (resultCode == RootDoctorCode.PUBLISH_FAILED && publication != PublicationReason.LOCKED)
+            PublicationReason.FAILED else publication
+        return RootDoctorResult(resultCode, moduleVersion, diagnosticText(output), reason)
     }
 
     internal fun parseInstallResult(output: String, exitCode: Int, appVersion: String): RootDoctorResult {
@@ -399,23 +412,39 @@ object CloakRootDoctor {
         val part = CloakStateLayout.INDEX_PART_FILE
         val prefix = "{\"schemaVersion\":2,\"entries\":{"
         return buildString {
+            append("( set -eu; umask 077; ")
             append("root=${quote(root)}; pubs=${quote(pubs)}; state=${quote(state)}; temp=${quote(temp)}; backup=${quote(backup)}; ")
             append("me=${quote(me)}; staging=${quote(staging)}; ")
             append("mkdir -p \"\$root\"; chmod 700 \"\$root\"; ")
+            append("command -v flock >/dev/null 2>&1 || { echo CLOAK_PUBLICATION=FAILED; echo CLOAK_DOCTOR=PUBLISH_FAILED; echo 'Publication locking is unavailable.'; exit 48; }; ")
+            // Never unlink this inode: waiters and owners must lock the same file, even after crashes.
+            append("exec 9>> \"\$root/publication.lock\"; ")
+            append("flock -n 9 || { echo CLOAK_PUBLICATION=LOCKED; echo CLOAK_DOCTOR=PUBLISH_FAILED; exit 48; }; ")
+            append("recovered=0; finished=0; ")
+            append("recover() { if [ ! -e \"\$state\" ] && [ -d \"\$backup\" ]; then mv \"\$backup\" \"\$state\" || return 1; recovered=1; fi; ")
+            append("if [ -d \"\$pubs\" ]; then for old in \"\$pubs\"/*.old; do [ -d \"\$old\" ] || continue; target=\${old%.old}; ")
+            append("if [ ! -e \"\$target\" ]; then mv \"\$old\" \"\$target\" || return 1; recovered=1; fi; done; fi; }; ")
+            append("finish() { status=\$?; trap - EXIT HUP INT TERM; if [ \"\$finished\" != 1 ]; then ")
+            append("if recover; then if [ -s \"\$state/$index\" ]; then echo CLOAK_PUBLICATION_DETAIL=LAST_TREE_RETAINED; else echo CLOAK_PUBLICATION_DETAIL=NO_PREVIOUS_TREE; fi; else echo CLOAK_PUBLICATION_DETAIL=RESTORE_PENDING; fi; ")
+            append("echo CLOAK_PUBLICATION=FAILED; echo CLOAK_DOCTOR=PUBLISH_FAILED; status=48; fi; ")
+            append("rm -f \"\$root/publication.owner\" || true; exit \"\$status\"; }; trap finish EXIT; trap 'exit 48' HUP INT TERM; ")
+            // A leftover marker is stale only AFTER the kernel grants exclusive ownership. Never steal by PID/age.
+            append("if [ -e \"\$root/publication.owner\" ]; then recovered=1; fi; echo \"\$\$\" > \"\$root/publication.owner\"; ")
+            append("recover; ")
             // A tree published before shares existed came from Main's Cloak: keep it as Main's share.
             append("if [ ! -d \"\$pubs\" ] && [ -s \"\$state/$index\" ]; then ")
-            append("legacy=\$(cat \"\$pubs.main\" 2>/dev/null || echo ${quote(legacyOwner)}); mkdir -p \"\$pubs/\$legacy\"; ")
-            append("cp -R \"\$state/.\" \"\$pubs/\$legacy/\"; rm -f \"\$pubs/\$legacy/$index\"; ")
+            append("legacy=\$(cat \"\$pubs.main\" 2>/dev/null || echo ${quote(legacyOwner)}); migration=\$pubs.migration; rm -rf \"\$migration\"; mkdir -p \"\$migration/\$legacy\"; ")
+            append("cp -R \"\$state/.\" \"\$migration/\$legacy/\"; rm -f \"\$migration/\$legacy/$index\"; ")
             // Cloak wrote `{"schemaVersion":2,"entries":{…}}`; accept the other key order too. Anything else is dropped
             // rather than risk an index the module can't parse. In a basic regular expression `{` and `}` are literal.
             val swapped = "{\"entries\":{"
             val swappedTail = "},\"schemaVersion\":2}"
             append("legacy_index=\$(tr -d '\\n' < \"\$state/$index\"); ")
             append("case \"\$legacy_index\" in ${quote(prefix)}*'}}') ")
-            append("printf '%s' \"\$legacy_index\" | sed -e ${quote("s/^$prefix//")} -e 's/}}\$//' > \"\$pubs/\$legacy/$part\";; ")
+            append("printf '%s' \"\$legacy_index\" | sed -e ${quote("s/^$prefix//")} -e 's/}}\$//' > \"\$migration/\$legacy/$part\";; ")
             append("${quote(swapped)}*${quote(swappedTail)}) ")
-            append("printf '%s' \"\$legacy_index\" | sed -e ${quote("s/^$swapped//")} -e ${quote("s/$swappedTail\$//")} > \"\$pubs/\$legacy/$part\";; ")
-            append("*) : > \"\$pubs/\$legacy/$part\";; esac; fi; ")
+            append("printf '%s' \"\$legacy_index\" | sed -e ${quote("s/^$swapped//")} -e ${quote("s/$swappedTail\$//")} > \"\$migration/\$legacy/$part\";; ")
+            append("*) : > \"\$migration/\$legacy/$part\";; esac; mv \"\$migration\" \"\$pubs\"; fi; ")
             append("mkdir -p \"\$pubs\"; chmod 700 \"\$pubs\"; ")
             // Replace this install's share atomically.
             append("rm -rf \"\$pubs/\$me.tmp\" \"\$pubs/\$me.old\"; cp -R \"\$staging\" \"\$pubs/\$me.tmp\"; ")
@@ -436,17 +465,20 @@ object CloakRootDoctor {
             append("order=''; for d in \"\$pubs\"/*/; do [ -d \"\$d\" ] || continue; n=\$(basename \"\$d\"); ")
             append("case \"\$n\" in ''|*[!0-9]*) continue;; esac; [ \"\$n\" = \"\$main\" ] || order=\"\$order \$n\"; done; ")
             append("if [ -d \"\$pubs/\$main\" ]; then order=\"\$order \$main\"; fi; ")
-            append("rm -rf \"\$temp\" \"\$backup\"; mkdir -p \"\$temp\"; ")
+            append("rm -rf \"\$temp\"; mkdir -p \"\$temp\"; ")
             append("printf '%s' ${quote(prefix)} > \"\$temp/$index\"; sep=''; ")
             append("for n in \$order; do for k in \"\$pubs/\$n\"/*/; do [ -d \"\$k\" ] || continue; kn=\$(basename \"\$k\"); ")
             append("case \"\$kn\" in *[!0-9a-f]*) continue;; esac; rm -rf \"\$temp/\$kn\"; cp -R \"\$k\" \"\$temp/\$kn\"; done; ")
             append("if [ -s \"\$pubs/\$n/$part\" ]; then printf '%s' \"\$sep\" >> \"\$temp/$index\"; cat \"\$pubs/\$n/$part\" >> \"\$temp/$index\"; sep=','; fi; done; ")
             append("printf '}}' >> \"\$temp/$index\"; ")
             append("chmod -R go-rwx \"\$temp\"; chmod 700 \"\$temp\"; ")
+            append("test -s \"\$temp/$index\"; ")
+            append("if [ -e \"\$backup\" ]; then test -s \"\$state/$index\"; rm -rf \"\$backup\"; fi; ")
             append("if [ -e \"\$state\" ]; then mv \"\$state\" \"\$backup\"; fi; ")
             append("if mv \"\$temp\" \"\$state\"; then rm -rf \"\$backup\" || true; ")
-            append("else if [ -e \"\$backup\" ]; then mv \"\$backup\" \"\$state\"; fi; echo CLOAK_DOCTOR=PUBLISH_FAILED; exit 48; fi; ")
-            append("test -s \"\$state/$index\" || { echo CLOAK_DOCTOR=PUBLISH_FAILED; exit 49; }; ")
+            append("else exit 48; fi; ")
+            append("test -s \"\$state/$index\"; finished=1; ")
+            append("if [ \"\$recovered\" = 1 ]; then echo CLOAK_PUBLICATION=RECOVERED; else echo CLOAK_PUBLICATION=COMPLETED; fi; ); ")
         }
     }
 

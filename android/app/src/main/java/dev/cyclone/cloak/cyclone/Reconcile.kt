@@ -26,12 +26,14 @@ object ReconcilePlanner {
         val desired: List<DesiredBinding>,
         /** Profiles now under a new Android user number: id → new number. Bindings follow (handoff §3.5). */
         val moves: Map<String, Int>,
-        /** Profiles permanently deleted from Cyclone (Main only): forget their bindings. */
+        /** Reserved for confirmed deletion; absence from one snapshot is not proof. */
         val forgotten: Set<String>,
         /** Bindings Cyclone would refuse right now, and why. */
         val issues: Map<String, String>,
         /** Profiles whose apps this install may check for stale Cloak bindings. */
         val sweep: List<CycloneProfile>,
+        /** Logical binding keys whose remote records must be left alone until ambiguity clears. */
+        val preserve: Set<String> = emptySet(),
     )
 
     const val NOT_LISTED = "app not in this profile's list in Cyclone; add it to the profile in Cyclone"
@@ -47,22 +49,43 @@ object ReconcilePlanner {
             is Placement.InProfile -> bindings.filter { it.profileId == placement.profile.id }
         }
         val moves = mutableMapOf<String, Int>()
-        val forgotten = mutableSetOf<String>()
+        val preserve = mutableSetOf<String>()
+        val duplicates = inScope.groupBy { bindingKey(it.profileId, it.packageName) }
+            .filterValues { it.size > 1 }.keys
         val issues = mutableMapOf<String, String>()
         val desired = mutableListOf<DesiredBinding>()
         for (binding in inScope) {
+            val key = bindingKey(binding.profileId, binding.packageName)
+            if (key in duplicates) {
+                issues[key] = "duplicate local bindings; review these records before syncing"
+                preserve += key
+                continue
+            }
             val profile = snapshot.byId(binding.profileId)
             if (profile == null) {
-                if (placement.isMain) forgotten += binding.profileId
+                issues[key] = "profile missing from Cyclone's current list; local binding retained"
+                preserve += key
                 continue
             }
             val user = profile.androidUserId
             if (user != null && user != binding.androidUserId) moves[profile.id] = user
             // Trashed or still setting up: keep the binding, Cyclone keeps its tuple (a restore brings it back).
-            if (!binding.enabled || !profile.bindable || user == null) continue
-            val packages = profile.packages ?: continue
+            if (!binding.enabled) continue
+            if (!profile.bindable || user == null) {
+                issues[key] = if (profile.state == "in_trash") "profile is in Recently deleted; local binding retained"
+                    else "profile is not ready or its Android user is unknown; local binding retained"
+                preserve += key
+                continue
+            }
+            val packages = profile.packages
+            if (packages == null) {
+                issues[key] = "app list is unavailable in Cyclone; local binding retained"
+                preserve += key
+                continue
+            }
             if (binding.packageName !in packages) {
-                issues[bindingKey(binding.profileId, binding.packageName)] = NOT_LISTED
+                issues[key] = NOT_LISTED
+                preserve += key
                 continue
             }
             desired += DesiredBinding(
@@ -77,7 +100,7 @@ object ReconcilePlanner {
             is Placement.Main -> snapshot.registry.filter { it.bindable }
             is Placement.InProfile -> listOfNotNull(snapshot.byId(placement.profile.id)?.takeIf { it.bindable })
         }
-        return Plan(desired, moves, forgotten, issues, sweep)
+        return Plan(desired, moves, emptySet(), issues, sweep, preserve)
     }
 }
 
@@ -106,8 +129,10 @@ class BindingReconciler(
 
     private var calls = 0
 
-    fun reconcile(desired: List<DesiredBinding>, previouslyPushed: Set<String>?, sweep: List<CycloneProfile>): Result {
-        val pushed = mutableSetOf<String>()
+    fun reconcile(desired: List<DesiredBinding>, previouslyPushed: Set<String>?, sweep: List<CycloneProfile>,
+                  preserve: Set<String> = emptySet()): Result {
+        fun protected(tuple: String): Boolean = splitTuple(tuple)?.let { (profile, _, pkg) -> bindingKey(profile, pkg) in preserve } == true
+        val pushed = previouslyPushed.orEmpty().filter(::protected).toMutableSet()
         val issues = mutableMapOf<String, String>()
         var written = 0
         var statuses = 0
@@ -140,13 +165,17 @@ class BindingReconciler(
             }
             // Tuples written earlier that Cloak no longer wants (unbound, disabled, moved to a new user number).
             for (old in previouslyPushed.orEmpty() - wanted.keys) {
+                if (protected(old)) continue
                 val (profileId, user, pkg) = splitTuple(old) ?: continue
                 try {
                     call { api.setConfig(profileId, user, pkg, null) }
                     cleared++
                 } catch (error: CycloneConnectorException) {
                     // NO_SUCH_PROFILE / BAD_REQUEST: Cyclone already dropped or moved it. Anything else: try next time.
-                    if (error.code !in setOf("NO_SUCH_PROFILE", "BAD_REQUEST")) pushed += old
+                    if (error.code !in setOf("NO_SUCH_PROFILE", "BAD_REQUEST")) {
+                        pushed += old
+                        issues[bindingKey(profileId, pkg)] = "Cyclone couldn't clear it (${error.code}); it will be retried"
+                    }
                 }
             }
             // First run (or lost bookkeeping): look for Cloak bindings Cyclone holds that Cloak doesn't know.
@@ -155,7 +184,7 @@ class BindingReconciler(
                     val user = profile.androidUserId ?: continue
                     for (pkg in profile.packages.orEmpty()) {
                         val tuple = tupleKey(profile.id, user, pkg)
-                        if (tuple in wanted) continue
+                        if (tuple in wanted || protected(tuple)) continue
                         try {
                             val held = call { api.getConfig(profile.id, user, pkg) }
                             if (held.optJSONObject("value")?.opt("cloakProfileId") is String) {

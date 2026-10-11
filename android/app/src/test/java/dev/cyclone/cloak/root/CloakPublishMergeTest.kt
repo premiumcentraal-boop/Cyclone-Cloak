@@ -22,7 +22,7 @@ class CloakPublishMergeTest {
 
     @Before
     fun setUp() {
-        assumeTrue(File("/bin/sh").canExecute())
+        assumeTrue(System.getenv("CLOAK_TEST_WSL") == "1" || File("/bin/sh").canExecute())
         work = Files.createTempDirectory("cloak-merge").toFile()
         root = File(work, "adb/cyclone_cloak")
     }
@@ -45,9 +45,17 @@ class CloakPublishMergeTest {
         return staging
     }
 
+    private fun shellPath(file: File): String {
+        val p = file.absolutePath.replace('\\', '/')
+        return if (System.getenv("CLOAK_TEST_WSL") == "1") "/mnt/${p[0].lowercaseChar()}${p.substring(2)}" else p
+    }
+
     private fun publish(staging: File, scope: PublishScope): Int {
-        val script = "set -eu; umask 077; " + CloakRootDoctor.mergePublishScript(root.absolutePath, staging.absolutePath, scope)
-        val process = ProcessBuilder("/bin/sh", "-c", script).redirectErrorStream(true).start()
+        val script = "set -eu; umask 077; " + CloakRootDoctor.mergePublishScript(shellPath(root), shellPath(staging), scope)
+        val source = File(work, "publish.sh").apply { writeText(script + "\n") }
+        val process = ProcessBuilder(if (System.getenv("CLOAK_TEST_WSL") == "1")
+            listOf("wsl.exe", "-d", "Ubuntu", "--exec", "/bin/sh", shellPath(source))
+            else listOf("/bin/sh", source.absolutePath)).redirectErrorStream(true).start()
         val output = process.inputStream.bufferedReader().readText()
         assertTrue("script hung", process.waitFor(20, TimeUnit.SECONDS))
         assertEquals("script failed: $output", 0, process.exitValue())

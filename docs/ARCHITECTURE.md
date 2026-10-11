@@ -1,92 +1,116 @@
 # Cyclone Cloak Architecture
 
-Cyclone Cloak gives the Cyclone profile selector real phone profiles: one Android device
-serves any number of internally coherent virtual devices - one per profile - to scoped apps. It
-attaches on top of Cyclone without forking it.
+Current local candidate: `v0.10.0-rc.1` (unpublished), based on `v0.10.0-alpha.1`. See [CURRENT-STATE.md](CURRENT-STATE.md)
+for versions, local verification and unresolved items. Dated release reports and
+checkpoints describe their historical releases.
 
 ## System view
 
+```text
+Cyclone app in the same Android user
+        | approved cyclone.connector/1.3 provider/Binder calls and events
+        v
+Cloak companion: UI -> Cyclone sync -> root publishing
+        | su --mount-master
+        v
+/data/adb/cyclone_cloak/publishers/<androidUser>/
+        | merge shares, Main takes precedence
+        v
+/data/adb/cyclone_cloak/state-v1/
+        | root Zygisk companion reads the user/package profile
+        v
+Zygisk module in the scoped app -> Build/properties + Pine Java callbacks
 ```
-Cyclone Desktop (profile selector, fleet dashboard)
-        |  localhost HTTP + SSE (existing Cyclone transport)
-        v
-Cyclone Core (orchestration, policy, automation)
-        |  loopback HTTPS + bearer token  (Cloak driver)
-        v
-Cloak Companion (Android app: forge, vault, callback control, API)
-        |  platform
-        v
-Cloak Callback Module  ---> scoped apps (Instagram, banking, ...)
-```
 
-## Layers
+The connector requires Cyclone 5.0.0-alpha.122 or newer. Cloak talks to Cyclone
+in its own Android user. The previously proposed loopback HTTPS API is not implemented.
 
-### 1. Profile Forge
+## App layout
 
-Turns real device dumps into validated Cloak profiles. Source of truth for profile content is
-the dump (build.prop + vendor build.prop, e.g. from the public tadiphone dump index); the forge
-cross-checks every field against every other field and rejects incoherent profiles. The
-validator in `forge/cloak_forge/validate.py` is the canonical rule set:
+`android/probe` is an independent diagnostic APK, not part of the companion or
+module payload. It reads framework/native APIs against two synthetic fixtures
+and displays per-read results. [RUNTIME-COVERAGE.md](RUNTIME-COVERAGE.md) records
+device evidence separately from source implementation and local callback tests.
 
-- fingerprint must parse and agree with brand, product/device name, release, build ID,
-  incremental, and build type of the device block;
-- `ro.build.version.sdk` must agree with the release string where the mapping is unambiguous;
-- security patch must be a real date, not in the future, not after the build date;
-- identifiers (if pre-filled) must be structurally valid: 64-bit Android ID, UUIDv4 advertising
-  and App Set IDs, Luhn-valid IMEIs, well-formed MACs;
-- locale/timezone must be well-formed.
+`MainActivity` hosts `CloakTheme` and `CloakApp` using `CloakViewModel`. The view
+model exposes observable state and serializes changes with a mutex on the IO
+dispatcher. `ConnectorService` handles connector registration and wakes.
 
-### 2. Callback Engine
+Packages under `android/app/src/main/java/dev/cyclone/cloak/`:
 
-A platform module (platform, KernelSU, and APatch via Platform-Next) that runs in each scoped app's
-process and rewrites what the app reads, per the profile bound to that app: build fields, system
-properties, serial number, and the Phase 2 identifier set from `docs/COMPAT_SURFACE.md`.
-
-Runtime posture: callbacks apply once at process start and then unload; no code stays mapped in the
-app's memory; nothing is injected into `system_server`; unscoped apps are untouched.
-
-### 3. Integrity Layer
-
-Per-profile Play Integrity management: each profile carries its own pif.json, Tricky Store
-handles key attestation where a valid keybox is available, a self-test runs the Play Integrity
-verdict before a profile is assigned, and a burned fingerprint rotates automatically.
-
-Honest limits: device integrity (the verdict most apps gate on) is reliably achievable. STRONG
-integrity needs a genuine hardware keybox - that is a supply question, and the health panel
-reports per profile what was actually verified.
-
-### 4. Profile Vault
-
-Every profile stores a 256-bit seed; all identifiers derive from it with HMAC-SHA256 (see
-`forge/cloak_forge/derive.py`), so values are stable for the profile's lifetime, unique across
-profiles, and never duplicated. The vault tracks health state (integrity verdict, fingerprint
-age, last egress IP, bound account) and supports the recycle flow: a new seed regenerates the
-entire identifier set, in place, with the DeviceResetProfile sentinel pattern triggering it on
-app data clear.
-
-### 5. Orchestration API
-
-The companion app exposes a loopback HTTPS API with a bearer token:
-
-| Endpoint | Purpose |
+| Package | Responsibility |
 | --- | --- |
-| `GET /profiles` | list profiles with health state |
-| `POST /profiles` | forge a new profile (dump text or spec in, validated profile out) |
-| `POST /profiles/{id}/apply` | bind a profile to an app package |
-| `POST /profiles/{id}/recycle` | reseed the profile, keep the slot |
-| `POST /profiles/{id}/rotate-fingerprint` | pull a fresh, valid fingerprint |
-| `GET /profiles/{id}/health` | coherence + integrity + last-seen state |
+| `forge/` | Shared phone catalog, phone drafts, dump/JSON imports, coherence validation, seeded identities and fleets, PIF data |
+| `data/` | Identities, custom phones, bindings, install placement and atomic JSON writes |
+| `root/` | Root Doctor, module repair, binding resolution, staging and root publication |
+| `cyclone/` | Connector bridge, approval/scope gates, events, reconciliation, Main mirror, health, bulk binding, open requests and startup callback |
+| `ui/` | Four tabs, phone editor, cards, theme and view model |
 
-Cyclone Core gets a thin driver for these endpoints; the desktop profile selector lists Cloak
-profiles as first-class profiles. No fork of Cyclone, no fork of the cloak - one contract.
+`com/cyclone/connector/client/` contains the connector client and startup provider
+base. `ArchitectureTest` checks that `forge` and `data` import no other Cloak
+layers, `root` may import those two, `cyclone` may also import `root`, and `ui`
+may import all lower layers.
 
-## Design principles
+| Tab | Current behavior |
+| --- | --- |
+| Phones | Built-in/custom templates; build, import, clone, edit and share |
+| Identities | Seeded generation, fleet creation, values, rename, guarded deletion, binding and import/export |
+| Profiles | Cyclone profiles, bindings, health pills, bulk binding and open requests |
+| Health | Health Doctor v2 readiness/checks, redacted clipboard diagnostics, existing repair/reconnect actions and bundled compatibility coverage |
 
-1. **System-level rendering, not containers.** Apps run as normal system apps; only what they read is
-   rewritten. No VirtualApp-style engine anywhere.
-2. **Schema first.** `schema/cloak-profile.schema.json` is the contract between forge, vault,
-   module, and API.
-3. **Coherence over creativity.** Generated values must be indistinguishable from a real dump;
-   the validator, not the generator, has the final word.
-4. **Per-app, always.** One profile per app binding; the device's real profile stays intact for
-   everything else.
+Editing a phone does not change the snapshot already stored in an identity.
+
+## Data and synchronization
+
+The profile contract is `schema/cloak-profile.schema.json`, `schema_version: "0.2"`.
+Python `forge/cloak_forge/` and Kotlin `forge/ProfileValidator.kt` implement
+coherence checks. They consume `catalog/phones.json` and cases in `forge/tests/vectors/`.
+
+Identities use app-private `files/profiles/`; custom phones use `files/phones/`.
+`JsonDirectory` uses temporary files and atomic renames and skips unreadable
+entries. Bindings use `no_backup/cloak-bindings-v1.json` (binding-store schema
+version 2, separate from the profile schema and module index versions).
+
+A binding's stable identity is Cyclone profile id plus package. Reconciliation
+updates its Android user number from Cyclone's registry. Main binds apps across
+ready profiles; a profile's Cloak binds only its own apps. Main is not a binding
+target. Sync checks approval/scopes, writes changed connector tuples, clears stale
+tuples and reports health. Snapshot absence, trashed/unready profiles, missing
+app lists/packages and duplicate ties retain local choices and warn. Deferred
+bindings are excluded from remote cleanup; deletion requires a removal event
+confirmed by the current snapshot. See [RECONCILIATION-TESTS.md](RECONCILIATION-TESTS.md).
+Event sequence numbers deduplicate wakes. Open
+requests are gated and are not retried blindly. `CloakStartupProvider` resolves
+enabled bindings for the pre-launch callback.
+
+Each install publishes its own root-owned share. The assembled tree merges all
+shares with Main taking precedence. Publication now holds a process-safe kernel
+lock across migration, share replacement, pruning and merge; interrupted swaps
+restore the previous complete tree before another merge. Each invocation owns
+its private staging snapshot. Secondary installs mirror Main's bindings
+through root reads. [STATE_LAYOUT.md](STATE_LAYOUT.md) defines permissions, keys,
+index metadata, migration and publication.
+
+## Module and diagnostics
+
+`android/module` builds a Magisk/Zygisk module for `arm64-v8a` and `armeabi-v7a`.
+`cloak.cpp` requests the profile from the root companion before specialization,
+then applies Build fields, property interception and locale/timezone after
+specialization. The embedded Pine library and
+`src/hook/java/dev/cyclone/cloak/hook/HookBridge.java` implement Java callbacks for
+telephony, Android ID, Wi-Fi/Bluetooth addresses, serial, WebView user agent,
+MediaDRM device id, advertising ID and guarded GSF queries. Stored identifiers
+also appear under `cloak.*` properties; storage does not prove every consumer
+API is intercepted. Callbacks remain available during the app process lifetime;
+the code does not implement the old claimed unload posture. Unbound apps do not
+receive a profile.
+
+Root Doctor checks root access, Magisk/Zygisk, module version/architecture and
+publication. The app embeds the matching module ZIP for explicit offline repair.
+An installed module update requires a reboot and another check.
+
+Publishing `pif.json` does not establish a Play Integrity verdict. Automatic
+attestation checks, keybox management, burned-fingerprint rotation, egress/account
+tracking and automatic reseeding on app-data clear are not implemented in this
+release. Device verification and remaining compatibility surfaces are recorded
+in [CURRENT-STATE.md](CURRENT-STATE.md) and [COMPAT_SURFACE.md](COMPAT_SURFACE.md).

@@ -22,7 +22,7 @@ class ImportsTest {
         val finding = parsed.findings.single()
         assertEquals("RELEASE_SDK_MISMATCH", finding.code)
         assertEquals("device.sdk_int", finding.field)
-        assertEquals("release '13' implies SDK 33, profile says 34", finding.message)
+        assertEquals("device.sdk_int must be 33 for Android 13; got 34", finding.message)
     }
 
     @Test
