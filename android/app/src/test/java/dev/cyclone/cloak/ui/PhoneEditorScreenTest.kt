@@ -63,7 +63,8 @@ class PhoneEditorScreenTest {
         sdk.performScrollTo().performTextReplacement("bad")
         sdk.assert(SemanticsMatcher.keyIsDefined(SemanticsProperties.Error))
         val finding = draft.findings().first { it.field == "device.sdk_int" && it.isError }
-        compose.onNodeWithText("Error: ${finding.message}", useUnmergedTree = true).assertIsDisplayed()
+        compose.onNodeWithText("Error: ${finding.message}", useUnmergedTree = true)
+            .performScrollTo().assertIsDisplayed()
         compose.onNodeWithText("Save").assertIsNotEnabled()
         compose.onNodeWithText("Fix the marked fields to save").performScrollTo().assertIsNotEnabled()
         sdk.performScrollTo().performTextReplacement(valid.sdkInt)
