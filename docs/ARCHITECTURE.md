@@ -1,6 +1,6 @@
 # Cyclone Cloak Architecture
 
-Current published prerelease: `v0.10.0-rc.1`, based on `v0.10.0-alpha.1`. See [CURRENT-STATE.md](CURRENT-STATE.md)
+Current local candidate: `v0.10.0-rc.2` (not published). Latest published prerelease: `v0.10.0-rc.1`, based on `v0.10.0-alpha.1`. See [CURRENT-STATE.md](CURRENT-STATE.md)
 for versions, local verification and unresolved items. Dated release reports and
 checkpoints describe their historical releases.
 
@@ -53,12 +53,20 @@ may import all lower layers.
 
 | Tab | Current behavior |
 | --- | --- |
-| Phones | Built-in/custom templates; build, import, clone, edit and share |
+| Phones | Built-in/custom templates; one-click validated profile generation; build, import, clone, edit and share |
 | Identities | Seeded generation, fleet creation, values, rename, guarded deletion, binding and import/export |
-| Profiles | Cyclone profiles, bindings, health pills, bulk binding and open requests |
-| Health | Health Doctor v2 readiness/checks, redacted clipboard diagnostics, existing repair/reconnect actions and bundled compatibility coverage |
+| Profiles | Cyclone profiles, guided single-app binding, filtered bindings, health pills, bulk binding and open requests |
+| Health | Readiness Doctor v3 readiness/checks, redacted clipboard diagnostics, existing repair/reconnect actions and bundled compatibility coverage |
 
 Editing a phone does not change the snapshot already stored in an identity.
+
+`ui/ProfileGeneration` orchestrates the Phones generation action: choose a unique
+default name, allocate a seed with `CloakForge.newSeed`, forge the full existing
+payload, validate it and call the existing atomic `CloakStore.save` writer only
+when no errors remain. `CloakViewModel` serializes the read/generate/save operation
+with its existing work mutex and retains running/saved/rejected/failed UI state.
+Duplicate IDs or names are rejected rather than replacing existing identities.
+This flow does not publish bindings or change the connector/runtime contracts.
 
 ## Data and synchronization
 
@@ -114,3 +122,88 @@ attestation checks, keybox management, burned-fingerprint rotation, egress/accou
 tracking and automatic reseeding on app-data clear are not implemented in this
 release. Device verification and remaining compatibility surfaces are recorded
 in [CURRENT-STATE.md](CURRENT-STATE.md) and [COMPAT_SURFACE.md](COMPAT_SURFACE.md).
+
+## Local profile uniqueness
+
+`forge/ProfileUniqueness` derives an in-memory index from readable saved profile JSON. It is rebuilt before each proposed write and for Health diagnostics, so there is no cache file, migration, or new storage format to corrupt. It indexes Android ID, advertising/app-set IDs, serial, Widevine ID, Wi-Fi/Bluetooth MAC addresses, both IMEIs, SIM serial, and GSF ID within the current Android user's library. Comparisons are case-insensitive; empty and non-string entries are skipped. Coherence validation separately reports malformed values.
+
+Create, generate, import (including fleets), duplicate, rename, and explicit identifier review check the library before saving. Duplicate findings use `warning`, `DUPLICATE_IDENTIFIER`, and the identifier's field path. A review offers per-field regeneration or explicit duplicate acceptance. Library imports preview the whole validated batch and commit together after explicit confirmation; cancellation saves none of the proposed import. A reviewed save checks the latest library again. The existing atomic store writes only after review/validation, and existing publication is invoked after explicit saves of bound profiles.
+
+Regeneration derives one replacement from a fresh random seed and retries collisions up to 32 times. It changes only that draft field; profile ID, original seed, other identifiers, and saved source records remain unchanged. The replacement is an explicit override, so replaying the original seed will reconstruct the original value rather than the override. Existing duplicates are never automatically repaired. Health lists duplicate groups and affected profile names, hides raw identifier values, and keeps this view separate from copied diagnostics. Checks do not compare profiles across Android users or against devices outside this library.
+
+## Readiness Doctor v3
+
+The Health screen derives read-only facts from the last sync/root results and the
+local library snapshot. It separately reports publication, synchronization,
+version agreement, binding enabled state, Cyclone profile/user/app references,
+identity readability/coherence, duplicate binding targets, identifier conflicts,
+and identity ID/reference mismatches. Unreadable files are counted during the
+existing local-library refresh; they are never repaired, removed or rewritten.
+
+The worst applicable check determines ready/degraded/failed. Disabled bindings
+retain visible checks but do not affect the verdict, and no enabled bindings
+produces degraded. Missing/corrupt referenced identities fail; unconfirmed facts
+warn. Main-mirrored identity files are not locally readable and are explicitly
+unverified here. Staleness means mismatched references/user numbers or pending
+last-reported health, not an arbitrary age threshold. Readiness is a snapshot,
+not physical-device hook verification.
+
+Clipboard format `cyclone-cloak.readiness-doctor/3` exports only check enums,
+fixed reason text, binding ordinals/counts, applicability and grammar-checked
+release versions. Profile/app names, JSON, seeds, identifiers, raw errors, keys,
+tokens and user content are never serialized. Existing sync, health-state
+mapping, publication actions, runtime and connector behavior are unchanged.
+
+## Guided binding workflow
+
+`ui/BindingFlow` derives step validation from the latest synchronized Cyclone
+snapshot, readable saved identities, the existing binding records, coherence
+validation and local uniqueness index. `BindingFlowScreen` walks through profile,
+app, compatibility profile, review and confirmation result. It is available from
+Profiles → Bind an app and from an identity's Bind to a profile action. The
+existing bulk workflow remains separate.
+
+Unready profiles, missing users/apps, invalid identities, duplicate target
+records and Main-managed mirrors block confirmation with corrective guidance.
+Sharing an identity, duplicate distinguishing values and replacing a target's
+current identity require explicit warning acknowledgement. A changed reviewed
+snapshot/library invalidates confirmation until the summary is reviewed again.
+
+The view model rechecks local data under its existing work mutex and writes one
+selected app through `CloakBindingStore.update/upsertIn`. New profiles use the
+existing catalog, forge, validated generation and atomic profile store. Cancelling
+after generation retains the saved profile. Success requires the existing root
+publication and reconciliation/health models to confirm readiness. Retry runs
+existing publication/synchronization for the retained target without rewriting
+its binding; a changed or removed target returns to review. Connector, sync
+engine, runtime module and storage formats are unchanged by this UI workflow.
+
+## Local profile backups
+
+`forge/ProfileBackup` defines a profile-only portable envelope with a schema/app
+version, creation time, profile count and optional label. The Identities screen
+exports one profile or the readable library, and previews/explicitly confirms
+single-profile, legacy fleet and backup imports. Coherence errors block the whole
+batch; warnings and duplicate distinguishing values require acknowledgement.
+ID/name collisions receive new local IDs/names in the preview rather than
+replacing existing records. Binding, Cyclone and publication records are excluded.
+
+Default export projects only compatibility settings and profile names. Seeds,
+profile IDs and distinguishing identifiers are included only by explicit checkbox
+selection. Arbitrary metadata, health, network hints and integrity/keybox data
+are always omitted. Restoring a default backup generates fresh identity values.
+These are profile-only backups; an advanced full-state backup is not implemented.
+
+`JsonDirectory.writeBatch` stages a copy of the existing library plus every new
+validated profile. A shared in-process lock excludes cooperating readers/writers
+during the two directory renames. Failed commits restore the previous tree; a
+failed rollback leaves `.profiles.previous` for recovery on the next store access.
+The existing one-JSON-file-per-profile storage format is retained. Temporary
+staging/backup folders are implementation artifacts, not reader schemas.
+
+Export saves an atomic app-private backup and a new local Downloads document.
+`LocalDocumentExport` uses MediaStore's pending-file visibility: complete bytes
+are written and synced before publishing the document. Failed copies are
+discarded; the already complete in-app backup remains available with a warning.
+Downloads copies survive app-data removal, while in-app backups do not. No new
+permissions or networking are used; `allowBackup=false` remains unchanged.

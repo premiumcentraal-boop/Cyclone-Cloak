@@ -67,6 +67,8 @@ class PublicationRecoveryTest {
         val (exit, output) = publish(11)
         assertEquals(output, 0, exit)
         assertTrue(output.contains("CLOAK_PUBLICATION=RECOVERED"))
+        assertTrue(output.contains("CLOAK_PUBLICATION_DETAIL=STALE_LOCK"))
+        assertTrue(CloakRootDoctor.parseResult(output + "\nCLOAK_DOCTOR=READY", 0).staleLockDetected)
         assertFalse(File(root, "publication.owner").exists())
     }
     @Test fun killedOwnerReleasesKernelLockAndLeavesRecoverableMarker() {
@@ -93,6 +95,7 @@ class PublicationRecoveryTest {
             val (exit, output) = publish(12)
             assertNotEquals(output, 0, exit)
             assertTrue(output.contains("CLOAK_PUBLICATION=LOCKED"))
+            assertFalse(output.contains("CLOAK_PUBLICATION_DETAIL=STALE_LOCK"))
             assertEquals(old, File(root, "state-v1/index.json").readText())
             assertFalse(File(root, "publishers/12").exists())
             assertEquals(owner, File(root, "publication.owner").readText())
@@ -109,6 +112,39 @@ class PublicationRecoveryTest {
         assertEquals(old, File(root, "state-v1/index.json").readText())
         assertTrue(File(root, "state-v1/11/profile.json").isFile)
         assertEquals(0, publish(12).first)
+    }
+    @Test fun failedPostSwapCheckRollsBackCompleteTree() {
+        val old = seed()
+        val state = quote(path(File(root, "state-v1/index.json")))
+        val fault = "mv() { command mv \"\$@\" || return \$?; case \"\$1\" in */state-v1.tmp) : > $state;; esac; };"
+        val (exit, output) = publish(12, fault)
+        assertNotEquals(output, 0, exit)
+        assertTrue(output.contains("CLOAK_PUBLICATION_DETAIL=LAST_TREE_RETAINED"))
+        assertEquals(old, File(root, "state-v1/index.json").readText())
+        assertEquals("{\"publisher\":11}", File(root, "state-v1/11/profile.json").readText())
+    }
+    @Test fun interruptedIncompleteCandidateRestoresPreviousCompleteTree() {
+        seed()
+        assertTrue(File(root, "state-v1").renameTo(File(root, "state-v1.previous")))
+        File(root, "state-v1").mkdirs()
+        File(root, "state-v1/index.json").writeText("")
+        File(root, "publication.owner").writeText("interrupted")
+        val (exit, output) = publish(12)
+        assertEquals(output, 0, exit)
+        assertTrue(output.contains("CLOAK_PUBLICATION=RECOVERED"))
+        assertTrue(output.contains("CLOAK_PUBLICATION_DETAIL=STALE_LOCK"))
+        assertTrue(File(root, "state-v1/11/profile.json").isFile)
+        assertTrue(File(root, "state-v1/12/profile.json").isFile)
+    }
+    @Test fun killedDuringTreeRetirementRecoversOnNextPublication() {
+        val old = seed()
+        val fault = "mv() { command mv \"\$@\" || return \$?; case \"\$1\" in */state-v1) kill -KILL \$(sh -c 'echo \$PPID');; esac; };"
+        assertNotEquals(0, publish(12, fault).first)
+        assertEquals(old, File(root, "state-v1.previous/index.json").readText())
+        val (exit, output) = publish(12)
+        assertEquals(output, 0, exit)
+        assertTrue(output.contains("CLOAK_PUBLICATION=RECOVERED"))
+        assertTrue(File(root, "state-v1/11/profile.json").isFile)
     }
     @Test fun failedRollbackRetainsBackupAndNextAttemptRecoversIt() {
         val old = seed()

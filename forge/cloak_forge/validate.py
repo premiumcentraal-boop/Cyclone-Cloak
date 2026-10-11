@@ -1,8 +1,7 @@
 """Coherence validation for Cloak profiles.
 
-A profile is only as strong as its least consistent field: every rule here mirrors a cross-check
-an anti-fraud SDK can run against a real device. The forge refuses to emit a profile that fails
-any ERROR finding.
+Checks stored device-configuration values for internal consistency. Errors block use;
+warnings and information describe uncertainty without rejecting a compatible profile.
 """
 
 from __future__ import annotations
@@ -10,12 +9,14 @@ from __future__ import annotations
 import re
 from dataclasses import dataclass
 from datetime import date, datetime, timezone
-from typing import Any, Mapping
+from typing import Any, Iterable, Mapping
 
 from .derive import luhn_valid
 
 ERROR = "error"
 WARNING = "warning"
+INFO = "info"
+_SEVERITY_ORDER = {ERROR: 0, WARNING: 1, INFO: 2}
 
 SCHEMA_VERSION = "0.2"
 
@@ -85,8 +86,52 @@ class Finding:
     message: str
     field: str | None = None
 
+    def __post_init__(self) -> None:
+        if self.severity not in _SEVERITY_ORDER:
+            raise ValueError("severity must be info, warning or error")
+        if not re.fullmatch(r"[A-Z][A-Z0-9_]*", self.code) or not self.message.strip():
+            raise ValueError("finding needs a stable reason code and explanation")
 
-def has_errors(findings: list[Finding]) -> bool:
+
+@dataclass(frozen=True)
+class ValidationResult:
+    """Diagnostic summary only; never part of the stored profile."""
+
+    findings: tuple[Finding, ...]
+
+    def __post_init__(self) -> None:
+        object.__setattr__(self, "findings", tuple(sorted(self.findings, key=_finding_key)))
+
+    @property
+    def has_errors(self) -> bool:
+        return has_errors(self.findings)
+
+    @property
+    def error_count(self) -> int:
+        return sum(f.severity == ERROR for f in self.findings)
+
+    @property
+    def warning_count(self) -> int:
+        return sum(f.severity == WARNING for f in self.findings)
+
+    @property
+    def info_count(self) -> int:
+        return sum(f.severity == INFO for f in self.findings)
+
+
+def _finding_key(finding: Finding) -> tuple[int, str, str, str]:
+    return (_SEVERITY_ORDER[finding.severity], finding.field or "", finding.code, finding.message)
+
+
+def summarize(findings: Iterable[Finding]) -> ValidationResult:
+    return ValidationResult(tuple(findings))
+
+
+def validate_profile_result(profile: Mapping[str, Any]) -> ValidationResult:
+    return summarize(validate_profile(profile))
+
+
+def has_errors(findings: Iterable[Finding]) -> bool:
     return any(finding.severity == ERROR for finding in findings)
 
 
@@ -222,7 +267,7 @@ def validate_profile(profile: Mapping[str, Any]) -> list[Finding]:
     findings: list[Finding] = []
     if not isinstance(profile, Mapping):
         _add(findings, ERROR, "BLOCK_TYPE", "profile must be an object", "profile")
-        return findings
+        return sorted(findings, key=_finding_key)
     def block(key: str) -> Mapping[str, Any]:
         value = profile.get(key, {})
         if not isinstance(value, Mapping):
@@ -245,7 +290,7 @@ def validate_profile(profile: Mapping[str, Any]) -> list[Finding]:
         elif field_name not in ("sdk_int", "first_api_level", "build_date_utc") and (not isinstance(value, str) or not value.strip() or any(ord(c) < 32 or ord(c) == 127 for c in value)):
             _add(findings, ERROR, "DEVICE_FIELD", f"device.{field_name} must be non-blank text without control characters")
     if has_errors(findings):
-        return findings
+        return sorted(findings, key=_finding_key)
 
     _validate_fingerprint(findings, device)
     _validate_versions(findings, device)
@@ -254,12 +299,15 @@ def validate_profile(profile: Mapping[str, Any]) -> list[Finding]:
     _validate_telephony(findings, block("telephony"))
     _validate_display(findings, block("display"))
     _validate_locale(findings, block("locale"))
+    _validate_network(findings, block("network"))
+    telephony = profile.get("telephony", {})
+    _validate_hardware(findings, device, telephony if isinstance(telephony, Mapping) else {})
     ua = profile.get("ua")
     if ua is None:
         _add(findings, WARNING, "UA_MISSING", "profile carries no user agent block")
     else:
         _validate_ua(findings, ua, device)
-    return findings
+    return sorted(findings, key=_finding_key)
 
 
 
@@ -293,14 +341,44 @@ def _validate_telephony(findings: list[Finding], telephony: Mapping[str, Any]) -
     carrier = telephony.get("carrier_name")
     if not isinstance(carrier, str) or not carrier.strip():
         _add(findings, ERROR, "TELEPHONY_CARRIER", "telephony.carrier_name must be a non-empty string")
-    if not _MCC_RE.match(str(telephony.get("mcc", ""))):
+    elif any(ord(c) < 32 or ord(c) == 127 for c in carrier):
+        _add(findings, ERROR, "TELEPHONY_CARRIER_FORMAT", "telephony.carrier_name must not contain control characters")
+    if not _MCC_RE.fullmatch(str(telephony.get("mcc", ""))):
         _add(findings, ERROR, "TELEPHONY_MCC", "telephony.mcc must be three digits")
-    if not _MNC_RE.match(str(telephony.get("mnc", ""))):
+    if not _MNC_RE.fullmatch(str(telephony.get("mnc", ""))):
         _add(findings, ERROR, "TELEPHONY_MNC", "telephony.mnc must be two or three digits")
     if str(telephony.get("network_type", "")) not in _NETWORK_TYPES:
         _add(findings, ERROR, "TELEPHONY_NETWORK_TYPE", "telephony.network_type must be one of 5G, LTE, HSPA, UMTS, GSM")
     if str(telephony.get("sim_slot_count", 1)) not in ("1", "2"):
         _add(findings, ERROR, "TELEPHONY_SLOTS", "telephony.sim_slot_count must be 1 or 2")
+    if telephony.get("mcc") == "000":
+        _add(findings, INFO, "TELEPHONY_PLACEHOLDER_OPERATOR", "telephony.mcc is all zero; confirm that a placeholder operator is intended")
+
+
+def _validate_network(findings: list[Finding], network: Mapping[str, Any]) -> None:
+    if "egress_hint" not in network:
+        return
+    hint = network["egress_hint"]
+    if not isinstance(hint, str) or len(hint) > 128 or any(ord(c) < 32 or ord(c) == 127 for c in hint):
+        _add(findings, ERROR, "NETWORK_HINT_FORMAT", "network.egress_hint must be text of at most 128 characters without control characters", "network.egress_hint")
+
+
+def _validate_hardware(findings: list[Finding], device: Mapping[str, Any], telephony: Mapping[str, Any]) -> None:
+    # Existing schema has no camera/sensor feature flags. Do not infer capabilities
+    # from OEM names, physical SIM slots, or the mere presence of identifier values.
+    for field in ("bootloader", "baseband"):
+        if field in device:
+            value = device[field]
+            if not isinstance(value, str) or any(ord(c) < 32 or ord(c) == 127 for c in value):
+                _add(findings, ERROR, "HARDWARE_FIELD_FORMAT", f"device.{field} must be text without control characters")
+    if device.get("hardware", "").lower() in ("unknown", "generic"):
+        _add(findings, INFO, "HARDWARE_UNSPECIFIED", "device.hardware does not identify a specific hardware platform; capability consistency cannot be established")
+    baseband = device.get("baseband")
+    if telephony.get("network_type") in _NETWORK_TYPES and isinstance(baseband, str) and baseband.strip().lower() in ("none", "unknown", "n/a"):
+        _add(findings, WARNING, "HARDWARE_MODEM_UNSPECIFIED", "device.baseband does not identify a modem although telephony.network_type declares cellular service")
+    first_api = device.get("first_api_level")
+    if telephony.get("network_type") == "5G" and type(first_api) is int and first_api < 29:
+        _add(findings, WARNING, "HARDWARE_NETWORK_GENERATION", "telephony.network_type declares 5G on hardware launched before API 29; confirm modem support", "telephony.network_type")
 
 
 def _validate_display(findings: list[Finding], display: Mapping[str, Any]) -> None:
@@ -328,7 +406,7 @@ def _validate_display(findings: list[Finding], display: Mapping[str, Any]) -> No
         _add(findings, ERROR, "DISPLAY_CLASS", "display.screen_size_class must be small, normal, or large")
 
 
-_MCC_RE = re.compile(r"^\d{3}$")
-_MNC_RE = re.compile(r"^\d{2,3}$")
+_MCC_RE = re.compile(r"^[0-9]{3}$")
+_MNC_RE = re.compile(r"^[0-9]{2,3}$")
 _NETWORK_TYPES = {"5G", "LTE", "HSPA", "UMTS", "GSM"}
 _DISPLAY_CLASSES = {"small", "normal", "large"}

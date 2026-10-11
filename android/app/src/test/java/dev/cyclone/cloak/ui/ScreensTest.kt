@@ -6,6 +6,11 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.assertIsDisplayed
+import androidx.compose.ui.test.hasAnyAncestor
+import androidx.compose.ui.test.hasTestTag
+import androidx.compose.ui.test.hasText
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performScrollToNode
 import dev.cyclone.cloak.cyclone.CycloneGate
 import dev.cyclone.cloak.cyclone.Placement
 import dev.cyclone.cloak.cyclone.ProfilesSnapshot
@@ -94,8 +99,10 @@ class ScreensTest {
     @Test
     fun phones() {
         compose.setContent { Screen { PhonesScreen(state(), vm) } }
-        compose.onNodeWithText("Galaxy S23 Germany").assertIsDisplayed()
+        compose.onNodeWithText("Generate profile").assertIsDisplayed()
         shot("1-phones")
+        compose.onNodeWithTag("phones-list").performScrollToNode(hasTestTag("phone-card/galaxy_de"))
+        compose.onNode(hasText("Galaxy S23 Germany") and hasAnyAncestor(hasTestTag("phone-card/galaxy_de"))).assertIsDisplayed()
     }
 
     @Test
@@ -115,7 +122,7 @@ class ScreensTest {
     @Test
     fun health() {
         compose.setContent { Screen { HealthScreen(state(), vm) } }
-        compose.onNodeWithText("Health Doctor v2").assertIsDisplayed()
+        compose.onNodeWithText("Readiness Doctor v3").assertIsDisplayed()
         shot("4-health")
     }
 

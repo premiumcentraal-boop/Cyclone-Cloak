@@ -66,4 +66,105 @@ class ProfileValidatorTest {
             assertTrue(before.similar(profile))
         }
     }
+
+    @Test
+    fun eachCoherenceRuleGroupReportsItsFieldAndStableReason() {
+        val cases = listOf(
+            listOf("device.manufacturer", "Samsung", "warning", "MODEL_MANUFACTURER_MISMATCH"),
+            listOf("device.sdk_int", 34, "error", "RELEASE_SDK_MISMATCH"),
+            listOf("device.brand", "other", "error", "FP_BRAND_MISMATCH"),
+            listOf("display.height", 6000, "warning", "DISPLAY_ASPECT"),
+            listOf("display.density", 1600, "warning", "DISPLAY_DENSITY_MISMATCH"),
+            listOf("locale.timezone", "Europe//Berlin", "error", "LOCALE"),
+            listOf("identifiers.serial", "bad serial", "error", "IDENTIFIER_FORMAT"),
+            listOf("telephony.carrier_name", "Carrier\nInjected", "error", "TELEPHONY_CARRIER_FORMAT"),
+            listOf("telephony.carrier_name", 123, "error", "TELEPHONY_CARRIER"),
+            listOf("telephony.mcc", "310\n", "error", "TELEPHONY_MCC"),
+            listOf("telephony.mcc", "٣١٠", "error", "TELEPHONY_MCC"),
+            listOf("telephony.mcc", "000", "info", "TELEPHONY_PLACEHOLDER_OPERATOR"),
+            listOf("network.egress_hint", "x".repeat(129), "error", "NETWORK_HINT_FORMAT"),
+            listOf("network.egress_hint", "region\u0000", "error", "NETWORK_HINT_FORMAT"),
+            listOf("device.bootloader", 123, "error", "HARDWARE_FIELD_FORMAT"),
+            listOf("device.baseband", "none", "warning", "HARDWARE_MODEM_UNSPECIFIED"),
+            listOf("device.first_api_level", 28, "warning", "HARDWARE_NETWORK_GENERATION"),
+            listOf("device.hardware", "generic", "info", "HARDWARE_UNSPECIFIED"),
+        )
+        for ((path, value, severity, code) in cases) {
+            val profile = profile()
+            val parts = (path as String).split('.')
+            profile.getJSONObject(parts[0]).put(parts[1], value)
+            val result = ProfileValidator.validateProfileResult(profile)
+            val field = when (code) { "DISPLAY_ASPECT" -> "display.width"; "HARDWARE_NETWORK_GENERATION" -> "telephony.network_type"; else -> path }
+            val finding = result.findings.single { it.code == code && it.field == field }
+            assertEquals(path, severity, finding.severity)
+            assertTrue(path, finding.message.startsWith(field as String))
+            assertEquals(path, severity == "error", result.hasErrors)
+        }
+    }
+
+    @Test
+    fun summaryIsSortedBySeverityFieldCodeAndMessageAndCannotBeMutated() {
+        val source = mutableListOf(
+            ProfileValidator.Finding("info", "NOTE", "note", "a"),
+            ProfileValidator.Finding("warning", "WARN", "warning", "a"),
+            ProfileValidator.Finding("error", "Z_CODE", "z reason", "b"),
+            ProfileValidator.Finding("error", "A_CODE", "b reason", "b"),
+            ProfileValidator.Finding("error", "A_CODE", "a reason", "b"),
+            ProfileValidator.Finding("error", "ROOT", "root reason"),
+            ProfileValidator.Finding("error", "LAST", "field first", "a"),
+        )
+        val result = ProfileValidator.summarize(source)
+        assertEquals(result.findings, ProfileValidator.summarize(source.reversed()).findings)
+        assertEquals(listOf("ROOT", "LAST", "A_CODE", "A_CODE", "Z_CODE", "WARN", "NOTE"), result.findings.map { it.code })
+        assertEquals(listOf("a reason", "b reason"), result.findings.slice(2..3).map { it.message })
+        assertEquals(5, result.errorCount)
+        assertEquals(1, result.warningCount)
+        assertEquals(1, result.infoCount)
+        assertTrue(result.hasErrors)
+        source.clear()
+        assertEquals(7, result.findings.size)
+        assertThrows(UnsupportedOperationException::class.java) { (result.findings as MutableList).clear() }
+    }
+
+    @Test
+    fun summaryAndLegacyApiMatchWithoutMutatingProfile() {
+        val profile = profile()
+        profile.getJSONObject("device").put("hardware", "generic").put("baseband", "none")
+        profile.getJSONObject("display").put("width", 0)
+        val before = JSONObject(profile.toString())
+        val result = ProfileValidator.validateProfileResult(profile)
+        assertEquals(ProfileValidator.validateProfile(profile), result.findings)
+        assertEquals(1, result.errorCount)
+        assertEquals(1, result.warningCount)
+        assertEquals(1, result.infoCount)
+        assertTrue(before.similar(profile))
+    }
+
+    @Test
+    fun validOpaqueNetworkHintsAndMissingOptionalHardwareAreAccepted() {
+        val profile = profile()
+        profile.getJSONObject("device").remove("baseband")
+        profile.getJSONObject("device").remove("bootloader")
+        profile.remove("network")
+        assertTrue(ProfileValidator.validateProfileResult(profile).findings.isEmpty())
+        profile.put("network", JSONObject().put("egress_hint", "😀".repeat(128)))
+        assertTrue(ProfileValidator.validateProfile(profile).isEmpty())
+        val phone = PhoneTemplate.fromProfile("test", "test", profile)
+        assertEquals(ProfileValidator.validatePhone(phone), ProfileValidator.validatePhoneResult(phone).findings)
+        phone.network.put("egress_hint", "bad\n")
+        assertTrue(ProfileValidator.validatePhone(phone).any { it.code == "NETWORK_HINT_FORMAT" && it.isError })
+    }
+
+    @Test
+    fun findingsRejectInvalidSeverityCodeOrEmptyExplanation() {
+        assertThrows(IllegalArgumentException::class.java) { ProfileValidator.Finding("fatal", "CODE", "reason") }
+        assertThrows(IllegalArgumentException::class.java) { ProfileValidator.Finding("info", "bad-code", "reason") }
+        assertThrows(IllegalArgumentException::class.java) { ProfileValidator.Finding("warning", "CODE", " ") }
+    }
+
+    @Test
+    fun malformedTelephonyReportsOnlyOneBlockFailure() {
+        val profile = profile().put("telephony", org.json.JSONArray())
+        assertEquals(1, ProfileValidator.validateProfile(profile).count { it.code == "BLOCK_TYPE" && it.field == "telephony" })
+    }
 }

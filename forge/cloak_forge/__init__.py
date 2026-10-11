@@ -16,14 +16,18 @@ from .derive import (
 )
 from .forge import FORGE_VERSION, ForgeError, available_templates, forge_profile
 from .prop_parse import draft_device, draft_phone, draft_profile, parse_build_prop
-from .validate import ERROR, WARNING, Finding, has_errors, validate_profile
+from .validate import ERROR, WARNING, INFO, Finding, ValidationResult, has_errors, summarize, validate_profile, validate_profile_result
 
 __version__ = FORGE_VERSION
 
 __all__ = [
     "ERROR",
     "WARNING",
+    "INFO",
     "Finding",
+    "ValidationResult",
+    "summarize",
+    "validate_profile_result",
     "FORGE_VERSION",
     "ForgeError",
     "available_templates",

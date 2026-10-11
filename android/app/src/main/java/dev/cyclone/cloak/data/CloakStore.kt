@@ -15,6 +15,10 @@ object CloakStore {
         return id
     }
 
+    /** Add a completely reviewed batch without replacing existing identities. */
+    fun importBatch(context: Context, profiles: List<JSONObject>) =
+        dir(context).writeBatch(profiles.map { it.getString("id") to it })
+
     fun all(context: Context): List<Pair<String, JSONObject>> = dir(context).all()
 
     /** Loads one stored cloak profile by id, or null when absent or unreadable. */

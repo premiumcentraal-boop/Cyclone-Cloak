@@ -30,6 +30,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.cyclone.cloak.forge.PhoneTemplate
@@ -47,7 +48,7 @@ internal fun PhonesScreen(state: CloakState, vm: CloakViewModel) {
     }
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().testTag("phones-list"),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
@@ -57,6 +58,10 @@ internal fun PhonesScreen(state: CloakState, vm: CloakViewModel) {
                 body = "Every identity copies a phone: its model, build, carrier, screen and locale. Use a built-in phone, " +
                     "build your own, or import one from a real phone's build.prop or `adb shell getprop` output.",
             )
+        }
+        item {
+            ProfileGenerationCard(state.phones, state.busy != null, state.generation,
+                onGenerate = vm::generateProfile, onDismiss = vm::dismissGenerationResult)
         }
         item {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -128,7 +133,7 @@ private fun PhoneCard(
     onDelete: (() -> Unit)?,
 ) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth().testTag("phone-card/${phone.id}"),
         shape = MaterialTheme.shapes.large,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
         elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),

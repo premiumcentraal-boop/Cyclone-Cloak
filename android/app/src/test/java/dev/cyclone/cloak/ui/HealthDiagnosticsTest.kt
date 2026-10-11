@@ -30,6 +30,16 @@ class HealthDiagnosticsTest {
         assertTrue(result.redactedReport().contains("PUBLICATION_RECOVERED"))
     }
 
+    @Test fun staleLockRecoveryIsReportedWithoutOwnerDetails() {
+        val result = HealthDiagnostics.assess(facts().copy(root = RootDoctorResult(
+            RootDoctorCode.READY, "v$version", diagnostic = "private-owner-123",
+            publicationReason = PublicationReason.RECOVERED, staleLockDetected = true)))
+        assertEquals(Readiness.READY, result.verdict)
+        assertTrue(check(result, DoctorCheckKind.ROOT).reasons.contains(DoctorReason.PUBLICATION_STALE_LOCK))
+        assertTrue(result.redactedReport().contains("PUBLICATION_STALE_LOCK"))
+        assertFalse(result.redactedReport().contains("private-owner-123"))
+    }
+
     @Test fun readyRequiresAllApplicableChecksToPass() {
         val result = HealthDiagnostics.assess(facts())
         assertEquals(Readiness.READY, result.verdict)
@@ -133,4 +143,80 @@ class HealthDiagnosticsTest {
             assertEquals(setOf("check", "status", "binding_number", "affects_readiness", "reasons"), json.getJSONArray("checks").getJSONObject(i).keys().asSequence().toSet())
         }
     }
+    @Test fun v3SplitsPublicationSynchronizationAndBindingAspects() {
+        val result = HealthDiagnostics.assess(facts())
+        assertTrue(result.checks.map { it.kind }.containsAll(listOf(DoctorCheckKind.PUBLICATION,
+            DoctorCheckKind.SYNC, DoctorCheckKind.LOCAL_RECORDS, DoctorCheckKind.ENABLED,
+            DoctorCheckKind.PROFILE, DoctorCheckKind.IDENTITY, DoctorCheckKind.RECORDS)))
+        assertEquals("cyclone-cloak.readiness-doctor/3", JSONObject(result.redactedReport()).getString("format"))
+        assertTrue(result.summary.endsWith("0 warning · 0 fail"))
+    }
+
+    @Test fun staleConflictingAndUnreadableRecordsHaveDistinctReasons() {
+        val examples = listOf(
+            binding.copy(duplicateRecord = true) to DoctorReason.DUPLICATE_BINDING,
+            binding.copy(duplicateIdentifiers = true) to DoctorReason.LOCAL_CONFLICT,
+            binding.copy(identityIdMatches = false) to DoctorReason.IDENTITY_ID_MISMATCH,
+            binding.copy(identityReadable = false) to DoctorReason.IDENTITY_UNREADABLE,
+            binding.copy(identityCoherent = false) to DoctorReason.IDENTITY_INVALID,
+            binding.copy(identityReadable = null) to DoctorReason.IDENTITY_UNKNOWN,
+            binding.copy(remoteIdentity = true, identityPresent = false, identityReadable = null) to DoctorReason.IDENTITY_REMOTE)
+        examples.forEach { (row, reason) ->
+            val result = HealthDiagnostics.assess(facts().copy(bindings = listOf(row)))
+            assertTrue(reason.name, reason in result.checks.last().reasons)
+            assertNotEquals(reason.name, Readiness.READY, result.verdict)
+            assertTrue(result.checks.filter { it.status != DoctorStatus.PASS }.all { it.reasons.isNotEmpty() && it.reasons.all { r -> r.message.isNotBlank() } })
+        }
+    }
+
+    @Test fun mixedSummaryFailsOnlyForApplicableFailures() {
+        val result = HealthDiagnostics.assess(facts().copy(bindings = listOf(binding,
+            binding.copy(duplicateRecord = true), binding.copy(identityPresent = false),
+            binding.copy(enabled = false, identityPresent = false))))
+        assertEquals(Readiness.FAILED, result.verdict)
+        assertEquals(3, result.enabledBindings)
+        assertEquals(1, result.disabledBindings)
+        val rows = result.checks.filter { it.affectsReadiness }
+        assertTrue(rows.any { it.status == DoctorStatus.PASS })
+        assertTrue(rows.any { it.status == DoctorStatus.WARN })
+        assertTrue(rows.any { it.status == DoctorStatus.FAIL })
+        assertEquals("${rows.count { it.status == DoctorStatus.PASS }} pass · ${rows.count { it.status == DoctorStatus.WARN }} warning · ${rows.count { it.status == DoctorStatus.FAIL }} fail", result.summary)
+        val disabled = HealthDiagnostics.assess(facts().copy(bindings = listOf(binding,
+            binding.copy(enabled = false, identityPresent = false, duplicateRecord = true))))
+        assertEquals(Readiness.READY, disabled.verdict)
+        assertTrue(disabled.checks.any { !it.affectsReadiness && it.status == DoctorStatus.FAIL })
+    }
+
+    @Test fun publicationLockCannotMaskFatalRootFailureAndSyncIssuesWarn() {
+        val result = HealthDiagnostics.assess(facts().copy(root = RootDoctorResult(
+            RootDoctorCode.MODULE_MISSING, "v$version", publicationReason = PublicationReason.LOCKED)))
+        assertEquals(Readiness.FAILED, result.verdict)
+        val sync = HealthDiagnostics.assess(facts().copy(syncIssues = true))
+        assertEquals(Readiness.DEGRADED, sync.verdict)
+        assertEquals(listOf(DoctorReason.SYNC_ISSUES), check(sync, DoctorCheckKind.SYNC).reasons)
+    }
+
+    @Test fun incompleteLibraryAndUnusedCorruptRecordsWarnWithoutChangingBindings() {
+        for (input in listOf(facts().copy(localInventoryKnown = false), facts().copy(unreadableIdentities = true),
+            facts().copy(conflictingIdentities = true), facts().copy(mismatchedIdentities = true))) {
+            val original = input.bindings.toList()
+            assertEquals(Readiness.DEGRADED, HealthDiagnostics.assess(input).verdict)
+            assertEquals(original, input.bindings)
+        }
+    }
+
+    @Test fun warningSerializationAndRedactionIncludeNoRawUserContentOrCredentials() {
+        val secrets = listOf("seed-marker", "identifier-marker", "-----BEGIN PRIVATE KEY-----",
+            "Bearer token-marker", "user-content-marker")
+        val raw = secrets.joinToString("\n")
+        val result = HealthDiagnostics.assess(facts().copy(appVersion = raw, providerState = raw,
+            root = RootDoctorResult(RootDoctorCode.PUBLISH_FAILED, raw, raw),
+            bindings = listOf(binding.copy(displayContext = raw, health = raw, duplicateRecord = true))))
+        val text = result.redactedReport()
+        secrets.forEach { assertFalse(it, text.contains(it)) }
+        assertTrue(text.contains("\"warning\""))
+        assertFalse(text.contains("displayContext"))
+        assertFalse(text.contains("diagnostic\""))
+    }
+
 }

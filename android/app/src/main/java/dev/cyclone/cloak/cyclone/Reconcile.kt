@@ -68,7 +68,7 @@ object ReconcilePlanner {
                 continue
             }
             val user = profile.androidUserId
-            if (user != null && user != binding.androidUserId) moves[profile.id] = user
+            if (profile.bindable && user != null && user != binding.androidUserId) moves[profile.id] = user
             // Trashed or still setting up: keep the binding, Cyclone keeps its tuple (a restore brings it back).
             if (!binding.enabled) continue
             if (!profile.bindable || user == null) {
@@ -121,7 +121,7 @@ class BindingReconciler(
         val written: Int,
         val statuses: Int,
         val cleared: Int,
-        /** Set when a whole-connector error stopped the run: NOT_APPROVED, SCOPE_NOT_GRANTED or UNKNOWN_METHOD. */
+        /** Set when a whole-connector error stopped the run: approval, scope, unknown-method or connector-loss errors. */
         val stoppedBy: String? = null,
     )
 
@@ -134,6 +134,7 @@ class BindingReconciler(
         fun protected(tuple: String): Boolean = splitTuple(tuple)?.let { (profile, _, pkg) -> bindingKey(profile, pkg) in preserve } == true
         val pushed = previouslyPushed.orEmpty().filter(::protected).toMutableSet()
         val issues = mutableMapOf<String, String>()
+        val failedKeys = mutableSetOf<String>()
         var written = 0
         var statuses = 0
         var cleared = 0
@@ -148,12 +149,15 @@ class BindingReconciler(
                         call { api.setConfig(want.profileId, want.androidUserId, want.packageName, want.value) }
                         written++
                     }
+                    // A confirmed value must remain tracked even if its following health update fails.
+                    pushed += want.tupleKey
                     if (held.optString("state", CloakHealth.UNKNOWN) != want.state) {
                         call { api.configStatus(want.profileId, want.androidUserId, want.packageName, want.state) }
                         statuses++
                     }
                     pushed += want.tupleKey
                 } catch (error: CycloneConnectorException) {
+                    failedKeys += key
                     issues[key] = when (error.code) {
                         "BAD_REQUEST" -> ReconcilePlanner.NOT_LISTED
                         "NO_SUCH_PROFILE" -> "profile isn't ready in Cyclone"
@@ -166,6 +170,10 @@ class BindingReconciler(
             // Tuples written earlier that Cloak no longer wants (unbound, disabled, moved to a new user number).
             for (old in previouslyPushed.orEmpty() - wanted.keys) {
                 if (protected(old)) continue
+                if (splitTuple(old)?.let { (profile, _, pkg) -> bindingKey(profile, pkg) in failedKeys } == true) {
+                    pushed += old
+                    continue
+                }
                 val (profileId, user, pkg) = splitTuple(old) ?: continue
                 try {
                     call { api.setConfig(profileId, user, pkg, null) }
@@ -191,7 +199,9 @@ class BindingReconciler(
                                 call { api.setConfig(profile.id, user, pkg, null) }
                                 cleared++
                             }
-                        } catch (_: CycloneConnectorException) {
+                        } catch (error: CycloneConnectorException) {
+                            issues[bindingKey(profile.id, pkg)] = "Cyclone could not check or clear this stale tuple (${error.code}); it will be retried"
+                            if (error.code !in setOf("NO_SUCH_PROFILE", "BAD_REQUEST")) pushed += tuple
                         }
                     }
                 }
@@ -215,7 +225,7 @@ class BindingReconciler(
                     try {
                         block()
                     } catch (again: CycloneConnectorException) {
-                        if (again.code in setOf("NOT_APPROVED", "SCOPE_NOT_GRANTED", "UNKNOWN_METHOD")) throw Stop(again.code)
+                        if (again.code in setOf("NOT_APPROVED", "SCOPE_NOT_GRANTED", "UNKNOWN_METHOD", "NOT_A_CONNECTOR")) throw Stop(again.code)
                         throw again
                     }
                 }

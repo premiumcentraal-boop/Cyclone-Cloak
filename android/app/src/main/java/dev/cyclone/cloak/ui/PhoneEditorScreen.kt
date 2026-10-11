@@ -208,7 +208,7 @@ private fun ProfileSummary(draft: PhoneDraft, findings: List<ProfileValidator.Fi
 @Composable
 private fun StatusLine(findings: List<ProfileValidator.Finding>) {
     val errors = findings.count { it.isError }
-    val warnings = findings.size - errors
+    val warnings = findings.count { it.severity == ProfileValidator.WARNING }
     val (label, tone) = when {
         errors > 0 -> "$errors to fix" to CloakStatusTone.ERROR
         warnings > 0 -> "Holds together · $warnings to check" to CloakStatusTone.PENDING
@@ -280,7 +280,7 @@ private fun FieldFeedback(findings: List<ProfileValidator.Finding>) {
     Column(verticalArrangement = Arrangement.spacedBy(2.dp)) {
         findings.sortedBy { if (it.isError) 0 else 1 }.forEach { finding ->
             Text(
-                "${if (finding.isError) "Error" else "Check"}: ${finding.message}",
+                "${when (finding.severity) { ProfileValidator.ERROR -> "Error"; ProfileValidator.WARNING -> "Check"; else -> "Note" }}: ${finding.message}",
                 style = MaterialTheme.typography.bodySmall,
                 color = if (finding.isError) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.tertiary,
             )

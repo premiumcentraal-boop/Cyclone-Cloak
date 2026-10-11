@@ -12,6 +12,9 @@ class PhoneCatalogTest {
         assertEquals(listOf("pixel_4", "pixel_7", "galaxy_s23"), ids.take(3))
         assertTrue(ids.containsAll(listOf("pixel_6", "pixel_6a", "pixel_7a", "pixel_8")))
         assertEquals("catalog ids must be unique", ids.size, ids.toSet().size)
+        assertTrue(ids.containsAll(listOf("pixel_6_pro", "pixel_7_pro", "pixel_8_pro", "pixel_8a",
+            "pixel_9", "pixel_9_pro", "pixel_9_pro_xl", "pixel_9a")))
+        assertTrue(ids.size >= 15)
         for (phone in TestPhones.all) {
             assertTrue(phone.builtIn)
             assertEquals(phone.id, emptyList<ProfileValidator.Finding>(), ProfileValidator.validatePhone(phone))
@@ -46,4 +49,28 @@ class PhoneCatalogTest {
         val parsed = Imports.parse(Imports.exportPhone(phone).toString(), setOf("pixel_7")) as Imports.Parsed.Phone
         assertEquals("pixel_7_2", parsed.phone.id)
     }
+    @Test fun optionalCatalogMetadataRoundTripsWithoutChangingProfiles() {
+        val classes = mutableSetOf<String>()
+        for (phone in TestPhones.all) {
+            assertTrue(phone.confidence in setOf("public reference", "approximated", "needs verification"))
+            val encoded = phone.toJson()
+            val decoded = PhoneTemplate.fromJson(encoded)
+            assertTrue(encoded.similar(decoded.toJson()))
+            val exported = Imports.parse(Imports.exportPhone(phone).toString(), emptySet()) as Imports.Parsed.Phone
+            assertTrue(encoded.similar(exported.phone.toJson()))
+            val profile = CloakForge.forgeProfile("Catalog", "ab".repeat(32), phone)
+            assertTrue(!profile.has("confidence") && !profile.has("classification"))
+            phone.classification?.let { metadata ->
+                val tags = metadata.getJSONArray("device_classes")
+                for (i in 0 until tags.length()) classes.add(tags.getString(i))
+                assertTrue(metadata.getString("hardware_feature_group").isNotBlank())
+                assertTrue(metadata.getString("camera_class") in setOf("dual-rear-front", "triple-rear-front"))
+            }
+        }
+        assertTrue(classes.containsAll(listOf("compact", "mainstream", "large-display", "midrange",
+            "older-supported-device", "newer-supported-device")))
+        val legacy = TestPhones["pixel_7"].toJson().also { it.remove("confidence"); it.remove("classification") }
+        assertTrue(legacy.similar(PhoneTemplate.fromJson(legacy).toJson()))
+    }
+
 }

@@ -6,19 +6,45 @@ import java.time.LocalDate
 import java.time.ZoneOffset
 
 /**
- * Coherence rules for cloak profiles, ported from forge/cloak_forge/validate.py. A profile is only as strong as its
- * least consistent field: every rule mirrors a cross-check an anti-fraud SDK can run against a real device.
+ * Coherence rules for device-configuration profiles, mirrored in forge/cloak_forge/validate.py.
  * `forge/tests/vectors/validation.json` holds cases both implementations must answer identically.
  */
 object ProfileValidator {
     const val ERROR = "error"
     const val WARNING = "warning"
+    const val INFO = "info"
     const val SCHEMA_VERSION = "0.2"
 
     /** One problem. [field] is the dotted path it is about ("device.fingerprint"), when there is one. */
     data class Finding(val severity: String, val code: String, val message: String, val field: String? = null) {
+        init {
+            require(severity in setOf(ERROR, WARNING, INFO)) { "severity must be info, warning or error" }
+            require(Regex("[A-Z][A-Z0-9_]*").matches(code) && message.isNotBlank()) {
+                "finding needs a stable reason code and explanation"
+            }
+        }
         val isError: Boolean get() = severity == ERROR
     }
+
+    /** Diagnostic summary only: not serialized into the profile or identity store. */
+    class ValidationResult internal constructor(findings: Iterable<Finding>) {
+        val findings: List<Finding> = java.util.Collections.unmodifiableList(findings.sortedWith(FINDING_ORDER))
+        val errorCount: Int get() = this.findings.count { it.severity == ERROR }
+        val warningCount: Int get() = this.findings.count { it.severity == WARNING }
+        val infoCount: Int get() = this.findings.count { it.severity == INFO }
+        val hasErrors: Boolean get() = errorCount > 0
+    }
+
+    private val FINDING_ORDER = compareBy<Finding>(
+        { when (it.severity) { ERROR -> 0; WARNING -> 1; else -> 2 } },
+        { it.field.orEmpty() }, { it.code }, { it.message },
+    )
+
+    fun summarize(findings: Iterable<Finding>): ValidationResult = ValidationResult(findings)
+    fun validateProfileResult(profile: JSONObject, today: LocalDate = LocalDate.now(ZoneOffset.UTC)): ValidationResult =
+        summarize(validateProfile(profile, today))
+    fun validatePhoneResult(phone: PhoneTemplate, today: LocalDate = LocalDate.now(ZoneOffset.UTC)): ValidationResult =
+        summarize(validatePhone(phone, today))
 
     private val SEED = Regex("^[0-9a-f]{64}$")
     private val ANDROID_ID = Regex("^[0-9a-f]{16}$")
@@ -32,8 +58,8 @@ object ProfileValidator {
     private val LANG = Regex("^[a-z]{2}$")
     private val COUNTRY = Regex("^[A-Z]{2}$")
     private val TIMEZONE = Regex("^(?:UTC|GMT|GMT0|GMT[+-]0|Greenwich|UCT|Universal|Zulu|CET|EET|MET|WET|EST|HST|MST|EST5EDT|CST6CDT|MST7MDT|PST8PDT|Cuba|Egypt|Eire|GB|GB-Eire|Hongkong|Iceland|Iran|Israel|Jamaica|Japan|Kwajalein|Libya|Navajo|NZ|NZ-CHAT|Poland|Portugal|PRC|ROC|ROK|Singapore|Turkey|W-SU|[A-Za-z]+/[A-Za-z0-9_+-]+(?:/[A-Za-z0-9_+-]+)*)$")
-    private val MCC = Regex("^\\d{3}$")
-    private val MNC = Regex("^\\d{2,3}$")
+    private val MCC = Regex("^[0-9]{3}$")
+    private val MNC = Regex("^[0-9]{2,3}$")
     private val UA = Regex(
         "^Mozilla/5\\.0 \\(Linux; Android [0-9.]+; [^()]+\\) AppleWebKit/537\\.36 " +
             "\\(KHTML, like Gecko\\) Chrome/[0-9]+\\.0\\.[0-9]+\\.[0-9]+ (Mobile )?Safari/537\\.36$",
@@ -78,21 +104,22 @@ object ProfileValidator {
         if ((profile.opt("name") as? String).isNullOrBlank()) findings.error("NAME", "profile name must be a non-empty string", "name")
         val device = block(findings, profile, "device")
         requiredDevice(findings, device)
-        if (findings.any { it.isError }) return findings
+        if (findings.any { it.isError }) return summarize(findings).findings
 
-        // Same order as validate.py, so both list the same findings in the same order.
+        // Summary ordering is independent of rule execution and JSON key order.
         fingerprint(findings, device)
         versions(findings, device)
         patch(findings, device, today)
         identifiers(findings, block(findings, profile, "identifiers"))
         surroundings(findings, profile)
+        hardware(findings, device, profile.optJSONObject("telephony") ?: JSONObject())
         val ua = profile.opt("ua")
         if (ua == null || ua == JSONObject.NULL) {
             findings.warning("UA_MISSING", "profile carries no user agent block", "ua")
         } else {
             userAgent(findings, ua, device)
         }
-        return findings
+        return summarize(findings).findings
     }
 
     /**
@@ -102,13 +129,14 @@ object ProfileValidator {
     fun validatePhone(phone: PhoneTemplate, today: LocalDate = LocalDate.now(ZoneOffset.UTC)): List<Finding> {
         val findings = mutableListOf<Finding>()
         requiredDevice(findings, phone.device)
-        if (findings.any { it.isError }) return findings
-        val asProfile = JSONObject().put("telephony", phone.telephony).put("display", phone.display).put("locale", phone.locale)
+        if (findings.any { it.isError }) return summarize(findings).findings
+        val asProfile = JSONObject().put("telephony", phone.telephony).put("display", phone.display).put("locale", phone.locale).put("network", phone.network)
         fingerprint(findings, phone.device)
         versions(findings, phone.device)
         patch(findings, phone.device, today)
         surroundings(findings, asProfile)
-        return findings
+        hardware(findings, phone.device, phone.telephony)
+        return summarize(findings).findings
     }
 
     /** The error messages only, for a one-line refusal. */
@@ -130,6 +158,7 @@ object ProfileValidator {
         telephony(findings, block(findings, profile, "telephony"))
         display(findings, block(findings, profile, "display"))
         locale(findings, block(findings, profile, "locale"))
+        network(findings, block(findings, profile, "network"))
     }
 
     private fun block(findings: MutableList<Finding>, profile: JSONObject, key: String): JSONObject {
@@ -275,8 +304,10 @@ object ProfileValidator {
 
     private fun telephony(findings: MutableList<Finding>, telephony: JSONObject) {
         if (telephony.length() == 0) return
-        if (telephony.text("carrier_name").isBlank()) {
+        if (telephony.opt("carrier_name") !is String || telephony.text("carrier_name").isBlank()) {
             findings.error("TELEPHONY_CARRIER", "telephony.carrier_name must be a non-empty string", "telephony.carrier_name")
+        } else if (telephony.text("carrier_name").hasControls()) {
+            findings.error("TELEPHONY_CARRIER_FORMAT", "telephony.carrier_name must not contain control characters", "telephony.carrier_name")
         }
         if (!MCC.matches(telephony.text("mcc"))) findings.error("TELEPHONY_MCC", "telephony.mcc must be three digits", "telephony.mcc")
         if (!MNC.matches(telephony.text("mnc"))) findings.error("TELEPHONY_MNC", "telephony.mnc must be two or three digits", "telephony.mnc")
@@ -289,7 +320,37 @@ object ProfileValidator {
         if (slots !in setOf("1", "2")) {
             findings.error("TELEPHONY_SLOTS", "telephony.sim_slot_count must be 1 or 2", "telephony.sim_slot_count")
         }
+        if (telephony.opt("mcc") == "000") findings.info("TELEPHONY_PLACEHOLDER_OPERATOR",
+            "telephony.mcc is all zero; confirm that a placeholder operator is intended", "telephony.mcc")
     }
+
+    private fun network(findings: MutableList<Finding>, network: JSONObject) {
+        if (!network.has("egress_hint")) return
+        val hint = network.opt("egress_hint")
+        if (hint !is String || hint.codePointCount(0, hint.length) > 128 || hint.hasControls()) findings.error(
+            "NETWORK_HINT_FORMAT", "network.egress_hint must be text of at most 128 characters without control characters", "network.egress_hint")
+    }
+
+    private fun hardware(findings: MutableList<Finding>, device: JSONObject, telephony: JSONObject) {
+        // Schema has no camera/sensor flags. Identifier presence does not imply SIM capability.
+        for (field in listOf("bootloader", "baseband")) {
+            if (device.has(field)) {
+                val value = device.opt(field)
+                if (value !is String || value.hasControls()) findings.error("HARDWARE_FIELD_FORMAT",
+                    "device.$field must be text without control characters", "device.$field")
+            }
+        }
+        if (device.text("hardware").lowercase(java.util.Locale.ROOT) in setOf("unknown", "generic")) findings.info(
+            "HARDWARE_UNSPECIFIED", "device.hardware does not identify a specific hardware platform; capability consistency cannot be established", "device.hardware")
+        val baseband = device.opt("baseband")
+        if (telephony.text("network_type") in NETWORK_TYPES && baseband is String && baseband.trim().lowercase(java.util.Locale.ROOT) in setOf("none", "unknown", "n/a")) findings.warning(
+            "HARDWARE_MODEM_UNSPECIFIED", "device.baseband does not identify a modem although telephony.network_type declares cellular service", "device.baseband")
+        val firstApi = device.integer("first_api_level")
+        if (telephony.text("network_type") == "5G" && firstApi != null && firstApi < 29) findings.warning(
+            "HARDWARE_NETWORK_GENERATION", "telephony.network_type declares 5G on hardware launched before API 29; confirm modem support", "telephony.network_type")
+    }
+
+    private fun String.hasControls() = any { it.code < 32 || it.code == 127 }
 
     private fun display(findings: MutableList<Finding>, display: JSONObject) {
         if (display.length() == 0) return
@@ -333,6 +394,7 @@ object ProfileValidator {
     private fun messageAt(message: String, field: String?) = if (field != null && !message.startsWith(field)) "$field: $message" else message
     private fun MutableList<Finding>.error(code: String, message: String, field: String?) = add(Finding(ERROR, code, messageAt(message, field), field))
     private fun MutableList<Finding>.warning(code: String, message: String, field: String?) = add(Finding(WARNING, code, messageAt(message, field), field))
+    private fun MutableList<Finding>.info(code: String, message: String, field: String?) = add(Finding(INFO, code, messageAt(message, field), field))
 
     private fun JSONObject.integer(key: String): Long? = when (val value = opt(key)) {
         is Int -> value.toLong()

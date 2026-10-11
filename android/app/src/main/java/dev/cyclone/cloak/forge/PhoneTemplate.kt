@@ -17,6 +17,8 @@ data class PhoneTemplate(
     val display: JSONObject,
     val locale: JSONObject,
     val builtIn: Boolean = false,
+    val confidence: String? = null,
+    val classification: JSONObject? = null,
 ) {
     /** "Google · Android 13 · panther". */
     val summary: String get() = listOf(
@@ -33,6 +35,10 @@ data class PhoneTemplate(
         .put("network", JSONObject(network.toString()))
         .put("display", JSONObject(display.toString()))
         .put("locale", JSONObject(locale.toString()))
+        .also { json ->
+            confidence?.let { json.put("confidence", it) }
+            classification?.let { json.put("classification", JSONObject(it.toString())) }
+        }
 
     companion object {
         val ID = Regex("^[a-z0-9][a-z0-9_-]{0,47}$")
@@ -44,7 +50,8 @@ data class PhoneTemplate(
             val label = o.optString("label").trim().ifBlank { id }
             val blocks = BLOCKS.associateWith { JSONObject((o.optJSONObject(it) ?: JSONObject()).toString()) }
             return PhoneTemplate(id, label.take(48), blocks.getValue("device"), blocks.getValue("telephony"),
-                blocks.getValue("network"), blocks.getValue("display"), blocks.getValue("locale"), builtIn)
+                blocks.getValue("network"), blocks.getValue("display"), blocks.getValue("locale"), builtIn,
+                (o.opt("confidence") as? String), o.optJSONObject("classification")?.let { JSONObject(it.toString()) })
         }
 
         /** The phone a profile was made from (any profile: forged, imported or from a dump). */

@@ -41,6 +41,7 @@ data class RootDoctorResult(
     val moduleVersion: String? = null,
     val diagnostic: String? = null,
     val publicationReason: PublicationReason? = null,
+    val staleLockDetected: Boolean = false,
 ) {
     val published: Boolean get() = code == RootDoctorCode.READY
 
@@ -84,7 +85,8 @@ data class RootDoctorResult(
             RootDoctorCode.ABI_UNSUPPORTED -> "This release has no Zygisk library for this device's Android architecture."
             RootDoctorCode.PUBLISH_FAILED -> "Root access worked, but profile state could not be published."
         }
-        val withPublication = publicationReason?.let { "$base\n${it.message}" } ?: base
+        val publication = publicationReason?.let { "$base\n${it.message}" } ?: base
+        val withPublication = if (staleLockDetected) "$publication\nA stale publication marker was detected after acquiring the kernel lock; the previous publisher no longer holds it." else publication
         return diagnostic?.takeIf { code in setOf(RootDoctorCode.PUBLISH_FAILED, RootDoctorCode.MODULE_BUNDLE_INVALID, RootDoctorCode.MODULE_INSTALL_FAILED) }
             ?.let { "$withPublication\nDetail: $it" } ?: withPublication
     }
@@ -277,7 +279,8 @@ object CloakRootDoctor {
             ?.groupValues?.get(1)?.let { value -> PublicationReason.entries.find { it.name == value } }
         val reason = if (resultCode == RootDoctorCode.PUBLISH_FAILED && publication != PublicationReason.LOCKED)
             PublicationReason.FAILED else publication
-        return RootDoctorResult(resultCode, moduleVersion, diagnosticText(output), reason)
+        return RootDoctorResult(resultCode, moduleVersion, diagnosticText(output), reason,
+            output.lineSequence().any { it.trim() == "CLOAK_PUBLICATION_DETAIL=STALE_LOCK" })
     }
 
     internal fun parseInstallResult(output: String, exitCode: Int, appVersion: String): RootDoctorResult {
@@ -420,8 +423,8 @@ object CloakRootDoctor {
             // Never unlink this inode: waiters and owners must lock the same file, even after crashes.
             append("exec 9>> \"\$root/publication.lock\"; ")
             append("flock -n 9 || { echo CLOAK_PUBLICATION=LOCKED; echo CLOAK_DOCTOR=PUBLISH_FAILED; exit 48; }; ")
-            append("recovered=0; finished=0; ")
-            append("recover() { if [ ! -e \"\$state\" ] && [ -d \"\$backup\" ]; then mv \"\$backup\" \"\$state\" || return 1; recovered=1; fi; ")
+            append("recovered=0; finished=0; swapped=0; ")
+            append("recover() { if [ \"\$swapped\" = 1 ] && [ -d \"\$backup\" ]; then rm -rf \"\$state\" || return 1; swapped=0; fi; if [ -d \"\$backup\" ] && [ -e \"\$state\" ] && [ ! -s \"\$state/$index\" ]; then test -s \"\$backup/$index\" || return 1; rm -rf \"\$state\" || return 1; fi; if [ ! -e \"\$state\" ] && [ -d \"\$backup\" ]; then mv \"\$backup\" \"\$state\" || return 1; recovered=1; fi; ")
             append("if [ -d \"\$pubs\" ]; then for old in \"\$pubs\"/*.old; do [ -d \"\$old\" ] || continue; target=\${old%.old}; ")
             append("if [ ! -e \"\$target\" ]; then mv \"\$old\" \"\$target\" || return 1; recovered=1; fi; done; fi; }; ")
             append("finish() { status=\$?; trap - EXIT HUP INT TERM; if [ \"\$finished\" != 1 ]; then ")
@@ -429,7 +432,7 @@ object CloakRootDoctor {
             append("echo CLOAK_PUBLICATION=FAILED; echo CLOAK_DOCTOR=PUBLISH_FAILED; status=48; fi; ")
             append("rm -f \"\$root/publication.owner\" || true; exit \"\$status\"; }; trap finish EXIT; trap 'exit 48' HUP INT TERM; ")
             // A leftover marker is stale only AFTER the kernel grants exclusive ownership. Never steal by PID/age.
-            append("if [ -e \"\$root/publication.owner\" ]; then recovered=1; fi; echo \"\$\$\" > \"\$root/publication.owner\"; ")
+            append("if [ -e \"\$root/publication.owner\" ]; then recovered=1; echo CLOAK_PUBLICATION_DETAIL=STALE_LOCK; fi; echo \"\$\$\" > \"\$root/publication.owner\"; ")
             append("recover; ")
             // A tree published before shares existed came from Main's Cloak: keep it as Main's share.
             append("if [ ! -d \"\$pubs\" ] && [ -s \"\$state/$index\" ]; then ")
@@ -475,9 +478,9 @@ object CloakRootDoctor {
             append("test -s \"\$temp/$index\"; ")
             append("if [ -e \"\$backup\" ]; then test -s \"\$state/$index\"; rm -rf \"\$backup\"; fi; ")
             append("if [ -e \"\$state\" ]; then mv \"\$state\" \"\$backup\"; fi; ")
-            append("if mv \"\$temp\" \"\$state\"; then rm -rf \"\$backup\" || true; ")
+            append("if mv \"\$temp\" \"\$state\"; then swapped=1; ")
             append("else exit 48; fi; ")
-            append("test -s \"\$state/$index\"; finished=1; ")
+            append("test -s \"\$state/$index\"; test ! -e \"\$temp\"; finished=1; swapped=0; rm -rf \"\$backup\" || true; ")
             append("if [ \"\$recovered\" = 1 ]; then echo CLOAK_PUBLICATION=RECOVERED; else echo CLOAK_PUBLICATION=COMPLETED; fi; ); ")
         }
     }

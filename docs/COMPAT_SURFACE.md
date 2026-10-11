@@ -20,25 +20,25 @@ their device verification remains pending a module install and reboot.
 | 5 | SIM / carrier | `getSimSerialNumber()`, `getSubscriberId()`, `getNetworkOperator()`, `getNetworkOperatorName()` | Framework callback, per-slot carrier block | 2 |
 | 6 | Wi-Fi MAC | `WifiInfo.getMacAddress()` | Interface-agnostic callback; BSSID/SSID randomized only if the profile asks | 2 |
 | 7 | Bluetooth MAC | `BluetoothAdapter.getAddress()` | Adapter callback | 2 |
-| 8 | ANDROID_ID | `Settings.Secure.ANDROID_ID` | Per-(profile, app) value; stable per binding, never the host value | 2 |
-| 9 | Advertising ID / App Set ID | Play services SDK calls | Play services callback scoped to the app's reads | 2 |
-| 10 | Widevine / MediaDRM | `MediaDrm.getPropertyByteArray DEVICE_ID`, security level | DRM plugin read callback; L1/L2/L3 reported per profile | 2 |
+| 8 | ANDROID_ID | `Settings.Secure.ANDROID_ID` | Stored identity value; intended scoped callback, measured failures remain | 2 |
+| 9 | Advertising ID / App Set ID | Play services SDK calls | Advertising-ID callback; App Set SDK callback is absent | 2 |
+| 10 | Widevine / MediaDRM | `MediaDrm.getPropertyByteArray DEVICE_ID`, security level | MediaDrm device-ID callback; security-level interception is not established | 2 |
 | 11 | GSF ID | `com.google.android.gsf` reads | Provider-level callback | 2 |
 | 12 | Locale / timezone | `Locale.getDefault()`, `TimeZone.getDefault()` | In-process configuration rewrite; must agree with egress IP region | 2 |
 | 13 | WebView user agent | `WebSettings.getUserAgentString()` | UA rewrite from a named UA profile | 2 |
 | 14 | Uptime | `SystemClock.elapsedRealtime()`, native `clock_gettime(CLOCK_BOOTTIME)` | Offset shift, persistent per profile | 3 |
 | 15 | Display | `DisplayMetrics`, refresh rate modes | Optional; off by default (layout breakage risk) | 3 |
 | 16 | Sensors | `SensorManager` name/vendor enumeration | Optional rename pass only; never invent or drop sensors | 3 |
-| 17 | Root / attestation | Play Integrity verdict, key attestation | PIF-style pif.json per profile + Tricky Store keybox | 2 |
+| 17 | Root / attestation | Play Integrity verdict, key attestation | pif.json publication only; keybox management and attestation checks are absent | 2 |
 
 ## Release candidate evidence boundary
 
-The RC has **no device verification**. The existing 70-read results describe the
+RC2 has **no device verification**. The existing 70-read results describe the
 older API36 installed binary by its recorded hash, not this candidate: 13 verified,
 39 failed, 7 blocked, 8 coincidental matches and 3 unmapped. Local callback/JVM
 success and packaged ARM libraries establish build/test results, not hook
 installation or full device compatibility. Camera/sensor metadata and display
-geometry are incomplete. Read the [RC notes](RELEASE_0.10.0-rc.1.md) and
+geometry are incomplete. Read the [current RC notes](RELEASE_0.10.0-rc.2.md) and
 [deferred device checklist](DEFERRED-DEVICE-CHECKS.md) before upgrading.
 
 ## Rules
@@ -51,7 +51,7 @@ geometry are incomplete. Read the [RC notes](RELEASE_0.10.0-rc.1.md) and
 - Planned display/sensor work must preserve coherent geometry and density.
   These pending areas are not evidence of available opt-in hooks.
 
-## Status (0.10.0-rc.1; source implementation, device verification pending)
+## Status (0.10.0-rc.2; runtime source unchanged, device verification pending)
 
 - Landed through the property surface: Build fields, telephony operator identity, display density, device serial (`ro.serialno`, `ro.boot.serialno`), and the full identifier vault under stable `cloak.*` keys.
 - Landed in-process: locale/timezone, the Pine callbacks for TelephonyManager, Settings.Secure ANDROID_ID, WifiInfo, BluetoothAdapter, Build.getSerial, MediaDRM device id, the advertising-id read path, the WebView user agent, and the guarded GSF gservices query rewrite.

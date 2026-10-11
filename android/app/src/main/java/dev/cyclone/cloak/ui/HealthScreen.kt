@@ -26,7 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import dev.cyclone.cloak.data.CloakBinding
 import dev.cyclone.cloak.root.RootDoctorCode
 
 @Composable
@@ -39,21 +38,7 @@ internal fun HealthScreen(state: CloakState, vm: CloakViewModel) {
     }
     @Suppress("DEPRECATION")
     val appVersion = remember(context) { runCatching { context.packageManager.getPackageInfo(context.packageName, 0).versionName }.getOrNull() }
-    val profiles = state.report?.snapshot?.registry?.associateBy { it.id }
-    val identityIds = state.identities.map { it.first }.toSet()
-    val diagnostics = HealthDiagnostics.assess(DoctorFacts(state.rootDoctor, appVersion, state.report?.headline,
-        state.syncing, state.report?.gate, state.providerState, state.bindings.map { binding ->
-            val profile = profiles?.get(binding.profileId)
-            BindingDoctorFacts(
-                displayContext = "${profile?.label ?: binding.profileId} · ${binding.packageName}",
-                enabled = binding.enabled, health = binding.state,
-                profilePresent = profiles?.containsKey(binding.profileId), profileReady = profile?.bindable,
-                userMatches = profile?.androidUserId?.let { it == binding.androidUserId },
-                appListed = profile?.packages?.contains(binding.packageName),
-                identityPresent = binding.origin == CloakBinding.ORIGIN_MAIN || binding.cloakProfileId in identityIds,
-                issuePresent = state.report?.issues?.containsKey("${binding.profileId}\n${binding.packageName}") == true,
-            )
-        }))
+    val diagnostics = HealthDiagnostics.assess(ReadinessDoctorFacts.fromState(state, appVersion))
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 14.dp),
         verticalArrangement = Arrangement.spacedBy(14.dp),
@@ -81,6 +66,7 @@ internal fun HealthScreen(state: CloakState, vm: CloakViewModel) {
                 CloakActionButton("Reconnect to Cyclone", Icons.Rounded.Refresh, vm::refresh, Modifier.fillMaxWidth(), outlined = true)
             }
         }
+        UniquenessDiagnostics(state, vm::reviewIdentity)
         CoverageMatrix(coverage)
     }
 }

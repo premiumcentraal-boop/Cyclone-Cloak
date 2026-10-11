@@ -46,3 +46,24 @@ The normal Android test target remains blocked before test execution at
 `android-all-instrumented-14-robolectric-10818077-i7.jar`. **138 Python tests passed**.
 App and module targets build locally; no warnings. No phone tests were run;
 [the deferred checklist](DEFERRED-DEVICE-CHECKS.md) remains in effect.
+
+## Synchronization/publication hardening, 2026-10-11
+
+Baseline for this run: `main` at `a240456`, containing published `v0.10.0-rc.1`.
+A failed replacement read, value write, or status update after an Android-user
+move retains the old remote tuple and its bookkeeping until a replacement
+succeeds. Confirmed existing or newly written values stay tracked even when
+health writes fail. Connector loss during a rate-limit retry stops cleanup.
+First-run sweep failures now produce warnings and retain retry bookkeeping.
+
+Trashed profiles do not trigger user moves. Missing profiles, unknown users,
+trashed profiles, duplicate records, and missing/unavailable app lists retain
+last-known publisher user numbers in the pruning allowlist. Confirmed removal
+plus snapshot absence retains the existing explicit removal behavior. Logical
+binding identity remains profile ID plus package name.
+
+Run `./tools/run-local-sync-tests.ps1` after building the app for focused Windows
+JVM checks, including real shell publication tests in Ubuntu WSL. This runner is
+supplemental; it does not replace `:app:testDebugUnitTest` or Android device checks.
+See [this run's handoff](HANDOFF-2026-10-11-SYNC-PUBLICATION.md) for exact commands
+and final results. Earlier test counts above describe the earlier sprint only.

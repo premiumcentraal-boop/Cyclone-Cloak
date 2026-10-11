@@ -8,13 +8,34 @@ import dev.cyclone.cloak.root.RootDoctorResult
 import org.json.JSONArray
 import org.json.JSONObject
 
-internal enum class DoctorStatus(val label: String) { PASS("Pass"), WARN("Warn"), FAIL("Fail") }
+internal enum class DoctorStatus(val label: String) { PASS("Pass"), WARN("Warning"), FAIL("Fail") }
 internal enum class Readiness(val label: String) { READY("Ready"), DEGRADED("Degraded"), FAILED("Failed") }
 internal enum class DoctorCheckKind(val label: String) {
-    ROOT("Root, Zygisk and publication"), VERSION("App/module release match"), CONNECTOR("Cyclone connection"),
+    ROOT("Root and Zygisk"), VERSION("App/module release match"), CONNECTOR("Cyclone connection"),
     PERMISSIONS("Binding permissions"), STARTUP("Startup provider"), BINDINGS("Enabled bindings"), BINDING("Binding health"),
+    PUBLICATION("Profile publication"), SYNC("Binding synchronization"), LOCAL_RECORDS("Local records"),
+    ENABLED("Binding enabled"), PROFILE("Cyclone profile reference"), IDENTITY("Identity readability"),
+    RECORDS("Binding record consistency"),
 }
 internal enum class DoctorReason(val message: String) {
+    PUBLICATION_STALE_LOCK("A stale publication marker was detected after acquiring the kernel lock. The previous publisher no longer holds it."),
+    PUBLICATION_UNKNOWN("Profile publication is not confirmed. Run Check & repair to refresh its status."),
+    SYNC_READY("The last synchronization completed without binding issues."),
+    SYNC_ISSUES("Some bindings were not saved or confirmed by Cyclone. Reconnect to retry existing reconciliation."),
+    LOCAL_READY("No unreadable or conflicting local records were found in the current snapshot."),
+    LOCAL_UNKNOWN("The local identity library has not finished loading."),
+    LOCAL_UNREADABLE("Some local identity files are unreadable. Restore them from an export or review affected bindings; no records were changed."),
+    LOCAL_CONFLICT("Saved identities share distinguishing values. Review Local identifier duplicates below."),
+    DUPLICATE_BINDING("Multiple local records target the same Cyclone profile and app. Review the conflicting bindings; no records were changed."),
+    IDENTITY_ID_MISMATCH("The stored identity ID does not match its file/reference. Review or restore that identity."),
+    IDENTITY_UNREADABLE("The referenced local identity file exists but cannot be read as profile JSON. Restore it from an export."),
+    IDENTITY_UNKNOWN("Identity readability has not been confirmed yet."),
+    IDENTITY_REMOTE("This identity is supplied by Main. Its file is not in this local library, so readability cannot be independently confirmed here."),
+    IDENTITY_INVALID("The referenced identity has blocking coherence errors. Review the identity before applying it."),
+    IDENTITY_READY("The referenced local identity is readable and coherent."),
+    PROFILE_READY("The Cyclone profile, Android user and app membership match this binding."),
+    RECORDS_READY("No stale or conflicting records were found for this binding."),
+    ENABLED_READY("This binding is enabled."),
     ROOT_READY("Root Doctor reports working root access, module setup and profile publication."),
     ROOT_NOT_CHECKED("Root setup and publication have not been checked yet. Run Root Doctor."),
     ROOT_CHECKING("Root Doctor is still checking. Approve the Magisk prompt if shown."),
@@ -80,6 +101,12 @@ internal data class BindingDoctorFacts(
     val appListed: Boolean?,
     val identityPresent: Boolean,
     val issuePresent: Boolean,
+    val identityReadable: Boolean? = identityPresent,
+    val identityCoherent: Boolean = true,
+    val identityIdMatches: Boolean = true,
+    val remoteIdentity: Boolean = false,
+    val duplicateRecord: Boolean = false,
+    val duplicateIdentifiers: Boolean = false,
 )
 internal data class DoctorFacts(
     val root: RootDoctorResult,
@@ -89,6 +116,11 @@ internal data class DoctorFacts(
     val gate: CycloneGate?,
     val providerState: String,
     val bindings: List<BindingDoctorFacts>,
+    val localInventoryKnown: Boolean = true,
+    val unreadableIdentities: Boolean = false,
+    val conflictingIdentities: Boolean = false,
+    val syncIssues: Boolean = false,
+    val mismatchedIdentities: Boolean = false,
 )
 internal data class DoctorCheck(
     val kind: DoctorCheckKind,
@@ -106,9 +138,13 @@ internal data class HealthDiagnostics(
     val disabledBindings: Int,
     val checks: List<DoctorCheck>,
 ) {
+    val summary: String get() {
+        val applicable = checks.filter { it.affectsReadiness }
+        return "${applicable.count { it.status == DoctorStatus.PASS }} pass · ${applicable.count { it.status == DoctorStatus.WARN }} warning · ${applicable.count { it.status == DoctorStatus.FAIL }} fail"
+    }
     /** Positive allowlist: never serialize a state object, raw error, or private display context. */
     fun redactedReport(): String = JSONObject()
-        .put("format", "cyclone-cloak.health-doctor/2")
+        .put("format", "cyclone-cloak.readiness-doctor/3")
         .put("scope", "last_reported_enabled_bindings")
         .put("verdict", verdict.name.lowercase())
         .put("app_version", safeVersion(appVersion) ?: JSONObject.NULL)
@@ -116,7 +152,7 @@ internal data class HealthDiagnostics(
         .put("enabled_bindings", enabledBindings)
         .put("disabled_bindings", disabledBindings)
         .put("checks", JSONArray(checks.map { check ->
-            JSONObject().put("check", check.kind.name.lowercase()).put("status", check.status.name.lowercase())
+            JSONObject().put("check", check.kind.name.lowercase()).put("status", if (check.status == DoctorStatus.WARN) "warning" else check.status.name.lowercase())
                 .put("binding_number", check.bindingOrdinal ?: JSONObject.NULL)
                 .put("affects_readiness", check.affectsReadiness)
                 .put("reasons", JSONArray(check.reasons.distinct().map { reason ->
@@ -167,9 +203,38 @@ internal data class HealthDiagnostics(
                 PublicationReason.COMPLETED -> DoctorReason.PUBLICATION_COMPLETED
                 null -> null
             }
-            checks += DoctorCheck(DoctorCheckKind.ROOT,
-                if (facts.root.publicationReason == PublicationReason.LOCKED) DoctorStatus.WARN else rootStatus,
-                listOfNotNull(if (facts.root.publicationReason == PublicationReason.LOCKED) null else rootReason, publicationReason))
+            val effectiveRootStatus = if (facts.root.code == RootDoctorCode.PUBLISH_FAILED &&
+                facts.root.publicationReason == PublicationReason.LOCKED) DoctorStatus.WARN else rootStatus
+            checks += DoctorCheck(DoctorCheckKind.ROOT, effectiveRootStatus,
+                listOfNotNull(DoctorReason.PUBLICATION_STALE_LOCK.takeIf { facts.root.staleLockDetected }, if (facts.root.code == RootDoctorCode.PUBLISH_FAILED &&
+                    facts.root.publicationReason == PublicationReason.LOCKED) null else rootReason, publicationReason))
+            val publicationStatus = when {
+                facts.root.publicationReason == PublicationReason.LOCKED -> DoctorStatus.WARN
+                facts.root.publicationReason == PublicationReason.FAILED || facts.root.code == RootDoctorCode.PUBLISH_FAILED -> DoctorStatus.FAIL
+                facts.root.code == RootDoctorCode.READY -> DoctorStatus.PASS
+                else -> DoctorStatus.WARN
+            }
+            add(DoctorCheckKind.PUBLICATION, publicationStatus, publicationReason ?: when (publicationStatus) {
+                DoctorStatus.PASS -> DoctorReason.PUBLICATION_COMPLETED
+                DoctorStatus.FAIL -> DoctorReason.PUBLICATION_FAILED
+                else -> DoctorReason.PUBLICATION_UNKNOWN
+            })
+            when {
+                facts.syncing -> add(DoctorCheckKind.SYNC, DoctorStatus.WARN, DoctorReason.CONNECTING)
+                facts.connectorHeadline == null -> add(DoctorCheckKind.SYNC, DoctorStatus.WARN, DoctorReason.CONNECTION_UNKNOWN)
+                facts.connectorHeadline != "Connected" -> add(DoctorCheckKind.SYNC, DoctorStatus.FAIL, DoctorReason.CONNECTION_FAILED)
+                facts.syncIssues || facts.bindings.any { it.enabled && it.issuePresent } -> add(DoctorCheckKind.SYNC, DoctorStatus.WARN, DoctorReason.SYNC_ISSUES)
+                else -> add(DoctorCheckKind.SYNC, DoctorStatus.PASS, DoctorReason.SYNC_READY)
+            }
+            val localReasons = listOfNotNull(
+                DoctorReason.LOCAL_UNKNOWN.takeIf { !facts.localInventoryKnown },
+                DoctorReason.LOCAL_UNREADABLE.takeIf { facts.unreadableIdentities },
+                DoctorReason.LOCAL_CONFLICT.takeIf { facts.conflictingIdentities },
+                DoctorReason.DUPLICATE_BINDING.takeIf { facts.bindings.any { it.enabled && it.duplicateRecord } },
+                DoctorReason.IDENTITY_ID_MISMATCH.takeIf { facts.mismatchedIdentities || facts.bindings.any { it.enabled && !it.identityIdMatches } })
+            checks += DoctorCheck(DoctorCheckKind.LOCAL_RECORDS,
+                if (localReasons.isEmpty()) DoctorStatus.PASS else DoctorStatus.WARN,
+                localReasons.ifEmpty { listOf(DoctorReason.LOCAL_READY) })
             val app = safeVersion(facts.appVersion)
             val module = if (facts.root.code == RootDoctorCode.MODULE_REBOOT_REQUIRED) null else safeVersion(facts.root.moduleVersion)
             when {
@@ -203,7 +268,7 @@ internal data class HealthDiagnostics(
                 val problems = mutableListOf<Pair<DoctorStatus, DoctorReason>>()
                 fun problem(status: DoctorStatus, reason: DoctorReason) { problems += status to reason }
                 if (!binding.enabled) problem(DoctorStatus.WARN, DoctorReason.BINDING_DISABLED)
-                else {
+                run {
                     when (binding.profilePresent) {
                         null -> problem(DoctorStatus.WARN, DoctorReason.PROFILE_UNKNOWN)
                         false -> problem(DoctorStatus.FAIL, DoctorReason.PROFILE_MISSING)
@@ -217,7 +282,16 @@ internal data class HealthDiagnostics(
                             }
                         }
                     }
-                    if (!binding.identityPresent) problem(DoctorStatus.FAIL, DoctorReason.IDENTITY_MISSING)
+                    when {
+                        binding.remoteIdentity -> problem(DoctorStatus.WARN, DoctorReason.IDENTITY_REMOTE)
+                        binding.identityReadable == null -> problem(DoctorStatus.WARN, DoctorReason.IDENTITY_UNKNOWN)
+                        !binding.identityReadable && binding.identityPresent -> problem(DoctorStatus.FAIL, DoctorReason.IDENTITY_UNREADABLE)
+                        !binding.identityPresent -> problem(DoctorStatus.FAIL, DoctorReason.IDENTITY_MISSING)
+                        !binding.identityCoherent -> problem(DoctorStatus.FAIL, DoctorReason.IDENTITY_INVALID)
+                    }
+                    if (!binding.identityIdMatches) problem(DoctorStatus.FAIL, DoctorReason.IDENTITY_ID_MISMATCH)
+                    if (binding.duplicateRecord) problem(DoctorStatus.WARN, DoctorReason.DUPLICATE_BINDING)
+                    if (binding.duplicateIdentifiers) problem(DoctorStatus.WARN, DoctorReason.LOCAL_CONFLICT)
                     if (binding.issuePresent) problem(DoctorStatus.WARN, DoctorReason.BINDING_ISSUE)
                     when (CloakHealth.cycloneState(binding.health)) {
                         CloakHealth.READY -> Unit
@@ -227,12 +301,37 @@ internal data class HealthDiagnostics(
                     }
                 }
                 val status = when {
+                    !binding.enabled -> DoctorStatus.WARN
                     problems.any { it.first == DoctorStatus.FAIL } -> DoctorStatus.FAIL
                     problems.isNotEmpty() -> DoctorStatus.WARN
                     else -> DoctorStatus.PASS
                 }
+                fun aspect(kind: DoctorCheckKind, reasons: Set<DoctorReason>, pass: DoctorReason) {
+                    val selected = problems.filter { it.second in reasons }
+                    val level = when {
+                        selected.any { it.first == DoctorStatus.FAIL } -> DoctorStatus.FAIL
+                        selected.isNotEmpty() -> DoctorStatus.WARN
+                        else -> DoctorStatus.PASS
+                    }
+                    checks += DoctorCheck(kind, level, selected.map { it.second }.ifEmpty { listOf(pass) },
+                        binding.displayContext, index + 1, binding.enabled)
+                }
+                checks += DoctorCheck(DoctorCheckKind.ENABLED, if (binding.enabled) DoctorStatus.PASS else DoctorStatus.WARN,
+                    listOf(if (binding.enabled) DoctorReason.ENABLED_READY else DoctorReason.BINDING_DISABLED),
+                    binding.displayContext, index + 1, binding.enabled)
+                // Disabled rows are still inspectable; their checks never affect the verdict.
+                run {
+                    aspect(DoctorCheckKind.PROFILE, setOf(DoctorReason.PROFILE_UNKNOWN, DoctorReason.PROFILE_MISSING,
+                        DoctorReason.PROFILE_NOT_READY, DoctorReason.USER_CHANGED, DoctorReason.APP_LIST_UNKNOWN,
+                        DoctorReason.APP_NOT_LISTED), DoctorReason.PROFILE_READY)
+                    aspect(DoctorCheckKind.IDENTITY, setOf(DoctorReason.IDENTITY_MISSING, DoctorReason.IDENTITY_UNREADABLE,
+                        DoctorReason.IDENTITY_UNKNOWN, DoctorReason.IDENTITY_REMOTE, DoctorReason.IDENTITY_INVALID,
+                        DoctorReason.IDENTITY_ID_MISMATCH), DoctorReason.IDENTITY_READY)
+                    aspect(DoctorCheckKind.RECORDS, setOf(DoctorReason.USER_CHANGED, DoctorReason.DUPLICATE_BINDING,
+                        DoctorReason.LOCAL_CONFLICT, DoctorReason.IDENTITY_ID_MISMATCH), DoctorReason.RECORDS_READY)
+                }
                 checks += DoctorCheck(DoctorCheckKind.BINDING, status,
-                    problems.map { it.second }.ifEmpty { listOf(DoctorReason.BINDING_READY) }, binding.displayContext, index + 1, binding.enabled)
+                    if (!binding.enabled) listOf(DoctorReason.BINDING_DISABLED) else problems.map { it.second }.ifEmpty { listOf(DoctorReason.BINDING_READY) }, binding.displayContext, index + 1, binding.enabled)
             }
             val applicable = checks.filter { it.affectsReadiness }
             val verdict = when {

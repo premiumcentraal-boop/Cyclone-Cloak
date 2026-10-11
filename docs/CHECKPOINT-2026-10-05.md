@@ -2,7 +2,7 @@
 
 Historical checkpoint for 2026-10-05; the snapshot and sprint plan below are
 retained as history. Use [CURRENT-STATE.md](CURRENT-STATE.md) and
-[ARCHITECTURE.md](ARCHITECTURE.md) for the current `v0.10.0-alpha.1` release.
+[ARCHITECTURE.md](ARCHITECTURE.md) for the current local RC2 candidate and published RC1 release.
 The app now has Phones, Identities, Profiles and Health tabs and separate
 `forge`, `data`, `root`, `cyclone` and `ui` packages. The native module is
 implemented. The old skeleton, version and next-sprint claims below do not

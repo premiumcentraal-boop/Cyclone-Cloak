@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.Layers
@@ -73,6 +74,8 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
             }
         }
 
+        item { OutlinedButton(onClick = { vm.startBinding() }, enabled = state.busy == null && !state.syncing, modifier = Modifier.fillMaxWidth()) { Text("Bind an app") } }
+
         item { CloakSectionTitle("Profiles", state.registry.size) }
         if (state.registry.isEmpty()) {
             item {
@@ -135,13 +138,14 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
         if (state.bindings.isEmpty()) {
             item {
                 Text(
-                    "Nothing is bound yet. In Identities, open an identity and choose Bind to a profile.",
+                    "Nothing is bound yet. Choose Bind an app to review a new binding.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
         }
-        items(visibleBindings, key = { it.profileId + "/" + it.packageName }) { binding ->
+        // Duplicate records must remain visible for review instead of colliding on a LazyColumn key.
+        itemsIndexed(visibleBindings, key = { index, binding -> "${binding.profileId}/${binding.packageName}/$index" }) { _, binding ->
             CloakBindingCard(
                 binding = binding,
                 profileLabel = profiles[binding.profileId]?.label ?: binding.profileId,

@@ -49,10 +49,14 @@ object CloakForge {
         val cleanName = name.trim()
         require(cleanName.isNotEmpty()) { "Enter a name for this device identity." }
         require(cleanName.length <= 64) { "Device identity names can be up to 64 characters." }
+        return forgeProfile(cleanName, newSeed(), phone)
+    }
+
+    /** One cryptographic seed per generation; the full profile persists it for stable derivation. */
+    fun newSeed(): String {
         val seedBytes = ByteArray(32).also(SecureRandom()::nextBytes)
-        val seed = seedBytes.joinToString("") { "%02x".format(it) }
-        seedBytes.fill(0)
-        return forgeProfile(cleanName, seed, phone)
+        return try { seedBytes.joinToString("") { "%02x".format(it) } }
+        finally { seedBytes.fill(0) }
     }
 
     /** Deterministic fleet seed: same name + template, same identity. */

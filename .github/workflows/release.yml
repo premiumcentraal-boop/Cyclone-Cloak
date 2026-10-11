@@ -8,7 +8,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: 'Tag to create and release, e.g. v0.10.0-rc.1 (must match versionName)'
+        description: 'Tag to create and release, e.g. v0.10.0-rc.2 (must match versionName)'
         required: true
 
 jobs:

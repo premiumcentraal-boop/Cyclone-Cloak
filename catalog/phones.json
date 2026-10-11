@@ -44,7 +44,8 @@
         "language": "en",
         "country": "US",
         "timezone": "America/New_York"
-      }
+      },
+      "confidence": "needs verification"
     },
     {
       "id": "pixel_7",
@@ -88,7 +89,8 @@
         "language": "en",
         "country": "US",
         "timezone": "America/New_York"
-      }
+      },
+      "confidence": "needs verification"
     },
     {
       "id": "galaxy_s23",
@@ -132,7 +134,8 @@
         "language": "de",
         "country": "DE",
         "timezone": "Europe/Berlin"
-      }
+      },
+      "confidence": "needs verification"
     },
     {
       "id": "pixel_6",
@@ -176,7 +179,8 @@
         "language": "en",
         "country": "US",
         "timezone": "America/New_York"
-      }
+      },
+      "confidence": "approximated"
     },
     {
       "id": "pixel_6a",
@@ -220,7 +224,8 @@
         "language": "en",
         "country": "US",
         "timezone": "America/New_York"
-      }
+      },
+      "confidence": "approximated"
     },
     {
       "id": "pixel_7a",
@@ -264,7 +269,8 @@
         "language": "en",
         "country": "US",
         "timezone": "America/New_York"
-      }
+      },
+      "confidence": "approximated"
     },
     {
       "id": "pixel_8",
@@ -308,6 +314,437 @@
         "language": "en",
         "country": "US",
         "timezone": "America/New_York"
+      },
+      "confidence": "approximated"
+    },
+    {
+      "id": "pixel_6_pro",
+      "label": "Pixel 6 Pro",
+      "device": {
+        "manufacturer": "Google",
+        "brand": "google",
+        "model": "Pixel 6 Pro",
+        "product": "raven",
+        "device": "raven",
+        "hardware": "gs101",
+        "fingerprint": "google/raven/raven:14/AP2A.240805.005.F1/catalog.20240805:user/release-keys",
+        "version_release": "14",
+        "sdk_int": 34,
+        "security_patch": "2024-08-05",
+        "build_id": "AP2A.240805.005.F1",
+        "version_incremental": "catalog.20240805",
+        "build_date_utc": 1724544000,
+        "first_api_level": 31,
+        "bootloader": "",
+        "baseband": ""
+      },
+      "telephony": {
+        "sim_slot_count": 2,
+        "carrier_name": "T-Mobile",
+        "mcc": "310",
+        "mnc": "260",
+        "network_type": "5G"
+      },
+      "network": {
+        "egress_hint": "us-east"
+      },
+      "display": {
+        "width": 1440,
+        "height": 3120,
+        "density": 480,
+        "refresh_rate_hz": 120,
+        "screen_size_class": "normal"
+      },
+      "locale": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      },
+      "confidence": "approximated",
+      "classification": {
+        "device_classes": [
+          "large-display",
+          "older-supported-device"
+        ],
+        "display_class": "large-display",
+        "hardware_feature_group": "tensor-5g-nfc-uwb",
+        "camera_class": "triple-rear-front"
+      }
+    },
+    {
+      "id": "pixel_7_pro",
+      "label": "Pixel 7 Pro",
+      "device": {
+        "manufacturer": "Google",
+        "brand": "google",
+        "model": "Pixel 7 Pro",
+        "product": "cheetah",
+        "device": "cheetah",
+        "hardware": "gs201",
+        "fingerprint": "google/cheetah/cheetah:14/AP2A.240805.005/catalog.20240805:user/release-keys",
+        "version_release": "14",
+        "sdk_int": 34,
+        "security_patch": "2024-08-05",
+        "build_id": "AP2A.240805.005",
+        "version_incremental": "catalog.20240805",
+        "build_date_utc": 1724544000,
+        "first_api_level": 33,
+        "bootloader": "",
+        "baseband": ""
+      },
+      "telephony": {
+        "sim_slot_count": 2,
+        "carrier_name": "T-Mobile",
+        "mcc": "310",
+        "mnc": "260",
+        "network_type": "5G"
+      },
+      "network": {
+        "egress_hint": "us-east"
+      },
+      "display": {
+        "width": 1440,
+        "height": 3120,
+        "density": 480,
+        "refresh_rate_hz": 120,
+        "screen_size_class": "normal"
+      },
+      "locale": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      },
+      "confidence": "approximated",
+      "classification": {
+        "device_classes": [
+          "large-display"
+        ],
+        "display_class": "large-display",
+        "hardware_feature_group": "tensor-g2-5g-nfc-uwb",
+        "camera_class": "triple-rear-front"
+      }
+    },
+    {
+      "id": "pixel_8_pro",
+      "label": "Pixel 8 Pro",
+      "device": {
+        "manufacturer": "Google",
+        "brand": "google",
+        "model": "Pixel 8 Pro",
+        "product": "husky",
+        "device": "husky",
+        "hardware": "zuma",
+        "fingerprint": "google/husky/husky:14/AP2A.240805.005.D1/catalog.20240805:user/release-keys",
+        "version_release": "14",
+        "sdk_int": 34,
+        "security_patch": "2024-08-05",
+        "build_id": "AP2A.240805.005.D1",
+        "version_incremental": "catalog.20240805",
+        "build_date_utc": 1724544000,
+        "first_api_level": 34,
+        "bootloader": "",
+        "baseband": ""
+      },
+      "telephony": {
+        "sim_slot_count": 2,
+        "carrier_name": "T-Mobile",
+        "mcc": "310",
+        "mnc": "260",
+        "network_type": "5G"
+      },
+      "network": {
+        "egress_hint": "us-east"
+      },
+      "display": {
+        "width": 1344,
+        "height": 2992,
+        "density": 480,
+        "refresh_rate_hz": 120,
+        "screen_size_class": "normal"
+      },
+      "locale": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      },
+      "confidence": "approximated",
+      "classification": {
+        "device_classes": [
+          "large-display"
+        ],
+        "display_class": "large-display",
+        "hardware_feature_group": "tensor-g3-5g-nfc-uwb",
+        "camera_class": "triple-rear-front"
+      }
+    },
+    {
+      "id": "pixel_8a",
+      "label": "Pixel 8a",
+      "device": {
+        "manufacturer": "Google",
+        "brand": "google",
+        "model": "Pixel 8a",
+        "product": "akita",
+        "device": "akita",
+        "hardware": "zuma",
+        "fingerprint": "google/akita/akita:14/AP2A.240805.005.E1/catalog.20240805:user/release-keys",
+        "version_release": "14",
+        "sdk_int": 34,
+        "security_patch": "2024-08-05",
+        "build_id": "AP2A.240805.005.E1",
+        "version_incremental": "catalog.20240805",
+        "build_date_utc": 1724544000,
+        "first_api_level": 34,
+        "bootloader": "",
+        "baseband": ""
+      },
+      "telephony": {
+        "sim_slot_count": 2,
+        "carrier_name": "T-Mobile",
+        "mcc": "310",
+        "mnc": "260",
+        "network_type": "5G"
+      },
+      "network": {
+        "egress_hint": "us-east"
+      },
+      "display": {
+        "width": 1080,
+        "height": 2400,
+        "density": 420,
+        "refresh_rate_hz": 120,
+        "screen_size_class": "normal"
+      },
+      "locale": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      },
+      "confidence": "approximated",
+      "classification": {
+        "device_classes": [
+          "compact",
+          "midrange"
+        ],
+        "display_class": "compact",
+        "hardware_feature_group": "tensor-g3-5g-nfc",
+        "camera_class": "dual-rear-front"
+      }
+    },
+    {
+      "id": "pixel_9",
+      "label": "Pixel 9",
+      "device": {
+        "manufacturer": "Google",
+        "brand": "google",
+        "model": "Pixel 9",
+        "product": "tokay",
+        "device": "tokay",
+        "hardware": "zumapro",
+        "fingerprint": "google/tokay/tokay:14/AD1A.240530.047/catalog.20240805:user/release-keys",
+        "version_release": "14",
+        "sdk_int": 34,
+        "security_patch": "2024-08-05",
+        "build_id": "AD1A.240530.047",
+        "version_incremental": "catalog.20240805",
+        "build_date_utc": 1724544000,
+        "first_api_level": 34,
+        "bootloader": "",
+        "baseband": ""
+      },
+      "telephony": {
+        "sim_slot_count": 2,
+        "carrier_name": "T-Mobile",
+        "mcc": "310",
+        "mnc": "260",
+        "network_type": "5G"
+      },
+      "network": {
+        "egress_hint": "us-east"
+      },
+      "display": {
+        "width": 1080,
+        "height": 2424,
+        "density": 420,
+        "refresh_rate_hz": 120,
+        "screen_size_class": "normal"
+      },
+      "locale": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      },
+      "confidence": "approximated",
+      "classification": {
+        "device_classes": [
+          "mainstream",
+          "newer-supported-device"
+        ],
+        "display_class": "mainstream",
+        "hardware_feature_group": "tensor-g4-5g-nfc",
+        "camera_class": "dual-rear-front"
+      }
+    },
+    {
+      "id": "pixel_9_pro",
+      "label": "Pixel 9 Pro",
+      "device": {
+        "manufacturer": "Google",
+        "brand": "google",
+        "model": "Pixel 9 Pro",
+        "product": "caiman",
+        "device": "caiman",
+        "hardware": "zumapro",
+        "fingerprint": "google/caiman/caiman:14/AD1A.240530.047/catalog.20240805:user/release-keys",
+        "version_release": "14",
+        "sdk_int": 34,
+        "security_patch": "2024-08-05",
+        "build_id": "AD1A.240530.047",
+        "version_incremental": "catalog.20240805",
+        "build_date_utc": 1724544000,
+        "first_api_level": 34,
+        "bootloader": "",
+        "baseband": ""
+      },
+      "telephony": {
+        "sim_slot_count": 2,
+        "carrier_name": "T-Mobile",
+        "mcc": "310",
+        "mnc": "260",
+        "network_type": "5G"
+      },
+      "network": {
+        "egress_hint": "us-east"
+      },
+      "display": {
+        "width": 1280,
+        "height": 2856,
+        "density": 480,
+        "refresh_rate_hz": 120,
+        "screen_size_class": "normal"
+      },
+      "locale": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      },
+      "confidence": "approximated",
+      "classification": {
+        "device_classes": [
+          "compact",
+          "newer-supported-device"
+        ],
+        "display_class": "compact",
+        "hardware_feature_group": "tensor-g4-5g-nfc-uwb",
+        "camera_class": "triple-rear-front"
+      }
+    },
+    {
+      "id": "pixel_9_pro_xl",
+      "label": "Pixel 9 Pro XL",
+      "device": {
+        "manufacturer": "Google",
+        "brand": "google",
+        "model": "Pixel 9 Pro XL",
+        "product": "komodo",
+        "device": "komodo",
+        "hardware": "zumapro",
+        "fingerprint": "google/komodo/komodo:14/AD1A.240530.047/catalog.20240805:user/release-keys",
+        "version_release": "14",
+        "sdk_int": 34,
+        "security_patch": "2024-08-05",
+        "build_id": "AD1A.240530.047",
+        "version_incremental": "catalog.20240805",
+        "build_date_utc": 1724544000,
+        "first_api_level": 34,
+        "bootloader": "",
+        "baseband": ""
+      },
+      "telephony": {
+        "sim_slot_count": 2,
+        "carrier_name": "T-Mobile",
+        "mcc": "310",
+        "mnc": "260",
+        "network_type": "5G"
+      },
+      "network": {
+        "egress_hint": "us-east"
+      },
+      "display": {
+        "width": 1344,
+        "height": 2992,
+        "density": 480,
+        "refresh_rate_hz": 120,
+        "screen_size_class": "normal"
+      },
+      "locale": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      },
+      "confidence": "approximated",
+      "classification": {
+        "device_classes": [
+          "large-display",
+          "newer-supported-device"
+        ],
+        "display_class": "large-display",
+        "hardware_feature_group": "tensor-g4-5g-nfc-uwb",
+        "camera_class": "triple-rear-front"
+      }
+    },
+    {
+      "id": "pixel_9a",
+      "label": "Pixel 9a",
+      "device": {
+        "manufacturer": "Google",
+        "brand": "google",
+        "model": "Pixel 9a",
+        "product": "tegu",
+        "device": "tegu",
+        "hardware": "zumapro",
+        "fingerprint": "google/tegu/tegu:15/BD4A.250405.003/catalog.20250205:user/release-keys",
+        "version_release": "15",
+        "sdk_int": 35,
+        "security_patch": "2025-02-05",
+        "build_id": "BD4A.250405.003",
+        "version_incremental": "catalog.20250205",
+        "build_date_utc": 1744675200,
+        "first_api_level": 35,
+        "bootloader": "",
+        "baseband": ""
+      },
+      "telephony": {
+        "sim_slot_count": 2,
+        "carrier_name": "T-Mobile",
+        "mcc": "310",
+        "mnc": "260",
+        "network_type": "5G"
+      },
+      "network": {
+        "egress_hint": "us-east"
+      },
+      "display": {
+        "width": 1080,
+        "height": 2424,
+        "density": 420,
+        "refresh_rate_hz": 120,
+        "screen_size_class": "normal"
+      },
+      "locale": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      },
+      "confidence": "approximated",
+      "classification": {
+        "device_classes": [
+          "midrange",
+          "newer-supported-device"
+        ],
+        "display_class": "mainstream",
+        "hardware_feature_group": "tensor-g4-5g-nfc",
+        "camera_class": "dual-rear-front"
       }
     }
   ]

@@ -1,52 +1,81 @@
-# Built-in phone sources
+# Built-in phone sources and confidence
 
-Reviewed 2026-10-10. `catalog/phones.json` remains schemaVersion 1. The four
-additions are representative Android 14 configurations, not certified factory
-property dumps. Confidence applies to the facts named below, not every field.
+Reviewed 2026-10-11. The shared catalog contains 15 templates and retains
+`schemaVersion: 1`. Existing device blocks are unchanged. These are coherent
+configuration examples, not captured firmware or device compatibility evidence.
 
-| Entry | Release / API (first API) | Display / hardware group | Source type and confidence |
-| --- | --- | --- | --- |
-| `pixel_4` | 13 / 33 (29) | Existing display and hardware values | Legacy release fixture; low confidence in full configuration, source audit pending |
-| `pixel_7` | 13 / 33 (33) | Existing display and hardware values | Legacy release fixture; low confidence in full configuration, source audit pending |
-| `galaxy_s23` | 13 / 33 (33) | Existing display and hardware values | Legacy release fixture; low confidence in full configuration, source audit pending |
-| `pixel_6` | 14 / 34 (31) | 1080 x 2400, 90 Hz, normal; Tensor / `gs101` | Google [specifications][specs], AOSP [build table][builds] and [device source][raviole]; high for model, launch OS, resolution, refresh and Tensor family; medium for representative defaults |
-| `pixel_6a` | 14 / 34 (31) | 1080 x 2400, 60 Hz, normal; Tensor / `gs101` | Google [specifications][specs], AOSP [build table][builds] and [device source][bluejay]; high for model, launch OS, resolution, refresh and Tensor family; medium for representative defaults |
-| `pixel_7a` | 14 / 34 (33) | 1080 x 2400, 90 Hz, normal; Tensor G2 / `gs201` | Google [specifications][specs], AOSP [build table][builds] and [device source][lynx]; high for model, launch OS, resolution, refresh and Tensor family; medium for representative defaults |
-| `pixel_8` | 14 / 34 (34) | 1080 x 2400, 120 Hz, normal; Tensor G3 / `zuma` | Google [specifications][specs], AOSP [build table][builds] and [device source][shusky]; high for model, launch OS, resolution, refresh and Tensor family; medium for representative defaults |
+## Confidence metadata
 
-Google is the manufacturer for all additions. API values follow Android's
-[release constants][apis]: Android 12 = 31, Android 13 = 33, Android 14 = 34.
-First API describes the launch OS; the template's current OS is Android 14.
-The build table lists `UP1A.231005.007` for Pixel 6/6a/7a and
-`UD1A.230803.022.A5` for Pixel 8, with the selected security patch dates.
+Each catalog entry has an optional `confidence` string:
 
-Representative defaults are explicit: logical density 420 dpi (not physical
-panel PPI), ordinary phone size class `normal`, two SIM slots (nano-SIM + eSIM),
-and a US T-Mobile/English locale configuration. `hardware` is the existing
-platform-family field; no feature-group field or feature claims were added.
-Refresh rate selects a supported mode, not a claim of constant panel refresh.
-Carrier and egress values are configuration choices, not manufacturer specs.
+- `public reference`: all supplied values have direct reference evidence.
+- `approximated`: public specifications combined with representative configuration defaults.
+- `needs verification`: legacy fixture awaiting a source audit.
 
-Incrementals `catalog.YYYYMMDD`, fingerprints composed from the matching fields,
-and build timestamp 2023-10-12 UTC are synthetic coherence defaults. They must
-not be presented as captured stock firmware or proof of integrity. Unverified
-bootloader/baseband strings are empty in the new entries, matching the existing
-phone editor's representation of unspecified optional values.
+All eight additions use `approximated`. Model, panel resolution, refresh mode,
+and camera grouping come from Google's [hardware specifications][specs];
+selected release/build/patch combinations come from the [AOSP build table][builds].
+API mapping follows [Android release constants][apis]. Device/platform names use
+[AOSP device sources][devices], including [Pixel 9 sources][caimito] and
+[Pixel 8a sources][akita]. This does not establish that every property matches
+stock firmware. No new template is device-verified.
 
-All seven entries pass the existing Python profile validator and Kotlin phone
-and profile validators with zero findings. Validation establishes internal
-coherence, not external accuracy; the older three entries are preserved and
-still need a separate audit of firmware, hardware and network values.
+| Entry | Device classes | Android / API (first API) | Panel pixels | Hardware / camera group | Overall confidence |
+| --- | --- | --- | --- | --- | --- |
+| `pixel_4` | Legacy | 13 / 33 (29) | Existing | Existing | needs verification |
+| `pixel_7` | Legacy | 13 / 33 (33) | Existing | Existing | needs verification |
+| `galaxy_s23` | Legacy | 13 / 33 (33) | Existing | Existing | needs verification |
+| `pixel_6` | Mainstream | 14 / 34 (31) | Existing | Existing | approximated |
+| `pixel_6a` | Midrange | 14 / 34 (31) | Existing | Existing | approximated |
+| `pixel_7a` | Midrange | 14 / 34 (33) | Existing | Existing | approximated |
+| `pixel_8` | Mainstream | 14 / 34 (34) | Existing | Existing | approximated |
+| `pixel_6_pro` | Older, large-display | 14 / 34 (31) | 1440 × 3120 | Tensor; triple rear + front | approximated |
+| `pixel_7_pro` | Large-display | 14 / 34 (33) | 1440 × 3120 | Tensor G2; triple rear + front | approximated |
+| `pixel_8_pro` | Large-display | 14 / 34 (34) | 1344 × 2992 | Tensor G3; triple rear + front | approximated |
+| `pixel_8a` | Compact, midrange | 14 / 34 (34) | 1080 × 2400 | Tensor G3; dual rear + front | approximated |
+| `pixel_9` | Mainstream, newer | 14 / 34 (34) | 1080 × 2424 | Tensor G4; dual rear + front | approximated |
+| `pixel_9_pro` | Compact, newer | 14 / 34 (34) | 1280 × 2856 | Tensor G4; triple rear + front | approximated |
+| `pixel_9_pro_xl` | Large-display, newer | 14 / 34 (34) | 1344 × 2992 | Tensor G4; triple rear + front | approximated |
+| `pixel_9a` | Midrange, newer | 15 / 35 (35) | 1080 × 2424 | Tensor G4; dual rear + front | approximated |
 
-Run `uv run --with pytest -- python -m pytest forge/tests/test_catalog.py -q`
-and `gradle -p android :app:testDebugUnitTest` (includes `PhoneCatalogTest`).
-Both suites iterate every catalog row; uniqueness checks prevent dictionary
-loading from hiding duplicate IDs.
+## Conservative defaults and metadata boundary
+
+Optional `classification` describes device classes, display class, hardware
+feature group and camera class. These are coarse catalog annotations. `compact`
+is relative to this catalog, not an Android resource-size qualifier. All new
+phones retain the schema's `display.screen_size_class: normal`. Hardware groups
+mean platform family plus 5G/NFC, optionally UWB; they are not complete feature
+lists. Camera classes describe rear-group/front presence, not Camera2 IDs,
+sensor dimensions or hook coverage.
+
+Both readers retain raw catalog annotations; Kotlin phone import/export also
+round-trips them. Both profile forges copy only existing device/telephony/network/
+display/locale blocks, so annotations never extend the profile storage schema or
+runtime reader format. Legacy phone files without annotations still load.
+Editing through the existing phone builder reconstructs a custom template and
+drops reference metadata, avoiding attribution of modified values to stock specs.
+
+New entries use US T-Mobile (`310`/`260`), two SIM slots, 5G, `us-east`, and
+`en`/`US`/`America/New_York`. These are chosen configuration defaults, not observed
+carrier provisioning. Logical densities of 420/480 dpi are approximated, not
+physical panel PPI. Refresh selects a supported 120 Hz mode.
+
+Incrementals `catalog.YYYYMMDD`, composed fingerprints and build timestamps are
+synthetic; bootloader/baseband remain empty. Pixel 9a's build-table patch is
+2025-02-05 for `BD4A.250405.003`; its later synthetic timestamp is intentional.
+Older/newer means generation relative to this catalog and support by its existing
+Android validator. It does not promise current manufacturer update eligibility.
+The three legacy fixtures still need firmware/hardware/network auditing.
+
+The full-catalog Python and Kotlin tests require zero validation findings for
+every entry and verify unique IDs, requested classes, metadata compatibility,
+and unchanged generated profile blocks. See the [run handoff][handoff] for exact
+commands and current local test/build limitations.
 
 [specs]: https://support.google.com/pixelphone/answer/7158570?hl=en
 [builds]: https://source.android.com/docs/setup/reference/build-numbers
 [apis]: https://developer.android.com/reference/android/os/Build.VERSION_CODES
-[raviole]: https://android.googlesource.com/device/google/raviole/
-[bluejay]: https://android.googlesource.com/device/google/bluejay/
-[lynx]: https://android.googlesource.com/device/google/lynx/
-[shusky]: https://android.googlesource.com/device/google/shusky/
+[devices]: https://android.googlesource.com/device/google/
+[caimito]: https://android.googlesource.com/device/google/caimito/+/refs/heads/main/
+[akita]: https://android.googlesource.com/device/google/akita/+/refs/heads/main/
+[handoff]: HANDOFF-2026-10-11-CATALOG.md

@@ -24,6 +24,9 @@ import dev.cyclone.cloak.forge.Imports
 import dev.cyclone.cloak.forge.PhoneCatalog
 import dev.cyclone.cloak.forge.PhoneDraft
 import dev.cyclone.cloak.forge.PhoneTemplate
+import dev.cyclone.cloak.forge.ProfileUniqueness
+import dev.cyclone.cloak.data.JsonDirectory
+import dev.cyclone.cloak.forge.ProfileBackup
 import dev.cyclone.cloak.forge.ProfileValidator
 import dev.cyclone.cloak.root.CloakResolver
 import dev.cyclone.cloak.root.RootDoctorCode
@@ -50,24 +53,33 @@ data class PhoneEditor(val draft: PhoneDraft, val isNew: Boolean, val note: Stri
 }
 
 /** An imported profile with findings, waiting for the owner's decision. */
-data class ImportReview(val profile: JSONObject, val findings: List<ProfileValidator.Finding>) {
+data class ImportReview(val profile: JSONObject, val findings: List<ProfileValidator.Finding>,
+    val verb: String = "Imported", val remaining: List<JSONObject> = emptyList()) {
     val canSave: Boolean get() = findings.none { it.isError }
 }
 
 data class CloakState(
     val phones: List<PhoneTemplate> = emptyList(),
     val identities: List<Identity> = emptyList(),
+    val identityInventoryKnown: Boolean = false,
+    val unreadableIdentityIds: Set<String> = emptySet(),
     val bindings: List<CloakBinding> = emptyList(),
     val report: SyncReport? = null,
     val syncing: Boolean = false,
     val providerState: String = "not registered",
     val rootDoctor: RootDoctorResult = RootDoctorResult(RootDoctorCode.NOT_CHECKED),
-    /** What is running right now ("Creating identity…"), or null. */
+    /** What is running right now ("Creating identityÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦"), or null. */
     val busy: String? = null,
     val opening: Boolean = false,
     val editor: PhoneEditor? = null,
     val review: ImportReview? = null,
+    val generation: ProfileGeneration.Result? = null,
+    val bindingFlow: BindingDraft? = null,
+    val backupReview: ProfileBackup.Review? = null,
+    val backupMessage: String? = null,
+    val backups: List<Pair<String, JSONObject>> = emptyList(),
 ) {
+    val uniqueness: ProfileUniqueness get() = ProfileUniqueness(identities)
     val registry: List<CycloneProfile> get() = report?.snapshot?.registry.orEmpty()
     val placement: Placement? get() = report?.placement
     /** Null in Main; this Cyclone profile's id when Cloak runs inside one. */
@@ -130,8 +142,18 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         val own = PhoneStore.userPhones(app).mapNotNull { runCatching { PhoneTemplate.fromJson(it) }.getOrNull() }
             .filter { phone -> builtIn.none { it.id == phone.id } }
             .sortedBy { it.label.lowercase() }
+        val identities = CloakStore.all(app)
+        val readableIds = identities.map { it.first }.toSet()
+        val directory = java.io.File(app.filesDir, "profiles")
+        val files = directory.listFiles()
+        val inventoryKnown = files != null || !directory.exists()
+        val unreadable = files.orEmpty()
+            .filter { it.isFile && it.name.endsWith(".json") && !it.name.startsWith(".") }
+            .map { it.name.removeSuffix(".json") }.filter { it !in readableIds }.toSet()
         _state.update {
-            it.copy(phones = builtIn + own, identities = CloakStore.all(app), bindings = CloakBindingStore.all(app))
+            it.copy(phones = builtIn + own, identities = identities, identityInventoryKnown = inventoryKnown,
+                unreadableIdentityIds = unreadable, bindings = CloakBindingStore.all(app),
+                backups = backupDirectory().all().mapNotNull { (id, value) -> value.optJSONObject("manifest")?.let { manifest -> id to manifest } })
         }
     }
 
@@ -196,7 +218,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         val editor = _state.value.editor ?: return
         val firstError = editor.findings.firstOrNull { it.isError }
         if (firstError != null) return say("Fix this first: ${firstError.message}")
-        launchWork("Saving phone…") {
+        launchWork("Saving phoneÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
             val phone = editor.draft.toTemplate()
             PhoneStore.save(app, phone.toJson())
             _state.update { it.copy(editor = null) }
@@ -206,26 +228,56 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
 
     fun deletePhone(phone: PhoneTemplate) {
         if (phone.builtIn) return
-        launchWork("Deleting phone…") {
+        launchWork("Deleting phoneÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
             PhoneStore.delete(app, phone.id)
             say("Deleted ${phone.label}. Identities made from it keep their own copy.")
         }
     }
 
+    fun generateProfile(phoneId: String) {
+        val current = _state.value
+        if (current.busy != null || current.generation == ProfileGeneration.Result.Running) return
+        val phone = current.phone(phoneId)
+        if (phone == null) {
+            _state.update { it.copy(generation = ProfileGeneration.Result.Failed("TEMPLATE_MISSING", "Choose an available phone template first.")) }
+            return
+        }
+        // Set synchronously so repeated taps cannot enqueue more than one generation.
+        _state.update { it.copy(generation = ProfileGeneration.Result.Running) }
+        launchWork("Generating profileÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
+            val result = try {
+                ProfileGeneration.generate(phone, CloakStore.all(app), save = { CloakStore.save(app, it) })
+            } catch (_: Exception) {
+                ProfileGeneration.Result.Failed("GENERATION_FAILED", "Could not generate the profile. Try again.")
+            }
+            _state.update { it.copy(generation = result, review = if (result is ProfileGeneration.Result.NeedsReview)
+                ImportReview(result.profile, result.findings, "Created") else it.review) }
+            if (result is ProfileGeneration.Result.Saved) say("Saved ${result.name}. Find it in Identities.")
+        }
+    }
+
+    fun dismissGenerationResult() {
+        _state.update { if (it.generation == ProfileGeneration.Result.Running) it else it.copy(generation = null) }
+    }
+
     // ---- Import and export ------------------------------------------------------------------------------------------
 
-    fun import(uri: Uri) = launchWork("Reading file…") {
-        val text = app.contentResolver.openInputStream(uri)?.bufferedReader()?.use(::readBounded)
+    fun import(uri: Uri) = launchWork("Reading fileÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
+        val text = app.contentResolver.openInputStream(uri)?.bufferedReader(Charsets.UTF_8)?.use { readBounded(it, 20_000_000) }
             ?: throw IllegalArgumentException("Couldn't open that file.")
         require(text.isNotBlank()) { "That file is empty." }
+        val objectFile = runCatching { JSONObject(text) }.getOrNull()
+        if (objectFile != null && (objectFile.optString("kind") in setOf(ProfileBackup.KIND, Imports.FLEET_KIND) ||
+                objectFile.has("device"))) {
+            reviewBackup(text)
+            return@launchWork
+        }
         when (val parsed = Imports.parse(text, takenPhoneIds())) {
             is Imports.Parsed.Profile -> {
-                if (parsed.findings.isEmpty()) saveIdentity(parsed.profile, "Imported")
-                else _state.update { it.copy(review = ImportReview(parsed.profile, parsed.findings)) }
+                saveIdentity(parsed.profile, "Imported")
             }
             is Imports.Parsed.Fleet -> {
-                parsed.profiles.forEach { CloakStore.save(app, it) }
-                say("Imported ${parsed.profiles.size} identities.")
+                saveBatch(parsed.profiles, "Imported")
             }
             is Imports.Parsed.Phone -> _state.update {
                 it.copy(editor = PhoneEditor(PhoneDraft.from(parsed.phone), isNew = true, note = when {
@@ -241,9 +293,19 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
     fun saveReviewed() {
         val review = _state.value.review ?: return
         if (!review.canSave) return say("This profile has errors, so it can't be used as it is.")
-        launchWork("Saving identity…") {
-            saveIdentity(review.profile, "Imported")
-            _state.update { it.copy(review = null) }
+        launchWork("Saving identityÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
+            val currentFindings = ProfileUniqueness(CloakStore.all(app)).findings(review.profile)
+            if (currentFindings != review.findings.filter { it.code == "DUPLICATE_IDENTIFIER" }) {
+                _state.update { it.copy(review = review.copy(findings = ProfileValidator.validateProfile(review.profile) + currentFindings)) }
+                return@launchWork say("The library changed. Review the current conflicts before saving.")
+            }
+            if (saveIdentity(review.profile, review.verb, allowDuplicates = true)) {
+                _state.update { it.copy(review = null, generation = if (it.generation is ProfileGeneration.Result.NeedsReview &&
+                    it.generation.profile.optString("id") == review.profile.optString("id"))
+                    ProfileGeneration.Result.Saved(review.profile.optString("id"), review.profile.optString("name"), review.findings)
+                    else it.generation) }
+                saveBatch(review.remaining, review.verb)
+            }
         }
     }
 
@@ -258,18 +320,54 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun dismissReview() = _state.update { it.copy(review = null) }
+    fun dismissReview() = _state.update {
+        if (it.busy != null) it else it.copy(review = null,
+            generation = if (it.generation is ProfileGeneration.Result.NeedsReview) null else it.generation)
+    }
 
-    fun exportPhone(phone: PhoneTemplate, uri: Uri) = launchWork("Exporting phone…") {
+    fun exportPhone(phone: PhoneTemplate, uri: Uri) = launchWork("Exporting phoneÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
         write(uri, Imports.exportPhone(phone).toString(2))
         say("Exported ${phone.label}.")
     }
 
-    fun exportFleet(uri: Uri) = launchWork("Exporting identities…") {
-        val identities = CloakStore.all(app)
-        require(identities.isNotEmpty()) { "No identities to export." }
-        write(uri, CloakFleet.exportFleet(identities).toString(2))
-        say("Exported ${identities.size} identities.")
+    private fun backupDirectory() = JsonDirectory(java.io.File(app.filesDir, "backups"))
+    fun exportProfiles(identityId: String? = null, includeIdentity: Boolean = false, label: String = "") = launchWork("Saving local backup…") {
+        try {
+            val identities = CloakStore.all(app)
+            val profiles = if (identityId == null) {
+                val files = java.io.File(app.filesDir, "profiles").listFiles().orEmpty().count { it.isFile && it.name.endsWith(".json") && !it.name.startsWith(".") }
+                require(files == identities.size) { "Some profiles are unreadable. Resolve them before exporting the full library." }
+                identities.map { it.second }
+            } else listOf(identities.firstOrNull { it.first == identityId }?.second ?: error("That profile is unreadable or missing."))
+            val version = app.packageManager.getPackageInfo(app.packageName, 0).versionName.orEmpty()
+            val backup = ProfileBackup.export(profiles, version, includeIdentity, label)
+            val id = java.util.UUID.randomUUID().toString()
+            backupDirectory().write(id, backup)
+            val download = runCatching { dev.cyclone.cloak.data.LocalDocumentExport.write(app, "cyclone-cloak-$id.json", backup.toString(2).toByteArray(Charsets.UTF_8)) }
+            _state.update { it.copy(backupMessage = "Saved ${profiles.size} profile(s) atomically in the on-device backup library. " +
+                (if (download.isSuccess) "A complete copy is in Downloads/CycloneCloak. " else "Downloads copy failed; the complete in-app backup is retained. ") +
+                if (includeIdentity) "Identity values included by your selection." else "Seeds and identifiers excluded; import will generate fresh values.") }
+        } catch (error: Exception) { _state.update { it.copy(backupMessage = "Backup not saved: ${error.message}") } }
+    }
+    fun importLocalBackup(id: String) = launchWork("Reading local backup…") {
+        try { reviewBackup(backupDirectory().read(id)?.toString() ?: error("Backup is corrupt or missing.")) }
+        catch (error: Exception) { _state.update { it.copy(backupMessage = "Import not saved: ${error.message}", backupReview = null) } }
+    }
+    private fun reviewBackup(text: String) {
+        try {
+            val review = ProfileBackup.parse(text, CloakStore.all(app))
+            _state.update { it.copy(backupReview = review, backupMessage = null) }
+        } catch (error: Exception) { _state.update { it.copy(backupMessage = "Import not saved: ${error.message}", backupReview = null) } }
+    }
+    fun dismissBackupReview() = _state.update { if (it.busy != null) it else it.copy(backupReview = null) }
+    fun confirmBackupImport(acceptWarnings: Boolean) {
+        val review = _state.value.backupReview ?: return
+        launchWork("Importing profile library…") {
+            try {
+                ProfileBackup.commit(review, CloakStore.all(app), true, acceptWarnings) { CloakStore.importBatch(app, it) }
+                _state.update { it.copy(backupReview = null, backupMessage = "Imported ${review.profiles.size} profile(s). Existing profiles and bindings were retained.") }
+            } catch (error: Exception) { _state.update { it.copy(backupMessage = "Import not saved: ${error.message}") } }
+        }
     }
 
     private fun write(uri: Uri, text: String) {
@@ -279,18 +377,60 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
 
     // ---- Identities -------------------------------------------------------------------------------------------------
 
-    private fun saveIdentity(profile: JSONObject, verb: String) {
+    private suspend fun saveIdentity(profile: JSONObject, verb: String, allowDuplicates: Boolean = false): Boolean {
+        val existing = CloakStore.all(app)
         val name = profile.optString("name").trim()
-        require(_state.value.identities.none { (id, p) -> id != profile.optString("id") && p.optString("name").equals(name, ignoreCase = true) }) {
+        require(existing.none { (id, p) -> id != profile.optString("id") && p.optString("name").equals(name, ignoreCase = true) }) {
             "An identity named \"$name\" already exists. Choose another name."
+        }
+        val findings = ProfileValidator.validateProfile(profile) + ProfileUniqueness(existing).findings(profile)
+        if (findings.any { it.isError } || (!allowDuplicates && findings.isNotEmpty())) {
+            _state.update { it.copy(review = ImportReview(JSONObject(profile.toString()), findings, verb)) }
+            return false
         }
         CloakStore.save(app, profile)
         say("$verb $name.")
+        if (CloakBindingStore.all(app).any { it.cloakProfileId == profile.optString("id") }) publishAndSync()
+        return true
+    }
+
+    private suspend fun saveBatch(profiles: List<JSONObject>, verb: String) {
+        profiles.forEachIndexed { index, profile ->
+            if (!saveIdentity(profile, verb)) {
+                _state.update { it.copy(review = it.review?.copy(remaining = profiles.drop(index + 1))) }
+                return
+            }
+        }
+    }
+
+    fun regenerateReviewed(field: String) = launchWork("Regenerating valueÃ¢â‚¬Â¦") {
+        val review = _state.value.review ?: return@launchWork
+        val index = ProfileUniqueness(CloakStore.all(app))
+        val draft = index.regenerate(review.profile, field)
+        _state.update { it.copy(review = review.copy(profile = draft,
+            findings = ProfileValidator.validateProfile(draft) + index.findings(draft))) }
+    }
+
+    fun reviewIdentity(id: String) = launchWork("Checking identityÃ¢â‚¬Â¦") {
+        val profile = CloakStore.find(app, id) ?: error("That identity is gone.")
+        _state.update { it.copy(review = ImportReview(profile,
+            ProfileValidator.validateProfile(profile) + ProfileUniqueness(CloakStore.all(app)).findings(profile), "Updated")) }
+    }
+
+    fun duplicateIdentity(id: String) = launchWork("Duplicating identityÃ¢â‚¬Â¦") {
+        val source = CloakStore.find(app, id) ?: error("That identity is gone.")
+        val draft = JSONObject(source.toString()).put("id", java.util.UUID.randomUUID().toString())
+        val names = CloakStore.all(app).map { it.second.optString("name").lowercase() }.toSet()
+        val base = source.optString("name").take(50) + " copy"
+        var name = base
+        var suffix = 2
+        while (name.lowercase() in names) name = "$base ${suffix++}"
+        saveIdentity(draft.put("name", name), "Duplicated")
     }
 
     fun createIdentity(name: String, phoneId: String) {
         val phone = _state.value.phone(phoneId) ?: return say("Choose a phone first.")
-        launchWork("Creating identity…") {
+        launchWork("Creating identityÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
             val profile = CloakForge.forgeNewProfile(name, phone)
             ProfileValidator.errors(profile).firstOrNull()?.let { throw IllegalArgumentException(it) }
             saveIdentity(profile, "Created")
@@ -299,28 +439,26 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
 
     fun forgeFleet(phoneId: String, count: Int) {
         val phone = _state.value.phone(phoneId) ?: return say("Choose a phone first.")
-        launchWork("Creating $count identities…") {
+        launchWork("Creating $count identitiesÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
             val profiles = CloakFleet.forgeFleet(phone, count)
-            profiles.forEach { CloakStore.save(app, it) }
-            say("Created ${profiles.size} identities from ${phone.label}.")
+            saveBatch(profiles, "Created")
         }
     }
 
     fun renameIdentity(id: String, name: String) {
         val clean = name.trim()
         if (clean.isEmpty() || clean.length > 64) return say("Names are 1 to 64 characters.")
-        launchWork("Renaming…") {
+        launchWork("RenamingÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
             val profile = CloakStore.find(app, id) ?: throw IllegalStateException("That identity is gone.")
             saveIdentity(profile.put("name", clean), "Renamed to")
-            // Bound apps carry the name in the published state and in Cyclone: bring both up to date.
-            if (_state.value.bindingsOf(id).isNotEmpty()) publishAndSync()
+
         }
     }
 
     fun deleteIdentity(id: String) {
         val bound = _state.value.bindingsOf(id)
         if (bound.isNotEmpty()) return say("It's bound to ${bound.size} apps. Remove those bindings first.")
-        launchWork("Deleting identity…") {
+        launchWork("Deleting identityÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
             // Check the store itself: the screen's list may be a moment old.
             val stillBound = CloakBindingStore.all(app).count { it.cloakProfileId == id }
             require(stillBound == 0) { "It's bound to $stillBound apps. Remove those bindings first." }
@@ -331,16 +469,125 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
 
     // ---- Bindings ---------------------------------------------------------------------------------------------------
 
+    fun startBinding(identityId: String? = null) {
+        if (_state.value.busy != null || _state.value.bindingFlow?.running == true) return
+        _state.update { it.copy(bindingFlow = BindingDraft(identityId = identityId)) }
+    }
+    fun closeBindingFlow() {
+        _state.update { if (it.bindingFlow?.running == true) it else it.copy(bindingFlow = null) }
+    }
+    private fun bindingInputs(freshLocal: Boolean = false): BindingInputs {
+        val state = _state.value
+        return BindingInputs(state.registry, if (freshLocal) CloakStore.all(app) else state.identities,
+            if (freshLocal) CloakBindingStore.all(app) else state.bindings, state.canBind, state.ownProfileId)
+    }
+    private fun changeBinding(transform: (BindingDraft) -> BindingDraft) {
+        _state.update { state -> state.copy(bindingFlow = state.bindingFlow?.let { if (it.running) it else transform(it) }) }
+    }
+    fun chooseBindingProfile(id: String) = changeBinding { it.copy(profileId = id, packageName = null, reviewStamp = null, acknowledged = false, note = null) }
+    fun chooseBindingApp(pkg: String) = changeBinding { it.copy(packageName = pkg, reviewStamp = null, acknowledged = false, note = null) }
+    fun chooseBindingIdentity(id: String) = changeBinding { it.copy(identityId = id, reviewStamp = null, acknowledged = false, note = null) }
+    fun acknowledgeBinding(value: Boolean) = changeBinding { it.copy(acknowledged = value) }
+    fun nextBindingStep() = changeBinding {
+        if (it.step == BindingStep.REVIEW) it.copy(reviewStamp = BindingFlow.stamp(it, bindingInputs()), acknowledged = false, note = null)
+        else BindingFlow.next(it, bindingInputs())
+    }
+    fun backBindingStep() {
+        val flow = _state.value.bindingFlow ?: return
+        if (flow.running) return
+        if (flow.step == BindingStep.PROFILE) return closeBindingFlow()
+        changeBinding { it.copy(step = if (it.step == BindingStep.RESULT) BindingStep.REVIEW else BindingStep.entries[it.step.ordinal - 1],
+            reviewStamp = null, acknowledged = false, outcome = null, note = null) }
+        if (_state.value.bindingFlow?.step == BindingStep.REVIEW) changeBinding { it.copy(reviewStamp = BindingFlow.stamp(it, bindingInputs())) }
+    }
+    fun generateBindingProfile(phoneId: String) {
+        val flow = _state.value.bindingFlow ?: return
+        val phone = _state.value.phone(phoneId) ?: return
+        if (flow.step != BindingStep.IDENTITY || flow.running || _state.value.busy != null) return
+        changeBinding { it.copy(running = true, note = null) }
+        launchWork("Generating compatibility profile…") {
+            val result = try {
+                ProfileGeneration.generate(phone, CloakStore.all(app), save = { CloakStore.save(app, it) })
+            } catch (_: Exception) { ProfileGeneration.Result.Failed("GENERATION_FAILED", "Generation failed. Check local storage and try again.") }
+            loadLocal()
+            _state.update { state -> state.copy(bindingFlow = state.bindingFlow?.copy(running = false,
+                identityId = if (result is ProfileGeneration.Result.Saved) result.id else state.bindingFlow.identityId,
+                note = when (result) {
+                    is ProfileGeneration.Result.Saved -> "Saved ${result.name}. Review it before binding."
+                    is ProfileGeneration.Result.Rejected -> result.findings.joinToString("\n") { it.message }
+                    is ProfileGeneration.Result.NeedsReview -> "Generated values conflict with the library. Generate again or review an existing profile in Identities. Nothing was saved."
+                    is ProfileGeneration.Result.Failed -> result.message
+                    else -> "Generation did not complete. Try again."
+                })) }
+        }
+    }
+    fun confirmBindingFlow() {
+        val draft = _state.value.bindingFlow ?: return
+        if (draft.running || _state.value.busy != null || !BindingFlow.canConfirm(draft, bindingInputs())) return
+        changeBinding { it.copy(running = true) }
+        launchWork("Saving binding…") {
+            try {
+                val input = bindingInputs(freshLocal = true)
+                if (!BindingFlow.canConfirm(draft, input)) {
+                    _state.update { it.copy(bindingFlow = draft.copy(reviewStamp = BindingFlow.stamp(draft, input),
+                        acknowledged = false, note = "The library or target changed. Review the current findings and confirm again.")) }
+                    return@launchWork
+                }
+                val record = BindingFlow.record(draft, input, System.currentTimeMillis())
+                // Existing store preserves the logical profile-ID/package key and atomic update behavior.
+                CloakBindingStore.update(app) { current ->
+                    require(current == input.bindings) { "Bindings changed. Return to review before saving." }
+                    CloakBindingStore.upsertIn(current, record)
+                }
+                finishBindingFlow(draft)
+            } catch (_: Exception) {
+                bindingFlowFailed(draft)
+            }
+        }
+    }
+    fun retryBindingFlow() {
+        val draft = _state.value.bindingFlow ?: return
+        if (draft.running || _state.value.busy != null || draft.outcome?.saved != true || draft.outcome.ready) return
+        changeBinding { it.copy(running = true) }
+        launchWork("Retrying reconciliation…") {
+            try {
+                val input = bindingInputs(freshLocal = true)
+                val errors = BindingFlow.findings(draft, input).filter { it.isError }
+                val held = input.bindings.filter { it.profileId == draft.profileId && it.packageName == draft.packageName }
+                require(held.singleOrNull()?.let { it.enabled && it.cloakProfileId == draft.identityId && it.origin == CloakBinding.ORIGIN_LOCAL } == true)
+                if (errors.isNotEmpty()) {
+                    _state.update { it.copy(bindingFlow = draft.copy(running = false, outcome = BindingOutcome(false, true,
+                        "Binding retained. " + errors.joinToString("\n") { it.message }))) }
+                    return@launchWork
+                }
+                // Retry publication/sync only: never recreate or overwrite a changed binding.
+                finishBindingFlow(draft)
+            } catch (_: Exception) { bindingFlowFailed(draft) }
+        }
+    }
+    private fun finishBindingFlow(draft: BindingDraft) {
+        val root = publishAndSync()
+        val result = BindingFlow.completion(draft, root, _state.value.report, CloakBindingStore.all(app))
+        _state.update { it.copy(bindingFlow = draft.copy(step = BindingStep.RESULT, running = false, outcome = result, note = null)) }
+    }
+    private fun bindingFlowFailed(draft: BindingDraft) {
+        val held = CloakBindingStore.all(app).filter { it.profileId == draft.profileId && it.packageName == draft.packageName }
+        val saved = held.singleOrNull()?.let { it.enabled && it.cloakProfileId == draft.identityId && it.origin == CloakBinding.ORIGIN_LOCAL } == true
+        _state.update { it.copy(bindingFlow = draft.copy(step = BindingStep.RESULT, running = false,
+            outcome = BindingOutcome(false, saved, if (saved) "Binding saved locally. Check Health Doctor and retry reconciliation."
+                else "Binding was not saved or the target changed. Return to review before trying again."))) }
+    }
+
     fun bind(identityId: String, profile: CycloneProfile) {
         val state = _state.value
         when {
-            !state.canBind -> return say("Approve Cyclone Cloak's profile settings in Cyclone → Settings → Connectors first.")
+            !state.canBind -> return say("Approve Cyclone Cloak's profile settings in Cyclone ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ Settings ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ Connectors first.")
             !state.bindableHere(profile) -> return say(
                 if (profile.bindable) "Bind ${profile.label} from Cyclone Cloak in Main, or from Cloak inside ${profile.label}."
                 else "${profile.label} isn't ready in Cyclone yet.",
             )
         }
-        launchWork("Binding…") {
+        launchWork("BindingÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
             val count = bindLocally(profile, identityId)
             if (count == 0) return@launchWork say("Cyclone shared no apps for ${profile.label}.")
             val result = publishAndSync()
@@ -350,7 +597,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
 
     fun bulkBind() {
         val state = _state.value
-        if (!state.canBind) return say("Approve Cyclone Cloak's profile settings in Cyclone → Settings → Connectors first.")
+        if (!state.canBind) return say("Approve Cyclone Cloak's profile settings in Cyclone ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ Settings ÃƒÂ¢Ã¢â‚¬Â Ã¢â‚¬â„¢ Connectors first.")
         val ready = state.registry.filter(state::bindableHere)
         val plan = BulkBind.plan(state.identities.map { it.first }, ready, state.bindings)
         if (plan.assignments.isEmpty()) {
@@ -360,7 +607,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
                 else -> "Every ready profile is bound already."
             })
         }
-        launchWork("Binding ${plan.assignments.size} profiles…") {
+        launchWork("Binding ${plan.assignments.size} profilesÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
             val count = plan.assignments.sumOf { (profile, id) -> bindLocally(profile, id) }
             val result = publishAndSync()
             val note = if (result.published) "" else " ${result.title}: ${result.message}"
@@ -370,7 +617,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
 
     fun toggleBinding(binding: CloakBinding) {
         if (binding.origin == CloakBinding.ORIGIN_MAIN) return say("This binding is managed by Cyclone Cloak in Main.")
-        launchWork(if (binding.enabled) "Turning off…" else "Turning on…") {
+        launchWork(if (binding.enabled) "Turning offÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦" else "Turning onÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
             CloakBindingStore.upsert(app, binding.copy(enabled = !binding.enabled, updatedAt = System.currentTimeMillis()))
             publishAndSync()
         }
@@ -378,7 +625,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
 
     fun removeBinding(binding: CloakBinding) {
         if (binding.origin == CloakBinding.ORIGIN_MAIN) return say("This binding is managed by Cyclone Cloak in Main.")
-        launchWork("Removing binding…") {
+        launchWork("Removing bindingÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
             CloakBindingStore.remove(app, binding.profileId, binding.androidUserId, binding.packageName)
             publishAndSync()
         }
@@ -415,7 +662,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
 
     fun runRootDoctor() {
         _state.update { it.copy(rootDoctor = RootDoctorResult(RootDoctorCode.CHECKING)) }
-        launchWork("Checking root…") {
+        launchWork("Checking rootÃƒÂ¢Ã¢â€šÂ¬Ã‚Â¦") {
             val result = CloakResolver.rebuildIndexDetailed(app, repairModule = true)
             _state.update { it.copy(rootDoctor = result) }
             _state.update { it.copy(report = CycloneBridge.sync(app, foreground = true)) }

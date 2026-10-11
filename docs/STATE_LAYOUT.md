@@ -12,8 +12,7 @@ reader. One layout, two implementations; change both in the same commit.
   before publishing; never read by the module.
 - Per-binding dir: `<root>/<sha256 key>/profile.json` - the full cloak profile JSON.
 - Per-binding dir: `<root>/<sha256 key>/pif.json` - PIF-style key/value Play Integrity
-  posture derived from the same device block. The module does not read it; a
-  Tricky Store-style consumer does.
+  posture derived from the same device block. The module does not read it; external consumption and attestation are unverified.
 - Module index: `<root>/index.json` - `{"schemaVersion": 2, "entries": {...}}` maps
   `<androidUserId>/<packageName>` to `{"profileId", "cloakProfileId", "key"}`.
   Rebuilt from all publisher shares on every publish (see Shares below).
@@ -36,8 +35,9 @@ share and the tree the module reads is assembled from all of them:
 - On every publish `state-v1/` is rebuilt from all shares, Main's last: for an app both bound, Main's
   per-binding dir and index member win (nlohmann/json and Android's org.json both keep the last of
   a repeated key).
-- Cloak in Main removes the share of any Android user that is no longer a Cyclone profile, so a
-  reused user number never inherits a deleted profile's identity.
+- Cloak in Main prunes shares only when the current registry and reconciliation
+  establish removal. Ambiguous records retain their old user shares with warnings;
+  reused Android user numbers require review.
 - The first publish after updating from an older release keeps the existing tree as Main's share.
 - Cloak in a profile reads the assembled `index.json` (read-only, through the same su checks) to
   mirror what Main bound for it.
@@ -58,9 +58,11 @@ when the last owning descriptor closes, including after process death.
 Each app invocation uses a separate private staging directory. Under the shared
 lock, missing shares are restored from `<user>.old` before merging. Legacy
 migration is assembled under `publishers.migration` before being renamed into
-place. `state-v1.previous` is restored first when `state-v1` is missing; it is
+place. `state-v1.previous` is restored first when `state-v1` is missing or its
+index is empty and the backup has a nonempty index; it is
 never deleted merely because another publication started. A failed final rename
-attempts rollback. If rollback also fails, the complete previous tree remains at
+attempts rollback. The backup remains until post-swap checks pass, and a failed
+post-swap check rolls the uncommitted candidate back as well. If rollback also fails, the complete previous tree remains at
 `state-v1.previous` and the next locked attempt retries recovery. No bindings or
 reader keys change. A failed merge can leave a completed publisher share pending
 for the next merge; the currently published complete tree remains authoritative.
@@ -74,12 +76,15 @@ edits must still run without concurrent app publication.
 
 Shell outcomes are `CLOAK_PUBLICATION=LOCKED|FAILED|RECOVERED|COMPLETED`.
 `LOCKED` requires retry without changing shares/state; `RECOVERED` and `COMPLETED`
-mean the merge succeeded. `FAILED` includes a recovery detail:
+mean the merge succeeded. A stale owner marker produces
+`CLOAK_PUBLICATION_DETAIL=STALE_LOCK` only after exclusive acquisition; it is
+reported separately from the final outcome, including in redacted diagnostics.
+`FAILED` includes a recovery detail:
 `LAST_TREE_RETAINED`, `RESTORE_PENDING`, or `NO_PREVIOUS_TREE`. Root Doctor retains its existing
 `READY`/`PUBLISH_FAILED` codes and exposes the publication reason separately;
 Health Doctor displays fixed reasons and copies only allowlisted messages.
 
-Local checks on 2026-10-11: 11 `PublicationRecoveryTest` cases exercise real Linux
+Local checks on 2026-10-11: 14 `PublicationRecoveryTest` cases exercise real Linux
 kernel locks through WSL Ubuntu, stale markers, SIGKILL, concurrent publishers,
 share/swap/rollback failures and recovery. Existing merge and Root Doctor tests
 also pass. Run `gradle -p android :app:testDebugUnitTest` on POSIX; on Windows with

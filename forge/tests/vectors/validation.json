@@ -148,9 +148,9 @@
       "expect": [
         [
           "error",
-          "SDK_RANGE",
-          "device.sdk_int",
-          "device.sdk_int must be between 26 and 36"
+          "FIRST_API_LEVEL",
+          "device.first_api_level",
+          "device.first_api_level cannot exceed device.sdk_int"
         ],
         [
           "error",
@@ -160,9 +160,9 @@
         ],
         [
           "error",
-          "FIRST_API_LEVEL",
-          "device.first_api_level",
-          "device.first_api_level cannot exceed device.sdk_int"
+          "SDK_RANGE",
+          "device.sdk_int",
+          "device.sdk_int must be between 26 and 36"
         ]
       ]
     },
@@ -214,15 +214,15 @@
       "expect": [
         [
           "warning",
-          "PATCH_FUTURE",
-          "device.security_patch",
-          "device.security_patch: security_patch is in the future"
-        ],
-        [
-          "warning",
           "PATCH_AFTER_BUILD",
           "device.security_patch",
           "device.security_patch: security patch is newer than the build date"
+        ],
+        [
+          "warning",
+          "PATCH_FUTURE",
+          "device.security_patch",
+          "device.security_patch: security_patch is in the future"
         ]
       ]
     },
@@ -447,15 +447,15 @@
       "expect": [
         [
           "error",
-          "DISPLAY_FIELD",
-          "display.width",
-          "display.width must be a positive integer"
-        ],
-        [
-          "error",
           "DISPLAY_CLASS",
           "display.screen_size_class",
           "display.screen_size_class must be small, normal, or large"
+        ],
+        [
+          "error",
+          "DISPLAY_FIELD",
+          "display.width",
+          "display.width must be a positive integer"
         ]
       ]
     },
@@ -480,14 +480,14 @@
         [
           "error",
           "LOCALE",
-          "locale.language",
-          "locale.language must be a two-letter lowercase code"
+          "locale.country",
+          "locale.country must be a two-letter uppercase code"
         ],
         [
           "error",
           "LOCALE",
-          "locale.country",
-          "locale.country must be a two-letter uppercase code"
+          "locale.language",
+          "locale.language must be a two-letter lowercase code"
         ],
         [
           "error",
@@ -624,15 +624,15 @@
       "expect": [
         [
           "error",
-          "SDK_RANGE",
-          "device.sdk_int",
-          "device.sdk_int must be between 26 and 36"
-        ],
-        [
-          "error",
           "RELEASE_SDK_MISMATCH",
           "device.sdk_int",
           "device.sdk_int must be 33 for Android 13; got 1099511627776"
+        ],
+        [
+          "error",
+          "SDK_RANGE",
+          "device.sdk_int",
+          "device.sdk_int must be between 26 and 36"
         ]
       ]
     },
@@ -651,6 +651,12 @@
           "FIRST_API_RANGE",
           "device.first_api_level",
           "device.first_api_level must be between 26 and 36"
+        ],
+        [
+          "warning",
+          "HARDWARE_NETWORK_GENERATION",
+          "telephony.network_type",
+          "telephony.network_type declares 5G on hardware launched before API 29; confirm modem support"
         ]
       ]
     },
@@ -822,15 +828,15 @@
       "expect": [
         [
           "warning",
-          "MODEL_MANUFACTURER_MISMATCH",
-          "device.manufacturer",
-          "device.manufacturer is unusual for device.model; expected google"
-        ],
-        [
-          "warning",
           "BRAND_MANUFACTURER_MISMATCH",
           "device.manufacturer",
           "device.manufacturer disagrees with the known device.brand family"
+        ],
+        [
+          "warning",
+          "MODEL_MANUFACTURER_MISMATCH",
+          "device.manufacturer",
+          "device.manufacturer is unusual for device.model; expected google"
         ]
       ]
     },
@@ -918,9 +924,9 @@
       "expect": [
         [
           "warning",
-          "DISPLAY_SUSPICIOUS",
-          "display.width",
-          "display.width is outside the usual range 120\u20138192"
+          "DISPLAY_DENSITY_MISMATCH",
+          "display.density",
+          "display.density implies a shortest edge outside 120\u20131600 dp for these dimensions"
         ],
         [
           "warning",
@@ -930,9 +936,9 @@
         ],
         [
           "warning",
-          "DISPLAY_DENSITY_MISMATCH",
-          "display.density",
-          "display.density implies a shortest edge outside 120\u20131600 dp for these dimensions"
+          "DISPLAY_SUSPICIOUS",
+          "display.width",
+          "display.width is outside the usual range 120\u20138192"
         ]
       ]
     },
@@ -948,15 +954,15 @@
       "expect": [
         [
           "warning",
-          "DISPLAY_SUSPICIOUS",
-          "display.width",
-          "display.width is outside the usual range 120\u20138192"
-        ],
-        [
-          "warning",
           "DISPLAY_ASPECT",
           "display.width",
           "display.width and display.height imply an aspect ratio above 4:1"
+        ],
+        [
+          "warning",
+          "DISPLAY_SUSPICIOUS",
+          "display.width",
+          "display.width is outside the usual range 120\u20138192"
         ]
       ]
     },
@@ -990,15 +996,15 @@
       "expect": [
         [
           "warning",
-          "DISPLAY_SUSPICIOUS",
-          "display.density",
-          "display.density is outside the usual range 72\u20131000"
-        ],
-        [
-          "warning",
           "DISPLAY_DENSITY_MISMATCH",
           "display.density",
           "display.density implies a shortest edge outside 120\u20131600 dp for these dimensions"
+        ],
+        [
+          "warning",
+          "DISPLAY_SUSPICIOUS",
+          "display.density",
+          "display.density is outside the usual range 72\u20131000"
         ]
       ]
     },
@@ -1400,15 +1406,21 @@
         ],
         [
           "error",
+          "FIRST_API_RANGE",
+          "device.first_api_level",
+          "device.first_api_level must be between 26 and 36"
+        ],
+        [
+          "error",
           "API_TYPE",
           "device.sdk_int",
           "device.sdk_int must be an integer"
         ],
         [
-          "error",
-          "FIRST_API_RANGE",
-          "device.first_api_level",
-          "device.first_api_level must be between 26 and 36"
+          "warning",
+          "HARDWARE_NETWORK_GENERATION",
+          "telephony.network_type",
+          "telephony.network_type declares 5G on hardware launched before API 29; confirm modem support"
         ]
       ]
     },
@@ -1468,6 +1480,397 @@
       ]
     },
     {
+      "name": "coherence telephony.carrier_name = 'Carrier\\nInjected'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "telephony.carrier_name",
+          "Carrier\nInjected"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "TELEPHONY_CARRIER_FORMAT",
+          "telephony.carrier_name",
+          "telephony.carrier_name must not contain control characters"
+        ]
+      ]
+    },
+    {
+      "name": "coherence telephony.carrier_name = 123",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "telephony.carrier_name",
+          123
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "TELEPHONY_CARRIER",
+          "telephony.carrier_name",
+          "telephony.carrier_name must be a non-empty string"
+        ]
+      ]
+    },
+    {
+      "name": "coherence telephony.mcc = '310\\n'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "telephony.mcc",
+          "310\n"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "TELEPHONY_MCC",
+          "telephony.mcc",
+          "telephony.mcc must be three digits"
+        ]
+      ]
+    },
+    {
+      "name": "coherence telephony.mcc = '\u0663\u0661\u0660'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "telephony.mcc",
+          "\u0663\u0661\u0660"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "TELEPHONY_MCC",
+          "telephony.mcc",
+          "telephony.mcc must be three digits"
+        ]
+      ]
+    },
+    {
+      "name": "coherence telephony.mcc = '000'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "telephony.mcc",
+          "000"
+        ]
+      ],
+      "expect": [
+        [
+          "info",
+          "TELEPHONY_PLACEHOLDER_OPERATOR",
+          "telephony.mcc",
+          "telephony.mcc is all zero; confirm that a placeholder operator is intended"
+        ]
+      ]
+    },
+    {
+      "name": "coherence telephony.mnc = '260\\n'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "telephony.mnc",
+          "260\n"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "TELEPHONY_MNC",
+          "telephony.mnc",
+          "telephony.mnc must be two or three digits"
+        ]
+      ]
+    },
+    {
+      "name": "coherence telephony.mnc = '\u0662\u0666\u0660'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "telephony.mnc",
+          "\u0662\u0666\u0660"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "TELEPHONY_MNC",
+          "telephony.mnc",
+          "telephony.mnc must be two or three digits"
+        ]
+      ]
+    },
+    {
+      "name": "coherence network.egress_hint = 'xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "network.egress_hint",
+          "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "NETWORK_HINT_FORMAT",
+          "network.egress_hint",
+          "network.egress_hint must be text of at most 128 characters without control characters"
+        ]
+      ]
+    },
+    {
+      "name": "coherence network.egress_hint = 'region\\x00'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "network.egress_hint",
+          "region\u0000"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "NETWORK_HINT_FORMAT",
+          "network.egress_hint",
+          "network.egress_hint must be text of at most 128 characters without control characters"
+        ]
+      ]
+    },
+    {
+      "name": "coherence network.egress_hint = None",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "network.egress_hint",
+          null
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "NETWORK_HINT_FORMAT",
+          "network.egress_hint",
+          "network.egress_hint must be text of at most 128 characters without control characters"
+        ]
+      ]
+    },
+    {
+      "name": "coherence network.egress_hint = '\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "network.egress_hint",
+          "\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00\ud83d\ude00"
+        ]
+      ],
+      "expect": []
+    },
+    {
+      "name": "coherence network = []",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "network",
+          []
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "BLOCK_TYPE",
+          "network",
+          "network must be an object"
+        ]
+      ]
+    },
+    {
+      "name": "coherence telephony = []",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "telephony",
+          []
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "BLOCK_TYPE",
+          "telephony",
+          "telephony must be an object"
+        ]
+      ]
+    },
+    {
+      "name": "coherence device.bootloader = 123",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.bootloader",
+          123
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "HARDWARE_FIELD_FORMAT",
+          "device.bootloader",
+          "device.bootloader must be text without control characters"
+        ]
+      ]
+    },
+    {
+      "name": "coherence device.baseband = 'modem\\n'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.baseband",
+          "modem\n"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "HARDWARE_FIELD_FORMAT",
+          "device.baseband",
+          "device.baseband must be text without control characters"
+        ]
+      ]
+    },
+    {
+      "name": "coherence device.baseband = 'none'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.baseband",
+          "none"
+        ]
+      ],
+      "expect": [
+        [
+          "warning",
+          "HARDWARE_MODEM_UNSPECIFIED",
+          "device.baseband",
+          "device.baseband does not identify a modem although telephony.network_type declares cellular service"
+        ]
+      ]
+    },
+    {
+      "name": "coherence device.hardware = 'generic'",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.hardware",
+          "generic"
+        ]
+      ],
+      "expect": [
+        [
+          "info",
+          "HARDWARE_UNSPECIFIED",
+          "device.hardware",
+          "device.hardware does not identify a specific hardware platform; capability consistency cannot be established"
+        ]
+      ]
+    },
+    {
+      "name": "coherence device.first_api_level = 28",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.first_api_level",
+          28
+        ]
+      ],
+      "expect": [
+        [
+          "warning",
+          "HARDWARE_NETWORK_GENERATION",
+          "telephony.network_type",
+          "telephony.network_type declares 5G on hardware launched before API 29; confirm modem support"
+        ]
+      ]
+    },
+    {
+      "name": "all severities have deterministic summary order",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "device.hardware",
+          "generic"
+        ],
+        [
+          "device.baseband",
+          "none"
+        ],
+        [
+          "display.width",
+          0
+        ],
+        [
+          "telephony.mcc",
+          "000"
+        ],
+        [
+          "identifiers.android_id",
+          "invalid"
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "DISPLAY_FIELD",
+          "display.width",
+          "display.width must be a positive integer"
+        ],
+        [
+          "error",
+          "IDENTIFIER_FORMAT",
+          "identifiers.android_id",
+          "identifiers.android_id must be 16 lowercase hex characters"
+        ],
+        [
+          "warning",
+          "HARDWARE_MODEM_UNSPECIFIED",
+          "device.baseband",
+          "device.baseband does not identify a modem although telephony.network_type declares cellular service"
+        ],
+        [
+          "info",
+          "HARDWARE_UNSPECIFIED",
+          "device.hardware",
+          "device.hardware does not identify a specific hardware platform; capability consistency cannot be established"
+        ],
+        [
+          "info",
+          "TELEPHONY_PLACEHOLDER_OPERATOR",
+          "telephony.mcc",
+          "telephony.mcc is all zero; confirm that a placeholder operator is intended"
+        ]
+      ]
+    },
+    {
+      "name": "optional network and modem fields can be absent",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "network"
+        ],
+        [
+          "device.baseband"
+        ],
+        [
+          "device.bootloader"
+        ]
+      ],
+      "expect": []
+    },
+    {
       "name": "valid Android 8.0 API 26",
       "phone": "pixel_7",
       "mutations": [
@@ -1492,7 +1895,14 @@
           "Mozilla/5.0 (Linux; Android 8.0; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
         ]
       ],
-      "expect": []
+      "expect": [
+        [
+          "warning",
+          "HARDWARE_NETWORK_GENERATION",
+          "telephony.network_type",
+          "telephony.network_type declares 5G on hardware launched before API 29; confirm modem support"
+        ]
+      ]
     },
     {
       "name": "valid Android 8.1 API 27",
@@ -1519,7 +1929,14 @@
           "Mozilla/5.0 (Linux; Android 8.1; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
         ]
       ],
-      "expect": []
+      "expect": [
+        [
+          "warning",
+          "HARDWARE_NETWORK_GENERATION",
+          "telephony.network_type",
+          "telephony.network_type declares 5G on hardware launched before API 29; confirm modem support"
+        ]
+      ]
     },
     {
       "name": "valid Android 9 API 28",
@@ -1546,7 +1963,14 @@
           "Mozilla/5.0 (Linux; Android 9; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
         ]
       ],
-      "expect": []
+      "expect": [
+        [
+          "warning",
+          "HARDWARE_NETWORK_GENERATION",
+          "telephony.network_type",
+          "telephony.network_type declares 5G on hardware launched before API 29; confirm modem support"
+        ]
+      ]
     },
     {
       "name": "valid Android 10 API 29",
@@ -1573,7 +1997,14 @@
           "Mozilla/5.0 (Linux; Android 10; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
         ]
       ],
-      "expect": []
+      "expect": [
+        [
+          "warning",
+          "HARDWARE_NETWORK_GENERATION",
+          "telephony.network_type",
+          "telephony.network_type declares 5G on hardware launched before API 29; confirm modem support"
+        ]
+      ]
     },
     {
       "name": "valid Android 11 API 30",
@@ -1600,7 +2031,14 @@
           "Mozilla/5.0 (Linux; Android 11; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
         ]
       ],
-      "expect": []
+      "expect": [
+        [
+          "warning",
+          "HARDWARE_NETWORK_GENERATION",
+          "telephony.network_type",
+          "telephony.network_type declares 5G on hardware launched before API 29; confirm modem support"
+        ]
+      ]
     },
     {
       "name": "valid Android 12 API 31",
@@ -1627,7 +2065,14 @@
           "Mozilla/5.0 (Linux; Android 12; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
         ]
       ],
-      "expect": []
+      "expect": [
+        [
+          "warning",
+          "HARDWARE_NETWORK_GENERATION",
+          "telephony.network_type",
+          "telephony.network_type declares 5G on hardware launched before API 29; confirm modem support"
+        ]
+      ]
     },
     {
       "name": "valid Android 12 API 32",
@@ -1654,7 +2099,14 @@
           "Mozilla/5.0 (Linux; Android 12; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
         ]
       ],
-      "expect": []
+      "expect": [
+        [
+          "warning",
+          "HARDWARE_NETWORK_GENERATION",
+          "telephony.network_type",
+          "telephony.network_type declares 5G on hardware launched before API 29; confirm modem support"
+        ]
+      ]
     },
     {
       "name": "valid Android 13 API 33",
@@ -1681,7 +2133,14 @@
           "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
         ]
       ],
-      "expect": []
+      "expect": [
+        [
+          "warning",
+          "HARDWARE_NETWORK_GENERATION",
+          "telephony.network_type",
+          "telephony.network_type declares 5G on hardware launched before API 29; confirm modem support"
+        ]
+      ]
     },
     {
       "name": "valid Android 14 API 34",
@@ -1708,7 +2167,14 @@
           "Mozilla/5.0 (Linux; Android 14; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
         ]
       ],
-      "expect": []
+      "expect": [
+        [
+          "warning",
+          "HARDWARE_NETWORK_GENERATION",
+          "telephony.network_type",
+          "telephony.network_type declares 5G on hardware launched before API 29; confirm modem support"
+        ]
+      ]
     },
     {
       "name": "valid Android 15 API 35",
@@ -1735,7 +2201,14 @@
           "Mozilla/5.0 (Linux; Android 15; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
         ]
       ],
-      "expect": []
+      "expect": [
+        [
+          "warning",
+          "HARDWARE_NETWORK_GENERATION",
+          "telephony.network_type",
+          "telephony.network_type declares 5G on hardware launched before API 29; confirm modem support"
+        ]
+      ]
     },
     {
       "name": "valid Android 16 API 36",
@@ -1762,7 +2235,14 @@
           "Mozilla/5.0 (Linux; Android 16; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
         ]
       ],
-      "expect": []
+      "expect": [
+        [
+          "warning",
+          "HARDWARE_NETWORK_GENERATION",
+          "telephony.network_type",
+          "telephony.network_type declares 5G on hardware launched before API 29; confirm modem support"
+        ]
+      ]
     },
     {
       "name": "valid Android 13.0 API 33",
@@ -1789,7 +2269,14 @@
           "Mozilla/5.0 (Linux; Android 13.0; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
         ]
       ],
-      "expect": []
+      "expect": [
+        [
+          "warning",
+          "HARDWARE_NETWORK_GENERATION",
+          "telephony.network_type",
+          "telephony.network_type declares 5G on hardware launched before API 29; confirm modem support"
+        ]
+      ]
     }
   ]
 }

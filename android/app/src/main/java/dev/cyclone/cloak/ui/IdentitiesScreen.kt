@@ -53,11 +53,12 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
     var selected by rememberSaveable { mutableStateOf<String?>(null) }
     var renaming by remember { mutableStateOf<Identity?>(null) }
     var deleting by remember { mutableStateOf<Identity?>(null) }
-    var binding by remember { mutableStateOf<Identity?>(null) }
     val importer = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri -> uri?.let(vm::import) }
-    val exporter = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
-        uri?.let(vm::exportFleet)
-    }
+    var exportTarget by remember { mutableStateOf<String?>(null) }
+    var exporting by remember { mutableStateOf(false) }
+    var includeIdentity by rememberSaveable { mutableStateOf(false) }
+    var backupLabel by rememberSaveable { mutableStateOf("") }
+
 
     LazyColumn(
         modifier = Modifier.fillMaxSize(),
@@ -102,7 +103,7 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
                     HorizontalDivider()
                     Text("A fleet", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
                     Text(
-                        "Several identities from the same phone, named ${CloakFleet.FLEET_PREFIX} 01, 02, … Making the same fleet again gives the same identities.",
+                        "Several identities from the same phone, named ${CloakFleet.FLEET_PREFIX} 01, 02, â€¦ Making the same fleet again gives the same identities.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
@@ -131,14 +132,23 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
                     Text("Import")
                 }
                 OutlinedButton(
-                    onClick = { exporter.launch("cyclone-cloak-fleet.json") },
+                    onClick = { run { exportTarget = null; includeIdentity = false; backupLabel = ""; exporting = true } },
                     enabled = state.identities.isNotEmpty(),
                     modifier = Modifier.weight(1f),
                     shape = MaterialTheme.shapes.small,
-                ) { Text("Export all") }
+                ) { Text("Back up all") }
             }
         }
 
+        state.backupMessage?.let { message -> item { Text(message, style = MaterialTheme.typography.bodySmall) } }
+        if (state.backups.isNotEmpty()) {
+            item { CloakSectionTitle("Local backups", state.backups.size) }
+            items(state.backups, key = { "backup-" + it.first }) { (id, manifest) ->
+                OutlinedButton(onClick = { vm.importLocalBackup(id) }, enabled = state.busy == null) {
+                    Text("Review import: ${manifest.optString("label").ifBlank { manifest.optString("created_at") }} · ${manifest.optInt("profile_count")} profiles")
+                }
+            }
+        }
         item { CloakSectionTitle("Identities", state.identities.size) }
         if (state.identities.size > 6) {
             item {
@@ -179,7 +189,10 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
                         modifier = Modifier.padding(horizontal = 8.dp),
                     )
                     FlowRow(Modifier.fillMaxWidth().padding(horizontal = 4.dp)) {
-                        TextButton(onClick = { binding = identity }) { Text("Bind to a profile") }
+                        TextButton(onClick = { vm.startBinding(id) }) { Text("Bind to a profile") }
+                        TextButton(onClick = { exportTarget = id; includeIdentity = false; backupLabel = ""; exporting = true }, enabled = state.busy == null) { Text("Export profile") }
+                        TextButton(onClick = { vm.duplicateIdentity(id) }, enabled = state.busy == null) { Text("Duplicate") }
+                        TextButton(onClick = { vm.reviewIdentity(id) }, enabled = state.busy == null) { Text("Review identifiers") }
                         TextButton(onClick = { renaming = identity }) { Text("Rename") }
                         TextButton(onClick = { deleting = identity }) { Text("Delete") }
                     }
@@ -215,29 +228,18 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
             dismissButton = { TextButton(onClick = { deleting = null }) { Text("Cancel") } },
         )
     }
-    binding?.let { (id, profile) ->
-        val choices = state.registry.filter(state::bindableHere)
-        AlertDialog(
-            onDismissRequest = { binding = null },
-            title = { Text("Bind ${profile.optString("name")}") },
-            text = {
-                Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                    when {
-                        !state.canBind -> Text("Approve Cyclone Cloak's profile settings in Cyclone → Settings → Connectors first.")
-                        choices.isEmpty() -> Text("No ready Cyclone profile can be bound from here.")
-                        else -> {
-                            Text("Every app in the profile will see this identity.", style = MaterialTheme.typography.bodySmall)
-                            choices.forEach { p ->
-                                TextButton(onClick = { vm.bind(id, p); binding = null }) {
-                                    Text("${p.label} · ${p.packages?.size ?: 0} apps")
-                                }
-                            }
-                        }
-                    }
-                }
-            },
-            confirmButton = {},
-            dismissButton = { TextButton(onClick = { binding = null }) { Text("Cancel") } },
-        )
-    }
+    if (exporting) AlertDialog(
+        onDismissRequest = { exporting = false }, title = { Text(if (exportTarget == null) "Back up profile library" else "Export profile") },
+        text = { Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+            Text("Save a complete local file in Downloads/CycloneCloak and Cloak's backup library. Binding state, Cyclone IDs and publication data are excluded.")
+            OutlinedTextField(value = backupLabel, onValueChange = { backupLabel = it.take(128) }, label = { Text("Optional backup label") })
+            Row { androidx.compose.material3.Checkbox(checked = includeIdentity, onCheckedChange = { includeIdentity = it })
+                Text("Include sensitive identity values and seed", modifier = Modifier.padding(top = 12.dp)) }
+            Text(if (includeIdentity) "This backup can reproduce the saved identity values. Keep it private."
+                else "Identity values are excluded. Import creates fresh identifiers and a seed.")
+        } },
+        confirmButton = { TextButton(onClick = { vm.exportProfiles(exportTarget, includeIdentity, backupLabel); exporting = false }, enabled = state.busy == null) { Text("Save local backup") } },
+        dismissButton = { TextButton(onClick = { exporting = false }) { Text("Cancel") } },
+    )
+
 }

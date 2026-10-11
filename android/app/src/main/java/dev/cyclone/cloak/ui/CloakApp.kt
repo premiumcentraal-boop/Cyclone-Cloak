@@ -68,6 +68,15 @@ fun CloakApp(vm: CloakViewModel) {
         return
     }
 
+    state.bindingFlow?.let { flow ->
+        BindingFlowScreen(flow, BindingInputs(state.registry, state.identities, state.bindings, state.canBind, state.ownProfileId),
+            state.phones, state.busy != null || state.syncing,
+            vm::chooseBindingProfile, vm::chooseBindingApp, vm::chooseBindingIdentity, vm::generateBindingProfile,
+            vm::nextBindingStep, vm::backBindingStep, vm::acknowledgeBinding, vm::confirmBindingFlow,
+            vm::retryBindingFlow, vm::refresh, vm::closeBindingFlow)
+        return
+    }
+
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         snackbarHost = { SnackbarHost(snackbar) },
@@ -119,6 +128,26 @@ fun CloakApp(vm: CloakViewModel) {
         }
     }
 
+    state.backupReview?.let { review ->
+        var accepted by remember(review) { androidx.compose.runtime.mutableStateOf(false) }
+        AlertDialog(onDismissRequest = vm::dismissBackupReview,
+            title = { Text("Review library import") }, text = {
+                Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    Text("${review.profiles.size} profiles will be added atomically. Existing profiles and bindings will remain.")
+                    review.profiles.forEach { Text(it.optString("name")) }
+                    FindingsList(review.findings)
+                    state.backupMessage?.let { Text(it) }
+                    if (review.findings.any { it.severity == dev.cyclone.cloak.forge.ProfileValidator.WARNING }) {
+                        Row { androidx.compose.material3.Checkbox(checked = accepted, onCheckedChange = { accepted = it })
+                            Text("I reviewed the duplicate values and warnings.") }
+                    }
+                }
+            }, confirmButton = {
+                TextButton(onClick = { vm.confirmBackupImport(accepted) }, enabled = state.busy == null && review.canSave &&
+                    (accepted || review.findings.none { it.severity == dev.cyclone.cloak.forge.ProfileValidator.WARNING })) { Text("Confirm import") }
+            }, dismissButton = { TextButton(onClick = vm::dismissBackupReview, enabled = state.busy == null) { Text("Cancel") } })
+    }
+
     state.review?.let { review ->
         AlertDialog(
             onDismissRequest = vm::dismissReview,
@@ -127,10 +156,16 @@ fun CloakApp(vm: CloakViewModel) {
                 Column(Modifier.verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                     Text(review.profile.optString("name").ifBlank { "Unnamed profile" }, fontWeight = FontWeight.SemiBold)
                     FindingsList(review.findings)
+                    review.findings.filter { it.code == "DUPLICATE_IDENTIFIER" }.forEach { finding ->
+                        TextButton(onClick = { finding.field?.let(vm::regenerateReviewed) }, enabled = state.busy == null) {
+                            Text("Regenerate ${finding.field?.removePrefix("identifiers.")}")
+                        }
+                    }
+                    if (review.remaining.isNotEmpty()) Text("${review.remaining.size} profiles remain in this batch. Cancel leaves them unsaved.")
                 }
             },
             confirmButton = {
-                if (review.canSave) TextButton(onClick = vm::saveReviewed) { Text("Save anyway") }
+                if (review.canSave) TextButton(onClick = vm::saveReviewed, enabled = state.busy == null) { Text(if (review.findings.isEmpty()) "Save" else "Save anyway") }
                 else TextButton(onClick = vm::fixReviewedInBuilder) { Text("Fix in builder") }
             },
             dismissButton = { TextButton(onClick = vm::dismissReview) { Text("Cancel") } },

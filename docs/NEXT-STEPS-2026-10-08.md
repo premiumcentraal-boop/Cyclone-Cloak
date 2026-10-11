@@ -1,4 +1,8 @@
-# Cyclone Cloak - current checkpoint and next build plan (2026-10-08)
+# Cyclone Cloak - historical checkpoint and build plan (2026-10-08)
+
+Historical snapshot; the version, implementation observations and plan below
+do not describe current readiness or authorize device work. Use
+[CURRENT-STATE.md](CURRENT-STATE.md) and [DEFERRED-DEVICE-CHECKS.md](DEFERRED-DEVICE-CHECKS.md).
 
 This document supersedes the older ad-hoc publish debugging notes. The current
 branch is `main`, tag `v0.5.0-alpha.4`, commit `fb69e80`.

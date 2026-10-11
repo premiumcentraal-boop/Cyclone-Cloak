@@ -83,6 +83,22 @@ CASES.append(("landscape dimensions are valid", "pixel_7", [["display.width", 24
 CASES.append(("unknown OEM is valid", "pixel_7", [["device.manufacturer", "Acme"]]))
 CASES.append(("duplicate IMEIs warn", "pixel_7", [
     ["identifiers.imei_primary", "490154203237518"], ["identifiers.imei_secondary", "490154203237518"]]))
+for path, value in [
+    ("telephony.carrier_name", "Carrier\nInjected"), ("telephony.carrier_name", 123),
+    ("telephony.mcc", "310\n"), ("telephony.mcc", "٣١٠"), ("telephony.mcc", "000"),
+    ("telephony.mnc", "260\n"), ("telephony.mnc", "٢٦٠"),
+    ("network.egress_hint", "x" * 129), ("network.egress_hint", "region\x00"),
+    ("network.egress_hint", None), ("network.egress_hint", "😀" * 128),
+    ("network", []), ("telephony", []), ("device.bootloader", 123),
+    ("device.baseband", "modem\n"), ("device.baseband", "none"),
+    ("device.hardware", "generic"), ("device.first_api_level", 28),
+]:
+    CASES.append((f"coherence {path} = {value!r}", "pixel_7", [[path, value]]))
+CASES.append(("all severities have deterministic summary order", "pixel_7", [
+    ["device.hardware", "generic"], ["device.baseband", "none"],
+    ["display.width", 0], ["telephony.mcc", "000"], ["identifiers.android_id", "invalid"]]))
+CASES.append(("optional network and modem fields can be absent", "pixel_7", [
+    ["network"], ["device.baseband"], ["device.bootloader"]]))
 for release, sdk in [("8.0", 26), ("8.1", 27), ("9", 28), ("10", 29), ("11", 30),
     ("12", 31), ("12", 32), ("13", 33), ("14", 34), ("15", 35), ("16", 36), ("13.0", 33)]:
     base = forge_profile("Vault 01", SEED, "pixel_7")
@@ -170,12 +186,12 @@ def main() -> None:
     out.mkdir(parents=True, exist_ok=True)
     (out / "validation.json").write_text(json.dumps(
         {"about": __doc__.strip().splitlines()[0], "seed": SEED, "name": "Vault 01", "today": TODAY, "cases": cases},
-        indent=2) + "\n")
+        indent=2) + "\n", encoding="utf-8")
     dumps = [
         {"name": "build.prop", "text": DUMP, "expect": draft_phone(parse_build_prop(DUMP))},
         {"name": "getprop", "text": GETPROP, "expect": draft_phone(parse_build_prop(GETPROP))},
     ]
-    (out / "dumps.json").write_text(json.dumps({"cases": dumps}, indent=2, ensure_ascii=False) + "\n")
+    (out / "dumps.json").write_text(json.dumps({"cases": dumps}, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
 if __name__ == "__main__":

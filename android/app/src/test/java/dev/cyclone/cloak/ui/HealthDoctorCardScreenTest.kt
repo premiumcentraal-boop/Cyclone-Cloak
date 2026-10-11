@@ -10,6 +10,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollTo
 import dev.cyclone.cloak.cyclone.CycloneGate
@@ -45,14 +46,14 @@ class HealthDoctorCardScreenTest {
         assertEquals("ready", JSONObject(copied).getString("verdict"))
         assertFalse(copied.contains("PRIVATE-LABEL"))
         assertFalse(copied.contains("PRIVATE-PACKAGE"))
-        compose.onNodeWithText("PRIVATE-LABEL / PRIVATE-PACKAGE").performScrollTo().assertIsDisplayed()
+        compose.onAllNodesWithText("PRIVATE-LABEL / PRIVATE-PACKAGE").onFirst().performScrollTo().assertIsDisplayed()
     }
 
     @Test fun queuedModuleShowsOneDegradedVerdictAndUnconfirmedInstalledVersion() {
         val model = HealthDiagnostics.assess(facts.copy(root = RootDoctorResult(RootDoctorCode.MODULE_REBOOT_REQUIRED, "v0.10.0-alpha.1")))
         compose.setContent { CloakTheme { Column(Modifier.verticalScroll(rememberScrollState())) { HealthDoctorCard(model) {} } } }
         compose.onAllNodesWithText("Degraded").assertCountEquals(1)
-        compose.onAllNodesWithText("Warn").assertCountEquals(2)
+        compose.onAllNodesWithText("Warning").assertCountEquals(3)
         compose.onNodeWithText("App: 0.10.0-alpha.1\nInstalled module: not confirmed").performScrollTo().assertIsDisplayed()
     }
 

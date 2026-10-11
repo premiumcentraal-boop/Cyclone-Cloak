@@ -11,10 +11,13 @@ not prove that every inspection API sees it.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.10.0-rc.1 (published prerelease; device verification pending)
+## Status: 0.10.0-rc.2 (local candidate; not published)
 
-[Release notes](docs/RELEASE_0.10.0-rc.1.md) · [Upgrade guide](docs/UPGRADE_0.10.0-rc.1.md).
-[Published release](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.10.0-rc.1) includes the signed APK and module ZIP. App and module both use version code 22.
+[Release notes](docs/RELEASE_0.10.0-rc.2.md) · [Upgrade guide](docs/UPGRADE_0.10.0-rc.2.md).
+App and module use version code 23. Latest published prerelease remains
+[v0.10.0-rc.1](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.10.0-rc.1).
+RC2 physical-device behavior is unverified; local test results and remaining
+release gates are recorded in [CURRENT-STATE.md](docs/CURRENT-STATE.md).
 
 - **Companion app** (`android/app`): a Cyclone connector (contract `cyclone.connector/1.3`, Cyclone
   5.0.0-alpha.122 or newer). Imports or creates cloak profiles, binds them to the apps of Cyclone
@@ -45,10 +48,10 @@ Four tabs:
 
 | Tab | What it's for |
 |---|---|
-| **Phones** | The phones identities are made from: seven built-in (Pixel 4, Pixel 6, Pixel 6a, Pixel 7, Pixel 7a, Pixel 8, Galaxy S23) and your own. See [catalog sources and confidence](docs/CATALOG-SOURCES.md). **Build a phone**, **Import** one, **Clone** a phone to change it, **Share** it as a file. |
-| **Identities** | Make an identity from any phone (or a fleet of them), see every value it carries, rename, delete, bind it to a Cyclone profile, export or import them all. |
+| **Phones** | The phones identities are made from: fifteen built-in templates across compact, mainstream, large-display and midrange classes and your own. See [catalog sources and confidence](docs/CATALOG-SOURCES.md). Select a template and **Generate profile**, or **Build a phone**, **Import**, **Clone** and **Share** a phone. |
+| **Identities** | Make an identity from any phone (or a fleet of them), see every value it carries, rename, delete, bind it through guided review, export one or the library, and preview validated imports. |
 | **Profiles** | Your Cyclone profiles with Cloak's pill for each, **Bind all**, **Open in Cyclone**, and every bound app with its health. |
-| **Health** | Health Doctor v2 readiness, per-check reasons, redacted diagnostics, module/version checks, publication and the local coverage matrix. |
+| **Health** | Readiness Doctor v3 readiness, per-check reasons, redacted diagnostics, module/version checks, publication and the local coverage matrix. |
 
 ### Adding a phone
 
@@ -67,7 +70,36 @@ model vs. build, release vs. SDK, patch level, carrier codes, screen, locale) an
 on its field. A phone saves only when it holds together. Identities keep their own copy of the phone
 they were made from, so editing or deleting a phone never changes an identity.
 
+### Generating a profile
+
+Phones → choose a template in **New profile** → **Generate profile**. The app
+chooses an unused name, creates one fresh seed, derives the profile using the
+existing forge, validates it and saves it atomically in **Identities**.
+The stored seed keeps those generated values stable. Blocking errors display
+their field findings and prevent saving; warnings and notes remain visible on
+success. Generation and storage failures have separate states. Existing identities
+are retained, and selecting another template clears the previous result.
+
 ![Phones, identities, profiles, health and the builder](docs/screenshots/1-phones.png)
+
+## Local backup and binding review
+
+Identities → Export saves one profile or the library to an app-private backup
+and Downloads/CycloneCloak. Default exports include compatibility settings and
+names; seeds and distinguishing identifiers require explicit selection. Default
+restore generates fresh identity values. Private backups disappear on uninstall
+or data clear; Downloads copies remain. Imports preview the entire validated
+batch and require confirmation, including duplicate-value warnings. A schema
+mismatch or blocking validation error prevents the batch from being saved.
+Bindings, Cyclone records and module publication data are excluded; full-state
+backup is not available. Phone-template sharing is a separate existing flow.
+
+Profiles → Bind an app guides profile, app, compatibility profile, review and
+confirmation. Missing Android users/apps or invalid profiles block confirmation;
+shared identities and duplicate values require acknowledgement. A failed
+reconciliation offers retry while preserving the saved binding. Health shows
+local duplicate diagnostics and readiness reasons. Copy diagnostics exports an
+allowlisted report without profile names, seeds, identifiers or raw errors.
 
 ## Working with Cyclone's profiles
 
@@ -92,7 +124,7 @@ own copy of Cloak. Cloak only talks to the Cyclone in its own Android user.
   `profile.switched` event.
 - **Staying in step.** On start, on every Cyclone wake (`profile.switched`, `profile.updated`,
   `profile.restored`, `profile.removed`, …) Cloak re-reads the profile list, moves bindings to a
-  profile's new user number, forgets permanently deleted profiles, writes what is missing or
+  profile's new user number, forgets removals confirmed by an event and fresh snapshot, writes what is missing or
   different, and clears what it no longer binds. Writing the same value twice is harmless.
 
 ### What Cloak sends to Cyclone

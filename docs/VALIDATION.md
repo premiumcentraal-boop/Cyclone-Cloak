@@ -7,6 +7,26 @@ storage and identifier derivation are unchanged. Findings are diagnostics only:
 Python's new optional `Finding.field` also preserves three-argument construction.
 The existing Android editor and import review display these field-specific messages.
 
+## Coherence result contract (2026-10-11)
+
+The existing list APIs remain available: Python `validate_profile` and Kotlin
+`validateProfile` / `validatePhone`. They now return findings ordered by severity
+(`error`, `warning`, `info`), then dotted field, then code and message as tie-breakers.
+A missing field sorts as an empty string. Ordering is independent of rule execution
+and input object key order, including structural-error early returns.
+
+Python `validate_profile_result` / `summarize` and Kotlin `validateProfileResult` /
+`validatePhoneResult` / `summarize` expose a `ValidationResult` containing immutable
+sorted findings, severity counts and an error flag. Python count names are
+`error_count`, `warning_count`, `info_count`, `has_errors`; Kotlin uses
+`errorCount`, `warningCount`, `infoCount`, `hasErrors`.
+Finding constructors reject unknown severities, malformed reason codes and blank
+explanations. Existing reason codes remain unchanged. Results are diagnostics only;
+they are not persisted in profile JSON and require no migration.
+
+Only errors block acceptance. Warnings express uncertainty; info gives context.
+The editor labels info as a note and does not count it as a warning.
+
 | Check | Errors | Warnings |
 | --- | --- | --- |
 | Build | Malformed fingerprint, mismatched fingerprint/device parts, non-user build, non-ISO or impossible patch date, invalid Unix-seconds build timestamp | Development keys, future build/patch, patch newer than build |
@@ -15,6 +35,28 @@ The existing Android editor and import review display these field-specific messa
 | Display | Dimensions, density and refresh rate must be positive JSON integers; valid screen class | Dimensions outside 120–8192 px, density outside 72–1000 dpi, refresh outside 24–240 Hz; aspect ratio above 4:1; shortest edge outside 120–1600 dp |
 | Locale | Two lowercase language letters, two uppercase country letters; timezone path syntax or recognized legacy alias; no empty segments, traversal or whitespace | None |
 | Identifiers | Exact complete-string formats for hex IDs, UUIDv4, serial, SIM serial, IMEI and MAC; IMEI Luhn checksum; MAC must be unicast | All-zero placeholders, duplicated primary/secondary IMEI, unknown identifier key |
+| Carrier/network | Carrier must be nonblank text without control characters; MCC/MNC must match the entire ASCII-digit value; supported network type and SIM slots; egress hint must be text of at most 128 Unicode code points without control characters | None; an all-zero MCC generates an info note |
+| Hardware consistency | Present bootloader/baseband must be text without control characters | Explicit unspecified modem (`none`, `unknown`, `n/a`) with declared cellular service; 5G with first API below 29 prompts confirmation, without asserting impossibility |
+
+Additional stable reason codes:
+
+| Code | Severity | Field | Explanation |
+| --- | --- | --- | --- |
+| `TELEPHONY_CARRIER_FORMAT` | error | `telephony.carrier_name` | Carrier contains control characters |
+| `TELEPHONY_PLACEHOLDER_OPERATOR` | info | `telephony.mcc` | All-zero operator value should be intentional |
+| `NETWORK_HINT_FORMAT` | error | `network.egress_hint` | Wrong type, excessive length or control characters |
+| `HARDWARE_FIELD_FORMAT` | error | `device.bootloader` or `device.baseband` | Wrong type or control characters |
+| `HARDWARE_MODEM_UNSPECIFIED` | warning | `device.baseband` | An explicitly unspecified modem accompanies cellular service |
+| `HARDWARE_NETWORK_GENERATION` | warning | `telephony.network_type` | Older launch API with 5G needs confirmation |
+| `HARDWARE_UNSPECIFIED` | info | `device.hardware` | `unknown`/`generic` cannot establish platform capabilities |
+
+Hardware coverage uses existing hardware, modem, network and launch-API fields.
+The storage schema has no camera/sensor feature flags; validation does not invent
+them or infer supported features from a manufacturer's name. Empty/absent optional
+modem fields remain supported, as do generated secondary identifiers on single-SIM
+templates. The seven catalog entries and runtime fixtures remain valid and clean.
+Egress hints are opaque labels: validation does not interpret them as addresses,
+perform networking, or require country/carrier/timezone agreement when roaming.
 
 These display and manufacturer ranges are heuristics, not a handset whitelist.
 Warnings do not prevent saving; unknown manufacturers remain supported. Portrait
@@ -48,8 +90,10 @@ field and message against `forge/tests/vectors/validation.json`.
 Android `ProfileValidatorTest` tests malformed types, independent failures,
 warnings, messages, optional blocks and unchanged valid templates.
 
-Local verification: 109 Python tests and 44 JVM forge tests passed. The latter
-compiled the repository's pure forge sources/tests using the installed Kotlin
-compiler and ran JUnit directly with cached JSON/JUnit libraries. This does not
-replace the full Android/Robolectric suite, whose required dependencies remain
-uncached locally; see [CURRENT-STATE.md](CURRENT-STATE.md).
+Coherence sprint verification: **176 Python tests and 50 JVM forge tests passed**,
+including **108 shared validation vectors** with exact severity/code/field/message
+parity. JVM tests compiled the current production forge sources and all forge tests
+with Kotlin/JUnit and cached JSON libraries. The full local Gradle unit/screen suite
+remains blocked at `:app:copyRobolectricRuntime` by the uncached API34 framework JAR.
+This is not a claim that screen tests ran in this sprint. See
+[the completion handoff](HANDOFF-2026-10-11-COHERENCE.md) for exact commands/results.

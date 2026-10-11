@@ -84,7 +84,19 @@ class CycloneSyncEngine(
             return SyncReport.failed(error.code, error.message).copy(gate = gate, events = batch)
         }
         val placement = Placement.of(local.myUser, snapshot)
-        local.savePlacement(placement, snapshot.registry.mapNotNull { it.androidUserId })
+        // Snapshot omissions and unknown users are not evidence that a publisher share may be pruned.
+        val confirmedRemoved = batch?.removed.orEmpty().filter { snapshot.byId(it) == null }.toSet()
+        val records = local.bindings()
+        val duplicateKeys = records.groupBy { bindingKey(it.profileId, it.packageName) }
+            .filterValues { it.size > 1 }.keys
+        val uncertainUsers = records.filter { binding ->
+            val profile = snapshot.byId(binding.profileId)
+            val packages = profile?.packages
+            binding.profileId !in confirmedRemoved && (profile == null || profile.androidUserId == null || !profile.bindable ||
+                bindingKey(binding.profileId, binding.packageName) in duplicateKeys ||
+                (binding.enabled && (packages == null || binding.packageName !in packages)))
+        }.map { it.androidUserId }
+        local.savePlacement(placement, (snapshot.registry.mapNotNull { it.androidUserId } + uncertainUsers).distinct())
         val issues = linkedMapOf<String, String>()
         val notes = mutableListOf<String>()
 

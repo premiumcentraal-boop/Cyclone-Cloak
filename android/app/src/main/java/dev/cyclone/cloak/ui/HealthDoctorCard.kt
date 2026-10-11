@@ -21,12 +21,13 @@ internal fun HealthDoctorCard(diagnostics: HealthDiagnostics, onCopy: (String) -
     Card(modifier = Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.large,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-            Text("Health Doctor v2", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            Text("Readiness Doctor v3", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
             CloakStatusPill(diagnostics.verdict.label, when (diagnostics.verdict) {
                 Readiness.READY -> CloakStatusTone.READY
                 Readiness.DEGRADED -> CloakStatusTone.PENDING
                 Readiness.FAILED -> CloakStatusTone.ERROR
             })
+            Text(diagnostics.summary, style = MaterialTheme.typography.bodySmall)
             Text("${diagnostics.enabledBindings} enabled bindings · ${diagnostics.disabledBindings} disabled", style = MaterialTheme.typography.bodySmall)
             Text("Readiness uses the last reported checks for enabled bindings. Disabled bindings are excluded. Hook verification is recorded in the coverage matrix below.",
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)

@@ -41,6 +41,74 @@ class ReconciliationBehaviorTest {
         assertEquals(1, local.republished)
         assertFalse(api.calls.contains("config.set.v1"))
     }
+    @Test fun failedReplacementAfterUserMoveRetainsOldTupleUntilRetrySucceeds() {
+        for (operation in listOf("config.get.v1", "config.set.v1", "config.status.v1")) {
+            val api = api(); val local = local(); seed(api, local)
+            val old = api.config.getValue(tuple).toString()
+            api.profiles[0] = api.profiles[0].copy(user = 21)
+            api.failNext[operation] = ArrayDeque(listOf("INTERNAL", "INTERNAL"))
+            val failed = sync(api, local)
+            assertWarning(failed)
+            assertEquals(21, local.store.single().androidUserId)
+            assertEquals(old, api.config.getValue(tuple).toString())
+            assertTrue(local.pushed!!.contains(tuple))
+            if (operation == "config.status.v1") assertTrue(local.pushed!!.contains(tupleKey(profile, 21, app)))
+            assertTrue(sync(api, local).issues.isEmpty())
+            assertEquals(setOf(tupleKey(profile, 21, app)), local.pushed)
+            assertEquals("pixel-8-work", CycloneReader.cloakProfileId(api.getConfig(profile, 21, app), profile, 21, app))
+            // Cyclone rejects the retired user tuple; confirmed absence removes only its bookkeeping.
+        }
+    }
+    @Test fun trashedProfileWithChangedUserPreservesLastKnownPlacement() {
+        val api = api(); val local = local(); seed(api, local)
+        val before = local.store
+        api.profiles[0] = api.profiles[0].copy(user = 21, state = "in_trash")
+        assertWarning(sync(api, local))
+        assertEquals(before, local.store)
+        assertTrue(local.liveUsers.contains(11))
+        assertEquals(setOf(tuple), local.pushed)
+        assertFalse(api.calls.any { it.startsWith("config.") })
+    }
+    @Test fun duplicatesWithChangedRegistryUserKeepOldPublisherInLiveUsers() {
+        val api = api(); val local = local(); seed(api, local)
+        local.store += local.store.single().copy(cloakProfileId = "conflict")
+        val before = local.store
+        api.profiles[0] = api.profiles[0].copy(user = 21)
+        assertWarning(sync(api, local))
+        assertEquals(before, local.store)
+        assertTrue(local.liveUsers.containsAll(listOf(11, 21)))
+        assertEquals(setOf(tuple), local.pushed)
+        assertFalse(api.calls.any { it.startsWith("config.") })
+    }
+    @Test fun matchingValueWithFailedHealthUpdateIsTrackedOnFirstRun() {
+        val api = api(); val local = local(); seed(api, local)
+        local.pushed = null
+        api.config.getValue(tuple).put("state", "unknown")
+        api.failNext["config.status.v1"] = ArrayDeque(listOf("INTERNAL", "INTERNAL"))
+        assertWarning(sync(api, local))
+        assertEquals(setOf(tuple), local.pushed)
+        assertFalse(api.calls.contains("config.set.v1"))
+    }
+    @Test fun ambiguousFirstRunSweepReportsWarningAndRetainsRetryBookkeeping() {
+        val api = api(); val local = local(); seed(api, local)
+        val old = api.config.getValue(tuple).toString()
+        api.failNext["config.get.v1"] = ArrayDeque(listOf("INTERNAL", "INTERNAL"))
+        val result = BindingReconciler(api, sleep = {}).reconcile(emptyList(), null,
+            listOf(CycloneProfile(profile, "B", "profile", "ready", 11, listOf(app))))
+        assertTrue(result.issues.getValue(key).contains("INTERNAL"))
+        assertEquals(setOf(tuple), result.pushed)
+        assertEquals(old, api.config.getValue(tuple).toString())
+        assertFalse(api.calls.contains("config.set.v1"))
+    }
+    @Test fun connectorLossOnRateLimitRetryStopsWithoutClearingOldTuple() {
+        val api = api(); val local = local(); seed(api, local)
+        api.profiles[0] = api.profiles[0].copy(user = 21)
+        api.failNext["config.get.v1"] = ArrayDeque(listOf("RATE_LIMITED", "NOT_A_CONNECTOR"))
+        val failed = sync(api, local)
+        assertEquals("NOT_A_CONNECTOR", failed.reconcile!!.stoppedBy)
+        assertEquals(setOf(tuple), local.pushed)
+        assertFalse(api.calls.contains("config.set.v1"))
+    }
     @Test fun confirmedRemovalForgetsOnlyThatProfilesBindingsAndNeverDeletesIdentityFiles() {
         val api = api().apply { profiles += FakeCyclone.Profile(other, "C", 12, listOf(app)) }
         val local = local().apply {
@@ -51,6 +119,7 @@ class ReconciliationBehaviorTest {
         api.profiles.removeAll { it.id == profile }; api.config.remove(tuple); api.emit("profile.removed", profile)
         assertTrue(sync(api, local).issues.isEmpty())
         assertEquals(listOf(other), local.store.map { it.profileId })
+        assertFalse(local.liveUsers.contains(11))
         assertEquals(setOf(tupleKey(other, 12, app)), local.pushed)
         assertEquals("retained identity", local.profilesById.getValue("pixel-8-work").getString("name"))
     }
@@ -61,6 +130,7 @@ class ReconciliationBehaviorTest {
         repeat(2) {
             assertWarning(sync(api, local))
             assertEquals(records, local.store)
+            assertTrue(local.liveUsers.contains(11))
             assertEquals(setOf(tuple), local.pushed)
             assertEquals(remote, api.config.getValue(tuple).toString())
         }
@@ -214,6 +284,7 @@ class ReconciliationBehaviorTest {
         val failed = sync(api, local)
         assertTrue(failed.issues.getValue(key).contains("INTERNAL"))
         assertEquals(1, failed.reconcile!!.written); assertEquals(0, failed.reconcile!!.statuses)
+        assertEquals(setOf(tuple), local.pushed)
         assertEquals(records, local.store)
         assertEquals("pixel-8-work", api.readBindings().single().second)
         api.calls.clear()

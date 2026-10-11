@@ -1,4 +1,9 @@
-# Health Doctor v2
+# Health Doctor v2 (historical RC1 design)
+
+Superseded by Readiness Doctor v3 in the current development candidate. See
+[ARCHITECTURE.md](ARCHITECTURE.md#readiness-doctor-v3) and
+[CURRENT-STATE.md](CURRENT-STATE.md) for current checks and redaction.
+The description below records RC1 behavior.
 
 The Health tab projects existing facts into a single **Ready / Degraded / Failed**
 verdict. It does not change synchronization, reconciliation, root publication,
