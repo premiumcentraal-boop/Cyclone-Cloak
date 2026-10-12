@@ -449,7 +449,8 @@ public final class HookBridge {
     private static final class DeviceIdHook extends MethodHook {
         @Override public void beforeCall(Pine.CallFrame frame) {
             if (frame.args == null || frame.args.length < 1
-                    || !"deviceId".equals(frame.args[0])) {
+                    || (!"deviceUniqueId".equals(frame.args[0])
+                    && !"deviceId".equals(frame.args[0]))) {
                 return;
             }
             String vault = prop(PROP_WIDEVINE);

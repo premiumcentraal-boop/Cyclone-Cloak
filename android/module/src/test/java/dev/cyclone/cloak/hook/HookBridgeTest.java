@@ -155,4 +155,18 @@ public class HookBridgeTest {
         drmHook.beforeCall(other);
         assertNull(other.getResult());
     }
+
+    @Test public void widevineVaultServesDeviceUniqueIdProperty() throws Throwable {
+        String hex = "aa0102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f";
+        PROPS.put("cloak.widevine_id", hex);
+        Class<?> callback = Class.forName(HookBridge.class.getName() + "$DeviceIdHook");
+        java.lang.reflect.Constructor<?> drmCtor = callback.getDeclaredConstructor();
+        drmCtor.setAccessible(true);
+        MethodHook drmHook = (MethodHook) drmCtor.newInstance();
+        Pine.CallFrame call = frame("deviceUniqueId");
+        drmHook.beforeCall(call);
+        byte[] bytes = (byte[]) call.getResult();
+        assertNotNull(bytes);
+        assertEquals(32, bytes.length);
+    }
 }
