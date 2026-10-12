@@ -1,15 +1,15 @@
 # Runtime coverage and device proof
 
-Reboot-dependent checks are deferred at the owner's request (2026-10-11, away
-from home). Do not install or reboot into the local runtime fixes yet. See
+Reboot-dependent checks for future local fixes remain deferred; see
 [DEFERRED-DEVICE-CHECKS.md](DEFERRED-DEVICE-CHECKS.md) for the resume checklist.
-
-Measured 2026-10-11 on a rooted Pixel 8, Android API 36, Android user 11.
-The installed module identifies itself as `v0.10.0-alpha.1`, versionCode 18;
-its arm64 library SHA-256 is
-`137c9e084fd6825c2e506b0f4b4ae8078bdc742184bd886ea2d0c19610847f75`.
+RC2 device baseline measured 2026-10-12 on a rooted Pixel 8, Android API 36,
+Android user 13. The installed module identifies itself as `v0.10.0-rc.2`,
+versionCode 23; its arm64 library SHA-256 is
+`2ec607f9563e9f2ac47ab4245041ca10420d2d36d530e040f862a9c231c5a528`.
 This identifies the measured binary; its version label alone does not prove
-byte-for-byte correspondence with a published build.
+byte-for-byte correspondence with a published build. The earlier alpha.1
+baseline (v0.10.0-alpha.1, code 18, user 11, 13 verified reads) remains in
+git history under the 2026-10-11 measurement of this file.
 
 The independent `dev.cyclone.cloak.probe` app reads Android APIs and native
 properties. Its fixtures supply expected values only. It never loads the
@@ -33,40 +33,47 @@ coverage from Root Doctor. Reboot-dependent verification remains deferred.
 
 The test app displays a row per read. The complete, generated **70-read matrix**
 is [RUNTIME-MEASUREMENTS.md](RUNTIME-MEASUREMENTS.md), backed by
-[redacted JSON evidence](runtime-evidence/release-api36-advertising.json).
+[redacted JSON evidence](runtime-evidence/rc2-api36-baseline.json)
+(dated copy: [RUNTIME-MATRIX-RC2-2026-10-12.md](RUNTIME-MATRIX-RC2-2026-10-12.md)).
 Observed host values are hashed; fixture expectations are synthetic test data.
 
-**13 reads VERIFIED, 39 FAIL, 7 BLOCKED, 8 MATCH_ONLY, 3 UNMAPPED.** A PASS in
+**45 reads VERIFIED, 11 FAIL, 8 MATCH_ONLY, 3 BLOCKED, 3 UNMAPPED.** A PASS in
 the raw app report means equality with that fixture only. VERIFIED additionally
 requires differing expectations for A/B, repeat stability and restoration of
-the unbound control. Matching host display dimensions do not prove a hook.
+the unbound control. Bound runs measure PASS=55/70 per profile with identical
+bound-a and bound-a-repeat reports; unbound-before and unbound-after reports
+match exactly. Remaining FAILs concentrate on native libc property reads
+(ro.product.model, ro.build.version.sdk, ro.build.fingerprint, ro.serialno,
+persist.sys.timezone), DRM deviceUniqueId and display refresh/geometry; the
+three BLOCKED rows (Wi-Fi service MAC/SSID, Bluetooth name) are permission
+gates on the probe identity, not module failures. Matching host display dimensions do not prove a hook.
 BLOCKED and UNMAPPED never count as passed coverage.
 
-| Requested surface | Installed binary: device result | Local runtime changes / remaining work |
+| Requested surface | RC2 installed binary: device result | Remaining work |
 | --- | --- | --- |
-| Build | 10 field reads verified; bootloader/radio not fully matched | Map bootloader/radio when supplied; empty fixture fields remain unspecified |
-| Build.VERSION | SDK/release/patch verified; incremental fails | Write INCREMENTAL on Build.VERSION instead of Build |
-| System properties | Java and native identity reads fail; density equality is coincidental | Skip non-native wrappers during JNI registration, register each method independently; native libc and handle-based reads remain uncovered |
-| Telephony manager | IMEI/subscriber/SIM reads fail; modem counts throw ClassCastException; network type is permission blocked | Integer count/type results; existing identifier callbacks depend on corrected property registration |
-| Settings provider reads | Secure provider query fails | Guarded single Android-ID query callback; generic provider call/bundle paths remain unverified |
-| Android ID | Settings.Secure getter fails | Restrict getter to android_id; unrelated keys must retain provider behavior |
-| Serial number | Build.SERIAL verified; Build.getSerial fails | Existing getter consumes corrected property surface |
-| Advertising ID | Real Google SDK read fails | Defer SDK hook installation until app class loader is available |
-| Wi-Fi info | Object MAC getter fails; service/SSID reads permission blocked | MAC callback consumes corrected property surface; no SSID/BSSID profile fields |
-| Bluetooth identity | Address getter fails; name read permission blocked | Address callback consumes corrected property surface; no name profile field |
-| DRM/MediaDrm | Widevine deviceUniqueId fails | Existing byte-array callback consumes corrected property surface; other DRM properties/attestation are not covered |
-| Display metrics | Profile B height differs from host and fails; density matches only; refresh fails | Geometry/refresh callbacks remain unimplemented; screen/resource/window consistency needs a separate implementation and device tests |
-| Camera info | Camera characteristics enumerated, UNMAPPED | No camera expectation in current schema; observed host capabilities are not profile coverage |
-| Sensor list | Sensor type/name/vendor enumerated, UNMAPPED | No sensor expectation in current schema; do not invent capabilities or mark enumeration as a hook |
-| Network operator | Numeric/name/country reads fail | Existing callbacks consume corrected property surface |
-| SIM/operator fields | Numeric/name/country/serial fail; secondary slot visibility checked | Integer counts and network types corrected; slot absence returns null as intended |
-| Country/locale/timezone | Country/default/resource locale and timezone do not consistently match both profiles | Apply locale at application startup and resource configuration reads; default timezone callback |
+| Build | Manufacturer/brand/model/device/product/hardware/fingerprint/ID/serial/getSerial/time all VERIFIED; TYPE/TAGS match-only; bootloader/radio PASS on B, unmapped on A | Map bootloader/radio in profile A fixture or catalog |
+| Build.VERSION | SDK, release, incremental and security patch all VERIFIED | None for measured surfaces |
+| System properties | Java-side property reads VERIFIED; native libc reads (model, sdk, fingerprint, serialno, timezone) still FAIL | Hook or intercept native __system_property_get paths |
+| Telephony manager | IMEI (both slots), deviceId, subscriber, SIM serial and network types VERIFIED on both profiles | Keep stable across cold starts; add secondary-slot profiles |
+| Settings provider reads | Secure provider Android-ID query VERIFIED | Generic provider call/bundle paths remain unverified |
+| Android ID | Settings.Secure android_id VERIFIED | None measured |
+| Serial number | Build.SERIAL and Build.getSerial VERIFIED | None measured |
+| Advertising ID | Real Google SDK read VERIFIED when bound | Re-verify after app updates of the SDK |
+| Wi-Fi info | Object MAC getter VERIFIED | Service MAC/SSID blocked by probe permissions; measure from a privileged probe identity |
+| Bluetooth identity | Address getter VERIFIED | Name read blocked by probe permissions |
+| DRM/MediaDrm | Widevine deviceUniqueId still FAIL | Implement MediaDrm byte-array identity callback |
+| Display metrics | Density VERIFIED; A heights match host (match-only); B height/refresh FAIL | Implement display geometry/refresh rewrites for profiles that differ from host |
+| Camera info | Enumerated, UNMAPPED | No camera expectation in schema yet (Phase D corpus) |
+| Sensor list | Enumerated, UNMAPPED | No sensor expectation in schema yet; do not invent capabilities |
+| Network operator | Numeric/name/country VERIFIED on both profiles | None measured |
+| SIM/operator fields | Numeric/name/country/serial VERIFIED; secondary slot checked | None measured |
+| Country/locale/timezone | Country, resource locale and default timezone VERIFIED on both profiles | None measured |
 
-The local patches build and callback tests pass, but **have not been loaded
-into the phone's Zygisk runtime**. The matrix above remains the installed
-binary's measured result. Installing the module and rebooting is required
-before measuring the patches; preserve this baseline and save a separate
-post-change evidence file. A callback unit test is not proof of ART installation.
+The RC2 release has been installed, rebooted and measured on the device; the
+matrix above is the installed RC2 binary's own result. Any future local runtime
+change must follow the same path: build, install with the owner's approval,
+reboot, then re-run the probe and save a separate evidence file. A callback
+unit test alone is not proof of ART installation.
 
 ## Reproduce
 
@@ -76,7 +83,7 @@ Build (this checkout has no Gradle wrapper; use the installed Gradle executable)
 gradle -p android :probe:assembleDebug -PprobeAdvertisingSdk=true
 gradle -p android :module:testDebugUnitTest :app:assembleDebug :module:packageModule
 uv run --with pytest -- python -m pytest forge/tests -q
-uv run -- python tools/run_runtime_probe.py --adb C:/Users/Agent/android-sdk/platform-tools/adb.exe --serial SERIAL --user 11 --output docs/runtime-evidence/new-run.json
+uv run -- python tools/run_runtime_probe.py --adb C:/Users/Agent/android-sdk/platform-tools/adb.exe --serial SERIAL --user 13 --output docs/runtime-evidence/new-run.json
 uv run -- python tools/render_runtime_matrix.py docs/runtime-evidence/new-run.json docs/RUNTIME-MEASUREMENTS.md
 ```
 
