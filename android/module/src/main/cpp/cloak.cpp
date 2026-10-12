@@ -29,6 +29,8 @@
 #include <utility>
 #include <vector>
 
+#include <dlfcn.h>
+
 #include "json.hpp"
 
 // Hook bridge assets generated at build time by tools/gen_embedded.py.
@@ -36,6 +38,8 @@ extern const unsigned char CLOAK_HOOKS_DEX[];
 extern const size_t CLOAK_HOOKS_DEX_SIZE;
 extern const unsigned char CLOAK_PINE_LIB[];
 extern const size_t CLOAK_PINE_LIB_SIZE;
+extern const unsigned char CLOAK_SHADOWHOOK_LIB[];
+extern const size_t CLOAK_SHADOWHOOK_LIB_SIZE;
 
 using json = nlohmann::json;
 using zygisk::Api;
@@ -73,9 +77,14 @@ const std::pair<const char *, const char *> kTelephonyProps[] = {
     {"network_type", "gsm.network.type"},
 };
 
-// display key -> system property.
+// display key -> system property. Width/height/refresh feed the Java-side
+// Display and Resources rewrites through cloak.display.*; density keeps the
+// real property key because getprop readers also consult it.
 const std::pair<const char *, const char *> kDisplayProps[] = {
     {"density", "ro.sf.lcd_density"},
+    {"width", "cloak.display.width"},
+    {"height", "cloak.display.height"},
+    {"refresh_rate_hz", "cloak.display.refresh"},
 };
 
 // identifier key -> system property. serial is listed twice: Build.getSerial()
@@ -112,6 +121,85 @@ std::string g_active_key;
 bool g_active = false;
 std::string g_app_data_dir;
 bool g_java_callbacks = true;
+bool g_native_hook_enabled = true;
+
+// Native property surface: ShadowHook-intercepted __system_property_get.
+using PropertyGetFn = int (*)(const char *, char *);
+PropertyGetFn g_orig_property_get = nullptr;
+void *g_shadowhook_handle = nullptr;
+
+// Overwrite policy for a hooked __system_property_get call. Returns false to
+// keep the value produced by the real libc implementation. The buffer is
+// PROP_VALUE_MAX bytes; never write at or beyond that boundary.
+bool cloak_prop_for(const char *name, char *value, int host_len) {
+    if (!g_active || name == nullptr || value == nullptr || host_len < 0) {
+        return false;
+    }
+    auto it = g_props.find(name);
+    if (it == g_props.end() || it->second.empty()) {
+        return false;
+    }
+    const std::string &replacement = it->second;
+    if (replacement.size() >= PROP_VALUE_MAX) {
+        // Callers allocate PROP_VALUE_MAX bytes; a longer value would not be
+        // representable through this surface regardless of who writes it.
+        return false;
+    }
+    memcpy(value, replacement.c_str(), replacement.size() + 1);
+    return true;
+}
+
+int hooked_property_get(const char *name, char *value) {
+    int host_len = g_orig_property_get ? g_orig_property_get(name, value) : 0;
+    if (cloak_prop_for(name, value, host_len)) {
+        return static_cast<int>(g_props.at(name).size());
+    }
+    return host_len;
+}
+
+// Stage the embedded ShadowHook library into the app's own data directory
+// (same ownership pattern as libpine.so) and hook libc's property read.
+void install_native_property_hook() {
+    if (!g_native_hook_enabled || g_orig_property_get != nullptr) {
+        return;
+    }
+    std::string path = g_app_data_dir + "/libshadowhook.so";
+    std::ofstream out(path, std::ios::binary | std::ios::trunc);
+    if (!out) {
+        LOGI("native hook: cannot write %s", path.c_str());
+        return;
+    }
+    out.write(reinterpret_cast<const char *>(CLOAK_SHADOWHOOK_LIB),
+              static_cast<std::streamsize>(CLOAK_SHADOWHOOK_LIB_SIZE));
+    out.close();
+    g_shadowhook_handle = dlopen(path.c_str(), RTLD_NOW | RTLD_LOCAL);
+    if (!g_shadowhook_handle) {
+        LOGI("native hook: dlopen failed");
+        return;
+    }
+    using InitFn = int (*)(int, bool);
+    using HookFn = void *(*)(const char *, const char *, void *, void **);
+    auto init = reinterpret_cast<InitFn>(dlsym(g_shadowhook_handle, "shadowhook_init"));
+    auto hook = reinterpret_cast<HookFn>(dlsym(g_shadowhook_handle, "shadowhook_hook_sym_name"));
+    if (!init || !hook) {
+        LOGI("native hook: symbols missing");
+        return;
+    }
+    // SHADOWHOOK_MODE_UNIQUE = 1: single owner of the hooked entry point.
+    if (init(1, false) != 0) {
+        LOGI("native hook: init failed");
+        return;
+    }
+    void *orig = nullptr;
+    void *record = hook("libc.so", "__system_property_get",
+                        reinterpret_cast<void *>(hooked_property_get), &orig);
+    if (!record || !orig) {
+        LOGI("native hook: hook failed");
+        return;
+    }
+    g_orig_property_get = reinterpret_cast<PropertyGetFn>(orig);
+    LOGI("native property hook installed");
+}
 
 void set_prop(const std::string &key, const std::string &value) {
     if (!value.empty()) {
@@ -788,6 +876,10 @@ public:
             g_active_package = g_active_package.substr(slash + 1);
         }
         g_active_key = userId + ":" + g_active_package;
+        // Owner kill switch: an empty marker file in the module directory
+        // keeps future native hooking off for every process.
+        g_native_hook_enabled =
+            access("/data/adb/modules/cyclone_cloak/disable_native_hook", F_OK) != 0;
         g_active = load_profile_for(api, userId, g_active_package);
         if (g_active) {
             LOGI("cloaking %s (%zu props)", g_active_key.c_str(), g_props.size());
@@ -796,6 +888,7 @@ public:
 
     void postAppSpecialize(const AppSpecializeArgs *args) override {
         if (g_active) {
+            install_native_property_hook();
             apply_profile(env);
             init_java_hooks(env, g_app_data_dir);
         }

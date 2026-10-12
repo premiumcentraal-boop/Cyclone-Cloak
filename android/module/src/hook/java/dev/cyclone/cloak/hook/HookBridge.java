@@ -60,6 +60,7 @@ public final class HookBridge {
     private static final int KIND_SERIAL = 10;
     private static final int KIND_UA = 11;
     private static final int KIND_NETWORK_TYPE = 12;
+    private static final int KIND_REFRESH_RATE = 13;
 
     private static volatile Method sPropGet;
 
@@ -130,6 +131,11 @@ public final class HookBridge {
             log("mediadrm hooks failed", t);
         }
         try {
+            installDisplay();
+        } catch (Throwable t) {
+            log("display hooks failed", t);
+        }
+        try {
             installApplicationHooks();
         } catch (Throwable t) {
             log("advertising id hooks failed", t);
@@ -153,6 +159,50 @@ public final class HookBridge {
         // getPropertyByteArray(String propertyName): only the device identity
         // read is redirected; every other property stays real.
         hookWith(mediaDrm, "getPropertyByteArray", new DeviceIdHook(), String.class);
+        log("mediadrm hook installed");
+    }
+
+    /**
+     * Display geometry and refresh: profile values flow through the
+     * cloak.display.* property surface. Resources.getDisplayMetrics and the
+     * Display out-parameter reads are rewritten after the real call so
+     * unchanged fields keep framework behavior.
+     */
+    private static void installDisplay() throws ClassNotFoundException {
+        Class<?> resources = Class.forName("android.content.res.Resources", false,
+                HookBridge.class.getClassLoader());
+        hookWith(resources, "getDisplayMetrics", new DisplayMetricsHook(), new Class<?>[0]);
+        Class<?> display = Class.forName("android.view.Display", false,
+                HookBridge.class.getClassLoader());
+        hookWith(display, "getMetrics", new DisplayMetricsHook(), android.util.DisplayMetrics.class);
+        hookWith(display, "getRealMetrics", new DisplayMetricsHook(), android.util.DisplayMetrics.class);
+        hookNoArg(display, "getRefreshRate", KIND_REFRESH_RATE);
+        log("display hooks installed");
+    }
+
+    /** Rewrites width/height/density fields of a DisplayMetrics result. */
+    private static final class DisplayMetricsHook extends MethodHook {
+        @Override public void afterCall(Pine.CallFrame frame) {
+            Object result = frame.getResult();
+            if (!(result instanceof android.util.DisplayMetrics)) {
+                return;
+            }
+            android.util.DisplayMetrics metrics = (android.util.DisplayMetrics) result;
+            int width = parseInt(prop("cloak.display.width"), -1);
+            int height = parseInt(prop("cloak.display.height"), -1);
+            int density = parseInt(prop("ro.sf.lcd_density"), -1);
+            if (width > 0) metrics.widthPixels = width;
+            if (height > 0) metrics.heightPixels = height;
+            if (density > 0) metrics.densityDpi = density;
+        }
+    }
+
+    private static int parseInt(String value, int fallback) {
+        try {
+            return Integer.parseInt(value.trim());
+        } catch (RuntimeException ignored) {
+            return fallback;
+        }
     }
 
     private static void installAdvertisingId(ClassLoader appLoader) throws ClassNotFoundException {
@@ -315,6 +365,8 @@ public final class HookBridge {
                 return orNull(prop(PROP_SERIAL));
             case KIND_UA:
                 return orNull(prop(PROP_UA));
+            case KIND_REFRESH_RATE:
+                return orNull(prop("cloak.display.refresh"));
             case KIND_NETWORK_TYPE:
                 switch (prop("gsm.network.type")) {
                     case "NR": return "20";
@@ -391,7 +443,15 @@ public final class HookBridge {
                     || !"deviceId".equals(frame.args[0])) {
                 return;
             }
-            frame.setResult(hexBytes(prop(PROP_WIDEVINE)));
+            String vault = prop(PROP_WIDEVINE);
+            // One-shot evidence line: distinguishes "hook never fires" from
+            // "hook fires with an empty vault" on real devices.
+            if (!vault.isEmpty()) {
+                log("widevine identity served");
+            } else {
+                log("widevine hook fired but vault empty");
+            }
+            frame.setResult(hexBytes(vault));
         }
     }
 
@@ -532,6 +592,8 @@ public final class HookBridge {
             String value = resolve(kind, slot);
             if (kind == KIND_SLOT_COUNT || kind == KIND_NETWORK_TYPE) {
                 frame.setResult(Integer.valueOf(value));
+            } else if (kind == KIND_REFRESH_RATE) {
+                frame.setResult(Float.valueOf(value));
             } else {
                 frame.setResult(value);
             }

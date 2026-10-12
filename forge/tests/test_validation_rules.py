@@ -217,3 +217,14 @@ def test_absent_optional_hardware_and_network_fields_remain_valid():
 def test_invalid_telephony_block_reports_once():
     findings = validate_profile(change(profile(), "telephony", []))
     assert len([f for f in findings if f.code == "BLOCK_TYPE" and f.field == "telephony"]) == 1
+
+def test_prop_fed_values_must_fit_the_property_buffer():
+    long_value = "x" * 92
+    findings = validate_profile(change(profile(), "device.build_id", long_value))
+    codes = [f.code for f in findings]
+    assert "PROP_LENGTH" in codes
+    assert has_errors(findings)
+
+    # At the limit itself the profile stays valid.
+    ok = validate_profile(change(profile(), "device.build_id", "x" * 91))
+    assert not [f for f in ok if f.code == "PROP_LENGTH"]

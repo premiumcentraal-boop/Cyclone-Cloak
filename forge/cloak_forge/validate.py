@@ -300,6 +300,7 @@ def validate_profile(profile: Mapping[str, Any]) -> list[Finding]:
     _validate_display(findings, block("display"))
     _validate_locale(findings, block("locale"))
     _validate_network(findings, block("network"))
+    _validate_prop_lengths(findings, profile)
     telephony = profile.get("telephony", {})
     _validate_hardware(findings, device, telephony if isinstance(telephony, Mapping) else {})
     ua = profile.get("ua")
@@ -404,6 +405,28 @@ def _validate_display(findings: list[Finding], display: Mapping[str, Any]) -> No
             _add(findings, WARNING, "DISPLAY_DENSITY_MISMATCH", "display.density implies a shortest edge outside 120–1600 dp for these dimensions", "display.density")
     if str(display.get("screen_size_class", "")) not in _DISPLAY_CLASSES:
         _add(findings, ERROR, "DISPLAY_CLASS", "display.screen_size_class must be small, normal, or large")
+
+
+# Android's property buffer is PROP_VALUE_MAX (92) bytes including the NUL, so
+# a value the runtime serves through a system-property surface must fit in 91
+# characters. Values beyond that cannot exist on a real device either.
+_PROP_FED_BLOCKS = ("device", "telephony", "locale", "identifiers")
+_PROP_VALUE_LIMIT = 91
+
+
+def _validate_prop_lengths(findings: list[Finding], profile: Mapping[str, Any]) -> None:
+    for block_name in _PROP_FED_BLOCKS:
+        block_data = profile.get(block_name, {})
+        if not isinstance(block_data, Mapping):
+            continue
+        for key, value in block_data.items():
+            if isinstance(value, str) and len(value) > _PROP_VALUE_LIMIT:
+                _add(
+                    findings,
+                    ERROR,
+                    "PROP_LENGTH",
+                    f"{block_name}.{key} exceeds the { _PROP_VALUE_LIMIT }-character property buffer limit",
+                )
 
 
 _MCC_RE = re.compile(r"^[0-9]{3}$")
