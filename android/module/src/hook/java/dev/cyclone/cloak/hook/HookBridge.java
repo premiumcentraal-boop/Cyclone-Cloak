@@ -180,10 +180,19 @@ public final class HookBridge {
         log("display hooks installed");
     }
 
-    /** Rewrites width/height/density fields of a DisplayMetrics result. */
+    /**
+     * Rewrites width/height/density fields of a DisplayMetrics. Handles both
+     * returning methods (Resources.getDisplayMetrics) and void out-parameter
+     * methods (Display.getMetrics/getRealMetrics write args[0]).
+     */
     private static final class DisplayMetricsHook extends MethodHook {
         @Override public void afterCall(Pine.CallFrame frame) {
             Object result = frame.getResult();
+            if (!(result instanceof android.util.DisplayMetrics)
+                    && frame.args != null && frame.args.length > 0
+                    && frame.args[0] instanceof android.util.DisplayMetrics) {
+                result = frame.args[0];
+            }
             if (!(result instanceof android.util.DisplayMetrics)) {
                 return;
             }

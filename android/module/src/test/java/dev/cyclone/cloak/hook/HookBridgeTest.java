@@ -115,6 +115,27 @@ public class HookBridgeTest {
         assertNotNull(nonMetrics.getResult());
     }
 
+    @Test public void voidDisplayMethodsRewriteTheOutParameter() throws Throwable {
+        PROPS.put("cloak.display.width", "1080");
+        PROPS.put("cloak.display.height", "2340");
+        PROPS.put("ro.sf.lcd_density", "420");
+        Class<?> callback = Class.forName(HookBridge.class.getName() + "$DisplayMetricsHook");
+        java.lang.reflect.Constructor<?> ctor = callback.getDeclaredConstructor();
+        ctor.setAccessible(true);
+        MethodHook displayHook = (MethodHook) ctor.newInstance();
+
+        android.util.DisplayMetrics out = new android.util.DisplayMetrics();
+        out.widthPixels = 1;
+        out.heightPixels = 2;
+        out.densityDpi = 3;
+        Pine.CallFrame call = frame(out); // void getRealMetrics(out): result stays null
+        call.setResult(null);
+        displayHook.afterCall(call);
+        assertEquals(1080, out.widthPixels);
+        assertEquals(2340, out.heightPixels);
+        assertEquals(420, out.densityDpi);
+    }
+
     @Test public void widevineVaultDecodesToRawBytes() throws Throwable {
         String hex = "f2b9c7904bec4ec0755b7aec3eca856e1deb43ab9cbd564f038af27837d568d3";
         PROPS.put("cloak.widevine_id", hex);
