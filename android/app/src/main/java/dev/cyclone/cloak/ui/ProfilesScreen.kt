@@ -50,7 +50,7 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
             CloakHeroCard(
                 title = if (state.ownProfileId == null) "Cyclone profiles" else "This Cyclone profile",
                 body = state.report?.message?.takeIf { it.isNotBlank() }
-                    ?: "Each Cyclone profile is its own Android user. Bind an identity to a profile and every app in it sees that phone.",
+                    ?: "Each Cyclone profile is its own Android user. Choose a device profile and select the apps to bind, or choose All apps.",
             )
         }
         item {
@@ -74,7 +74,7 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
             }
         }
 
-        item { OutlinedButton(onClick = { vm.startBinding() }, enabled = state.busy == null && !state.syncing, modifier = Modifier.fillMaxWidth()) { Text("Bind an app") } }
+        item { OutlinedButton(onClick = { vm.startBinding() }, enabled = state.busy == null && !state.syncing, modifier = Modifier.fillMaxWidth()) { Text("Bind a device profile") } }
 
         item { CloakSectionTitle("Profiles", state.registry.size) }
         if (state.registry.isEmpty()) {
@@ -138,7 +138,7 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
         if (state.bindings.isEmpty()) {
             item {
                 Text(
-                    "Nothing is bound yet. Choose Bind an app to review a new binding.",
+                    "Nothing is bound yet. Choose Bind a device profile, then select apps or All apps.",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )

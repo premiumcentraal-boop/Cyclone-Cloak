@@ -71,7 +71,7 @@ fun CloakApp(vm: CloakViewModel) {
     state.bindingFlow?.let { flow ->
         BindingFlowScreen(flow, BindingInputs(state.registry, state.identities, state.bindings, state.canBind, state.ownProfileId),
             state.phones, state.busy != null || state.syncing,
-            vm::chooseBindingProfile, vm::chooseBindingApp, vm::chooseBindingIdentity, vm::generateBindingProfile,
+            vm::chooseBindingProfile, vm::chooseBindingApps, vm::chooseBindingIdentity, vm::generateBindingProfile,
             vm::nextBindingStep, vm::backBindingStep, vm::acknowledgeBinding, vm::confirmBindingFlow,
             vm::retryBindingFlow, vm::refresh, vm::closeBindingFlow)
         return

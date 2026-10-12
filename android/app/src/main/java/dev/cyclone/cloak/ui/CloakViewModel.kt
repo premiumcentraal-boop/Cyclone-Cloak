@@ -484,8 +484,8 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
     private fun changeBinding(transform: (BindingDraft) -> BindingDraft) {
         _state.update { state -> state.copy(bindingFlow = state.bindingFlow?.let { if (it.running) it else transform(it) }) }
     }
-    fun chooseBindingProfile(id: String) = changeBinding { it.copy(profileId = id, packageName = null, reviewStamp = null, acknowledged = false, note = null) }
-    fun chooseBindingApp(pkg: String) = changeBinding { it.copy(packageName = pkg, reviewStamp = null, acknowledged = false, note = null) }
+    fun chooseBindingProfile(id: String) = changeBinding { BindingFlow.chooseProfile(it, id) }
+    fun chooseBindingApps(packages: Set<String>) = changeBinding { BindingFlow.selectApps(it, packages) }
     fun chooseBindingIdentity(id: String) = changeBinding { it.copy(identityId = id, reviewStamp = null, acknowledged = false, note = null) }
     fun acknowledgeBinding(value: Boolean) = changeBinding { it.copy(acknowledged = value) }
     fun nextBindingStep() = changeBinding {
@@ -533,12 +533,9 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
                         acknowledged = false, note = "The library or target changed. Review the current findings and confirm again.")) }
                     return@launchWork
                 }
-                val record = BindingFlow.record(draft, input, System.currentTimeMillis())
+                val records = BindingFlow.records(draft, input, System.currentTimeMillis())
                 // Existing store preserves the logical profile-ID/package key and atomic update behavior.
-                CloakBindingStore.update(app) { current ->
-                    require(current == input.bindings) { "Bindings changed. Return to review before saving." }
-                    CloakBindingStore.upsertIn(current, record)
-                }
+                saveBindingRecords(records, input.bindings)
                 finishBindingFlow(draft)
             } catch (_: Exception) {
                 bindingFlowFailed(draft)
@@ -553,8 +550,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
             try {
                 val input = bindingInputs(freshLocal = true)
                 val errors = BindingFlow.findings(draft, input).filter { it.isError }
-                val held = input.bindings.filter { it.profileId == draft.profileId && it.packageName == draft.packageName }
-                require(held.singleOrNull()?.let { it.enabled && it.cloakProfileId == draft.identityId && it.origin == CloakBinding.ORIGIN_LOCAL } == true)
+                require(BindingFlow.saved(draft, input.bindings))
                 if (errors.isNotEmpty()) {
                     _state.update { it.copy(bindingFlow = draft.copy(running = false, outcome = BindingOutcome(false, true,
                         "Binding retained. " + errors.joinToString("\n") { it.message }))) }
@@ -571,8 +567,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         _state.update { it.copy(bindingFlow = draft.copy(step = BindingStep.RESULT, running = false, outcome = result, note = null)) }
     }
     private fun bindingFlowFailed(draft: BindingDraft) {
-        val held = CloakBindingStore.all(app).filter { it.profileId == draft.profileId && it.packageName == draft.packageName }
-        val saved = held.singleOrNull()?.let { it.enabled && it.cloakProfileId == draft.identityId && it.origin == CloakBinding.ORIGIN_LOCAL } == true
+        val saved = BindingFlow.saved(draft, CloakBindingStore.all(app))
         _state.update { it.copy(bindingFlow = draft.copy(step = BindingStep.RESULT, running = false,
             outcome = BindingOutcome(false, saved, if (saved) "Binding saved locally. Check Health Doctor and retry reconciliation."
                 else "Binding was not saved or the target changed. Return to review before trying again."))) }
@@ -631,6 +626,13 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    private fun saveBindingRecords(records: List<CloakBinding>, expected: List<CloakBinding>? = null) {
+        CloakBindingStore.update(app) { current ->
+            require(expected == null || current == expected) { "Bindings changed. Return to review before saving." }
+            BindingFlow.applyRecords(current, records)
+        }
+    }
+
     /** Loads identity [cloakId] onto every app of [profile]; apps Main manages stay Main's. Returns how many. */
     private fun bindLocally(profile: CycloneProfile, cloakId: String): Int {
         val userId = profile.androidUserId ?: return 0
@@ -641,11 +643,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
             pkg !in managedByMain && runCatching { CloakBindingStore.validate(profile.id, userId, pkg) }.isSuccess
         }
         val now = System.currentTimeMillis()
-        CloakBindingStore.update(app) { current ->
-            packages.fold(current) { list, pkg ->
-                CloakBindingStore.upsertIn(list, CloakBinding(profile.id, userId, pkg, cloakId, 0, true, now, "pending"))
-            }
-        }
+        saveBindingRecords(packages.map { pkg -> CloakBinding(profile.id, userId, pkg, cloakId, 0, true, now, "pending") })
         return packages.size
     }
 

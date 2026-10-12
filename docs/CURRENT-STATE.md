@@ -9,6 +9,16 @@ publication evidence without changing the released payload.
 
 [RC2 release notes](RELEASE_0.10.0-rc.2.md) · [Upgrade guide](UPGRADE_0.10.0-rc.2.md).
 
+## Development after RC2
+
+The local binding UI now selects multiple apps or All apps from either Profiles
+or Identities. Both paths show the required device-profile step, with a selected
+summary for a preselected identity; review lists all packages. The existing
+fleet bulk planner remains intact and shares the per-app store-update helper.
+Storage schema, connector, synchronization and publication are unchanged.
+This change has not been published; current-run evidence is in
+[HANDOFF-2026-10-12-MULTI-APP-BINDING.md](HANDOFF-2026-10-12-MULTI-APP-BINDING.md).
+
 ## Versions and major components
 
 | Component | Version / responsibility |

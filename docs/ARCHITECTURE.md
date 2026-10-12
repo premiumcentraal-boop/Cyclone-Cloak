@@ -56,7 +56,7 @@ may import all lower layers.
 | --- | --- |
 | Phones | Built-in/custom templates; one-click validated profile generation; build, import, clone, edit and share |
 | Identities | Seeded generation, fleet creation, values, rename, guarded deletion, binding and import/export |
-| Profiles | Cyclone profiles, guided single-app binding, filtered bindings, health pills, bulk binding and open requests |
+| Profiles | Cyclone profiles, guided multi-app binding, filtered bindings, health pills, bulk binding and open requests |
 | Health | Readiness Doctor v3 readiness/checks, redacted clipboard diagnostics, existing repair/reconnect actions and bundled compatibility coverage |
 
 Editing a phone does not change the snapshot already stored in an identity.
@@ -155,14 +155,18 @@ release versions. Profile/app names, JSON, seeds, identifiers, raw errors, keys,
 tokens and user content are never serialized. Existing sync, health-state
 mapping, publication actions, runtime and connector behavior are unchanged.
 
-## Guided binding workflow
+## Guided binding workflow (multi-app selection in development after RC2)
 
 `ui/BindingFlow` derives step validation from the latest synchronized Cyclone
 snapshot, readable saved identities, the existing binding records, coherence
 validation and local uniqueness index. `BindingFlowScreen` walks through profile,
 app, compatibility profile, review and confirmation result. It is available from
-Profiles → Bind an app and from an identity's Bind to a profile action. The
-existing bulk workflow remains separate.
+Profiles → Bind a device profile and from an identity's Bind to profile apps
+action. App selection is a set with individual checkboxes and an All apps toggle.
+Both entry paths show the identity picker before review; a preselected identity
+is shown as a selected summary. Review lists all packages, and the confirmation
+stamp includes the sorted selected set. The existing fleet bulk planner remains
+unchanged and shares the view model's per-app store-update helper with this flow.
 
 Unready profiles, missing users/apps, invalid identities, duplicate target
 records and Main-managed mirrors block confirmation with corrective guidance.
@@ -170,13 +174,13 @@ Sharing an identity, duplicate distinguishing values and replacing a target's
 current identity require explicit warning acknowledgement. A changed reviewed
 snapshot/library invalidates confirmation until the summary is reviewed again.
 
-The view model rechecks local data under its existing work mutex and writes one
-selected app through `CloakBindingStore.update/upsertIn`. New profiles use the
+The view model rechecks local data under its existing work mutex and writes every
+selected app together through one `CloakBindingStore.update/upsertIn` operation. New profiles use the
 existing catalog, forge, validated generation and atomic profile store. Cancelling
 after generation retains the saved profile. Success requires the existing root
 publication and reconciliation/health models to confirm readiness. Retry runs
 existing publication/synchronization for the retained target without rewriting
-its binding; a changed or removed target returns to review. Connector, sync
+its bindings; a changed or removed selected target returns to review. Connector, sync
 engine, runtime module and storage formats are unchanged by this UI workflow.
 
 ## Local profile backups

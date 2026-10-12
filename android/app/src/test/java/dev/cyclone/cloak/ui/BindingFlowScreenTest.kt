@@ -27,7 +27,7 @@ class BindingFlowScreenTest {
         return BindingInputs(listOf(profile), listOf(identity.getString("id") to identity), emptyList(), true, null)
     }
     private fun review(input: BindingInputs): BindingDraft {
-        val draft = BindingDraft(BindingStep.REVIEW, profile.id, "com.example.app", input.identities.first().first)
+        val draft = BindingDraft(BindingStep.REVIEW, profile.id, setOf("com.example.app"), input.identities.first().first)
         return draft.copy(reviewStamp = BindingFlow.stamp(draft, input))
     }
     @Test fun selectionStepsLeadToSummaryAndExplicitConfirmation() {
@@ -35,8 +35,8 @@ class BindingFlowScreenTest {
         compose.setContent {
             CloakTheme {
                 BindingFlowScreen(draft.value, input, emptyList(), false,
-                    onProfile = { draft.value = draft.value.copy(profileId = it) },
-                    onApp = { draft.value = draft.value.copy(packageName = it) },
+                    onProfile = { draft.value = BindingFlow.chooseProfile(draft.value, it) },
+                    onApps = { draft.value = BindingFlow.selectApps(draft.value, it) },
                     onIdentity = { draft.value = draft.value.copy(identityId = it) }, onGenerate = {},
                     onNext = { draft.value = BindingFlow.next(draft.value, input) }, onBack = {},
                     onAcknowledge = { draft.value = draft.value.copy(acknowledged = it) },
@@ -55,7 +55,7 @@ class BindingFlowScreenTest {
         compose.onNodeWithText("Cyclone profile: Work").assertIsDisplayed()
         compose.onNodeWithText("App package: com.example.app").assertIsDisplayed()
         compose.onNodeWithText("Android user: 11").assertIsDisplayed()
-        compose.onNodeWithText("Compatibility profile: Pixel profile").assertIsDisplayed()
+        compose.onNodeWithText("Device profile: Pixel profile").assertIsDisplayed()
         assertEquals(0, confirmed)
         // Valid profiles can still carry nonblocking coherence warnings.
         compose.onAllNodes(isToggleable()).fetchSemanticsNodes().takeIf { it.isNotEmpty() }?.let {
@@ -119,4 +119,68 @@ class BindingFlowScreenTest {
         compose.onNodeWithText("Review latest summary").performScrollTo().performClick()
         compose.onNodeWithText("Android user: 21").performScrollTo().assertIsDisplayed()
     }
+    @Test fun allAppsAndIndividualCheckboxesCarryTheFullSelectionToReview() {
+        val original = input()
+        val input = original.copy(profiles = listOf(profile.copy(packages = listOf("com.example.app", "com.example.other"))))
+        val draft = mutableStateOf(BindingDraft(step = BindingStep.APP, profileId = profile.id, identityId = input.identities.single().first))
+        compose.setContent {
+            CloakTheme { BindingFlowScreen(draft.value, input, emptyList(), false, {},
+                { draft.value = BindingFlow.selectApps(draft.value, it) }, {}, {},
+                { draft.value = BindingFlow.next(draft.value, input) }, {},
+                { draft.value = draft.value.copy(acknowledged = it) }, {}, {}, {}, {}) }
+        }
+        compose.onNodeWithText("Continue").assertIsNotEnabled()
+        compose.onNodeWithText("All apps (2)").performClick().assertIsOn()
+        compose.onNodeWithText("com.example.app").assertIsOn()
+        compose.onNodeWithText("com.example.other").assertIsOn().performClick().assertIsOff()
+        compose.onNodeWithText("All apps (2)").assertIsOff().performClick()
+        compose.onNodeWithText("Continue").performClick()
+        compose.onNodeWithText("Step 3 of 5 · Choose device profile").assertIsDisplayed()
+        compose.onNodeWithText("Selected device profile: Pixel profile").assertIsDisplayed()
+        compose.onNodeWithText("Continue").performScrollTo().performClick()
+        compose.onNodeWithText("All apps (2)").assertIsDisplayed()
+        compose.onNodeWithText("App package: com.example.app").assertIsDisplayed()
+        compose.onNodeWithText("App package: com.example.other").assertIsDisplayed()
+        compose.onNodeWithText("Device profile: Pixel profile").assertIsDisplayed()
+    }
+    @Test fun profilesEntryRequiresVisibleDeviceProfileSelectionForMultipleApps() {
+        val original = input()
+        val input = original.copy(profiles = listOf(profile.copy(packages = listOf("com.example.app", "com.example.other"))))
+        val draft = mutableStateOf(BindingDraft())
+        compose.setContent {
+            CloakTheme { BindingFlowScreen(draft.value, input, emptyList(), false,
+                { draft.value = BindingFlow.chooseProfile(draft.value, it) },
+                { draft.value = BindingFlow.selectApps(draft.value, it) },
+                { draft.value = draft.value.copy(identityId = it) }, {},
+                { draft.value = BindingFlow.next(draft.value, input) }, {}, {}, {}, {}, {}, {}) }
+        }
+        compose.onNodeWithText("Work · user 11 · ready").performClick()
+        compose.onNodeWithText("Continue").performClick()
+        compose.onNodeWithText("All apps (2)").performClick()
+        compose.onNodeWithText("Continue").performClick()
+        compose.onNodeWithText("Choose a saved device profile before review.").assertIsDisplayed()
+        compose.onNodeWithText("Continue").assertIsNotEnabled()
+        compose.onNodeWithText("Pixel profile").assertIsDisplayed().performClick()
+        compose.onNodeWithText("Continue").performClick()
+        compose.onNodeWithText("All apps (2)").assertIsDisplayed()
+        compose.onNodeWithText("Device profile: Pixel profile").assertIsDisplayed()
+    }
+    @Test fun allAppsToggleClearsSelectionAndBusyStateDisablesAppChanges() {
+        val original = input()
+        val input = original.copy(profiles = listOf(profile.copy(packages = listOf("com.example.app", "com.example.other"))))
+        val busy = mutableStateOf(false)
+        val draft = mutableStateOf(BindingDraft(step = BindingStep.APP, profileId = profile.id))
+        compose.setContent {
+            CloakTheme { BindingFlowScreen(draft.value, input, emptyList(), busy.value, {},
+                { draft.value = BindingFlow.selectApps(draft.value, it) }, {}, {}, {}, {}, {}, {}, {}, {}, {}) }
+        }
+        compose.onNodeWithText("All apps (2)").performClick().performClick().assertIsOff()
+        compose.onNodeWithText("com.example.app").assertIsOff()
+        compose.onNodeWithText("com.example.other").assertIsOff()
+        compose.onNodeWithText("Continue").assertIsNotEnabled()
+        compose.runOnIdle { busy.value = true }
+        compose.onNodeWithText("All apps (2)").assertIsNotEnabled()
+        compose.onNodeWithText("com.example.app").assertIsNotEnabled()
+    }
+
 }

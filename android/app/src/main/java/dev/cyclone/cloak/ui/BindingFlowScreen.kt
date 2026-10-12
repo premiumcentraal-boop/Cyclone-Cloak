@@ -2,6 +2,8 @@ package dev.cyclone.cloak.ui
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.selection.toggleable
+import androidx.compose.ui.semantics.Role
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
@@ -14,7 +16,7 @@ import dev.cyclone.cloak.forge.ProfileValidator
 @Composable
 internal fun BindingFlowScreen(
     draft: BindingDraft, input: BindingInputs, phones: List<PhoneTemplate>, busy: Boolean,
-    onProfile: (String) -> Unit, onApp: (String) -> Unit, onIdentity: (String) -> Unit,
+    onProfile: (String) -> Unit, onApps: (Set<String>) -> Unit, onIdentity: (String) -> Unit,
     onGenerate: (String) -> Unit, onNext: () -> Unit, onBack: () -> Unit,
     onAcknowledge: (Boolean) -> Unit, onConfirm: () -> Unit, onRetry: () -> Unit,
     onRefresh: () -> Unit, onClose: () -> Unit,
@@ -29,10 +31,11 @@ internal fun BindingFlowScreen(
     Scaffold { padding ->
         Column(Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState()).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text("Bind an app", style = MaterialTheme.typography.headlineSmall)
+            Text("Bind a device profile", style = MaterialTheme.typography.headlineSmall)
+            Text("Choose a Cyclone profile and apps, then select the device profile to bind.", style = MaterialTheme.typography.bodySmall)
             Text("Step ${draft.step.ordinal + 1} of 5 · ${when (draft.step) {
-                BindingStep.PROFILE -> "Choose Cyclone profile"; BindingStep.APP -> "Choose app"
-                BindingStep.IDENTITY -> "Choose compatibility profile"; BindingStep.REVIEW -> "Review summary"
+                BindingStep.PROFILE -> "Choose Cyclone profile"; BindingStep.APP -> "App selection"
+                BindingStep.IDENTITY -> "Choose device profile"; BindingStep.REVIEW -> "Review summary"
                 BindingStep.RESULT -> "Binding result"
             }}", style = MaterialTheme.typography.titleMedium)
             if (locked) LinearProgressIndicator(Modifier.fillMaxWidth())
@@ -50,15 +53,30 @@ internal fun BindingFlowScreen(
                 BindingStep.APP -> {
                     Text("Cyclone profile: ${profile?.label ?: "Unavailable"}")
                     if (profile?.packages.isNullOrEmpty()) Text("No app list available. Add an app in Cyclone, then refresh.")
-                    profile?.packages.orEmpty().sorted().forEach { pkg ->
-                        OutlinedButton(onClick = { onApp(pkg) }, enabled = !locked, modifier = Modifier.fillMaxWidth()) {
-                            Text("${if (pkg == draft.packageName) "✓ " else ""}$pkg")
+                    val packages = profile?.packages.orEmpty().toSet()
+                    Row(Modifier.fillMaxWidth().toggleable(
+                        value = BindingFlow.allApps(draft, input), enabled = !locked && packages.isNotEmpty(), role = Role.Checkbox,
+                        onValueChange = { onApps(BindingFlow.selectAll(draft, input, it).packageNames) }),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Checkbox(checked = BindingFlow.allApps(draft, input), onCheckedChange = null, enabled = !locked && packages.isNotEmpty())
+                        Text("All apps (${packages.size})", Modifier.padding(top = 12.dp))
+                    }
+                    Text("${draft.packageNames.size} selected. Choose one or more apps for this device profile.")
+                    packages.sorted().forEach { pkg ->
+                        Row(Modifier.fillMaxWidth().toggleable(
+                            value = pkg in draft.packageNames, enabled = !locked, role = Role.Checkbox,
+                            onValueChange = { checked -> onApps(if (checked) draft.packageNames + pkg else draft.packageNames - pkg) }),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                            Checkbox(checked = pkg in draft.packageNames, onCheckedChange = null, enabled = !locked)
+                            Text(pkg, Modifier.padding(top = 12.dp))
                         }
                     }
                     TextButton(onClick = onRefresh, enabled = !locked) { Text("Refresh Cyclone") }
                 }
                 BindingStep.IDENTITY -> {
-                    Text("Choose an existing profile")
+                    Text("Choose a saved device profile before review.")
+                    if (identity != null) Text("Selected device profile: ${identity.optString("name").ifBlank { draft.identityId.orEmpty() }}")
+                    if (input.identities.isEmpty()) Text("No saved device profiles. Generate one below, or create/import one in Identities.")
                     input.identities.forEach { (id, value) ->
                         OutlinedButton(onClick = { onIdentity(id) }, enabled = !locked, modifier = Modifier.fillMaxWidth()) {
                             Text("${if (id == draft.identityId) "✓ " else ""}${value.optString("name").ifBlank { id }}")
@@ -75,10 +93,11 @@ internal fun BindingFlowScreen(
                         Column(Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
                             Text("Final binding review", style = MaterialTheme.typography.titleMedium)
                             Text("Cyclone profile: ${profile?.label ?: draft.profileId.orEmpty()}")
-                            Text("App package: ${draft.packageName.orEmpty()}")
+                            Text(if (BindingFlow.allApps(draft, input)) "All apps (${draft.packageNames.size})" else "Selected apps (${draft.packageNames.size})")
+                            draft.packageNames.sorted().forEach { Text("App package: $it") }
                             Text("Android user: ${profile?.androidUserId ?: "Not assigned"}")
-                            Text("Compatibility profile: ${identity?.optString("name") ?: draft.identityId.orEmpty()}")
-                            Text("Only this app binding will be saved.", style = MaterialTheme.typography.bodySmall)
+                            Text("Device profile: ${identity?.optString("name") ?: draft.identityId.orEmpty()}")
+                            Text("One binding per selected app will be saved.", style = MaterialTheme.typography.bodySmall)
                         }
                     }
                 }

@@ -94,8 +94,13 @@ mismatch or blocking validation error prevents the batch from being saved.
 Bindings, Cyclone records and module publication data are excluded; full-state
 backup is not available. Phone-template sharing is a separate existing flow.
 
-Profiles → Bind an app guides profile, app, compatibility profile, review and
-confirmation. Missing Android users/apps or invalid profiles block confirmation;
+Current development after RC2: Profiles → Bind a device profile guides Cyclone profile, app selection, device
+profile, review and confirmation. Select multiple apps or All apps in one pass.
+Identities → Bind to profile apps uses the same flow with the device profile
+preselected and shown at the identity step. Review lists every selected app;
+confirmation saves one existing-format binding per app in one store update.
+The separate Bind all fleet action still assigns unused identities across ready
+unbound Cyclone profiles. Missing Android users/apps or invalid profiles block confirmation;
 shared identities and duplicate values require acknowledgement. A failed
 reconciliation offers retry while preserving the saved binding. Health shows
 local duplicate diagnostics and readiness reasons. Copy diagnostics exports an

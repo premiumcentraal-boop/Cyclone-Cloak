@@ -13,7 +13,7 @@ enum class BindingStep { PROFILE, APP, IDENTITY, REVIEW, RESULT }
 data class BindingDraft(
     val step: BindingStep = BindingStep.PROFILE,
     val profileId: String? = null,
-    val packageName: String? = null,
+    val packageNames: Set<String> = emptySet(),
     val identityId: String? = null,
     val reviewStamp: String? = null,
     val acknowledged: Boolean = false,
@@ -44,19 +44,22 @@ object BindingFlow {
                 issue("profile", "PROFILE_OUT_OF_SCOPE", "Bind this profile from Cloak in Main or from Cloak inside that profile.")
         }
         val packages = profile?.packages
-        if (draft.packageName == null) issue("app", "APP_REQUIRED", "Choose an app from this profile's current list.")
-        else if (packages == null || draft.packageName !in packages)
-            issue("app", "APP_MISSING", "This app is missing from the current app list. Add it in Cyclone and refresh before binding.")
-        val user = profile?.androidUserId
-        if (profile != null && user != null && draft.packageName != null &&
-            runCatching { CloakBindingStore.validate(profile.id, user, draft.packageName) }.isFailure)
-            issue("app", "INVALID_TARGET", "The profile, Android user or app package is invalid. Refresh Cyclone's list.")
-        val targets = input.bindings.filter { it.profileId == draft.profileId && it.packageName == draft.packageName }
-        if (targets.size > 1) issue("app", "DUPLICATE_BINDING", "Multiple local records exist for this target. Review them in Profiles before binding.")
-        if (targets.any { it.origin == CloakBinding.ORIGIN_MAIN })
-            issue("app", "MANAGED_BY_MAIN", "This app binding is managed by Cloak in Main. Change it there.")
-        if (targets.any { it.cloakProfileId != draft.identityId } && draft.identityId != null)
-            issue("identity", "REPLACE_BINDING", "Confirmation replaces this app's existing compatibility profile. Go back to keep the current selection.", true)
+        if (draft.packageNames.isEmpty()) issue("app", "APP_REQUIRED", "Choose at least one app or select All apps.")
+        draft.packageNames.sorted().forEach { pkg ->
+            val field = "app.$pkg"
+            if (packages == null || pkg !in packages)
+                issue(field, "APP_MISSING", "This app is missing from the current app list. Add it in Cyclone and refresh before binding.")
+            val user = profile?.androidUserId
+            if (profile != null && user != null &&
+                runCatching { CloakBindingStore.validate(profile.id, user, pkg) }.isFailure)
+                issue(field, "INVALID_TARGET", "The profile, Android user or app package is invalid. Refresh Cyclone's list.")
+            val targets = input.bindings.filter { it.profileId == draft.profileId && it.packageName == pkg }
+            if (targets.size > 1) issue(field, "DUPLICATE_BINDING", "Multiple local records exist for this target. Review them in Profiles before binding.")
+            if (targets.any { it.origin == CloakBinding.ORIGIN_MAIN })
+                issue(field, "MANAGED_BY_MAIN", "This app binding is managed by Cloak in Main. Change it there.")
+            if (targets.any { it.cloakProfileId != draft.identityId } && draft.identityId != null)
+                issue("identity", "REPLACE_BINDING", "Confirmation replaces $pkg's existing device profile. Go back to keep the current selection.", true)
+        }
         val identity = input.identities.firstOrNull { it.first == draft.identityId }?.second
         if (identity == null) issue("identity", "IDENTITY_MISSING", "Choose a readable saved compatibility profile or generate one.")
         else {
@@ -66,7 +69,7 @@ object BindingFlow {
                 it.copy(field = "identity.${it.field}", message = "${it.message} Review or regenerate the value in Identities, or acknowledge keeping it.")
             }
             if (input.bindings.any { it.cloakProfileId == draft.identityId &&
-                    (it.profileId != draft.profileId || it.packageName != draft.packageName) })
+                    (it.profileId != draft.profileId || it.packageName !in draft.packageNames) })
                 issue("identity", "IDENTITY_ALREADY_BOUND", "This compatibility profile is already bound elsewhere. Choose or generate another profile for separate identities, or acknowledge sharing it.", true)
         }
         return out.sortedWith(compareBy({ if (it.isError) 0 else 1 }, { it.field }, { it.code }))
@@ -86,7 +89,7 @@ object BindingFlow {
     fun stamp(draft: BindingDraft, input: BindingInputs): String {
         val profile = input.profiles.firstOrNull { it.id == draft.profileId }
         val identity = input.identities.firstOrNull { it.first == draft.identityId }?.second
-        val text = listOf(profile.toString(), draft.packageName, identity?.toString(),
+        val text = listOf(profile.toString(), draft.packageNames.sorted().joinToString("\n"), identity?.toString(),
             input.bindings.toString(), input.canBind, input.ownProfileId, findings(draft, input).toString()).joinToString("\n")
         return MessageDigest.getInstance("SHA-256").digest(text.toByteArray()).joinToString("") { "%02x".format(it) }
     }
@@ -94,22 +97,52 @@ object BindingFlow {
         draft.step == BindingStep.REVIEW && !draft.running && draft.reviewStamp == stamp(draft, input) &&
             findings(draft, input).none { it.isError } && (draft.acknowledged || findings(draft, input).none { it.severity == ProfileValidator.WARNING })
 
-    fun record(draft: BindingDraft, input: BindingInputs, now: Long): CloakBinding {
+    fun chooseProfile(draft: BindingDraft, id: String): BindingDraft = draft.copy(
+        profileId = id, packageNames = if (id == draft.profileId) draft.packageNames else emptySet(),
+        reviewStamp = null, acknowledged = false, note = null)
+
+    fun selectApps(draft: BindingDraft, packages: Set<String>): BindingDraft = draft.copy(
+        packageNames = packages.toSet(), reviewStamp = null, acknowledged = false, note = null)
+
+    fun allApps(draft: BindingDraft, input: BindingInputs): Boolean {
+        val packages = input.profiles.firstOrNull { it.id == draft.profileId }?.packages.orEmpty().toSet()
+        return packages.isNotEmpty() && draft.packageNames == packages
+    }
+
+    fun selectAll(draft: BindingDraft, input: BindingInputs, selected: Boolean): BindingDraft =
+        selectApps(draft, if (selected) input.profiles.firstOrNull { it.id == draft.profileId }?.packages.orEmpty().toSet() else emptySet())
+
+    fun records(draft: BindingDraft, input: BindingInputs, now: Long): List<CloakBinding> {
         require(canConfirm(draft, input)) { "Review the current selection and resolve blocking findings first." }
         val profile = input.profiles.first { it.id == draft.profileId }
-        val existing = input.bindings.singleOrNull { it.profileId == draft.profileId && it.packageName == draft.packageName }
-        return existing?.copy(androidUserId = profile.androidUserId!!, cloakProfileId = draft.identityId!!,
-            enabled = true, updatedAt = now, state = "pending") ?: CloakBinding(profile.id, profile.androidUserId!!,
-            draft.packageName!!, draft.identityId!!, 0, true, now, "pending")
+        return draft.packageNames.sorted().map { pkg ->
+            val existing = input.bindings.singleOrNull { it.profileId == profile.id && it.packageName == pkg }
+            existing?.copy(androidUserId = profile.androidUserId!!, cloakProfileId = draft.identityId!!,
+                enabled = true, updatedAt = now, state = "pending") ?: CloakBinding(profile.id, profile.androidUserId!!,
+                pkg, draft.identityId!!, 0, true, now, "pending")
+        }
     }
+
+    /** Shared by guided app selection and the existing fleet bulk action. Store format stays per app. */
+    fun applyRecords(current: List<CloakBinding>, records: List<CloakBinding>): List<CloakBinding> =
+        records.fold(current) { list, record -> CloakBindingStore.upsertIn(list, record) }
+
+    fun saved(draft: BindingDraft, records: List<CloakBinding>): Boolean =
+        draft.packageNames.isNotEmpty() && draft.packageNames.all { pkg ->
+            records.filter { it.profileId == draft.profileId && it.packageName == pkg }.singleOrNull()?.let {
+                it.enabled && it.cloakProfileId == draft.identityId && it.origin == CloakBinding.ORIGIN_LOCAL
+            } == true
+        }
     fun completion(draft: BindingDraft, root: RootDoctorResult, report: SyncReport?, records: List<CloakBinding>): BindingOutcome {
-        val held = records.filter { it.profileId == draft.profileId && it.packageName == draft.packageName }
-        val saved = held.singleOrNull()?.let { it.enabled && it.cloakProfileId == draft.identityId && it.origin == CloakBinding.ORIGIN_LOCAL } == true
+        val held = records.filter { it.profileId == draft.profileId && it.packageName in draft.packageNames }
+        val saved = saved(draft, records)
         if (!saved) return BindingOutcome(false, false, "The saved target changed or is unavailable. Return to review; retry will not overwrite it.")
         val reconcile = report?.reconcile
-        val issue = report?.issues?.get(bindingKey(draft.profileId!!, draft.packageName!!))
+        val issue = draft.packageNames.sorted().mapNotNull { pkg ->
+            report?.issues?.get(bindingKey(draft.profileId!!, pkg))?.let { "$pkg: $it" }
+        }.takeIf { it.isNotEmpty() }?.joinToString("\n")
         val ready = root.published && report?.gate?.bindings == true && reconcile != null &&
-            reconcile.stoppedBy == null && issue == null && CloakHealth.cycloneState(held.single().state) == CloakHealth.READY
+            reconcile.stoppedBy == null && issue == null && held.all { CloakHealth.cycloneState(it.state) == CloakHealth.READY }
         val reason = when {
             !root.published -> "${root.title}: ${root.message}"
             issue != null -> issue

@@ -189,7 +189,7 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
                         modifier = Modifier.padding(horizontal = 8.dp),
                     )
                     FlowRow(Modifier.fillMaxWidth().padding(horizontal = 4.dp)) {
-                        TextButton(onClick = { vm.startBinding(id) }) { Text("Bind to a profile") }
+                        TextButton(onClick = { vm.startBinding(id) }) { Text("Bind to profile apps") }
                         TextButton(onClick = { exportTarget = id; includeIdentity = false; backupLabel = ""; exporting = true }, enabled = state.busy == null) { Text("Export profile") }
                         TextButton(onClick = { vm.duplicateIdentity(id) }, enabled = state.busy == null) { Text("Duplicate") }
                         TextButton(onClick = { vm.reviewIdentity(id) }, enabled = state.busy == null) { Text("Review identifiers") }
