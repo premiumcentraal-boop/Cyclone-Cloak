@@ -2,14 +2,16 @@
 
 Reboot-dependent checks for future local fixes remain deferred; see
 [DEFERRED-DEVICE-CHECKS.md](DEFERRED-DEVICE-CHECKS.md) for the resume checklist.
-RC2 device baseline measured 2026-10-12 on a rooted Pixel 8, Android API 36,
-Android user 13. The installed module identifies itself as `v0.10.0-rc.2`,
-versionCode 23; its arm64 library SHA-256 is
-`2ec607f9563e9f2ac47ab4245041ca10420d2d36d530e040f862a9c231c5a528`.
+RC3 device baseline measured 2026-10-13 on a rooted Pixel 8, Android API 36,
+Android user 0 (the user-13 switch stayed blocked behind the device PIN after
+reboot; the probe's proof logic is user-independent and the run metadata
+records the user). The installed module identifies itself as `v0.10.0-rc.3`,
+versionCode 24; its arm64 library SHA-256 is
+`b11991891dcad2425f6cef91e03cedefd67ed7140a69c9c06d25a77dd8cfa266`.
 This identifies the measured binary; its version label alone does not prove
-byte-for-byte correspondence with a published build. The earlier alpha.1
-baseline (v0.10.0-alpha.1, code 18, user 11, 13 verified reads) remains in
-git history under the 2026-10-11 measurement of this file.
+byte-for-byte correspondence with a published build. The RC2 baseline
+(v0.10.0-rc.2, code 23, user 13, 45 verified reads) remains in git history
+under the 2026-10-12 measurement of this file.
 
 The independent `dev.cyclone.cloak.probe` app reads Android APIs and native
 properties. Its fixtures supply expected values only. It never loads the
@@ -33,27 +35,30 @@ coverage from Root Doctor. Reboot-dependent verification remains deferred.
 
 The test app displays a row per read. The complete, generated **70-read matrix**
 is [RUNTIME-MEASUREMENTS.md](RUNTIME-MEASUREMENTS.md), backed by
-[redacted JSON evidence](runtime-evidence/rc2-api36-baseline.json)
+[redacted JSON evidence](runtime-evidence/rc3-api36-final.json)
+(dated copy: [RUNTIME-MATRIX-RC3-2026-10-13.md](RUNTIME-MATRIX-RC3-2026-10-13.md)).
 (dated copy: [RUNTIME-MATRIX-RC2-2026-10-12.md](RUNTIME-MATRIX-RC2-2026-10-12.md)).
 Observed host values are hashed; fixture expectations are synthetic test data.
 
-**45 reads VERIFIED, 11 FAIL, 8 MATCH_ONLY, 3 BLOCKED, 3 UNMAPPED.** A PASS in
+**53 reads VERIFIED, 3 FAIL, 8 MATCH_ONLY, 3 BLOCKED, 3 UNMAPPED.** A PASS in
 the raw app report means equality with that fixture only. VERIFIED additionally
 requires differing expectations for A/B, repeat stability and restoration of
-the unbound control. Bound runs measure PASS=55/70 per profile with identical
-bound-a and bound-a-repeat reports; unbound-before and unbound-after reports
-match exactly. Remaining FAILs concentrate on native libc property reads
-(ro.product.model, ro.build.version.sdk, ro.build.fingerprint, ro.serialno,
-persist.sys.timezone), DRM deviceUniqueId and display refresh/geometry; the
-three BLOCKED rows (Wi-Fi service MAC/SSID, Bluetooth name) are permission
-gates on the probe identity, not module failures. Matching host display dimensions do not prove a hook.
+the unbound control. Bound runs measure PASS=61/70 (A) and 63/70 (B) with
+identical bound-a and bound-a-repeat reports; unbound-before and unbound-after
+reports match exactly. Of the three FAIL rows, only `drm.deviceUniqueId` is a
+runtime gap: the Pine callback installs on the native
+`MediaDrm.getPropertyByteArray` but never fires at call time (logcat shows the
+real Widevine plugin serving the identity; no callback log). The other two
+FAILs are fixture gaps: profile A carries no bootloader/radio expectations.
+The three BLOCKED rows (Wi-Fi service MAC/SSID, Bluetooth name) remain
+permission gates on the probe identity, not module failures. Matching host display dimensions do not prove a hook.
 BLOCKED and UNMAPPED never count as passed coverage.
 
-| Requested surface | RC2 installed binary: device result | Remaining work |
+| Requested surface | RC3 installed binary: device result | Remaining work |
 | --- | --- | --- |
-| Build | Manufacturer/brand/model/device/product/hardware/fingerprint/ID/serial/getSerial/time all VERIFIED; TYPE/TAGS match-only; bootloader/radio PASS on B, unmapped on A | Map bootloader/radio in profile A fixture or catalog |
-| Build.VERSION | SDK, release, incremental and security patch all VERIFIED | None for measured surfaces |
-| System properties | Java-side property reads VERIFIED; native libc reads (model, sdk, fingerprint, serialno, timezone) still FAIL | Hook or intercept native __system_property_get paths |
+| Build | Manufacturer/brand/model/device/product/hardware/fingerprint/ID/serial/getSerial/time all VERIFIED; TYPE/TAGS match-only; bootloader/radio PASS on B, unmapped on A | Add bootloader/radio expectations to fixture A or the catalog |
+| Build.VERSION | SDK, release, incremental and security patch all VERIFIED | None measured |
+| System properties | Java-side AND native libc `__system_property_get` reads all VERIFIED (ShadowHook inline hook, bind-time install) | Property-handle `__system_property_read_callback` path remains open (batch 2) |
 | Telephony manager | IMEI (both slots), deviceId, subscriber, SIM serial and network types VERIFIED on both profiles | Keep stable across cold starts; add secondary-slot profiles |
 | Settings provider reads | Secure provider Android-ID query VERIFIED | Generic provider call/bundle paths remain unverified |
 | Android ID | Settings.Secure android_id VERIFIED | None measured |
@@ -61,19 +66,23 @@ BLOCKED and UNMAPPED never count as passed coverage.
 | Advertising ID | Real Google SDK read VERIFIED when bound | Re-verify after app updates of the SDK |
 | Wi-Fi info | Object MAC getter VERIFIED | Service MAC/SSID blocked by probe permissions; measure from a privileged probe identity |
 | Bluetooth identity | Address getter VERIFIED | Name read blocked by probe permissions |
-| DRM/MediaDrm | Widevine deviceUniqueId still FAIL | Implement MediaDrm byte-array identity callback |
-| Display metrics | Density VERIFIED; A heights match host (match-only); B height/refresh FAIL | Implement display geometry/refresh rewrites for profiles that differ from host |
+| DRM/MediaDrm | Callback installs but never fires on the native `getPropertyByteArray` (logcat-proven); row FAIL | Native-method interception strategy or alternate hook point (batch 2) |
+| Display metrics | Density, width, real metrics and refresh VERIFIED via Resources/Display rewrites (out-parameter handling fixed this release) | `display.resources.*` for B verified; screen/resource/window consistency beyond probe scope |
 | Camera info | Enumerated, UNMAPPED | No camera expectation in schema yet (Phase D corpus) |
 | Sensor list | Enumerated, UNMAPPED | No sensor expectation in schema yet; do not invent capabilities |
 | Network operator | Numeric/name/country VERIFIED on both profiles | None measured |
 | SIM/operator fields | Numeric/name/country/serial VERIFIED; secondary slot checked | None measured |
 | Country/locale/timezone | Country, resource locale and default timezone VERIFIED on both profiles | None measured |
 
-The RC2 release has been installed, rebooted and measured on the device; the
-matrix above is the installed RC2 binary's own result. Any future local runtime
+The RC3 release has been installed, rebooted and measured on the device; the
+matrix above is the installed RC3 binary's own result. Any future local runtime
 change must follow the same path: build, install with the owner's approval,
 reboot, then re-run the probe and save a separate evidence file. A callback
 unit test alone is not proof of ART installation.
+
+Known hook-framework note: Pine cannot hook the abstract
+`WebSettings.getUserAgentString` (logcat: "Cannot hook abstract methods"); the
+UA surface needs a concrete-class hook point. Recorded for batch 2.
 
 ## Reproduce
 

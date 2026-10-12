@@ -1,6 +1,6 @@
 # Runtime measurements
 
-Generated from `2ec607f9563e9f2ac47ab4245041ca10420d2d36d530e040f862a9c231c5a528`. PASS in a raw report means value equality only. VERIFIED below also requires distinct profiles, repeat stability and restoration of the unbound control.
+Generated from `b11991891dcad2425f6cef91e03cedefd67ed7140a69c9c06d25a77dd8cfa266`. PASS in a raw report means value equality only. VERIFIED below also requires distinct profiles, repeat stability and restoration of the unbound control.
 
 | Read | Profile A | Profile B | Proof | Reason |
 | --- | --- | --- | --- | --- |
@@ -24,17 +24,17 @@ Generated from `2ec607f9563e9f2ac47ab4245041ca10420d2d36d530e040f862a9c231c5a528
 | `version.SECURITY_PATCH` | PASS | PASS | VERIFIED | MATCH |
 | `build.getRadioVersion` | OBSERVED | PASS | FAIL | MATCH, NO_PROFILE_EXPECTATION |
 | `properties.java.ro.product.model` | PASS | PASS | VERIFIED | MATCH |
-| `properties.native.ro.product.model` | FAIL | FAIL | FAIL | VALUE_MISMATCH |
+| `properties.native.ro.product.model` | PASS | PASS | VERIFIED | MATCH |
 | `properties.java.ro.build.version.sdk` | PASS | PASS | VERIFIED | MATCH |
-| `properties.native.ro.build.version.sdk` | FAIL | FAIL | FAIL | VALUE_MISMATCH |
+| `properties.native.ro.build.version.sdk` | PASS | PASS | VERIFIED | MATCH |
 | `properties.java.ro.build.fingerprint` | PASS | PASS | VERIFIED | MATCH |
-| `properties.native.ro.build.fingerprint` | FAIL | FAIL | FAIL | VALUE_MISMATCH |
+| `properties.native.ro.build.fingerprint` | PASS | PASS | VERIFIED | MATCH |
 | `properties.java.ro.serialno` | PASS | PASS | VERIFIED | MATCH |
-| `properties.native.ro.serialno` | FAIL | FAIL | FAIL | VALUE_MISMATCH |
+| `properties.native.ro.serialno` | PASS | PASS | VERIFIED | MATCH |
 | `properties.java.ro.sf.lcd_density` | PASS | PASS | MATCH_ONLY | MATCH |
 | `properties.native.ro.sf.lcd_density` | PASS | PASS | MATCH_ONLY | MATCH |
 | `properties.java.persist.sys.timezone` | PASS | PASS | VERIFIED | MATCH |
-| `properties.native.persist.sys.timezone` | FAIL | FAIL | FAIL | VALUE_MISMATCH |
+| `properties.native.persist.sys.timezone` | PASS | PASS | VERIFIED | MATCH |
 | `telephony.imei0` | PASS | PASS | VERIFIED | MATCH |
 | `telephony.imei1` | PASS | PASS | VERIFIED | MATCH |
 | `telephony.deviceId` | PASS | PASS | VERIFIED | MATCH |
@@ -61,12 +61,12 @@ Generated from `2ec607f9563e9f2ac47ab4245041ca10420d2d36d530e040f862a9c231c5a528
 | `advertising.id` | PASS | PASS | VERIFIED | MATCH |
 | `drm.deviceUniqueId` | FAIL | FAIL | FAIL | VALUE_MISMATCH |
 | `display.resources.width` | PASS | PASS | MATCH_ONLY | MATCH |
-| `display.resources.height` | PASS | FAIL | FAIL | MATCH, VALUE_MISMATCH |
+| `display.resources.height` | PASS | PASS | VERIFIED | MATCH |
 | `display.resources.density` | PASS | PASS | MATCH_ONLY | MATCH |
 | `display.real.width` | PASS | PASS | MATCH_ONLY | MATCH |
-| `display.real.height` | PASS | FAIL | FAIL | MATCH, VALUE_MISMATCH |
+| `display.real.height` | PASS | PASS | VERIFIED | MATCH |
 | `display.real.density` | PASS | PASS | MATCH_ONLY | MATCH |
-| `display.refresh` | FAIL | FAIL | FAIL | VALUE_MISMATCH |
+| `display.refresh` | PASS | PASS | VERIFIED | MATCH |
 | `camera.characteristics` | OBSERVED | OBSERVED | UNMAPPED | NO_PROFILE_EXPECTATION |
 | `sensors.list` | OBSERVED | OBSERVED | UNMAPPED | NO_PROFILE_EXPECTATION |
 | `locale.default.language` | PASS | PASS | VERIFIED | MATCH |
