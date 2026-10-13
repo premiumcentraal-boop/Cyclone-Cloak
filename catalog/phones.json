@@ -67,7 +67,24 @@
             "pixel_height": 2448
           }
         ]
-      }
+      },
+      "source_confidence": "needs verification",
+      "camera_class": "dual-back + front",
+      "expected_capability_set": [
+        "camera_front",
+        "camera_rear",
+        "wifi",
+        "bluetooth",
+        "nfc"
+      ],
+      "sensor_class_list": [
+        "accelerometer",
+        "gyroscope",
+        "magnetometer"
+      ],
+      "sources": [
+        "https://support.google.com/pixelphone/answer/16043605?hl=en"
+      ]
     },
     {
       "id": "pixel_7",
@@ -134,7 +151,24 @@
             "pixel_height": 3000
           }
         ]
-      }
+      },
+      "source_confidence": "needs verification",
+      "camera_class": "dual-back + front",
+      "expected_capability_set": [
+        "camera_front",
+        "camera_rear",
+        "wifi",
+        "bluetooth",
+        "nfc"
+      ],
+      "sensor_class_list": [
+        "accelerometer",
+        "gyroscope",
+        "magnetometer"
+      ],
+      "sources": [
+        "https://support.google.com/pixelphone/answer/7158570?hl=en"
+      ]
     },
     {
       "id": "galaxy_s23",
@@ -207,7 +241,24 @@
             "pixel_height": 3024
           }
         ]
-      }
+      },
+      "source_confidence": "needs verification",
+      "camera_class": "triple-back + front",
+      "expected_capability_set": [
+        "camera_front",
+        "camera_rear",
+        "wifi",
+        "bluetooth",
+        "nfc"
+      ],
+      "sensor_class_list": [
+        "accelerometer",
+        "gyroscope",
+        "magnetometer"
+      ],
+      "sources": [
+        "https://www.samsung.com/au/smartphones/galaxy-s/galaxy-s23-phantom-black-128gb-sm-s911bzkaats/"
+      ]
     },
     {
       "id": "pixel_6",
@@ -274,7 +325,24 @@
             "pixel_height": 2448
           }
         ]
-      }
+      },
+      "source_confidence": "approximated",
+      "camera_class": "dual-back + front",
+      "expected_capability_set": [
+        "camera_front",
+        "camera_rear",
+        "wifi",
+        "bluetooth",
+        "nfc"
+      ],
+      "sensor_class_list": [
+        "accelerometer",
+        "gyroscope",
+        "magnetometer"
+      ],
+      "sources": [
+        "https://support.google.com/pixelphone/answer/7158570?hl=en"
+      ]
     },
     {
       "id": "pixel_6a",
@@ -341,7 +409,24 @@
             "pixel_height": 2448
           }
         ]
-      }
+      },
+      "source_confidence": "approximated",
+      "camera_class": "dual-back + front",
+      "expected_capability_set": [
+        "camera_front",
+        "camera_rear",
+        "wifi",
+        "bluetooth",
+        "nfc"
+      ],
+      "sensor_class_list": [
+        "accelerometer",
+        "gyroscope",
+        "magnetometer"
+      ],
+      "sources": [
+        "https://support.google.com/pixelphone/answer/7158570?hl=en"
+      ]
     },
     {
       "id": "pixel_7a",
@@ -408,7 +493,24 @@
             "pixel_height": 3124
           }
         ]
-      }
+      },
+      "source_confidence": "approximated",
+      "camera_class": "dual-back + front",
+      "expected_capability_set": [
+        "camera_front",
+        "camera_rear",
+        "wifi",
+        "bluetooth",
+        "nfc"
+      ],
+      "sensor_class_list": [
+        "accelerometer",
+        "gyroscope",
+        "magnetometer"
+      ],
+      "sources": [
+        "https://support.google.com/pixelphone/answer/7158570?hl=en"
+      ]
     },
     {
       "id": "pixel_8",
@@ -475,7 +577,24 @@
             "pixel_height": 3000
           }
         ]
-      }
+      },
+      "source_confidence": "approximated",
+      "camera_class": "dual-back + front",
+      "expected_capability_set": [
+        "camera_front",
+        "camera_rear",
+        "wifi",
+        "bluetooth",
+        "nfc"
+      ],
+      "sensor_class_list": [
+        "accelerometer",
+        "gyroscope",
+        "magnetometer"
+      ],
+      "sources": [
+        "https://support.google.com/pixelphone/answer/7158570?hl=en"
+      ]
     },
     {
       "id": "pixel_6_pro",
@@ -557,7 +676,24 @@
             "pixel_height": 3124
           }
         ]
-      }
+      },
+      "source_confidence": "approximated",
+      "camera_class": "triple-back + front",
+      "expected_capability_set": [
+        "camera_front",
+        "camera_rear",
+        "wifi",
+        "bluetooth",
+        "nfc"
+      ],
+      "sensor_class_list": [
+        "accelerometer",
+        "gyroscope",
+        "magnetometer"
+      ],
+      "sources": [
+        "https://support.google.com/pixelphone/answer/7158570?hl=en"
+      ]
     },
     {
       "id": "pixel_7_pro",
@@ -638,7 +774,24 @@
             "pixel_height": 3000
           }
         ]
-      }
+      },
+      "source_confidence": "approximated",
+      "camera_class": "triple-back + front",
+      "expected_capability_set": [
+        "camera_front",
+        "camera_rear",
+        "wifi",
+        "bluetooth",
+        "nfc"
+      ],
+      "sensor_class_list": [
+        "accelerometer",
+        "gyroscope",
+        "magnetometer"
+      ],
+      "sources": [
+        "https://support.google.com/pixelphone/answer/7158570?hl=en"
+      ]
     },
     {
       "id": "pixel_8_pro",
@@ -719,7 +872,24 @@
             "pixel_height": 3000
           }
         ]
-      }
+      },
+      "source_confidence": "approximated",
+      "camera_class": "triple-back + front",
+      "expected_capability_set": [
+        "camera_front",
+        "camera_rear",
+        "wifi",
+        "bluetooth",
+        "nfc"
+      ],
+      "sensor_class_list": [
+        "accelerometer",
+        "gyroscope",
+        "magnetometer"
+      ],
+      "sources": [
+        "https://support.google.com/pixelphone/answer/7158570?hl=en"
+      ]
     },
     {
       "id": "pixel_8a",
@@ -795,7 +965,24 @@
             "pixel_height": 3000
           }
         ]
-      }
+      },
+      "source_confidence": "approximated",
+      "camera_class": "dual-back + front",
+      "expected_capability_set": [
+        "camera_front",
+        "camera_rear",
+        "wifi",
+        "bluetooth",
+        "nfc"
+      ],
+      "sensor_class_list": [
+        "accelerometer",
+        "gyroscope",
+        "magnetometer"
+      ],
+      "sources": [
+        "https://support.google.com/pixelphone/answer/7158570?hl=en"
+      ]
     },
     {
       "id": "pixel_9",
@@ -871,7 +1058,24 @@
             "pixel_height": 3000
           }
         ]
-      }
+      },
+      "source_confidence": "approximated",
+      "camera_class": "dual-back + front",
+      "expected_capability_set": [
+        "camera_front",
+        "camera_rear",
+        "wifi",
+        "bluetooth",
+        "nfc"
+      ],
+      "sensor_class_list": [
+        "accelerometer",
+        "gyroscope",
+        "magnetometer"
+      ],
+      "sources": [
+        "https://support.google.com/pixelphone/answer/7158570?hl=en"
+      ]
     },
     {
       "id": "pixel_9_pro",
@@ -953,7 +1157,24 @@
             "pixel_height": 3000
           }
         ]
-      }
+      },
+      "source_confidence": "approximated",
+      "camera_class": "triple-back + front",
+      "expected_capability_set": [
+        "camera_front",
+        "camera_rear",
+        "wifi",
+        "bluetooth",
+        "nfc"
+      ],
+      "sensor_class_list": [
+        "accelerometer",
+        "gyroscope",
+        "magnetometer"
+      ],
+      "sources": [
+        "https://support.google.com/pixelphone/answer/7158570?hl=en"
+      ]
     },
     {
       "id": "pixel_9_pro_xl",
@@ -1035,7 +1256,24 @@
             "pixel_height": 3000
           }
         ]
-      }
+      },
+      "source_confidence": "approximated",
+      "camera_class": "triple-back + front",
+      "expected_capability_set": [
+        "camera_front",
+        "camera_rear",
+        "wifi",
+        "bluetooth",
+        "nfc"
+      ],
+      "sensor_class_list": [
+        "accelerometer",
+        "gyroscope",
+        "magnetometer"
+      ],
+      "sources": [
+        "https://support.google.com/pixelphone/answer/7158570?hl=en"
+      ]
     },
     {
       "id": "pixel_9a",
@@ -1105,7 +1343,24 @@
             "pixel_height": 3124
           }
         ]
-      }
+      },
+      "source_confidence": "approximated",
+      "camera_class": "dual-back + front",
+      "expected_capability_set": [
+        "camera_front",
+        "camera_rear",
+        "wifi",
+        "bluetooth",
+        "nfc"
+      ],
+      "sensor_class_list": [
+        "accelerometer",
+        "gyroscope",
+        "magnetometer"
+      ],
+      "sources": [
+        "https://support.google.com/pixelphone/answer/7158570?hl=en"
+      ]
     }
   ]
 }

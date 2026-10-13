@@ -2277,6 +2277,201 @@
           "telephony.network_type declares 5G on hardware launched before API 29; confirm modem support"
         ]
       ]
+    },
+    {
+      "name": "camera block is not an object",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "camera",
+          []
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "CAMERA",
+          "camera",
+          "camera must be an object with a cameras list"
+        ]
+      ]
+    },
+    {
+      "name": "camera has no entries",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "camera",
+          {
+            "cameras": []
+          }
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "CAMERA_COUNT",
+          "camera.cameras",
+          "camera.cameras must hold 1-6 entries, got 0"
+        ]
+      ]
+    },
+    {
+      "name": "camera entry is not an object",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "camera",
+          {
+            "cameras": [
+              3
+            ]
+          }
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "CAMERA_ENTRY",
+          "camera.cameras.0",
+          "camera.cameras.0: camera.cameras[0] must be an object"
+        ]
+      ]
+    },
+    {
+      "name": "camera facing = True",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "camera",
+          {
+            "cameras": [
+              {
+                "facing": true,
+                "hardware_level": 1,
+                "pixel_width": 4032,
+                "pixel_height": 3024
+              }
+            ]
+          }
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "CAMERA_FACING",
+          "camera.cameras.0.facing",
+          "camera.cameras.0.facing: camera.cameras[0].facing must be 0 (front), 1 (back) or 2 (external)"
+        ]
+      ]
+    },
+    {
+      "name": "camera facing = 3",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "camera",
+          {
+            "cameras": [
+              {
+                "facing": 3,
+                "hardware_level": 1,
+                "pixel_width": 4032,
+                "pixel_height": 3024
+              }
+            ]
+          }
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "CAMERA_FACING",
+          "camera.cameras.0.facing",
+          "camera.cameras.0.facing: camera.cameras[0].facing must be 0 (front), 1 (back) or 2 (external)"
+        ]
+      ]
+    },
+    {
+      "name": "camera hardware_level = 9",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "camera",
+          {
+            "cameras": [
+              {
+                "facing": 1,
+                "hardware_level": 9,
+                "pixel_width": 4032,
+                "pixel_height": 3024
+              }
+            ]
+          }
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "CAMERA_LEVEL",
+          "camera.cameras.0.hardware_level",
+          "camera.cameras.0.hardware_level: camera.cameras[0].hardware_level must be an integer in 0-4"
+        ]
+      ]
+    },
+    {
+      "name": "camera pixel_width = 0",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "camera",
+          {
+            "cameras": [
+              {
+                "facing": 1,
+                "hardware_level": 1,
+                "pixel_width": 0,
+                "pixel_height": 3024
+              }
+            ]
+          }
+        ]
+      ],
+      "expect": [
+        [
+          "error",
+          "CAMERA_SIZE",
+          "camera.cameras.0.pixel_width",
+          "camera.cameras.0.pixel_width: camera.cameras[0].pixel_width must be an integer in 320-20000"
+        ]
+      ]
+    },
+    {
+      "name": "camera pixel_height = 5000",
+      "phone": "pixel_7",
+      "mutations": [
+        [
+          "camera",
+          {
+            "cameras": [
+              {
+                "facing": 1,
+                "hardware_level": 1,
+                "pixel_width": 320,
+                "pixel_height": 5000
+              }
+            ]
+          }
+        ]
+      ],
+      "expect": [
+        [
+          "warning",
+          "CAMERA_ASPECT",
+          "camera.cameras.0.pixel_width",
+          "camera.cameras.0.pixel_width: camera.cameras[0] aspect ratio 320/5000 is unusual for a phone sensor"
+        ]
+      ]
     }
   ]
 }

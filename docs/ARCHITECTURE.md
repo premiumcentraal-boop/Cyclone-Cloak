@@ -26,6 +26,14 @@ Zygisk module in the scoped app -> Build/properties + Pine Java callbacks
 The connector requires Cyclone 5.0.0-alpha.122 or newer. Cloak talks to Cyclone
 in its own Android user. The previously proposed loopback HTTPS API is not implemented.
 
+## Pure identity engine
+
+The Python `cloak_forge.engine` module and Kotlin `IdentityEngine` object wrap
+existing generation, validation, posture and uniqueness logic. They return
+bundles without storage or connector actions. [Engine/corpus documentation](IDENTITY-ENGINE.md)
+records signatures, optional catalog facts and proof limits. Runtime hooks and
+publishing remain separate components.
+
 ## App layout
 
 `android/probe` is an independent diagnostic APK, not part of the companion or
@@ -161,7 +169,7 @@ mapping, publication actions, runtime and connector behavior are unchanged.
 snapshot, readable saved identities, the existing binding records, coherence
 validation and local uniqueness index. `BindingFlowScreen` walks through profile,
 app, compatibility profile, review and confirmation result. It is available from
-Profiles → Bind a device profile and from an identity's Bind to profile apps
+Profiles â†’ Bind a device profile and from an identity's Bind to profile apps
 action. App selection is a set with individual checkboxes and an All apps toggle.
 Both entry paths show the identity picker before review; a preselected identity
 is shown as a selected summary. Review lists all packages, and the confirmation

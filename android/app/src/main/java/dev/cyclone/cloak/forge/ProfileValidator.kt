@@ -112,6 +112,7 @@ object ProfileValidator {
         versions(findings, device)
         patch(findings, device, today)
         identifiers(findings, block(findings, profile, "identifiers"))
+        camera(findings, profile.opt("camera"))
         surroundings(findings, profile)
         hardware(findings, device, profile.optJSONObject("telephony") ?: JSONObject())
         val ua = profile.opt("ua")
@@ -137,6 +138,15 @@ object ProfileValidator {
         patch(findings, phone.device, today)
         surroundings(findings, asProfile)
         hardware(findings, phone.device, phone.telephony)
+        if (phone.camera.length() > 0) camera(findings, phone.camera)
+        val claims = JSONObject(phone.corpus.toString())
+        if (!claims.has("confidence")) phone.confidence?.let { claims.put("confidence", it) }
+        corpus(findings, claims)
+        val width = phone.display.integer("width")
+        val height = phone.display.integer("height")
+        if (width != null && height != null && minOf(width, height) > 0 &&
+            maxOf(width, height).toDouble() / minOf(width, height) > 4) findings.error(
+            "CATALOG_DISPLAY_ASPECT", "display.width and display.height imply an aspect ratio above 4:1 for a phone template", "display.width")
         return summarize(findings).findings
     }
 
@@ -352,6 +362,60 @@ object ProfileValidator {
     }
 
     private fun String.hasControls() = any { it.code < 32 || it.code == 127 }
+
+    private fun corpus(findings: MutableList<Finding>, record: JSONObject) {
+        for (field in listOf("confidence", "source_confidence")) {
+            if (record.has(field) && record.opt(field) !in setOf("public reference", "approximated", "needs verification")) findings.error(
+                "SOURCE_CONFIDENCE", "$field must be public reference, approximated, or needs verification", field)
+        }
+        for (field in listOf("camera_class", "board")) {
+            if (record.has(field) && (record.opt(field) !is String || record.text(field).isBlank() || record.text(field).hasControls())) findings.error(
+                "CORPUS_TEXT", "$field must be non-blank text without control characters", field)
+        }
+        for (field in listOf("expected_capability_set", "sensor_class_list", "sources")) {
+            if (!record.has(field)) continue
+            val array = record.optJSONArray(field)
+            val values = array?.let { (0 until it.length()).map(it::opt) }
+            if (values == null || values.any { it !is String || it.isBlank() }) findings.error(
+                "CORPUS_LIST", "$field must be a list of non-blank strings", field)
+            else if (values.size != values.toSet().size) findings.error(
+                "CORPUS_LIST_DUPLICATE", "$field must not contain duplicates", field)
+        }
+        if (record.has("drm_security_level") && record.opt("drm_security_level") !in setOf("L1", "L2", "L3")) findings.error(
+            "DRM_SECURITY_LEVEL", "drm_security_level must be L1, L2, or L3", "drm_security_level")
+    }
+
+    private fun camera(findings: MutableList<Finding>, raw: Any?) {
+        if (raw == null || raw == JSONObject.NULL) return
+        val cameras = (raw as? JSONObject)?.optJSONArray("cameras")
+        if (cameras == null) {
+            findings.error("CAMERA", "camera must be an object with a cameras list", "camera")
+            return
+        }
+        if (cameras.length() !in 1..6) {
+            findings.error("CAMERA_COUNT", "camera.cameras must hold 1-6 entries, got ${cameras.length()}", "camera.cameras")
+            return
+        }
+        for (index in 0 until cameras.length()) {
+            val cam = cameras.optJSONObject(index)
+            if (cam == null) {
+                findings.error("CAMERA_ENTRY", "camera.cameras[$index] must be an object", "camera.cameras.$index")
+                continue
+            }
+            if (cam.integer("facing") !in 0L..2L) findings.error("CAMERA_FACING",
+                "camera.cameras[$index].facing must be 0 (front), 1 (back) or 2 (external)", "camera.cameras.$index.facing")
+            if (cam.integer("hardware_level") !in 0L..4L) findings.error("CAMERA_LEVEL",
+                "camera.cameras[$index].hardware_level must be an integer in 0-4", "camera.cameras.$index.hardware_level")
+            for ((field, bounds) in listOf("pixel_width" to (320L..20000L), "pixel_height" to (240L..20000L))) {
+                if (cam.integer(field) !in bounds) findings.error("CAMERA_SIZE",
+                    "camera.cameras[$index].$field must be an integer in ${bounds.first}-${bounds.last}", "camera.cameras.$index.$field")
+            }
+            val w = cam.integer("pixel_width")
+            val h = cam.integer("pixel_height")
+            if (w != null && h != null && w > 0 && h > 0 && w.toDouble() / h !in 0.5..2.0) findings.warning(
+                "CAMERA_ASPECT", "camera.cameras[$index] aspect ratio $w/$h is unusual for a phone sensor", "camera.cameras.$index.pixel_width")
+        }
+    }
 
     private fun display(findings: MutableList<Finding>, display: JSONObject) {
         if (display.length() == 0) return

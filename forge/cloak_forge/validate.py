@@ -271,7 +271,7 @@ def _validate_camera(findings: list[Finding], camera: Any) -> None:
         level = cam.get("hardware_level")
         width = cam.get("pixel_width")
         height = cam.get("pixel_height")
-        if facing not in (0, 1, 2):
+        if type(facing) is not int or facing not in (0, 1, 2):
             _add(findings, ERROR, "CAMERA_FACING", f"camera.cameras[{index}].facing must be 0 (front), 1 (back) or 2 (external)", f"camera.cameras.{index}.facing")
         if type(level) is not int or not 0 <= level <= 4:
             _add(findings, ERROR, "CAMERA_LEVEL", f"camera.cameras[{index}].hardware_level must be an integer in 0-4", f"camera.cameras.{index}.hardware_level")
@@ -340,6 +340,47 @@ def validate_profile(profile: Mapping[str, Any]) -> list[Finding]:
         _add(findings, WARNING, "UA_MISSING", "profile carries no user agent block")
     else:
         _validate_ua(findings, ua, device)
+    return sorted(findings, key=_finding_key)
+
+
+def validate_catalog_metadata(record: Mapping[str, Any]) -> list[Finding]:
+    """Optional corpus claims; absence is not a finding and never implies proof."""
+    findings: list[Finding] = []
+    for field in ("confidence", "source_confidence"):
+        if field in record and record[field] not in ("public reference", "approximated", "needs verification"):
+            _add(findings, ERROR, "SOURCE_CONFIDENCE", f"{field} must be public reference, approximated, or needs verification", field)
+    for field in ("camera_class", "board"):
+        if field in record and (not isinstance(record[field], str) or not record[field].strip()
+                                or any(ord(c) < 32 or ord(c) == 127 for c in record[field])):
+            _add(findings, ERROR, "CORPUS_TEXT", f"{field} must be non-blank text without control characters", field)
+    for field in ("expected_capability_set", "sensor_class_list", "sources"):
+        if field in record:
+            value = record[field]
+            if not isinstance(value, list) or any(not isinstance(v, str) or not v.strip() for v in value):
+                _add(findings, ERROR, "CORPUS_LIST", f"{field} must be a list of non-blank strings", field)
+            elif len(value) != len(set(value)):
+                _add(findings, ERROR, "CORPUS_LIST_DUPLICATE", f"{field} must not contain duplicates", field)
+    if "drm_security_level" in record and record["drm_security_level"] not in ("L1", "L2", "L3"):
+        _add(findings, ERROR, "DRM_SECURITY_LEVEL", "drm_security_level must be L1, L2, or L3", "drm_security_level")
+    return sorted(findings, key=_finding_key)
+
+
+def validate_catalog_record(record: Mapping[str, Any]) -> list[Finding]:
+    """Run profile coherence on template blocks without changing generated data."""
+    from .forge import build_ua
+    profile = {key: record[key] for key in ("device", "display", "telephony", "network", "locale", "camera") if key in record}
+    profile.update(schema_version="0.3", seed="ab" * 32, name="Catalog validation")
+    device = record.get("device", {})
+    if isinstance(device, Mapping) and all(isinstance(device.get(k), str) for k in ("model", "version_release")):
+        display = record.get("display", {})
+        screen_class = display.get("screen_size_class", "large") if isinstance(display, Mapping) else "large"
+        profile["ua"] = {"value": build_ua(device, screen_class, "ab" * 32)}
+    findings = validate_profile(profile) + validate_catalog_metadata(record)
+    display = record.get("display", {})
+    if isinstance(display, Mapping):
+        w, h = display.get("width"), display.get("height")
+        if type(w) is int and type(h) is int and min(w, h) > 0 and max(w, h) > 4 * min(w, h):
+            _add(findings, ERROR, "CATALOG_DISPLAY_ASPECT", "display.width and display.height imply an aspect ratio above 4:1 for a phone template", "display.width")
     return sorted(findings, key=_finding_key)
 
 

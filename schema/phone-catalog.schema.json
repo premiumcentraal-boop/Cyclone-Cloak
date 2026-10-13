@@ -1,0 +1,127 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/premiumcentraal-boop/Cyclone-Cloak/schema/phone-catalog.schema.json",
+  "title": "Cyclone Cloak optional device fact corpus",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schemaVersion",
+    "phones"
+  ],
+  "properties": {
+    "schemaVersion": {
+      "const": 1
+    },
+    "about": {
+      "type": "string"
+    },
+    "phones": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "label",
+          "device",
+          "display",
+          "telephony",
+          "network",
+          "locale"
+        ],
+        "properties": {
+          "device": {
+            "$ref": "cloak-profile.schema.json#/$defs/device"
+          },
+          "display": {
+            "$ref": "cloak-profile.schema.json#/$defs/display"
+          },
+          "telephony": {
+            "$ref": "cloak-profile.schema.json#/$defs/telephony"
+          },
+          "locale": {
+            "$ref": "cloak-profile.schema.json#/$defs/locale"
+          },
+          "camera": {
+            "$ref": "cloak-profile.schema.json#/$defs/camera"
+          },
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z0-9][a-z0-9_-]{0,47}$"
+          },
+          "label": {
+            "type": "string",
+            "minLength": 1
+          },
+          "network": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "egress_hint": {
+                "type": "string",
+                "maxLength": 128
+              }
+            }
+          },
+          "classification": {
+            "type": "object",
+            "additionalProperties": true
+          },
+          "confidence": {
+            "enum": [
+              "public reference",
+              "approximated",
+              "needs verification"
+            ]
+          },
+          "source_confidence": {
+            "enum": [
+              "public reference",
+              "approximated",
+              "needs verification"
+            ]
+          },
+          "board": {
+            "type": "string",
+            "minLength": 1
+          },
+          "camera_class": {
+            "type": "string",
+            "minLength": 1
+          },
+          "expected_capability_set": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "sensor_class_list": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "sources": {
+            "type": "array",
+            "uniqueItems": true,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          },
+          "drm_security_level": {
+            "enum": [
+              "L1",
+              "L2",
+              "L3"
+            ]
+          }
+        }
+      }
+    }
+  }
+}

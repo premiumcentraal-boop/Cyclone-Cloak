@@ -20,6 +20,8 @@ data class PhoneTemplate(
     val confidence: String? = null,
     val classification: JSONObject? = null,
     val camera: JSONObject = JSONObject(),
+    /** Catalog-only optional device facts; never copied into a generated profile. */
+    val corpus: JSONObject = JSONObject(),
 ) {
     /** "Google · Android 13 · panther". */
     val summary: String get() = listOf(
@@ -37,6 +39,7 @@ data class PhoneTemplate(
         .put("display", JSONObject(display.toString()))
         .put("locale", JSONObject(locale.toString()))
         .also { json ->
+            corpus.keys().forEach { json.put(it, corpus.get(it)) }
             confidence?.let { json.put("confidence", it) }
             classification?.let { json.put("classification", JSONObject(it.toString())) }
         }
@@ -44,6 +47,8 @@ data class PhoneTemplate(
     companion object {
         val ID = Regex("^[a-z0-9][a-z0-9_-]{0,47}$")
         private val BLOCKS = listOf("device", "telephony", "network", "display", "locale", "camera")
+        private val CORPUS = listOf("confidence", "source_confidence", "camera_class", "expected_capability_set",
+            "sensor_class_list", "drm_security_level", "board", "sources")
 
         fun fromJson(o: JSONObject, builtIn: Boolean = false): PhoneTemplate {
             val id = o.optString("id")
@@ -53,7 +58,9 @@ data class PhoneTemplate(
             return PhoneTemplate(id, label.take(48), blocks.getValue("device"), blocks.getValue("telephony"),
                 blocks.getValue("network"), blocks.getValue("display"), blocks.getValue("locale"), builtIn,
                 (o.opt("confidence") as? String), o.optJSONObject("classification")?.let { JSONObject(it.toString()) },
-                blocks.getValue("camera"))
+                blocks.getValue("camera"), JSONObject().also { facts ->
+                    CORPUS.filter(o::has).forEach { facts.put(it, o.get(it)) }
+                })
         }
 
         /** The phone a profile was made from (any profile: forged, imported or from a dump). */

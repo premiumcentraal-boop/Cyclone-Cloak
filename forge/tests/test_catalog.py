@@ -9,6 +9,7 @@ import pytest
 from cloak_forge.forge import available_templates, forge_profile
 from cloak_forge.templates import CATALOG_PATH, load_catalog
 from cloak_forge.validate import validate_profile
+from cloak_forge.validate import validate_catalog_record
 
 
 PHONES = load_catalog()
@@ -29,7 +30,10 @@ def test_catalog_schema_ids_and_additions():
 def test_every_catalog_entry_validates_without_findings_or_mutation(phone):
     before = copy.deepcopy(phone)
     assert {"id", "label", *BLOCKS} <= set(phone)
-    assert set(phone) <= {"id", "label", *BLOCKS, "camera", "confidence", "classification"}
+    assert set(phone) <= {"id", "label", *BLOCKS, "camera", "confidence", "classification",
+                          "source_confidence", "camera_class", "expected_capability_set", "sensor_class_list",
+                          "drm_security_level", "board", "sources"}
+    assert validate_catalog_record(phone) == []
     assert phone["confidence"] in {"public reference", "approximated", "needs verification"}
     profile = forge_profile(phone["label"], "ab" * 32, phone["id"])
     for block in BLOCKS:
