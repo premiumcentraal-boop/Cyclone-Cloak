@@ -1,0 +1,49 @@
+# Alpha.7 release handoff
+
+## Scope
+
+Starting main: `27d3a11caf2d69fd78e5bb50b97cf1b657be1ed1`, including the native
+property callback hook and probe row. Release: `v0.11.0-alpha.7`, code **31**.
+This run changes only packaging metadata and documentation. No device tests,
+storage/schema, connector, binding, publication or verification-logic changes.
+
+Changed files: `android/app/build.gradle`, `android/module/module.prop`,
+`README.md`, `docs/ARCHITECTURE.md`, `docs/CURRENT-STATE.md`,
+`docs/RELEASE_0.11.0-alpha.7.md`, and this handoff.
+
+## Exact local commands and results
+
+```powershell
+$env:JAVA_HOME='C:/Program Files/Eclipse Adoptium/jdk-17.0.20.101-hotspot'
+& "$env:TEMP/cloak-build/gradle-8.11.1/bin/gradle.bat" -p android :app:testDebugUnitTest :module:testDebugUnitTest :app:assembleDebug --offline --no-daemon
+& "$env:TEMP/cloak-build/gradle-8.11.1/bin/gradle.bat" -p android :probe:assembleDebug --offline --no-daemon
+uv run --with pytest -- python -m pytest forge/tests -q
+uv run --with pytest --with jsonschema -- python -m pytest forge/schema_tests -q
+uv run -- python tools/verify_release.py --tag v0.11.0-alpha.7
+git diff --check
+```
+
+App: **398 total, 375 passed, 23 existing Windows POSIX-shell skips**, no
+failures/errors. Module: **12 passed**. Forge: **227 passed**. Schema: **33
+passed**. Debug app, module packaging, both probe variants, metadata agreement
+and whitespace checks passed.
+
+App/module build produced no new compiler warnings. Diagnostics probe manifest
+warned that its removal marker for `com.google.android.gms.permission.AD_ID`
+had no other matching declaration; build succeeded. This marker is unchanged.
+
+## Publication gate
+
+The unchanged release workflow reruns the suites, builds/signs using existing CI
+credentials, and verifies tag/version/code, both module ABIs and exact embedded
+module ZIP agreement before upload. Publication outcome will be recorded here
+after CI completes. Expected assets: `app-release.apk` and
+`cyclone-cloak-0.11.0-alpha.7.zip`.
+
+## Evidence limits
+
+`properties.nativeCallback.ro.product.model` is exercised by probe source and
+builds locally. Physical-device proof is **pending**; older evidence does not
+cover that row, updated fixture A bootloader/baseband expectations, or this new
+artifact automatically. No platform verdict is claimed. Activation/reboot and
+device coverage remain a separately authorized follow-up.

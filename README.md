@@ -11,16 +11,14 @@ not prove that every inspection API sees it.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.11.0-alpha.6 (published prerelease)
+## Status: 0.11.0-alpha.7 (release candidate)
 
-[Published alpha.6](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.6) adds a read-only local
-library-quality summary. App/module metadata agrees at code 30.
-[Release notes](docs/RELEASE_0.11.0-alpha.6.md) include upgrade and evidence limits.
-[Release CI](https://github.com/premiumcentraal-boop/Cyclone-Cloak/actions/runs/38472829633) passed app/module, forge and schema suites,
-signed builds and matching-artifact checks, then attached the APK and module ZIP.
-See [CURRENT-STATE.md](docs/CURRENT-STATE.md) for local results and limitations.
-Device evidence remains tied to its measured artifact; local quality and posture
-states do not constitute platform verdicts.
+Alpha.7 packages the native property-callback implementation already on main,
+with app/module code 31. [Release notes](docs/RELEASE_0.11.0-alpha.7.md) explain
+scope and upgrade limits. The probe includes the callback read, but physical-device
+verification remains pending. Existing device evidence does not cover the new
+row automatically. Local compatibility states are not platform verdicts.
+See [CURRENT-STATE.md](docs/CURRENT-STATE.md) for checks and release status.
 
 - **Companion app** (`android/app`): a Cyclone connector (contract `cyclone.connector/1.3`, Cyclone
   5.0.0-alpha.122 or newer). Imports or creates cloak profiles, binds them to the apps of Cyclone

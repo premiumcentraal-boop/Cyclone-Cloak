@@ -1,20 +1,16 @@
 # Current state
 
-Updated 2026-10-13. **v0.11.0-alpha.6 / versionCode 30** is the
-[latest published prerelease](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.6),
-release commit `f4ff3992759ef1652a25aceda8d07fb9c3dd0daa`.
-[Release CI](https://github.com/premiumcentraal-boop/Cyclone-Cloak/actions/runs/38472829633) passed all four suites,
-signed builds and matching-artifact checks before attaching the APK and module ZIP.
-[Alpha.6 notes](RELEASE_0.11.0-alpha.6.md) describe the read-only library-quality
-summary and upgrade limits. Later publication-documentation commits on main do
-not change the tagged payload.
+Updated 2026-10-14. **v0.11.0-alpha.7 / versionCode 31** is the current
+release candidate, packaging native callback work from main `27d3a11`.
+The latest published prerelease remains alpha.6 until release CI completes.
+[Alpha.7 notes](RELEASE_0.11.0-alpha.7.md) describe scope and evidence limits.
 
 ## Versions and major components
 
 | Component | Current source version / responsibility |
 | --- | --- |
-| App | `dev.cyclone.cloak`, `0.11.0-alpha.6`, code 30; minimum API 29, target/compile API 36 |
-| Module | `cyclone_cloak`, `v0.11.0-alpha.6`, code 30; ARM64/ARMv7, minimum API 26; packaging metadata update only |
+| App | `dev.cyclone.cloak`, `0.11.0-alpha.7`, code 31; minimum API 29, target/compile API 36 |
+| Module | `cyclone_cloak`, `v0.11.0-alpha.7`, code 31; ARM64/ARMv7, minimum API 26; native property callback path added on main |
 | Profile | Schema `0.3`, legacy `0.2` accepted; existing JSON storage unchanged |
 | Binding / reader | Binding schema 2; module index `schemaVersion: 2`; existing key lookup unchanged |
 | Connector | `cyclone.connector/1.3`; Cyclone 5.0.0-alpha.122 or newer |
@@ -35,7 +31,8 @@ not change the tagged payload.
   conservative reconciliation, publisher shares and recovery. This release
   changes neither storage layout nor synchronization/publication behavior.
 - Module/probe: existing runtime inspection implementation and separate diagnostics
-  app. Module/runtime behavior is unchanged; artifact-specific device evidence is
+  app. The native property callback hook and probe row are implemented; device
+  verification remains pending. Earlier evidence does not cover the new row; evidence is
   tracked independently in [RUNTIME-COVERAGE.md](RUNTIME-COVERAGE.md).
 
 ## Local verification and release gate
@@ -50,15 +47,15 @@ $env:JAVA_HOME='C:/Program Files/Eclipse Adoptium/jdk-17.0.20.101-hotspot'
 & "$env:TEMP/cloak-build/gradle-8.11.1/bin/gradle.bat" -p android :app:testDebugUnitTest :module:testDebugUnitTest :app:assembleDebug --offline --no-daemon
 uv run --with pytest -- python -m pytest forge/tests -q
 uv run --with pytest --with jsonschema -- python -m pytest forge/schema_tests -q
-uv run -- python tools/verify_release.py --tag v0.11.0-alpha.6
+uv run -- python tools/verify_release.py --tag v0.11.0-alpha.7
 git diff --check
 ```
 
-Release CI passed all four suites on Linux, built/signed the APK and packaged
-the module ZIP, verified version agreement and exact embedded-module bytes, then
-published both prerelease assets. Signing uses the existing CI secrets.
+Release CI must pass all four suites on Linux, build/sign the APK and package
+the module ZIP, and verify version agreement and exact embedded-module bytes
+before publication. Signing uses the existing CI secrets.
 Local debug output: `android/app/build/outputs/apk/debug/app-debug.apk`.
-Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.6.zip`.
+Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.7.zip`.
 
 ## Known limits and separately verified device evidence
 
@@ -69,7 +66,8 @@ Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.6.zip`.
 - Existing physical-device checks remain separate, including reboot/activation,
   multi-user behavior, publication/recovery and backup/import UI. See
   [DEFERRED-DEVICE-CHECKS.md](DEFERRED-DEVICE-CHECKS.md) and the runtime coverage ledger.
-  Earlier artifact measurements are not alpha.6 verification.
+  Earlier artifact measurements are not alpha.7 verification, including the new
+  `properties.nativeCallback.ro.product.model` row.
 - Publisher swaps retain the existing two-rename reader gap and do not guarantee
   power-loss safety or lock coordination with older/external writers.
 - Profile batch commits coordinate cooperating in-process callers. Downloads
