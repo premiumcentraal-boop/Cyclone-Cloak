@@ -1,7 +1,7 @@
 # Cyclone Cloak Architecture
 
-Current published prerelease: `v0.10.0-rc.2`, commit `b9d8606`, following RC1 and
-`v0.10.0-alpha.1`. See [CURRENT-STATE.md](CURRENT-STATE.md)
+Current published prerelease: `v0.11.0-alpha.4`, commit `2f0da6b`. The diagnostics
+posture adapter described below is subsequent development on main. See [CURRENT-STATE.md](CURRENT-STATE.md)
 for versions, local verification and unresolved items. Dated release reports and
 checkpoints describe their historical releases.
 
@@ -46,8 +46,8 @@ and evidence limits; runtime and connector paths do not consume this sidecar.
 ## Local compatibility posture
 
 `PostureState`, `PostureRecord` and `PostureStore` provide separate app-private
-records keyed by saved profile ID. They do not read integrity fields, engine
-metadata or runtime evidence to infer a result. The default
+records keyed by saved profile ID. They do not infer a platform result from
+integrity fields, engine metadata or runtime evidence. The default
 `LocalCompatibilityPostureProvider` returns UNKNOWN and does not save anything.
 Missing or corrupt records display as "not recorded" beneath the identity card.
 These are neutral local compatibility states, not platform verdicts and not inputs
@@ -167,6 +167,20 @@ to NEEDS_ROTATION instead of reusing the evidence. If the current artifact diges
 unavailable, PASS is not possible. The Identities screen can load one report for a
 selected identity, then shows state, source, timestamp, reason and an artifact-mismatch
 warning. Calling providers never saves records; explicit report loading does.
+The subsequent diagnostics adapter accepts the existing runtime probe JSON without
+changing its format. It reuses five-phase proof classification for every read,
+including reads with no profile-schema mapping. Only VERIFIED becomes a PASS row;
+raw PASS, blocked, observed and incomplete proof become WARNING. Missing saved-profile
+scope adds a warning, and conflicting artifact/metadata digests are discarded.
+A load binds the in-memory report to the selected ID and canonical body SHA-256.
+Optional source profile claims are checked, never overwritten silently. The identity
+card offers **Load diagnostics for posture**, a preview with every row and freshness
+warnings, then **Save local posture**. Save reloads the profile and rechecks context;
+changes require another review. Mismatched profiles cannot be saved. Only the existing
+posture summary record is persisted; raw diagnostics, expected values and check values
+are not stored. Artifact comparison concerns the bundled module payload, not the
+installed module. Older profile files, binding and publication behavior are unchanged.
+
 ## Local profile uniqueness
 
 `forge/ProfileUniqueness` derives an in-memory index from readable saved profile JSON. It is rebuilt before each proposed write and for Health diagnostics, so there is no cache file, migration, or new storage format to corrupt. It indexes Android ID, advertising/app-set IDs, serial, Widevine ID, Wi-Fi/Bluetooth MAC addresses, both IMEIs, SIM serial, and GSF ID within the current Android user's library. Comparisons are case-insensitive; empty and non-string entries are skipped. Coherence validation separately reports malformed values.

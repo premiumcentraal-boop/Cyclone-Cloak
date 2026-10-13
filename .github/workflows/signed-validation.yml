@@ -1,0 +1,54 @@
+name: signed validation
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Version tag for artifact metadata checks only; no tag or release is created'
+        required: true
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.11.1'
+      - uses: astral-sh/setup-uv@v5
+        with:
+          python-version: '3.12'
+      - name: All local suites
+        run: |
+          uv run --with pytest -- python -m pytest forge/tests -q
+          uv run --with pytest --with jsonschema -- python -m pytest forge/schema_tests -q
+          gradle -p android :app:testDebugUnitTest :module:testDebugUnitTest --no-daemon
+      - name: Decode existing release keystore
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}
+        run: printf '%s' "$KEYSTORE_B64" | base64 -d > "$RUNNER_TEMP/cloak.keystore"
+      - name: Build signed artifacts
+        env:
+          CLOAK_KEYSTORE_PATH: ${{ runner.temp }}/cloak.keystore
+          CLOAK_KEYSTORE_PASSWORD: ${{ secrets.CLOAK_KEYSTORE_PASSWORD }}
+        run: gradle -p android :app:assembleRelease :module:packageModule --no-daemon
+      - name: Verify matching artifacts
+        env:
+          TAG: ${{ inputs.tag }}
+        run: python3 tools/verify_release.py --tag "$TAG" --artifacts
+      - uses: actions/upload-artifact@v4
+        with:
+          name: signed-validation-${{ github.sha }}
+          path: |
+            android/app/build/outputs/apk/release/*.apk
+            android/module/build/module/*.zip
+          if-no-files-found: error

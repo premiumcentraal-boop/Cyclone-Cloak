@@ -38,7 +38,8 @@ object RuntimeEvidence {
         "locale.timezone" to listOf("timezone.default", "properties.java.persist.sys.timezone", "properties.native.persist.sys.timezone"),
     )
 
-    fun toScoreInput(evidence: JSONObject): Map<String, String> {
+    /** Proof for every probe read, including surfaces with no profile-schema field. */
+    fun readStatuses(evidence: JSONObject): Map<String, String> {
         require(evidence.opt("format") == 1) { "Unsupported probe evidence format." }
         val runs = evidence.optJSONArray("runs") ?: throw IllegalArgumentException("Probe evidence has no runs.")
         require(runs.length() in 1..5) { "Invalid probe phase count." }
@@ -82,8 +83,13 @@ object RuntimeEvidence {
             if (a.get("expected").toString() == b.get("expected").toString() || a.opt("actual_sha256") == b.opt("actual_sha256")) return "MATCH_ONLY"
             return "VERIFIED"
         }
+        return reads.keys.sorted().associateWith(::status)
+    }
+
+    fun toScoreInput(evidence: JSONObject): Map<String, String> {
+        val reads = readStatuses(evidence)
         return mappings.mapValues { (_, ids) ->
-            val states = ids.map(::status)
+            val states = ids.map { reads[it] ?: "INCOMPLETE" }
             when {
                 "FAIL" in states -> "FAIL"
                 states.all { it == "VERIFIED" } -> "VERIFIED"

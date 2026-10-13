@@ -88,4 +88,23 @@ class PostureStoreTest {
         assertNull(store.read("profile-1"))
         assertFalse(File(app.filesDir, "profiles/profile-1.json").exists())
     }
+    @Test fun diagnosticsPreviewAndSavePreserveProfileFiles() {
+        val profile = CloakForge.forgeProfile("Diagnostics", "ab".repeat(32), TestPhones["pixel_7"])
+        val id = CloakStore.save(app, profile)
+        val file = File(app.filesDir, "profiles/$id.json"); val before = file.readBytes()
+        val raw = org.json.JSONObject().put("format", 1)
+            .put("metadata", org.json.JSONObject().put("measured_at_utc", "2026-10-13T12:00:00Z"))
+            .put("runs", org.json.JSONArray().put(org.json.JSONObject().put("run", "bound-a")
+                .put("package", "dev.cyclone.cloak.probe.diag").put("rows", org.json.JSONArray().put(
+                    org.json.JSONObject().put("id", "wifi.ssid").put("status", "OBSERVED")))))
+        val diagnostics = dev.cyclone.cloak.ui.DiagnosticsPostureAdapter.convert(raw.toString(), profile)
+        val now = java.time.Instant.parse("2026-10-13T12:00:00Z")
+        val review = dev.cyclone.cloak.ui.DiagnosticsReview(diagnostics, diagnostics.preview(profile, null, now))
+        assertNull(store.read(id))
+        assertEquals(dev.cyclone.cloak.ui.DiagnosticsReview.SaveResult.Saved, review.save(profile, null, now, store::update))
+        assertEquals(PostureState.UNKNOWN, store.read(id)!!.state)
+        assertEquals(EngineMetadataStore.digest(profile), store.read(id)!!.profileDigest)
+        assertNull(store.read(id)!!.artifactDigest)
+        assertArrayEquals(before, file.readBytes())
+    }
 }

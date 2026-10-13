@@ -77,6 +77,7 @@ data class CloakState(
     val engineMetadata: Map<String, JSONObject> = emptyMap(),
     val postures: Map<String, PostureRecord> = emptyMap(),
     val currentArtifactDigest: String? = null,
+    val diagnosticsReview: DiagnosticsReview? = null,
     val engineCoverage: Map<String, String> = emptyMap(),
     val bindings: List<CloakBinding> = emptyList(),
     val report: SyncReport? = null,
@@ -332,6 +333,33 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         postureStore.update(record)
         say("Saved local posture: ${PostureSummary.label(record).removePrefix("Local compatibility posture: ")}.")
     }
+
+    fun loadDiagnosticsForPosture(uri: Uri, identityId: String) = launchWork("Reading local diagnostics…") {
+        _state.update { it.copy(diagnosticsReview = null) }
+        val text = app.contentResolver.openInputStream(uri)?.bufferedReader(Charsets.UTF_8)?.use { readBounded(it, 2_000_000) }
+            ?: error("Couldn't open that file.")
+        val profile = CloakStore.find(app, identityId) ?: error("That identity is gone.")
+        val diagnostics = DiagnosticsPostureAdapter.convert(text, profile)
+        _state.update { it.copy(diagnosticsReview = DiagnosticsReview(diagnostics,
+            diagnostics.preview(profile, bundledArtifactDigest, Instant.now()))) }
+    }
+
+    fun saveDiagnosticsPosture() = launchWork("Saving local diagnostics posture…") {
+        val review = _state.value.diagnosticsReview ?: return@launchWork
+        val profile = CloakStore.find(app, review.diagnostics.report.profileId) ?: error("That identity is gone. No posture was saved.")
+        when (val outcome = review.save(profile, bundledArtifactDigest, Instant.now(), postureStore::update)) {
+            is DiagnosticsReview.SaveResult.ReviewChanged -> {
+                _state.update { it.copy(diagnosticsReview = outcome.review) }
+                return@launchWork say("The profile or report context changed. Review the updated preview before saving.")
+            }
+            DiagnosticsReview.SaveResult.Blocked -> error("This diagnostics report does not match the selected profile. No posture was saved.")
+            DiagnosticsReview.SaveResult.Saved -> Unit
+        }
+        _state.update { it.copy(diagnosticsReview = null) }
+        say("Saved local diagnostics posture. No platform verdict was inferred.")
+    }
+
+    fun dismissDiagnosticsPosture() = _state.update { if (it.busy == null) it.copy(diagnosticsReview = null) else it }
 
     fun saveReviewed() {
         val review = _state.value.review ?: return

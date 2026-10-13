@@ -24,7 +24,7 @@ data class CompatibilityPostureReport(
     val checkedAt: String,
     val profileId: String,
     val profileDigest: String,
-    val artifactDigest: String,
+    val artifactDigest: String?,
     val checks: List<PostureReportCheck>,
     val rawVerdict: String? = null,
 ) {
@@ -37,7 +37,7 @@ data class CompatibilityPostureReport(
         Instant.parse(checkedAt)
         require(profileId.isNotBlank() && profileId.length <= 128 && profileId.none(Char::isISOControl)) { "Invalid posture profile ID." }
         require(Regex("[0-9a-f]{64}").matches(profileDigest)) { "Profile digest must be lowercase SHA-256." }
-        require(Regex("[0-9a-f]{64}").matches(artifactDigest)) { "Artifact digest must be lowercase SHA-256." }
+        artifactDigest?.let { require(Regex("[0-9a-f]{64}").matches(it)) { "Artifact digest must be lowercase SHA-256." } }
         require(checks.isNotEmpty() && checks.size <= 1000) { "Posture report must contain one to 1000 checks." }
         require(checks.map { it.id }.toSet().size == checks.size) { "Posture check IDs must be unique." }
         rawVerdict?.let {
@@ -82,9 +82,10 @@ object LocalPostureDecision {
         val actualProfileDigest = EngineMetadataStore.digest(currentProfile)
         val checkedAt = report.checkedAt
         val profileChanged = report.profileDigest != actualProfileDigest
-        val artifactUnknown = currentArtifactDigest == null
+        val artifactUnknown = currentArtifactDigest == null || report.artifactDigest == null
         val drift = when {
             profileChanged -> "The saved identity changed after this report."
+            report.artifactDigest == null -> "The report artifact digest is unavailable or inconsistent, so artifact freshness is unknown."
             artifactUnknown -> "The current artifact digest is unavailable, so artifact freshness is unknown."
             report.artifactDigest != currentArtifactDigest -> "The current artifact changed after this report."
             Duration.between(Instant.parse(report.checkedAt), now) > maxAge -> "This local report is older than 7 days."

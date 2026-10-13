@@ -47,6 +47,12 @@ import dev.cyclone.cloak.forge.RuntimeEvidence
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
+    var diagnosticsTarget by rememberSaveable { mutableStateOf<String?>(null) }
+    val diagnosticsImporter = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        val target = diagnosticsTarget
+        if (uri != null && target != null) vm.loadDiagnosticsForPosture(uri, target)
+        diagnosticsTarget = null
+    }
     var phoneId by rememberSaveable { mutableStateOf<String?>(null) }
     val phone = state.phone(phoneId) ?: state.phones.firstOrNull()
     var name by rememberSaveable { mutableStateOf("") }
@@ -199,13 +205,9 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
                             Text(posture.reason, style = MaterialTheme.typography.bodySmall)
                             Text("Local compatibility record only; no platform verdict.",
                                 style = MaterialTheme.typography.bodySmall)
-                            if (posture.profileDigest != null && posture.profileDigest != EngineMetadataStore.digest(profile)) {
-                                Text("The report does not match the current saved identity.",
-                                    style = MaterialTheme.typography.bodySmall)
-                            }
-                            if (posture.artifactDigest != null && posture.artifactDigest != state.currentArtifactDigest) {
-                                Text("The report artifact differs from the current bundled artifact.",
-                                    style = MaterialTheme.typography.bodySmall)
+                            PostureSummary.freshnessWarnings(posture, id, EngineMetadataStore.digest(profile),
+                                state.currentArtifactDigest, java.time.Instant.now()).forEach { warning ->
+                                Text(warning, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
                             }
                         }
                     }
@@ -226,6 +228,8 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
                         TextButton(onClick = { evidenceImporter.launch(arrayOf("application/json", "text/plain")) }, enabled = state.busy == null) { Text("Load probe evidence") }
                         TextButton(onClick = { postureTarget = id; postureImporter.launch(arrayOf("application/json", "text/plain")) },
                             enabled = state.busy == null) { Text("Load posture report") }
+                        TextButton(onClick = { diagnosticsTarget = id; diagnosticsImporter.launch(arrayOf("application/json", "text/plain")) },
+                            enabled = state.busy == null) { Text("Load diagnostics for posture") }
                         TextButton(onClick = { vm.startBinding(id) }) { Text("Bind to profile apps") }
                         TextButton(onClick = { exportTarget = id; includeIdentity = false; backupLabel = ""; exporting = true }, enabled = state.busy == null) { Text("Export profile") }
                         TextButton(onClick = { vm.duplicateIdentity(id) }, enabled = state.busy == null) { Text("Duplicate") }
@@ -247,6 +251,9 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
         }
     }
 
+    state.diagnosticsReview?.let { review ->
+        DiagnosticsPostureDialog(review.preview, state.busy != null, vm::saveDiagnosticsPosture, vm::dismissDiagnosticsPosture)
+    }
     renaming?.let { (id, profile) ->
         NameDialog(
             title = "Rename identity",
