@@ -67,6 +67,8 @@ internal fun HealthScreen(state: CloakState, vm: CloakViewModel) {
             }
         }
         UniquenessDiagnostics(state, vm::reviewIdentity)
+        LibraryQualityCard(LibraryQuality.assess(state, java.time.Instant.now()),
+            state.identities.associate { (id, profile) -> id to profile.optString("name") }, state.busy != null, vm::reviewIdentity)
         CoverageMatrix(coverage)
     }
 }
