@@ -182,7 +182,12 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
             val bound = state.bindingsOf(id)
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 CloakIdentityCard(id = id, profile = profile, selected = selected == id, onSelect = { selected = if (selected == id) null else id })
+                PostureSummaryLine(state.postures[id], Modifier.padding(horizontal = 8.dp))
                 if (selected == id) {
+                    state.postures[id]?.let { posture ->
+                        Text("${posture.reason} Local compatibility record only; no platform verdict.",
+                            style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(horizontal = 8.dp))
+                    }
                     val metadata = state.engineMetadata[id]
                     EngineIdentitySummary.labels(profile, metadata).forEach { label ->
                         Text(label, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(horizontal = 8.dp))

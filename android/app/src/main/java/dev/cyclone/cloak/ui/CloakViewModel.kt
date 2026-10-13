@@ -18,6 +18,8 @@ import dev.cyclone.cloak.data.CloakBinding
 import dev.cyclone.cloak.data.CloakBindingStore
 import dev.cyclone.cloak.data.CloakStore
 import dev.cyclone.cloak.data.EngineMetadataStore
+import dev.cyclone.cloak.data.PostureRecord
+import dev.cyclone.cloak.data.PostureStore
 import dev.cyclone.cloak.forge.DefaultDeviceProfileEngine
 import dev.cyclone.cloak.forge.IdentityEngine
 import dev.cyclone.cloak.forge.EngineBundleCodec
@@ -69,6 +71,7 @@ data class CloakState(
     val identityInventoryKnown: Boolean = false,
     val unreadableIdentityIds: Set<String> = emptySet(),
     val engineMetadata: Map<String, JSONObject> = emptyMap(),
+    val postures: Map<String, PostureRecord> = emptyMap(),
     val engineCoverage: Map<String, String> = emptyMap(),
     val bindings: List<CloakBinding> = emptyList(),
     val report: SyncReport? = null,
@@ -111,6 +114,7 @@ data class CloakState(
 class CloakViewModel(application: Application) : AndroidViewModel(application) {
     private val engine = DefaultDeviceProfileEngine()
     private val engineMetadataStore by lazy { EngineMetadataStore(app, EngineBundleCodec::validateMetadata) }
+    private val postureStore by lazy { PostureStore(app) }
     private val app: Context get() = getApplication()
     private val _state = MutableStateFlow(CloakState())
     val state: StateFlow<CloakState> = _state.asStateFlow()
@@ -162,6 +166,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         _state.update {
             it.copy(phones = builtIn + own, identities = identities, identityInventoryKnown = inventoryKnown,
                 engineMetadata = identities.mapNotNull { (id, profile) -> engineMetadataStore.read(profile)?.let { id to it } }.toMap(),
+                postures = identities.mapNotNull { (id, _) -> postureStore.read(id)?.let { id to it } }.toMap(),
                 unreadableIdentityIds = unreadable, bindings = CloakBindingStore.all(app),
                 backups = backupDirectory().all().mapNotNull { (id, value) -> value.optJSONObject("manifest")?.let { manifest -> id to manifest } })
         }

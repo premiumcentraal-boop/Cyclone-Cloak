@@ -43,6 +43,18 @@ screen exposes descriptive engine labels and optional probe-fixture field
 coverage. [B5 handoff](HANDOFF-2026-10-13-B5-ENGINE-INTEGRATION.md) documents recovery
 and evidence limits; runtime and connector paths do not consume this sidecar.
 
+## Local compatibility posture
+
+`PostureState`, `PostureRecord` and `PostureStore` provide separate app-private
+records keyed by saved profile ID. They do not read integrity fields, engine
+metadata or runtime evidence to infer a result. The default
+`LocalCompatibilityPostureProvider` returns UNKNOWN and does not save anything.
+Missing or corrupt records display as "not recorded" beneath the identity card.
+These are neutral local compatibility states, not platform verdicts and not inputs
+to binding health or publication. Pure rotation helpers require explicit caller
+persistence and a completed local reset before clearing a rotation flag. See
+[B6A handoff](HANDOFF-2026-10-13-B6A-POSTURE-STATE.md).
+
 ## App layout
 
 `android/probe` is an independent diagnostic APK, not part of the companion or
