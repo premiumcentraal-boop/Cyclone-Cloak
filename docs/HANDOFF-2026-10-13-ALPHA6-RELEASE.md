@@ -60,7 +60,8 @@ Release URL: [v0.11.0-alpha.6](https://github.com/premiumcentraal-boop/Cyclone-C
 Assets: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.6.zip`.
 Published prerelease confirmed. `app-release.apk`: 43,045,082 bytes;
 `cyclone-cloak-0.11.0-alpha.6.zip`: 1,674,608 bytes. CI warnings were limited to
-existing action-tooling/Node API deprecations; no new compiler warnings.
+existing setup-java/Node deprecations and an unmatched uv cache glob; no new
+compiler warnings.
 Publication status headers were finalized in a subsequent documentation-only
 commit without modifying or moving the release tag.
 
