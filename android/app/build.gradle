@@ -26,8 +26,8 @@ android {
         applicationId "dev.cyclone.cloak"
         minSdk 29
         targetSdk 36
-        versionCode 29
-        versionName "0.11.0-alpha.5"
+        versionCode 30
+        versionName "0.11.0-alpha.6"
     }
 
     signingConfigs {

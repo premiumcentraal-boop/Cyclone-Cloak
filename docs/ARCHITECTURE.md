@@ -1,9 +1,9 @@
 # Cyclone Cloak Architecture
 
-Current published prerelease: `v0.11.0-alpha.4`, commit `2f0da6b`. The diagnostics
-posture adapter described below is subsequent development on main. See [CURRENT-STATE.md](CURRENT-STATE.md)
-for versions, local verification and unresolved items. Dated release reports and
-checkpoints describe their historical releases.
+Release metadata: `v0.11.0-alpha.6`, code 30. Latest published at preparation:
+[v0.11.0-alpha.5](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.5).
+See [CURRENT-STATE.md](CURRENT-STATE.md) for verification and evidence limits.
+Dated release reports and checkpoints describe their historical releases.
 
 ## System view
 
