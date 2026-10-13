@@ -1,5 +1,5 @@
 {
-  "schema_version": "0.2",
+  "schema_version": "0.3",
   "id": "7bf62497-5c67-57db-924e-c9d80e482ab7",
   "name": "Runtime probe b",
   "seed": "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
@@ -50,6 +50,9 @@
     "density": 420,
     "refresh_rate_hz": 120,
     "screen_size_class": "large"
+  },
+  "camera": {
+    "cameras": [{"facing":1,"hardware_level":1,"pixel_width":8160,"pixel_height":6144},{"facing":1,"hardware_level":0,"pixel_width":4032,"pixel_height":3024},{"facing":1,"hardware_level":0,"pixel_width":3648,"pixel_height":2736},{"facing":0,"hardware_level":0,"pixel_width":4032,"pixel_height":3024}]
   },
   "locale": {
     "language": "de",

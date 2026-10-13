@@ -7,7 +7,7 @@
   "additionalProperties": false,
   "required": ["schema_version", "id", "name", "seed", "device"],
   "properties": {
-    "schema_version": { "const": "0.2" },
+    "schema_version": { "enum": ["0.2", "0.3"] },
     "id": { "$ref": "#/$defs/uuid4" },
     "name": { "type": "string", "minLength": 1, "maxLength": 64 },
     "seed": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
@@ -16,7 +16,31 @@
     "telephony": { "$ref": "#/$defs/telephony" },
     "display": { "$ref": "#/$defs/display" },
     "health": { "$ref": "#/$defs/health" },
+    "camera": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cameras"],
+      "properties": {
+        "cameras": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 6,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["facing", "hardware_level", "pixel_width", "pixel_height"],
+            "properties": {
+              "facing": { "type": "integer", "minimum": 0, "maximum": 2 },
+              "hardware_level": { "type": "integer", "minimum": 0, "maximum": 4 },
+              "pixel_width": { "type": "integer", "minimum": 320, "maximum": 20000 },
+              "pixel_height": { "type": "integer", "minimum": 240, "maximum": 20000 }
+            }
+          }
+        }
+      }
+    },
     "locale": { "$ref": "#/$defs/locale" },
+    "camera": { "$ref": "#/$defs/camera" },
     "ua": { "$ref": "#/$defs/ua" },
     "network": {
       "type": "object",
@@ -116,6 +140,29 @@
       "properties": {
         "state": { "enum": ["new", "ready", "degraded", "failed"] },
         "last_seen": { "type": ["string", "null"] }
+      }
+    },
+    "camera": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cameras"],
+      "properties": {
+        "cameras": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 6,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["facing", "hardware_level", "pixel_width", "pixel_height"],
+            "properties": {
+              "facing": { "type": "integer", "minimum": 0, "maximum": 2 },
+              "hardware_level": { "type": "integer", "minimum": 0, "maximum": 4 },
+              "pixel_width": { "type": "integer", "minimum": 320, "maximum": 20000 },
+              "pixel_height": { "type": "integer", "minimum": 240, "maximum": 20000 }
+            }
+          }
+        }
       }
     },
     "locale": {

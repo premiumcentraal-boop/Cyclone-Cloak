@@ -38,7 +38,7 @@ def test_runtime_fixtures_are_distinct_and_pass_existing_validation():
     fixtures = [json.loads((probe.REPO / f"android/probe/src/main/assets/profile-{f}.json").read_text()) for f in ("a", "b")]
     for fixture in fixtures:
         assert validate_profile(fixture) == []
-        assert fixture["schema_version"] == "0.2"
+        assert fixture["schema_version"] == "0.3"
     assert fixtures[0]["device"]["model"] != fixtures[1]["device"]["model"]
     assert fixtures[0]["identifiers"] != fixtures[1]["identifiers"]
 

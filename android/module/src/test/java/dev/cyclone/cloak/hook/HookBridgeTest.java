@@ -5,6 +5,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import top.canyie.pine.Pine;
@@ -168,5 +169,28 @@ public class HookBridgeTest {
         byte[] bytes = (byte[]) call.getResult();
         assertNotNull(bytes);
         assertEquals(32, bytes.length);
+    }
+
+    @Test public void cameraSpecsMatchByFacingOccurrence() throws Exception {
+        PROPS.put("cloak.camera.count", "3");
+        PROPS.put("cloak.camera.0.facing", "1");
+        PROPS.put("cloak.camera.0.level", "1");
+        PROPS.put("cloak.camera.0.w", "8160");
+        PROPS.put("cloak.camera.0.h", "6144");
+        PROPS.put("cloak.camera.1.facing", "1");
+        PROPS.put("cloak.camera.1.level", "0");
+        PROPS.put("cloak.camera.1.w", "4032");
+        PROPS.put("cloak.camera.1.h", "3024");
+        PROPS.put("cloak.camera.2.facing", "0");
+        PROPS.put("cloak.camera.2.level", "0");
+        PROPS.put("cloak.camera.2.w", "4000");
+        PROPS.put("cloak.camera.2.h", "3000");
+        Class<?> callback = Class.forName(HookBridge.class.getName() + "$CameraCharacteristicsHook");
+        Method spec = callback.getDeclaredMethod("cameraSpec", int.class, int.class, int.class);
+        spec.setAccessible(true);
+        assertArrayEquals(new int[]{1, 8160, 6144}, (int[]) spec.invoke(null, 1, 0, 3));
+        assertArrayEquals(new int[]{0, 4032, 3024}, (int[]) spec.invoke(null, 1, 1, 3));
+        assertNull(spec.invoke(null, 1, 2, 3));
+        assertArrayEquals(new int[]{0, 4000, 3000}, (int[]) spec.invoke(null, 0, 0, 3));
     }
 }

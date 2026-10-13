@@ -13,7 +13,8 @@ object ProfileValidator {
     const val ERROR = "error"
     const val WARNING = "warning"
     const val INFO = "info"
-    const val SCHEMA_VERSION = "0.2"
+    const val SCHEMA_VERSION = "0.3"
+    val LEGACY_SCHEMA_VERSIONS = setOf("0.2")
 
     /** One problem. [field] is the dotted path it is about ("device.fingerprint"), when there is one. */
     data class Finding(val severity: String, val code: String, val message: String, val field: String? = null) {
@@ -97,7 +98,7 @@ object ProfileValidator {
     /** Every finding for a full cloak profile. */
     fun validateProfile(profile: JSONObject, today: LocalDate = LocalDate.now(ZoneOffset.UTC)): List<Finding> {
         val findings = mutableListOf<Finding>()
-        if (profile.opt("schema_version") != SCHEMA_VERSION) {
+        if (profile.opt("schema_version") != SCHEMA_VERSION && profile.opt("schema_version") !in LEGACY_SCHEMA_VERSIONS) {
             findings.error("SCHEMA_VERSION", "schema_version must be $SCHEMA_VERSION", "schema_version")
         }
         if (profile.opt("seed") !is String || !SEED.matches(profile.optString("seed"))) findings.error("SEED", "seed must be 64 lowercase hex characters", "seed")

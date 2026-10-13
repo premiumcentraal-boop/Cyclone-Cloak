@@ -12,7 +12,7 @@ def test_forge_profile_is_deterministic():
 
 def test_forge_profile_is_coherent():
     profile = forge_profile("Pixel 7 - vault A", SEED, "pixel_7")
-    assert profile["schema_version"] == "0.2"
+    assert profile["schema_version"] == "0.3"
     assert cloak_forge.validate_profile(profile) == []
 
 

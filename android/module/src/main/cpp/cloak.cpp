@@ -487,6 +487,39 @@ bool load_profile_for(Api *api, const std::string &user, const std::string &pkg)
                 set_prop(std::string("cloak.locale.") + entry.first, value->get<std::string>());
             }
         }
+    // Camera: publish per-camera identity specs as cloak.camera.* props; the
+    // Java callback rewrites supported-level and pixel-array reads by facing.
+    auto camera = profile.find("camera");
+    if (camera != profile.end() && camera->is_object()) {
+        auto cams = camera->find("cameras");
+        if (cams != camera->end() && cams->is_array()) {
+            int count = 0;
+            for (const auto &cam : *cams) {
+                if (!cam.is_object() || count >= 6) {
+                    break;
+                }
+                auto field = [&cam](const char *key) -> std::string {
+                    auto value = cam.find(key);
+                    return value != cam.end() && value->is_number()
+                               ? std::to_string(value->get<int>())
+                               : std::string();
+                };
+                std::string prefix = "cloak.camera." + std::to_string(count) + ".";
+                std::string facing = field("facing");
+                std::string level = field("hardware_level");
+                std::string width = field("pixel_width");
+                std::string height = field("pixel_height");
+                if (!facing.empty() && !level.empty() && !width.empty() && !height.empty()) {
+                    set_prop(prefix + "facing", facing);
+                    set_prop(prefix + "level", level);
+                    set_prop(prefix + "w", width);
+                    set_prop(prefix + "h", height);
+                    ++count;
+                }
+            }
+            set_prop("cloak.camera.count", std::to_string(count));
+        }
+    }
         auto lang = locale->find("language");
         auto country = locale->find("country");
         if (lang != locale->end() && lang->is_string() &&

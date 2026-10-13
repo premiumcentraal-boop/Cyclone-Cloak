@@ -45,7 +45,29 @@
         "country": "US",
         "timezone": "America/New_York"
       },
-      "confidence": "needs verification"
+      "confidence": "needs verification",
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 4032,
+            "pixel_height": 3024
+          },
+          {
+            "facing": 1,
+            "hardware_level": 0,
+            "pixel_width": 4656,
+            "pixel_height": 3496
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 3264,
+            "pixel_height": 2448
+          }
+        ]
+      }
     },
     {
       "id": "pixel_7",
@@ -90,7 +112,29 @@
         "country": "US",
         "timezone": "America/New_York"
       },
-      "confidence": "needs verification"
+      "confidence": "needs verification",
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8160,
+            "pixel_height": 6144
+          },
+          {
+            "facing": 1,
+            "hardware_level": 0,
+            "pixel_width": 4032,
+            "pixel_height": 3024
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 4000,
+            "pixel_height": 3000
+          }
+        ]
+      }
     },
     {
       "id": "galaxy_s23",
@@ -135,7 +179,35 @@
         "country": "DE",
         "timezone": "Europe/Berlin"
       },
-      "confidence": "needs verification"
+      "confidence": "needs verification",
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8160,
+            "pixel_height": 6144
+          },
+          {
+            "facing": 1,
+            "hardware_level": 0,
+            "pixel_width": 4032,
+            "pixel_height": 3024
+          },
+          {
+            "facing": 1,
+            "hardware_level": 0,
+            "pixel_width": 3648,
+            "pixel_height": 2736
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 4032,
+            "pixel_height": 3024
+          }
+        ]
+      }
     },
     {
       "id": "pixel_6",
@@ -180,7 +252,29 @@
         "country": "US",
         "timezone": "America/New_York"
       },
-      "confidence": "approximated"
+      "confidence": "approximated",
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8160,
+            "pixel_height": 6144
+          },
+          {
+            "facing": 1,
+            "hardware_level": 0,
+            "pixel_width": 4032,
+            "pixel_height": 3024
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 3264,
+            "pixel_height": 2448
+          }
+        ]
+      }
     },
     {
       "id": "pixel_6a",
@@ -225,7 +319,29 @@
         "country": "US",
         "timezone": "America/New_York"
       },
-      "confidence": "approximated"
+      "confidence": "approximated",
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8160,
+            "pixel_height": 6144
+          },
+          {
+            "facing": 1,
+            "hardware_level": 0,
+            "pixel_width": 4032,
+            "pixel_height": 3024
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 3264,
+            "pixel_height": 2448
+          }
+        ]
+      }
     },
     {
       "id": "pixel_7a",
@@ -270,7 +386,29 @@
         "country": "US",
         "timezone": "America/New_York"
       },
-      "confidence": "approximated"
+      "confidence": "approximated",
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 9248,
+            "pixel_height": 6944
+          },
+          {
+            "facing": 1,
+            "hardware_level": 0,
+            "pixel_width": 4032,
+            "pixel_height": 3024
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 4164,
+            "pixel_height": 3124
+          }
+        ]
+      }
     },
     {
       "id": "pixel_8",
@@ -315,7 +453,29 @@
         "country": "US",
         "timezone": "America/New_York"
       },
-      "confidence": "approximated"
+      "confidence": "approximated",
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8160,
+            "pixel_height": 6144
+          },
+          {
+            "facing": 1,
+            "hardware_level": 0,
+            "pixel_width": 4032,
+            "pixel_height": 3024
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 4000,
+            "pixel_height": 3000
+          }
+        ]
+      }
     },
     {
       "id": "pixel_6_pro",
@@ -369,6 +529,34 @@
         "display_class": "large-display",
         "hardware_feature_group": "tensor-5g-nfc-uwb",
         "camera_class": "triple-rear-front"
+      },
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8160,
+            "pixel_height": 6144
+          },
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8000,
+            "pixel_height": 6000
+          },
+          {
+            "facing": 1,
+            "hardware_level": 0,
+            "pixel_width": 4032,
+            "pixel_height": 3024
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 4164,
+            "pixel_height": 3124
+          }
+        ]
       }
     },
     {
@@ -422,6 +610,34 @@
         "display_class": "large-display",
         "hardware_feature_group": "tensor-g2-5g-nfc-uwb",
         "camera_class": "triple-rear-front"
+      },
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8160,
+            "pixel_height": 6144
+          },
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8000,
+            "pixel_height": 6000
+          },
+          {
+            "facing": 1,
+            "hardware_level": 0,
+            "pixel_width": 4032,
+            "pixel_height": 3024
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 4000,
+            "pixel_height": 3000
+          }
+        ]
       }
     },
     {
@@ -475,6 +691,34 @@
         "display_class": "large-display",
         "hardware_feature_group": "tensor-g3-5g-nfc-uwb",
         "camera_class": "triple-rear-front"
+      },
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 3,
+            "pixel_width": 8160,
+            "pixel_height": 6144
+          },
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8000,
+            "pixel_height": 6000
+          },
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8000,
+            "pixel_height": 6000
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 4000,
+            "pixel_height": 3000
+          }
+        ]
       }
     },
     {
@@ -529,6 +773,28 @@
         "display_class": "compact",
         "hardware_feature_group": "tensor-g3-5g-nfc",
         "camera_class": "dual-rear-front"
+      },
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8160,
+            "pixel_height": 6144
+          },
+          {
+            "facing": 1,
+            "hardware_level": 0,
+            "pixel_width": 4032,
+            "pixel_height": 3024
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 4000,
+            "pixel_height": 3000
+          }
+        ]
       }
     },
     {
@@ -583,6 +849,28 @@
         "display_class": "mainstream",
         "hardware_feature_group": "tensor-g4-5g-nfc",
         "camera_class": "dual-rear-front"
+      },
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 3,
+            "pixel_width": 8160,
+            "pixel_height": 6144
+          },
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8000,
+            "pixel_height": 6000
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 4000,
+            "pixel_height": 3000
+          }
+        ]
       }
     },
     {
@@ -637,6 +925,34 @@
         "display_class": "compact",
         "hardware_feature_group": "tensor-g4-5g-nfc-uwb",
         "camera_class": "triple-rear-front"
+      },
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 3,
+            "pixel_width": 8160,
+            "pixel_height": 6144
+          },
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8000,
+            "pixel_height": 6000
+          },
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8000,
+            "pixel_height": 6000
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 4000,
+            "pixel_height": 3000
+          }
+        ]
       }
     },
     {
@@ -691,6 +1007,34 @@
         "display_class": "large-display",
         "hardware_feature_group": "tensor-g4-5g-nfc-uwb",
         "camera_class": "triple-rear-front"
+      },
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 3,
+            "pixel_width": 8160,
+            "pixel_height": 6144
+          },
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8000,
+            "pixel_height": 6000
+          },
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8000,
+            "pixel_height": 6000
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 4000,
+            "pixel_height": 3000
+          }
+        ]
       }
     },
     {
@@ -745,6 +1089,22 @@
         "display_class": "mainstream",
         "hardware_feature_group": "tensor-g4-5g-nfc",
         "camera_class": "dual-rear-front"
+      },
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8000,
+            "pixel_height": 6000
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 4164,
+            "pixel_height": 3124
+          }
+        ]
       }
     }
   ]

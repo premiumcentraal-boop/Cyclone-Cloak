@@ -35,7 +35,7 @@ class ProfileGenerationTest {
         assertEquals(1, saveCalls)
         assertEquals(seed, saved.getString("seed"))
         assertTrue(CloakForge.forgeProfile(result.name, seed, phone).similar(saved))
-        assertEquals(setOf("schema_version", "id", "name", "seed", "device", "identifiers", "telephony", "network", "display", "locale", "ua", "integrity", "health", "meta"), saved.keySet())
+        assertEquals(setOf("schema_version", "id", "name", "seed", "device", "identifiers", "telephony", "network", "display", "locale", "camera", "ua", "integrity", "health", "meta"), saved.keySet())
         assertTrue(before.similar(phone.toJson()))
         assertEquals(listOf("${result.id}.json"), folder.listFiles()!!.map { it.name })
     }

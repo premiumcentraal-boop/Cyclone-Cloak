@@ -25,7 +25,7 @@ object CloakForge {
         val device = phone.device
         val screenClass = phone.display.optString("screen_size_class", "large")
         return JSONObject()
-            .put("schema_version", "0.2")
+            .put("schema_version", "0.3")
             .put("id", uuid5("https://cloak.cyclone.dev/$seed/$name"))
             .put("name", name)
             .put("seed", seed)
@@ -35,6 +35,7 @@ object CloakForge {
             .put("network", JSONObject(phone.network.toString()))
             .put("display", JSONObject(phone.display.toString()))
             .put("locale", JSONObject(phone.locale.toString()))
+            .also { json -> if (phone.camera.length() > 0) json.put("camera", JSONObject(phone.camera.toString())) }
             .put("ua", JSONObject().put("value", buildUa(device, screenClass, seed)))
             .put(
                 "integrity",

@@ -29,7 +29,7 @@ def test_catalog_schema_ids_and_additions():
 def test_every_catalog_entry_validates_without_findings_or_mutation(phone):
     before = copy.deepcopy(phone)
     assert {"id", "label", *BLOCKS} <= set(phone)
-    assert set(phone) <= {"id", "label", *BLOCKS, "confidence", "classification"}
+    assert set(phone) <= {"id", "label", *BLOCKS, "camera", "confidence", "classification"}
     assert phone["confidence"] in {"public reference", "approximated", "needs verification"}
     profile = forge_profile(phone["label"], "ab" * 32, phone["id"])
     for block in BLOCKS:

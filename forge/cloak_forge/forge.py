@@ -46,7 +46,7 @@ def forge_profile(
 
     profile = uuid.uuid5(uuid.NAMESPACE_URL, f"https://cloak.cyclone.dev/{seed}/{name}")
     return {
-        "schema_version": "0.2",
+        "schema_version": "0.3",
         "id": str(profile),
         "name": name,
         "seed": seed,
@@ -56,6 +56,7 @@ def forge_profile(
         "network": copy.deepcopy(template["network"]),
         "display": copy.deepcopy(template["display"]),
         "locale": copy.deepcopy(template["locale"]),
+        **({"camera": copy.deepcopy(template["camera"])} if "camera" in template else {}),
         "ua": {"value": build_ua(template["device"], template["display"]["screen_size_class"], seed)},
         "integrity": {"verdict": "unknown", "checked_at": None, "keybox_tag": None},
         "health": {"state": "new", "last_seen": None},

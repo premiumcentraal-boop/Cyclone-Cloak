@@ -46,6 +46,7 @@ APPLIED = frozenset({
     "locale.timezone",
     "telephony.sim_slot_count",
     "ua.value",
+    "camera.cameras",
 })
 
 PENDING = frozenset({

@@ -19,6 +19,7 @@ data class PhoneTemplate(
     val builtIn: Boolean = false,
     val confidence: String? = null,
     val classification: JSONObject? = null,
+    val camera: JSONObject = JSONObject(),
 ) {
     /** "Google · Android 13 · panther". */
     val summary: String get() = listOf(
@@ -42,7 +43,7 @@ data class PhoneTemplate(
 
     companion object {
         val ID = Regex("^[a-z0-9][a-z0-9_-]{0,47}$")
-        private val BLOCKS = listOf("device", "telephony", "network", "display", "locale")
+        private val BLOCKS = listOf("device", "telephony", "network", "display", "locale", "camera")
 
         fun fromJson(o: JSONObject, builtIn: Boolean = false): PhoneTemplate {
             val id = o.optString("id")
@@ -51,7 +52,8 @@ data class PhoneTemplate(
             val blocks = BLOCKS.associateWith { JSONObject((o.optJSONObject(it) ?: JSONObject()).toString()) }
             return PhoneTemplate(id, label.take(48), blocks.getValue("device"), blocks.getValue("telephony"),
                 blocks.getValue("network"), blocks.getValue("display"), blocks.getValue("locale"), builtIn,
-                (o.opt("confidence") as? String), o.optJSONObject("classification")?.let { JSONObject(it.toString()) })
+                (o.opt("confidence") as? String), o.optJSONObject("classification")?.let { JSONObject(it.toString()) },
+                blocks.getValue("camera"))
         }
 
         /** The phone a profile was made from (any profile: forged, imported or from a dump). */

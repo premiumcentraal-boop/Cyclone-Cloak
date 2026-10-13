@@ -12,7 +12,7 @@ from typing import Any
 
 CATALOG_PATH = Path(__file__).resolve().parents[2] / "catalog" / "phones.json"
 
-_TEMPLATE_BLOCKS = ("device", "telephony", "network", "display", "locale")
+_TEMPLATE_BLOCKS = ("device", "telephony", "network", "display", "locale", "camera")
 
 
 def load_catalog(path: Path = CATALOG_PATH) -> list[dict[str, Any]]:
@@ -22,5 +22,5 @@ def load_catalog(path: Path = CATALOG_PATH) -> list[dict[str, Any]]:
 
 # Like Kotlin CloakForge, profile generation copies only schema blocks, not catalog metadata.
 TEMPLATES: dict[str, dict[str, Any]] = {
-    phone["id"]: {block: phone[block] for block in _TEMPLATE_BLOCKS} for phone in load_catalog()
+    phone["id"]: {block: phone[block] for block in _TEMPLATE_BLOCKS if block in phone} for phone in load_catalog()
 }

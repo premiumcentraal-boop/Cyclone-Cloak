@@ -18,7 +18,8 @@ WARNING = "warning"
 INFO = "info"
 _SEVERITY_ORDER = {ERROR: 0, WARNING: 1, INFO: 2}
 
-SCHEMA_VERSION = "0.2"
+SCHEMA_VERSION = "0.3"
+_LEGACY_SCHEMA_VERSIONS = ("0.2",)
 
 _SEED_RE = re.compile(r"^[0-9a-f]{64}$")
 _ANDROID_ID_RE = re.compile(r"^[0-9a-f]{16}$")
@@ -137,13 +138,13 @@ def has_errors(findings: Iterable[Finding]) -> bool:
 
 def _add(findings: list[Finding], severity: str, code: str, message: str, field: str | None = None) -> None:
     if field is None:
-        path = re.search(r"(?:device|identifiers|display|locale|telephony|ua)\.[A-Za-z0-9_]+", message)
+        path = re.search(r"(?:device|identifiers|display|locale|telephony|ua|camera)\.[A-Za-z0-9_]+", message)
         field = path.group() if path else {
             "SCHEMA_VERSION": "schema_version", "SEED": "seed", "NAME": "name",
             "FINGERPRINT_FORMAT": "device.fingerprint", "BUILD_TYPE": "device.fingerprint",
             "TAGS": "device.fingerprint", "PATCH_DATE": "device.security_patch",
             "PATCH_FUTURE": "device.security_patch", "PATCH_AFTER_BUILD": "device.security_patch",
-            "UA_MISSING": "ua", "UA_BLOCK": "ua", "TELEPHONY": "telephony", "DISPLAY": "display",
+            "UA_MISSING": "ua", "UA_BLOCK": "ua", "TELEPHONY": "telephony", "DISPLAY": "display", "CAMERA": "camera",
         }.get(code)
     if field and not message.startswith(field):
         message = f"{field}: {message}"
@@ -251,6 +252,36 @@ def _validate_identifiers(findings: list[Finding], identifiers: Mapping[str, Any
         _add(findings, WARNING, "IDENTIFIER_DUPLICATE", "identifiers.imei_secondary duplicates identifiers.imei_primary", "identifiers.imei_secondary")
 
 
+def _validate_camera(findings: list[Finding], camera: Any) -> None:
+    """Camera hardware claims: coherent counts, facings and sensor sizes."""
+    if camera is None:
+        return
+    if not isinstance(camera, Mapping) or not isinstance(camera.get("cameras"), list):
+        _add(findings, ERROR, "CAMERA", "camera must be an object with a cameras list", "camera")
+        return
+    cameras = camera["cameras"]
+    if not 1 <= len(cameras) <= 6:
+        _add(findings, ERROR, "CAMERA_COUNT", f"camera.cameras must hold 1-6 entries, got {len(cameras)}", "camera.cameras")
+        return
+    for index, cam in enumerate(cameras):
+        if not isinstance(cam, Mapping):
+            _add(findings, ERROR, "CAMERA_ENTRY", f"camera.cameras[{index}] must be an object", f"camera.cameras.{index}")
+            continue
+        facing = cam.get("facing")
+        level = cam.get("hardware_level")
+        width = cam.get("pixel_width")
+        height = cam.get("pixel_height")
+        if facing not in (0, 1, 2):
+            _add(findings, ERROR, "CAMERA_FACING", f"camera.cameras[{index}].facing must be 0 (front), 1 (back) or 2 (external)", f"camera.cameras.{index}.facing")
+        if type(level) is not int or not 0 <= level <= 4:
+            _add(findings, ERROR, "CAMERA_LEVEL", f"camera.cameras[{index}].hardware_level must be an integer in 0-4", f"camera.cameras.{index}.hardware_level")
+        for name, value, bounds in (("pixel_width", width, (320, 20000)), ("pixel_height", height, (240, 20000))):
+            if type(value) is not int or not bounds[0] <= value <= bounds[1]:
+                _add(findings, ERROR, "CAMERA_SIZE", f"camera.cameras[{index}].{name} must be an integer in {bounds[0]}-{bounds[1]}", f"camera.cameras.{index}.{name}")
+        if type(width) is int and type(height) is int and width > 0 and height > 0 and not 0.5 <= width / height <= 2.0:
+            _add(findings, WARNING, "CAMERA_ASPECT", f"camera.cameras[{index}] aspect ratio {width}/{height} is unusual for a phone sensor", f"camera.cameras.{index}.pixel_width")
+
+
 def _validate_locale(findings: list[Finding], locale: Mapping[str, Any]) -> None:
     language = locale.get("language")
     country = locale.get("country")
@@ -274,7 +305,7 @@ def validate_profile(profile: Mapping[str, Any]) -> list[Finding]:
             _add(findings, ERROR, "BLOCK_TYPE", f"{key} must be an object", key)
             return {}
         return value
-    if profile.get("schema_version") != SCHEMA_VERSION:
+    if profile.get("schema_version") != SCHEMA_VERSION and profile.get("schema_version") not in _LEGACY_SCHEMA_VERSIONS:
         _add(findings, ERROR, "SCHEMA_VERSION", f"schema_version must be {SCHEMA_VERSION}")
     if not isinstance(profile.get("seed"), str) or not _SEED_RE.fullmatch(profile["seed"]):
         _add(findings, ERROR, "SEED", "seed must be 64 lowercase hex characters")
@@ -298,6 +329,7 @@ def validate_profile(profile: Mapping[str, Any]) -> list[Finding]:
     _validate_identifiers(findings, block("identifiers"))
     _validate_telephony(findings, block("telephony"))
     _validate_display(findings, block("display"))
+    _validate_camera(findings, profile.get("camera"))
     _validate_locale(findings, block("locale"))
     _validate_network(findings, block("network"))
     _validate_prop_lengths(findings, profile)

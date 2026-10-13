@@ -5,7 +5,12 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Constructor;
+import android.hardware.camera2.CameraCharacteristics;
+import android.util.Size;
+
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 import java.util.TimeZone;
 
 import top.canyie.pine.Pine;
@@ -131,6 +136,11 @@ public final class HookBridge {
             log("mediadrm hooks failed", t);
         }
         try {
+            installCamera();
+        } catch (Throwable t) {
+            log("camera hooks failed", t);
+        }
+        try {
             installDisplay();
         } catch (Throwable t) {
             log("display hooks failed", t);
@@ -168,6 +178,18 @@ public final class HookBridge {
      * Display out-parameter reads are rewritten after the real call so
      * unchanged fields keep framework behavior.
      */
+    private static void installCamera() throws ClassNotFoundException {
+        Class<?> cameraManager = Class.forName("android.hardware.camera2.CameraManager", false,
+                HookBridge.class.getClassLoader());
+        // Facing stays real so camera apps keep working; the camera2 read path is
+        // re-rendered at the two keys the profile owns (level + pixel array).
+        hookWith(cameraManager, "getCameraCharacteristics", new CameraCharacteristicsHook(), String.class);
+        Class<?> characteristics = Class.forName("android.hardware.camera2.CameraCharacteristics", false,
+                HookBridge.class.getClassLoader());
+        hookWith(characteristics, "get", new CameraMetadataGetHook(), CameraCharacteristics.Key.class);
+        log("camera hooks installed");
+    }
+
     private static void installDisplay() throws ClassNotFoundException {
         Class<?> resources = Class.forName("android.content.res.Resources", false,
                 HookBridge.class.getClassLoader());
@@ -544,6 +566,119 @@ public final class HookBridge {
 
         private boolean matchesAndroidIdQuery(String[] names) {
             return names != null && names.length == 1 && ANDROID_ID_KEY.equals(names[0]);
+        }
+    }
+
+    /**
+     * CameraCharacteristicsHook: maps every characteristics object handed out by
+     * getCameraCharacteristics to its profile spec. Facing is read real (the get
+     * hook never touches it), so the occurrence order stays host-stable.
+     */
+    private static final class CameraCharacteristicsHook extends MethodHook {
+        /** First-seen camera id -> occurrence index of its facing, in query order. */
+        private final Map<String, Integer> occurrences = new HashMap<>();
+        private final Map<Integer, Integer> seenPerFacing = new HashMap<>();
+
+
+        @Override public void afterCall(Pine.CallFrame frame) {
+            Object result = frame.getResult();
+            if (!(result instanceof CameraCharacteristics)
+                    || frame.args == null || frame.args.length < 1
+                    || !(frame.args[0] instanceof String)) {
+                return;
+            }
+            int count = parsePropInt(prop("cloak.camera.count"));
+            if (count <= 0) {
+                return;
+            }
+            CameraCharacteristics characteristics = (CameraCharacteristics) result;
+            Integer realFacing = null;
+            try {
+                realFacing = characteristics.get(CameraCharacteristics.LENS_FACING);
+            } catch (Throwable t) {
+                return;
+            }
+            if (realFacing == null) {
+                return;
+            }
+            String id = (String) frame.args[0];
+            Integer occurrence = occurrences.get(id);
+            if (occurrence == null) {
+                occurrence = seenPerFacing.getOrDefault(realFacing, 0);
+                seenPerFacing.put(realFacing, occurrence + 1);
+                occurrences.put(id, occurrence);
+            }
+            int[] spec = cameraSpec(realFacing, occurrence, count);
+            if (spec == null) {
+                return;
+            }
+            CameraCharacteristicsHookLookups.put(characteristics, spec);
+        }
+
+        /** nth published spec with the given facing, or null when absent or malformed. */
+        static int[] cameraSpec(int facing, int occurrence, int count) {
+            int seen = 0;
+            for (int i = 0; i < count; i++) {
+                String prefix = "cloak.camera." + i + ".";
+                if (parsePropInt(prop(prefix + "facing")) != facing) {
+                    continue;
+                }
+                if (seen++ != occurrence) {
+                    continue;
+                }
+                int level = parsePropInt(prop(prefix + "level"));
+                int width = parsePropInt(prop(prefix + "w"));
+                int height = parsePropInt(prop(prefix + "h"));
+                if (level < 0 || level > 4 || width <= 0 || height <= 0) {
+                    return null;
+                }
+                return new int[]{level, width, height};
+            }
+            return null;
+        }
+    }
+
+    /** Serves the profile's level and pixel array from mapped characteristics. */
+    private static final class CameraMetadataGetHook extends MethodHook {
+        @Override public void beforeCall(Pine.CallFrame frame) {
+            if (frame.thisObject == null || frame.args == null || frame.args.length < 1
+                    || !(frame.args[0] instanceof CameraCharacteristics.Key)) {
+                return;
+            }
+            int[] spec = CameraCharacteristicsHookLookups.specFor(frame.thisObject);
+            if (spec == null) {
+                return;
+            }
+            CameraCharacteristics.Key<?> key = (CameraCharacteristics.Key<?>) frame.args[0];
+            if (CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL.equals(key)) {
+                frame.setResult((Integer) spec[0]);
+            } else if (CameraCharacteristics.SENSOR_INFO_PIXEL_ARRAY_SIZE.equals(key)) {
+                frame.setResult(new Size(spec[1], spec[2]));
+            }
+        }
+    }
+
+    /** Indirection so the lookup map stays reachable from the static get hook. */
+    private static final class CameraCharacteristicsHookLookups {
+        private static final Map<Integer, int[]> SPECS = new HashMap<>();
+
+        static void put(Object characteristics, int[] spec) {
+            if (SPECS.size() > 128) {
+                SPECS.clear();
+            }
+            SPECS.put(System.identityHashCode(characteristics), spec);
+        }
+
+        static int[] specFor(Object characteristics) {
+            return SPECS.get(System.identityHashCode(characteristics));
+        }
+    }
+
+    private static int parsePropInt(String value) {
+        try {
+            return Integer.parseInt(value);
+        } catch (NumberFormatException e) {
+            return Integer.MIN_VALUE;
         }
     }
 

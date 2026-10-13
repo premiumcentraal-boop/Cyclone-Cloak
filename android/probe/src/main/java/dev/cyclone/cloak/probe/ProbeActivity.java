@@ -19,6 +19,8 @@ import android.util.DisplayMetrics;
 import android.view.Display;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import java.util.HashMap;
+import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import java.io.File;
@@ -79,6 +81,50 @@ public final class ProbeActivity extends Activity {
                 runOnUiThread(() -> matrix.setText("Probe failed: " + failure.getClass().getSimpleName()));
             }
         }, "cloak-probe").start();
+    }
+
+    /**
+     * Expected camera rows: the profile spec matched by real facing + occurrence
+     * order, with real values kept for cameras the profile does not describe.
+     */
+    private JSONArray buildCameraExpectation() throws Exception {
+        CameraManager cameras = getSystemService(CameraManager.class);
+        JSONArray actual = new JSONArray();
+        for (String id : cameras.getCameraIdList()) {
+            CameraCharacteristics c = cameras.getCameraCharacteristics(id);
+            actual.put(new JSONObject().put("id", id).put("facing", c.get(CameraCharacteristics.LENS_FACING))
+                .put("level", c.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL))
+                .put("pixelArray", String.valueOf(c.get(CameraCharacteristics.SENSOR_INFO_PIXEL_ARRAY_SIZE))));
+        }
+        JSONArray specs = profile.optJSONObject("camera") == null
+                ? null : profile.optJSONObject("camera").optJSONArray("cameras");
+        Map<Integer, Integer> seen = new HashMap<>();
+        JSONArray expected = new JSONArray();
+        for (int i = 0; i < actual.length(); i++) {
+            JSONObject row = actual.getJSONObject(i);
+            int facing = row.getInt("facing");
+            int occurrence = seen.getOrDefault(facing, 0);
+            seen.put(facing, occurrence + 1);
+            JSONObject spec = null;
+            if (specs != null) {
+                int index = 0;
+                for (int j = 0; j < specs.length(); j++) {
+                    JSONObject candidate = specs.optJSONObject(j);
+                    if (candidate == null || candidate.optInt("facing", -1) != facing) continue;
+                    if (index++ == occurrence) { spec = candidate; break; }
+                }
+            }
+            JSONObject out = new JSONObject().put("id", row.get("id")).put("facing", facing);
+            if (spec != null) {
+                out.put("level", spec.optInt("hardware_level"));
+                out.put("pixelArray", spec.optInt("pixel_width") + "x" + spec.optInt("pixel_height"));
+            } else {
+                out.put("level", row.get("level"));
+                out.put("pixelArray", row.get("pixelArray"));
+            }
+            expected.put(out);
+        }
+        return expected;
     }
 
     private Object expected(String path) throws Exception {
@@ -212,7 +258,13 @@ public final class ProbeActivity extends Activity {
         read("display.real.height", "display.height", () -> real.heightPixels);
         read("display.real.density", "display.density", () -> real.densityDpi);
         compare("display.refresh", ((Number) expected("display.refresh_rate_hz")).floatValue(), display::getRefreshRate);
-        compare("camera.characteristics", null, () -> {
+        Object cameraExpected;
+        try {
+            cameraExpected = buildCameraExpectation();
+        } catch (Throwable t) {
+            cameraExpected = null;
+        }
+        compare("camera.characteristics", cameraExpected, () -> {
             CameraManager cameras = getSystemService(CameraManager.class);
             JSONArray result = new JSONArray();
             for (String id : cameras.getCameraIdList()) {
