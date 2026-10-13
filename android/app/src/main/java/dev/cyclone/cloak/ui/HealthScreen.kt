@@ -14,11 +14,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Build
+import androidx.compose.material.icons.rounded.Download
+import androidx.compose.material.icons.rounded.OpenInNew
 import androidx.compose.material.icons.rounded.Refresh
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Button
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,34 +40,36 @@ internal fun HealthScreen(state: CloakState, vm: CloakViewModel) {
     val diagnostics = HealthDiagnostics.assess(ReadinessDoctorFacts.fromState(state, appVersion))
     Column(
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 14.dp),
-        verticalArrangement = Arrangement.spacedBy(14.dp),
+        verticalArrangement = Arrangement.spacedBy(CloakSpace.item),
     ) {
+        CloakNotice("Local diagnostics. These checks run on this device and are kept apart from saved identities and bindings.")
+        CloakSectionHeader("Readiness")
         HealthDoctorCard(diagnostics) { report ->
             context.getSystemService(ClipboardManager::class.java).setPrimaryClip(ClipData.newPlainText("Cyclone Cloak diagnostics", report))
             Toast.makeText(context, "Redacted diagnostics copied", Toast.LENGTH_SHORT).show()
         }
-        Card(
-            modifier = Modifier.fillMaxWidth(),
-            shape = MaterialTheme.shapes.large,
-            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-        ) {
-            Column(Modifier.fillMaxWidth().padding(18.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
-                Text("Check and repair", style = MaterialTheme.typography.titleMedium)
+        CloakSectionHeader("Check and repair")
+        CloakGroup {
+            Column(Modifier.fillMaxWidth().padding(CloakSpace.inner), verticalArrangement = Arrangement.spacedBy(CloakSpace.item)) {
                 Text("Root Doctor checks setup, may queue a matching module repair, and publishes profile state. It does not restart the device.",
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                Button(onClick = vm::runRootDoctor, enabled = state.rootDoctor.code != RootDoctorCode.CHECKING && state.busy == null,
-                    modifier = Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.small) { Text("Check & repair") }
-                TextButton(onClick = { openMagisk(context) }) { Text("Open Magisk") }
-                if (state.rootDoctor.code != RootDoctorCode.READY) {
-                    TextButton(onClick = { openModuleDownload(context) }) { Text("Get module ZIP") }
-                }
-                CloakActionButton("Reconnect to Cyclone", Icons.Rounded.Refresh, vm::refresh, Modifier.fillMaxWidth(), outlined = true)
+                CloakActionButton("Check & repair", Icons.Rounded.Build, vm::runRootDoctor, Modifier.fillMaxWidth(),
+                    enabled = state.rootDoctor.code != RootDoctorCode.CHECKING && state.busy == null)
+            }
+            CloakGroupDivider()
+            CloakRow("Reconnect to Cyclone", icon = Icons.Rounded.Refresh, onClick = vm::refresh, showChevron = false)
+            CloakGroupDivider()
+            CloakRow("Open Magisk", icon = Icons.Rounded.OpenInNew, onClick = { openMagisk(context) }, showChevron = false)
+            if (state.rootDoctor.code != RootDoctorCode.READY) {
+                CloakGroupDivider()
+                CloakRow("Get module ZIP", icon = Icons.Rounded.Download, onClick = { openModuleDownload(context) }, showChevron = false)
             }
         }
+        CloakSectionHeader("Library review")
         UniquenessDiagnostics(state, vm::reviewIdentity)
         LibraryQualityCard(LibraryQuality.assess(state, java.time.Instant.now()),
             state.identities.associate { (id, profile) -> id to profile.optString("name") }, state.busy != null, vm::reviewIdentity)
+        CloakSectionHeader("Coverage")
         CoverageMatrix(coverage)
     }
 }

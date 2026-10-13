@@ -15,16 +15,15 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material.icons.rounded.Remove
+import androidx.compose.material.icons.rounded.Backup
+import androidx.compose.material.icons.rounded.FileOpen
+import androidx.compose.material.icons.rounded.Layers
+import androidx.compose.material3.AssistChip
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.FilterChip
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -35,10 +34,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.cyclone.cloak.data.EngineMetadataStore
 import dev.cyclone.cloak.forge.CloakFleet
@@ -57,6 +53,7 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
     val phone = state.phone(phoneId) ?: state.phones.firstOrNull()
     var name by rememberSaveable { mutableStateOf("") }
     var count by rememberSaveable { mutableIntStateOf(5) }
+    var fleet by rememberSaveable { mutableStateOf(false) }
     var query by rememberSaveable { mutableStateOf("") }
     var selected by rememberSaveable { mutableStateOf<String?>(null) }
     var renaming by remember { mutableStateOf<Identity?>(null) }
@@ -81,91 +78,88 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
+        item { CloakSectionHeader("New identity") }
         item {
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                shape = MaterialTheme.shapes.large,
-                colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-                elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-            ) {
-                Column(Modifier.fillMaxWidth().padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
-                    Text("New identity", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
+            CloakGroup {
+                Column(Modifier.fillMaxWidth().padding(CloakSpace.inner), verticalArrangement = Arrangement.spacedBy(CloakSpace.item)) {
                     Text(
                         "A copy of a phone with its own fresh identifiers. They are generated, never read from your own phone.",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                     )
-                    Text("Phone", style = MaterialTheme.typography.labelLarge)
-                    FlowRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        state.phones.forEach { option ->
-                            FilterChip(selected = option.id == phone?.id, onClick = { phoneId = option.id }, label = { Text(option.label) })
-                        }
-                    }
+                    CloakSegmented(listOf(false to "One identity", true to "A fleet"), fleet, { fleet = it })
+                    CloakSelectField(
+                        label = "Phone",
+                        value = phone?.label ?: "No phones yet",
+                        options = state.phones,
+                        optionLabel = { it.label },
+                        optionSupporting = { it.summary.takeIf(String::isNotBlank) },
+                        onSelect = { phoneId = it.id },
+                        enabled = state.phones.isNotEmpty(),
+                    )
                     phone?.let { Text(it.summary, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) }
-                    OutlinedTextField(
-                        value = name,
-                        onValueChange = { if (it.length <= 64) name = it },
-                        modifier = Modifier.fillMaxWidth(),
-                        label = { Text("Name") },
-                        placeholder = { Text("For example, Work Pixel") },
-                        singleLine = true,
-                    )
-                    Button(
-                        onClick = { phone?.let { vm.createIdentity(name, it.id); name = "" } },
-                        enabled = name.isNotBlank() && phone != null && state.busy == null,
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = MaterialTheme.shapes.small,
-                    ) { Text("Create identity") }
-                    HorizontalDivider()
-                    Text("A fleet", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
-                    Text(
-                        "Several identities from the same phone, named ${CloakFleet.FLEET_PREFIX} 01, 02, … Making the same fleet again gives the same identities.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp), verticalAlignment = Alignment.CenterVertically) {
-                        OutlinedButton(onClick = { count = (count - 1).coerceIn(1, CloakFleet.MAX_FLEET_SIZE) }, shape = MaterialTheme.shapes.small) {
-                            Icon(Icons.Rounded.Remove, contentDescription = "Fewer")
-                        }
-                        Text("$count", style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f), textAlign = TextAlign.Center)
-                        OutlinedButton(onClick = { count = (count + 1).coerceIn(1, CloakFleet.MAX_FLEET_SIZE) }, shape = MaterialTheme.shapes.small) {
-                            Icon(Icons.Rounded.Add, contentDescription = "More")
-                        }
+                    if (!fleet) {
+                        OutlinedTextField(
+                            value = name,
+                            onValueChange = { if (it.length <= 64) name = it },
+                            modifier = Modifier.fillMaxWidth(),
+                            label = { Text("Name") },
+                            placeholder = { Text("For example, Work Pixel") },
+                            singleLine = true,
+                        )
+                        Button(
+                            onClick = { phone?.let { vm.createIdentity(name, it.id); name = "" } },
+                            enabled = name.isNotBlank() && phone != null && state.busy == null,
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = MaterialTheme.shapes.small,
+                        ) { Text("Create identity") }
+                    } else {
+                        Text(
+                            "Several identities from the same phone, named ${CloakFleet.FLEET_PREFIX} 01, 02, … Making the same fleet again gives the same identities.",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        )
+                        CloakStepper("Identities", count, 1..CloakFleet.MAX_FLEET_SIZE, { count = it })
+                        Button(
+                            onClick = { phone?.let { vm.forgeFleet(it.id, count) } },
+                            enabled = phone != null && state.busy == null,
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = MaterialTheme.shapes.small,
+                        ) { Text("Create $count from ${phone?.label ?: "a phone"}") }
                     }
-                    OutlinedButton(
-                        onClick = { phone?.let { vm.forgeFleet(it.id, count) } },
-                        enabled = phone != null && state.busy == null,
-                        modifier = Modifier.fillMaxWidth(),
-                        shape = MaterialTheme.shapes.small,
-                    ) { Text("Create $count from ${phone?.label ?: "a phone"}") }
+                    Text(
+                        if (state.identities.isEmpty()) "Next: bind the new identity to apps from its card below or in Profiles."
+                        else "After creating, bind it to apps from its card below.",
+                        style = MaterialTheme.typography.labelMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                    )
                 }
             }
         }
 
         item {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                OutlinedButton(onClick = { importer.launch(arrayOf("*/*")) }, modifier = Modifier.weight(1f), shape = MaterialTheme.shapes.small) {
-                    Text("Import")
-                }
-                OutlinedButton(
-                    onClick = { run { exportTarget = null; includeIdentity = false; backupLabel = ""; exporting = true } },
-                    enabled = state.identities.isNotEmpty(),
-                    modifier = Modifier.weight(1f),
-                    shape = MaterialTheme.shapes.small,
-                ) { Text("Back up all") }
+                CloakActionButton("Import", Icons.Rounded.FileOpen, { importer.launch(arrayOf("*/*")) }, Modifier.weight(1f), outlined = true)
+                CloakActionButton("Back up all", Icons.Rounded.Backup, { exportTarget = null; includeIdentity = false; backupLabel = ""; exporting = true },
+                    Modifier.weight(1f), outlined = true, enabled = state.identities.isNotEmpty())
             }
         }
 
         state.backupMessage?.let { message -> item { Text(message, style = MaterialTheme.typography.bodySmall) } }
         if (state.backups.isNotEmpty()) {
-            item { CloakSectionTitle("Local backups", state.backups.size) }
-            items(state.backups, key = { "backup-" + it.first }) { (id, manifest) ->
-                OutlinedButton(onClick = { vm.importLocalBackup(id) }, enabled = state.busy == null) {
-                    Text("Review import: ${manifest.optString("label").ifBlank { manifest.optString("created_at") }} · ${manifest.optInt("profile_count")} profiles")
+            item { CloakSectionHeader("Local backups", state.backups.size) }
+            item {
+                CloakGroup {
+                    state.backups.forEachIndexed { index, (id, manifest) ->
+                        if (index > 0) CloakGroupDivider()
+                        CloakRow("Review import: ${manifest.optString("label").ifBlank { manifest.optString("created_at") }}",
+                            supporting = "${manifest.optInt("profile_count")} profiles", icon = Icons.Rounded.Backup,
+                            onClick = { if (state.busy == null) vm.importLocalBackup(id) })
+                    }
                 }
             }
         }
-        item { CloakSectionTitle("Identities", state.identities.size) }
+        item { CloakSectionHeader("Saved identities", state.identities.size) }
         if (state.identities.size > 6) {
             item {
                 OutlinedTextField(
@@ -197,42 +191,48 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
                 CloakIdentityCard(id = id, profile = profile, selected = selected == id, onSelect = { selected = if (selected == id) null else id })
                 PostureSummaryLine(state.postures[id], Modifier.padding(horizontal = 8.dp))
                 if (selected == id) {
-                    CompatibilityReportCard(state.postures[id], id, EngineMetadataStore.digest(profile),
-                        state.currentArtifactDigest, state.busy != null, state.postureErrors[id],
-                        onLoad = { postureTarget = id; postureImporter.launch(arrayOf("application/json", "text/plain")) },
-                        onMarkRotation = { vm.markPostureNeedsRotation(id, it) },
-                        onClearReset = { record, confirmed -> vm.clearPostureAfterReset(id, record, confirmed) })
-                    val metadata = state.engineMetadata[id]
-                    EngineIdentitySummary.labels(profile, metadata).forEach { label ->
-                        Text(label, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(horizontal = 8.dp))
-                    }
                     val profiles = bound.map { it.profileId }.distinct()
                         .map { pid -> state.registry.firstOrNull { it.id == pid }?.label ?: pid }
-                    Text(
-                        if (bound.isEmpty()) "Not bound to any app" else "Bound to ${bound.size} apps in ${profiles.joinToString(", ")}",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(horizontal = 8.dp),
-                    )
-                    FlowRow(Modifier.fillMaxWidth().padding(horizontal = 4.dp)) {
-                        TextButton(onClick = { coverageId = if (coverageId == id) null else id }) { Text("Field coverage") }
-                        TextButton(onClick = { evidenceImporter.launch(arrayOf("application/json", "text/plain")) }, enabled = state.busy == null) { Text("Load probe evidence") }
-                        TextButton(onClick = { diagnosticsTarget = id; diagnosticsImporter.launch(arrayOf("application/json", "text/plain")) },
-                            enabled = state.busy == null) { Text("Load diagnostics for posture") }
-                        TextButton(onClick = { vm.startBinding(id) }) { Text("Bind to profile apps") }
-                        TextButton(onClick = { exportTarget = id; includeIdentity = false; backupLabel = ""; exporting = true }, enabled = state.busy == null) { Text("Export profile") }
-                        TextButton(onClick = { vm.duplicateIdentity(id) }, enabled = state.busy == null) { Text("Duplicate") }
-                        TextButton(onClick = { vm.reviewIdentity(id) }, enabled = state.busy == null) { Text("Review identifiers") }
-                        TextButton(onClick = { renaming = identity }) { Text("Rename") }
-                        TextButton(onClick = { deleting = identity }) { Text("Delete") }
-                    }
-                    if (coverageId == id) {
-                        Text(if (state.engineCoverage.isEmpty()) "Implementation coverage; device evidence not loaded."
-                            else "Probe fixture coverage for the artifact in the loaded report. Saved identity and installed module are not verified by this report.",
-                            style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(horizontal = 8.dp))
-                        RuntimeEvidence.rows(profile, state.engineCoverage).forEach { row ->
-                            Text("${row.field}: ${row.state} (${row.testStatus})", style = MaterialTheme.typography.bodySmall,
-                                modifier = Modifier.padding(horizontal = 8.dp))
+                    CloakGroup {
+                        CloakRow(
+                            if (bound.isEmpty()) "Not bound to any app" else "Bound to ${bound.size} apps in ${profiles.joinToString(", ")}",
+                            icon = Icons.Rounded.Layers, tone = if (bound.isEmpty()) CloakStatusTone.PENDING else CloakStatusTone.READY,
+                        ) {
+                            FilledTonalButton(onClick = { vm.startBinding(id) }, contentPadding = PaddingValues(horizontal = 12.dp)) { Text("Bind to profile apps") }
+                            CloakOverflowMenu(listOf(
+                                CloakMenuAction("Export profile", enabled = state.busy == null) { exportTarget = id; includeIdentity = false; backupLabel = ""; exporting = true },
+                                CloakMenuAction("Duplicate", enabled = state.busy == null) { vm.duplicateIdentity(id) },
+                                CloakMenuAction("Review identifiers", enabled = state.busy == null) { vm.reviewIdentity(id) },
+                                CloakMenuAction("Rename") { renaming = identity },
+                                CloakMenuAction("Delete", destructive = true) { deleting = identity },
+                            ), contentDescription = "More for ${profile.optString("name")}")
+                        }
+                        CloakGroupDivider()
+                        CloakDisclosure("Diagnostics & evidence", supporting = "Local checks, kept apart from the saved identity values") {
+                            CompatibilityReportCard(state.postures[id], id, EngineMetadataStore.digest(profile),
+                                state.currentArtifactDigest, state.busy != null, state.postureErrors[id],
+                                onLoad = { postureTarget = id; postureImporter.launch(arrayOf("application/json", "text/plain")) },
+                                onMarkRotation = { vm.markPostureNeedsRotation(id, it) },
+                                onClearReset = { record, confirmed -> vm.clearPostureAfterReset(id, record, confirmed) })
+                            val metadata = state.engineMetadata[id]
+                            EngineIdentitySummary.labels(profile, metadata).forEach { label ->
+                                Text(label, style = MaterialTheme.typography.bodySmall)
+                            }
+                            FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                                FilterChip(selected = coverageId == id, onClick = { coverageId = if (coverageId == id) null else id }, label = { Text("Field coverage") })
+                                AssistChip(onClick = { evidenceImporter.launch(arrayOf("application/json", "text/plain")) }, enabled = state.busy == null,
+                                    label = { Text("Load probe evidence") })
+                                AssistChip(onClick = { diagnosticsTarget = id; diagnosticsImporter.launch(arrayOf("application/json", "text/plain")) },
+                                    enabled = state.busy == null, label = { Text("Load diagnostics for posture") })
+                            }
+                            if (coverageId == id) {
+                                Text(if (state.engineCoverage.isEmpty()) "Implementation coverage; device evidence not loaded."
+                                    else "Probe fixture coverage for the artifact in the loaded report. Saved identity and installed module are not verified by this report.",
+                                    style = MaterialTheme.typography.bodySmall)
+                                RuntimeEvidence.rows(profile, state.engineCoverage).forEach { row ->
+                                    Text("${row.field}: ${row.state} (${row.testStatus})", style = MaterialTheme.typography.bodySmall)
+                                }
+                            }
                         }
                     }
                 }

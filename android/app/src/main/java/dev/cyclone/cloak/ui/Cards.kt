@@ -22,6 +22,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Apps
+import androidx.compose.material.icons.rounded.Layers
+import androidx.compose.material.icons.rounded.OpenInNew
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.ContentCopy
 import androidx.compose.material.icons.rounded.ExpandLess
@@ -283,32 +287,22 @@ internal fun CloakProfileCard(
     onClick: () -> Unit,
     onOpen: () -> Unit,
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-        CloakChoiceCard(title = title, subtitle = subtitle, selected = selected, onClick = onClick)
-        if (pill != null || canOpen) {
-            Row(
-                Modifier.fillMaxWidth().padding(horizontal = 6.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                    if (pill != null) {
-                        CloakStatusPill(
-                            pill.label,
-                            when (pill.tone) {
-                                CloakPillTone.READY -> CloakStatusTone.READY
-                                CloakPillTone.ATTENTION -> CloakStatusTone.ERROR
-                                CloakPillTone.NEUTRAL -> CloakStatusTone.PENDING
-                            },
-                        )
-                        pill.reason?.let {
-                            Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        }
-                    }
-                }
-                if (canOpen) TextButton(onClick = onOpen) { Text("Open in Cyclone") }
-            }
+    val tone = pill?.tone?.let {
+        when (it) {
+            CloakPillTone.READY -> CloakStatusTone.READY
+            CloakPillTone.ATTENTION -> CloakStatusTone.ERROR
+            CloakPillTone.NEUTRAL -> CloakStatusTone.PENDING
         }
+    }
+    CloakRow(
+        title,
+        supporting = listOfNotNull(subtitle, pill?.reason).joinToString("\n"),
+        icon = if (selected) Icons.Rounded.CheckCircle else Icons.Rounded.Layers,
+        tone = tone,
+        showChevron = false,
+    ) {
+        if (pill != null) CloakStatusPill(pill.label, tone ?: CloakStatusTone.PENDING)
+        if (canOpen) IconButton(onClick = onOpen) { Icon(Icons.Rounded.OpenInNew, contentDescription = "Open in Cyclone") }
     }
 }
 
@@ -323,53 +317,44 @@ internal fun CloakBindingCard(
     onRemove: (CloakBinding) -> Unit,
 ) {
     val mirrored = binding.origin == CloakBinding.ORIGIN_MAIN
-    Card(
+    Surface(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(14.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = if (binding.enabled) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.surfaceVariant,
-        ),
+        shape = MaterialTheme.shapes.large,
+        color = if (binding.enabled) MaterialTheme.colorScheme.surface else MaterialTheme.colorScheme.surfaceVariant,
     ) {
         Column(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 14.dp, vertical = 10.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(6.dp),
         ) {
-            Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
-                Text(binding.packageName, style = MaterialTheme.typography.bodyMedium, fontWeight = FontWeight.SemiBold)
-                Text(
-                    "$profileLabel · user ${binding.androidUserId}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-                Text("Cloak: $identityLabel", style = MaterialTheme.typography.bodySmall)
-                Text(if (binding.enabled) "Enabled" else "Disabled", style = MaterialTheme.typography.labelLarge,
-                    color = if (binding.enabled) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onSurfaceVariant)
-                Text("Health", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
+                CloakIconBadge(Icons.Rounded.Apps, if (binding.enabled) null else CloakStatusTone.PENDING)
+                Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                    Text(binding.packageName, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
+                    Text("$profileLabel · user ${binding.androidUserId}", style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant)
+                }
                 CloakStatusPill(binding.state, when (binding.state) {
                     "ready" -> CloakStatusTone.READY
                     "disabled", "pending", "unknown" -> CloakStatusTone.PENDING
                     else -> CloakStatusTone.ERROR
                 })
-                if (mirrored) {
-                    Text("managed by Cloak in Main", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                }
-                if (issue != null) {
-                    Text("Cyclone: $issue", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
-                }
+            }
+            Text("Cloak: $identityLabel", style = MaterialTheme.typography.bodySmall)
+            if (mirrored) {
+                Text("managed by Cloak in Main", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            }
+            if (issue != null) {
+                Text("Cyclone: $issue", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
             }
             if (profileMissing) {
-                Surface(color = MaterialTheme.colorScheme.tertiaryContainer, shape = MaterialTheme.shapes.small) {
-                    Row(Modifier.fillMaxWidth().padding(10.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                        Icon(Icons.Rounded.Warning, contentDescription = null, tint = MaterialTheme.colorScheme.onTertiaryContainer)
-                        Text("Cyclone profile no longer present: ${binding.profileId}", style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onTertiaryContainer)
-                    }
-                }
+                CloakNotice("Cyclone profile no longer present: ${binding.profileId}", CloakStatusTone.PENDING, Icons.Rounded.Warning)
             }
-            if (!mirrored) {
-                Row(horizontalArrangement = Arrangement.spacedBy(2.dp)) {
+            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+                Text(if (binding.enabled) "Enabled" else "Disabled", style = MaterialTheme.typography.labelLarge, modifier = Modifier.weight(1f),
+                    color = if (binding.enabled) MaterialTheme.colorScheme.secondary else MaterialTheme.colorScheme.onSurfaceVariant)
+                if (!mirrored) {
                     TextButton(onClick = { onToggle(binding) }) { Text(if (binding.enabled) "Off" else "On") }
-                    TextButton(onClick = { onRemove(binding) }) { Text("Remove") }
+                    TextButton(onClick = { onRemove(binding) }, colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)) { Text("Remove") }
                 }
             }
         }
