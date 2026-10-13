@@ -1,27 +1,25 @@
 # Runtime coverage and device proof
 
-Reboot-dependent checks for future local fixes remain deferred; see
-[DEFERRED-DEVICE-CHECKS.md](DEFERRED-DEVICE-CHECKS.md) for the resume checklist.
-RC3 device baseline measured 2026-10-13 on a rooted Pixel 8, Android API 36,
-Android user 0 (the user-13 switch stayed blocked behind the device PIN after
-reboot; the probe's proof logic is user-independent and the run metadata
-records the user). The installed module identifies itself as `v0.10.0-rc.3`,
-versionCode 24; its arm64 library SHA-256 is
-`b11991891dcad2425f6cef91e03cedefd67ed7140a69c9c06d25a77dd8cfa266`.
-This identifies the measured binary; its version label alone does not prove
-byte-for-byte correspondence with a published build. The RC2 baseline
-(v0.10.0-rc.2, code 23, user 13, 45 verified reads) remains in git history
-under the 2026-10-12 measurement of this file.
+The owner authorized module installation and reboot for B2A DRM verification on
+2026-10-13. This run used a rooted Pixel 8/API 36, Android user 0. The installed
+module retains version `v0.10.0-rc.3`, versionCode 24, with the local DRM fix
+`9a6a1e7`; its arm64 SHA-256 is
+`f87b218e5763a2084093b817c42eaee632390e7d1cb72a686851a469e4e3c4b9`.
+The version label alone does not identify a published binary. The earlier RC3
+baseline remains in [its evidence file](runtime-evidence/rc3-api36-final.json).
+Other pending device checks are listed in
+[DEFERRED-DEVICE-CHECKS.md](DEFERRED-DEVICE-CHECKS.md).
 
 The independent `dev.cyclone.cloak.probe` app reads Android APIs and native
 properties. Its fixtures supply expected values only. It never loads the
 Cloak engine, calls hook callbacks itself, or substitutes expected values for
-observations. The installed release was tested with two distinct valid schema
+observations. The installed patched module was tested with two distinct valid schema
 0.2 profiles, a repeated cold start, and unbound controls before and after.
 Both fixtures have distinct Build/identifier/locale values; A has two SIM slots
 and 5G, B has one slot and LTE. The runner removes its own temporary bindings
-and profile files, preserving other app/user bindings. No module replacement,
-reboot, permission grant or production app restart occurred in these runs.
+and profile files, preserving other app/user bindings. The module was installed and the device rebooted before these runs. The existing
+companion app was retained because the freshly built release APK was unsigned.
+The runner itself did not reboot or grant permissions.
 
 ## Visible matrix
 
@@ -31,30 +29,31 @@ The companion Health tab also displays a local 13-area summary from the checked-
 selected baseline reads with device proof; no whole area or local runtime patch
 is claimed verified. Dates in that summary use UTC (the documented 2026-10-11
 Berlin run started on 2026-10-10 UTC). It does not run a live check or infer
-coverage from Root Doctor. Reboot-dependent verification remains deferred.
+coverage from Root Doctor. This summary must not be interpreted as proof of every API in an area.
 
 The test app displays a row per read. The complete, generated **70-read matrix**
 is [RUNTIME-MEASUREMENTS.md](RUNTIME-MEASUREMENTS.md), backed by
-[redacted JSON evidence](runtime-evidence/rc3-api36-final.json)
-(dated copy: [RUNTIME-MATRIX-RC3-2026-10-13.md](RUNTIME-MATRIX-RC3-2026-10-13.md)).
+[redacted JSON evidence](runtime-evidence/b2a-drm.json)
+(dated copy: [RUNTIME-MATRIX-B2A-2026-10-13.md](RUNTIME-MATRIX-B2A-2026-10-13.md)).
 (dated copy: [RUNTIME-MATRIX-RC2-2026-10-12.md](RUNTIME-MATRIX-RC2-2026-10-12.md)).
 Observed host values are hashed; fixture expectations are synthetic test data.
 
-**53 reads VERIFIED, 3 FAIL, 8 MATCH_ONLY, 3 BLOCKED, 3 UNMAPPED.** A PASS in
-the raw app report means equality with that fixture only. VERIFIED additionally
+**54 reads VERIFIED, 2 FAIL, 8 MATCH_ONLY, 3 BLOCKED, 3 UNMAPPED.** A PASS in
+the raw report means equality with that fixture only. VERIFIED additionally
 requires differing expectations for A/B, repeat stability and restoration of
-the unbound control. Bound runs measure PASS=61/70 (A) and 63/70 (B) with
+the unbound control. Bound runs measure PASS=62/70 (A) and 64/70 (B), with
 identical bound-a and bound-a-repeat reports; unbound-before and unbound-after
-reports match exactly. Of the three FAIL rows, only `drm.deviceUniqueId` is a
-runtime gap: the Pine callback installs on the native
-`MediaDrm.getPropertyByteArray` but never fires at call time (logcat shows the
-real Widevine plugin serving the identity; no callback log). The other two
-FAILs are fixture gaps: profile A carries no bootloader/radio expectations.
+reports match exactly. `drm.deviceUniqueId` is now VERIFIED. The previous
+property guard accepted `deviceId` but omitted Android's `deviceUniqueId` name;
+absence of a log after that guard did not prove that the callback never fired.
+The patched callback serves both bound fixtures, and three bound cold starts
+emit the serving log. The two FAILs are fixture gaps: profile A carries no
+bootloader/radio expectations.
 The three BLOCKED rows (Wi-Fi service MAC/SSID, Bluetooth name) remain
 permission gates on the probe identity, not module failures. Matching host display dimensions do not prove a hook.
 BLOCKED and UNMAPPED never count as passed coverage.
 
-| Requested surface | RC3 installed binary: device result | Remaining work |
+| Requested surface | Installed patched module: device result | Remaining work |
 | --- | --- | --- |
 | Build | Manufacturer/brand/model/device/product/hardware/fingerprint/ID/serial/getSerial/time all VERIFIED; TYPE/TAGS match-only; bootloader/radio PASS on B, unmapped on A | Add bootloader/radio expectations to fixture A or the catalog |
 | Build.VERSION | SDK, release, incremental and security patch all VERIFIED | None measured |
@@ -66,7 +65,7 @@ BLOCKED and UNMAPPED never count as passed coverage.
 | Advertising ID | Real Google SDK read VERIFIED when bound | Re-verify after app updates of the SDK |
 | Wi-Fi info | Object MAC getter VERIFIED | Service MAC/SSID blocked by probe permissions; measure from a privileged probe identity |
 | Bluetooth identity | Address getter VERIFIED | Name read blocked by probe permissions |
-| DRM/MediaDrm | Callback installs but never fires on the native `getPropertyByteArray` (logcat-proven); row FAIL | Native-method interception strategy or alternate hook point (batch 2) |
+| DRM/MediaDrm | `deviceUniqueId` VERIFIED for two distinct profiles, repeated A and restored unbound control | Other DRM properties, UUIDs and security levels remain unverified |
 | Display metrics | Density, width, real metrics and refresh VERIFIED via Resources/Display rewrites (out-parameter handling fixed this release) | `display.resources.*` for B verified; screen/resource/window consistency beyond probe scope |
 | Camera info | Enumerated, UNMAPPED | No camera expectation in schema yet (Phase D corpus) |
 | Sensor list | Enumerated, UNMAPPED | No sensor expectation in schema yet; do not invent capabilities |
@@ -74,8 +73,8 @@ BLOCKED and UNMAPPED never count as passed coverage.
 | SIM/operator fields | Numeric/name/country/serial VERIFIED; secondary slot checked | None measured |
 | Country/locale/timezone | Country, resource locale and default timezone VERIFIED on both profiles | None measured |
 
-The RC3 release has been installed, rebooted and measured on the device; the
-matrix above is the installed RC3 binary's own result. Any future local runtime
+The local DRM patch has been installed, rebooted and measured; the matrix above
+is the identified patched binary's result. Any future local runtime
 change must follow the same path: build, install with the owner's approval,
 reboot, then re-run the probe and save a separate evidence file. A callback
 unit test alone is not proof of ART installation.
@@ -115,8 +114,9 @@ remain blocked; those require a separately authorized test environment to prove.
 - Device proof currently covers one arm64/API36 device, one Android user and one
   process. Other APIs/ARM32, additional processes, other users, subscription
   overloads, delayed class loaders and early SDK reads need their own runs.
-- Direct native `__system_property_get`, property handles, full provider reads,
-  display geometry/refresh, camera and sensor identity are not complete.
+- Native property-handle reads, full provider reads, broader display consistency,
+  camera and sensor identity are not complete. The measured direct native
+  `__system_property_get` and display geometry/refresh reads have device proof.
   Camera/sensor field expectations need an agreed representation compatible
   with the existing profile schema before a meaningful pass can be claimed.
 - Do not fabricate camera/sensor capabilities or alter actual hardware operation

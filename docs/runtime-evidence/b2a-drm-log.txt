@@ -1,0 +1,4 @@
+B2A 2026-10-13: filtered MediaDrm callback evidence only.
+I/CloakModule(16644): [cloak-hook] widevine identity served
+I/CloakModule(16700): [cloak-hook] widevine identity served
+I/CloakModule(16801): [cloak-hook] widevine identity served

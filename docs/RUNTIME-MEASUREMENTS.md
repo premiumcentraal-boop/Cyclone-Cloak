@@ -1,6 +1,6 @@
 # Runtime measurements
 
-Generated from `b11991891dcad2425f6cef91e03cedefd67ed7140a69c9c06d25a77dd8cfa266`. PASS in a raw report means value equality only. VERIFIED below also requires distinct profiles, repeat stability and restoration of the unbound control.
+Generated from `f87b218e5763a2084093b817c42eaee632390e7d1cb72a686851a469e4e3c4b9`. PASS in a raw report means value equality only. VERIFIED below also requires distinct profiles, repeat stability and restoration of the unbound control.
 
 | Read | Profile A | Profile B | Proof | Reason |
 | --- | --- | --- | --- | --- |
@@ -59,7 +59,7 @@ Generated from `b11991891dcad2425f6cef91e03cedefd67ed7140a69c9c06d25a77dd8cfa266
 | `bluetooth.address` | PASS | PASS | VERIFIED | MATCH |
 | `bluetooth.name` | BLOCKED | BLOCKED | BLOCKED | SecurityException |
 | `advertising.id` | PASS | PASS | VERIFIED | MATCH |
-| `drm.deviceUniqueId` | FAIL | FAIL | FAIL | VALUE_MISMATCH |
+| `drm.deviceUniqueId` | PASS | PASS | VERIFIED | MATCH |
 | `display.resources.width` | PASS | PASS | MATCH_ONLY | MATCH |
 | `display.resources.height` | PASS | PASS | VERIFIED | MATCH |
 | `display.resources.density` | PASS | PASS | MATCH_ONLY | MATCH |

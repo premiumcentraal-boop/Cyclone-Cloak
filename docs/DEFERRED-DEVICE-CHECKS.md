@@ -21,10 +21,17 @@ the owner resumes these checks. Local JVM tests and builds can continue.
 5. Recheck Root Doctor after reboot, cross-user approval/revocation,
    restore/reconciliation, health pills, open requests and signed upgrades.
 
-The current measured baseline remains 13 verified reads out of 70. Runtime
-source fixes are built locally but have not been loaded into the phone. Display
-geometry, native property paths and several other surfaces still need work;
-this checklist does not claim they are fixed.
+## Partial resumption: B2A, 2026-10-13
+
+The owner explicitly authorized installation and reboot for DRM verification.
+The patched module was installed and rebooted; the five-phase probe completed
+on Pixel 8/API 36/user 0 with **54/70 verified reads**, including DRM unique ID.
+See [the completion report](HANDOFF-2026-10-13-B2A-DRM-VERIFICATION.md).
+The original 13/70 baseline is historical, not the current measurement.
+
+This run does not complete the broader checklist: secondary-user/ARM32 checks,
+Root Doctor workflows, publication concurrency, signed companion upgrades and
+restricted/unmapped inspection surfaces still require separate verification.
 
 Publication sprint follow-up: once phone checks resume, update every Cloak
 publisher install, exercise simultaneous Main/profile publication on Android
