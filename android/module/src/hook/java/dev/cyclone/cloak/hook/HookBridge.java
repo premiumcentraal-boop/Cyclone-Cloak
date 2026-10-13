@@ -68,6 +68,8 @@ public final class HookBridge {
     private static final int KIND_REFRESH_RATE = 13;
 
     private static volatile Method sPropGet;
+    private static final java.util.Set<Class<?>> sUaHooked =
+            java.util.Collections.synchronizedSet(new java.util.HashSet<Class<?>>());
 
     private HookBridge() { }
 
@@ -158,9 +160,51 @@ public final class HookBridge {
     }
 
     private static void installWebView() throws ClassNotFoundException {
-        Class<?> webSettings = Class.forName("android.webkit.WebSettings", false,
+        // getUserAgentString is abstract on android.webkit.WebSettings; Pine
+        // cannot hook abstract methods. The concrete declaration lives on the
+        // provider's runtime class, so hook getSettings() and resolve per class.
+        Class<?> webView = Class.forName("android.webkit.WebView", false,
                 HookBridge.class.getClassLoader());
-        hookNoArg(webSettings, "getUserAgentString", KIND_UA);
+        hookWith(webView, "getSettings", new MethodHook() {
+            @Override public void afterCall(Pine.CallFrame frame) {
+                Object settings = frame.getResult();
+                if (settings == null) {
+                    return;
+                }
+                Class<?> runtimeClass = settings.getClass();
+                if (!sUaHooked.add(runtimeClass)) {
+                    return;
+                }
+                Method ua = findConcreteMethod(runtimeClass, "getUserAgentString");
+                if (ua == null) {
+                    log("webview ua method not found on " + runtimeClass.getName());
+                    return;
+                }
+                try {
+                    Pine.hook(ua, new IdentityHook(KIND_UA));
+                    log("webview ua hooked on " + runtimeClass.getName());
+                } catch (Throwable t) {
+                    log("webview ua hook failed", t);
+                }
+            }
+        });
+    }
+
+    /** Walks up the class chain to the first declared, hookable method. */
+    static Method findConcreteMethod(Class<?> start, String name, Class<?>... params) {
+        for (Class<?> c = start; c != null && c != Object.class; c = c.getSuperclass()) {
+            try {
+                Method m = c.getDeclaredMethod(name, params);
+                int mods = m.getModifiers();
+                if (!java.lang.reflect.Modifier.isAbstract(mods)
+                        && !java.lang.reflect.Modifier.isNative(mods)) {
+                    return m;
+                }
+            } catch (NoSuchMethodException ignored) {
+                // Keep walking toward the concrete declaration.
+            }
+        }
+        return null;
     }
 
     private static void installMediaDrm() throws ClassNotFoundException {

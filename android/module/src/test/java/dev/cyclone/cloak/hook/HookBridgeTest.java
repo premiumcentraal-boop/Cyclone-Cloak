@@ -171,6 +171,23 @@ public class HookBridgeTest {
         assertEquals(32, bytes.length);
     }
 
+    abstract static class AbstractSettings {
+        public abstract String getUserAgentString();
+    }
+
+    static class ConcreteSettings extends AbstractSettings {
+        @Override public String getUserAgentString() { return "concrete"; }
+    }
+
+    static class DeeperSettings extends ConcreteSettings { }
+
+    @Test public void uaResolverFindsTheConcreteDeclaration() throws Exception {
+        Method resolved = HookBridge.findConcreteMethod(DeeperSettings.class, "getUserAgentString");
+        assertEquals(ConcreteSettings.class, resolved.getDeclaringClass());
+        assertNull(HookBridge.findConcreteMethod(AbstractSettings.class, "getUserAgentString"));
+        assertNull(HookBridge.findConcreteMethod(DeeperSettings.class, "getNothing"));
+    }
+
     @Test public void cameraSpecsMatchByFacingOccurrence() throws Exception {
         PROPS.put("cloak.camera.count", "3");
         PROPS.put("cloak.camera.0.facing", "1");
