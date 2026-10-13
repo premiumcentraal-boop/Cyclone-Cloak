@@ -3,6 +3,7 @@ package dev.cyclone.cloak.ui
 import dev.cyclone.cloak.data.CompatibilityPostureReport
 import dev.cyclone.cloak.data.EngineMetadataStore
 import dev.cyclone.cloak.data.LocalPostureDecision
+import dev.cyclone.cloak.data.PostureCheckCause
 import dev.cyclone.cloak.data.PostureCheckStatus
 import dev.cyclone.cloak.data.PostureRecord
 import dev.cyclone.cloak.data.PostureReportCheck
@@ -62,13 +63,18 @@ class AdaptedDiagnostics internal constructor(
 }
 
 object DiagnosticsPostureAdapter {
-    fun mapStatus(status: String): PostureCheckStatus = when (status) {
+    fun mapStatus(status: String, cause: RuntimeEvidence.Cause? = null): PostureCheckStatus = when (status) {
         "VERIFIED" -> PostureCheckStatus.PASS
         "FAIL" -> PostureCheckStatus.FAIL
-        "PASS", "PARTIAL", "BLOCKED", "INCOMPLETE", "UNMAPPED", "OBSERVED", "MATCH_ONLY", "not verified",
-        "UNSTABLE", "CONTROL_CHANGED" -> PostureCheckStatus.WARNING
+        "INCOMPLETE", "BLOCKED", "UNMAPPED", "OBSERVED", "MATCH_ONLY" -> when (cause) {
+            null -> PostureCheckStatus.WARNING
+            else -> PostureCheckStatus.UNKNOWN
+        }
+        "PASS", "PARTIAL", "not verified", "UNSTABLE", "CONTROL_CHANGED" -> PostureCheckStatus.WARNING
         else -> throw IllegalArgumentException("Unsupported diagnostics status.")
     }
+
+    private fun mapCause(cause: RuntimeEvidence.Cause): PostureCheckCause = PostureCheckCause.valueOf(cause.name)
 
     fun convert(text: String, selectedProfile: JSONObject): AdaptedDiagnostics {
         require(text.length <= 2_000_000) { "Diagnostics file is too large." }
@@ -88,6 +94,10 @@ object DiagnosticsPostureAdapter {
             for (j in 0 until rows.length()) {
                 val row = rows.getJSONObject(j)
                 require(row.opt("id") is String && row.optString("id").length in 1..120 && row.opt("status") is String) { "Malformed diagnostics row." }
+                if (row.has("reason")) {
+                    val reason = row.opt("reason") as? String
+                    require(reason != null && reason.isNotBlank() && reason.length <= 128 && reason.none(Char::isISOControl)) { "Malformed diagnostics reason." }
+                }
             }
         }
         fun digest(value: Any?): String? {
@@ -107,9 +117,12 @@ object DiagnosticsPostureAdapter {
         }
         val sourceId = claim("profile_id")
         val sourceDigest = claim("profile_sha256")?.also { digest(it) }
-        val states = RuntimeEvidence.readStatuses(json)
-        require(states.isNotEmpty() && states.size <= 990) { "Diagnostics must contain one to 990 reads." }
-        val checks = states.map { (id, status) -> PostureReportCheck("read:$id", mapStatus(status), "Diagnostics proof: $status.") }.toMutableList()
+        val results = RuntimeEvidence.readResults(json)
+        require(results.isNotEmpty() && results.size <= 990) { "Diagnostics must contain one to 990 reads." }
+        val checks = results.map { (id, read) ->
+            PostureReportCheck("read:$id", mapStatus(read.status, read.cause),
+                "Diagnostics proof: ${read.status}; cause: ${read.cause}.", mapCause(read.cause))
+        }.toMutableList()
         if (sourceId == null || sourceDigest == null) checks += PostureReportCheck("context.profile_scope", PostureCheckStatus.WARNING,
             "Probe fixture evidence has no complete saved-profile binding. Association with the selected identity is local only.")
         if (agreedArtifact == null) checks += PostureReportCheck("context.artifact", PostureCheckStatus.WARNING,

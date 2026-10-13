@@ -74,6 +74,22 @@ class CompatibilityPostureReportTest {
         assertTrue(result.reason.contains("1 failed"))
     }
 
+    @Test fun optionalCauseIsPreservedChangesDigestAndUnknownBlocksSilentPass() {
+        val plain = report()
+        val caused = report(listOf(PostureReportCheck("build.model", PostureCheckStatus.UNKNOWN,
+            "Not tested.", PostureCheckCause.PROBE_NOT_RUN)))
+        val parsed = CompatibilityPostureReport.parse(caused.canonicalJson().put("report_digest", caused.digest()))
+        assertEquals(PostureCheckCause.PROBE_NOT_RUN, parsed.checks.single().cause)
+        assertNotEquals(plain.digest(), caused.digest())
+        assertTrue(runCatching {
+            CompatibilityPostureReport.parse(caused.canonicalJson().put("checks", JSONArray().put(
+                JSONObject().put("id", "build.model").put("status", "UNKNOWN").put("cause", "OTHER"))))
+        }.isFailure)
+        val withPass = report(listOf(PostureReportCheck("one", PostureCheckStatus.PASS, null),
+            PostureReportCheck("two", PostureCheckStatus.UNKNOWN, null, PostureCheckCause.PROBE_NOT_RUN)))
+        assertEquals(PostureState.UNKNOWN, LocalPostureDecision.evaluate(withPass, profile, now, artifact).state)
+    }
+
     @Test fun profileArtifactAndFreshnessChangesForceRotationInsteadOfReusingEvidence() {
         val stale = report().copy(checkedAt = "2026-10-05T14:00:00Z")
         val future = report().copy(checkedAt = "2026-10-13T15:01:01Z")

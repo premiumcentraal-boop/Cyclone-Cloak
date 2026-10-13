@@ -169,10 +169,12 @@ selected identity, then shows state, source, timestamp, reason and an artifact-m
 warning. Calling providers and loading reports never save records; an explicit
 preview/save action does.
 The subsequent diagnostics adapter accepts the existing runtime probe JSON without
-changing its format. It reuses five-phase proof classification for every read,
-including reads with no profile-schema mapping. Only VERIFIED becomes a PASS row;
-raw PASS, blocked, observed and incomplete proof become WARNING. Missing saved-profile
-scope adds a warning, and conflicting artifact/metadata digests are discarded.
+changing its wire format. It reuses five-phase proof classification for every read,
+including reads with no profile-schema mapping. Only VERIFIED becomes a PASS row.
+Each row also carries a machine-readable cause. Missing phases, blocked reads,
+unmapped or ambiguous results map to UNKNOWN, while raw PASS, partial or control
+instability remain WARNING; failures remain FAILED. Missing saved-profile scope
+adds a warning, and conflicting artifact/metadata digests are discarded.
 A load binds the in-memory report to the selected ID and canonical body SHA-256.
 Optional source profile claims are checked, never overwritten silently. The identity
 card offers **Load diagnostics for posture**, a preview with every row and freshness

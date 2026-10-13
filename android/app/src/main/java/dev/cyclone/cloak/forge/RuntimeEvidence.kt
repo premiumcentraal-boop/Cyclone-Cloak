@@ -6,6 +6,8 @@ import org.json.JSONObject
  * never certification of a saved identity or of the currently installed binary. No raw values retained.
  */
 object RuntimeEvidence {
+    enum class Cause { NONE, PERMISSION, ENVIRONMENT, HARDWARE_UNAVAILABLE, PROBE_NOT_RUN, CALLBACK_NOT_REACHED, MISMATCH, UNKNOWN }
+    data class Read(val status: String, val cause: Cause)
     private val phases = listOf("unbound-before", "bound-a", "bound-a-repeat", "bound-b", "unbound-after")
     private val mappings = linkedMapOf(
         "device.manufacturer" to listOf("build.MANUFACTURER"), "device.brand" to listOf("build.BRAND"),
@@ -38,8 +40,8 @@ object RuntimeEvidence {
         "locale.timezone" to listOf("timezone.default", "properties.java.persist.sys.timezone", "properties.native.persist.sys.timezone"),
     )
 
-    /** Proof for every probe read, including surfaces with no profile-schema field. */
-    fun readStatuses(evidence: JSONObject): Map<String, String> {
+    /** Proof and blocker cause for every probe read, including surfaces with no profile-schema field. */
+    fun readResults(evidence: JSONObject): Map<String, Read> {
         require(evidence.opt("format") == 1) { "Unsupported probe evidence format." }
         val runs = evidence.optJSONArray("runs") ?: throw IllegalArgumentException("Probe evidence has no runs.")
         require(runs.length() in 1..5) { "Invalid probe phase count." }
@@ -60,6 +62,12 @@ object RuntimeEvidence {
                 val row = rows.getJSONObject(j)
                 val id = row.getString("id")
                 require(ids.add(id) && row.opt("status") in setOf("PASS", "FAIL", "BLOCKED", "OBSERVED")) { "Malformed or duplicate probe row." }
+                if (row.has("reason")) {
+                    val reason = row.opt("reason") as? String
+                    require(reason != null && reason.isNotBlank() && reason.length <= 128 && reason.none(Char::isISOControl)) {
+                        "Malformed probe reason."
+                    }
+                }
                 reads.getOrPut(id) { mutableMapOf() }[phase] = row
             }
         }
@@ -67,6 +75,15 @@ object RuntimeEvidence {
         val artifact = evidence.opt("artifact") as? String
         val trustworthyArtifact = artifact != null && Regex("[0-9a-f]{64}").matches(artifact) &&
             evidence.optJSONObject("metadata")?.opt("module_arm64_sha256") == artifact
+        fun cause(row: JSONObject): Cause = when {
+            row.optString("reason").startsWith("PERMISSION_DENIED:") ||
+                row.optString("reason").startsWith("SecurityException:android.permission.") -> Cause.PERMISSION
+            row.optString("reason") == "SDK_OR_API_ABSENT" -> Cause.HARDWARE_UNAVAILABLE
+            row.optString("reason") == "CALLBACK_NOT_REACHED" -> Cause.CALLBACK_NOT_REACHED
+            row.optString("reason") == "SecurityException" -> Cause.ENVIRONMENT
+            row.opt("status") == "FAIL" -> Cause.MISMATCH
+            else -> Cause.UNKNOWN
+        }
         fun status(id: String): String {
             val rows = reads[id].orEmpty()
             val bound = listOfNotNull(rows["bound-a"], rows["bound-a-repeat"], rows["bound-b"])
@@ -83,11 +100,32 @@ object RuntimeEvidence {
             if (a.get("expected").toString() == b.get("expected").toString() || a.opt("actual_sha256") == b.opt("actual_sha256")) return "MATCH_ONLY"
             return "VERIFIED"
         }
-        return reads.keys.sorted().associateWith(::status)
+        fun read(id: String): Read {
+            val value = status(id)
+            val rows = reads[id].orEmpty()
+            val bound = listOfNotNull(rows["bound-a"], rows["bound-a-repeat"], rows["bound-b"])
+            val resultCause = when (value) {
+                "FAIL" -> bound.firstOrNull { it.opt("status") == "FAIL" }?.let(::cause) ?: Cause.ENVIRONMENT
+                "BLOCKED" -> bound.firstOrNull { it.opt("status") == "BLOCKED" }?.let(::cause) ?: Cause.UNKNOWN
+                "INCOMPLETE" -> when {
+                    !phases.all { rows.containsKey(it) } -> Cause.PROBE_NOT_RUN
+                    !trustworthyArtifact -> Cause.ENVIRONMENT
+                    else -> Cause.UNKNOWN
+                }
+                "VERIFIED", "PASS" -> Cause.NONE
+                else -> Cause.UNKNOWN
+            }
+            return Read(value, resultCause)
+        }
+        return reads.keys.sorted().associateWith(::read)
     }
 
+    /** Backward-compatible status view used by scoring and older callers. */
+    fun readStatuses(evidence: JSONObject): Map<String, String> =
+        readResults(evidence).mapValues { it.value.status }
+
     fun toScoreInput(evidence: JSONObject): Map<String, String> {
-        val reads = readStatuses(evidence)
+        val reads = readResults(evidence).mapValues { it.value.status }
         return mappings.mapValues { (_, ids) ->
             val states = ids.map { reads[it] ?: "INCOMPLETE" }
             when {

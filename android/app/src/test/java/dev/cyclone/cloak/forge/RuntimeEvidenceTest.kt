@@ -20,6 +20,11 @@ class RuntimeEvidenceTest {
             .put("metadata", JSONObject().put("module_arm64_sha256", "d".repeat(64))).put("runs", runs)
     }
     private fun row(evidence: JSONObject, index: Int) = evidence.getJSONArray("runs").getJSONObject(index).getJSONArray("rows").getJSONObject(0)
+    private fun load(name: String): JSONObject {
+        val path = "docs/runtime-evidence/$name"
+        val file = listOf(File(path), File("../$path"), File("../../$path")).first { it.isFile }
+        return JSONObject(file.readText())
+    }
     @Test fun completeDistinctStableFixtureProofMapsToVerified() {
         assertEquals("VERIFIED", RuntimeEvidence.toScoreInput(evidence())["device.manufacturer"])
         assertEquals("INCOMPLETE", RuntimeEvidence.toScoreInput(evidence())["identifiers.android_id"])
@@ -74,5 +79,35 @@ class RuntimeEvidenceTest {
         assertEquals("INCOMPLETE", partial["identifiers.mac"])
         val full = RuntimeEvidence.toScoreInput(load("b2a-drm.json"))
         assertEquals("VERIFIED", full["identifiers.widevine_id"])
+    }
+
+    @Test fun blockedMismatchAndMissingPhasesHaveDistinctCauses() {
+        val results = RuntimeEvidence.readResults(load("b3b-diagnostics-2026-10-13.json"))
+        assertEquals(RuntimeEvidence.Cause.MISMATCH, results.getValue("camera.characteristics").cause)
+        assertEquals("FAIL", results.getValue("camera.characteristics").status)
+        assertEquals(RuntimeEvidence.Cause.PROBE_NOT_RUN, results.getValue("wifi.objectMac").cause)
+        assertEquals("INCOMPLETE", results.getValue("wifi.objectMac").status)
+
+        val permissions = RuntimeEvidence.readResults(load("b3b-diagnostics-2026-10-13-before-prerequisites.json"))
+        assertEquals(RuntimeEvidence.Cause.PROBE_NOT_RUN, permissions.getValue("wifi.serviceMac").cause)
+        assertEquals("INCOMPLETE", permissions.getValue("wifi.serviceMac").status)
+        val permission = evidence(); row(permission, 1).put("status", "BLOCKED")
+            .put("reason", "SecurityException:android.permission.ACCESS_WIFI_STATE")
+        val permissionResult = RuntimeEvidence.readResults(permission).getValue("build.MANUFACTURER")
+        assertEquals(RuntimeEvidence.Cause.PERMISSION, permissionResult.cause)
+        assertEquals("BLOCKED", permissionResult.status)
+
+        val absent = evidence(); row(absent, 1).put("status", "BLOCKED").put("reason", "SDK_OR_API_ABSENT")
+        assertEquals(RuntimeEvidence.Cause.HARDWARE_UNAVAILABLE, RuntimeEvidence.readResults(absent).getValue("build.MANUFACTURER").cause)
+        val security = evidence(); row(security, 1).put("status", "BLOCKED").put("reason", "SecurityException")
+        assertEquals(RuntimeEvidence.Cause.ENVIRONMENT, RuntimeEvidence.readResults(security).getValue("build.MANUFACTURER").cause)
+        val callback = evidence(); row(callback, 1).put("status", "BLOCKED").put("reason", "CALLBACK_NOT_REACHED")
+        assertEquals(RuntimeEvidence.Cause.CALLBACK_NOT_REACHED, RuntimeEvidence.readResults(callback).getValue("build.MANUFACTURER").cause)
+    }
+
+    @Test fun malformedReasonsAreRejected() {
+        val long = evidence(); row(long, 1).put("reason", "x".repeat(129))
+        val controlled = evidence(); row(controlled, 1).put("reason", "bad\u0000reason")
+        for (raw in listOf(long, controlled)) assertTrue(runCatching { RuntimeEvidence.readResults(raw) }.isFailure)
     }
 }

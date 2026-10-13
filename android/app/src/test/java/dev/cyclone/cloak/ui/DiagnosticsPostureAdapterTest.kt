@@ -52,7 +52,7 @@ class DiagnosticsPostureAdapterTest {
         val profile = profile()
         assertEquals(PostureState.DEGRADED, adapt(evidence(profile, false), profile).preview(profile, artifact, now).result.state)
         val partial = evidence(profile).also { it.put("runs", JSONArray().put(it.getJSONArray("runs").getJSONObject(1))) }
-        assertEquals(PostureState.DEGRADED, adapt(partial, profile).preview(profile, artifact, now).result.state)
+        assertEquals(PostureState.UNKNOWN, adapt(partial, profile).preview(profile, artifact, now).result.state)
         partial.getJSONArray("runs").getJSONObject(0).getJSONArray("rows").getJSONObject(0).put("status", "FAIL")
         assertEquals(PostureState.FAILED, adapt(partial, profile).preview(profile, artifact, now).result.state)
     }
@@ -134,5 +134,30 @@ class DiagnosticsPostureAdapterTest {
         assertEquals(70, adapted.report.checks.count { it.id.startsWith("read:") })
         assertFalse(adapted.report.checks.any { it.status == PostureCheckStatus.PASS })
         assertTrue(adapted.report.checks.any { it.status == PostureCheckStatus.FAIL })
+    }
+
+    @Test fun blockedReadsCarryMachineReadableCauseAndDoNotBecomePass() {
+        val raw = evidence(profile())
+        for (index in 0 until raw.getJSONArray("runs").length()) {
+            raw.getJSONArray("runs").getJSONObject(index).getJSONArray("rows").getJSONObject(0)
+                .put("status", "BLOCKED").put("reason", "SecurityException:android.permission.ACCESS_WIFI_STATE")
+        }
+        val adapted = DiagnosticsPostureAdapter.convert(raw.toString(), profile())
+        val blocked = adapted.report.checks.first { it.cause == dev.cyclone.cloak.data.PostureCheckCause.PERMISSION }
+        assertEquals(PostureCheckStatus.UNKNOWN, blocked.status)
+        assertTrue(blocked.message!!.contains("cause: PERMISSION"))
+        assertFalse(adapted.report.checks.any { it.status == PostureCheckStatus.PASS })
+    }
+
+    @Test fun mismatchAndMissingPhasesUseDistinctCauses() {
+        val path = "docs/runtime-evidence/b3b-diagnostics-2026-10-13.json"
+        val file = listOf(File(path), File("../$path"), File("../../$path")).first { it.isFile }
+        val adapted = DiagnosticsPostureAdapter.convert(file.readText(), profile())
+        assertTrue(adapted.report.checks.any {
+            it.cause == dev.cyclone.cloak.data.PostureCheckCause.MISMATCH && it.status == PostureCheckStatus.FAIL
+        })
+        assertTrue(adapted.report.checks.any {
+            it.cause == dev.cyclone.cloak.data.PostureCheckCause.PROBE_NOT_RUN && it.status == PostureCheckStatus.UNKNOWN
+        })
     }
 }

@@ -12,7 +12,14 @@ import java.util.zip.ZipInputStream
 /** One local self-test row. Only these rows drive the posture decision. */
 enum class PostureCheckStatus { PASS, WARNING, FAIL, UNKNOWN }
 
-data class PostureReportCheck(val id: String, val status: PostureCheckStatus, val message: String?) {
+enum class PostureCheckCause { NONE, PERMISSION, ENVIRONMENT, HARDWARE_UNAVAILABLE, PROBE_NOT_RUN, CALLBACK_NOT_REACHED, MISMATCH, UNKNOWN }
+
+data class PostureReportCheck(
+    val id: String,
+    val status: PostureCheckStatus,
+    val message: String?,
+    val cause: PostureCheckCause? = null,
+) {
     init {
         require(id.isNotBlank() && id.length <= 128 && id.none(Char::isISOControl)) { "Invalid posture check ID." }
         message?.let { require(it.isNotBlank() && it.length <= 512 && it.none(Char::isISOControl)) { "Invalid posture check message." } }
@@ -59,10 +66,14 @@ data class CompatibilityPostureReport(
             val rawChecks = json.getJSONArray("checks")
             val checks = (0 until rawChecks.length()).map { index ->
                 val row = rawChecks.getJSONObject(index)
-                val allowed = setOf("id", "status", "message")
+                val allowed = setOf("id", "status", "message", "cause")
                 require(row.keys().asSequence().toSet().let { keys -> keys.containsAll(setOf("id", "status")) && keys.all { it in allowed } }) { "Malformed local posture check." }
                 val message = if (row.isNull("message")) null else row.optString("message")
-                PostureReportCheck(row.getString("id"), PostureCheckStatus.valueOf(row.getString("status")), message)
+                val cause = if (row.has("cause") && !row.isNull("cause")) {
+                    runCatching { PostureCheckCause.valueOf(row.getString("cause")) }.getOrNull()
+                        ?: throw IllegalArgumentException("Invalid local posture cause.")
+                } else null
+                PostureReportCheck(row.getString("id"), PostureCheckStatus.valueOf(row.getString("status")), message, cause)
             }
             val report = CompatibilityPostureReport(
                 text("provider_id"), text("checked_at"), text("profile_id"), text("profile_sha256"),
@@ -90,10 +101,14 @@ data class CompatibilityPostureReport(
     /** Canonical local report body used for provenance and replay detection. */
     fun canonicalJson(): JSONObject {
         val checks = org.json.JSONArray()
-        for (check in this.checks) checks.put(JSONObject()
-            .put("id", check.id)
-            .put("status", check.status.name)
-            .put("message", check.message ?: JSONObject.NULL))
+        for (check in this.checks) {
+            val row = JSONObject()
+                .put("id", check.id)
+                .put("status", check.status.name)
+                .put("message", check.message ?: JSONObject.NULL)
+            check.cause?.let { cause -> row.put("cause", cause.name) }
+            checks.put(row)
+        }
         return JSONObject()
             .put("format", 1)
             .put("provider_id", providerId)
@@ -136,19 +151,22 @@ object LocalPostureDecision {
         val passes = report.passIds.size
         val warnings = report.warningIds.size
         val failures = report.failureIds.size
+        val unknowns = report.checks.count { it.status == PostureCheckStatus.UNKNOWN }
         val state = when {
             profileChanged -> PostureState.NEEDS_ROTATION
             artifactUnknown -> PostureState.UNKNOWN
             drift != null -> PostureState.NEEDS_ROTATION
             failures > 0 -> PostureState.FAILED
             warnings > 0 -> PostureState.DEGRADED
+            unknowns > 0 -> PostureState.UNKNOWN
             passes > 0 -> PostureState.PASS
             else -> PostureState.UNKNOWN
         }
         val reason = when {
             drift != null -> drift
             failures > 0 -> "Local checks failed: $failures failed, $warnings warned, $passes passed."
-            warnings > 0 -> "Local checks need review: $warnings warned, $passes passed."
+            warnings > 0 -> "Local checks need review: $warnings warned, $unknowns unknown, $passes passed."
+            unknowns > 0 -> "Local checks are inconclusive: $unknowns unknown, $passes passed."
             passes > 0 -> "Local checks passed: $passes passed."
             else -> "The local report contained no definite check result."
         } + " Local report only; no platform verdict."
