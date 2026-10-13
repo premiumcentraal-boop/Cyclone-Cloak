@@ -16,8 +16,10 @@ import org.junit.Assert.assertTrue
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import org.robolectric.annotation.Config
 
 @RunWith(RobolectricTestRunner::class)
+@Config(sdk = [34])
 class HomeAttentionTest {
     private val b = "Cyclone_bbbbbbbbbbbbbbbb"
     private val gate = CycloneGate(true, 3, setOf("profiles.read", "profiles.apps.read", "profiles.config"), emptySet())

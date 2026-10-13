@@ -24,7 +24,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Apps
 import androidx.compose.material.icons.rounded.Layers
-import androidx.compose.material.icons.rounded.OpenInNew
+import androidx.compose.material.icons.automirrored.rounded.OpenInNew
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.ContentCopy
@@ -302,7 +302,7 @@ internal fun CloakProfileCard(
         showChevron = false,
     ) {
         if (pill != null) CloakStatusPill(pill.label, tone ?: CloakStatusTone.PENDING)
-        if (canOpen) IconButton(onClick = onOpen) { Icon(Icons.Rounded.OpenInNew, contentDescription = "Open in Cyclone") }
+        if (canOpen) IconButton(onClick = onOpen) { Icon(Icons.AutoMirrored.Rounded.OpenInNew, contentDescription = "Open in Cyclone") }
     }
 }
 

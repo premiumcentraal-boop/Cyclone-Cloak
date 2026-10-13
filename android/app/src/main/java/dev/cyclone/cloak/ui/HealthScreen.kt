@@ -16,7 +16,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Build
 import androidx.compose.material.icons.rounded.Download
-import androidx.compose.material.icons.rounded.OpenInNew
+import androidx.compose.material.icons.automirrored.rounded.OpenInNew
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -59,7 +59,7 @@ internal fun HealthScreen(state: CloakState, vm: CloakViewModel) {
             CloakGroupDivider()
             CloakRow("Reconnect to Cyclone", icon = Icons.Rounded.Refresh, onClick = vm::refresh, showChevron = false)
             CloakGroupDivider()
-            CloakRow("Open Magisk", icon = Icons.Rounded.OpenInNew, onClick = { openMagisk(context) }, showChevron = false)
+            CloakRow("Open Magisk", icon = Icons.AutoMirrored.Rounded.OpenInNew, onClick = { openMagisk(context) }, showChevron = false)
             if (state.rootDoctor.code != RootDoctorCode.READY) {
                 CloakGroupDivider()
                 CloakRow("Get module ZIP", icon = Icons.Rounded.Download, onClick = { openModuleDownload(context) }, showChevron = false)

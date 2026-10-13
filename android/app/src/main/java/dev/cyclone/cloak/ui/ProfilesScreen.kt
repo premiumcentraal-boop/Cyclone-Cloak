@@ -12,7 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.Layers
 import androidx.compose.material.icons.rounded.Link
-import androidx.compose.material.icons.rounded.OpenInNew
+import androidx.compose.material.icons.automirrored.rounded.OpenInNew
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -70,7 +70,7 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
         mainTarget?.let { main ->
             item {
                 CloakGroup {
-                    CloakRow("Open ${main.label} in Cyclone", icon = Icons.Rounded.OpenInNew, onClick = { if (!state.opening) vm.openInCyclone(main) })
+                    CloakRow("Open ${main.label} in Cyclone", icon = Icons.AutoMirrored.Rounded.OpenInNew, onClick = { if (!state.opening) vm.openInCyclone(main) })
                 }
             }
         }

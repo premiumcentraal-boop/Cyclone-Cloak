@@ -95,7 +95,7 @@ internal fun HomeScreen(state: CloakState, onNavigate: (CloakDestination) -> Uni
                 CloakGroupDivider()
                 Shortcut(Icons.Rounded.Layers, "Profiles", "${state.registry.size} Cyclone profiles · ${state.bindings.size} bound apps") { onNavigate(CloakDestination.PROFILES) }
                 CloakGroupDivider()
-                Shortcut(Icons.Rounded.HealthAndSafety, "Health", "Root Doctor: ${state.rootDoctor.title}") { onNavigate(CloakDestination.HEALTH) }
+                Shortcut(Icons.Rounded.HealthAndSafety, "Health", "Readiness checks, repair and duplicate review") { onNavigate(CloakDestination.HEALTH) }
             }
         }
     }
