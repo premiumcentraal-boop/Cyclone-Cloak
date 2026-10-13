@@ -40,6 +40,7 @@ jobs:
       - name: Test release candidate
         run: |
           uv run --with pytest -- python -m pytest forge/tests -q
+          uv run --with pytest --with jsonschema -- python -m pytest forge/schema_tests -q
           gradle -p android :app:testDebugUnitTest :module:testDebugUnitTest --no-daemon
       - name: Decode Android release keystore
         run: echo "${{ secrets.ANDROID_KEYSTORE_B64 }}" | base64 -d > "$RUNNER_TEMP/cloak.keystore"
