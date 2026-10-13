@@ -40,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import dev.cyclone.cloak.data.EngineMetadataStore
 import dev.cyclone.cloak.forge.CloakFleet
 import dev.cyclone.cloak.forge.RuntimeEvidence
 
@@ -56,6 +57,12 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
     var deleting by remember { mutableStateOf<Identity?>(null) }
     val importer = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri -> uri?.let(vm::import) }
     val evidenceImporter = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri -> uri?.let(vm::importEngineEvidence) }
+    var postureTarget by remember { mutableStateOf<String?>(null) }
+    val postureImporter = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        val target = postureTarget
+        postureTarget = null
+        if (uri != null && target != null) vm.importPostureReport(uri, target)
+    }
     var coverageId by rememberSaveable { mutableStateOf<String?>(null) }
     var exportTarget by remember { mutableStateOf<String?>(null) }
     var exporting by remember { mutableStateOf(false) }
@@ -185,8 +192,22 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
                 PostureSummaryLine(state.postures[id], Modifier.padding(horizontal = 8.dp))
                 if (selected == id) {
                     state.postures[id]?.let { posture ->
-                        Text("${posture.reason} Local compatibility record only; no platform verdict.",
-                            style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(horizontal = 8.dp))
+                        Column(Modifier.padding(horizontal = 8.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                            Text("Source: ${posture.source}", style = MaterialTheme.typography.bodySmall)
+                            Text(posture.checkedAt?.let { "Checked: $it" } ?: "No check timestamp",
+                                style = MaterialTheme.typography.bodySmall)
+                            Text(posture.reason, style = MaterialTheme.typography.bodySmall)
+                            Text("Local compatibility record only; no platform verdict.",
+                                style = MaterialTheme.typography.bodySmall)
+                            if (posture.profileDigest != null && posture.profileDigest != EngineMetadataStore.digest(profile)) {
+                                Text("The report does not match the current saved identity.",
+                                    style = MaterialTheme.typography.bodySmall)
+                            }
+                            if (posture.artifactDigest != null && posture.artifactDigest != state.currentArtifactDigest) {
+                                Text("The report artifact differs from the current bundled artifact.",
+                                    style = MaterialTheme.typography.bodySmall)
+                            }
+                        }
                     }
                     val metadata = state.engineMetadata[id]
                     EngineIdentitySummary.labels(profile, metadata).forEach { label ->
@@ -203,6 +224,8 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
                     FlowRow(Modifier.fillMaxWidth().padding(horizontal = 4.dp)) {
                         TextButton(onClick = { coverageId = if (coverageId == id) null else id }) { Text("Field coverage") }
                         TextButton(onClick = { evidenceImporter.launch(arrayOf("application/json", "text/plain")) }, enabled = state.busy == null) { Text("Load probe evidence") }
+                        TextButton(onClick = { postureTarget = id; postureImporter.launch(arrayOf("application/json", "text/plain")) },
+                            enabled = state.busy == null) { Text("Load posture report") }
                         TextButton(onClick = { vm.startBinding(id) }) { Text("Bind to profile apps") }
                         TextButton(onClick = { exportTarget = id; includeIdentity = false; backupLabel = ""; exporting = true }, enabled = state.busy == null) { Text("Export profile") }
                         TextButton(onClick = { vm.duplicateIdentity(id) }, enabled = state.busy == null) { Text("Duplicate") }

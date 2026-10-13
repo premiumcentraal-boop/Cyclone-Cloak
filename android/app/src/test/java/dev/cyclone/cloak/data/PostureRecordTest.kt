@@ -6,7 +6,7 @@ import org.junit.Test
 
 class PostureRecordTest {
     private fun record(state: PostureState = PostureState.UNKNOWN) = PostureRecord("profile-1", state,
-        "2026-10-13T15:00:00Z", "local-test", "Explicit local observation", "test-provider", "ab".repeat(32))
+        "2026-10-13T15:00:00Z", "local-test", "Explicit local observation", "test-provider", "ab".repeat(32), "cd".repeat(32))
 
     @Test fun everyStateSerializesByStableNameAndRoundTrips() {
         for (state in PostureState.entries) {
@@ -50,6 +50,7 @@ class PostureRecordTest {
         assertEquals(PostureState.NEEDS_ROTATION, marked.state)
         assertNull(cleared.providerId)
         assertNull(cleared.artifactDigest)
+        assertNull(cleared.profileDigest)
     }
     @Test fun resetHelperDoesNotChangeUnrelatedStates() {
         for (state in PostureState.entries.filter { it != PostureState.NEEDS_ROTATION }) {
@@ -59,7 +60,8 @@ class PostureRecordTest {
     @Test fun reasonSourceIdsAndArtifactAreBoundedAndValidated() {
         for (change in listOf<() -> PostureRecord>({ record().copy(reason = "x".repeat(1025)) },
             { record().copy(source = "invalid\nsource") }, { record().copy(profileId = "") },
-            { record().copy(providerId = "") }, { record().copy(artifactDigest = "AB".repeat(32)) })) {
+            { record().copy(providerId = "") }, { record().copy(artifactDigest = "AB".repeat(32)) },
+            { record().copy(profileDigest = "AB".repeat(32)) })) {
             assertTrue(runCatching(change).isFailure)
         }
     }

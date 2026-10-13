@@ -153,6 +153,20 @@ tracking and automatic reseeding on app-data clear are not implemented in this
 release. Device verification and remaining compatibility surfaces are recorded
 in [CURRENT-STATE.md](CURRENT-STATE.md) and [COMPAT_SURFACE.md](COMPAT_SURFACE.md).
 
+## Local compatibility posture
+
+Posture is a local evidence layer, not a platform verdict. `PostureStore` keeps one
+app-private record per profile. B6B adds a versioned local report parser and a
+conservative decision engine. A report must name its provider, check time, profile
+ID, profile SHA-256, artifact SHA-256 and explicit check rows; an optional raw
+verdict is retained but never overrides check rows.
+
+The decision maps actual rows to PASS, DEGRADED, FAILED or UNKNOWN. A profile-body
+mismatch, artifact mismatch, future timestamp or report older than seven days maps
+to NEEDS_ROTATION instead of reusing the evidence. If the current artifact digest is
+unavailable, PASS is not possible. The Identities screen can load one report for a
+selected identity, then shows state, source, timestamp, reason and an artifact-mismatch
+warning. Calling providers never saves records; explicit report loading does.
 ## Local profile uniqueness
 
 `forge/ProfileUniqueness` derives an in-memory index from readable saved profile JSON. It is rebuilt before each proposed write and for Health diagnostics, so there is no cache file, migration, or new storage format to corrupt. It indexes Android ID, advertising/app-set IDs, serial, Widevine ID, Wi-Fi/Bluetooth MAC addresses, both IMEIs, SIM serial, and GSF ID within the current Android user's library. Comparisons are case-insensitive; empty and non-string entries are skipped. Coherence validation separately reports malformed values.

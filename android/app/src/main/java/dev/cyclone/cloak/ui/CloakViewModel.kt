@@ -20,6 +20,9 @@ import dev.cyclone.cloak.data.CloakStore
 import dev.cyclone.cloak.data.EngineMetadataStore
 import dev.cyclone.cloak.data.PostureRecord
 import dev.cyclone.cloak.data.PostureStore
+import dev.cyclone.cloak.data.CompatibilityPostureReport
+import dev.cyclone.cloak.data.LocalPostureDecision
+import dev.cyclone.cloak.data.PostureArtifacts
 import dev.cyclone.cloak.forge.DefaultDeviceProfileEngine
 import dev.cyclone.cloak.forge.IdentityEngine
 import dev.cyclone.cloak.forge.EngineBundleCodec
@@ -49,6 +52,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.json.JSONObject
+import java.time.Instant
 
 /** An identity on this phone: its id and its full cloak profile. */
 typealias Identity = Pair<String, JSONObject>
@@ -72,6 +76,7 @@ data class CloakState(
     val unreadableIdentityIds: Set<String> = emptySet(),
     val engineMetadata: Map<String, JSONObject> = emptyMap(),
     val postures: Map<String, PostureRecord> = emptyMap(),
+    val currentArtifactDigest: String? = null,
     val engineCoverage: Map<String, String> = emptyMap(),
     val bindings: List<CloakBinding> = emptyList(),
     val report: SyncReport? = null,
@@ -115,6 +120,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
     private val engine = DefaultDeviceProfileEngine()
     private val engineMetadataStore by lazy { EngineMetadataStore(app, EngineBundleCodec::validateMetadata) }
     private val postureStore by lazy { PostureStore(app) }
+    private val bundledArtifactDigest by lazy { PostureArtifacts.bundledModuleDigest(app) }
     private val app: Context get() = getApplication()
     private val _state = MutableStateFlow(CloakState())
     val state: StateFlow<CloakState> = _state.asStateFlow()
@@ -167,6 +173,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
             it.copy(phones = builtIn + own, identities = identities, identityInventoryKnown = inventoryKnown,
                 engineMetadata = identities.mapNotNull { (id, profile) -> engineMetadataStore.read(profile)?.let { id to it } }.toMap(),
                 postures = identities.mapNotNull { (id, _) -> postureStore.read(id)?.let { id to it } }.toMap(),
+                currentArtifactDigest = bundledArtifactDigest,
                 unreadableIdentityIds = unreadable, bindings = CloakBindingStore.all(app),
                 backups = backupDirectory().all().mapNotNull { (id, value) -> value.optJSONObject("manifest")?.let { manifest -> id to manifest } })
         }
@@ -313,6 +320,17 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         val coverage = RuntimeEvidence.toScoreInput(JSONObject(text))
         _state.update { it.copy(engineCoverage = coverage) }
         say("Loaded probe fixture coverage. It describes the measured binary, not this saved identity or the installed module.")
+    }
+
+    fun importPostureReport(uri: Uri, identityId: String) = launchWork("Reading local posture report…") {
+        val text = app.contentResolver.openInputStream(uri)?.bufferedReader(Charsets.UTF_8)?.use { readBounded(it, 2_000_000) }
+            ?: error("Couldn't open that file.")
+        val report = CompatibilityPostureReport.parse(JSONObject(text))
+        val profile = CloakStore.find(app, identityId) ?: error("That identity is gone.")
+        val result = LocalPostureDecision.evaluate(report, profile, Instant.now(), bundledArtifactDigest)
+        val record = result.recordFor(identityId)
+        postureStore.update(record)
+        say("Saved local posture: ${PostureSummary.label(record).removePrefix("Local compatibility posture: ")}.")
     }
 
     fun saveReviewed() {
