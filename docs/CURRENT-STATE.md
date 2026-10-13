@@ -1,11 +1,13 @@
 # Current state
 
-Updated 2026-10-13. Latest published prerelease at preparation:
-[v0.11.0-alpha.5](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.5),
-code 29, release commit `6f04079`.
-Current release metadata is **v0.11.0-alpha.6 / versionCode 30**; its publication
-is gated by release CI. [Alpha.6 notes](RELEASE_0.11.0-alpha.6.md) describe the
-read-only library-quality summary and upgrade limits.
+Updated 2026-10-13. **v0.11.0-alpha.6 / versionCode 30** is the
+[latest published prerelease](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.6),
+release commit `f4ff3992759ef1652a25aceda8d07fb9c3dd0daa`.
+[Release CI](https://github.com/premiumcentraal-boop/Cyclone-Cloak/actions/runs/38472829633) passed all four suites,
+signed builds and matching-artifact checks before attaching the APK and module ZIP.
+[Alpha.6 notes](RELEASE_0.11.0-alpha.6.md) describe the read-only library-quality
+summary and upgrade limits. Later publication-documentation commits on main do
+not change the tagged payload.
 
 ## Versions and major components
 
@@ -52,9 +54,9 @@ uv run -- python tools/verify_release.py --tag v0.11.0-alpha.6
 git diff --check
 ```
 
-Release CI runs all four suites on Linux, builds/signs the APK and packages the
-module ZIP, verifies version agreement and exact embedded-module bytes, and then
-publishes both prerelease assets. Signing uses the existing CI secrets.
+Release CI passed all four suites on Linux, built/signed the APK and packaged
+the module ZIP, verified version agreement and exact embedded-module bytes, then
+published both prerelease assets. Signing uses the existing CI secrets.
 Local debug output: `android/app/build/outputs/apk/debug/app-debug.apk`.
 Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.6.zip`.
 

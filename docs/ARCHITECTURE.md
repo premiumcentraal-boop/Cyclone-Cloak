@@ -1,7 +1,8 @@
 # Cyclone Cloak Architecture
 
-Release metadata: `v0.11.0-alpha.6`, code 30. Latest published at preparation:
-[v0.11.0-alpha.5](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.5).
+Current published prerelease: [v0.11.0-alpha.6](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.6),
+code 30, release commit `f4ff399`. The local library-quality summary is read-only;
+this release does not change runtime/module behavior.
 See [CURRENT-STATE.md](CURRENT-STATE.md) for verification and evidence limits.
 Dated release reports and checkpoints describe their historical releases.
 

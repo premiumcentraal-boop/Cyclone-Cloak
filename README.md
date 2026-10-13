@@ -11,13 +11,13 @@ not prove that every inspection API sees it.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.11.0-alpha.6 (prerelease preparation)
+## Status: 0.11.0-alpha.6 (published prerelease)
 
-Latest published at preparation: [v0.11.0-alpha.5](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.5).
-Alpha.6 adds a read-only local library-quality summary. App/module metadata agrees
-at code 30. [Alpha.6 release notes](docs/RELEASE_0.11.0-alpha.6.md) include upgrade
-and evidence limits. [Release CI](https://github.com/premiumcentraal-boop/Cyclone-Cloak/actions/workflows/release.yml)
-tests, signs and verifies both artifacts before publication.
+[Published alpha.6](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.6) adds a read-only local
+library-quality summary. App/module metadata agrees at code 30.
+[Release notes](docs/RELEASE_0.11.0-alpha.6.md) include upgrade and evidence limits.
+[Release CI](https://github.com/premiumcentraal-boop/Cyclone-Cloak/actions/runs/38472829633) passed app/module, forge and schema suites,
+signed builds and matching-artifact checks, then attached the APK and module ZIP.
 See [CURRENT-STATE.md](docs/CURRENT-STATE.md) for local results and limitations.
 Device evidence remains tied to its measured artifact; local quality and posture
 states do not constitute platform verdicts.
@@ -30,7 +30,7 @@ states do not constitute platform verdicts.
 - **Per-profile isolation**: bindings are keyed by Cyclone profile id and package name; the Android
   user number follows the profile (a profile restored under a new user keeps its bindings).
 - **platform module** (`android/module`): for every app bound to a cloak profile, rewrites the
-  `android.os.Build` statics and callbacks `SystemProperties` reads with partial measured coverage; RC runtime changes remain unverified.
+  `android.os.Build` statics and callbacks `SystemProperties` reads with partial, artifact-specific measured coverage.
   Callbacks apply once at process start; unscoped apps are untouched.
 - **Root Doctor**: checks Magisk, Zygisk, module version and architecture, and profile-state publishing. Its
   explicit repair action can use the matching module bundled inside the signed app, then explains when a
