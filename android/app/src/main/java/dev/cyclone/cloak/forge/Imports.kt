@@ -10,6 +10,7 @@ object Imports {
     sealed class Parsed {
         /** One identity. [findings] are the coherence rules; any error blocks saving it. */
         data class Profile(val profile: JSONObject, val findings: List<ProfileValidator.Finding>) : Parsed()
+        data class Engine(val bundle: EngineBundleCodec.Bundle) : Parsed()
         data class Fleet(val profiles: List<JSONObject>) : Parsed()
         /** A phone shared from Cloak, or drafted from a dump ([fromDump]): open it in the builder to check or finish. */
         data class Phone(val phone: PhoneTemplate, val findings: List<ProfileValidator.Finding>, val fromDump: Boolean) : Parsed()
@@ -22,6 +23,7 @@ object Imports {
             return Parsed.Phone(phone, ProfileValidator.validatePhone(phone), fromDump = true)
         }
         val json = runCatching { JSONObject(trimmed) }.getOrElse { throw IllegalArgumentException("That file isn't valid JSON.") }
+        if (json.has("profile") || json.has("metadata")) return Parsed.Engine(EngineBundleCodec.decode(trimmed))
         return when (json.optString("kind")) {
             FLEET_KIND -> Parsed.Fleet(CloakFleet.parseFleet(trimmed))
             PHONE_KIND -> {

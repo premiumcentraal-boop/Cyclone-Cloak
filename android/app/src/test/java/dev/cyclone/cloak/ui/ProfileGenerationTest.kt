@@ -17,6 +17,16 @@ class ProfileGenerationTest {
     private val phone get() = TestPhones["pixel_7"]
     private val seed = "ab".repeat(32)
     private fun store(): Pair<File, JsonDirectory> = temp.newFolder().let { it to JsonDirectory(it) }
+    @Test fun normalGenerationDeliversMetadataAndUnchangedBodyToTheSidecarSavePath() {
+        val result = ProfileGeneration.generate(phone, emptyList(), save = { fail("Sidecar callback must be used"); "" }, seedFactory = { seed },
+            saveEngine = { profile, metadata ->
+                assertTrue(profile.similar(CloakForge.forgeProfile(profile.getString("name"), seed, phone)))
+                assertEquals(seed, metadata.getString("chosen_seed"))
+                assertEquals(1, metadata.getInt("attempt_count"))
+                profile.getString("id")
+            })
+        assertTrue(result is ProfileGeneration.Result.Saved)
+    }
 
     @Test
     fun validGenerationUsesOneSeedAndAtomicallySavesTheCompleteForgePayload() {
@@ -122,7 +132,7 @@ class ProfileGenerationTest {
         val bytes = folder.listFiles()!!.single().readBytes()
         val result = ProfileGeneration.generate(phone, store.all(), save = { fail("Must not save"); "" },
             seedFactory = { seed }, name = "Repeat") as ProfileGeneration.Result.Failed
-        assertEquals("PROFILE_EXISTS", result.code)
+        assertEquals("NAME_EXISTS", result.code)
         assertArrayEquals(bytes, folder.listFiles()!!.single().readBytes())
     }
 
@@ -169,14 +179,14 @@ class ProfileGenerationTest {
         assertNotEquals(seedA, seedB)
         assertTrue(CloakForge.forgeProfile(first.name, seedA, phone).similar(store.read(first.id)))
     }
-    @Test fun duplicateIdentifiersPreventGenerationSaveUntilReviewed() {
+    @Test fun duplicateIdentifiersTriggerUniqueGenerationBeforeSaving() {
         val original = CloakForge.forgeProfile("Original", seed, phone)
         var saves = 0
         val result = ProfileGeneration.generate(phone, listOf(original.getString("id") to original),
             save = { saves++; "unused" }, seedFactory = { seed }, name = "Copy")
-        assertTrue(result is ProfileGeneration.Result.NeedsReview)
-        assertEquals(0, saves)
-        assertEquals(11, (result as ProfileGeneration.Result.NeedsReview).findings.count { it.code == "DUPLICATE_IDENTIFIER" })
+        assertTrue(result is ProfileGeneration.Result.Saved)
+        assertEquals(1, saves)
+        assertEquals(0, (result as ProfileGeneration.Result.Saved).findings.count { it.code == "DUPLICATE_IDENTIFIER" })
     }
 
     @Test fun libraryRebuildToleratesUnreadableFilesAndPreservesOldBytes() {

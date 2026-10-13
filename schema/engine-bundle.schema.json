@@ -51,8 +51,18 @@
         "template": {
           "type": "string",
           "minLength": 1
+        },
+        "source_confidence": {
+          "enum": ["public reference", "approximated", "needs verification"]
+        },
+        "chosen_seed": {
+          "type": "string", "pattern": "^[0-9a-f]{64}$"
+        },
+        "attempt_count": {
+          "type": "integer", "minimum": 1, "maximum": 128
         }
-      }
+      },
+      "dependentRequired": {"chosen_seed": ["attempt_count"], "attempt_count": ["chosen_seed"]}
     }
   },
   "$defs": {

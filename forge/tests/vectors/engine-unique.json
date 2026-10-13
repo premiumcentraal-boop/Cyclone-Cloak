@@ -1,0 +1,331 @@
+{
+  "request": {
+    "name": "Unique",
+    "seed": "abababababababababababababababababababababababababababababababab",
+    "template": "pixel_7"
+  },
+  "library": [
+    {
+      "schema_version": "0.3",
+      "id": "2cdb4d12-7a0c-54f6-86c3-d15e5a0a2239",
+      "name": "Unique",
+      "seed": "abababababababababababababababababababababababababababababababab",
+      "device": {
+        "manufacturer": "Google",
+        "brand": "google",
+        "model": "Pixel 7",
+        "product": "panther",
+        "device": "panther",
+        "hardware": "gs101",
+        "fingerprint": "google/panther/panther:13/TQ3A.230805.001/10193186:user/release-keys",
+        "version_release": "13",
+        "sdk_int": 33,
+        "security_patch": "2023-08-05",
+        "build_id": "TQ3A.230805.001",
+        "version_incremental": "10193186",
+        "build_date_utc": 1691712000,
+        "first_api_level": 33,
+        "bootloader": "panther-1.0-8769422",
+        "baseband": "g5123-230712-230712-B10046521"
+      },
+      "identifiers": {
+        "android_id": "3a4cf3a7fcd4e8cb",
+        "advertising_id": "d3500169-d39a-40b1-bcfa-f9d9d1739be7",
+        "app_set_id": "3d2eb31f-1124-489c-bcd6-61b985491917",
+        "mac": "1A:35:32:1E:77:25",
+        "bt_mac": "3A:B4:66:9A:D8:54",
+        "imei_primary": "472186978248637",
+        "imei_secondary": "710989943352422",
+        "sim_serial": "2622829857001513606",
+        "gsf_id": "f043b6a655d7a57a",
+        "widevine_id": "f2b9c7904bec4ec0755b7aec3eca856e1deb43ab9cbd564f038af27837d568d3",
+        "serial": "U6UV1SJBJET5"
+      },
+      "telephony": {
+        "sim_slot_count": 1,
+        "carrier_name": "T-Mobile",
+        "mcc": "310",
+        "mnc": "260",
+        "network_type": "5G"
+      },
+      "network": {
+        "egress_hint": "us-east"
+      },
+      "display": {
+        "width": 1080,
+        "height": 2400,
+        "density": 420,
+        "refresh_rate_hz": 90,
+        "screen_size_class": "large"
+      },
+      "locale": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      },
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8160,
+            "pixel_height": 6144
+          },
+          {
+            "facing": 1,
+            "hardware_level": 0,
+            "pixel_width": 4032,
+            "pixel_height": 3024
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 4000,
+            "pixel_height": 3000
+          }
+        ]
+      },
+      "ua": {
+        "value": "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
+      },
+      "integrity": {
+        "verdict": "unknown",
+        "checked_at": null,
+        "keybox_tag": null
+      },
+      "health": {
+        "state": "new",
+        "last_seen": null
+      },
+      "meta": {
+        "source": "forge",
+        "forge_version": "0.2.0",
+        "template": "pixel_7"
+      }
+    },
+    {
+      "schema_version": "0.3",
+      "id": "5c88b61a-4141-5067-a6e5-7ef3fa90d361",
+      "name": "Unique",
+      "seed": "92e28fa87ce1f91892775725abe3cdb5b0e6e5549d4b35d3822deffe8a504a11",
+      "device": {
+        "manufacturer": "Google",
+        "brand": "google",
+        "model": "Pixel 7",
+        "product": "panther",
+        "device": "panther",
+        "hardware": "gs101",
+        "fingerprint": "google/panther/panther:13/TQ3A.230805.001/10193186:user/release-keys",
+        "version_release": "13",
+        "sdk_int": 33,
+        "security_patch": "2023-08-05",
+        "build_id": "TQ3A.230805.001",
+        "version_incremental": "10193186",
+        "build_date_utc": 1691712000,
+        "first_api_level": 33,
+        "bootloader": "panther-1.0-8769422",
+        "baseband": "g5123-230712-230712-B10046521"
+      },
+      "identifiers": {
+        "android_id": "a837a05207d64e06",
+        "advertising_id": "39322559-4b6b-4435-8d8a-2170504df2d9",
+        "app_set_id": "c6835c99-42f5-422c-bd1b-8e39c56589f4",
+        "mac": "2A:4C:AD:47:28:53",
+        "bt_mac": "9A:14:C2:C0:49:6A",
+        "imei_primary": "490354050374519",
+        "imei_secondary": "863392254547158",
+        "sim_serial": "1684337481786491056",
+        "gsf_id": "73296604dc0a1914",
+        "widevine_id": "d19152b2c1effc6bc48829c735306fa512112d33adc06fa31126b9b751f62720",
+        "serial": "9VMIV91T2TOF"
+      },
+      "telephony": {
+        "sim_slot_count": 1,
+        "carrier_name": "T-Mobile",
+        "mcc": "310",
+        "mnc": "260",
+        "network_type": "5G"
+      },
+      "network": {
+        "egress_hint": "us-east"
+      },
+      "display": {
+        "width": 1080,
+        "height": 2400,
+        "density": 420,
+        "refresh_rate_hz": 90,
+        "screen_size_class": "large"
+      },
+      "locale": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      },
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8160,
+            "pixel_height": 6144
+          },
+          {
+            "facing": 1,
+            "hardware_level": 0,
+            "pixel_width": 4032,
+            "pixel_height": 3024
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 4000,
+            "pixel_height": 3000
+          }
+        ]
+      },
+      "ua": {
+        "value": "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/115.0.3380.24 Safari/537.36"
+      },
+      "integrity": {
+        "verdict": "unknown",
+        "checked_at": null,
+        "keybox_tag": null
+      },
+      "health": {
+        "state": "new",
+        "last_seen": null
+      },
+      "meta": {
+        "source": "forge",
+        "forge_version": "0.2.0",
+        "template": "pixel_7"
+      }
+    }
+  ],
+  "bundle": {
+    "profile": {
+      "schema_version": "0.3",
+      "id": "6957cb5f-1b5a-5c79-a6fa-9160719e7bfc",
+      "name": "Unique",
+      "seed": "8361e6560ccc27f1ab333b870d1d374436271d735ebb24987823ffcaa82c07ad",
+      "device": {
+        "manufacturer": "Google",
+        "brand": "google",
+        "model": "Pixel 7",
+        "product": "panther",
+        "device": "panther",
+        "hardware": "gs101",
+        "fingerprint": "google/panther/panther:13/TQ3A.230805.001/10193186:user/release-keys",
+        "version_release": "13",
+        "sdk_int": 33,
+        "security_patch": "2023-08-05",
+        "build_id": "TQ3A.230805.001",
+        "version_incremental": "10193186",
+        "build_date_utc": 1691712000,
+        "first_api_level": 33,
+        "bootloader": "panther-1.0-8769422",
+        "baseband": "g5123-230712-230712-B10046521"
+      },
+      "identifiers": {
+        "android_id": "90f9db991318c41c",
+        "advertising_id": "6f305fa0-c82c-496d-99b1-35176028ed72",
+        "app_set_id": "ac8129f3-f5ac-4801-9b2d-35b3ff339371",
+        "mac": "B2:77:D3:E2:C5:27",
+        "bt_mac": "22:57:65:EC:17:84",
+        "imei_primary": "479229463714151",
+        "imei_secondary": "671283720158955",
+        "sim_serial": "3133217553204184207",
+        "gsf_id": "6e64c5c8b6a15103",
+        "widevine_id": "5b7bcf5324f993a97aa4935f46c17c510aa7d66af12e187f0b5da5fb8d7426e0",
+        "serial": "H270C2HQ0ZJ2"
+      },
+      "telephony": {
+        "sim_slot_count": 1,
+        "carrier_name": "T-Mobile",
+        "mcc": "310",
+        "mnc": "260",
+        "network_type": "5G"
+      },
+      "network": {
+        "egress_hint": "us-east"
+      },
+      "display": {
+        "width": 1080,
+        "height": 2400,
+        "density": 420,
+        "refresh_rate_hz": 90,
+        "screen_size_class": "large"
+      },
+      "locale": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      },
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8160,
+            "pixel_height": 6144
+          },
+          {
+            "facing": 1,
+            "hardware_level": 0,
+            "pixel_width": 4032,
+            "pixel_height": 3024
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 4000,
+            "pixel_height": 3000
+          }
+        ]
+      },
+      "ua": {
+        "value": "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.5986.84 Safari/537.36"
+      },
+      "integrity": {
+        "verdict": "unknown",
+        "checked_at": null,
+        "keybox_tag": null
+      },
+      "health": {
+        "state": "new",
+        "last_seen": null
+      },
+      "meta": {
+        "source": "forge",
+        "forge_version": "0.2.0",
+        "template": "pixel_7"
+      }
+    },
+    "posture": {
+      "MANUFACTURER": "Google",
+      "MODEL": "Pixel 7",
+      "BRAND": "google",
+      "PRODUCT": "panther",
+      "DEVICE": "panther",
+      "FINGERPRINT": "google/panther/panther:13/TQ3A.230805.001/10193186:user/release-keys",
+      "SECURITY_PATCH": "2023-08-05",
+      "FIRST_API_LEVEL": "33",
+      "BUILD_ID": "TQ3A.230805.001",
+      "INCREMENTAL": "10193186",
+      "BOOTLOADER": "panther-1.0-8769422",
+      "BASEBAND": "g5123-230712-230712-B10046521",
+      "VERSION_RELEASE": "13",
+      "SDK_INT": "33"
+    },
+    "findings": [],
+    "uniqueness": [],
+    "metadata": {
+      "engine_version": "1",
+      "schema_version": "0.3",
+      "template": "pixel_7",
+      "chosen_seed": "8361e6560ccc27f1ab333b870d1d374436271d735ebb24987823ffcaa82c07ad",
+      "attempt_count": 3,
+      "source_confidence": "needs verification"
+    }
+  }
+}

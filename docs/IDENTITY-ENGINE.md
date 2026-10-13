@@ -4,6 +4,13 @@ The engine is a pure facade over the existing forges. It has no UI, connector,
 storage or publishing dependencies. Existing callers and function signatures
 are unchanged. Generated profiles are not automatically saved, bound or published.
 
+The B5 app integration now uses `DeviceProfileEngine` and its default adapter for
+normal new-profile generation and accepts engine bundles via Import. Separate
+app-private metadata records leave profile bodies and existing storage paths
+unchanged. See [B5 integration and handoff](HANDOFF-2026-10-13-B5-ENGINE-INTEGRATION.md)
+for the adapter signatures, deterministic uniqueness retries, sidecar format and
+fixture-scoped field coverage. Direct generation APIs remain available.
+
 ## Public operations
 
 Python module: `forge/cloak_forge/engine.py`.
@@ -36,6 +43,11 @@ The bundle contains `profile`, `posture`, `findings`, `uniqueness`, `metadata`.
 Metadata has engine_version "1", selected schema_version and template ID.
 It contains no duplicate seed. Findings serialize severity/code/message/field.
 The bundle is a return value, not a new persisted storage format.
+
+This describes direct `generate`, which remains unchanged. B5 `generate_unique`
+adds optional metadata `source_confidence`, `chosen_seed`, and `attempt_count`.
+The seed is private local metadata; the UI displays only descriptive labels.
+The schema accepts this additive extension without requiring it on older bundles.
 
 Schema: `schema/engine-bundle.schema.json`, Draft 2020-12.
 `$id`: `https://github.com/premiumcentraal-boop/Cyclone-Cloak/schema/engine-bundle.schema.json`.

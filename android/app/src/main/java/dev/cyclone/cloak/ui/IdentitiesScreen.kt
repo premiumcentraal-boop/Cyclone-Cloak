@@ -41,6 +41,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import dev.cyclone.cloak.forge.CloakFleet
+import dev.cyclone.cloak.forge.RuntimeEvidence
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -54,6 +55,8 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
     var renaming by remember { mutableStateOf<Identity?>(null) }
     var deleting by remember { mutableStateOf<Identity?>(null) }
     val importer = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri -> uri?.let(vm::import) }
+    val evidenceImporter = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri -> uri?.let(vm::importEngineEvidence) }
+    var coverageId by rememberSaveable { mutableStateOf<String?>(null) }
     var exportTarget by remember { mutableStateOf<String?>(null) }
     var exporting by remember { mutableStateOf(false) }
     var includeIdentity by rememberSaveable { mutableStateOf(false) }
@@ -180,6 +183,10 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                 CloakIdentityCard(id = id, profile = profile, selected = selected == id, onSelect = { selected = if (selected == id) null else id })
                 if (selected == id) {
+                    val metadata = state.engineMetadata[id]
+                    EngineIdentitySummary.labels(profile, metadata).forEach { label ->
+                        Text(label, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(horizontal = 8.dp))
+                    }
                     val profiles = bound.map { it.profileId }.distinct()
                         .map { pid -> state.registry.firstOrNull { it.id == pid }?.label ?: pid }
                     Text(
@@ -189,12 +196,23 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
                         modifier = Modifier.padding(horizontal = 8.dp),
                     )
                     FlowRow(Modifier.fillMaxWidth().padding(horizontal = 4.dp)) {
+                        TextButton(onClick = { coverageId = if (coverageId == id) null else id }) { Text("Field coverage") }
+                        TextButton(onClick = { evidenceImporter.launch(arrayOf("application/json", "text/plain")) }, enabled = state.busy == null) { Text("Load probe evidence") }
                         TextButton(onClick = { vm.startBinding(id) }) { Text("Bind to profile apps") }
                         TextButton(onClick = { exportTarget = id; includeIdentity = false; backupLabel = ""; exporting = true }, enabled = state.busy == null) { Text("Export profile") }
                         TextButton(onClick = { vm.duplicateIdentity(id) }, enabled = state.busy == null) { Text("Duplicate") }
                         TextButton(onClick = { vm.reviewIdentity(id) }, enabled = state.busy == null) { Text("Review identifiers") }
                         TextButton(onClick = { renaming = identity }) { Text("Rename") }
                         TextButton(onClick = { deleting = identity }) { Text("Delete") }
+                    }
+                    if (coverageId == id) {
+                        Text(if (state.engineCoverage.isEmpty()) "Implementation coverage; device evidence not loaded."
+                            else "Probe fixture coverage for the artifact in the loaded report. Saved identity and installed module are not verified by this report.",
+                            style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(horizontal = 8.dp))
+                        RuntimeEvidence.rows(profile, state.engineCoverage).forEach { row ->
+                            Text("${row.field}: ${row.state} (${row.testStatus})", style = MaterialTheme.typography.bodySmall,
+                                modifier = Modifier.padding(horizontal = 8.dp))
+                        }
                     }
                 }
             }

@@ -34,6 +34,15 @@ bundles without storage or connector actions. [Engine/corpus documentation](IDEN
 records signatures, optional catalog facts and proof limits. Runtime hooks and
 publishing remain separate components.
 
+The app's `DeviceProfileEngine` adapter delegates to that pure facade. Normal
+new-profile actions perform deterministic uniqueness retries before saving;
+Import also accepts validated engine bundles. `EngineMetadataStore` retains
+metadata in app-private preferences keyed by profile ID and body digest, leaving
+the existing profiles directory and all published bodies unchanged. The identity
+screen exposes descriptive engine labels and optional probe-fixture field
+coverage. [B5 handoff](HANDOFF-2026-10-13-B5-ENGINE-INTEGRATION.md) documents recovery
+and evidence limits; runtime and connector paths do not consume this sidecar.
+
 ## App layout
 
 `android/probe` is an independent diagnostic APK, not part of the companion or

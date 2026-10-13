@@ -17,6 +17,11 @@ import dev.cyclone.cloak.cyclone.SyncReport
 import dev.cyclone.cloak.data.CloakBinding
 import dev.cyclone.cloak.data.CloakBindingStore
 import dev.cyclone.cloak.data.CloakStore
+import dev.cyclone.cloak.data.EngineMetadataStore
+import dev.cyclone.cloak.forge.DefaultDeviceProfileEngine
+import dev.cyclone.cloak.forge.IdentityEngine
+import dev.cyclone.cloak.forge.EngineBundleCodec
+import dev.cyclone.cloak.forge.RuntimeEvidence
 import dev.cyclone.cloak.data.PhoneStore
 import dev.cyclone.cloak.forge.CloakFleet
 import dev.cyclone.cloak.forge.CloakForge
@@ -54,7 +59,7 @@ data class PhoneEditor(val draft: PhoneDraft, val isNew: Boolean, val note: Stri
 
 /** An imported profile with findings, waiting for the owner's decision. */
 data class ImportReview(val profile: JSONObject, val findings: List<ProfileValidator.Finding>,
-    val verb: String = "Imported", val remaining: List<JSONObject> = emptyList()) {
+    val verb: String = "Imported", val remaining: List<JSONObject> = emptyList(), val engineMetadata: JSONObject? = null) {
     val canSave: Boolean get() = findings.none { it.isError }
 }
 
@@ -63,6 +68,8 @@ data class CloakState(
     val identities: List<Identity> = emptyList(),
     val identityInventoryKnown: Boolean = false,
     val unreadableIdentityIds: Set<String> = emptySet(),
+    val engineMetadata: Map<String, JSONObject> = emptyMap(),
+    val engineCoverage: Map<String, String> = emptyMap(),
     val bindings: List<CloakBinding> = emptyList(),
     val report: SyncReport? = null,
     val syncing: Boolean = false,
@@ -102,6 +109,8 @@ data class CloakState(
 }
 
 class CloakViewModel(application: Application) : AndroidViewModel(application) {
+    private val engine = DefaultDeviceProfileEngine()
+    private val engineMetadataStore by lazy { EngineMetadataStore(app, EngineBundleCodec::validateMetadata) }
     private val app: Context get() = getApplication()
     private val _state = MutableStateFlow(CloakState())
     val state: StateFlow<CloakState> = _state.asStateFlow()
@@ -152,6 +161,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
             .map { it.name.removeSuffix(".json") }.filter { it !in readableIds }.toSet()
         _state.update {
             it.copy(phones = builtIn + own, identities = identities, identityInventoryKnown = inventoryKnown,
+                engineMetadata = identities.mapNotNull { (id, profile) -> engineMetadataStore.read(profile)?.let { id to it } }.toMap(),
                 unreadableIdentityIds = unreadable, bindings = CloakBindingStore.all(app),
                 backups = backupDirectory().all().mapNotNull { (id, value) -> value.optJSONObject("manifest")?.let { manifest -> id to manifest } })
         }
@@ -246,7 +256,8 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         _state.update { it.copy(generation = ProfileGeneration.Result.Running) }
         launchWork("Generating profile…") {
             val result = try {
-                ProfileGeneration.generate(phone, CloakStore.all(app), save = { CloakStore.save(app, it) })
+                ProfileGeneration.generate(phone, CloakStore.all(app), save = { CloakStore.save(app, it) },
+                    saveEngine = { profile, metadata -> engineMetadataStore.save(profile, metadata) { CloakStore.save(app, it) } })
             } catch (_: Exception) {
                 ProfileGeneration.Result.Failed("GENERATION_FAILED", "Could not generate the profile. Try again.")
             }
@@ -273,6 +284,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
             return@launchWork
         }
         when (val parsed = Imports.parse(text, takenPhoneIds())) {
+            is Imports.Parsed.Engine -> saveIdentity(parsed.bundle.profile, "Imported", engineMetadata = parsed.bundle.metadata)
             is Imports.Parsed.Profile -> {
                 saveIdentity(parsed.profile, "Imported")
             }
@@ -290,6 +302,14 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun importEngineEvidence(uri: Uri) = launchWork("Reading probe evidence…") {
+        val text = app.contentResolver.openInputStream(uri)?.bufferedReader(Charsets.UTF_8)?.use { readBounded(it, 2_000_000) }
+            ?: error("Couldn't open that file.")
+        val coverage = RuntimeEvidence.toScoreInput(JSONObject(text))
+        _state.update { it.copy(engineCoverage = coverage) }
+        say("Loaded probe fixture coverage. It describes the measured binary, not this saved identity or the installed module.")
+    }
+
     fun saveReviewed() {
         val review = _state.value.review ?: return
         if (!review.canSave) return say("This profile has errors, so it can't be used as it is.")
@@ -299,7 +319,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
                 _state.update { it.copy(review = review.copy(findings = ProfileValidator.validateProfile(review.profile) + currentFindings)) }
                 return@launchWork say("The library changed. Review the current conflicts before saving.")
             }
-            if (saveIdentity(review.profile, review.verb, allowDuplicates = true)) {
+            if (saveIdentity(review.profile, review.verb, allowDuplicates = true, engineMetadata = review.engineMetadata)) {
                 _state.update { it.copy(review = null, generation = if (it.generation is ProfileGeneration.Result.NeedsReview &&
                     it.generation.profile.optString("id") == review.profile.optString("id"))
                     ProfileGeneration.Result.Saved(review.profile.optString("id"), review.profile.optString("name"), review.findings)
@@ -377,18 +397,21 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
 
     // ---- Identities -------------------------------------------------------------------------------------------------
 
-    private suspend fun saveIdentity(profile: JSONObject, verb: String, allowDuplicates: Boolean = false): Boolean {
+    private suspend fun saveIdentity(profile: JSONObject, verb: String, allowDuplicates: Boolean = false, engineMetadata: JSONObject? = null): Boolean {
         val existing = CloakStore.all(app)
+        if (engineMetadata != null) require(CloakStore.find(app, profile.getString("id")) == null &&
+            !java.io.File(app.filesDir, "profiles/${profile.getString("id")}.json").exists()) { "That profile already exists. Engine import never replaces saved identities." }
         val name = profile.optString("name").trim()
         require(existing.none { (id, p) -> id != profile.optString("id") && p.optString("name").equals(name, ignoreCase = true) }) {
             "An identity named \"$name\" already exists. Choose another name."
         }
         val findings = ProfileValidator.validateProfile(profile) + ProfileUniqueness(existing).findings(profile)
         if (findings.any { it.isError } || (!allowDuplicates && findings.isNotEmpty())) {
-            _state.update { it.copy(review = ImportReview(JSONObject(profile.toString()), findings, verb)) }
+            _state.update { it.copy(review = ImportReview(JSONObject(profile.toString()), findings, verb, engineMetadata = engineMetadata)) }
             return false
         }
-        CloakStore.save(app, profile)
+        if (engineMetadata == null) CloakStore.save(app, profile)
+        else engineMetadataStore.save(profile, engineMetadata) { CloakStore.save(app, it) }
         say("$verb $name.")
         if (CloakBindingStore.all(app).any { it.cloakProfileId == profile.optString("id") }) publishAndSync()
         return true
@@ -408,6 +431,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         val index = ProfileUniqueness(CloakStore.all(app))
         val draft = index.regenerate(review.profile, field)
         _state.update { it.copy(review = review.copy(profile = draft,
+            engineMetadata = null,
             findings = ProfileValidator.validateProfile(draft) + index.findings(draft))) }
     }
 
@@ -431,9 +455,12 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
     fun createIdentity(name: String, phoneId: String) {
         val phone = _state.value.phone(phoneId) ?: return say("Choose a phone first.")
         launchWork("Creating identity…") {
-            val profile = CloakForge.forgeNewProfile(name, phone)
+            val clean = name.trim()
+            require(clean.length in 1..64) { "Names are 1 to 64 characters." }
+            val bundle = engine.generate_unique(IdentityEngine.GenerationRequest(clean, CloakForge.newSeed(), phone), CloakStore.all(app).map { it.second })
+            val profile = bundle.getJSONObject("profile")
             ProfileValidator.errors(profile).firstOrNull()?.let { throw IllegalArgumentException(it) }
-            saveIdentity(profile, "Created")
+            saveIdentity(profile, "Created", engineMetadata = bundle.getJSONObject("metadata"))
         }
     }
 
@@ -507,7 +534,8 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         changeBinding { it.copy(running = true, note = null) }
         launchWork("Generating compatibility profile…") {
             val result = try {
-                ProfileGeneration.generate(phone, CloakStore.all(app), save = { CloakStore.save(app, it) })
+                ProfileGeneration.generate(phone, CloakStore.all(app), save = { CloakStore.save(app, it) },
+                    saveEngine = { profile, metadata -> engineMetadataStore.save(profile, metadata) { CloakStore.save(app, it) } })
             } catch (_: Exception) { ProfileGeneration.Result.Failed("GENERATION_FAILED", "Generation failed. Check local storage and try again.") }
             loadLocal()
             _state.update { state -> state.copy(bindingFlow = state.bindingFlow?.copy(running = false,

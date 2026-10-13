@@ -1,6 +1,9 @@
 package dev.cyclone.cloak.ui
 
 import dev.cyclone.cloak.forge.CloakForge
+import dev.cyclone.cloak.forge.DefaultDeviceProfileEngine
+import dev.cyclone.cloak.forge.DeviceProfileEngine
+import dev.cyclone.cloak.forge.IdentityEngine
 import dev.cyclone.cloak.forge.PhoneTemplate
 import dev.cyclone.cloak.forge.ProfileUniqueness
 import dev.cyclone.cloak.forge.ProfileValidator
@@ -34,26 +37,31 @@ object ProfileGeneration {
         save: (JSONObject) -> String,
         seedFactory: () -> String = CloakForge::newSeed,
         name: String = nextName(phone, existing),
+        engine: DeviceProfileEngine = DefaultDeviceProfileEngine(),
+        saveEngine: ((JSONObject, JSONObject) -> String)? = null,
     ): Result {
-        val profile = try {
+        if (existing.any { it.second.optString("name").equals(name, ignoreCase = true) }) {
+            return Result.Failed("NAME_EXISTS", "That profile name is already in use. No existing identity was replaced.")
+        }
+        val bundle = try {
             // The seed is allocated once, and copied into the same profile that is validated and saved.
-            CloakForge.forgeProfile(name, seedFactory(), phone)
+            engine.generate_unique(IdentityEngine.GenerationRequest(name, seedFactory(), phone), existing.map { it.second })
+        } catch (invalid: DefaultDeviceProfileEngine.InvalidProfile) {
+            return Result.Rejected(invalid.findings)
         } catch (_: Exception) {
             return Result.Failed("GENERATION_FAILED", "Could not generate the profile. Try again.")
         }
+        val profile = bundle.getJSONObject("profile")
         val findings = ProfileValidator.validateProfileResult(profile).findings
         if (findings.any { it.isError }) return Result.Rejected(findings)
         val id = profile.getString("id")
         if (existing.any { (storedId, value) -> storedId == id || value.optString("id") == id }) {
             return Result.Failed("PROFILE_EXISTS", "This profile already exists. No existing identity was replaced.")
         }
-        if (existing.any { it.second.optString("name").equals(name, ignoreCase = true) }) {
-            return Result.Failed("NAME_EXISTS", "That profile name is already in use. No existing identity was replaced.")
-        }
         val duplicates = ProfileUniqueness(existing).findings(profile)
         if (duplicates.isNotEmpty()) return Result.NeedsReview(profile, findings + duplicates)
         return try {
-            save(profile)
+            if (saveEngine == null) save(profile) else saveEngine(profile, bundle.getJSONObject("metadata"))
             Result.Saved(id, name, findings)
         } catch (_: Exception) {
             Result.Failed("SAVE_FAILED", "Could not save the profile. Check local storage and try again.")

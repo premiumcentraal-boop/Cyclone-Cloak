@@ -2,10 +2,12 @@
 from __future__ import annotations
 
 from dataclasses import asdict
+import hashlib
 from typing import Any, Iterable, Mapping
 
 from .coverage import APPLIED, INTERNAL, PENDING
 from .forge import forge_profile
+from .templates import TEMPLATES
 from .pif import build_pif
 from .validate import Finding, summarize, validate_profile
 
@@ -31,6 +33,33 @@ def generate(request: Mapping[str, Any]) -> dict[str, Any]:
 
 def validate(profile: Mapping[str, Any]) -> list[Finding]:
     return validate_profile(profile)
+
+
+def retry_seed(seed: str, attempt: int) -> str:
+    import re
+    if not isinstance(seed, str) or not re.fullmatch(r"[0-9a-f]{64}", seed) or type(attempt) is not int or not 2 <= attempt <= 128:
+        raise ValueError("Invalid retry seed or attempt")
+    return hashlib.sha256(f"cloak-engine-unique-v1:{seed}:{attempt}".encode("utf-8")).hexdigest()
+
+
+def generate_unique(request: Mapping[str, Any], existingProfiles: Iterable[Mapping[str, Any]]) -> dict[str, Any]:
+    """Deterministic bounded retry; candidate IDs are never treated as an edit of a saved record."""
+    library = list(existingProfiles)
+    for attempt in range(1, 129):
+        seed = request["seed"] if attempt == 1 else retry_seed(request["seed"], attempt)
+        bundle = generate({**request, "seed": seed})
+        profile = bundle["profile"]
+        if any(f.severity == "error" for f in validate(profile)):
+            raise ValueError("Generated profile has coherence errors.")
+        # Copy shells to prevent the edit-oriented own-ID exclusion, without touching saved data.
+        index = [{**p, "id": f"saved-{i}"} for i, p in enumerate(library)]
+        if any(p.get("id") == profile["id"] for p in library) or check_uniqueness(profile, index):
+            continue
+        template = TEMPLATES[request["template"]]
+        bundle["metadata"].update(chosen_seed=seed, attempt_count=attempt,
+            source_confidence=template.get("source_confidence", template.get("confidence", "needs verification")))
+        return bundle
+    raise ValueError("Could not generate a unique profile after 128 attempts. Nothing was saved.")
 
 
 def derive_posture(profile: Mapping[str, Any]) -> dict[str, str]:

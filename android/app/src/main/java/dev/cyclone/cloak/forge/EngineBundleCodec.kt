@@ -1,0 +1,115 @@
+package dev.cyclone.cloak.forge
+
+import org.json.JSONObject
+import org.json.JSONTokener
+
+/** Imported findings/posture are untrusted. Validation is always recomputed from the original body. */
+object EngineBundleCodec {
+    data class Bundle(val profile: JSONObject, val metadata: JSONObject, val findings: List<ProfileValidator.Finding>, val extras: JSONObject = JSONObject())
+    private val keys = setOf("profile", "metadata", "posture", "findings", "uniqueness")
+    private val metadataKeys = setOf("engine_version", "schema_version", "template", "source_confidence", "chosen_seed", "attempt_count")
+
+    fun decode(text: String): Bundle {
+        require(text.length <= 2_000_000) { "Engine bundle is too large." }
+        StrictJson(text).check()
+        // Bound nesting before the recursive JSON reader (including malicious unknown fields).
+        var depth = 0; var quoted = false; var escaped = false
+        for (char in text) {
+            if (quoted) { if (escaped) escaped = false else if (char == '\\') escaped = true else if (char == '"') quoted = false }
+            else when (char) { '"' -> quoted = true; '{', '[' -> { depth++; require(depth <= 32) { "Engine bundle is too deeply nested." } }; '}', ']' -> depth-- }
+        }
+        val parser = JSONTokener(text)
+        val root = parser.nextValue() as? JSONObject ?: throw IllegalArgumentException("Engine bundle must be an object.")
+        require(parser.nextClean() == '\u0000' && root.keys().asSequence().toSet().all { it in keys }) { "Malformed engine bundle." }
+        val profile = root.optJSONObject("profile") ?: throw IllegalArgumentException("Engine bundle has no profile body.")
+        val metadata = root.optJSONObject("metadata") ?: throw IllegalArgumentException("Engine bundle has no metadata.")
+        validateMetadata(metadata, profile)
+        root.opt("posture")?.let { require(it is JSONObject && it.keys().asSequence().toSet().all { key -> it.opt(key) is String }) { "Malformed posture." } }
+        for (key in listOf("findings", "uniqueness")) if (root.has(key)) {
+            val array = root.optJSONArray(key) ?: throw IllegalArgumentException("Malformed $key.")
+            require(array.length() <= 1000) { "Too many findings." }
+            for (i in 0 until array.length()) {
+                val finding = array.optJSONObject(i) ?: throw IllegalArgumentException("Malformed finding.")
+                require(finding.keys().asSequence().toSet() == setOf("severity", "code", "message", "field") &&
+                    finding.opt("severity") is String && finding.opt("code") is String && finding.opt("message") is String &&
+                    (finding.isNull("field") || finding.opt("field") is String)) { "Malformed finding." }
+                ProfileValidator.Finding(finding.getString("severity"), finding.getString("code"), finding.getString("message"))
+            }
+        }
+        val findings = IdentityEngine.validate(profile)
+        require(findings.none { it.isError }) { findings.filter { it.isError }.joinToString("\n") { "${it.code}: ${it.message}" } }
+        val extras = JSONObject()
+        listOf("posture", "findings", "uniqueness").filter(root::has).forEach { extras.put(it, root.get(it)) }
+        return Bundle(JSONObject(profile.toString()), JSONObject(metadata.toString()), findings, extras)
+    }
+
+    fun validateMetadata(metadata: JSONObject, profile: JSONObject) {
+        require(metadata.keys().asSequence().toSet().all { it in metadataKeys }) { "Unsupported engine metadata field." }
+        require(metadata.opt("engine_version") == "1") { "Unsupported engine version." }
+        require(metadata.opt("schema_version") in setOf("0.2", "0.3") && metadata.opt("schema_version") == profile.opt("schema_version")) { "Engine/profile schema versions disagree." }
+        require(metadata.opt("template") is String && metadata.getString("template").length in 1..128) { "Missing template ID." }
+        val profileTemplate = profile.optJSONObject("meta")?.optString("template").orEmpty()
+        require(profileTemplate.isEmpty() || metadata.getString("template") == profileTemplate) { "Engine/profile template IDs disagree." }
+        if (metadata.has("source_confidence")) require(metadata.opt("source_confidence") in setOf("public reference", "approximated", "needs verification")) { "Invalid source confidence." }
+        require(metadata.has("chosen_seed") == metadata.has("attempt_count")) { "Incomplete generation metadata." }
+        if (metadata.has("chosen_seed")) {
+            require(metadata.opt("chosen_seed") is String && Regex("[0-9a-f]{64}").matches(metadata.getString("chosen_seed")) && metadata.opt("chosen_seed") == profile.opt("seed")) { "Chosen seed disagrees with profile." }
+            val attempts = metadata.opt("attempt_count")
+            require(attempts is Int && attempts in 1..128) { "Invalid attempt count." }
+        }
+    }
+
+    fun encode(bundle: Bundle): String {
+        val root = JSONObject(bundle.extras.toString()).put("profile", bundle.profile).put("metadata", bundle.metadata)
+        decode(root.toString())
+        return root.toString()
+    }
+
+    /** Android's JSONTokener accepts non-JSON syntax. Reject it, duplicate keys and trailing data. */
+    private class StrictJson(private val text: String) {
+        private var index = 0
+        private fun space() { while (index < text.length && text[index] in " \t\r\n") index++ }
+        private fun token(char: Char) { space(); require(index < text.length && text[index++] == char) { "Malformed engine JSON." } }
+        fun check() { value(0); space(); require(index == text.length) { "Trailing engine JSON data." } }
+        private fun string(): String {
+            space(); val start = index; token('"')
+            while (index < text.length) {
+                val char = text[index++]
+                require(char >= ' ') { "Control character in JSON string." }
+                if (char == '"') return JSONTokener(text.substring(start, index)).nextValue() as String
+                if (char == '\\') {
+                    require(index < text.length) { "Incomplete JSON escape." }
+                    val escape = text[index++]
+                    require(escape in "\"\\/bfnrtu") { "Invalid JSON escape." }
+                    if (escape == 'u') { require(index + 4 <= text.length && text.substring(index, index + 4).all { it in "0123456789abcdefABCDEF" }) { "Invalid Unicode escape." }; index += 4 }
+                }
+            }
+            throw IllegalArgumentException("Unterminated JSON string.")
+        }
+        private fun value(depth: Int) {
+            require(depth <= 32) { "Engine bundle is too deeply nested." }
+            space(); require(index < text.length) { "Incomplete engine JSON." }
+            when (text[index]) {
+                '{' -> {
+                    index++; space(); val keys = mutableSetOf<String>()
+                    if (index < text.length && text[index] == '}') { index++; return }
+                    while (true) {
+                        require(keys.add(string())) { "Duplicate engine JSON key." }; token(':'); value(depth + 1); space()
+                        if (index < text.length && text[index] == '}') { index++; return }
+                        token(',')
+                    }
+                }
+                '[' -> {
+                    index++; space(); if (index < text.length && text[index] == ']') { index++; return }
+                    while (true) { value(depth + 1); space(); if (index < text.length && text[index] == ']') { index++; return }; token(',') }
+                }
+                '"' -> string()
+                else -> {
+                    val literal = Regex("(?:true|false|null|-?(?:0|[1-9][0-9]*)(?:\\.[0-9]+)?(?:[eE][+-]?[0-9]+)?)").find(text, index)
+                    require(literal != null && literal.range.first == index) { "Invalid JSON value." }
+                    index += literal.value.length
+                }
+            }
+        }
+    }
+}

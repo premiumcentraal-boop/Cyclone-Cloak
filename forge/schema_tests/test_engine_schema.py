@@ -9,7 +9,7 @@ from referencing import Registry, Resource
 
 ROOT = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(ROOT / "forge"))
-from cloak_forge.engine import generate
+from cloak_forge.engine import generate, generate_unique
 from cloak_forge.templates import load_catalog
 
 SCHEMAS = [json.loads(p.read_text()) for p in (ROOT / "schema").glob("*.schema.json")]
@@ -42,3 +42,11 @@ def test_bundle_rejects_missing_required_and_unknown_fields():
     v = validator("engine-bundle.schema.json")
     assert list(v.iter_errors({"profile": {}}))
     assert list(v.iter_errors({"profile": {}, "metadata": {}, "bindings": {}}))
+
+
+def test_unique_metadata_is_additive_and_rejects_incomplete_retry_pair():
+    v = validator("engine-bundle.schema.json")
+    bundle = generate_unique({"name": "Unique", "seed": "ab" * 32, "template": "pixel_7"}, [])
+    v.validate(bundle)
+    bundle["metadata"].pop("chosen_seed")
+    assert list(v.iter_errors(bundle))
