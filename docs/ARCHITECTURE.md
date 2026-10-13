@@ -166,7 +166,8 @@ mismatch, artifact mismatch, future timestamp or report older than seven days ma
 to NEEDS_ROTATION instead of reusing the evidence. If the current artifact digest is
 unavailable, PASS is not possible. The Identities screen can load one report for a
 selected identity, then shows state, source, timestamp, reason and an artifact-mismatch
-warning. Calling providers never saves records; explicit report loading does.
+warning. Calling providers and loading reports never save records; an explicit
+preview/save action does.
 The subsequent diagnostics adapter accepts the existing runtime probe JSON without
 changing its format. It reuses five-phase proof classification for every read,
 including reads with no profile-schema mapping. Only VERIFIED becomes a PASS row;
@@ -269,3 +270,23 @@ are written and synced before publishing the document. Failed copies are
 discarded; the already complete in-app backup remains available with a warning.
 Downloads copies survive app-data removal, while in-app backups do not. No new
 permissions or networking are used; `allowBackup=false` remains unchanged.
+
+## Compatibility report workflow
+
+The selected identity's local report card shows a 12-character report digest
+prefix when provenance is available, source, checked time, explicit saved-profile
+and bundled-artifact matches, and freshness. Missing metadata is shown as not
+recorded; matching a bundled payload does not verify the installed module.
+**Load compatibility report** validates and previews the existing report envelope
+before an explicit save. Replay/newer-report acceptance rules remain in force.
+**Review report details** opens the saved summary; individual check rows are only
+available in the import preview because the existing store retains a summary.
+
+**Mark needs rotation** requires confirmation and preserves report provenance.
+**Clear after explicit local reset** is enabled only for Needs rotation and requires
+acknowledgement that a reset or reseed already completed. It records Unknown and
+clears the current evidence association without performing an identity reset.
+Replay history is retained. Both actions recheck the reviewed record before writing;
+a changed record requires another review. Errors remain visible on the selected
+identity (and in an open import preview), with retry/cancel paths. Profile files,
+connector behavior, binding and module publication are unchanged.

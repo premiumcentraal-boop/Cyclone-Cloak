@@ -21,7 +21,6 @@ import dev.cyclone.cloak.data.EngineMetadataStore
 import dev.cyclone.cloak.data.PostureRecord
 import dev.cyclone.cloak.data.PostureStore
 import dev.cyclone.cloak.data.CompatibilityPostureReport
-import dev.cyclone.cloak.data.LocalPostureDecision
 import dev.cyclone.cloak.data.PostureArtifacts
 import dev.cyclone.cloak.data.PostureProvenance
 import dev.cyclone.cloak.data.PostureProvenanceStore
@@ -78,6 +77,7 @@ data class CloakState(
     val unreadableIdentityIds: Set<String> = emptySet(),
     val engineMetadata: Map<String, JSONObject> = emptyMap(),
     val postures: Map<String, PostureRecord> = emptyMap(),
+    val postureErrors: Map<String, String> = emptyMap(),
     val currentArtifactDigest: String? = null,
     val diagnosticsReview: DiagnosticsReview? = null,
     val engineCoverage: Map<String, String> = emptyMap(),
@@ -326,18 +326,38 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         say("Loaded probe fixture coverage. It describes the measured binary, not this saved identity or the installed module.")
     }
 
-    fun importPostureReport(uri: Uri, identityId: String) = launchWork("Reading local posture report…") {
-        val text = app.contentResolver.openInputStream(uri)?.bufferedReader(Charsets.UTF_8)?.use { readBounded(it, 2_000_000) }
-            ?: error("Couldn't open that file.")
-        val report = CompatibilityPostureReport.parse(JSONObject(text))
-        val profile = CloakStore.find(app, identityId) ?: error("That identity is gone.")
-        val result = LocalPostureDecision.evaluate(report, profile, Instant.now(), bundledArtifactDigest)
-        val record = result.recordFor(identityId)
-        acceptPostureRecord(record)
-        say("Saved local posture: ${PostureSummary.label(record).removePrefix("Local compatibility posture: ")}.")
+    private fun postureWork(identityId: String, label: String, failure: String, block: suspend () -> Unit) = launchWork(label) {
+        _state.update { it.copy(postureErrors = it.postureErrors - identityId) }
+        try { block() } catch (error: Exception) {
+            if (error is kotlinx.coroutines.CancellationException) throw error
+            val safeReasons = setOf("This compatibility report is for another profile. Select its identity before loading.",
+                "The saved report changed. Review it again before continuing.",
+                "This exact local posture report was already imported.", "This local posture report is not newer than the saved record.",
+                "A completed explicit local reset or reseed is required.", "This identity is not marked as needing rotation.",
+                "That identity is gone. No local evidence was changed.",
+                "This compatibility report does not match the selected profile. No local evidence was saved.")
+            val message = error.message?.takeIf { it in safeReasons } ?: failure
+            _state.update { it.copy(postureErrors = it.postureErrors + (identityId to message)) }
+            say(message)
+        }
     }
 
-    fun loadDiagnosticsForPosture(uri: Uri, identityId: String) = launchWork("Reading local diagnostics…") {
+    fun importPostureReport(uri: Uri, identityId: String) = postureWork(identityId, "Reading local compatibility report…",
+        "Couldn't load the compatibility report. Check the file format and try again. No record was saved.") {
+        _state.update { it.copy(diagnosticsReview = null) }
+        val text = app.contentResolver.openInputStream(uri)?.bufferedReader(Charsets.UTF_8)?.use { readBounded(it, 2_000_000) }
+            ?: error("Couldn't open that file.")
+        dev.cyclone.cloak.forge.StrictJson(text).check()
+        val report = CompatibilityPostureReport.parse(JSONObject(text))
+        val profile = CloakStore.find(app, identityId) ?: error("That identity is gone. No local evidence was changed.")
+        require(report.profileId == identityId) { "This compatibility report is for another profile. Select its identity before loading." }
+        val diagnostics = AdaptedDiagnostics(report, report.profileId, report.profileDigest)
+        _state.update { it.copy(diagnosticsReview = DiagnosticsReview(diagnostics,
+            diagnostics.preview(profile, bundledArtifactDigest, Instant.now()))) }
+    }
+
+    fun loadDiagnosticsForPosture(uri: Uri, identityId: String) = postureWork(identityId, "Reading local diagnostics…",
+        "Couldn't load diagnostics. Check the file format and try again. No record was saved.") {
         _state.update { it.copy(diagnosticsReview = null) }
         val text = app.contentResolver.openInputStream(uri)?.bufferedReader(Charsets.UTF_8)?.use { readBounded(it, 2_000_000) }
             ?: error("Couldn't open that file.")
@@ -347,19 +367,37 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
             diagnostics.preview(profile, bundledArtifactDigest, Instant.now()))) }
     }
 
-    fun saveDiagnosticsPosture() = launchWork("Saving local diagnostics posture…") {
-        val review = _state.value.diagnosticsReview ?: return@launchWork
-        val profile = CloakStore.find(app, review.diagnostics.report.profileId) ?: error("That identity is gone. No posture was saved.")
-        when (val outcome = review.save(profile, bundledArtifactDigest, Instant.now(), ::acceptPostureRecord)) {
-            is DiagnosticsReview.SaveResult.ReviewChanged -> {
-                _state.update { it.copy(diagnosticsReview = outcome.review) }
-                return@launchWork say("The profile or report context changed. Review the updated preview before saving.")
+    fun saveDiagnosticsPosture() {
+        val identityId = _state.value.diagnosticsReview?.diagnostics?.report?.profileId ?: return
+        postureWork(identityId, "Saving local compatibility evidence…", "Couldn't save local evidence. Review the report and try again.") {
+            val review = _state.value.diagnosticsReview ?: return@postureWork
+            val profile = CloakStore.find(app, review.diagnostics.report.profileId) ?: error("That identity is gone. No local evidence was changed.")
+            when (val outcome = review.save(profile, bundledArtifactDigest, Instant.now(), ::acceptPostureRecord)) {
+                is DiagnosticsReview.SaveResult.ReviewChanged -> {
+                    _state.update { it.copy(diagnosticsReview = outcome.review) }
+                    return@postureWork say("The profile or report context changed. Review the updated preview before saving.")
+                }
+                DiagnosticsReview.SaveResult.Blocked -> error("This compatibility report does not match the selected profile. No local evidence was saved.")
+                DiagnosticsReview.SaveResult.Saved -> Unit
             }
-            DiagnosticsReview.SaveResult.Blocked -> error("This diagnostics report does not match the selected profile. No posture was saved.")
-            DiagnosticsReview.SaveResult.Saved -> Unit
+            _state.update { it.copy(diagnosticsReview = null) }
+            say("Saved local compatibility evidence. No platform verdict was inferred.")
         }
-        _state.update { it.copy(diagnosticsReview = null) }
-        say("Saved local diagnostics posture. No platform verdict was inferred.")
+    }
+
+    fun markPostureNeedsRotation(identityId: String, reviewed: PostureRecord?) = postureWork(identityId,
+        "Marking local rotation state…", "Couldn't mark rotation state. No identity reset was performed. Try again.") {
+        require(CloakStore.find(app, identityId) != null) { "That identity is gone. No local evidence was changed." }
+        postureStore.update(CompatibilityReportActions.mark(identityId, postureStore.read(identityId), reviewed))
+        say("Marked Needs rotation. No identity reset or reseed was performed.")
+    }
+
+    fun clearPostureAfterReset(identityId: String, reviewed: PostureRecord, resetCompleted: Boolean) = postureWork(identityId,
+        "Clearing local rotation state…", "Couldn't clear rotation state. Review the report and try again.") {
+        require(CloakStore.find(app, identityId) != null) { "That identity is gone. No local evidence was changed." }
+        require(reviewed.profileId == identityId) { "The saved report changed. Review it again before continuing." }
+        postureStore.update(CompatibilityReportActions.clear(postureStore.read(identityId), reviewed, resetCompleted))
+        say("Local evidence state is Unknown after your confirmed reset. Compatibility has not been checked again.")
     }
 
     fun dismissDiagnosticsPosture() = _state.update { if (it.busy == null) it.copy(diagnosticsReview = null) else it }

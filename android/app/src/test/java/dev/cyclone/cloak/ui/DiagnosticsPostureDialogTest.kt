@@ -25,7 +25,7 @@ class DiagnosticsPostureDialogTest {
         var saves = 0
         compose.setContent { CloakTheme { DiagnosticsPostureDialog(preview(), false, { saves++ }, {}) } }
         assertEquals(0, saves)
-        compose.onNodeWithText("Preview local diagnostics posture").assertIsDisplayed()
+        compose.onNodeWithText("Preview local compatibility evidence").assertIsDisplayed()
         compose.onNodeWithText("Stale report: diagnostics are older than 7 days.").performScrollTo().assertIsDisplayed()
         compose.onNodeWithText("read:wifi.ssid: WARNING").performScrollTo().assertIsDisplayed()
         compose.onNodeWithText("Save local posture").assertIsEnabled().performClick()
@@ -40,5 +40,11 @@ class DiagnosticsPostureDialogTest {
         compose.setContent { CloakTheme { DiagnosticsPostureDialog(preview(), true, {}, {}) } }
         compose.onNodeWithText("Save local posture").assertIsNotEnabled()
         compose.onNodeWithText("Cancel").assertIsNotEnabled()
+    }
+    @Test fun saveErrorIsVisibleAndCancelRemainsAvailable() {
+        compose.setContent { CloakTheme { DiagnosticsPostureDialog(preview(), false, {}, {},
+            "This exact local posture report was already imported.") } }
+        compose.onNodeWithText("This exact local posture report was already imported.").assertIsDisplayed()
+        compose.onNodeWithText("Cancel").assertIsEnabled()
     }
 }

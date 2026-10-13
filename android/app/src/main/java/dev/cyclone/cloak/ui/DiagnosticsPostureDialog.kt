@@ -14,10 +14,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-internal fun DiagnosticsPostureDialog(preview: DiagnosticsPosturePreview, busy: Boolean, onSave: () -> Unit, onDismiss: () -> Unit) {
-    AlertDialog(onDismissRequest = { if (!busy) onDismiss() }, title = { Text("Preview local diagnostics posture") },
+internal fun DiagnosticsPostureDialog(preview: DiagnosticsPosturePreview, busy: Boolean, onSave: () -> Unit, onDismiss: () -> Unit,
+    error: String? = null) {
+    AlertDialog(onDismissRequest = { if (!busy) onDismiss() }, title = { Text("Preview local compatibility evidence") },
         text = {
             Column(Modifier.heightIn(max = 440.dp).verticalScroll(rememberScrollState()), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                error?.let { Text(it, color = MaterialTheme.colorScheme.error) }
                 Text("Local evidence only; no platform verdict. Probe results describe the measured artifact, not the installed module.")
                 Text("Profile: ${preview.report.profileId}")
                 Text("Profile SHA-256: ${preview.report.profileDigest.take(12)}…")

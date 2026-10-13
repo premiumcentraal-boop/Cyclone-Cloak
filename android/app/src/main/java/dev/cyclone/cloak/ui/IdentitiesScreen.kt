@@ -197,23 +197,11 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
                 CloakIdentityCard(id = id, profile = profile, selected = selected == id, onSelect = { selected = if (selected == id) null else id })
                 PostureSummaryLine(state.postures[id], Modifier.padding(horizontal = 8.dp))
                 if (selected == id) {
-                    state.postures[id]?.let { posture ->
-                        Column(Modifier.padding(horizontal = 8.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                            PostureSummary.reportId(posture)?.let { reportId ->
-                                Text("Report: $reportId", style = MaterialTheme.typography.bodySmall)
-                            }
-                            Text("Source: ${posture.source}", style = MaterialTheme.typography.bodySmall)
-                            Text(posture.checkedAt?.let { "Checked: $it" } ?: "No check timestamp",
-                                style = MaterialTheme.typography.bodySmall)
-                            Text(posture.reason, style = MaterialTheme.typography.bodySmall)
-                            Text("Local compatibility record only; no platform verdict.",
-                                style = MaterialTheme.typography.bodySmall)
-                            PostureSummary.freshnessWarnings(posture, id, EngineMetadataStore.digest(profile),
-                                state.currentArtifactDigest, java.time.Instant.now()).forEach { warning ->
-                                Text(warning, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.error)
-                            }
-                        }
-                    }
+                    CompatibilityReportCard(state.postures[id], id, EngineMetadataStore.digest(profile),
+                        state.currentArtifactDigest, state.busy != null, state.postureErrors[id],
+                        onLoad = { postureTarget = id; postureImporter.launch(arrayOf("application/json", "text/plain")) },
+                        onMarkRotation = { vm.markPostureNeedsRotation(id, it) },
+                        onClearReset = { record, confirmed -> vm.clearPostureAfterReset(id, record, confirmed) })
                     val metadata = state.engineMetadata[id]
                     EngineIdentitySummary.labels(profile, metadata).forEach { label ->
                         Text(label, style = MaterialTheme.typography.bodySmall, modifier = Modifier.padding(horizontal = 8.dp))
@@ -229,8 +217,6 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
                     FlowRow(Modifier.fillMaxWidth().padding(horizontal = 4.dp)) {
                         TextButton(onClick = { coverageId = if (coverageId == id) null else id }) { Text("Field coverage") }
                         TextButton(onClick = { evidenceImporter.launch(arrayOf("application/json", "text/plain")) }, enabled = state.busy == null) { Text("Load probe evidence") }
-                        TextButton(onClick = { postureTarget = id; postureImporter.launch(arrayOf("application/json", "text/plain")) },
-                            enabled = state.busy == null) { Text("Load posture report") }
                         TextButton(onClick = { diagnosticsTarget = id; diagnosticsImporter.launch(arrayOf("application/json", "text/plain")) },
                             enabled = state.busy == null) { Text("Load diagnostics for posture") }
                         TextButton(onClick = { vm.startBinding(id) }) { Text("Bind to profile apps") }
@@ -255,7 +241,8 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
     }
 
     state.diagnosticsReview?.let { review ->
-        DiagnosticsPostureDialog(review.preview, state.busy != null, vm::saveDiagnosticsPosture, vm::dismissDiagnosticsPosture)
+        DiagnosticsPostureDialog(review.preview, state.busy != null, vm::saveDiagnosticsPosture, vm::dismissDiagnosticsPosture,
+            state.postureErrors[review.diagnostics.report.profileId])
     }
     renaming?.let { (id, profile) ->
         NameDialog(

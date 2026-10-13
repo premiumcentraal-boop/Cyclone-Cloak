@@ -11,6 +11,31 @@ import java.time.Duration
 import java.time.Instant
 
 object PostureSummary {
+    fun details(record: PostureRecord?, profileId: String, profileDigest: String, artifactDigest: String?, now: Instant): List<String> {
+        if (record == null) return listOf("Source: not recorded", "Checked: not recorded", "Profile match: not recorded",
+            "Artifact match: not recorded", "Freshness: not recorded")
+        val age = record.checkedAt?.let { Duration.between(Instant.parse(it), now) }
+        return listOfNotNull(reportId(record)?.let { "Report: $it" }, "Source: ${record.source}",
+            "Checked: ${record.checkedAt ?: "not recorded"}",
+            "Profile match: " + when {
+                record.profileId != profileId -> "another profile"
+                record.profileDigest == null -> "not recorded"
+                record.profileDigest != profileDigest -> "changed"
+                else -> "matches saved profile"
+            },
+            "Artifact match: " + when {
+                record.artifactDigest == null -> "not recorded"
+                artifactDigest == null -> "current bundled artifact unavailable"
+                record.artifactDigest != artifactDigest -> "different bundled artifact"
+                else -> "matches bundled artifact"
+            },
+            "Freshness: " + when {
+                age == null -> "not recorded"
+                age < Duration.ofMinutes(-1) -> "future timestamp"
+                age > LocalPostureDecision.maxAge -> "stale (older than 7 days)"
+                else -> "within 7 days"
+            })
+    }
     fun reportId(record: PostureRecord?): String? = record?.reportDigest?.take(12)
 
     fun freshnessWarnings(record: PostureRecord, profileId: String, profileDigest: String, artifactDigest: String?, now: Instant): List<String> = buildList {
