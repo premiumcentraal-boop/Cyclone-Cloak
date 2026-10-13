@@ -21,6 +21,44 @@ and profile files, preserving other app/user bindings. The module was installed 
 companion app was retained because the freshly built release APK was unsigned.
 The runner itself did not reboot or grant permissions.
 
+## B3B diagnostics partial measurement â€” 2026-10-13
+
+A side-by-side `dev.cyclone.cloak.probe.diag` APK can request runtime permissions
+before reads start. The default APK still declares no permissions, including
+with the optional advertising-ID SDK, and retains
+`android/probe/build/outputs/apk/debug/probe-debug.apk`. Diagnostics output is
+`android/probe/build/outputs/apk/diagnostics/debug/probe-diagnostics-debug.apk`.
+
+[Partial evidence](runtime-evidence/b3b-diagnostics-2026-10-13.json) and
+[the B3B matrix](RUNTIME-MATRIX-B3B-2026-10-13.md) cover **bound-a only**:
+**63 PASS, 1 FAIL, 0 BLOCKED, 6 OBSERVED**, 70 reads. All 70 proof classifications
+are INCOMPLETE; a single phase cannot increase the historical 54 VERIFIED count.
+The installed module hash remains the B2A hash above. No module installation or
+reboot occurred. Current source contains schema 0.3 camera fixtures, while the
+installed module is still the RC3 DRM patch; camera metadata therefore fails
+its new fixture expectation. This is an expected version mismatch, not a
+defect assigned to this sprint. Camera verification belongs to the coordinated
+device pass after the v0.11.0-alpha.1 module is installed.
+
+After the owner authorized both prerequisite permissions, `wifi.serviceMac`
+moved from BLOCKED to PASS (`MATCH`). `wifi.ssid` and `bluetooth.name` moved
+from BLOCKED to OBSERVED (`NO_PROFILE_EXPECTATION`). Diagnostics alone declares
+`ACCESS_WIFI_STATE` and `ACCESS_COARSE_LOCATION` in addition to the original
+three permissions; runtime location requests include the coarse/fine pair.
+The [initial evidence](runtime-evidence/b3b-diagnostics-2026-10-13-before-prerequisites.json)
+retains the two missing-Wi-Fi-permission results.
+SSID and Bluetooth name have no fixture expectations, so readable values are
+OBSERVED rather than PASS/FAIL. Denial remains explicit and never counts as
+engine coverage. The default permission-free probe intentionally preserves
+permission-blocked behavior.
+
+Use `--phases all` (default) for the original five-phase proof, or
+`--phases bound-a` / `--phases bound-a,bound-b` for a subset. Subsets are executed
+in the canonical five-phase order, carry `metadata.phases`, and still clean up
+only their own temporary binding/fixtures. Missing phases render as `not run`;
+partial equality alone is not VERIFIED proof. SSID/Bluetooth name remain
+pending profile-backed expectations in a future sprint.
+
 ## Visible matrix
 
 The companion Health tab also displays a local 13-area summary from the checked-in

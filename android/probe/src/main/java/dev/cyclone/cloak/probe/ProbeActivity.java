@@ -33,7 +33,7 @@ import java.util.UUID;
 
 /** Independent consumer: actual values only come from Android APIs, never the fixture. */
 @SuppressWarnings("deprecation")
-public final class ProbeActivity extends Activity {
+public class ProbeActivity extends Activity {
     private interface Read { Object get() throws Exception; }
     private final JSONArray rows = new JSONArray();
     private JSONObject profile;
@@ -50,6 +50,13 @@ public final class ProbeActivity extends Activity {
         ScrollView scroll = new ScrollView(this);
         scroll.addView(matrix);
         setContentView(scroll);
+        prepareReads(this::startReads);
+    }
+
+    protected void prepareReads(Runnable ready) { ready.run(); }
+    protected String permissionFailure(String id) { return null; }
+
+    private void startReads() {
         // AdvertisingIdClient requires a worker thread. One failed read never
         // prevents subsequent rows from being measured.
         new Thread(() -> {
@@ -143,6 +150,12 @@ public final class ProbeActivity extends Activity {
         JSONObject row = new JSONObject().put("id", id)
             .put("expected", expected == null ? JSONObject.NULL : expected);
         try {
+            String denied = permissionFailure(id);
+            if (denied != null) {
+                row.put("status", "BLOCKED").put("reason", denied);
+                rows.put(row);
+                return;
+            }
             Object value = operation.get();
             row.put("actual", value == null ? JSONObject.NULL : value);
             boolean unspecified = expected == null || expected.toString().isEmpty();
@@ -152,6 +165,13 @@ public final class ProbeActivity extends Activity {
         } catch (Exception | LinkageError error) {
             Throwable cause = error instanceof InvocationTargetException ? error.getCause() : error;
             String reason = cause.getClass().getSimpleName();
+            // Record permission names, never the full exception (which may expose data).
+            if (cause instanceof SecurityException && cause.getMessage() != null) {
+                java.util.regex.Matcher permission = java.util.regex.Pattern
+                    .compile("android\\.permission\\.[A-Z_]+")
+                    .matcher(cause.getMessage());
+                if (permission.find()) reason += ":" + permission.group();
+            }
             if (cause instanceof ClassNotFoundException) reason = "SDK_OR_API_ABSENT";
             row.put("status", "BLOCKED").put("reason", reason);
         }

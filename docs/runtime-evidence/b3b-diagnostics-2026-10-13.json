@@ -1,0 +1,537 @@
+{
+  "format": 1,
+  "user": 0,
+  "metadata": {
+    "phases": [
+      "bound-a"
+    ],
+    "probe_package": "dev.cyclone.cloak.probe.diag",
+    "measured_at_utc": "2026-10-13T01:18:32Z",
+    "host_api": "36",
+    "host_model": "Pixel 8",
+    "module_properties": "id=cyclone_cloak\n\nname=Cyclone Cloak\n\nversion=v0.10.0-rc.3\n\nversionCode=24\n\nauthor=Cyclone Cloak contributors\n\ndescription=Device-profile engine for Cyclone (platform). Manage per-app profiles from the Cyclone Cloak companion app. Requires platform.",
+    "module_arm64_sha256": "f87b218e5763a2084093b817c42eaee632390e7d1cb72a686851a469e4e3c4b9",
+    "probe_permissions_before_launch": {
+      "android.permission.ACCESS_WIFI_STATE": true,
+      "android.permission.ACCESS_FINE_LOCATION": true,
+      "android.permission.NEARBY_WIFI_DEVICES": true,
+      "android.permission.BLUETOOTH_CONNECT": true,
+      "android.permission.ACCESS_COARSE_LOCATION": true
+    }
+  },
+  "artifact": "f87b218e5763a2084093b817c42eaee632390e7d1cb72a686851a469e4e3c4b9",
+  "runs": [
+    {
+      "format": 1,
+      "fixture": "a",
+      "package": "dev.cyclone.cloak.probe.diag",
+      "uid": 10273,
+      "rows": [
+        {
+          "id": "build.MANUFACTURER",
+          "expected": "Google",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "a4f2cf81a927c6eb9dd7d575978468433f12433f589181b445059b20205d4de1"
+        },
+        {
+          "id": "build.BRAND",
+          "expected": "google",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "7d0eacef0de836233bf69fc88fcab76ae6d5d1b4bd19982d683eeec79da0cefa"
+        },
+        {
+          "id": "build.MODEL",
+          "expected": "Pixel 6",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "1b4c3929892c505a54a54f117b89145bf3d8dec3497e5c6a05376456e84a76ed"
+        },
+        {
+          "id": "build.DEVICE",
+          "expected": "oriole",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "8574000ff4ecb691787e6387f272437c3757cc13de77322545ed494c10cc9f7e"
+        },
+        {
+          "id": "build.PRODUCT",
+          "expected": "oriole",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "8574000ff4ecb691787e6387f272437c3757cc13de77322545ed494c10cc9f7e"
+        },
+        {
+          "id": "build.HARDWARE",
+          "expected": "gs101",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "f4836b84b39bddb99c37d68e20494618198b7e20e0ba0c58b4a18f8b45e1ecc5"
+        },
+        {
+          "id": "build.FINGERPRINT",
+          "expected": "google/oriole/oriole:14/UP1A.231005.007/catalog.20231005:user/release-keys",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "f0d88f4f52af0ba32b295b678811167b36508b6d0c3b2bcf19b1099de4340f45"
+        },
+        {
+          "id": "build.ID",
+          "expected": "UP1A.231005.007",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "7f2864b002ba5bd3fc968ddca18fbeb3c105175a7acd5587857993d24effe2db"
+        },
+        {
+          "id": "build.BOOTLOADER",
+          "expected": "",
+          "status": "OBSERVED",
+          "reason": "NO_PROFILE_EXPECTATION",
+          "actual_sha256": "28eff559133c55eb7a85cf1951d29bdd070ae7c0554ce089997945df71931250"
+        },
+        {
+          "id": "build.SERIAL",
+          "expected": "U6UV1SJBJET5",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "57cb75137f3e689f23e79f725ed3cd5c8813c7add96583ac808e5c43759b37c5"
+        },
+        {
+          "id": "build.getSerial",
+          "expected": "U6UV1SJBJET5",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "57cb75137f3e689f23e79f725ed3cd5c8813c7add96583ac808e5c43759b37c5"
+        },
+        {
+          "id": "build.TIME",
+          "expected": 1697068800000,
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "1f2d62b03d51023dd9c14c269cc9a37e4f0ccf9921a852fe95c1e323bbc44264"
+        },
+        {
+          "id": "build.TYPE",
+          "expected": "user",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "3190d261d186aeead3a8deec202737c7775af5c8d455a9e5ba958c48b5fd3f59"
+        },
+        {
+          "id": "build.TAGS",
+          "expected": "release-keys",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "64759ff83545dfe4452f8f71fb645b0e14088e2d143042fe89020eed6f5bc16b"
+        },
+        {
+          "id": "version.SDK_INT",
+          "expected": 34,
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "86e50149658661312a9e0b35558d84f6c6d3da797f552a9657fe0558ca40cdef"
+        },
+        {
+          "id": "version.RELEASE",
+          "expected": "14",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "789d9e7dc67f986660d9b28f5946cce995f9b145e4c2ef61828679cee07bb316"
+        },
+        {
+          "id": "version.INCREMENTAL",
+          "expected": "catalog.20231005",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "793d5091c516f57d0427d8f4172531ae444265cbaf8781d9f99a36e01adddbf3"
+        },
+        {
+          "id": "version.SECURITY_PATCH",
+          "expected": "2023-10-05",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "bce3949a39f96fa6f08dde556e693ea16e0a3a0cebd41e5364085e51296ebce7"
+        },
+        {
+          "id": "build.getRadioVersion",
+          "expected": "",
+          "status": "OBSERVED",
+          "reason": "NO_PROFILE_EXPECTATION",
+          "actual_sha256": "233c16101ba35af8ea9e77e207e460ff3741c19ec39c959b4d7585724c31e335"
+        },
+        {
+          "id": "properties.java.ro.product.model",
+          "expected": "Pixel 6",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "1b4c3929892c505a54a54f117b89145bf3d8dec3497e5c6a05376456e84a76ed"
+        },
+        {
+          "id": "properties.native.ro.product.model",
+          "expected": "Pixel 6",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "1b4c3929892c505a54a54f117b89145bf3d8dec3497e5c6a05376456e84a76ed"
+        },
+        {
+          "id": "properties.java.ro.build.version.sdk",
+          "expected": 34,
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "772b814564dc952353b817a0863a75910dfa47c8ce907e9cc67466acf07eca1a"
+        },
+        {
+          "id": "properties.native.ro.build.version.sdk",
+          "expected": 34,
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "772b814564dc952353b817a0863a75910dfa47c8ce907e9cc67466acf07eca1a"
+        },
+        {
+          "id": "properties.java.ro.build.fingerprint",
+          "expected": "google/oriole/oriole:14/UP1A.231005.007/catalog.20231005:user/release-keys",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "f0d88f4f52af0ba32b295b678811167b36508b6d0c3b2bcf19b1099de4340f45"
+        },
+        {
+          "id": "properties.native.ro.build.fingerprint",
+          "expected": "google/oriole/oriole:14/UP1A.231005.007/catalog.20231005:user/release-keys",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "f0d88f4f52af0ba32b295b678811167b36508b6d0c3b2bcf19b1099de4340f45"
+        },
+        {
+          "id": "properties.java.ro.serialno",
+          "expected": "U6UV1SJBJET5",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "57cb75137f3e689f23e79f725ed3cd5c8813c7add96583ac808e5c43759b37c5"
+        },
+        {
+          "id": "properties.native.ro.serialno",
+          "expected": "U6UV1SJBJET5",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "57cb75137f3e689f23e79f725ed3cd5c8813c7add96583ac808e5c43759b37c5"
+        },
+        {
+          "id": "properties.java.ro.sf.lcd_density",
+          "expected": 420,
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "370347485def74965c9325cf412911e204bfb6012003162089f012c0de6bea4b"
+        },
+        {
+          "id": "properties.native.ro.sf.lcd_density",
+          "expected": 420,
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "370347485def74965c9325cf412911e204bfb6012003162089f012c0de6bea4b"
+        },
+        {
+          "id": "properties.java.persist.sys.timezone",
+          "expected": "America/New_York",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "7e903041a1f3abfaa8b9ae1cae91c77e7afe2d5784bdfa4725086f70c2b8f0e6"
+        },
+        {
+          "id": "properties.native.persist.sys.timezone",
+          "expected": "America/New_York",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "7e903041a1f3abfaa8b9ae1cae91c77e7afe2d5784bdfa4725086f70c2b8f0e6"
+        },
+        {
+          "id": "telephony.imei0",
+          "expected": "472186978248637",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "78dc7ba5a572e49b1ac68b5bfd95ef3b0a6783b305c647eb0886a669f3e54444"
+        },
+        {
+          "id": "telephony.imei1",
+          "expected": "710989943352422",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "3b10ac97b8b9f851a8438b03bedb2be645561589554742785bf684c235e966a1"
+        },
+        {
+          "id": "telephony.deviceId",
+          "expected": "472186978248637",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "78dc7ba5a572e49b1ac68b5bfd95ef3b0a6783b305c647eb0886a669f3e54444"
+        },
+        {
+          "id": "telephony.simSerial",
+          "expected": "2622829857001513606",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "04aa0dee1287d3e3f91689e4e9cfb10bb60c1b493ed3cc39aaf25e72aac1c5dd"
+        },
+        {
+          "id": "telephony.phoneCount",
+          "expected": 2,
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35"
+        },
+        {
+          "id": "telephony.activeModemCount",
+          "expected": 2,
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35"
+        },
+        {
+          "id": "telephony.networkType",
+          "expected": 20,
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "f5ca38f748a1d6eaf726b8a42fb575c3c71f1864a8143301782de13da2d9202b"
+        },
+        {
+          "id": "telephony.dataNetworkType",
+          "expected": 20,
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "f5ca38f748a1d6eaf726b8a42fb575c3c71f1864a8143301782de13da2d9202b"
+        },
+        {
+          "id": "operator.networkNumeric",
+          "expected": "310260",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "4a5f91886e5dd41b8fac7c58354ab547cf71697625f252812940c8bd68a44550"
+        },
+        {
+          "id": "operator.simNumeric",
+          "expected": "310260",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "4a5f91886e5dd41b8fac7c58354ab547cf71697625f252812940c8bd68a44550"
+        },
+        {
+          "id": "operator.networkName",
+          "expected": "T-Mobile",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "53a7d4dd8b88be1396fb498ed72f56fa65fce7c41a9a5550576dde0babcb6de7"
+        },
+        {
+          "id": "operator.simName",
+          "expected": "T-Mobile",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "53a7d4dd8b88be1396fb498ed72f56fa65fce7c41a9a5550576dde0babcb6de7"
+        },
+        {
+          "id": "operator.networkCountry",
+          "expected": "us",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "07c3c9f013fa991e9daddcd3fec986668bc5a011df153cc78f86297da24b6d7f"
+        },
+        {
+          "id": "operator.simCountry",
+          "expected": "us",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "07c3c9f013fa991e9daddcd3fec986668bc5a011df153cc78f86297da24b6d7f"
+        },
+        {
+          "id": "telephony.subscriberId",
+          "expected": "310260001513606",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "53750b278f336c0ce3c1a8235e97819decf122b05bf5fbd0aa5c38e16881ea92"
+        },
+        {
+          "id": "settings.secure.androidId",
+          "expected": "3a4cf3a7fcd4e8cb",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "61749d484af31e7e647f9a6035757da2c0d86f7f4e9c2970c005152e01b2f813"
+        },
+        {
+          "id": "settings.provider.androidId",
+          "expected": "3a4cf3a7fcd4e8cb",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "61749d484af31e7e647f9a6035757da2c0d86f7f4e9c2970c005152e01b2f813"
+        },
+        {
+          "id": "settings.unrelatedControl",
+          "expected": null,
+          "status": "OBSERVED",
+          "reason": "NO_PROFILE_EXPECTATION",
+          "actual_sha256": "391552c099c101b131feaf24c5795a6a15bc8ec82015424e0d2b4274a369a0bf"
+        },
+        {
+          "id": "wifi.objectMac",
+          "expected": "1A:35:32:1E:77:25",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "f26064fcec211067a69e9dc73176add6aa2e26879e4a8b8132448b7ae8494166"
+        },
+        {
+          "id": "wifi.serviceMac",
+          "expected": "1A:35:32:1E:77:25",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "f26064fcec211067a69e9dc73176add6aa2e26879e4a8b8132448b7ae8494166"
+        },
+        {
+          "id": "wifi.ssid",
+          "expected": null,
+          "status": "OBSERVED",
+          "reason": "NO_PROFILE_EXPECTATION",
+          "actual_sha256": "92dc9517b31e7f385bf73e56d1794a9e5e3167d71c3538e74b28ad8a22b1e881"
+        },
+        {
+          "id": "bluetooth.address",
+          "expected": "3A:B4:66:9A:D8:54",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "8efd468d05410445712f54a028418cd7d8aa19431b7bf04bf1ace99256de0ab6"
+        },
+        {
+          "id": "bluetooth.name",
+          "expected": null,
+          "status": "OBSERVED",
+          "reason": "NO_PROFILE_EXPECTATION",
+          "actual_sha256": "2bbf587a65830ac67b21c2ed04d05bdb774c5f513970059a03ca714d7d91b253"
+        },
+        {
+          "id": "advertising.id",
+          "expected": "d3500169-d39a-40b1-bcfa-f9d9d1739be7",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "e594424e3a27d4387d9d78b48f07863ab5eafcdd8372e071b1c31b384006ca5d"
+        },
+        {
+          "id": "drm.deviceUniqueId",
+          "expected": "f2b9c7904bec4ec0755b7aec3eca856e1deb43ab9cbd564f038af27837d568d3",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "61d7ccb373b4998452c1c9ddc529e37af9da513563a34628df20ee0964ed71ec"
+        },
+        {
+          "id": "display.resources.width",
+          "expected": 1080,
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "32eb1a8dafeb0873c8d00b0e9058c8c77ff6c6d9235b3236989c50ef63d8f9ba"
+        },
+        {
+          "id": "display.resources.height",
+          "expected": 2400,
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "8350242b2df439d296a664c7c59b117507d0b3c537fa293304c84d84eb85cc43"
+        },
+        {
+          "id": "display.resources.density",
+          "expected": 420,
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "db55da3fc3098e9c42311c6013304ff36b19ef73d12ea932054b5ad51df4f49d"
+        },
+        {
+          "id": "display.real.width",
+          "expected": 1080,
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "32eb1a8dafeb0873c8d00b0e9058c8c77ff6c6d9235b3236989c50ef63d8f9ba"
+        },
+        {
+          "id": "display.real.height",
+          "expected": 2400,
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "8350242b2df439d296a664c7c59b117507d0b3c537fa293304c84d84eb85cc43"
+        },
+        {
+          "id": "display.real.density",
+          "expected": 420,
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "db55da3fc3098e9c42311c6013304ff36b19ef73d12ea932054b5ad51df4f49d"
+        },
+        {
+          "id": "display.refresh",
+          "expected": 90,
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "69f59c273b6e669ac32a6dd5e1b2cb63333d8b004f9696447aee2d422ce63763"
+        },
+        {
+          "id": "camera.characteristics",
+          "expected": [
+            {
+              "id": "0",
+              "facing": 1,
+              "level": 1,
+              "pixelArray": "8160x6144"
+            },
+            {
+              "id": "1",
+              "facing": 0,
+              "level": 0,
+              "pixelArray": "3264x2448"
+            }
+          ],
+          "status": "FAIL",
+          "reason": "VALUE_MISMATCH",
+          "actual_sha256": "574b8b341f34b203f1ebb988d709ee646715193a8640981dc4212218c5e52b4a"
+        },
+        {
+          "id": "sensors.list",
+          "expected": null,
+          "status": "OBSERVED",
+          "reason": "NO_PROFILE_EXPECTATION",
+          "actual_sha256": "b0909ad6ea9c471c8d38a843870c6748536c6b92d9bee193a4edbf3fd7ed4476"
+        },
+        {
+          "id": "locale.default.language",
+          "expected": "en",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "50eac10e7966a04e139902940a2a8e129a4597574c709cb8d01939ace56ff9c3"
+        },
+        {
+          "id": "locale.default.country",
+          "expected": "US",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "b5e86cefc9cfb8c972b2ede02131e8a270e7fbc4216e7be80bf800aea5de029b"
+        },
+        {
+          "id": "locale.resources.language",
+          "expected": "en",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "50eac10e7966a04e139902940a2a8e129a4597574c709cb8d01939ace56ff9c3"
+        },
+        {
+          "id": "locale.resources.country",
+          "expected": "US",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "b5e86cefc9cfb8c972b2ede02131e8a270e7fbc4216e7be80bf800aea5de029b"
+        },
+        {
+          "id": "timezone.default",
+          "expected": "America/New_York",
+          "status": "PASS",
+          "reason": "MATCH",
+          "actual_sha256": "7e903041a1f3abfaa8b9ae1cae91c77e7afe2d5784bdfa4725086f70c2b8f0e6"
+        }
+      ],
+      "run": "bound-a"
+    }
+  ]
+}

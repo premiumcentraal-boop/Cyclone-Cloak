@@ -33,11 +33,13 @@ def render(evidence):
              "Generated from `" + evidence.get("artifact", "installed module") + "`. "
              "PASS in a raw report means value equality only. VERIFIED below also requires "
              "distinct profiles, repeat stability and restoration of the unbound control.", "",
+             "Requested phases: " + ", ".join(evidence.get("metadata", {}).get("phases", [run["run"] for run in evidence["runs"]])) + ". Missing phases are not run; partial runs cannot establish VERIFIED proof.", "",
+             "Phase availability: " + ", ".join(name + "=" + ("run" if any(run["run"] == name for run in evidence["runs"]) else "not run") for name in ("unbound-before", "bound-a", "bound-a-repeat", "bound-b", "unbound-after")) + ".", "",
              "| Read | Profile A | Profile B | Proof | Reason |", "| --- | --- | --- | --- | --- |"]
     for id, runs in reads.items():
         a, b = runs.get("bound-a", {}), runs.get("bound-b", {})
         reason = ", ".join(sorted({a.get("reason", "INCOMPLETE"), b.get("reason", "INCOMPLETE")}))
-        lines.append(f"| `{id}` | {a.get('status', '—')} | {b.get('status', '—')} | {classify(runs)} | {reason} |")
+        lines.append(f"| `{id}` | {a.get('status', 'not run')} | {b.get('status', 'not run')} | {classify(runs)} | {reason} |")
     return "\n".join(lines) + "\n"
 
 
