@@ -93,9 +93,9 @@ BLOCKED and UNMAPPED never count as passed coverage.
 
 | Requested surface | Installed patched module: device result | Remaining work |
 | --- | --- | --- |
-| Build | Manufacturer/brand/model/device/product/hardware/fingerprint/ID/serial/getSerial/time all VERIFIED; TYPE/TAGS match-only; bootloader/radio PASS on B, unmapped on A | Add bootloader/radio expectations to fixture A or the catalog |
+| Build | Manufacturer/brand/model/device/product/hardware/fingerprint/ID/serial/getSerial/time all VERIFIED; TYPE/TAGS match-only; bootloader/radio PASS on B and now fixture A has expectations | Next device run must prove fixture A |
 | Build.VERSION | SDK, release, incremental and security patch all VERIFIED | None measured |
-| System properties | Java-side AND native libc `__system_property_get` reads all VERIFIED (ShadowHook inline hook, bind-time install) | Property-handle `__system_property_read_callback` path remains open (batch 2) |
+| System properties | Java-side AND native libc `__system_property_get` reads all VERIFIED (ShadowHook inline hook, bind-time install) | `__system_property_read_callback` hook is implemented and probe-exercised; device proof is pending |
 | Telephony manager | IMEI (both slots), deviceId, subscriber, SIM serial and network types VERIFIED on both profiles | Keep stable across cold starts; add secondary-slot profiles |
 | Settings provider reads | Secure provider Android-ID query VERIFIED | Generic provider call/bundle paths remain unverified |
 | Android ID | Settings.Secure android_id VERIFIED | None measured |
@@ -152,9 +152,11 @@ remain blocked; those require a separately authorized test environment to prove.
 - Device proof currently covers one arm64/API36 device, one Android user and one
   process. Other APIs/ARM32, additional processes, other users, subscription
   overloads, delayed class loaders and early SDK reads need their own runs.
-- Native property-handle reads, full provider reads, broader display consistency,
-  camera and sensor identity are not complete. The measured direct native
-  `__system_property_get` and display geometry/refresh reads have device proof.
+- The new direct `__system_property_read_callback` probe row has local build
+  coverage only; the checked-in device matrix predates it. Full provider reads,
+  broader display consistency, camera and sensor identity are not complete. The
+  measured direct native `__system_property_get` and display geometry/refresh
+  reads have device proof.
   Camera/sensor field expectations need an agreed representation compatible
   with the existing profile schema before a meaningful pass can be claimed.
 - Do not fabricate camera/sensor capabilities or alter actual hardware operation

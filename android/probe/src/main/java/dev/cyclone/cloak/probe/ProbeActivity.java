@@ -40,6 +40,7 @@ public class ProbeActivity extends Activity {
     private TextView matrix;
     static { System.loadLibrary("probe"); }
     private static native String nativeProperty(String key);
+    private static native String nativePropertyCallback(String key);
 
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
@@ -207,6 +208,8 @@ public class ProbeActivity extends Activity {
                 .getMethod("get", String.class).invoke(null, prop[0]));
             read("properties.native." + prop[0], prop[1], () -> nativeProperty(prop[0]));
         }
+        read("properties.nativeCallback.ro.product.model", "device.model",
+            () -> nativePropertyCallback("ro.product.model"));
 
         TelephonyManager tm = getSystemService(TelephonyManager.class);
         read("telephony.imei0", "identifiers.imei_primary", () -> tm.getImei(0));

@@ -122,11 +122,48 @@ bool g_active = false;
 std::string g_app_data_dir;
 bool g_java_callbacks = true;
 bool g_native_hook_enabled = true;
+bool cloak_prop_for(const char *name, char *value, int host_len);
 
 // Native property surface: ShadowHook-intercepted __system_property_get.
 using PropertyGetFn = int (*)(const char *, char *);
 PropertyGetFn g_orig_property_get = nullptr;
 void *g_shadowhook_handle = nullptr;
+bool g_shadowhook_ready = false;
+
+// Modern callers may use the prop_info handle API instead of
+// __system_property_get. The handle carries only an opaque pointer, so the
+// original call supplies the name and the callback wrapper substitutes the
+// bound value before handing it to the real consumer callback.
+using PropertyReadCallbackFn = void (*)(void *, const char *, const char *, uint32_t);
+using PropertyReadCallbackApiFn = void (*)(const prop_info *,
+                                           PropertyReadCallbackFn, void *);
+PropertyReadCallbackApiFn g_orig_property_read_callback = nullptr;
+
+struct PropertyReadContext {
+    PropertyReadCallbackFn callback;
+    void *cookie;
+};
+
+void hooked_property_read_callback(void *cookie, const char *name,
+                                   const char *value, uint32_t serial) {
+    auto *context = static_cast<PropertyReadContext *>(cookie);
+    char replacement[PROP_VALUE_MAX] = {0};
+    if (cloak_prop_for(name, replacement, PROP_VALUE_MAX)) {
+        context->callback(context->cookie, name, replacement, serial);
+        return;
+    }
+    context->callback(context->cookie, name, value, serial);
+}
+
+void hooked_property_read_callback_api(const prop_info *info,
+                                       PropertyReadCallbackFn callback,
+                                       void *cookie) {
+    if (!g_orig_property_read_callback || !info || !callback) {
+        return;
+    }
+    PropertyReadContext context{callback, cookie};
+    g_orig_property_read_callback(info, hooked_property_read_callback, &context);
+}
 
 // Overwrite policy for a hooked __system_property_get call. Returns false to
 // keep the value produced by the real libc implementation. The buffer is
@@ -160,7 +197,7 @@ int hooked_property_get(const char *name, char *value) {
 // Stage the embedded ShadowHook library into the app's own data directory
 // (same ownership pattern as libpine.so) and hook libc's property read.
 void install_native_property_hook() {
-    if (!g_native_hook_enabled || g_orig_property_get != nullptr) {
+    if (!g_native_hook_enabled || g_shadowhook_ready) {
         return;
     }
     std::string path = g_app_data_dir + "/libshadowhook.so";
@@ -190,6 +227,9 @@ void install_native_property_hook() {
         LOGI("native hook: init failed");
         return;
     }
+    // Initialization is intentionally not retried: a partial hook install is
+    // safer than repeatedly hooking already-patched entries.
+    g_shadowhook_ready = true;
     void *orig = nullptr;
     void *record = hook("libc.so", "__system_property_get",
                         reinterpret_cast<void *>(hooked_property_get), &orig);
@@ -199,6 +239,17 @@ void install_native_property_hook() {
     }
     g_orig_property_get = reinterpret_cast<PropertyGetFn>(orig);
     LOGI("native property hook installed");
+
+    orig = nullptr;
+    record = hook("libc.so", "__system_property_read_callback",
+                  reinterpret_cast<void *>(hooked_property_read_callback_api), &orig);
+    if (!record || !orig) {
+        LOGI("native property callback hook failed");
+        return;
+    }
+    g_orig_property_read_callback =
+        reinterpret_cast<PropertyReadCallbackApiFn>(orig);
+    LOGI("native property callback hook installed");
 }
 
 void set_prop(const std::string &key, const std::string &value) {
