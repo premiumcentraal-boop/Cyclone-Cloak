@@ -11,13 +11,14 @@ not prove that every inspection API sees it.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.11.0-alpha.7 (release candidate)
+## Status: 0.11.0-alpha.7 (published prerelease)
 
-Alpha.7 packages the native property-callback implementation already on main,
+[Published alpha.7](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.7) packages the native property-callback implementation already on main,
 with app/module code 31. [Release notes](docs/RELEASE_0.11.0-alpha.7.md) explain
 scope and upgrade limits. The probe includes the callback read, but physical-device
 verification remains pending. Existing device evidence does not cover the new
 row automatically. Local compatibility states are not platform verdicts.
+[Release CI](https://github.com/premiumcentraal-boop/Cyclone-Cloak/actions/runs/38479788715) passed tests, signing, matching-artifact checks and upload.
 See [CURRENT-STATE.md](docs/CURRENT-STATE.md) for checks and release status.
 
 - **Companion app** (`android/app`): a Cyclone connector (contract `cyclone.connector/1.3`, Cyclone

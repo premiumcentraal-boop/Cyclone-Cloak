@@ -1,8 +1,9 @@
 # Current state
 
-Updated 2026-10-14. **v0.11.0-alpha.7 / versionCode 31** is the current
-release candidate, packaging native callback work from main `27d3a11`.
-The latest published prerelease remains alpha.6 until release CI completes.
+Updated 2026-10-14. **v0.11.0-alpha.7 / versionCode 31** is the
+[latest published prerelease](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.7), packaging native callback work from main `27d3a11`.
+Release commit: `a9bb38d761f10666628dd1c2a51711792d2aee5b`.
+[Release CI](https://github.com/premiumcentraal-boop/Cyclone-Cloak/actions/runs/38479788715) passed tests, signed builds, artifact checks and upload.
 [Alpha.7 notes](RELEASE_0.11.0-alpha.7.md) describe scope and evidence limits.
 
 ## Versions and major components
@@ -51,9 +52,10 @@ uv run -- python tools/verify_release.py --tag v0.11.0-alpha.7
 git diff --check
 ```
 
-Release CI must pass all four suites on Linux, build/sign the APK and package
-the module ZIP, and verify version agreement and exact embedded-module bytes
-before publication. Signing uses the existing CI secrets.
+Release CI passed all four suites on Linux, built/signed the APK and packaged
+the module ZIP, and verified version agreement and exact embedded-module bytes
+before publication. Signing used the existing CI secrets. Both probe variants
+also built locally; diagnostics emitted an unchanged AD_ID removal-marker warning.
 Local debug output: `android/app/build/outputs/apk/debug/app-debug.apk`.
 Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.7.zip`.
 

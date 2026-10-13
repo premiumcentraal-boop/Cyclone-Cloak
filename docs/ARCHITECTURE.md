@@ -1,6 +1,6 @@
 # Cyclone Cloak Architecture
 
-Current release candidate: **v0.11.0-alpha.7**, app/module code 31.
+Current published prerelease: [v0.11.0-alpha.7](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.7), app/module code 31, release commit `a9bb38d`.
 The existing main implementation adds the native property callback hook and
 probe row; device proof remains pending. Earlier evidence does not verify this
 new row or the new artifact. No platform verdict is claimed.

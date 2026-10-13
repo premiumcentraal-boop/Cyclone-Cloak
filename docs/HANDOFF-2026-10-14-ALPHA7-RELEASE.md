@@ -36,9 +36,27 @@ had no other matching declaration; build succeeded. This marker is unchanged.
 
 The unchanged release workflow reruns the suites, builds/signs using existing CI
 credentials, and verifies tag/version/code, both module ABIs and exact embedded
-module ZIP agreement before upload. Publication outcome will be recorded here
-after CI completes. Expected assets: `app-release.apk` and
+module ZIP agreement before upload. Release source: `a9bb38d761f10666628dd1c2a51711792d2aee5b`.
+[Release CI](https://github.com/premiumcentraal-boop/Cyclone-Cloak/actions/runs/38479788715) completed successfully.
+[Published prerelease](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.7). Uploaded assets: `app-release.apk` and
 `cyclone-cloak-0.11.0-alpha.7.zip`.
+
+Asset sizes: APK **43,048,058 bytes**, module ZIP **1,677,627 bytes**. CI verified
+alpha.7/code 31, module ABIs and exact embedded module ZIP agreement. CI warnings
+were existing setup-java/Node deprecations and an unmatched uv cache glob; no
+compiler warnings. Downloaded assets matched the published SHA-256 digests;
+the APK embedded the exact ZIP, with alpha.7/code 31 module metadata.
+`apksigner verify --verbose` confirmed APK Signature Scheme v2 with one signer.
+Publication headers are finalized in a documentation-only
+follow-up commit; the release tag is unchanged.
+
+CI build and artifact commands:
+
+```sh
+gradle -p android :app:testDebugUnitTest :module:testDebugUnitTest --no-daemon
+gradle -p android :app:assembleRelease :module:packageModule --no-daemon
+python3 tools/verify_release.py --tag v0.11.0-alpha.7 --artifacts
+```
 
 ## Evidence limits
 
