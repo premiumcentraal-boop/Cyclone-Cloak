@@ -27,6 +27,8 @@ data class CompatibilityPostureReport(
     val artifactDigest: String?,
     val checks: List<PostureReportCheck>,
     val rawVerdict: String? = null,
+    val sequence: Long? = null,
+    val claimedDigest: String? = null,
 ) {
     val passIds get() = checks.filter { it.status == PostureCheckStatus.PASS }.map { it.id }
     val warningIds get() = checks.filter { it.status == PostureCheckStatus.WARNING }.map { it.id }
@@ -43,12 +45,14 @@ data class CompatibilityPostureReport(
         rawVerdict?.let {
             require(it.isNotBlank() && it.length <= 256 && it.none(Char::isISOControl)) { "Invalid raw posture verdict." }
         }
+        sequence?.let { require(it in 0..9_007_199_254_740_991L) { "Invalid posture report sequence." } }
+        claimedDigest?.let { require(Regex("[0-9a-f]{64}").matches(it)) { "Report digest must be lowercase SHA-256." } }
     }
 
     companion object {
         fun parse(json: JSONObject): CompatibilityPostureReport {
             val required = setOf("format", "provider_id", "checked_at", "profile_id", "profile_sha256", "artifact_digest", "checks")
-            val optional = setOf("raw_verdict")
+            val optional = setOf("raw_verdict", "sequence", "report_digest")
             require(json.keys().asSequence().toSet().let { keys -> keys.containsAll(required) && keys.all { it in required || it in optional } }) { "Malformed local posture report." }
             require(json.opt("format") == 1) { "Unsupported local posture report format." }
             fun text(key: String): String = json.opt(key) as? String ?: throw IllegalArgumentException("Invalid local posture $key.")
@@ -60,12 +64,49 @@ data class CompatibilityPostureReport(
                 val message = if (row.isNull("message")) null else row.optString("message")
                 PostureReportCheck(row.getString("id"), PostureCheckStatus.valueOf(row.getString("status")), message)
             }
-            return CompatibilityPostureReport(
+            val report = CompatibilityPostureReport(
                 text("provider_id"), text("checked_at"), text("profile_id"), text("profile_sha256"),
-                text("artifact_digest"), checks, if (json.has("raw_verdict")) text("raw_verdict") else null,
+                text("artifact_digest"), checks,
+                if (json.has("raw_verdict") && !json.isNull("raw_verdict")) text("raw_verdict") else null,
+                optionalNumber(json, "sequence"),
+                if (json.has("report_digest") && !json.isNull("report_digest")) text("report_digest") else null,
             )
+            report.claimedDigest?.let { claimed ->
+                require(claimed == report.digest()) { "Report digest does not match report content." }
+            }
+            return report
+        }
+
+        private fun optionalNumber(json: JSONObject, key: String): Long? {
+            if (!json.has(key) || json.isNull(key)) return null
+            return when (val value = json.opt(key)) {
+                is Int -> value.toLong()
+                is Long -> value
+                else -> throw IllegalArgumentException("Invalid local posture $key.")
+            }
         }
     }
+
+    /** Canonical local report body used for provenance and replay detection. */
+    fun canonicalJson(): JSONObject {
+        val checks = org.json.JSONArray()
+        for (check in this.checks) checks.put(JSONObject()
+            .put("id", check.id)
+            .put("status", check.status.name)
+            .put("message", check.message ?: JSONObject.NULL))
+        return JSONObject()
+            .put("format", 1)
+            .put("provider_id", providerId)
+            .put("checked_at", checkedAt)
+            .put("profile_id", profileId)
+            .put("profile_sha256", profileDigest)
+            .put("artifact_digest", artifactDigest ?: JSONObject.NULL)
+            .put("checks", checks)
+            .put("raw_verdict", rawVerdict ?: JSONObject.NULL)
+            .put("sequence", sequence ?: JSONObject.NULL)
+    }
+
+    fun digest(): String = EngineMetadataStore.digest(canonicalJson())
 }
 
 /** Maps explicit local observations only. Missing evidence never becomes PASS. */
@@ -112,7 +153,7 @@ object LocalPostureDecision {
             else -> "The local report contained no definite check result."
         } + " Local report only; no platform verdict."
         return PostureResult(state, checkedAt, "local-report", reason, report.providerId,
-            report.artifactDigest, report.profileDigest)
+            report.artifactDigest, report.profileDigest, report.digest(), report.sequence)
     }
 }
 

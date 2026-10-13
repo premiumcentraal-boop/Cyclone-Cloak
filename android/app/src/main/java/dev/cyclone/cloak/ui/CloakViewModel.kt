@@ -23,6 +23,8 @@ import dev.cyclone.cloak.data.PostureStore
 import dev.cyclone.cloak.data.CompatibilityPostureReport
 import dev.cyclone.cloak.data.LocalPostureDecision
 import dev.cyclone.cloak.data.PostureArtifacts
+import dev.cyclone.cloak.data.PostureProvenance
+import dev.cyclone.cloak.data.PostureProvenanceStore
 import dev.cyclone.cloak.forge.DefaultDeviceProfileEngine
 import dev.cyclone.cloak.forge.IdentityEngine
 import dev.cyclone.cloak.forge.EngineBundleCodec
@@ -122,6 +124,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
     private val engineMetadataStore by lazy { EngineMetadataStore(app, EngineBundleCodec::validateMetadata) }
     private val postureStore by lazy { PostureStore(app) }
     private val bundledArtifactDigest by lazy { PostureArtifacts.bundledModuleDigest(app) }
+    private val postureProvenance by lazy { PostureProvenanceStore(app) }
     private val app: Context get() = getApplication()
     private val _state = MutableStateFlow(CloakState())
     val state: StateFlow<CloakState> = _state.asStateFlow()
@@ -330,7 +333,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         val profile = CloakStore.find(app, identityId) ?: error("That identity is gone.")
         val result = LocalPostureDecision.evaluate(report, profile, Instant.now(), bundledArtifactDigest)
         val record = result.recordFor(identityId)
-        postureStore.update(record)
+        acceptPostureRecord(record)
         say("Saved local posture: ${PostureSummary.label(record).removePrefix("Local compatibility posture: ")}.")
     }
 
@@ -347,7 +350,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
     fun saveDiagnosticsPosture() = launchWork("Saving local diagnostics posture…") {
         val review = _state.value.diagnosticsReview ?: return@launchWork
         val profile = CloakStore.find(app, review.diagnostics.report.profileId) ?: error("That identity is gone. No posture was saved.")
-        when (val outcome = review.save(profile, bundledArtifactDigest, Instant.now(), postureStore::update)) {
+        when (val outcome = review.save(profile, bundledArtifactDigest, Instant.now(), ::acceptPostureRecord)) {
             is DiagnosticsReview.SaveResult.ReviewChanged -> {
                 _state.update { it.copy(diagnosticsReview = outcome.review) }
                 return@launchWork say("The profile or report context changed. Review the updated preview before saving.")
@@ -361,6 +364,19 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
 
     fun dismissDiagnosticsPosture() = _state.update { if (it.busy == null) it.copy(diagnosticsReview = null) else it }
 
+    private fun acceptPostureRecord(record: PostureRecord) {
+        val previous = postureStore.read(record.profileId)
+        require(PostureProvenance.canReplace(previous, record)) {
+            if (previous?.reportDigest == record.reportDigest) "This exact local posture report was already imported."
+            else "This local posture report is not newer than the saved record."
+        }
+        val digest = record.reportDigest
+        if (digest != null) {
+            require(!postureProvenance.consumed(record.profileId, digest)) { "This exact local posture report was already imported." }
+        }
+        postureStore.update(record)
+        digest?.let { postureProvenance.remember(record.profileId, it) }
+    }
     fun saveReviewed() {
         val review = _state.value.review ?: return
         if (!review.canSave) return say("This profile has errors, so it can't be used as it is.")

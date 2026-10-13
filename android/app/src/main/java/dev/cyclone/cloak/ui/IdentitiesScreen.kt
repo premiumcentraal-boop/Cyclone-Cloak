@@ -199,6 +199,9 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
                 if (selected == id) {
                     state.postures[id]?.let { posture ->
                         Column(Modifier.padding(horizontal = 8.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+                            PostureSummary.reportId(posture)?.let { reportId ->
+                                Text("Report: $reportId", style = MaterialTheme.typography.bodySmall)
+                            }
                             Text("Source: ${posture.source}", style = MaterialTheme.typography.bodySmall)
                             Text(posture.checkedAt?.let { "Checked: $it" } ?: "No check timestamp",
                                 style = MaterialTheme.typography.bodySmall)

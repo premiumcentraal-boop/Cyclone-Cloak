@@ -32,4 +32,11 @@ class PostureSummaryTest {
         val label = PostureSummary.label(record)
         for (privateValue in listOf(record.profileId, record.reason, record.artifactDigest!!)) assertFalse(label.contains(privateValue))
     }
+
+    @Test fun reportIdentifierIsShortAndOnlyShownWhenPresent() {
+        val record = PostureResult(reportDigest = "ab".repeat(32)).recordFor("profile-1")
+        assertEquals("ab".repeat(6), PostureSummary.reportId(record))
+        assertNull(PostureSummary.reportId(PostureResult().recordFor("profile-1")))
+        assertNull(PostureSummary.reportId(null))
+    }
 }

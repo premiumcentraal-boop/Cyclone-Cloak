@@ -11,6 +11,8 @@ import java.time.Duration
 import java.time.Instant
 
 object PostureSummary {
+    fun reportId(record: PostureRecord?): String? = record?.reportDigest?.take(12)
+
     fun freshnessWarnings(record: PostureRecord, profileId: String, profileDigest: String, artifactDigest: String?, now: Instant): List<String> = buildList {
         if (record.profileId != profileId) add("The report is from another profile.")
         if (record.profileDigest != null && record.profileDigest != profileDigest) add("Stale report: the saved profile SHA-256 changed.")
