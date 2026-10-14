@@ -1,5 +1,7 @@
 package dev.cyclone.cloak.data
 
+import dev.cyclone.cloak.diagnostics.LogBus
+import dev.cyclone.cloak.diagnostics.Transition
 import android.content.Context
 import org.json.JSONArray
 import org.json.JSONObject
@@ -87,7 +89,7 @@ object CloakBindingStore {
         val before = read(context)
         val after = change(before)
         if (after == before) return false
-        write(context, after)
+        LogBus.trace("bindings", "save") { write(context, after) }
         true
     }
 

@@ -53,6 +53,8 @@ internal enum class DoctorReason(val message: String) {
     ZYGISK_UNKNOWN("Root Doctor could not confirm Zygisk is enabled. Check Magisk settings."),
     ABI_UNSUPPORTED("This module has no library for the device's Android architecture."),
     PUBLICATION_LOCKED("Another publisher holds the publication lock. Retry when it finishes."),
+    PUBLICATION_LOCK_UNAVAILABLE("The device publication lock tool is unavailable."),
+    PUBLICATION_LOCK_FAILED("The publication lock could not be opened or acquired; this is not publisher contention."),
     PUBLICATION_RECOVERED("Interrupted publication was recovered and the merged tree was published successfully."),
     PUBLICATION_COMPLETED("The merged profile tree was published successfully."),
     PUBLICATION_FAILED("Root access worked, but profile publication failed. Run Root Doctor again."),
@@ -199,6 +201,8 @@ internal data class HealthDiagnostics(
             val publicationReason = when (facts.root.publicationReason) {
                 PublicationReason.LOCKED -> DoctorReason.PUBLICATION_LOCKED
                 PublicationReason.FAILED -> DoctorReason.PUBLICATION_FAILED
+                PublicationReason.LOCK_UNAVAILABLE -> DoctorReason.PUBLICATION_LOCK_UNAVAILABLE
+                PublicationReason.LOCK_FAILED -> DoctorReason.PUBLICATION_LOCK_FAILED
                 PublicationReason.RECOVERED -> DoctorReason.PUBLICATION_RECOVERED
                 PublicationReason.COMPLETED -> DoctorReason.PUBLICATION_COMPLETED
                 null -> null

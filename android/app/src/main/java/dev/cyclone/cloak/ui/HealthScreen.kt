@@ -43,6 +43,7 @@ internal fun HealthScreen(state: CloakState, vm: CloakViewModel) {
         verticalArrangement = Arrangement.spacedBy(CloakSpace.item),
     ) {
         CloakNotice("Local diagnostics. These checks run on this device and are kept apart from saved identities and bindings.")
+        DeveloperDiagnosticsEntry(state.rootDoctor.moduleVersion)
         CloakSectionHeader("Readiness")
         HealthDoctorCard(diagnostics) { report ->
             context.getSystemService(ClipboardManager::class.java).setPrimaryClip(ClipData.newPlainText("Cyclone Cloak diagnostics", report))

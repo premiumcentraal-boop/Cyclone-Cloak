@@ -5,16 +5,17 @@ import org.junit.Test
 import java.io.File
 
 /**
- * Keeps the layers one-way: `forge` (pure identity rules) and `data` (storage) depend on nothing of Cloak's;
+ * Keeps the layers one-way: diagnostics is a leaf; forge remains pure and storage may emit diagnostics;
  * `root` on those; `cyclone` on those and `root`; `ui` on anything below it.
  */
 class ArchitectureTest {
     private val allowed = mapOf(
         "forge" to emptySet(),
-        "data" to emptySet(),
-        "root" to setOf("data", "forge"),
-        "cyclone" to setOf("data", "forge", "root"),
-        "ui" to setOf("data", "forge", "root", "cyclone"),
+        "diagnostics" to emptySet(),
+        "data" to setOf("diagnostics"),
+        "root" to setOf("data", "forge", "diagnostics"),
+        "cyclone" to setOf("data", "forge", "root", "diagnostics"),
+        "ui" to setOf("data", "forge", "root", "cyclone", "diagnostics"),
     )
 
     @Test

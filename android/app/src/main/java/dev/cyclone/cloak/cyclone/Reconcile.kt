@@ -1,5 +1,7 @@
 package dev.cyclone.cloak.cyclone
 
+import dev.cyclone.cloak.diagnostics.LogBus
+import dev.cyclone.cloak.diagnostics.Transition
 import dev.cyclone.cloak.data.*
 import com.cyclone.connector.client.CycloneConnectorException
 import org.json.JSONObject
@@ -130,7 +132,15 @@ class BindingReconciler(
     private var calls = 0
 
     fun reconcile(desired: List<DesiredBinding>, previouslyPushed: Set<String>?, sweep: List<CycloneProfile>,
-                  preserve: Set<String> = emptySet()): Result {
+                  preserve: Set<String> = emptySet()): Result = LogBus.trace("reconciliation", "reconcile") {
+        reconcileDetailed(desired, previouslyPushed, sweep, preserve).also { result ->
+            if (result.issues.isNotEmpty() || result.stoppedBy != null)
+                LogBus.event("reconciliation", "result", Transition.DEGRADED, reason = result.stoppedBy ?: "BINDING_ISSUES")
+        }
+    }
+
+    private fun reconcileDetailed(desired: List<DesiredBinding>, previouslyPushed: Set<String>?, sweep: List<CycloneProfile>,
+                  preserve: Set<String>): Result {
         fun protected(tuple: String): Boolean = splitTuple(tuple)?.let { (profile, _, pkg) -> bindingKey(profile, pkg) in preserve } == true
         val pushed = previouslyPushed.orEmpty().filter(::protected).toMutableSet()
         val issues = mutableMapOf<String, String>()
@@ -218,6 +228,7 @@ class BindingReconciler(
         return try {
             block()
         } catch (error: CycloneConnectorException) {
+            LogBus.event("reconciliation", "connector-call", Transition.DEGRADED, reason = error.code, error = error)
             when (error.code) {
                 "NOT_APPROVED", "SCOPE_NOT_GRANTED", "UNKNOWN_METHOD", "NOT_A_CONNECTOR" -> throw Stop(error.code)
                 "RATE_LIMITED", "INTERNAL" -> {
@@ -225,6 +236,7 @@ class BindingReconciler(
                     try {
                         block()
                     } catch (again: CycloneConnectorException) {
+                        LogBus.event("reconciliation", "retry", Transition.FAILED, reason = again.code, error = again)
                         if (again.code in setOf("NOT_APPROVED", "SCOPE_NOT_GRANTED", "UNKNOWN_METHOD", "NOT_A_CONNECTOR")) throw Stop(again.code)
                         throw again
                     }

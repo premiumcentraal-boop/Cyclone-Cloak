@@ -155,6 +155,7 @@ public class ProbeActivity extends Activity {
             if (denied != null) {
                 row.put("status", "BLOCKED").put("reason", denied);
                 rows.put(row);
+                logDiagnosticRow(id, row);
                 return;
             }
             Object value = operation.get();
@@ -177,6 +178,16 @@ public class ProbeActivity extends Activity {
             row.put("status", "BLOCKED").put("reason", reason);
         }
         rows.put(row);
+        logDiagnosticRow(id, row);
+    }
+
+    private void logDiagnosticRow(String id, JSONObject row) {
+        try {
+            android.util.Log.i("CloakProbeDiagnostics", new JSONObject()
+                .put("timestamp", System.currentTimeMillis())
+                .put("process", android.os.Process.myPid()).put("thread", android.os.Process.myTid())
+                .put("field", id).put("status", row.optString("status")).toString());
+        } catch (Exception ignored) { /* Diagnostics must not change a probe result. */ }
     }
 
     private void collect() throws Exception {

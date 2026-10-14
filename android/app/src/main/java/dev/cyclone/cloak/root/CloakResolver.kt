@@ -1,5 +1,7 @@
 package dev.cyclone.cloak.root
 
+import dev.cyclone.cloak.diagnostics.LogBus
+import dev.cyclone.cloak.diagnostics.Transition
 import dev.cyclone.cloak.data.*
 import dev.cyclone.cloak.forge.*
 import android.content.Context
@@ -51,14 +53,22 @@ object CloakResolver {
         context: Context,
         repairModule: Boolean = false,
         scope: PublishScope = PublishScope.forThisInstall(context),
-    ): RootDoctorResult {
-        val staging = runCatching { stagingRoot(context) }.getOrElse {
+    ): RootDoctorResult = LogBus.trace("publication", "publish") {
+        rebuildIndexObserved(context, repairModule, scope).also { result ->
+            LogBus.event("publication", "result", if (result.published) Transition.COMPLETED else Transition.DEGRADED,
+                reason = result.publicationReason?.name ?: result.code.name)
+            if (result.staleLockDetected) LogBus.event("publication", "lock", Transition.DEGRADED, reason = "STALE_LOCK")
+        }
+    }
+
+    private fun rebuildIndexObserved(context: Context, repairModule: Boolean, scope: PublishScope): RootDoctorResult {
+        val staging = runCatching { LogBus.trace("publication", "staging-create") { stagingRoot(context) } }.getOrElse {
+            LogBus.event("publication", "stage", Transition.FAILED, reason = "STAGING_FAILED", error = it)
             Log.e("CloakPublish", "Could not create staging snapshot", it)
             return RootDoctorResult(RootDoctorCode.PUBLISH_FAILED, publicationReason = PublicationReason.FAILED)
         }
         val staged = runCatching {
-            staging.deleteRecursively()
-            staging.mkdirs()
+            check(staging.isDirectory) { "Staging directory unavailable" }
             val entries = JSONObject()
             for (binding in CloakBindingStore.all(context)) {
                 if (!binding.enabled || !scope.publishes(binding)) continue
@@ -82,7 +92,10 @@ object CloakResolver {
             }
             // This install's share of the shared index; CloakRootDoctor assembles every share into index.json.
             File(staging, CloakStateLayout.INDEX_PART_FILE).writeText(indexPart(entries))
-        }.onFailure { Log.e("CloakPublish", "Could not stage profile state", it) }.isSuccess
+        }.onFailure {
+            LogBus.event("publication", "stage", Transition.FAILED, reason = "STAGING_FAILED", error = it)
+            Log.e("CloakPublish", "Could not stage profile state", it)
+        }.isSuccess
         val result = if (staged) {
             CloakRootDoctor.run(context, staging, repairModule, scope)
         } else {

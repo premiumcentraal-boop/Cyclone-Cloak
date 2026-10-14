@@ -62,6 +62,41 @@ class PublicationRecoveryTest {
         assertTrue(File(root, "publication.lock").isFile)
         assertFalse(File(root, "publication.owner").exists())
     }
+    @Test fun descriptorZeroLockCoversMergeAndSwap() {
+        val (exit, output) = publish(11)
+        assertEquals(output, 0, exit)
+        for (phase in listOf("LOCK_OPEN", "LOCK_ACQUIRE", "RECOVERY", "STAGING", "MERGE", "ATOMIC_SWAP")) {
+            assertTrue(output, output.contains("CLOAK_PHASE=$phase:STARTED"))
+            assertTrue(output, output.contains("CLOAK_PHASE=$phase:COMPLETED"))
+        }
+        assertTrue(output.contains("CLOAK_PHASE=COMPLETION:COMPLETED"))
+    }
+    @Test fun lockingUnavailableDoesNotMasqueradeAsContention() {
+        val old = seed()
+        val (exit, output) = publish(12, "command() { if [ \"\$1\" = -v ] && [ \"\$2\" = flock ]; then return 1; fi; builtin command \"\$@\"; };")
+        assertNotEquals(0, exit)
+        assertTrue(output.contains("CLOAK_PUBLICATION=LOCK_UNAVAILABLE"))
+        assertEquals(old, File(root, "state-v1/index.json").readText())
+    }
+    @Test fun flockOperationalErrorIsDifferentFromBusyLock() {
+        val old = seed()
+        val (exit, output) = publish(12, "flock() { echo 'flock: Bad file descriptor' >&2; return 1; };")
+        assertNotEquals(0, exit)
+        assertTrue(output.contains("CLOAK_PUBLICATION=LOCK_FAILED"))
+        assertFalse(output.contains("CLOAK_PUBLICATION=LOCKED"))
+        assertEquals(old, File(root, "state-v1/index.json").readText())
+    }
+    @Test fun missingStagingPartRetainsLastTree() {
+        val old = seed()
+        val source = stage(12)
+        File(source, "index.part").delete()
+        val script = "set -eu; " + CloakRootDoctor.mergePublishScript(path(root), path(source), PublishScope(12, false, null))
+        val (exit, output) = result(start(script))
+        assertNotEquals(output, 0, exit)
+        assertTrue(output.contains("CLOAK_PUBLICATION=FAILED"))
+        assertEquals(old, File(root, "state-v1/index.json").readText())
+        assertFalse(File(root, "publishers/12").exists())
+    }
     @Test fun staleMarkerIsRecoveredOnlyAfterAcquiringKernelLock() {
         File(root, "publication.owner").writeText("stale owner, reused PID")
         val (exit, output) = publish(11)

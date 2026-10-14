@@ -1,5 +1,7 @@
 package dev.cyclone.cloak.root
 
+import dev.cyclone.cloak.diagnostics.LogBus
+import dev.cyclone.cloak.diagnostics.Transition
 import dev.cyclone.cloak.data.*
 import android.content.Context
 import android.os.Build
@@ -31,6 +33,8 @@ enum class RootDoctorCode {
 
 enum class PublicationReason(val message: String) {
     LOCKED("Another publisher holds the publication lock. Retry after it finishes."),
+    LOCK_UNAVAILABLE("Publication locking is unavailable on this device."),
+    LOCK_FAILED("The publication lock could not be opened or acquired. This is a locking error, not another publisher."),
     FAILED("Publication failed. Retry to recover or complete publication."),
     RECOVERED("An interrupted publication was recovered and publication completed."),
     COMPLETED("Profile publication completed."),
@@ -120,6 +124,12 @@ object CloakRootDoctor {
         repairModule: Boolean = false,
         scope: PublishScope = PublishScope.forThisInstall(context),
     ): RootDoctorResult {
+        LogBus.event("publication", "staging-validation", Transition.STARTED)
+        if (!validateStaging(staging)) {
+            LogBus.event("publication", "staging-validation", Transition.FAILED, reason = "MALFORMED_STAGING")
+            return RootDoctorResult(RootDoctorCode.PUBLISH_FAILED, diagnostic = "Malformed staging tree.", publicationReason = PublicationReason.FAILED)
+        }
+        LogBus.event("publication", "staging-validation", Transition.COMPLETED)
         val abi = Build.SUPPORTED_ABIS.firstOrNull { it in supportedAbis }
             ?: return rememberResult(context, RootDoctorResult(RootDoctorCode.ABI_UNSUPPORTED), null)
         @Suppress("DEPRECATION")
@@ -147,6 +157,7 @@ object CloakRootDoctor {
             return rememberResult(context, RootDoctorResult(RootDoctorCode.ROOT_TIMEOUT), appVersion)
         }
 
+        recordPublicationPhases(shell.output, shell.exitCode ?: 1)
         val initial = parseResult(shell.output, shell.exitCode ?: 1)
         Log.i("CloakRootDoctor", "Root check ${initial.code}; exit=${shell.exitCode}; output=${shell.output}")
         if (repairModule && initial.code in setOf(
@@ -246,11 +257,47 @@ object CloakRootDoctor {
     }.getOrDefault(false)
 
     private fun rememberResult(context: Context, result: RootDoctorResult, appVersion: String?): RootDoctorResult {
+        LogBus.event("module", "check", if (result.published) Transition.COMPLETED else Transition.DEGRADED, reason = result.code.name)
         val preferences = context.getSharedPreferences(preferencesName, Context.MODE_PRIVATE).edit()
         if (result.published && appVersion != null) preferences.putString(verifiedVersionKey, appVersion)
         else preferences.remove(verifiedVersionKey)
         preferences.apply()
         return result
+    }
+
+    internal fun validateStaging(staging: File): Boolean = runCatching {
+        require(staging.isDirectory && !java.nio.file.Files.isSymbolicLink(staging.toPath()))
+        val part = File(staging, CloakStateLayout.INDEX_PART_FILE)
+        require(part.isFile && !java.nio.file.Files.isSymbolicLink(part.toPath()))
+        val entries = org.json.JSONObject("{${part.readText()}}")
+        val keys = entries.keys().asSequence().map { entries.getJSONObject(it).getString("key") }.toSet()
+        require(keys.all { it.matches(Regex("[0-9a-f]{64}")) })
+        require(staging.listFiles()!!.all { child ->
+            !java.nio.file.Files.isSymbolicLink(child.toPath()) &&
+                (child.name == CloakStateLayout.INDEX_PART_FILE || child.name in keys)
+        })
+        keys.forEach { key ->
+            val dir = File(staging, key)
+            require(dir.isDirectory)
+            val profile = File(dir, CloakStateLayout.PROFILE_FILE)
+            val pif = File(dir, CloakStateLayout.PIF_FILE)
+            require(profile.isFile && pif.isFile)
+            require(dir.listFiles()!!.all { !java.nio.file.Files.isSymbolicLink(it.toPath()) &&
+                it.name in setOf(CloakStateLayout.PROFILE_FILE, CloakStateLayout.PIF_FILE) })
+            org.json.JSONObject(profile.readText())
+            org.json.JSONObject(pif.readText())
+        }
+        true
+    }.getOrDefault(false)
+
+    internal fun recordPublicationPhases(output: String, exitCode: Int) {
+        Regex("(?m)^CLOAK_PHASE=([A-Z_]+):(STARTED|COMPLETED)$").findAll(output).forEach { match ->
+            LogBus.event("publication", match.groupValues[1].lowercase(),
+                if (match.groupValues[2] == "STARTED") Transition.STARTED else Transition.COMPLETED)
+        }
+        val result = parseResult(output, exitCode)
+        if (!result.published) LogBus.event("publication", "shell-result", Transition.FAILED,
+            reason = result.publicationReason?.name ?: result.code.name)
     }
 
     internal fun parseResult(output: String, exitCode: Int): RootDoctorResult {
@@ -277,8 +324,12 @@ object CloakRootDoctor {
         val resultCode = if (marker == "READY" && exitCode != 0) RootDoctorCode.PUBLISH_FAILED else code
         val publication = Regex("CLOAK_PUBLICATION=([A-Z_]+)").findAll(output).lastOrNull()
             ?.groupValues?.get(1)?.let { value -> PublicationReason.entries.find { it.name == value } }
-        val reason = if (resultCode == RootDoctorCode.PUBLISH_FAILED && publication != PublicationReason.LOCKED)
-            PublicationReason.FAILED else publication
+        val lockOpenFailed = output.contains("CLOAK_PHASE=LOCK_OPEN:STARTED") && !output.contains("CLOAK_PHASE=LOCK_OPEN:COMPLETED")
+        val reason = when {
+            lockOpenFailed -> PublicationReason.LOCK_FAILED
+            resultCode == RootDoctorCode.PUBLISH_FAILED && publication !in setOf(PublicationReason.LOCKED, PublicationReason.LOCK_UNAVAILABLE, PublicationReason.LOCK_FAILED) -> PublicationReason.FAILED
+            else -> publication
+        }
         return RootDoctorResult(resultCode, moduleVersion, diagnosticText(output), reason,
             output.lineSequence().any { it.trim() == "CLOAK_PUBLICATION_DETAIL=STALE_LOCK" })
     }
@@ -390,7 +441,9 @@ object CloakRootDoctor {
         legacyDirs: List<String>,
         scope: PublishScope = PublishScope.MAIN_DEFAULT,
     ): String = buildString {
+        append("echo CLOAK_PHASE=PRECHECK:STARTED; ")
         append(precheckScript(abi, appVersion))
+        append("echo CLOAK_PHASE=PRECHECK:COMPLETED; ")
         append(mergePublishScript("/data/adb/cyclone_cloak", staging.absolutePath, scope))
         for (dir in legacyDirs) append("rm -rf ${quote(dir)} || true; ")
         append("echo CLOAK_DOCTOR=READY")
@@ -419,21 +472,24 @@ object CloakRootDoctor {
             append("root=${quote(root)}; pubs=${quote(pubs)}; state=${quote(state)}; temp=${quote(temp)}; backup=${quote(backup)}; ")
             append("me=${quote(me)}; staging=${quote(staging)}; ")
             append("mkdir -p \"\$root\"; chmod 700 \"\$root\"; ")
-            append("command -v flock >/dev/null 2>&1 || { echo CLOAK_PUBLICATION=FAILED; echo CLOAK_DOCTOR=PUBLISH_FAILED; echo 'Publication locking is unavailable.'; exit 48; }; ")
+            append("command -v flock >/dev/null 2>&1 || { echo CLOAK_PUBLICATION=LOCK_UNAVAILABLE; echo CLOAK_DOCTOR=PUBLISH_FAILED; echo 'Publication locking is unavailable.'; exit 48; }; ")
             // Never unlink this inode: waiters and owners must lock the same file, even after crashes.
-            append("exec 9>> \"\$root/publication.lock\"; ")
-            append("flock -n 9 || { echo CLOAK_PUBLICATION=LOCKED; echo CLOAK_DOCTOR=PUBLISH_FAILED; exit 48; }; ")
+            // Android mksh closes extra descriptors before external commands. Standard
+            // input survives exec; it stays open for this entire publication subshell.
+            append("echo CLOAK_PHASE=LOCK_OPEN:STARTED; exec 0>> \"\$root/publication.lock\"; echo CLOAK_PHASE=LOCK_OPEN:COMPLETED; ")
+            append("echo CLOAK_PHASE=LOCK_ACQUIRE:STARTED; if lock_error=\$(flock -n 0 2>&1); then echo CLOAK_PHASE=LOCK_ACQUIRE:COMPLETED; ")
+            append("else if [ -z \"\$lock_error\" ]; then echo CLOAK_PUBLICATION=LOCKED; else echo CLOAK_PUBLICATION=LOCK_FAILED; fi; echo CLOAK_DOCTOR=PUBLISH_FAILED; exit 48; fi; ")
             append("recovered=0; finished=0; swapped=0; ")
             append("recover() { if [ \"\$swapped\" = 1 ] && [ -d \"\$backup\" ]; then rm -rf \"\$state\" || return 1; swapped=0; fi; if [ -d \"\$backup\" ] && [ -e \"\$state\" ] && [ ! -s \"\$state/$index\" ]; then test -s \"\$backup/$index\" || return 1; rm -rf \"\$state\" || return 1; fi; if [ ! -e \"\$state\" ] && [ -d \"\$backup\" ]; then mv \"\$backup\" \"\$state\" || return 1; recovered=1; fi; ")
             append("if [ -d \"\$pubs\" ]; then for old in \"\$pubs\"/*.old; do [ -d \"\$old\" ] || continue; target=\${old%.old}; ")
             append("if [ ! -e \"\$target\" ]; then mv \"\$old\" \"\$target\" || return 1; recovered=1; fi; done; fi; }; ")
             append("finish() { status=\$?; trap - EXIT HUP INT TERM; if [ \"\$finished\" != 1 ]; then ")
-            append("if recover; then if [ -s \"\$state/$index\" ]; then echo CLOAK_PUBLICATION_DETAIL=LAST_TREE_RETAINED; else echo CLOAK_PUBLICATION_DETAIL=NO_PREVIOUS_TREE; fi; else echo CLOAK_PUBLICATION_DETAIL=RESTORE_PENDING; fi; ")
+            append("echo CLOAK_PHASE=RECOVERY:STARTED; if recover; then echo CLOAK_PHASE=RECOVERY:COMPLETED; if [ -s \"\$state/$index\" ]; then echo CLOAK_PUBLICATION_DETAIL=LAST_TREE_RETAINED; else echo CLOAK_PUBLICATION_DETAIL=NO_PREVIOUS_TREE; fi; else echo CLOAK_PUBLICATION_DETAIL=RESTORE_PENDING; fi; ")
             append("echo CLOAK_PUBLICATION=FAILED; echo CLOAK_DOCTOR=PUBLISH_FAILED; status=48; fi; ")
             append("rm -f \"\$root/publication.owner\" || true; exit \"\$status\"; }; trap finish EXIT; trap 'exit 48' HUP INT TERM; ")
             // A leftover marker is stale only AFTER the kernel grants exclusive ownership. Never steal by PID/age.
             append("if [ -e \"\$root/publication.owner\" ]; then recovered=1; echo CLOAK_PUBLICATION_DETAIL=STALE_LOCK; fi; echo \"\$\$\" > \"\$root/publication.owner\"; ")
-            append("recover; ")
+            append("echo CLOAK_PHASE=RECOVERY:STARTED; recover; echo CLOAK_PHASE=RECOVERY:COMPLETED; ")
             // A tree published before shares existed came from Main's Cloak: keep it as Main's share.
             append("if [ ! -d \"\$pubs\" ] && [ -s \"\$state/$index\" ]; then ")
             append("legacy=\$(cat \"\$pubs.main\" 2>/dev/null || echo ${quote(legacyOwner)}); migration=\$pubs.migration; rm -rf \"\$migration\"; mkdir -p \"\$migration/\$legacy\"; ")
@@ -450,8 +506,10 @@ object CloakRootDoctor {
             append("*) : > \"\$migration/\$legacy/$part\";; esac; mv \"\$migration\" \"\$pubs\"; fi; ")
             append("mkdir -p \"\$pubs\"; chmod 700 \"\$pubs\"; ")
             // Replace this install's share atomically.
+            append("echo CLOAK_PHASE=STAGING:STARTED; ")
             append("rm -rf \"\$pubs/\$me.tmp\" \"\$pubs/\$me.old\"; cp -R \"\$staging\" \"\$pubs/\$me.tmp\"; ")
             append("test -f \"\$pubs/\$me.tmp/$part\" || { echo CLOAK_DOCTOR=PUBLISH_FAILED; exit 48; }; ")
+            append("echo CLOAK_PHASE=STAGING:COMPLETED; echo CLOAK_PHASE=MERGE:STARTED; ")
             append("if [ -e \"\$pubs/\$me\" ]; then mv \"\$pubs/\$me\" \"\$pubs/\$me.old\"; fi; ")
             append("mv \"\$pubs/\$me.tmp\" \"\$pubs/\$me\"; rm -rf \"\$pubs/\$me.old\"; ")
             if (scope.isMain) {
@@ -476,11 +534,13 @@ object CloakRootDoctor {
             append("printf '}}' >> \"\$temp/$index\"; ")
             append("chmod -R go-rwx \"\$temp\"; chmod 700 \"\$temp\"; ")
             append("test -s \"\$temp/$index\"; ")
+            append("echo CLOAK_PHASE=MERGE:COMPLETED; echo CLOAK_PHASE=ATOMIC_SWAP:STARTED; ")
             append("if [ -e \"\$backup\" ]; then test -s \"\$state/$index\"; rm -rf \"\$backup\"; fi; ")
             append("if [ -e \"\$state\" ]; then mv \"\$state\" \"\$backup\"; fi; ")
             append("if mv \"\$temp\" \"\$state\"; then swapped=1; ")
             append("else exit 48; fi; ")
             append("test -s \"\$state/$index\"; test ! -e \"\$temp\"; finished=1; swapped=0; rm -rf \"\$backup\" || true; ")
+            append("echo CLOAK_PHASE=ATOMIC_SWAP:COMPLETED; echo CLOAK_PHASE=COMPLETION:COMPLETED; ")
             append("if [ \"\$recovered\" = 1 ]; then echo CLOAK_PUBLICATION=RECOVERED; else echo CLOAK_PUBLICATION=COMPLETED; fi; ); ")
         }
     }

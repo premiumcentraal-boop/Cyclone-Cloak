@@ -1,5 +1,7 @@
 package dev.cyclone.cloak.cyclone
 
+import dev.cyclone.cloak.diagnostics.LogBus
+import dev.cyclone.cloak.diagnostics.Transition
 import dev.cyclone.cloak.data.*
 import dev.cyclone.cloak.forge.*
 import dev.cyclone.cloak.root.*
@@ -37,8 +39,10 @@ object CycloneBridge {
                     report
                 }
             } catch (error: CycloneConnectorException) {
+                LogBus.event("connector", "connect", Transition.FAILED, reason = error.code, error = error)
                 SyncReport.failed(error.code, error.message)
             } catch (error: Exception) {
+                LogBus.event("connector", "connect", Transition.FAILED, reason = "INTERNAL", error = error)
                 SyncReport.failed("INTERNAL", error.message)
             }
         }

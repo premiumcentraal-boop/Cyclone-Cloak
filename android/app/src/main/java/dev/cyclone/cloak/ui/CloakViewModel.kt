@@ -1,5 +1,7 @@
 package dev.cyclone.cloak.ui
 
+import dev.cyclone.cloak.diagnostics.LogBus
+import dev.cyclone.cloak.diagnostics.Transition
 import android.app.Application
 import android.content.Context
 import android.net.Uri
@@ -149,8 +151,9 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
             work.withLock {
                 _state.update { it.copy(busy = label) }
                 try {
-                    block()
+                    LogBus.trace("app", "local-work") { block() }
                 } catch (error: Exception) {
+                    LogBus.event("exceptions", "ui-work", Transition.FAILED, reason = "ACTION_FAILED", error = error)
                     say(error.message ?: "Something went wrong.")
                 } finally {
                     _state.update { it.copy(busy = null) }
@@ -173,6 +176,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         val unreadable = files.orEmpty()
             .filter { it.isFile && it.name.endsWith(".json") && !it.name.startsWith(".") }
             .map { it.name.removeSuffix(".json") }.filter { it !in readableIds }.toSet()
+        if (unreadable.isNotEmpty()) LogBus.event("profiles", "inventory", Transition.DEGRADED, reason = "UNREADABLE_PROFILES")
         _state.update {
             it.copy(phones = builtIn + own, identities = identities, identityInventoryKnown = inventoryKnown,
                 engineMetadata = identities.mapNotNull { (id, profile) -> engineMetadataStore.read(profile)?.let { id to it } }.toMap(),

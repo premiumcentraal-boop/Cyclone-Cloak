@@ -1,5 +1,7 @@
 package dev.cyclone.cloak.cyclone
 
+import dev.cyclone.cloak.diagnostics.LogBus
+import dev.cyclone.cloak.diagnostics.Transition
 import dev.cyclone.cloak.data.*
 import dev.cyclone.cloak.root.*
 import com.cyclone.connector.client.CycloneConnectorException
@@ -60,10 +62,18 @@ class CycloneSyncEngine(
     private val local: CloakLocal,
     private val reconciler: BindingReconciler = BindingReconciler(api),
 ) {
-    fun sync(): SyncReport {
+    fun sync(): SyncReport = LogBus.trace("connector", "sync") {
+        syncDetailed().also { result ->
+            if (result.headline != "Connected" || result.issues.isNotEmpty())
+                LogBus.event("connector", "sync-result", Transition.DEGRADED, reason = "SYNC_NEEDS_ATTENTION")
+        }
+    }
+
+    private fun syncDetailed(): SyncReport {
         var gate = try {
             CycloneGate.of(api.hello())
         } catch (error: CycloneConnectorException) {
+            LogBus.event("connector", "request", Transition.FAILED, reason = error.code, error = error)
             return SyncReport.failed(error.code, error.message)
         }
         if (!gate.approved) return SyncReport("Needs approval", OpenRequests.APPROVE_LINE, gate)
@@ -81,6 +91,7 @@ class CycloneSyncEngine(
         val snapshot = try {
             ProfilesSnapshot.parse(api.profiles())
         } catch (error: CycloneConnectorException) {
+            LogBus.event("connector", "request", Transition.FAILED, reason = error.code, error = error)
             return SyncReport.failed(error.code, error.message).copy(gate = gate, events = batch)
         }
         val placement = Placement.of(local.myUser, snapshot)

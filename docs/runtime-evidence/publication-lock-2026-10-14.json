@@ -1,0 +1,22 @@
+{
+  "date": "2026-10-14",
+  "scope": "publication locking only; no app installation or full device publication",
+  "shell": "MIRBSD KSH R59 2020/10/31 Android",
+  "flock": "Toybox 0.8.13-android; documented interface: flock [-sxun] fd",
+  "observations": {
+    "fd9_present_in_parent": true,
+    "fd9_present_in_external_child": false,
+    "flock_n_9_exit": 1,
+    "flock_n_9_error": "flock: flock: Bad file descriptor",
+    "flock_n_8_exit": 1,
+    "path_argument_exit_while_lock_held": 0,
+    "fd0_holder_exit": 0,
+    "fd0_separate_open_contender_exit": 1,
+    "command_substitution_fd0_holder_exit": 0,
+    "command_substitution_fd0_contender_exit": 1,
+    "busy_contender_stderr_empty": true
+  },
+  "conclusion": "Use inherited standard descriptor 0 for the complete publication subshell. Path-based invocation is not a supported locking interface on this Toybox.",
+  "changes_to_device": "Temporary advisory lock acquisition on existing publication.lock only; lock file not unlinked, no profile/share/tree edits, reboot, uninstall or data clearing.",
+  "platform_verdict": "not claimed"
+}
