@@ -11,13 +11,13 @@ not prove that every inspection API sees it.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.11.0-alpha.8 (prerelease)
+## Status: 0.11.0-alpha.9 (release candidate)
 
-Alpha.8 packages the companion UI redesign: a Home dashboard that lists what needs attention,
-one shared Cyclone-style design library, and tidier Phones, Identities, Profiles and Health
-screens. App/module code 32. [Release notes](docs/RELEASE_0.11.0-alpha.8.md) explain scope.
-Runtime, module, storage and connector behavior are unchanged from alpha.7; physical-device
-verification of the alpha.7 callback row remains pending. Local compatibility states are not platform verdicts.
+Alpha.9 adds bounded local developer diagnostics and fixes Android shell publication
+locking. App/module code 33. [Release notes](docs/RELEASE_0.11.0-alpha.9.md)
+record scope. Runtime hooks, profile semantics, storage layout and connector behavior
+are unchanged. Device publication proof is pending the signed release installation;
+local compatibility evidence is not a platform verdict.
 See [CURRENT-STATE.md](docs/CURRENT-STATE.md) for checks and release status.
 
 - **Companion app** (`android/app`): a Cyclone connector (contract `cyclone.connector/1.3`, Cyclone

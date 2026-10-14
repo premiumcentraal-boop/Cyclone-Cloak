@@ -1,16 +1,17 @@
 # Current state
 
-Updated 2026-10-14. **v0.11.0-alpha.8 / versionCode 32** is the
-[latest prerelease](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.8), packaging the companion UI redesign from main `a9f4759` (PR #13).
-Runtime and module behavior are unchanged from alpha.7 (`a9bb38d`).
-[Alpha.8 notes](RELEASE_0.11.0-alpha.8.md) describe scope; the [UI redesign handoff](HANDOFF-2026-10-14-UI-REDESIGN.md) lists open questions.
+Updated 2026-10-14. **v0.11.0-alpha.9 / versionCode 33** is the release candidate.
+Latest published prerelease is v0.11.0-alpha.8 until the gated release workflow completes.
+[Alpha.9 notes](RELEASE_0.11.0-alpha.9.md) describe bounded local diagnostics and
+the Android shell publication locking repair. Device proof will be recorded after
+installing the signed artifacts. Runtime hooks and reader/storage formats are unchanged.
 
 ## Versions and major components
 
 | Component | Current source version / responsibility |
 | --- | --- |
-| App | `dev.cyclone.cloak`, `0.11.0-alpha.8`, code 32; minimum API 29, target/compile API 36 |
-| Module | `cyclone_cloak`, `v0.11.0-alpha.8`, code 32; ARM64/ARMv7, minimum API 26; native property callback path added on main |
+| App | `dev.cyclone.cloak`, `0.11.0-alpha.9`, code 33; minimum API 29, target/compile API 36 |
+| Module | `cyclone_cloak`, `v0.11.0-alpha.9`, code 33; ARM64/ARMv7, minimum API 26; native property callback path added on main |
 | Profile | Schema `0.3`, legacy `0.2` accepted; existing JSON storage unchanged |
 | Binding / reader | Binding schema 2; module index `schemaVersion: 2`; existing key lookup unchanged |
 | Connector | `cyclone.connector/1.3`; Cyclone 5.0.0-alpha.122 or newer |
@@ -29,7 +30,7 @@ Runtime and module behavior are unchanged from alpha.7 (`a9bb38d`).
   not platform verdicts; the library summary does not change posture decisions.
 - Data/root/connector: existing atomic profile storage and backup behavior,
   conservative reconciliation, publisher shares and recovery. This release
-  changes neither storage layout nor synchronization/publication behavior.
+  preserves storage layout and synchronization behavior; publication uses an inherited lock descriptor with explicit phase diagnostics.
 - Module/probe: existing runtime inspection implementation and separate diagnostics
   app. The native property callback hook and probe row are implemented; device
   verification remains pending. Earlier evidence does not cover the new row; evidence is
@@ -37,33 +38,32 @@ Runtime and module behavior are unchanged from alpha.7 (`a9bb38d`).
 
 ## Local verification and release gate
 
-The preparation checks passed: app **398 tests (375 passed, 23 existing Windows
-POSIX-shell skips)**, module **12 passed**, forge **227 passed**, schema **33 passed**.
-Debug assembly succeeded. No tests were removed or bypassed. The old offline
-Robolectric dependency blocker no longer applies to this environment.
+The alpha.9 preparation checks passed: app **428 passed, zero skipped**, module
+**12 passed**, forge **227 passed**, schema **33 passed**, diagnostics helper **3 passed**.
+WSL enabled the actual publication shell tests on Windows. Debug assembly and module
+packaging succeeded without compiler warnings. Release CI signing is pending.
 
 ```powershell
 $env:JAVA_HOME='C:/Program Files/Eclipse Adoptium/jdk-17.0.20.101-hotspot'
-& "$env:TEMP/cloak-build/gradle-8.11.1/bin/gradle.bat" -p android :app:testDebugUnitTest :module:testDebugUnitTest :app:assembleDebug --offline --no-daemon
-uv run --with pytest -- python -m pytest forge/tests -q
+$env:CLOAK_TEST_WSL='1'
+& "$env:TEMP/cloak-build/gradle-8.11.1/bin/gradle.bat" -p android :app:testDebugUnitTest :module:testDebugUnitTest :app:assembleDebug :module:packageModule --offline --no-daemon
+uv run --with pytest -- python -m pytest forge/tests tools/tests -q
 uv run --with pytest --with jsonschema -- python -m pytest forge/schema_tests -q
-uv run -- python tools/verify_release.py --tag v0.11.0-alpha.8
+uv run -- python tools/verify_release.py --tag v0.11.0-alpha.9
 git diff --check
 ```
 
-Release CI passed all four suites on Linux, built/signed the APK and packaged
-the module ZIP, and verified version agreement and exact embedded-module bytes
-before publication. Signing used the existing CI secrets. Both probe variants
-also built locally; diagnostics emitted an unchanged AD_ID removal-marker warning.
+The release workflow reruns tests, signs the APK using existing CI secrets, packages
+the module and checks exact embedded-module agreement before uploading the prerelease.
 Local debug output: `android/app/build/outputs/apk/debug/app-debug.apk`.
-Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.8.zip`.
+Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.9.zip`.
 
 ## Known limits and separately verified device evidence
 
 - Local quality, readiness and PASS records do not prove interception or a
   platform verdict. Runtime coverage is partial. Probe fixture results concern
   their measured artifact; they do not verify arbitrary saved identities or the
-  currently installed module. No device actions were performed for this release.
+  currently installed module. Normal-app publication proof for alpha.9 is pending released-artifact installation.
 - Existing physical-device checks remain separate, including reboot/activation,
   multi-user behavior, publication/recovery and backup/import UI. See
   [DEFERRED-DEVICE-CHECKS.md](DEFERRED-DEVICE-CHECKS.md) and the runtime coverage ledger.
