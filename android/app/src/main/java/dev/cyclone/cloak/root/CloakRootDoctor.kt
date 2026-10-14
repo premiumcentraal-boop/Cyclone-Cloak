@@ -8,7 +8,6 @@ import android.os.Build
 import android.util.Log
 import java.io.File
 import java.io.IOException
-import java.util.concurrent.TimeUnit
 import java.util.zip.ZipFile
 
 enum class RootDoctorCode {
@@ -75,7 +74,7 @@ data class RootDoctorResult(
             RootDoctorCode.CHECKING -> "Approve Cyclone Cloak in the Magisk prompt to finish the check."
             RootDoctorCode.READY -> "Magisk access, module version, and rooted profile publishing are working."
             RootDoctorCode.ROOT_REQUIRED -> "Open Magisk → Superuser, allow Cyclone Cloak, then run the check again."
-            RootDoctorCode.ROOT_TIMEOUT -> "The Magisk prompt expired. Run the check again and approve the prompt right away."
+            RootDoctorCode.ROOT_TIMEOUT -> "The root session approval budget expired. Open Magisk → Superuser and allow Cyclone Cloak for this Android profile, then retry."
             RootDoctorCode.ROOT_UNAVAILABLE -> "Install or open Magisk, enable its superuser service, then try again."
             RootDoctorCode.MODULE_MISSING -> "Install the Cyclone Cloak module ZIP from this release in Magisk, then restart."
             RootDoctorCode.MODULE_DISABLED -> "Enable Cyclone Cloak in Magisk → Modules, then restart the device."
@@ -356,33 +355,10 @@ object CloakRootDoctor {
     private data class RootShellResult(val output: String, val exitCode: Int?, val timedOut: Boolean)
 
     private fun runRootScript(script: String, timeoutMs: Long, maxOutput: Int = 4096): RootShellResult {
-        val process = ProcessBuilder("su", "--mount-master", "-c", script)
-            .redirectErrorStream(true)
-            .start()
-        val output = StringBuilder()
-        val outputReader = Thread {
-            runCatching {
-                process.inputStream.bufferedReader().use { reader ->
-                    val buffer = CharArray(512)
-                    while (true) {
-                        val count = reader.read(buffer)
-                        if (count < 0) break
-                        synchronized(output) {
-                            if (output.length < maxOutput) output.append(buffer, 0, minOf(count, maxOutput - output.length))
-                        }
-                    }
-                }
-            }
-        }.apply { isDaemon = true; start() }
-
-        val finished = process.waitFor(timeoutMs, TimeUnit.MILLISECONDS)
-        if (!finished) {
-            process.destroyForcibly()
-            process.waitFor(1, TimeUnit.SECONDS)
-        }
-        outputReader.join(1000)
-        val details = synchronized(output) { output.toString().trim() }
-        return RootShellResult(details, if (finished) process.exitValue() else null, timedOut = !finished)
+        val shared = RootSessions.current()
+        val result = if (shared != null) shared.execute(script, maxOutput)
+            else PrivilegedSession(budgetMs = timeoutMs).use { it.execute(script, maxOutput) }
+        return RootShellResult(result.output, result.exitCode, result.timedOut)
     }
 
     private fun quote(value: String) = "'" + value.replace("'", "'\\''") + "'"

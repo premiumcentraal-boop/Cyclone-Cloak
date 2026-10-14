@@ -11,17 +11,16 @@ not prove that every inspection API sees it.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.11.0-alpha.10 (prerelease)
+## Status: 0.11.0-alpha.11 (prerelease)
 
-Alpha.10 adds per-profile Companion copies checks to Health. App/module code 34.
-[Release notes](docs/RELEASE_0.11.0-alpha.10.md) explain installation, launcher,
-user unlock and private-directory checks. Cross-user root visibility does not
-prove app-process write access; verify that inside the profile's own Cloak.
-Runtime hooks, publication, bindings, identity/storage formats and the connector
-contract are unchanged. Earlier device evidence remains specific to its measured
-build; Alpha.10 physical-device verification is pending. Local compatibility
-evidence is not a platform verdict.
-See [CURRENT-STATE.md](docs/CURRENT-STATE.md) for checks and release status.
+Alpha.11 uses one privileged shell per binding batch with a root preflight before
+binding mutations, a shared 30-second budget and per-profile approval guidance.
+App/module code 35. [Release notes](docs/RELEASE_0.11.0-alpha.11.md) describe
+waiting/resume states and the pending seven-app phone checks. Publication scripts,
+storage, connector, permissions and runtime/module behavior are unchanged.
+Earlier evidence remains specific to its measured artifact; Alpha.11 phone
+verification and timing are UNVERIFIED. Local compatibility evidence is not a
+platform verdict. See [CURRENT-STATE.md](docs/CURRENT-STATE.md).
 
 - **Companion app** (`android/app`): a Cyclone connector (contract `cyclone.connector/1.3`, Cyclone
   5.0.0-alpha.122 or newer). Imports or creates cloak profiles, binds them to the apps of Cyclone
