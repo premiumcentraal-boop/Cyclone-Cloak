@@ -1,17 +1,16 @@
 # Current state
 
-Updated 2026-10-14. **v0.11.0-alpha.7 / versionCode 31** is the
-[latest published prerelease](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.7), packaging native callback work from main `27d3a11`.
-Release commit: `a9bb38d761f10666628dd1c2a51711792d2aee5b`.
-[Release CI](https://github.com/premiumcentraal-boop/Cyclone-Cloak/actions/runs/38479788715) passed tests, signed builds, artifact checks and upload.
-[Alpha.7 notes](RELEASE_0.11.0-alpha.7.md) describe scope and evidence limits.
+Updated 2026-10-14. **v0.11.0-alpha.8 / versionCode 32** is the
+[latest prerelease](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.8), packaging the companion UI redesign from main `a9f4759` (PR #13).
+Runtime and module behavior are unchanged from alpha.7 (`a9bb38d`).
+[Alpha.8 notes](RELEASE_0.11.0-alpha.8.md) describe scope; the [UI redesign handoff](HANDOFF-2026-10-14-UI-REDESIGN.md) lists open questions.
 
 ## Versions and major components
 
 | Component | Current source version / responsibility |
 | --- | --- |
-| App | `dev.cyclone.cloak`, `0.11.0-alpha.7`, code 31; minimum API 29, target/compile API 36 |
-| Module | `cyclone_cloak`, `v0.11.0-alpha.7`, code 31; ARM64/ARMv7, minimum API 26; native property callback path added on main |
+| App | `dev.cyclone.cloak`, `0.11.0-alpha.8`, code 32; minimum API 29, target/compile API 36 |
+| Module | `cyclone_cloak`, `v0.11.0-alpha.8`, code 32; ARM64/ARMv7, minimum API 26; native property callback path added on main |
 | Profile | Schema `0.3`, legacy `0.2` accepted; existing JSON storage unchanged |
 | Binding / reader | Binding schema 2; module index `schemaVersion: 2`; existing key lookup unchanged |
 | Connector | `cyclone.connector/1.3`; Cyclone 5.0.0-alpha.122 or newer |
@@ -48,7 +47,7 @@ $env:JAVA_HOME='C:/Program Files/Eclipse Adoptium/jdk-17.0.20.101-hotspot'
 & "$env:TEMP/cloak-build/gradle-8.11.1/bin/gradle.bat" -p android :app:testDebugUnitTest :module:testDebugUnitTest :app:assembleDebug --offline --no-daemon
 uv run --with pytest -- python -m pytest forge/tests -q
 uv run --with pytest --with jsonschema -- python -m pytest forge/schema_tests -q
-uv run -- python tools/verify_release.py --tag v0.11.0-alpha.7
+uv run -- python tools/verify_release.py --tag v0.11.0-alpha.8
 git diff --check
 ```
 
@@ -57,7 +56,7 @@ the module ZIP, and verified version agreement and exact embedded-module bytes
 before publication. Signing used the existing CI secrets. Both probe variants
 also built locally; diagnostics emitted an unchanged AD_ID removal-marker warning.
 Local debug output: `android/app/build/outputs/apk/debug/app-debug.apk`.
-Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.7.zip`.
+Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.8.zip`.
 
 ## Known limits and separately verified device evidence
 
