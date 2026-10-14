@@ -1,9 +1,11 @@
 # Current state
 
-Updated 2026-10-14. **v0.11.0-alpha.11 / versionCode 35** is the
-[latest prerelease](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.11).
-[Alpha.11 notes](RELEASE_0.11.0-alpha.11.md) describe the single privileged-shell binding
-batch transport and preflight. Alpha.11 phone verification and timing are UNVERIFIED. Earlier Alpha.9 normal-app
+Updated 2026-10-15. **v0.11.0-alpha.12 / versionCode 36** is the
+[latest prerelease](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.12).
+[Alpha.12 notes](RELEASE_0.11.0-alpha.12.md) describe connector reconnection, display-only
+registry caching and local binding run history/debug bundles. Post-boot reconnect
+depends on Cyclone wake or the next launch/resume; no boot permission was added.
+Alpha.12 device verification, including the share chooser, is pending. Earlier Alpha.9 normal-app
 publication and two-profile preservation evidence remains specific to Alpha.9;
 see [its handoff](HANDOFF-2026-10-14-ALPHA9-PUBLICATION-PROOF.md).
 Runtime hooks and reader/storage formats are unchanged.
@@ -12,8 +14,8 @@ Runtime hooks and reader/storage formats are unchanged.
 
 | Component | Current source version / responsibility |
 | --- | --- |
-| App | `dev.cyclone.cloak`, `0.11.0-alpha.11`, code 35; minimum API 29, target/compile API 36 |
-| Module | `cyclone_cloak`, `v0.11.0-alpha.11`, code 35; ARM64/ARMv7, minimum API 26; native property callback path added on main |
+| App | `dev.cyclone.cloak`, `0.11.0-alpha.12`, code 36; minimum API 29, target/compile API 36 |
+| Module | `cyclone_cloak`, `v0.11.0-alpha.12`, code 36; ARM64/ARMv7, minimum API 26; native property callback path added on main |
 | Profile | Schema `0.3`, legacy `0.2` accepted; existing JSON storage unchanged |
 | Binding / reader | Binding schema 2; module index `schemaVersion: 2`; existing key lookup unchanged |
 | Connector | `cyclone.connector/1.3`; Cyclone 5.0.0-alpha.122 or newer |

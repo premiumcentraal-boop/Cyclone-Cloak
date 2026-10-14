@@ -11,15 +11,16 @@ not prove that every inspection API sees it.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.11.0-alpha.11 (prerelease)
+## Status: 0.11.0-alpha.12 (prerelease)
 
-Alpha.11 uses one privileged shell per binding batch with a root preflight before
-binding mutations, a shared 30-second budget and per-profile approval guidance.
-App/module code 35. [Release notes](docs/RELEASE_0.11.0-alpha.11.md) describe
-waiting/resume states and the pending seven-app phone checks. Publication scripts,
-storage, connector, permissions and runtime/module behavior are unchanged.
-Earlier evidence remains specific to its measured artifact; Alpha.11 phone
-verification and timing are UNVERIFIED. Local compatibility evidence is not a
+Alpha.12 adds single-flight reconnection with bounded backoff, cached registry
+display and a connection chip, plus Health → Runs with redacted per-run and
+24-hour debug bundles through the share sheet. App/module code 36.
+[Release notes](docs/RELEASE_0.11.0-alpha.12.md) explain the boot-wake limitation
+and pending device checks. Existing profile/binding schemas, connector protocol,
+binding logic, publication scripts, permissions and runtime/module behavior are
+unchanged. Earlier evidence remains specific to its measured artifact;
+Alpha.12 phone verification is UNVERIFIED. Local compatibility evidence is not a
 platform verdict. See [CURRENT-STATE.md](docs/CURRENT-STATE.md).
 
 - **Companion app** (`android/app`): a Cyclone connector (contract `cyclone.connector/1.3`, Cyclone
