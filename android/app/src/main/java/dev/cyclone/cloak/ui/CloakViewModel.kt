@@ -2,6 +2,12 @@ package dev.cyclone.cloak.ui
 
 import dev.cyclone.cloak.diagnostics.LogBus
 import dev.cyclone.cloak.diagnostics.Transition
+import dev.cyclone.cloak.diagnostics.BindingRun
+import dev.cyclone.cloak.diagnostics.BindingRuns
+import dev.cyclone.cloak.diagnostics.RunEventCapture
+import dev.cyclone.cloak.diagnostics.RunOperation
+import dev.cyclone.cloak.diagnostics.RunTarget
+import dev.cyclone.cloak.diagnostics.RunPrivacy
 import android.app.Application
 import android.content.Context
 import android.net.Uri
@@ -140,6 +146,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
     private val bundledArtifactDigest by lazy { PostureArtifacts.bundledModuleDigest(app) }
     private val postureProvenance by lazy { PostureProvenanceStore(app) }
     private val app: Context get() = getApplication()
+    private var currentRun: BindingRunResult? = null
     private val _state = MutableStateFlow(CloakState(connection = ConnectionLifecycle.state(app).value))
     val state: StateFlow<CloakState> = _state.asStateFlow()
     private val _messages = MutableSharedFlow<String>(extraBufferCapacity = 8)
@@ -701,7 +708,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         val draft = _state.value.bindingFlow ?: return
         if (draft.running || _state.value.busy != null || !BindingFlow.canConfirm(draft, bindingInputs())) return
         changeBinding { it.copy(running = true) }
-        launchBindingWork("Saving binding…") {
+        launchBindingWork("Saving binding…", RunOperation.BIND, draftTargets(draft)) {
             try {
                 val input = bindingInputs(freshLocal = true)
                 if (!BindingFlow.canConfirm(draft, input)) {
@@ -722,7 +729,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         val draft = _state.value.bindingFlow ?: return
         if (draft.running || _state.value.busy != null || draft.outcome?.saved != true || draft.outcome.ready) return
         changeBinding { it.copy(running = true) }
-        launchBindingWork("Retrying reconciliation…") {
+        launchBindingWork("Retrying reconciliation…", RunOperation.RETRY_RECONCILIATION, draftTargets(draft)) {
             try {
                 val input = bindingInputs(freshLocal = true)
                 val errors = BindingFlow.findings(draft, input).filter { it.isError }
@@ -758,7 +765,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
                 else "${profile.label} isn't ready in Cyclone yet.",
             )
         }
-        launchBindingWork("Binding…") {
+        launchBindingWork("Binding…", RunOperation.BIND, listOf(RunTarget(profile.id, profile.androidUserId, profile.packages.orEmpty(), identityId))) {
             val count = bindLocally(profile, identityId)
             if (count == 0) return@launchBindingWork say("Cyclone shared no apps for ${profile.label}.")
             val result = publishAndSync()
@@ -778,7 +785,8 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
                 else -> "Every ready profile is bound already."
             })
         }
-        launchBindingWork("Binding ${plan.assignments.size} profiles…") {
+        launchBindingWork("Binding ${plan.assignments.size} profiles…", RunOperation.BIND,
+            plan.assignments.map { (profile, id) -> RunTarget(profile.id, profile.androidUserId, profile.packages.orEmpty(), id) }) {
             val count = plan.assignments.sumOf { (profile, id) -> bindLocally(profile, id) }
             val result = publishAndSync()
             val note = if (result.published) "" else " ${result.title}: ${result.message}"
@@ -788,7 +796,8 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
 
     fun toggleBinding(binding: CloakBinding) {
         if (binding.origin == CloakBinding.ORIGIN_MAIN) return say("This binding is managed by Cyclone Cloak in Main.")
-        launchBindingWork(if (binding.enabled) "Turning off…" else "Turning on…") {
+        launchBindingWork(if (binding.enabled) "Turning off…" else "Turning on…",
+            if (binding.enabled) RunOperation.DISABLE else RunOperation.ENABLE, listOf(bindingRunTarget(binding))) {
             CloakBindingStore.upsert(app, binding.copy(enabled = !binding.enabled, updatedAt = System.currentTimeMillis()))
             publishAndSync()
         }
@@ -796,15 +805,31 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
 
     fun removeBinding(binding: CloakBinding) {
         if (binding.origin == CloakBinding.ORIGIN_MAIN) return say("This binding is managed by Cyclone Cloak in Main.")
-        launchBindingWork("Removing binding…") {
+        launchBindingWork("Removing binding…", RunOperation.REMOVE, listOf(bindingRunTarget(binding))) {
             CloakBindingStore.remove(app, binding.profileId, binding.androidUserId, binding.packageName)
             publishAndSync()
         }
     }
 
     /** Approval precedes all binding writes; all synchronous root calls reuse this session. */
-    private fun launchBindingWork(label: String, block: () -> Unit) {
+    private fun launchBindingWork(label: String, operation: RunOperation, targets: List<RunTarget>, block: () -> Unit) {
         launchWork(label) {
+            @Suppress("DEPRECATION")
+            val version = runCatching { app.packageManager.getPackageInfo(app.packageName, 0).versionName }.getOrNull()
+            val run = BindingRun(operation = operation, appVersion = version, targets = targets.map { target -> when (operation) {
+                RunOperation.REMOVE -> target.copy(expectedPresent = false)
+                RunOperation.ENABLE -> target.copy(expectedEnabled = true)
+                RunOperation.DISABLE -> target.copy(expectedEnabled = false)
+                else -> target
+            } })
+            val journal = BindingRuns.journal(app)
+            val capture = RunEventCapture()
+            val observation = BindingRunResult()
+            val started = System.nanoTime()
+            journal.begin(run)
+            currentRun = observation
+            try { LogBus.registry.captureRun(capture) {
+            LogBus.event("binding-runs", "run.${run.id}", Transition.STARTED)
             val session = try {
                 PrivilegedSession(waiting = {
                     LogBus.event("root", "batch-session", Transition.DEGRADED, reason = "WAITING_FOR_APPROVAL")
@@ -823,6 +848,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
                     block()
                 }
             if (!result.published) {
+                observation.root = result
                 LogBus.event("root", "batch-preflight", Transition.FAILED, reason = result.code.name)
                 val current = _state.value.bindingFlow
                 _state.update { it.copy(rootDoctor = result, bindingFlow = current?.copy(step = BindingStep.RESULT,
@@ -836,10 +862,43 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
                 }) }
                 say(hint)
             }
+            } } catch (error: Exception) {
+                observation.exception = true
+                throw error
+            } finally {
+                currentRun = null
+                val completed = observation.complete(run, CloakBindingStore.all(app),
+                    maxOf((System.nanoTime() - started) / 1_000_000, System.currentTimeMillis() - run.timestamp), capture)
+                journal.append(completed)
+                LogBus.event("binding-runs", "run.${run.id}", if (completed.outcome == dev.cyclone.cloak.diagnostics.RunOutcome.READY)
+                    Transition.COMPLETED else Transition.DEGRADED, reason = completed.outcome.name)
+            }
         }
     }
 
+    private fun draftTargets(draft: BindingDraft): List<RunTarget> = listOf(RunTarget(draft.profileId.orEmpty(),
+        _state.value.registry.firstOrNull { it.id == draft.profileId }?.androidUserId,
+        draft.packageNames.sorted(), draft.identityId.orEmpty()))
+
+    /** Reuse publication/sync only; never restore a historical record or re-enable a binding. */
+    fun retryRun(run: BindingRun) {
+        if (_state.value.busy != null) return
+        val bindings = CloakBindingStore.all(app)
+        val changed = run.targets.any { target -> target.packages.any { pkg ->
+            val records = bindings.filter { RunPrivacy.reference(it.profileId) == target.profileId && it.packageName == pkg }
+            if (!target.expectedPresent) records.isNotEmpty()
+            else records.size != 1 || RunPrivacy.reference(records.single().cloakProfileId) != target.deviceProfileId ||
+                (target.expectedEnabled != null && records.single().enabled != target.expectedEnabled)
+        } }
+        if (changed) return say("Bindings changed since this run. Review them in Profiles before retrying.")
+        launchBindingWork("Retrying reconciliation…", RunOperation.RETRY_RECONCILIATION, run.targets) { publishAndSync() }
+    }
+
     private fun saveBindingRecords(records: List<CloakBinding>, expected: List<CloakBinding>? = null) {
+        currentRun?.let { observation -> observation.resolvedTargets = observation.resolvedTargets.orEmpty() +
+            records.groupBy { it.profileId to it.cloakProfileId }.values.map { group ->
+                RunTarget(group.first().profileId, group.first().androidUserId, group.map { it.packageName }, group.first().cloakProfileId)
+            } }
         CloakBindingStore.update(app) { current ->
             require(expected == null || current == expected) { "Bindings changed. Return to review before saving." }
             BindingFlow.applyRecords(current, records)
@@ -863,8 +922,10 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
     /** Publishes for the module, then tells Cyclone (values and health). Runs inside [work]. */
     private fun publishAndSync(): RootDoctorResult {
         val result = CloakResolver.rebuildIndexDetailed(app)
+        currentRun?.root = result
         _state.update { it.copy(rootDoctor = result) }
         val report = CycloneBridge.sync(app, foreground = true)
+        currentRun?.report = report
         _state.update { it.copy(report = report) }
         return result
     }

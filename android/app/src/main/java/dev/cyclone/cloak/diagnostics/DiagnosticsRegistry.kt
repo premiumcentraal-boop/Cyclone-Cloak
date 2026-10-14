@@ -67,6 +67,7 @@ class DiagnosticsRegistry(
     private val queue = ArrayBlockingQueue<() -> Unit>(capacity)
     private val counts = linkedMapOf<String, Long>()
     private val active = linkedMapOf<String, DiagnosticEvent>()
+    private val capture = ThreadLocal<RunEventCapture?>()
     val dropped = AtomicLong()
     val persistenceFailures = AtomicLong()
     @Volatile private var closed = false
@@ -96,7 +97,15 @@ class DiagnosticsRegistry(
             DiagnosticPrivacy.threadId(), process.filter(Char::isDigit).take(20).ifBlank { "unknown" }, DiagnosticPrivacy.target(target), transition,
             reason?.let(DiagnosticPrivacy::code), error?.javaClass?.simpleName?.let(DiagnosticPrivacy::label),
             durationMs?.coerceAtLeast(0))
+        capture.get()?.accept(event)
         if (!queue.offer { accept(event) }) dropped.incrementAndGet()
+    }
+
+    /** Capture at the producer so a busy ring cannot lose a binding run's evidence. */
+    fun <T> captureRun(events: RunEventCapture, block: () -> T): T {
+        val previous = capture.get()
+        capture.set(events)
+        return try { block() } finally { capture.set(previous) }
     }
 
     private fun accept(event: DiagnosticEvent) {
