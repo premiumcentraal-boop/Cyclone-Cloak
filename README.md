@@ -11,15 +11,16 @@ not prove that every inspection API sees it.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.11.0-alpha.9 (prerelease)
+## Status: 0.11.0-alpha.10 (prerelease)
 
-Alpha.9 adds bounded local developer diagnostics and fixes Android shell publication
-locking. App/module code 33. [Release notes](docs/RELEASE_0.11.0-alpha.9.md)
-record scope. Runtime hooks, profile semantics, storage layout and connector behavior
-are unchanged. Normal-app publication and two-profile binding preservation passed
-on the connected Pixel 8. A separate profile-side publisher remains unverified
-because Cyclone could not open the receiving profile. Local compatibility evidence
-is not a platform verdict.
+Alpha.10 adds per-profile Companion copies checks to Health. App/module code 34.
+[Release notes](docs/RELEASE_0.11.0-alpha.10.md) explain installation, launcher,
+user unlock and private-directory checks. Cross-user root visibility does not
+prove app-process write access; verify that inside the profile's own Cloak.
+Runtime hooks, publication, bindings, identity/storage formats and the connector
+contract are unchanged. Earlier device evidence remains specific to its measured
+build; Alpha.10 physical-device verification is pending. Local compatibility
+evidence is not a platform verdict.
 See [CURRENT-STATE.md](docs/CURRENT-STATE.md) for checks and release status.
 
 - **Companion app** (`android/app`): a Cyclone connector (contract `cyclone.connector/1.3`, Cyclone

@@ -7,6 +7,11 @@ import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import dev.cyclone.cloak.cyclone.CompanionPresence
+import dev.cyclone.cloak.cyclone.CompanionPresenceLookup
+import dev.cyclone.cloak.cyclone.CompanionPresenceProbe
+import dev.cyclone.cloak.cyclone.CompanionFacts
+import dev.cyclone.cloak.data.InstallPlacement
 import dev.cyclone.cloak.cyclone.BulkBind
 import dev.cyclone.cloak.cyclone.CloakPill
 import dev.cyclone.cloak.cyclone.CloakPills
@@ -87,6 +92,8 @@ data class CloakState(
     val report: SyncReport? = null,
     val syncing: Boolean = false,
     val providerState: String = "not registered",
+    val companionPresence: List<CompanionPresence> = emptyList(),
+    val checkingCompanions: Boolean = false,
     val rootDoctor: RootDoctorResult = RootDoctorResult(RootDoctorCode.NOT_CHECKED),
     /** What is running right now ("Creating identity…"), or null. */
     val busy: String? = null,
@@ -208,7 +215,38 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
                 }
             }
             loadLocal()
-            _state.update { it.copy(report = report, syncing = false, providerState = provider) }
+            val presence = CompanionPresenceLookup.inspect(report.snapshot?.registry.orEmpty()) { user ->
+                if (user == InstallPlacement.myUser()) CompanionPresenceProbe.local(app)
+                else CompanionFacts()
+            }
+            _state.update { it.copy(report = report, syncing = false, providerState = provider, companionPresence = presence) }
+        }
+    }
+
+    fun checkCompanionPresence() {
+        if (_state.value.checkingCompanions) return
+        _state.update { it.copy(checkingCompanions = true) }
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val profiles = _state.value.registry
+                val rows = CompanionPresenceLookup.inspect(profiles) { user ->
+                    LogBus.trace("companions", "presence", user.toString()) {
+                        CompanionPresenceProbe.inspect(app, user)
+                    }
+                }
+                _state.update { current ->
+                    // A concurrent refresh may replace user assignments; never show results for an old assignment.
+                    current.copy(companionPresence = current.registry.map { profile ->
+                        rows.firstOrNull { it.profileId == profile.id && it.user == profile.androidUserId }
+                            ?: CompanionPresence(profile.id, profile.label, profile.androidUserId?.takeIf { it >= 0 },
+                                CompanionFacts())
+                    })
+                }
+                rows.forEach { row ->
+                    LogBus.event("companions", "presence-result", if (row.state == dev.cyclone.cloak.cyclone.CompanionState.READY)
+                        Transition.COMPLETED else Transition.DEGRADED, target = row.user?.toString(), reason = row.state.name)
+                }
+            } finally { _state.update { it.copy(checkingCompanions = false) } }
         }
     }
 

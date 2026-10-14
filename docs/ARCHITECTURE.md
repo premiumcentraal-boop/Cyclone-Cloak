@@ -1,6 +1,6 @@
 # Cyclone Cloak Architecture
 
-Current prerelease: [v0.11.0-alpha.9](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.9), app/module code 33 (bounded local diagnostics and Android publication locking repair).
+Current prerelease: [v0.11.0-alpha.10](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.10), app/module code 34 (read-only per-profile companion presence diagnostics).
 Normal-app publication and preservation of bindings across two Cyclone profiles
 passed on Pixel 8; an independent profile-side publisher is not device-verified.
 The existing main implementation adds the native property callback hook and

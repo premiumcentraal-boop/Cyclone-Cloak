@@ -66,6 +66,7 @@ internal fun HealthScreen(state: CloakState, vm: CloakViewModel) {
                 CloakRow("Get module ZIP", icon = Icons.Rounded.Download, onClick = { openModuleDownload(context) }, showChevron = false)
             }
         }
+        CompanionPresenceCard(state.companionPresence, state.checkingCompanions, vm::checkCompanionPresence)
         CloakSectionHeader("Library review")
         UniquenessDiagnostics(state, vm::reviewIdentity)
         LibraryQualityCard(LibraryQuality.assess(state, java.time.Instant.now()),
