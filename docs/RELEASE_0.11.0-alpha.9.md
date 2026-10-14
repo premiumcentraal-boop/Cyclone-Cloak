@@ -23,7 +23,15 @@ the module package has matching version metadata. This is local compatibility
 evidence, not a platform verdict. Older runtime evidence does not automatically
 verify this artifact or the native property callback probe row.
 
-Local suites and signed release artifact verification gate publication. Normal-app
-device publication and two-profile isolation proof are pending installation of the
-released artifacts and will be recorded in a separate dated handoff. The state swap
-uses rename and rollback; uninterrupted power-loss atomicity is not claimed.
+Local suites, CI tests and signed release artifact verification passed before
+publication. The released APK and bundled module were installed on the connected
+Pixel 8, with one restart explicitly required by Root Doctor. Normal Health repair
+reported publication `COMPLETED`; two Chrome bindings in Android users 14 and 16
+reached ready, and all earlier index entries survived unchanged. Diagnostics show
+every publication phase completed, with no publication failure or false lock error.
+See the [dated proof handoff](https://github.com/premiumcentraal-boop/Cyclone-Cloak/blob/main/docs/HANDOFF-2026-10-14-ALPHA9-PUBLICATION-PROOF.md).
+
+Both bindings were published from Main. A separate profile-side writer remains
+unverified because Cyclone could not verify/open the receiving profile. This is
+not Pixel 7 Pro verification. The state swap uses rename and rollback;
+uninterrupted power-loss atomicity is not claimed.

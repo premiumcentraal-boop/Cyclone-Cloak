@@ -11,13 +11,15 @@ not prove that every inspection API sees it.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.11.0-alpha.9 (release candidate)
+## Status: 0.11.0-alpha.9 (prerelease)
 
 Alpha.9 adds bounded local developer diagnostics and fixes Android shell publication
 locking. App/module code 33. [Release notes](docs/RELEASE_0.11.0-alpha.9.md)
 record scope. Runtime hooks, profile semantics, storage layout and connector behavior
-are unchanged. Device publication proof is pending the signed release installation;
-local compatibility evidence is not a platform verdict.
+are unchanged. Normal-app publication and two-profile binding preservation passed
+on the connected Pixel 8. A separate profile-side publisher remains unverified
+because Cyclone could not open the receiving profile. Local compatibility evidence
+is not a platform verdict.
 See [CURRENT-STATE.md](docs/CURRENT-STATE.md) for checks and release status.
 
 - **Companion app** (`android/app`): a Cyclone connector (contract `cyclone.connector/1.3`, Cyclone

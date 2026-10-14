@@ -1,0 +1,43 @@
+{
+  "date": "2026-10-14",
+  "device_model": "Pixel 8",
+  "device_product": "shiba",
+  "release_tag": "v0.11.0-alpha.9",
+  "release_commit": "87da2c6c1bab2d353070341d7f439c20fca36b5c",
+  "release_url": "https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.9",
+  "ci_run": 38573519136,
+  "ci_conclusion": "success",
+  "app_version": "0.11.0-alpha.9",
+  "module_version": "v0.11.0-alpha.9",
+  "version_code": 33,
+  "reboot_count": 1,
+  "reboot_reason": "Root Doctor explicitly reported Reboot required after the bundled module update",
+  "root_doctor_publication": "COMPLETED",
+  "completed_phases": ["precheck", "lock_open", "lock_acquire", "recovery", "staging", "merge", "atomic_swap", "completion"],
+  "all_phases_completed": true,
+  "publication_failures_in_export": [],
+  "publication_completed_result_count": 3,
+  "readiness_observed": {"verdict": "ready", "pass": 49, "warning": 0, "fail": 0, "enabled_bindings": 8},
+  "new_bindings": [
+    {"android_user": 14, "package": "com.android.chrome", "ui_result": "Binding ready"},
+    {"android_user": 16, "package": "com.android.chrome", "ui_result": "Binding ready"}
+  ],
+  "publisher_for_both_bindings": 0,
+  "index_entries_after_second_bind": 8,
+  "first_binding_and_earlier_entries_retained_unchanged": true,
+  "separate_publisher_device_check": {
+    "status": "not_verified",
+    "reason": "Cyclone could not verify receiving profile and kept Main open. Direct app launch for stopped user 16 also reported Activity does not exist. Unrelated Cyclone setup was not repaired."
+  },
+  "bundle": {
+    "path": "cloak-alpha9-device-diagnostics-2026-10-14.zip",
+    "sha256": "f71574f8e916854f92e71948be156ff6876c4315f5b87f4d6681d94a95f9a09a",
+    "bytes": 3653,
+    "events": 256,
+    "redacted": true,
+    "flush_complete": true,
+    "dropped": 0,
+    "persistence_failures": 0
+  },
+  "platform_verdict_claimed": false
+}

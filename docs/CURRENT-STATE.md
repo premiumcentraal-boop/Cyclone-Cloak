@@ -1,10 +1,12 @@
 # Current state
 
-Updated 2026-10-14. **v0.11.0-alpha.9 / versionCode 33** is the release candidate.
-Latest published prerelease is v0.11.0-alpha.8 until the gated release workflow completes.
+Updated 2026-10-14. **v0.11.0-alpha.9 / versionCode 33** is the
+[latest prerelease](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.9).
 [Alpha.9 notes](RELEASE_0.11.0-alpha.9.md) describe bounded local diagnostics and
-the Android shell publication locking repair. Device proof will be recorded after
-installing the signed artifacts. Runtime hooks and reader/storage formats are unchanged.
+the Android shell publication locking repair. Signed-artifact installation, normal
+app publication and two-profile binding preservation passed on Pixel 8; see the
+[publication proof handoff](HANDOFF-2026-10-14-ALPHA9-PUBLICATION-PROOF.md).
+Runtime hooks and reader/storage formats are unchanged.
 
 ## Versions and major components
 
@@ -41,7 +43,8 @@ installing the signed artifacts. Runtime hooks and reader/storage formats are un
 The alpha.9 preparation checks passed: app **428 passed, zero skipped**, module
 **12 passed**, forge **227 passed**, schema **33 passed**, diagnostics helper **3 passed**.
 WSL enabled the actual publication shell tests on Windows. Debug assembly and module
-packaging succeeded without compiler warnings. Release CI signing is pending.
+packaging succeeded without compiler warnings. Release CI passed, signed both
+artifacts and verified the APK embeds the exact released module ZIP.
 
 ```powershell
 $env:JAVA_HOME='C:/Program Files/Eclipse Adoptium/jdk-17.0.20.101-hotspot'
@@ -63,7 +66,10 @@ Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.9.zip`.
 - Local quality, readiness and PASS records do not prove interception or a
   platform verdict. Runtime coverage is partial. Probe fixture results concern
   their measured artifact; they do not verify arbitrary saved identities or the
-  currently installed module. Normal-app publication proof for alpha.9 is pending released-artifact installation.
+  currently installed module. Alpha.9 publication proof covers normal Main-app
+  publication on Pixel 8 and two Cyclone profiles; it does not verify runtime hooks
+  or an independent profile-side publisher. Cyclone could not open the receiving
+  profile for that additional check.
 - Existing physical-device checks remain separate, including reboot/activation,
   multi-user behavior, publication/recovery and backup/import UI. See
   [DEFERRED-DEVICE-CHECKS.md](DEFERRED-DEVICE-CHECKS.md) and the runtime coverage ledger.

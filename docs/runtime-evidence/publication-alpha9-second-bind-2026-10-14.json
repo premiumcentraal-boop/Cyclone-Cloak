@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 2,
+  "entries": {
+    "13/com.google.android.gm": {
+      "profileId": "Cyclone_65c6bc11c4f247a9",
+      "key": "1dfd3b5751ba22a0489b26d5fed134e6ae9a3468e69b95d190ffb387505f2477",
+      "publisher": 0
+    },
+    "13/com.instagram.android": {
+      "profileId": "Cyclone_65c6bc11c4f247a9",
+      "key": "cba7833a8d506a8da36838a2593ef218d0e3c823486600f2c1461a27166e40aa",
+      "publisher": 0
+    },
+    "13/com.topjohnwu.magisk": {
+      "profileId": "Cyclone_65c6bc11c4f247a9",
+      "key": "5774c5308c75df3712894643a2a1c6c60f2a6de08612d9d1970bcdb7d77999f4",
+      "publisher": 0
+    },
+    "16/com.vzw.apnlib": {
+      "profileId": "Cyclone_01959c078e944eab",
+      "key": "ab06ba1a93abd907b1cb344764166e157816aa20f62c187532bb21c560424d54",
+      "publisher": 0
+    },
+    "16/dev.cyclone.cloak": {
+      "profileId": "Cyclone_01959c078e944eab",
+      "key": "b8d96715ecebe7dee28afcfe3c91c68225c3f459f37dc338bca7e15acab3dcb3",
+      "publisher": 0
+    },
+    "16/moe.shizuku.privileged.api": {
+      "profileId": "Cyclone_01959c078e944eab",
+      "key": "7de62fa80abfe0bf6308fd154f81879feb61cb6964970eb6ad8c98145cd45b41",
+      "publisher": 0
+    },
+    "14/com.android.chrome": {
+      "profileId": "Cyclone_90bfb9a6c92b4165",
+      "key": "9ae9ccddad8b5280ed11d089cc551861d8fd6bb4808a69361f3e545d6e1c5279",
+      "publisher": 0
+    },
+    "16/com.android.chrome": {
+      "profileId": "Cyclone_01959c078e944eab",
+      "key": "48d34e2719ec2e82808264345c1f795a1f4d2bf417999bf9614c2f99dd1e64d2",
+      "publisher": 0
+    }
+  },
+  "first_entries_retained": true,
+  "first_entries_unchanged": true,
+  "new_binding": "16/com.android.chrome"
+}
