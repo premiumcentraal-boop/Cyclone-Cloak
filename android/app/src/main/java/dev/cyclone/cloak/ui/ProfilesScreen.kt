@@ -1,24 +1,21 @@
 package dev.cyclone.cloak.ui
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.Layers
+import androidx.compose.material.icons.rounded.Link
+import androidx.compose.material.icons.automirrored.rounded.OpenInNew
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -54,9 +51,13 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
             )
         }
         item {
+            CloakActionButton("Bind a device profile", Icons.Rounded.Link, { vm.startBinding() }, Modifier.fillMaxWidth(),
+                enabled = state.busy == null && !state.syncing)
+        }
+        item {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 CloakActionButton("Refresh", Icons.Rounded.Refresh, vm::refresh, Modifier.weight(1f), outlined = true)
-                CloakActionButton("Bind all", Icons.Rounded.Layers, vm::bulkBind, Modifier.weight(1f))
+                CloakActionButton("Bind all", Icons.Rounded.Layers, vm::bulkBind, Modifier.weight(1f), outlined = true)
             }
         }
         item {
@@ -68,15 +69,13 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
         }
         mainTarget?.let { main ->
             item {
-                OutlinedButton(onClick = { vm.openInCyclone(main) }, enabled = !state.opening, modifier = Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.small) {
-                    Text("Open ${main.label} in Cyclone")
+                CloakGroup {
+                    CloakRow("Open ${main.label} in Cyclone", icon = Icons.AutoMirrored.Rounded.OpenInNew, onClick = { if (!state.opening) vm.openInCyclone(main) })
                 }
             }
         }
 
-        item { OutlinedButton(onClick = { vm.startBinding() }, enabled = state.busy == null && !state.syncing, modifier = Modifier.fillMaxWidth()) { Text("Bind a device profile") } }
-
-        item { CloakSectionTitle("Profiles", state.registry.size) }
+        item { CloakSectionHeader("Profiles", state.registry.size) }
         if (state.registry.isEmpty()) {
             item {
                 CloakEmptyState(
@@ -86,7 +85,8 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
                 )
             }
         }
-        items(state.registry, key = { it.id }) { profile ->
+        if (state.registry.isNotEmpty()) item { CloakGroup { state.registry.forEachIndexed { index, profile ->
+            if (index > 0) CloakGroupDivider()
             val appCount = profile.packages?.size ?: 0
             val where = when {
                 profile.state == "in_trash" -> "in Recently deleted"
@@ -110,9 +110,9 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
                 onClick = {},
                 onOpen = { vm.openInCyclone(profile) },
             )
-        }
+        } } }
 
-        item { CloakSectionTitle("Bound apps", state.bindings.size) }
+        item { CloakSectionHeader("Bound apps", state.bindings.size) }
         if (state.bindings.isNotEmpty()) {
             item {
                 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
@@ -170,31 +170,15 @@ internal fun BindingFilters(
     onPackageChange: (String) -> Unit,
     onClear: () -> Unit,
 ) {
-    var expanded by rememberSaveable { mutableStateOf(false) }
     Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-        Text("Filter bindings", style = MaterialTheme.typography.titleMedium)
-        Box {
-            OutlinedButton(onClick = { expanded = true }, modifier = Modifier.fillMaxWidth()) {
-                Text(profileFilter?.let { "Cyclone profile: ${profileLabel(it)}" } ?: "All Cyclone profiles")
-            }
-            DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
-                DropdownMenuItem(text = { Text("All Cyclone profiles") }, onClick = {
-                    onProfileChange(null)
-                    expanded = false
-                })
-                profileChoices.forEach { id ->
-                    DropdownMenuItem(text = {
-                        Column {
-                            Text(profileLabel(id))
-                            Text(id, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        }
-                    }, onClick = {
-                        onProfileChange(id)
-                        expanded = false
-                    })
-                }
-            }
-        }
+        CloakSelectField(
+            label = "Filter bindings",
+            value = profileFilter?.let { "Cyclone profile: ${profileLabel(it)}" } ?: "All Cyclone profiles",
+            options = listOf<String?>(null) + profileChoices,
+            optionLabel = { it?.let(profileLabel) ?: "All Cyclone profiles" },
+            optionSupporting = { it },
+            onSelect = onProfileChange,
+        )
         OutlinedTextField(
             value = packageQuery,
             onValueChange = onPackageChange,

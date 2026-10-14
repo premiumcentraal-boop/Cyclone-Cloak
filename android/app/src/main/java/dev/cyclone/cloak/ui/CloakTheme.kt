@@ -11,8 +11,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -77,12 +75,7 @@ enum class CloakStatusTone { READY, PENDING, ERROR }
 
 @Composable
 fun CloakStatusPill(label: String, tone: CloakStatusTone = CloakStatusTone.READY) {
-    val scheme = MaterialTheme.colorScheme
-    val (container, content) = when (tone) {
-        CloakStatusTone.READY -> scheme.secondaryContainer to scheme.onSecondaryContainer
-        CloakStatusTone.PENDING -> scheme.tertiaryContainer to scheme.onTertiaryContainer
-        CloakStatusTone.ERROR -> scheme.errorContainer to scheme.onErrorContainer
-    }
+    val (container, content) = tone.colors()
     Surface(shape = CircleShape, color = container, contentColor = content) {
         Text(label, modifier = Modifier.padding(horizontal = 11.dp, vertical = 7.dp), style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold)
     }
@@ -110,56 +103,6 @@ fun CloakHeroCard(title: String, body: String) {
                 Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
                 Text(body, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.78f))
             }
-        }
-    }
-}
-
-@Composable
-fun CloakSectionTitle(title: String, count: Int) {
-    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-        Text(title, style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold)
-        Surface(shape = CircleShape, color = MaterialTheme.colorScheme.surfaceVariant, contentColor = MaterialTheme.colorScheme.onSurfaceVariant) {
-            Text(count.toString(), modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp), style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold)
-        }
-    }
-}
-
-@Composable
-fun CloakChoiceCard(
-    title: String,
-    subtitle: String,
-    selected: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Card(
-        onClick = onClick,
-        modifier = modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.large,
-        colors = CardDefaults.cardColors(
-            containerColor = if (selected) MaterialTheme.colorScheme.primaryContainer else MaterialTheme.colorScheme.surface,
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-    ) {
-        Row(
-            Modifier.fillMaxWidth().padding(16.dp),
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Surface(
-                shape = CircleShape,
-                color = if (selected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.surfaceVariant,
-                contentColor = if (selected) MaterialTheme.colorScheme.onPrimary else MaterialTheme.colorScheme.onSurfaceVariant,
-            ) {
-                Box(Modifier.size(42.dp), contentAlignment = Alignment.Center) {
-                    Text("C", style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.Black)
-                }
-            }
-            Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(3.dp)) {
-                Text(title, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold)
-                Text(subtitle, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            }
-            if (selected) Icon(Icons.Rounded.CheckCircle, contentDescription = "Selected", tint = MaterialTheme.colorScheme.primary)
         }
     }
 }
@@ -195,11 +138,13 @@ fun CloakActionButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     outlined: Boolean = false,
+    enabled: Boolean = true,
 ) {
     if (outlined) {
         OutlinedButton(
             onClick = onClick,
             modifier = modifier,
+            enabled = enabled,
             shape = MaterialTheme.shapes.small,
             colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary),
         ) { CloakActionButtonContent(label, icon) }
@@ -207,11 +152,8 @@ fun CloakActionButton(
         Button(
             onClick = onClick,
             modifier = modifier,
+            enabled = enabled,
             shape = MaterialTheme.shapes.small,
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary,
-            ),
         ) { CloakActionButtonContent(label, icon) }
     }
 }

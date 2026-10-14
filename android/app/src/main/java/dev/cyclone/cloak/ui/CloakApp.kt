@@ -15,6 +15,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Badge
 import androidx.compose.material.icons.rounded.HealthAndSafety
+import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Layers
 import androidx.compose.material.icons.rounded.PhoneAndroid
 import androidx.compose.material3.AlertDialog
@@ -46,11 +47,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
-private enum class Tab(val label: String, val icon: ImageVector) {
-    PHONES("Phones", Icons.Rounded.PhoneAndroid),
-    IDENTITIES("Identities", Icons.Rounded.Badge),
-    PROFILES("Profiles", Icons.Rounded.Layers),
-    HEALTH("Health", Icons.Rounded.HealthAndSafety),
+private val CloakDestination.icon: ImageVector get() = when (this) {
+    CloakDestination.HOME -> Icons.Rounded.Home
+    CloakDestination.PHONES -> Icons.Rounded.PhoneAndroid
+    CloakDestination.IDENTITIES -> Icons.Rounded.Badge
+    CloakDestination.PROFILES -> Icons.Rounded.Layers
+    CloakDestination.HEALTH -> Icons.Rounded.HealthAndSafety
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,7 +60,7 @@ private enum class Tab(val label: String, val icon: ImageVector) {
 fun CloakApp(vm: CloakViewModel) {
     val state by vm.state.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
-    var tab by rememberSaveable { mutableIntStateOf(Tab.PHONES.ordinal) }
+    var tab by rememberSaveable { mutableIntStateOf(CloakDestination.HOME.ordinal) }
     LaunchedEffect(vm) { vm.messages.collect { snackbar.showSnackbar(it) } }
 
     val editor = state.editor
@@ -93,7 +95,7 @@ fun CloakApp(vm: CloakViewModel) {
                             }
                             Column(verticalArrangement = Arrangement.spacedBy(1.dp)) {
                                 Text("Cyclone Cloak", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                                Text(Tab.entries[tab].label.uppercase(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text(CloakDestination.entries[tab].label.uppercase(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
                             }
                         }
                     },
@@ -107,23 +109,25 @@ fun CloakApp(vm: CloakViewModel) {
         },
         bottomBar = {
             NavigationBar {
-                Tab.entries.forEach { item ->
+                CloakDestination.entries.forEach { item ->
                     NavigationBarItem(
                         selected = tab == item.ordinal,
                         onClick = { tab = item.ordinal },
                         icon = { Icon(item.icon, contentDescription = null) },
-                        label = { Text(item.label) },
+                        label = { Text(item.label, maxLines = 1) },
                     )
                 }
             }
         },
     ) { inner ->
         Box(Modifier.fillMaxSize().padding(inner)) {
-            when (Tab.entries[tab]) {
-                Tab.PHONES -> PhonesScreen(state, vm)
-                Tab.IDENTITIES -> IdentitiesScreen(state, vm)
-                Tab.PROFILES -> ProfilesScreen(state, vm)
-                Tab.HEALTH -> HealthScreen(state, vm)
+            if (CloakDestination.entries[tab] != CloakDestination.HOME) BackHandler { tab = CloakDestination.HOME.ordinal }
+            when (CloakDestination.entries[tab]) {
+                CloakDestination.HOME -> HomeScreen(state, onNavigate = { tab = it.ordinal }, onRefresh = vm::refresh)
+                CloakDestination.PHONES -> PhonesScreen(state, vm)
+                CloakDestination.IDENTITIES -> IdentitiesScreen(state, vm)
+                CloakDestination.PROFILES -> ProfilesScreen(state, vm)
+                CloakDestination.HEALTH -> HealthScreen(state, vm)
             }
         }
     }

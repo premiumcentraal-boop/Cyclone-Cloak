@@ -11,6 +11,7 @@ import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performScrollToNode
+import androidx.compose.ui.test.performClick
 import dev.cyclone.cloak.cyclone.CycloneGate
 import dev.cyclone.cloak.cyclone.Placement
 import dev.cyclone.cloak.cyclone.ProfilesSnapshot
@@ -94,6 +95,22 @@ class ScreensTest {
         view.draw(Canvas(bitmap))
         val out = File("build/screenshots").apply { mkdirs() }
         File(out, "$name.png").outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
+    }
+
+    @Test
+    fun home() {
+        compose.setContent { Screen { HomeScreen(state(), onNavigate = {}, onRefresh = {}) } }
+        compose.onNodeWithText("Root Doctor: Reboot required").assertIsDisplayed()
+        compose.onNodeWithText("1 bound app isn't ready").assertIsDisplayed()
+        shot("0-home")
+    }
+
+    @Test
+    fun homeNavigatesToTheFix() {
+        var went: CloakDestination? = null
+        compose.setContent { Screen { HomeScreen(state(), onNavigate = { went = it }, onRefresh = {}) } }
+        compose.onNodeWithText("Root Doctor: Reboot required").performClick()
+        org.junit.Assert.assertEquals(CloakDestination.HEALTH, went)
     }
 
     @Test

@@ -3,23 +3,19 @@ package dev.cyclone.cloak.ui
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Build
 import androidx.compose.material.icons.rounded.FileOpen
+import androidx.compose.material.icons.rounded.PhoneAndroid
+import androidx.compose.material3.FilledTonalButton
 import androidx.compose.material3.AlertDialog
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -31,7 +27,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import dev.cyclone.cloak.forge.PhoneTemplate
 
@@ -78,7 +73,8 @@ internal fun PhonesScreen(state: CloakState, vm: CloakViewModel) {
         }
         val builtIn = state.phones.filter { it.builtIn }
         val own = state.phones.filter { !it.builtIn }
-        item { CloakSectionTitle("Your phones", own.size) }
+        fun identitiesFrom(phone: PhoneTemplate) = state.identities.count { it.second.optJSONObject("meta")?.optString("template") == phone.id }
+        item { CloakSectionHeader("Your phones", own.size) }
         if (own.isEmpty()) {
             item {
                 CloakEmptyState(
@@ -87,17 +83,26 @@ internal fun PhonesScreen(state: CloakState, vm: CloakViewModel) {
                     icon = Icons.Rounded.Add,
                 )
             }
+        } else item {
+            CloakGroup {
+                own.forEachIndexed { index, phone ->
+                    if (index > 0) CloakGroupDivider()
+                    PhoneRow(phone, identitiesFrom(phone),
+                        onMake = { making = phone }, onClone = { vm.clonePhone(phone) }, onEdit = { vm.editPhone(phone) },
+                        onExport = { exporting = phone; exporter.launch("${phone.id}.cloak-phone.json") }, onDelete = { deleting = phone })
+                }
+            }
         }
-        items(own, key = { "own/" + it.id }) { phone ->
-            PhoneCard(phone, identities = state.identities.count { it.second.optJSONObject("meta")?.optString("template") == phone.id },
-                onMake = { making = phone }, onClone = { vm.clonePhone(phone) }, onEdit = { vm.editPhone(phone) },
-                onExport = { exporting = phone; exporter.launch("${phone.id}.cloak-phone.json") }, onDelete = { deleting = phone })
-        }
-        item { CloakSectionTitle("Built in", builtIn.size) }
-        items(builtIn, key = { "builtin/" + it.id }) { phone ->
-            PhoneCard(phone, identities = state.identities.count { it.second.optJSONObject("meta")?.optString("template") == phone.id },
-                onMake = { making = phone }, onClone = { vm.clonePhone(phone) }, onEdit = null,
-                onExport = { exporting = phone; exporter.launch("${phone.id}.cloak-phone.json") }, onDelete = null)
+        item { CloakSectionHeader("Built in", builtIn.size) }
+        item {
+            CloakGroup {
+                builtIn.forEachIndexed { index, phone ->
+                    if (index > 0) CloakGroupDivider()
+                    PhoneRow(phone, identitiesFrom(phone),
+                        onMake = { making = phone }, onClone = { vm.clonePhone(phone) }, onEdit = null,
+                        onExport = { exporting = phone; exporter.launch("${phone.id}.cloak-phone.json") }, onDelete = null)
+                }
+            }
         }
     }
 
@@ -121,9 +126,8 @@ internal fun PhonesScreen(state: CloakState, vm: CloakViewModel) {
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun PhoneCard(
+private fun PhoneRow(
     phone: PhoneTemplate,
     identities: Int,
     onMake: () -> Unit,
@@ -132,32 +136,25 @@ private fun PhoneCard(
     onExport: () -> Unit,
     onDelete: (() -> Unit)?,
 ) {
-    Card(
-        modifier = Modifier.fillMaxWidth().testTag("phone-card/${phone.id}"),
-        shape = MaterialTheme.shapes.large,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
+    val extra = listOfNotNull(
+        phone.telephony.optString("carrier_name").takeIf { it.isNotBlank() },
+        phone.locale.optString("country").takeIf { it.isNotBlank() },
+        if (identities > 0) "$identities ${if (identities == 1) "identity" else "identities"}" else null,
+    ).joinToString(" · ")
+    CloakRow(
+        phone.label,
+        modifier = Modifier.testTag("phone-card/${phone.id}"),
+        supporting = listOf(phone.summary.ifBlank { "No details yet" }, extra).filter { it.isNotBlank() }.joinToString("\n"),
+        icon = Icons.Rounded.PhoneAndroid,
+        tone = if (phone.builtIn) CloakStatusTone.PENDING else null,
     ) {
-        Column(Modifier.fillMaxWidth().padding(16.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-                Text(phone.label, style = MaterialTheme.typography.titleSmall, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
-                if (phone.builtIn) CloakStatusPill("Built in", CloakStatusTone.PENDING)
-            }
-            Text(phone.summary.ifBlank { "No details yet" }, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            val extra = listOfNotNull(
-                phone.telephony.optString("carrier_name").takeIf { it.isNotBlank() },
-                phone.locale.optString("country").takeIf { it.isNotBlank() },
-                if (identities > 0) "$identities ${if (identities == 1) "identity" else "identities"}" else null,
-            ).joinToString(" · ")
-            if (extra.isNotBlank()) Text(extra, style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            FlowRow(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(2.dp)) {
-                TextButton(onClick = onMake) { Text("Make identity") }
-                TextButton(onClick = onClone) { Text("Clone") }
-                onEdit?.let { TextButton(onClick = it) { Text("Edit") } }
-                TextButton(onClick = onExport) { Text("Share") }
-                onDelete?.let { TextButton(onClick = it) { Text("Delete") } }
-            }
-        }
+        FilledTonalButton(onClick = onMake, contentPadding = PaddingValues(horizontal = 12.dp)) { Text("Make identity") }
+        CloakOverflowMenu(listOfNotNull(
+            CloakMenuAction("Clone", onClick = onClone),
+            onEdit?.let { CloakMenuAction("Edit", onClick = it) },
+            CloakMenuAction("Share", onClick = onExport),
+            onDelete?.let { CloakMenuAction("Delete", destructive = true, onClick = it) },
+        ), contentDescription = "More for ${phone.label}")
     }
 }
 
