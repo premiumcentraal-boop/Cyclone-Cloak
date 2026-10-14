@@ -66,16 +66,26 @@ fun CloakApp(vm: CloakViewModel) {
     val editor = state.editor
     if (editor != null) {
         BackHandler { vm.closeEditor() }
-        PhoneEditorScreen(editor, busy = state.busy != null, onChange = vm::updateDraft, onSave = vm::savePhone, onClose = vm::closeEditor)
+        Column {
+            ConnectionStatusChip(state.connection, vm::refresh)
+            Box(Modifier.weight(1f)) {
+                PhoneEditorScreen(editor, busy = state.busy != null, onChange = vm::updateDraft, onSave = vm::savePhone, onClose = vm::closeEditor)
+            }
+        }
         return
     }
 
     state.bindingFlow?.let { flow ->
-        BindingFlowScreen(flow, BindingInputs(state.registry, state.identities, state.bindings, state.canBind, state.ownProfileId),
+        Column {
+            ConnectionStatusChip(state.connection, vm::refresh)
+            Box(Modifier.weight(1f)) {
+                BindingFlowScreen(flow, BindingInputs(state.registry, state.identities, state.bindings, state.canBind, state.ownProfileId),
             state.phones, state.busy != null || state.syncing,
             vm::chooseBindingProfile, vm::chooseBindingApps, vm::chooseBindingIdentity, vm::generateBindingProfile,
             vm::nextBindingStep, vm::backBindingStep, vm::acknowledgeBinding, vm::confirmBindingFlow,
             vm::retryBindingFlow, vm::refresh, vm::closeBindingFlow)
+            }
+        }
         return
     }
 
@@ -100,8 +110,7 @@ fun CloakApp(vm: CloakViewModel) {
                         }
                     },
                     actions = {
-                        val headline = if (state.syncing) "Checking Cyclone" else state.report?.headline ?: "Checking Cyclone"
-                        CloakStatusPill(headline, statusTone(headline))
+                        ConnectionStatusChip(state.connection, vm::refresh)
                     },
                 )
                 if (state.busy != null || state.syncing) LinearProgressIndicator(Modifier.fillMaxWidth())

@@ -6,7 +6,6 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.os.IBinder
-import kotlin.concurrent.thread
 
 /** Marker for Cyclone discovery. Cyclone never binds this; it reads the manifest. */
 class CycloneConnect : Service() {
@@ -20,12 +19,6 @@ class CycloneConnect : Service() {
 class CycloneWake : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         val pending = goAsync()
-        thread(name = "cloak-cyclone-wake") {
-            try {
-                CycloneBridge.sync(context, foreground = false)
-            } finally {
-                pending.finish()
-            }
-        }
+        ConnectionLifecycle.wake(context, ReconnectReason.REGISTRY_CHANGE, pending::finish)
     }
 }

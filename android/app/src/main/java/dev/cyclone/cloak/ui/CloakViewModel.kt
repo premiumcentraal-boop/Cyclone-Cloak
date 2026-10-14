@@ -8,6 +8,9 @@ import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import dev.cyclone.cloak.cyclone.CompanionPresence
+import dev.cyclone.cloak.cyclone.ConnectionLifecycle
+import dev.cyclone.cloak.cyclone.ConnectionStatus
+import dev.cyclone.cloak.cyclone.ReconnectReason
 import dev.cyclone.cloak.cyclone.CompanionPresenceLookup
 import dev.cyclone.cloak.cyclone.CompanionPresenceProbe
 import dev.cyclone.cloak.cyclone.CompanionFacts
@@ -15,7 +18,6 @@ import dev.cyclone.cloak.data.InstallPlacement
 import dev.cyclone.cloak.cyclone.BulkBind
 import dev.cyclone.cloak.cyclone.CloakPill
 import dev.cyclone.cloak.cyclone.CloakPills
-import dev.cyclone.cloak.cyclone.CloakStartupProvider
 import dev.cyclone.cloak.cyclone.CycloneBridge
 import dev.cyclone.cloak.cyclone.CycloneProfile
 import dev.cyclone.cloak.cyclone.OpenRequests
@@ -93,6 +95,7 @@ data class CloakState(
     val bindings: List<CloakBinding> = emptyList(),
     val report: SyncReport? = null,
     val syncing: Boolean = false,
+    val connection: ConnectionStatus = ConnectionStatus(),
     val providerState: String = "not registered",
     val companionPresence: List<CompanionPresence> = emptyList(),
     val checkingCompanions: Boolean = false,
@@ -109,7 +112,7 @@ data class CloakState(
     val backups: List<Pair<String, JSONObject>> = emptyList(),
 ) {
     val uniqueness: ProfileUniqueness get() = ProfileUniqueness(identities)
-    val registry: List<CycloneProfile> get() = report?.snapshot?.registry.orEmpty()
+    val registry: List<CycloneProfile> get() = (report?.snapshot ?: connection.cached?.snapshot)?.registry.orEmpty()
     val placement: Placement? get() = report?.placement
     /** Null in Main; this Cyclone profile's id when Cloak runs inside one. */
     val ownProfileId: String? get() = (placement as? Placement.InProfile)?.profile?.id
@@ -137,7 +140,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
     private val bundledArtifactDigest by lazy { PostureArtifacts.bundledModuleDigest(app) }
     private val postureProvenance by lazy { PostureProvenanceStore(app) }
     private val app: Context get() = getApplication()
-    private val _state = MutableStateFlow(CloakState())
+    private val _state = MutableStateFlow(CloakState(connection = ConnectionLifecycle.state(app).value))
     val state: StateFlow<CloakState> = _state.asStateFlow()
     private val _messages = MutableSharedFlow<String>(extraBufferCapacity = 8)
     val messages: SharedFlow<String> = _messages
@@ -147,7 +150,26 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
 
     init {
         viewModelScope.launch(Dispatchers.IO) { loadLocal() }
-        refresh()
+        viewModelScope.launch(Dispatchers.IO) {
+            var previous: dev.cyclone.cloak.cyclone.SyncReport? = null
+            ConnectionLifecycle.state(app).collect { connection ->
+                val changed = connection.report != null && connection.report !== previous
+                _state.update { state -> state.copy(connection = connection,
+                    syncing = connection.phase == dev.cyclone.cloak.cyclone.ConnectionPhase.RECONNECTING &&
+                        connection.cached == null && state.report?.snapshot == null,
+                    report = if (changed) connection.report else state.report,
+                    providerState = connection.provider) }
+                if (changed) {
+                    previous = connection.report
+                    loadLocal()
+                    val presence = CompanionPresenceLookup.inspect(connection.report?.snapshot?.registry.orEmpty()) { user ->
+                        if (user == InstallPlacement.myUser()) CompanionPresenceProbe.local(app) else CompanionFacts()
+                    }
+                    _state.update { it.copy(companionPresence = presence) }
+                }
+            }
+        }
+        ConnectionLifecycle.trigger(app, ReconnectReason.PROCESS_START)
     }
 
     private fun say(message: String) {
@@ -198,32 +220,9 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
 
     // ---- Cyclone ----------------------------------------------------------------------------------------------------
 
-    fun refresh() {
-        if (_state.value.syncing) return
-        _state.update { it.copy(syncing = true) }
-        viewModelScope.launch(Dispatchers.IO) {
-            var provider = "not registered"
-            val report = work.withLock {
-                CycloneBridge.sync(app, foreground = true) { cyclone, report ->
-                    // The startup provider lives as long as this process; register it again on every connect.
-                    val gate = report.gate
-                    provider = when {
-                        gate?.approved != true -> "not registered"
-                        gate.minor < 1 -> "Cyclone too old"
-                        !gate.startup -> "not approved"
-                        else -> runCatching { cyclone.registerProfileProvider(CloakStartupProvider(app)) }
-                            .fold({ "ready" }, { it.message ?: "failed" })
-                    }
-                }
-            }
-            loadLocal()
-            val presence = CompanionPresenceLookup.inspect(report.snapshot?.registry.orEmpty()) { user ->
-                if (user == InstallPlacement.myUser()) CompanionPresenceProbe.local(app)
-                else CompanionFacts()
-            }
-            _state.update { it.copy(report = report, syncing = false, providerState = provider, companionPresence = presence) }
-        }
-    }
+    fun refresh() { ConnectionLifecycle.trigger(app, ReconnectReason.MANUAL) }
+
+    fun reconnectOnResume() { ConnectionLifecycle.trigger(app, ReconnectReason.RESUME) }
 
     fun checkCompanionPresence() {
         if (_state.value.checkingCompanions) return
@@ -878,6 +877,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
             val result = CloakResolver.rebuildIndexDetailed(app, repairModule = true)
             _state.update { it.copy(rootDoctor = result) }
             _state.update { it.copy(report = CycloneBridge.sync(app, foreground = true)) }
+            ConnectionLifecycle.trigger(app, ReconnectReason.MODULE_STATE_CHANGE)
         }
     }
 

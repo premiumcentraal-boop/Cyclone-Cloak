@@ -21,7 +21,7 @@ class MainActivity : ComponentActivity() {
     override fun onResume() {
         super.onResume()
         // The owner may have just approved Cloak in Cyclone, or switched profiles: look again.
-        if (resumedOnce) vm.refresh()
+        if (resumedOnce) vm.reconnectOnResume()
         resumedOnce = true
     }
 }

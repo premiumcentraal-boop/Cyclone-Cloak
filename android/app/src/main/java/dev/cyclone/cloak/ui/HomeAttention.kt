@@ -14,9 +14,12 @@ internal data class SetupStep(val title: String, val done: Boolean, val destinat
 /** Pure presentation of [CloakState] for the Home dashboard. Reads state only; never changes it. */
 internal object HomeAttention {
     /** Null while the first Cyclone check is still running. */
-    fun loading(state: CloakState): Boolean = state.report == null
+    fun loading(state: CloakState): Boolean = state.report == null && state.connection.cached == null
 
     fun items(state: CloakState): List<AttentionItem> = buildList {
+        if (state.report == null && state.connection.cached != null) {
+            add(AttentionItem("Showing last seen Cyclone profiles", "Verifying the connection in the background.", CloakStatusTone.PENDING, CloakDestination.PROFILES))
+        }
         val report = state.report
         if (report != null && statusTone(report.headline) != CloakStatusTone.READY) {
             add(AttentionItem("Cyclone: ${report.headline}", report.message.ifBlank { null }, statusTone(report.headline), CloakDestination.PROFILES))

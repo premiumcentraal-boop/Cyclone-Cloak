@@ -19,7 +19,7 @@ interface CycloneApi {
 }
 
 class ConnectorApi(private val cyclone: CycloneConnector) : CycloneApi {
-    override fun hello() = cyclone.hello()
+    override fun hello() = ConnectorHandshake.validate(cyclone.hello())
     override fun profiles() = cyclone.profiles()
     override fun getConfig(profileId: String, androidUserId: Int, packageName: String) =
         cyclone.getConfig(profileId, androidUserId, packageName)

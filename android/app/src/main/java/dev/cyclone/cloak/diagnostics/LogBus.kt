@@ -51,5 +51,6 @@ class CloakApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         runCatching { LogBus.initialize(this) }
+        dev.cyclone.cloak.cyclone.ConnectionLifecycle.trigger(this, dev.cyclone.cloak.cyclone.ReconnectReason.PROCESS_START)
     }
 }

@@ -37,6 +37,7 @@ data class SyncReport(
     val issues: Map<String, String> = emptyMap(),
     val reconcile: BindingReconciler.Result? = null,
     val events: CycloneEvents.Batch? = null,
+    val failureCode: String? = null,
 ) {
     val approved: Boolean get() = gate?.approved == true
 
@@ -49,6 +50,7 @@ data class SyncReport(
                 else -> "Connector failed"
             },
             message = if (code == "NOT_APPROVED") OpenRequests.APPROVE_LINE else listOfNotNull(code, message).joinToString(": "),
+            failureCode = code,
         )
     }
 }
