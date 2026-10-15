@@ -1,6 +1,6 @@
 # Cyclone Cloak Architecture
 
-Current prerelease: [v0.11.0-alpha.12](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.12), app/module code 36 (connector lifecycle, cached registry display and local binding run bundles; device verification pending).
+Current prerelease: [v0.11.0-alpha.13](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.13), app/module code 37 (root-free reconnect, recoverable binding-run checkpoints and redacted reconciliation summaries; device verification pending).
 Normal-app publication and preservation of bindings across two Cyclone profiles
 passed on Pixel 8; an independent profile-side publisher is not device-verified.
 The existing main implementation adds the native property callback hook and

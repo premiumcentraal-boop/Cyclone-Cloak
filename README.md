@@ -11,17 +11,18 @@ not prove that every inspection API sees it.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.11.0-alpha.12 (prerelease)
+## Status: 0.11.0-alpha.13 (prerelease)
 
-Alpha.12 adds single-flight reconnection with bounded backoff, cached registry
-display and a connection chip, plus Health → Runs with redacted per-run and
-24-hour debug bundles through the share sheet. App/module code 36.
-[Release notes](docs/RELEASE_0.11.0-alpha.12.md) explain the boot-wake limitation
-and pending device checks. Existing profile/binding schemas, connector protocol,
-binding logic, publication scripts, permissions and runtime/module behavior are
-unchanged. Earlier evidence remains specific to its measured artifact;
-Alpha.12 phone verification is UNVERIFIED. Local compatibility evidence is not a
-platform verdict. See [CURRENT-STATE.md](docs/CURRENT-STATE.md).
+Alpha.13 hardens connector reconnection and binding-run recovery. Reconnect
+avoids root approval waits; active runs retain checkpoints and actionable failure
+reasons. Health → Runs exports redacted reconciliation summaries alongside the
+existing diagnostics. App/module code 37.
+[Release notes](docs/RELEASE_0.11.0-alpha.13.md) cover compatibility and pending
+device checks. Existing profile/binding schemas, connector protocol, publication
+scripts, permissions and runtime/module behavior are unchanged. Earlier evidence
+remains specific to its measured artifact. Alpha.13 device verification is
+UNVERIFIED. Local evidence is not a platform verdict.
+See [CURRENT-STATE.md](docs/CURRENT-STATE.md).
 
 - **Companion app** (`android/app`): a Cyclone connector (contract `cyclone.connector/1.3`, Cyclone
   5.0.0-alpha.122 or newer). Imports or creates cloak profiles, binds them to the apps of Cyclone
