@@ -28,13 +28,18 @@ object CycloneBridge {
 
     fun myUser(): Int = InstallPlacement.myUser()
 
+    internal fun rootAllowed(allowRoot: Boolean, foreground: Boolean, verified: () -> Boolean): Boolean =
+        allowRoot && (foreground || verified())
+
     /** Connects, syncs and closes. [foreground]: the owner is looking at Cloak, so a root prompt is acceptable. */
-    fun sync(context: Context, foreground: Boolean, withConnection: (CycloneConnector, SyncReport) -> Unit = { _, _ -> }): SyncReport =
+    fun sync(context: Context, foreground: Boolean, allowRoot: Boolean = true,
+             onPublication: (RootDoctorResult) -> Unit = {},
+             withConnection: (CycloneConnector, SyncReport) -> Unit = { _, _ -> }): SyncReport =
         synchronized(lock) {
             val app = context.applicationContext
             try {
                 CycloneConnector.connect(app).use { cyclone ->
-                    val report = CycloneSyncEngine(ConnectorApi(cyclone), AndroidLocal(app, foreground)).sync()
+                    val report = CycloneSyncEngine(ConnectorApi(cyclone), AndroidLocal(app, foreground, allowRoot, onPublication)).sync()
                     withConnection(cyclone, report)
                     report
                 }
@@ -56,7 +61,8 @@ object CycloneBridge {
 
     private fun prefs(context: Context) = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
 
-    private class AndroidLocal(private val context: Context, private val foreground: Boolean) : CloakLocal {
+    private class AndroidLocal(private val context: Context, private val foreground: Boolean,
+                               private val allowRoot: Boolean, private val onPublication: (RootDoctorResult) -> Unit) : CloakLocal {
         private val prefs = prefs(context)
         override val myUser: Int = myUser()
 
@@ -87,9 +93,9 @@ object CycloneBridge {
             InstallPlacement.save(context, if (placement is Placement.InProfile) placement.profile.id else InstallPlacement.MAIN, liveUsers)
         }
 
-        override fun rootAllowed(): Boolean = foreground || CloakRootDoctor.verifiedForCurrentApp(context)
+        override fun rootAllowed(): Boolean = rootAllowed(allowRoot, foreground) { CloakRootDoctor.verifiedForCurrentApp(context) }
 
-        override fun republish(): RootDoctorResult = CloakResolver.rebuildIndexDetailed(context)
+        override fun republish(): RootDoctorResult = CloakResolver.rebuildIndexDetailed(context).also(onPublication)
 
         override fun readPublished(): Pair<RootDoctorResult, String?> = CloakRootDoctor.readPublished(context)
     }

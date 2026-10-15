@@ -18,14 +18,14 @@ class BindingRunBundleTest {
         BindingRunBundle.build(runs, recent, bindings, RootDoctorResult(RootDoctorCode.READY, "0.11.0-alpha.11",
             diagnostic = "SECRET ROOT OUTPUT", publicationReason = PublicationReason.COMPLETED), null, "0.11.0-alpha.11", 100, 150, 300)
 
-    @Test fun zipContainsAllSixStructuredFilesAndVersions() {
+    @Test fun zipContainsAllSevenStructuredFilesAndVersions() {
         val files = bundle()
         val names = mutableListOf<String>()
         ZipInputStream(BindingRunBundle.zip(files).inputStream()).use { zip ->
             while (true) { val entry = zip.nextEntry ?: break; names += entry.name
                 JSONObject(zip.readBytes().toString(Charsets.UTF_8)) }
         }
-        assertEquals(setOf("manifest.json", "runs.json", "diagnostics.json", "bindings-index.json", "module-state.json", "connector-handshake.json"), names.toSet())
+        assertEquals(setOf("manifest.json", "runs.json", "diagnostics.json", "bindings-index.json", "module-state.json", "connector-handshake.json", "reconciliation.json"), names.toSet())
         assertEquals("0.11.0-alpha.11", files.getValue("manifest.json").getString("app_version"))
         assertTrue(files.getValue("manifest.json").getBoolean("redacted"))
     }
@@ -70,5 +70,21 @@ class BindingRunBundleTest {
         val j = run.copy(eventsDropped = 7).json()
         assertEquals("merge", j.getJSONArray("publication_phases").getJSONObject(0).getString("phase"))
         assertEquals(7, bundle(runs = listOf(run.copy(eventsDropped = 7))).getValue("diagnostics.json").getInt("retained_run_events_dropped"))
+    }
+    @Test fun reconciliationSummaryAndFirstFailureAreHistoricalAndRedacted() {
+        val failed = run.copy(reasons = listOf("CYCLONE_NOT_ANSWERING", "CONNECTOR_NOT_READY"),
+            reconciliation = RunReconciliation(1, 2, 0, 1, "CYCLONE_NOT_ANSWERING"))
+        val row = bundle(runs = listOf(failed)).getValue("reconciliation.json").getJSONArray("run_observations").getJSONObject(0)
+        assertEquals(failed.id, row.getString("run_id"))
+        assertEquals("CYCLONE_NOT_ANSWERING", row.getString("first_failure_reason"))
+        assertEquals(1, row.getJSONObject("summary").getInt("written"))
+        assertEquals("CYCLONE_NOT_ANSWERING", row.getJSONObject("summary").getString("stopped_by"))
+    }
+    @Test fun activeRunRemainsExportableBeyondItsLastCheckpoint() {
+        val active = run.copy(timestamp = 1, durationMs = 5, active = true)
+        val files = bundle(runs = listOf(active))
+        assertEquals(1, files.getValue("manifest.json").getInt("run_count"))
+        val row = files.getValue("runs.json").getJSONArray("runs").getJSONObject(0)
+        assertTrue(row.getBoolean("active")); assertTrue(row.isNull("end_timestamp"))
     }
 }

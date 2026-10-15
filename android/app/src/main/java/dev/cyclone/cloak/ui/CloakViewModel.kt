@@ -147,6 +147,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
     private val postureProvenance by lazy { PostureProvenanceStore(app) }
     private val app: Context get() = getApplication()
     private var currentRun: BindingRunResult? = null
+    private var checkpointRun: (() -> Unit)? = null
     private val _state = MutableStateFlow(CloakState(connection = ConnectionLifecycle.state(app).value))
     val state: StateFlow<CloakState> = _state.asStateFlow()
     private val _messages = MutableSharedFlow<String>(extraBufferCapacity = 8)
@@ -727,7 +728,15 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
     }
     fun retryBindingFlow() {
         val draft = _state.value.bindingFlow ?: return
-        if (draft.running || _state.value.busy != null || draft.outcome?.saved != true || draft.outcome.ready) return
+        if (draft.running || _state.value.busy != null || draft.outcome == null || draft.outcome.ready) return
+        if (!draft.outcome.saved) {
+            val retained = draft.copy(step = BindingStep.REVIEW, outcome = null, note = null)
+            _state.update { it.copy(bindingFlow = retained) }
+            // Reuse a still-valid review acknowledgement; changed facts require review again.
+            if (BindingFlow.canConfirm(retained, bindingInputs(freshLocal = true))) confirmBindingFlow()
+            else changeBinding { it.copy(note = "Review the current selection before retrying.") }
+            return
+        }
         changeBinding { it.copy(running = true) }
         launchBindingWork("Retrying reconciliation…", RunOperation.RETRY_RECONCILIATION, draftTargets(draft)) {
             try {
@@ -799,6 +808,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         launchBindingWork(if (binding.enabled) "Turning off…" else "Turning on…",
             if (binding.enabled) RunOperation.DISABLE else RunOperation.ENABLE, listOf(bindingRunTarget(binding))) {
             CloakBindingStore.upsert(app, binding.copy(enabled = !binding.enabled, updatedAt = System.currentTimeMillis()))
+            checkpointRun?.invoke()
             publishAndSync()
         }
     }
@@ -807,16 +817,17 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         if (binding.origin == CloakBinding.ORIGIN_MAIN) return say("This binding is managed by Cyclone Cloak in Main.")
         launchBindingWork("Removing binding…", RunOperation.REMOVE, listOf(bindingRunTarget(binding))) {
             CloakBindingStore.remove(app, binding.profileId, binding.androidUserId, binding.packageName)
+            checkpointRun?.invoke()
             publishAndSync()
         }
     }
 
     /** Approval precedes all binding writes; all synchronous root calls reuse this session. */
-    private fun launchBindingWork(label: String, operation: RunOperation, targets: List<RunTarget>, block: () -> Unit) {
+    private fun launchBindingWork(label: String, operation: RunOperation, targets: List<RunTarget>, retryOf: String? = null, block: () -> Unit) {
         launchWork(label) {
             @Suppress("DEPRECATION")
             val version = runCatching { app.packageManager.getPackageInfo(app.packageName, 0).versionName }.getOrNull()
-            val run = BindingRun(operation = operation, appVersion = version, targets = targets.map { target -> when (operation) {
+            val run = BindingRun(operation = operation, appVersion = version, retryOf = retryOf, targets = targets.map { target -> when (operation) {
                 RunOperation.REMOVE -> target.copy(expectedPresent = false)
                 RunOperation.ENABLE -> target.copy(expectedEnabled = true)
                 RunOperation.DISABLE -> target.copy(expectedEnabled = false)
@@ -828,15 +839,18 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
             val started = System.nanoTime()
             journal.begin(run)
             currentRun = observation
+            checkpointRun = { journal.begin(observation.snapshot(run, (System.nanoTime() - started) / 1_000_000, capture)) }
             try { LogBus.registry.captureRun(capture) {
             LogBus.event("binding-runs", "run.${run.id}", Transition.STARTED)
             val session = try {
                 PrivilegedSession(waiting = {
                     LogBus.event("root", "batch-session", Transition.DEGRADED, reason = "WAITING_FOR_APPROVAL")
+                    checkpointRun?.invoke()
                     _state.update { state -> state.copy(busy = "Waiting for approval — allow Cyclone Cloak in Magisk…",
                         bindingFlow = state.bindingFlow?.copy(note = "Waiting for approval. Allow Cyclone Cloak in Magisk for this Android profile.")) }
                 }, resumed = {
                     LogBus.event("root", "batch-session", Transition.COMPLETED, reason = "SESSION_RESUMED")
+                    checkpointRun?.invoke()
                     _state.update { it.copy(busy = label, bindingFlow = it.bindingFlow?.copy(note = null)) }
                 })
             } catch (_: java.io.IOException) { null }
@@ -866,6 +880,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
                 observation.exception = true
                 throw error
             } finally {
+                checkpointRun = null
                 currentRun = null
                 val completed = observation.complete(run, CloakBindingStore.all(app),
                     maxOf((System.nanoTime() - started) / 1_000_000, System.currentTimeMillis() - run.timestamp), capture)
@@ -884,14 +899,22 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
     fun retryRun(run: BindingRun) {
         if (_state.value.busy != null) return
         val bindings = CloakBindingStore.all(app)
-        val changed = run.targets.any { target -> target.packages.any { pkg ->
-            val records = bindings.filter { RunPrivacy.reference(it.profileId) == target.profileId && it.packageName == pkg }
-            if (!target.expectedPresent) records.isNotEmpty()
-            else records.size != 1 || RunPrivacy.reference(records.single().cloakProfileId) != target.deviceProfileId ||
-                (target.expectedEnabled != null && records.single().enabled != target.expectedEnabled)
-        } }
-        if (changed) return say("Bindings changed since this run. Review them in Profiles before retrying.")
-        launchBindingWork("Retrying reconciliation…", RunOperation.RETRY_RECONCILIATION, run.targets) { publishAndSync() }
+        when (BindingRunRetry.plan(run, bindings)) {
+            RunRetry.BLOCKED -> return say("Bindings changed or this selection needs review. Review it in Profiles before retrying.")
+            RunRetry.REVIEW -> {
+                val target = run.targets.single()
+                val profile = _state.value.registry.firstOrNull { RunPrivacy.reference(it.id) == RunPrivacy.reference(target.profileId) }
+                    ?: return say("Reconnect to Cyclone to restore the selected profile before retrying.")
+                val identity = _state.value.identities.firstOrNull { RunPrivacy.reference(it.first) == RunPrivacy.reference(target.deviceProfileId) }
+                    ?: return say("The selected device profile is unavailable. Review it in Identities.")
+                val draft = BindingDraft(step = BindingStep.REVIEW, profileId = profile.id, packageNames = target.packages.toSet(), identityId = identity.first,
+                    note = "Selection retained. Review the unsaved apps before confirming; existing local records are kept.")
+                _state.update { it.copy(bindingFlow = draft.copy(reviewStamp = BindingFlow.stamp(draft, bindingInputs(freshLocal = true)))) }
+                return
+            }
+            RunRetry.RECONCILE -> Unit
+        }
+        launchBindingWork("Retrying reconciliation…", RunOperation.RETRY_RECONCILIATION, run.targets, retryOf = run.id) { publishAndSync() }
     }
 
     private fun saveBindingRecords(records: List<CloakBinding>, expected: List<CloakBinding>? = null) {
@@ -903,6 +926,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
             require(expected == null || current == expected) { "Bindings changed. Return to review before saving." }
             BindingFlow.applyRecords(current, records)
         }
+        checkpointRun?.invoke()
     }
 
     /** Loads identity [cloakId] onto every app of [profile]; apps Main manages stay Main's. Returns how many. */
@@ -924,10 +948,17 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         val result = CloakResolver.rebuildIndexDetailed(app)
         currentRun?.root = result
         _state.update { it.copy(rootDoctor = result) }
-        val report = CycloneBridge.sync(app, foreground = true)
+        checkpointRun?.invoke()
+        var finalResult = result
+        val report = CycloneBridge.sync(app, foreground = true, onPublication = { publication ->
+            finalResult = publication
+            currentRun?.root = publication
+            checkpointRun?.invoke()
+        })
         currentRun?.report = report
-        _state.update { it.copy(report = report) }
-        return result
+        checkpointRun?.invoke()
+        _state.update { it.copy(report = report, rootDoctor = finalResult) }
+        return finalResult
     }
 
     // ---- Root -------------------------------------------------------------------------------------------------------

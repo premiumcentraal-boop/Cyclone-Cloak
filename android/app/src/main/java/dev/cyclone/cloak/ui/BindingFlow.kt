@@ -141,7 +141,7 @@ object BindingFlow {
         val issue = draft.packageNames.sorted().mapNotNull { pkg ->
             report?.issues?.get(bindingKey(draft.profileId!!, pkg))?.let { "$pkg: $it" }
         }.takeIf { it.isNotEmpty() }?.joinToString("\n")
-        val ready = root.published && report?.gate?.bindings == true && reconcile != null &&
+        val ready = root.published && report?.headline == "Connected" && report.failureCode == null && report.gate?.bindings == true && reconcile != null &&
             reconcile.stoppedBy == null && issue == null && held.all { CloakHealth.cycloneState(it.state) == CloakHealth.READY }
         val reason = when {
             !root.published -> "${root.title}: ${root.message}"

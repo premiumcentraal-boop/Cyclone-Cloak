@@ -3,6 +3,10 @@ package dev.cyclone.cloak.ui
 import android.app.Application
 import androidx.compose.ui.test.*
 import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.ui.Modifier
 import dev.cyclone.cloak.diagnostics.*
 import org.junit.Assert.*
 import org.junit.Rule
@@ -20,13 +24,15 @@ class BindingRunCardTest {
         outcome = RunOutcome.FAILED, reasons = listOf("ROOT_TIMEOUT"), durationMs = 42)
     @Test fun failureExpandsToTargetAndReasonAndRetryAction() {
         var retries = 0
-        compose.setContent { CloakTheme { BindingRunCard(run, true, { retries++ }, {}) } }
+        compose.setContent { CloakTheme { Column(Modifier.verticalScroll(rememberScrollState())) {
+            BindingRunCard(run, true, { retries++ }, {})
+        } } }
         compose.onNodeWithText("bind · failed").assertIsDisplayed()
         compose.onNodeWithText("Review run details").performClick()
         compose.onNodeWithText("Android user: 16", substring = true).assertIsDisplayed()
         compose.onNodeWithText("org.example.app", substring = true).assertIsDisplayed()
         compose.onNodeWithText("Reasons: ROOT_TIMEOUT").assertIsDisplayed()
-        compose.onNodeWithText("Retry reconciliation").performClick()
+        compose.onNodeWithText("Retry reconciliation").performScrollTo().performClick()
         assertEquals(1, retries)
     }
     @Test fun readyRowHasExportButNoRetry() {
@@ -41,5 +47,16 @@ class BindingRunCardTest {
         compose.onNodeWithText("bind · needs-attention").assertIsDisplayed()
         compose.onNodeWithText("Retry reconciliation").assertIsNotEnabled()
         compose.onNodeWithText("Download debug bundle").assertIsNotEnabled()
+    }
+    @Test fun activeRunShowsWaitGuidanceAndCannotStartAnotherRetry() {
+        compose.setContent { CloakTheme { BindingRunCard(run.copy(active = true), true, {}, {}) } }
+        compose.onNodeWithText("bind · in progress").assertIsDisplayed()
+        compose.onNodeWithText("This run is active.", substring = true).assertIsDisplayed()
+        compose.onNodeWithText("Retry reconciliation").assertDoesNotExist()
+    }
+    @Test fun expiredApprovalShowsCauseAndOneRetry() {
+        compose.setContent { CloakTheme { BindingRunCard(run, true, {}, {}) } }
+        compose.onNodeWithText("The approval or confirmation window expired.", substring = true).assertIsDisplayed()
+        compose.onNodeWithText("Retry reconciliation").assertIsEnabled()
     }
 }

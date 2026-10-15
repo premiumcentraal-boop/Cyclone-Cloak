@@ -56,6 +56,17 @@ class RunEventCapture {
     }
 }
 
+/** Counts and fixed codes only; never reconciliation's free-text issue values. */
+data class RunReconciliation(val written: Int, val statuses: Int, val cleared: Int, val issues: Int, val stoppedBy: String?) {
+    fun json(): JSONObject = JSONObject().put("written", written.coerceAtLeast(0)).put("statuses", statuses.coerceAtLeast(0))
+        .put("cleared", cleared.coerceAtLeast(0)).put("issues", issues.coerceAtLeast(0))
+        .put("stopped_by", stoppedBy?.let(DiagnosticPrivacy::code) ?: JSONObject.NULL)
+    companion object {
+        fun parse(j: JSONObject) = RunReconciliation(j.getInt("written"), j.getInt("statuses"), j.getInt("cleared"),
+            j.getInt("issues"), if (j.isNull("stopped_by")) null else DiagnosticPrivacy.code(j.getString("stopped_by")))
+    }
+}
+
 data class BindingRun(
     val id: String = UUID.randomUUID().toString(), val timestamp: Long = System.currentTimeMillis(),
     val operation: RunOperation, val targets: List<RunTarget>, val outcome: RunOutcome = RunOutcome.NEEDS_ATTENTION,
@@ -63,12 +74,17 @@ data class BindingRun(
     val events: List<JSONObject> = emptyList(), val eventsDropped: Int = 0,
     val appVersion: String? = null, val moduleVersion: String? = null, val moduleCode: String? = null,
     val connectorMinor: Int? = null, val connectorApproved: Boolean? = null,
+    val active: Boolean = false, val retryOf: String? = null, val reconciliation: RunReconciliation? = null,
 ) {
     val end: Long get() = timestamp + durationMs
     fun json(): JSONObject = JSONObject().put("schema_version", 1).put("run_id", id)
         .put("timestamp", timestamp).put("operation", operation.name).put("targets", JSONArray(targets.map { it.json() }))
         .put("outcome", outcome.label).put("reason_codes", JSONArray(reasons.distinct().map(DiagnosticPrivacy::code)))
         .put("duration_ms", durationMs).put("events_dropped", eventsDropped)
+        .put("active", active).put("end_timestamp", if (active) JSONObject.NULL else end)
+        .put("first_failure_reason", reasons.firstOrNull()?.let(DiagnosticPrivacy::code) ?: JSONObject.NULL)
+        .put("retry_of", retryOf?.takeIf { runCatching { UUID.fromString(it) }.isSuccess } ?: JSONObject.NULL)
+        .put("reconciliation", reconciliation?.json() ?: JSONObject.NULL)
         .put("app_version", appVersion?.let(DiagnosticPrivacy::version) ?: JSONObject.NULL)
         .put("module_version", moduleVersion?.let(DiagnosticPrivacy::version) ?: JSONObject.NULL)
         .put("module_code", moduleCode?.let(DiagnosticPrivacy::code) ?: JSONObject.NULL)
@@ -94,13 +110,16 @@ data class BindingRun(
                 j.optString("module_version").takeIf { !j.isNull("module_version") }?.let(DiagnosticPrivacy::version),
                 j.optString("module_code").takeIf { !j.isNull("module_code") }?.let(DiagnosticPrivacy::code),
                 if (j.isNull("connector_minor")) null else j.getInt("connector_minor"),
-                if (j.isNull("connector_approved")) null else j.getBoolean("connector_approved"))
+                if (j.isNull("connector_approved")) null else j.getBoolean("connector_approved"),
+                j.optBoolean("active", false), j.optString("retry_of").takeIf { !j.isNull("retry_of") && runCatching { UUID.fromString(it) }.isSuccess },
+                j.optJSONObject("reconciliation")?.let(RunReconciliation::parse))
         }
     }
 }
 
 /** Four append-only segments, at most 50 records/2 MiB each, newest 200 retained. */
-class BindingRunJournal(private val directory: File, private val segmentRuns: Int = 50, private val fileCap: Int = 2 * 1024 * 1024) {
+class BindingRunJournal(private val directory: File, private val segmentRuns: Int = 50, private val fileCap: Int = 2 * 1024 * 1024,
+                        private val now: () -> Long = System::currentTimeMillis) {
     private val mutable = MutableStateFlow<List<BindingRun>>(emptyList())
     val runs = mutable.asStateFlow()
     val failures = MutableStateFlow(0)
@@ -109,28 +128,41 @@ class BindingRunJournal(private val directory: File, private val segmentRuns: In
         mutable.value = read()
         runCatching {
             val pending = File(directory, "pending.json")
-            if ((pending.isFile || File(directory, "pending.json.bak").isFile) && pending.length() <= fileCap) {
-                val text = android.util.AtomicFile(pending).openRead().use { input ->
+            val backup = File(directory, "pending.json.bak")
+            if (backup.isFile) {
+                require(backup.length() <= fileCap)
+                java.nio.file.Files.move(backup.toPath(), pending.toPath(), java.nio.file.StandardCopyOption.ATOMIC_MOVE,
+                    java.nio.file.StandardCopyOption.REPLACE_EXISTING)
+            }
+            if (pending.isFile && pending.length() <= fileCap) {
+                val text = pending.inputStream().use { input ->
                     require(input.channel.size() <= fileCap); input.readBytes().toString(Charsets.UTF_8)
                 }
                 val run = BindingRun.parse(JSONObject(text))
-                if (mutable.value.none { it.id == run.id }) append(run.copy(reasons = listOf("INTERRUPTED")))
-                pending.delete()
+                if (mutable.value.none { it.id == run.id }) append(run.copy(active = false, reasons = (run.reasons + "INTERRUPTED").distinct(),
+                    durationMs = (now() - run.timestamp).coerceAtLeast(0)))
+                else pending.delete() // append removes the checkpoint only after a durable journal write.
             }
         }.onFailure { failures.value++ }
     }
     @Synchronized fun begin(run: BindingRun) = safely {
         directory.mkdirs()
-        val pending = android.util.AtomicFile(File(directory, "pending.json"))
-        val bytes = run.json().toString().toByteArray(Charsets.UTF_8)
+        val pending = File(directory, "pending.json")
+        val staged = File(directory, "pending.json.new")
+        val active = run.copy(active = true)
+        val bytes = active.json().toString().toByteArray(Charsets.UTF_8)
         require(bytes.size <= fileCap)
-        val stream = pending.startWrite()
-        try { stream.write(bytes); pending.finishWrite(stream) }
-        catch (e: Exception) { pending.failWrite(stream); throw e }
+        try {
+            staged.outputStream().use { it.write(bytes); it.fd.sync() }
+            // A checked atomic replacement: failure retains the last complete checkpoint.
+            java.nio.file.Files.move(staged.toPath(), pending.toPath(), java.nio.file.StandardCopyOption.ATOMIC_MOVE,
+                java.nio.file.StandardCopyOption.REPLACE_EXISTING)
+        } catch (e: Exception) { staged.delete(); throw e }
+        mutable.value = (mutable.value.filterNot { it.id == run.id } + active).sortedBy { it.timestamp }.takeLast(200)
     }
     @Synchronized fun append(run: BindingRun) = safely {
         directory.mkdirs()
-        val bytes = (run.json().toString() + "\n").toByteArray(Charsets.UTF_8)
+        val bytes = (run.copy(active = false).json().toString() + "\n").toByteArray(Charsets.UTF_8)
         require(bytes.size <= fileCap)
         val current = File(directory, "runs.jsonl")
         val count = if (current.isFile && current.length() <= fileCap) current.useLines { it.count() } else 0

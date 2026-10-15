@@ -8,6 +8,7 @@ import kotlin.random.Random
 
 enum class ReconnectReason { PROCESS_START, RESUME, REGISTRY_CHANGE, MODULE_STATE_CHANGE, SELF_UPDATE, CYCLONE_PACKAGE_CHANGE, MANUAL }
 enum class ConnectionPhase { CONNECTED, RECONNECTING, NEEDS_UPDATE, NOT_INSTALLED, NEEDS_APPROVAL, PAUSED }
+enum class ConnectionState { CONNECTED, RETRYING, WAITING_FOR_USER, FAILED }
 
 data class ConnectionStatus(
     val phase: ConnectionPhase = ConnectionPhase.RECONNECTING,
@@ -18,13 +19,19 @@ data class ConnectionStatus(
     val report: SyncReport? = null,
     val provider: String = "not registered",
 ) {
+    val state: ConnectionState get() = when (phase) {
+        ConnectionPhase.CONNECTED -> ConnectionState.CONNECTED
+        ConnectionPhase.RECONNECTING -> ConnectionState.RETRYING
+        ConnectionPhase.PAUSED -> ConnectionState.FAILED
+        else -> ConnectionState.WAITING_FOR_USER
+    }
     val label: String get() = when (phase) {
         ConnectionPhase.CONNECTED -> "Connected"
         ConnectionPhase.RECONNECTING -> "Reconnecting (attempt ${attempt.coerceAtLeast(1)})"
         ConnectionPhase.NEEDS_UPDATE -> "Needs update"
         ConnectionPhase.NOT_INSTALLED -> "Not installed"
         ConnectionPhase.NEEDS_APPROVAL -> "Needs approval"
-        ConnectionPhase.PAUSED -> "Connection paused"
+        ConnectionPhase.PAUSED -> "Connection failed"
     }
 }
 
@@ -32,7 +39,7 @@ data class ReconnectOutcome(val report: SyncReport, val provider: String = "not 
     val phase: ConnectionPhase get() = when {
         !installed -> ConnectionPhase.NOT_INSTALLED
         report.failureCode in setOf("CLOAK_NEEDS_UPDATE", "CYCLONE_NEEDS_UPDATE", "HANDSHAKE_INVALID", "UNSUPPORTED_CONTRACT", "CONTRACT_MISMATCH") -> ConnectionPhase.NEEDS_UPDATE
-        report.headline == "Needs approval" -> ConnectionPhase.NEEDS_APPROVAL
+        report.headline == "Needs approval" || report.failureCode in setOf("NOT_APPROVED", "SCOPE_NOT_GRANTED", "APPROVAL_EXPIRED", "CONFIRMATION_EXPIRED") -> ConnectionPhase.NEEDS_APPROVAL
         report.gate != null && report.gate.minor < 1 -> ConnectionPhase.NEEDS_UPDATE
         report.headline == "Connected" && provider != "failed" -> ConnectionPhase.CONNECTED
         else -> ConnectionPhase.RECONNECTING
@@ -41,7 +48,9 @@ data class ReconnectOutcome(val report: SyncReport, val provider: String = "not 
         report.failureCode !in setOf("SCOPE_NOT_GRANTED", "BAD_REQUEST", "NOT_APPROVED")
     val detail: String get() = when {
         !installed -> "Install or enable Cyclone in this Android profile, then retry."
-        report.headline == "Needs approval" -> OpenRequests.APPROVE_LINE
+        report.failureCode in setOf("APPROVAL_EXPIRED", "CONFIRMATION_EXPIRED") -> "The approval window expired. Open Cyclone, finish the pending confirmation, then tap Retry."
+        report.headline == "Needs approval" || report.failureCode == "NOT_APPROVED" -> OpenRequests.APPROVE_LINE
+        report.failureCode == "SCOPE_NOT_GRANTED" -> "Allow the requested connector scopes in Cyclone → Settings → Connectors, then tap Retry."
         report.failureCode == "CYCLONE_NOT_FOUND" -> "Cyclone is installed but its connector service is unavailable. Open or update Cyclone, then retry."
         report.gate != null && report.gate.minor < 1 -> "Cyclone connector minor ${report.gate.minor} is too old. Update Cyclone; Cloak needs minor 1 or newer for binding."
         else -> report.message.ifBlank { "Open Cyclone in this Android profile, then retry." }
@@ -92,7 +101,8 @@ class ReconnectCoordinator(
 
     private fun enqueue(delay: Long) {
         scheduled = true
-        mutable.value = mutable.value.copy(phase = ConnectionPhase.RECONNECTING, attempt = attempts + 1)
+        mutable.value = mutable.value.copy(phase = ConnectionPhase.RECONNECTING, attempt = attempts + 1,
+            detail = "Reconnecting to Cyclone. Wait for this attempt to finish; no additional tap is needed.")
         scheduler.schedule(delay, ::attempt)
     }
 

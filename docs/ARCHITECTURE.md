@@ -247,6 +247,51 @@ existing publication/synchronization for the retained target without rewriting
 its bindings; a changed or removed selected target returns to review. Connector, sync
 engine, runtime module and storage formats are unchanged by this UI workflow.
 
+## Connection and binding-run evidence
+
+The process-owned `ConnectionLifecycle` continues to use one
+`ReconnectCoordinator` and `CycloneBridge`. Its connection-only refresh opts out
+of root reads and publication, including on resume and manual reconnect. This
+keeps a previously approved connector from waiting on a separate Magisk prompt.
+Explicit repair and binding operations retain their existing privileged-session
+path. Connection status has one operator state: connected, retrying, waiting for
+user action, or failed after bounded retries. The status dialog shows one next
+step and hides Retry while an attempt is active. Cached registry rows remain
+visible during retries; cached data never grants authorization.
+
+Health → Runs uses the existing `binding-runs` journal and atomic `pending.json`.
+An active row is visible from the start, with approval-wait guidance when the
+session reports a wait. Checkpoints retain the selected targets and captured
+evidence after local writes, publication, and synchronization. A process restart
+converts an unfinished checkpoint into a needs-attention record with
+`INTERRUPTED`; its end time is the recovery observation time, not a claimed
+exact process-death time. Completed records remain append-only and bounded.
+
+Each record includes start/end time, duration, targets, final state, first failure
+code, publication phase markers, historical handshake facts, and reconciliation
+counts when available. New fields are optional in the existing schema-version-1
+envelope; earlier journal entries remain readable. Retry of an unchanged saved
+target runs publication and synchronization without recreating bindings. An
+unsaved bind returns to review with its selection retained; changed or ambiguous
+records require review. A still-valid in-memory review acknowledgement is reused.
+Retrying a saved run from history links the new attempt with `retry_of`.
+
+Readiness requires publication and reconciliation evidence. The bridge observes
+later publication attempts during sync, so a failed final publication cannot be
+masked by an earlier successful one. Expired root/connector approval windows have
+fixed retry guidance. Missing evidence never implies success.
+
+Per-run and 24-hour ZIPs contain seven JSON files: `manifest.json`, `runs.json`,
+`diagnostics.json`, `bindings-index.json`, `module-state.json`,
+`connector-handshake.json`, and `reconciliation.json`. The last file contains
+historical counts and fixed failure codes, never free-text issue values.
+Diagnostics are limited to the requested time window; a still-active run can be
+included through export time. Bindings and top-level module/connector snapshots
+describe export time, while run observations describe the recorded attempt.
+Module-state SHA-256 describes observed state, not the installed binary. Exports
+exclude profile bodies, seeds, credentials, and raw shell/connector output.
+No platform verdict or device-verification claim follows from a run record.
+
 ## Local profile backups
 
 `forge/ProfileBackup` defines a profile-only portable envelope with a schema/app

@@ -125,7 +125,9 @@ internal fun BindingFlowScreen(
                 Text(if (outcome?.ready == true) "Binding ready" else if (outcome?.saved == true) "Saved · needs attention" else "Binding not completed",
                     style = MaterialTheme.typography.titleMedium)
                 Text(outcome?.message ?: "Saving and checking the binding…")
-                if (outcome?.saved == true && !outcome.ready) Button(onClick = onRetry, enabled = !locked) { Text("Retry reconciliation") }
+                if (outcome != null && !outcome.ready) Button(onClick = onRetry, enabled = !locked) {
+                    Text(if (outcome.saved) "Retry reconciliation" else "Retry binding")
+                }
                 if (outcome?.ready != true) TextButton(onClick = onBack, enabled = !locked) { Text("Return to review") }
             }
             Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {

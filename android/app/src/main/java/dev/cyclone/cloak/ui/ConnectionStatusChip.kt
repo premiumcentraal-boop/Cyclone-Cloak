@@ -22,7 +22,8 @@ internal fun ConnectionStatusChip(state: ConnectionStatus, onRetry: () -> Unit) 
         }
     }
     if (details) AlertDialog(onDismissRequest = { details = false }, title = { Text(state.label) },
-        text = { Text("${state.detail}\nReason: ${state.reason}\nAttempt: ${state.attempt}\nCached profiles are display-only until Cyclone answers.") },
-        confirmButton = { TextButton(onClick = { details = false; onRetry() }) { Text("Retry") } },
+        text = { Text(state.detail) },
+        confirmButton = { if (state.state != dev.cyclone.cloak.cyclone.ConnectionState.RETRYING)
+            TextButton(onClick = { details = false; onRetry() }) { Text("Retry") } },
         dismissButton = { TextButton(onClick = { details = false }) { Text("Close") } })
 }

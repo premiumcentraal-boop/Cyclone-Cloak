@@ -142,6 +142,8 @@ class BindingFlowTest {
         assertFalse(BindingFlow.completion(draft, RootDoctorResult(RootDoctorCode.PUBLISH_FAILED), report(draft), records).ready)
         assertFalse(BindingFlow.completion(draft, RootDoctorResult(RootDoctorCode.READY), report(draft, stopped = "NOT_A_CONNECTOR"), records).ready)
         assertFalse(BindingFlow.completion(draft, RootDoctorResult(RootDoctorCode.READY), null, records).ready)
+        assertFalse(BindingFlow.completion(draft, RootDoctorResult(RootDoctorCode.READY),
+            report(draft).copy(failureCode = "CYCLONE_NOT_ANSWERING"), records).ready)
         assertFalse(BindingFlow.completion(draft, RootDoctorResult(RootDoctorCode.READY), report(draft), listOf(held(draft, "pending"))).ready)
     }
     @Test fun changedOrRemovedSavedTargetCannotClaimSuccess() {

@@ -20,7 +20,7 @@ import java.util.zip.ZipOutputStream
 
 object BindingRunBundle {
     fun window(runs: List<BindingRun>, since: Long, until: Long): List<BindingRun> =
-        runs.filter { it.timestamp <= until && it.end >= since }.sortedBy { it.timestamp }
+        runs.filter { it.timestamp <= until && (it.active || it.end >= since) }.sortedBy { it.timestamp }
 
     /** Export an allowlisted projection, never raw binding JSON or mirrored identity summaries. */
     fun build(runs: List<BindingRun>, recent: List<DiagnosticEvent>, bindings: List<CloakBinding>, root: RootDoctorResult,
@@ -43,6 +43,11 @@ object BindingRunBundle {
                 .put("evidence_limits", JSONArray(listOf("Bounded local retention; missing events are not proof of success.",
                     "Snapshots describe export time, not necessarily run time.", "Local evidence only; no platform verdict."))),
             "runs.json" to JSONObject().put("runs", JSONArray(selected.map { it.json() })),
+            "reconciliation.json" to JSONObject().put("run_observations", JSONArray(selected.map { run ->
+                JSONObject().put("run_id", run.id).put("active", run.active)
+                    .put("summary", run.reconciliation?.json() ?: JSONObject.NULL)
+                    .put("first_failure_reason", run.reasons.firstOrNull()?.let(DiagnosticPrivacy::code) ?: JSONObject.NULL)
+            })),
             "diagnostics.json" to JSONObject().put("window_start", since).put("window_end", until)
                 .put("events", JSONArray(events)).put("retained_run_events_dropped", selected.sumOf { it.eventsDropped }),
             "bindings-index.json" to JSONObject().put("captured_at", capturedAt).put("snapshot_type", "current_local_bindings_projection")

@@ -5,6 +5,9 @@ import dev.cyclone.cloak.data.CloakBinding
 import dev.cyclone.cloak.root.*
 import dev.cyclone.cloak.ui.BindingRunResult
 import dev.cyclone.cloak.ui.bindingRunTarget
+import dev.cyclone.cloak.ui.BindingRunFeedback
+import dev.cyclone.cloak.ui.BindingRunRetry
+import dev.cyclone.cloak.ui.RunRetry
 import org.junit.Assert.*
 import org.junit.Test
 
@@ -46,5 +49,52 @@ class BindingRunResultTest {
         assertEquals(RunOutcome.NEEDS_ATTENTION, result.outcome)
         assertTrue("RECONCILIATION_ISSUE" in result.reasons); assertTrue("RECONCILIATION_NOT_VERIFIED" in result.reasons)
         assertFalse(result.json().toString().contains("private details"))
+    }
+    @Test fun expiredApprovalKeepsSelectionAndOffersDirectRetry() {
+        val result = healthy().apply { root = RootDoctorResult(RootDoctorCode.ROOT_TIMEOUT) }
+            .complete(run, emptyList(), 30000, RunEventCapture())
+        assertEquals("ROOT_TIMEOUT", result.reasons.first())
+        assertEquals(run.targets, result.targets)
+        assertTrue(BindingRunFeedback.message(result).contains("expired"))
+        assertEquals(RunRetry.REVIEW, BindingRunRetry.plan(result, emptyList()))
+    }
+    @Test fun partialSavedRunRetriesExistingRecordsWithoutRecreatingThem() {
+        val pending = binding.copy(state = "pending")
+        val records = listOf(pending)
+        val failed = healthy().apply { root = RootDoctorResult(RootDoctorCode.PUBLISH_FAILED) }
+            .complete(run, records, 10, RunEventCapture())
+        assertEquals(RunRetry.RECONCILE, BindingRunRetry.plan(failed, records))
+        assertEquals(listOf(pending), records)
+        assertEquals(RunOutcome.READY, healthy().complete(run.copy(operation = RunOperation.RETRY_RECONCILIATION,
+            retryOf = failed.id), listOf(binding), 10, RunEventCapture()).outcome)
+        assertEquals(RunRetry.BLOCKED, BindingRunRetry.plan(failed, listOf(binding.copy(cloakProfileId = "aaaaaaaaaaaaaaaa"))))
+    }
+    @Test fun connectorFailureAfterPublicationNeverClaimsReady() {
+        val result = healthy().apply { report = SyncReport.failed("CYCLONE_NOT_ANSWERING", "private details") }
+            .complete(run, listOf(binding), 10, RunEventCapture())
+        assertEquals(RunOutcome.NEEDS_ATTENTION, result.outcome)
+        assertEquals("CYCLONE_NOT_ANSWERING", result.reasons.first())
+        assertTrue(BindingRunFeedback.message(result).contains("Reconnect"))
+        assertFalse(result.json().toString().contains("private details"))
+    }
+    @Test fun finalPublicationFailureOverridesSuccessfulReconciliation() {
+        val result = healthy().apply { root = RootDoctorResult(RootDoctorCode.PUBLISH_FAILED,
+            publicationReason = PublicationReason.FAILED) }.complete(run, listOf(binding), 10, RunEventCapture())
+        assertEquals(RunOutcome.FAILED, result.outcome)
+        assertEquals("FAILED", result.reasons.first())
+    }
+    @Test fun activeAndEmptySelectionsCannotBeRetried() {
+        assertEquals(RunRetry.BLOCKED, BindingRunRetry.plan(run.copy(active = true), listOf(binding)))
+        assertEquals(RunRetry.BLOCKED, BindingRunRetry.plan(run.copy(targets = run.targets.map { it.copy(packages = emptyList()) }), emptyList()))
+    }
+    @Test fun checkpointsRetainFirstObservedFailureWithoutPrivateErrorText() {
+        val capture = RunEventCapture().apply { accept(DiagnosticEvent(1, Severity.ERROR, "app", "connector", "request",
+            "1", "2", null, Transition.FAILED, "CONFIRMATION_EXPIRED", null, null)) }
+        val observation = healthy().apply { root = RootDoctorResult(RootDoctorCode.PUBLISH_FAILED) }
+        val checkpoint = observation.snapshot(run, 10, capture)
+        assertEquals("CONFIRMATION_EXPIRED", checkpoint.reasons.first())
+        val completed = observation.complete(run, listOf(binding), 10, capture)
+        assertEquals(checkpoint.reasons.first(), completed.reasons.first())
+        assertTrue(BindingRunFeedback.message(completed).contains("expired"))
     }
 }

@@ -149,4 +149,29 @@ class ReconnectCoordinatorTest {
         assertEquals(listOf("STARTED", "CONNECTED"), events.map { it.third })
         assertTrue(events.all { it.first == ReconnectReason.MODULE_STATE_CHANGE && it.second == 1 })
     }
+    @Test fun expiredConfirmationWaitsForUserWithoutAutomaticRepeat() {
+        val scheduler = Scheduler()
+        var calls = 0
+        val c = ReconnectCoordinator({ calls++; ReconnectOutcome(SyncReport.failed("CONFIRMATION_EXPIRED", "private details")) }, scheduler)
+        c.trigger(ReconnectReason.PROCESS_START); scheduler.runNext()
+        assertEquals(ConnectionState.WAITING_FOR_USER, c.state.value.state)
+        assertTrue(c.state.value.detail.contains("expired"))
+        assertFalse(c.state.value.detail.contains("private details"))
+        assertEquals(1, calls); assertTrue(scheduler.jobs.isEmpty())
+    }
+    @Test fun rootOptOutDoesNotEvenConsultPreviousApproval() {
+        var checks = 0
+        assertFalse(CycloneBridge.rootAllowed(false, true) { checks++; true })
+        assertFalse(CycloneBridge.rootAllowed(false, false) { checks++; true })
+        assertEquals(0, checks)
+        assertTrue(CycloneBridge.rootAllowed(true, false) { checks++; true })
+        assertEquals(1, checks)
+    }
+    @Test fun stateHasOneOperatorMeaningAcrossAllPhases() {
+        assertEquals(ConnectionState.CONNECTED, ConnectionStatus(ConnectionPhase.CONNECTED).state)
+        assertEquals(ConnectionState.RETRYING, ConnectionStatus(ConnectionPhase.RECONNECTING).state)
+        assertEquals(ConnectionState.FAILED, ConnectionStatus(ConnectionPhase.PAUSED).state)
+        for (phase in listOf(ConnectionPhase.NEEDS_UPDATE, ConnectionPhase.NOT_INSTALLED, ConnectionPhase.NEEDS_APPROVAL))
+            assertEquals(ConnectionState.WAITING_FOR_USER, ConnectionStatus(phase).state)
+    }
 }

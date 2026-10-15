@@ -43,7 +43,8 @@ internal fun BindingRunsSection(state: CloakState, onRetry: (BindingRun) -> Unit
                 val now = System.currentTimeMillis()
                 LogBus.registry.flush()
                 val files = BindingRunBundle.build(run?.let { listOf(it) } ?: runs, LogBus.registry.events(), CloakBindingStore.all(context),
-                    state.rootDoctor, state.report, appVersion, run?.timestamp ?: (now - 86_400_000), run?.end ?: now, now, failures)
+                    state.rootDoctor, state.report, appVersion, run?.timestamp ?: (now - 86_400_000),
+                    run?.takeUnless { it.active }?.end ?: now, now, failures)
                 RunBundleShare.prepare(context, BindingRunBundle.zip(files))
             } }
             message = if (result.isSuccess) {
@@ -78,8 +79,10 @@ internal fun BindingRunCard(run: BindingRun, enabled: Boolean, onRetry: () -> Un
     }
     Card(Modifier.fillMaxWidth(), colors = CardDefaults.cardColors(containerColor = color)) {
         Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(4.dp)) {
-            Text("${run.operation.name.lowercase().replace('_', ' ')} · ${run.outcome.label}", style = MaterialTheme.typography.titleSmall)
-            Text("${Instant.ofEpochMilli(run.timestamp)} · ${run.durationMs} ms", style = MaterialTheme.typography.bodySmall)
+            Text("${run.operation.name.lowercase().replace('_', ' ')} · ${if (run.active) "in progress" else run.outcome.label}", style = MaterialTheme.typography.titleSmall)
+            Text("Started ${Instant.ofEpochMilli(run.timestamp)} · " + if (run.active) "not finished" else
+                "Ended ${Instant.ofEpochMilli(run.end)} · ${run.durationMs} ms", style = MaterialTheme.typography.bodySmall)
+            Text(BindingRunFeedback.message(run), style = MaterialTheme.typography.bodySmall)
             TextButton(onClick = { expanded = !expanded }) { Text(if (expanded) "Hide run details" else "Review run details") }
             if (expanded) {
                 Text("Run ${run.id}")
@@ -89,13 +92,14 @@ internal fun BindingRunCard(run: BindingRun, enabled: Boolean, onRetry: () -> Un
                         "Apps: ${target.packages.joinToString()}\nDevice profile: ${target.deviceProfileId}")
                 }
                 Text("Reasons: ${run.reasons.joinToString().ifBlank { "none" }}")
+                run.reconciliation?.let { Text("Reconciliation: ${it.written} written · ${it.cleared} cleared · ${it.issues} issues") }
                 val phases = run.json().getJSONArray("publication_phases")
                 Text("Publication phases: " + if (phases.length() == 0) "not observed" else (0 until phases.length()).joinToString("\n") {
                     phases.getJSONObject(it).let { phase -> "${phase.getString("phase")}: ${phase.getString("state")}" }
                 })
                 if (run.eventsDropped > 0) Text("${run.eventsDropped} events exceeded this run's retention limit.")
             }
-            if (run.outcome != RunOutcome.READY) TextButton(enabled = enabled, onClick = onRetry) { Text("Retry reconciliation") }
+            if (!run.active && run.outcome != RunOutcome.READY) TextButton(enabled = enabled, onClick = onRetry) { Text("Retry reconciliation") }
             TextButton(enabled = enabled, onClick = onExport) { Text("Download debug bundle") }
         }
     }

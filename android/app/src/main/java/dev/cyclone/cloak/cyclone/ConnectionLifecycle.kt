@@ -19,11 +19,12 @@ object ConnectionLifecycle {
         coordinator?.let { return it }
         val app = context.applicationContext
         val cache = RegistryCache(app)
-        return ReconnectCoordinator(connect = { reason ->
+        return ReconnectCoordinator(connect = { _ ->
             val installed = CycloneConnector.isCycloneInstalled(app)
             var provider = "not registered"
             var report = if (!installed) SyncReport.failed("CYCLONE_NOT_FOUND", "Install Cyclone in this Android profile.")
-                else CycloneBridge.sync(app, foreground = reason == ReconnectReason.MANUAL || reason == ReconnectReason.RESUME) { cyclone, result ->
+                // Reconnection never reopens a root approval window, even on resume/manual retry.
+                else CycloneBridge.sync(app, foreground = false, allowRoot = false) { cyclone, result ->
                     val gate = result.gate
                     provider = when {
                         gate?.approved != true -> "not registered"
