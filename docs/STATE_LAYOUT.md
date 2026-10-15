@@ -67,6 +67,17 @@ post-swap check rolls the uncommitted candidate back as well. If rollback also f
 reader keys change. A failed merge can leave a completed publisher share pending
 for the next merge; the currently published complete tree remains authoritative.
 
+Since alpha.14, each publisher's key directories are copied into the candidate in
+one `cp` invocation. Existing candidate keys are removed before an overriding
+share is copied, so whole-key replacement and Main precedence are unchanged.
+Staging remains a separate copy; source profiles and shares are not hard-linked.
+Privilege preflight retains its 30-second budget. Granted publication work uses
+a fixed 120-second shared deadline anchored to the grant, including when invoked
+through the batch session. A timeout after confirmed root access is publication
+failure rather than an approval failure. Locking and recovery remain unchanged.
+The runtime excludes `dev.cyclone.cloak` before profile lookup, independently of
+Android user, without deleting self-binding records from any store or index.
+
 The swap retains the existing two-rename reader contract. There can be a brief
 interval with no `state-v1`, and a failed rollback leaves it unavailable until
 recovery succeeds. This does not provide power-loss durability or coordination

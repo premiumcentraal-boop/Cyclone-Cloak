@@ -11,17 +11,16 @@ not prove that every inspection API sees it.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.11.0-alpha.13 (prerelease)
+## Status: 0.11.0-alpha.14 (prerelease)
 
-Alpha.13 hardens connector reconnection and binding-run recovery. Reconnect
-avoids root approval waits; active runs retain checkpoints and actionable failure
-reasons. Health → Runs exports redacted reconciliation summaries alongside the
-existing diagnostics. App/module code 37.
-[Release notes](docs/RELEASE_0.11.0-alpha.13.md) cover compatibility and pending
-device checks. Existing profile/binding schemas, connector protocol, publication
-scripts, permissions and runtime/module behavior are unchanged. Earlier evidence
-remains specific to its measured artifact. Alpha.13 device verification is
-UNVERIFIED. Local evidence is not a platform verdict.
+Alpha.14 fixes the granted publication budget for large binding batches, reduces
+merge copy processes to one per publisher, and excludes the companion package
+from its own runtime hooks. App/module code 38.
+[Release notes](docs/RELEASE_0.11.0-alpha.14.md) describe the changes and pending
+device checks. Profile/binding schemas, storage layout, connector protocol and
+permissions are unchanged. Physical-device timeout and Health stability checks
+are UNVERIFIED for this artifact. Earlier evidence remains artifact-specific.
+Local evidence is not a platform verdict.
 See [CURRENT-STATE.md](docs/CURRENT-STATE.md).
 
 - **Companion app** (`android/app`): a Cyclone connector (contract `cyclone.connector/1.3`, Cyclone

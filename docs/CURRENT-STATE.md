@@ -1,22 +1,22 @@
 # Current state
 
-Updated 2026-10-15. **v0.11.0-alpha.13 / versionCode 37** is the
-[latest prerelease](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.13).
-[Alpha.13 notes](RELEASE_0.11.0-alpha.13.md) describe root-free reconnect,
-recoverable binding-run checkpoints, retained retry selections, and redacted
-reconciliation summaries. Post-boot reconnect depends on Cyclone wake or the
-next launch/resume; no boot permission was added. Alpha.13 device verification,
-including prompt timing and the share chooser, is pending. Earlier Alpha.9
-publication evidence remains specific to its artifact; see
-[its handoff](HANDOFF-2026-10-14-ALPHA9-PUBLICATION-PROOF.md).
-Runtime hooks and profile/binding reader formats are unchanged.
+Updated 2026-10-16. **v0.11.0-alpha.14 / versionCode 38** is the
+[latest prerelease](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.14).
+[Alpha.14 notes](RELEASE_0.11.0-alpha.14.md) cover the fixed granted-work deadline,
+merge copy batching and runtime exclusion of the companion package. Approval
+retains its 30-second preflight budget; publication work shares a fixed
+120-second deadline anchored to privilege grant. Post-grant publication timeout
+is reported as a publication failure. No stored profile or binding is rewritten.
+Physical-device large-batch timing and Health stability remain UNVERIFIED for
+this artifact. Earlier device evidence does not automatically verify it.
+No platform verdict is claimed.
 
 ## Versions and major components
 
 | Component | Current source version / responsibility |
 | --- | --- |
-| App | `dev.cyclone.cloak`, `0.11.0-alpha.13`, code 37; minimum API 29, target/compile API 36 |
-| Module | `cyclone_cloak`, `v0.11.0-alpha.13`, code 37; ARM64/ARMv7, minimum API 26; native property callback path added on main |
+| App | `dev.cyclone.cloak`, `0.11.0-alpha.14`, code 38; minimum API 29, target/compile API 36 |
+| Module | `cyclone_cloak`, `v0.11.0-alpha.14`, code 38; ARM64/ARMv7, minimum API 26; native property callback path added on main |
 | Profile | Schema `0.3`, legacy `0.2` accepted; existing JSON storage unchanged |
 | Binding / reader | Binding schema 2; module index `schemaVersion: 2`; existing key lookup unchanged |
 | Connector | `cyclone.connector/1.3`; Cyclone 5.0.0-alpha.122 or newer |
