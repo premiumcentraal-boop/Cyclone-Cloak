@@ -142,4 +142,17 @@ class CloakRootDoctorTest {
         }
         return archive
     }
+    @Test fun publicationTimeoutAfterRootSuccessDoesNotBlameApproval() {
+        val result = CloakRootDoctor.publicationTimeoutResult("CLOAK_ROOT=OK\nCLOAK_PHASE=MERGE:STARTED")
+        assertEquals(RootDoctorCode.PUBLISH_FAILED, result.code)
+        assertEquals(PublicationReason.FAILED, result.publicationReason)
+        assertTrue(result.message.contains("time budget"))
+        assertFalse(result.message.contains("approval"))
+        assertFalse(result.published)
+    }
+
+    @Test fun publicationTimeoutBeforeRootResponseStillExplainsApproval() {
+        assertEquals(RootDoctorCode.ROOT_TIMEOUT, CloakRootDoctor.publicationTimeoutResult("").code)
+    }
+
 }

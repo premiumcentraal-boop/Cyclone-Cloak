@@ -6,7 +6,7 @@ import java.util.UUID
 import java.util.concurrent.LinkedBlockingQueue
 import java.util.concurrent.TimeUnit
 
-/** One su grant and one deadline for a synchronous batch. Scripts run unchanged in child sh shells. */
+/** One su grant with bounded approval and granted-work budgets. Scripts run unchanged in child sh shells. */
 class PrivilegedSession(
     budgetMs: Long = 30_000,
     private val waiting: () -> Unit = {},
@@ -14,7 +14,9 @@ class PrivilegedSession(
     startProcess: () -> Process = { ProcessBuilder("su", "--mount-master").redirectErrorStream(true).start() },
 ) : Closeable {
     data class Result(val output: String, val exitCode: Int?, val timedOut: Boolean)
-    private val deadline = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(budgetMs)
+    private var deadline = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(budgetMs)
+    private var grantedAt: Long? = null
+    private var expired = false
     private val process = startProcess()
     private val writer = process.outputStream.bufferedWriter()
     private val lines = LinkedBlockingQueue<String>(1024)
@@ -32,8 +34,21 @@ class PrivilegedSession(
     }.apply { isDaemon = true; this.start() }
 
     @Synchronized
-    fun execute(script: String, maxOutput: Int = 4096): Result {
-        if (System.nanoTime() >= deadline) return Result("", null, true)
+    fun execute(script: String, maxOutput: Int = 4096): Result = executeCommand(script, maxOutput, true)
+
+    /** Approval keeps its original budget. Granted work shares a fixed deadline, never reset per command. */
+    @Synchronized
+    internal fun executeWithBudget(script: String, timeoutMs: Long, maxOutput: Int = 4096): Result {
+        if (expired) return Result("", null, true)
+        grantedAt?.let { deadline = maxOf(deadline, it + TimeUnit.MILLISECONDS.toNanos(timeoutMs)) }
+        return executeCommand(script, maxOutput, false)
+    }
+
+    private fun executeCommand(script: String, maxOutput: Int, notifyApproval: Boolean): Result {
+        if (expired || System.nanoTime() >= deadline) {
+            expired = true
+            return Result("", null, true)
+        }
         val marker = "CLOAK_SESSION_${UUID.randomUUID().toString().replace("-", "")}:"
         val quoted = "'" + script.replace("'", "'\\''") + "'"
         try {
@@ -45,7 +60,10 @@ class PrivilegedSession(
         val started = System.nanoTime()
         while (true) {
             val remaining = deadline - System.nanoTime()
-            if (remaining <= 0) return Result(output.toString().trim(), null, true)
+            if (remaining <= 0) {
+                expired = true
+                return Result(output.toString().trim(), null, true)
+            }
             val line = lines.poll(minOf(remaining, TimeUnit.MILLISECONDS.toNanos(100)), TimeUnit.NANOSECONDS)
             if (line == end) return Result(output.toString().trim(), 1, false)
             if (line?.startsWith(marker) == true) {
@@ -55,7 +73,7 @@ class PrivilegedSession(
             if (line != null && output.length < maxOutput) {
                 output.append((line + "\n").take(maxOutput - output.length))
             }
-            if (!announced && System.nanoTime() - started >= TimeUnit.SECONDS.toNanos(1)) {
+            if (notifyApproval && !announced && System.nanoTime() - started >= TimeUnit.SECONDS.toNanos(1)) {
                 announced = true
                 waiting()
             }
@@ -64,6 +82,9 @@ class PrivilegedSession(
 
     fun preflight(): RootDoctorResult {
         val result = execute("if [ \"\$(id -u)\" = 0 ]; then echo CLOAK_PRIVILEGE_OK; else exit 41; fi")
+        if (result.exitCode == 0 && result.output.lineSequence().any { it == "CLOAK_PRIVILEGE_OK" }) {
+            if (grantedAt == null) grantedAt = System.nanoTime()
+        }
         return RootDoctorResult(when {
             result.timedOut -> RootDoctorCode.ROOT_TIMEOUT
             result.exitCode == 0 && result.output.lineSequence().any { it == "CLOAK_PRIVILEGE_OK" } -> RootDoctorCode.READY

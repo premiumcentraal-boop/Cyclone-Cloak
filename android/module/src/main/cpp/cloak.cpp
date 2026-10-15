@@ -13,6 +13,7 @@
 #include <sys/socket.h>
 #include <unistd.h>
 #include "zygisk.hpp"
+#include "runtime_scope.hpp"
 
 #include <android/log.h>
 #include <jni.h>
@@ -960,6 +961,11 @@ public:
             g_active_package = g_active_package.substr(slash + 1);
         }
         g_active_key = userId + ":" + g_active_package;
+        // Ignore even an existing self-binding; do not rewrite the saved or published records.
+        if (!runtime_package_allowed(g_active_package)) {
+            g_active = false;
+            return;
+        }
         // Owner kill switch: an empty marker file in the module directory
         // keeps future native hooking off for every process.
         g_native_hook_enabled =

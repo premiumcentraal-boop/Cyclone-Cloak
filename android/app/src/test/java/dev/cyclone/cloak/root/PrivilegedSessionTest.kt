@@ -155,4 +155,39 @@ class PrivilegedSessionTest {
             assertFalse(result.timedOut)
         }
     }
+    @Test fun grantedPublicationOutlivesApprovalBudgetWithoutApprovalNotifications() {
+        var waiting = 0
+        val shell = Shell({ if (it == 0) "CLOAK_PRIVILEGE_OK" to 0 else "published" to 0 }, delayAt = 1)
+        PrivilegedSession(budgetMs = 500, waiting = { waiting++ }, startProcess = { shell }).use { session ->
+            assertTrue(session.preflight().published)
+            val result = session.executeWithBudget("publish", 2500)
+            assertFalse(result.timedOut)
+            assertEquals("published", result.output)
+            assertEquals(0, session.execute("next command").exitCode)
+        }
+        assertEquals(0, waiting)
+        assertEquals(3, shell.commands.size)
+    }
+
+    @Test fun publicationCannotReviveAnExpiredSession() {
+        val shell = Shell({ if (it == 0) "CLOAK_PRIVILEGE_OK" to 0 else null })
+        PrivilegedSession(budgetMs = 200, startProcess = { shell }).use { session ->
+            assertTrue(session.preflight().published)
+            assertTrue(session.executeWithBudget("publish", 300).timedOut)
+            assertTrue(session.executeWithBudget("must not send", 120000).timedOut)
+            assertEquals(2, shell.commands.size)
+        }
+    }
+
+    @Test fun publicationBudgetIsAnchoredToGrantAndNotResetByEachCommand() {
+        val shell = Shell({ if (it == 0) "CLOAK_PRIVILEGE_OK" to 0 else "done" to 0 })
+        PrivilegedSession(budgetMs = 50, startProcess = { shell }).use { session ->
+            assertTrue(session.preflight().published)
+            assertEquals(0, session.executeWithBudget("first", 200).exitCode)
+            Thread.sleep(250)
+            assertTrue(session.executeWithBudget("must not send", 200).timedOut)
+            assertEquals(2, shell.commands.size)
+        }
+    }
+
 }

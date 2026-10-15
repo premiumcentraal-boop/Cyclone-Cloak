@@ -143,7 +143,7 @@ object CloakRootDoctor {
             .map { it.androidUserId }.distinct()
             .map { "/data/user/$it/dev.cyclone.cloak/no_backup/${CloakStateLayout.ROOT_DIR}" }
         val shell = try {
-            runRootScript(publishScript(staging, abi, appVersion, legacyDirs, scope), 25_000)
+            runRootScript(publishScript(staging, abi, appVersion, legacyDirs, scope), 120_000)
         } catch (error: Exception) {
             Log.e("CloakRootDoctor", "Could not run root check", error)
             return rememberResult(context, RootDoctorResult(
@@ -153,7 +153,8 @@ object CloakRootDoctor {
         }
         if (shell.timedOut) {
             Log.w("CloakRootDoctor", "Root check timed out")
-            return rememberResult(context, RootDoctorResult(RootDoctorCode.ROOT_TIMEOUT), appVersion)
+            recordPublicationPhases(shell.output, 1)
+            return rememberResult(context, publicationTimeoutResult(shell.output), appVersion)
         }
 
         recordPublicationPhases(shell.output, shell.exitCode ?: 1)
@@ -299,6 +300,13 @@ object CloakRootDoctor {
             reason = result.publicationReason?.name ?: result.code.name)
     }
 
+    internal fun publicationTimeoutResult(output: String): RootDoctorResult =
+        if (output.lineSequence().any { it == "CLOAK_ROOT=OK" }) RootDoctorResult(
+            RootDoctorCode.PUBLISH_FAILED,
+            diagnostic = "Publication exceeded its time budget after root access succeeded. Retry to recover the previous complete tree.",
+            publicationReason = PublicationReason.FAILED,
+        ) else RootDoctorResult(RootDoctorCode.ROOT_TIMEOUT)
+
     internal fun parseResult(output: String, exitCode: Int): RootDoctorResult {
         val marker = Regex("CLOAK_DOCTOR=([A-Z_]+)").find(output)?.groupValues?.get(1)
         val moduleVersion = Regex("CLOAK_MODULE_VERSION=([^\\r\\n]+)").find(output)?.groupValues?.get(1)?.trim()
@@ -356,7 +364,7 @@ object CloakRootDoctor {
 
     private fun runRootScript(script: String, timeoutMs: Long, maxOutput: Int = 4096): RootShellResult {
         val shared = RootSessions.current()
-        val result = if (shared != null) shared.execute(script, maxOutput)
+        val result = if (shared != null) shared.executeWithBudget(script, timeoutMs, maxOutput)
             else PrivilegedSession(budgetMs = timeoutMs).use { it.execute(script, maxOutput) }
         return RootShellResult(result.output, result.exitCode, result.timedOut)
     }
@@ -504,8 +512,11 @@ object CloakRootDoctor {
             append("if [ -d \"\$pubs/\$main\" ]; then order=\"\$order \$main\"; fi; ")
             append("rm -rf \"\$temp\"; mkdir -p \"\$temp\"; ")
             append("printf '%s' ${quote(prefix)} > \"\$temp/$index\"; sep=''; ")
-            append("for n in \$order; do for k in \"\$pubs/\$n\"/*/; do [ -d \"\$k\" ] || continue; kn=\$(basename \"\$k\"); ")
-            append("case \"\$kn\" in *[!0-9a-f]*) continue;; esac; rm -rf \"\$temp/\$kn\"; cp -R \"\$k\" \"\$temp/\$kn\"; done; ")
+            // One copy per publisher, rather than one process per app. Remove collisions first so
+            // Main still replaces a whole key directory; never merge stale files into an override.
+            append("for n in \$order; do set --; for k in \"\$pubs/\$n\"/*/; do [ -d \"\$k\" ] || continue; k=\${k%/}; kn=\${k##*/}; ")
+            append("case \"\$kn\" in *[!0-9a-f]*) continue;; esac; if [ -e \"\$temp/\$kn\" ]; then rm -rf \"\$temp/\$kn\"; fi; set -- \"\$@\" \"\$k\"; done; ")
+            append("if [ \"\$#\" -gt 0 ]; then cp -R \"\$@\" \"\$temp/\"; fi; ")
             append("if [ -s \"\$pubs/\$n/$part\" ]; then printf '%s' \"\$sep\" >> \"\$temp/$index\"; cat \"\$pubs/\$n/$part\" >> \"\$temp/$index\"; sep=','; fi; done; ")
             append("printf '}}' >> \"\$temp/$index\"; ")
             append("chmod -R go-rwx \"\$temp\"; chmod 700 \"\$temp\"; ")

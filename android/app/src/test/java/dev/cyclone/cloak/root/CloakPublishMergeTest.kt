@@ -50,8 +50,8 @@ class CloakPublishMergeTest {
         return if (System.getenv("CLOAK_TEST_WSL") == "1") "/mnt/${p[0].lowercaseChar()}${p.substring(2)}" else p
     }
 
-    private fun publish(staging: File, scope: PublishScope): Int {
-        val script = "set -eu; umask 077; " + CloakRootDoctor.mergePublishScript(shellPath(root), shellPath(staging), scope)
+    private fun publish(staging: File, scope: PublishScope, before: String = ""): Int {
+        val script = "set -eu; umask 077; $before " + CloakRootDoctor.mergePublishScript(shellPath(root), shellPath(staging), scope)
         val source = File(work, "publish.sh").apply { writeText(script + "\n") }
         val process = ProcessBuilder(if (System.getenv("CLOAK_TEST_WSL") == "1")
             listOf("wsl.exe", "-d", "Ubuntu", "--exec", "/bin/sh", shellPath(source))
@@ -169,4 +169,29 @@ class CloakPublishMergeTest {
         assertEquals("{\"schemaVersion\":2,\"entries\":{}}", CloakRootDoctor.publishedIndex(output))
         assertEquals(null, CloakRootDoctor.publishedIndex("CLOAK_DOCTOR=MODULE_MISSING"))
     }
+    @Test fun hundredsOfTargetsPublishWithOneMergeCopyAndPreserveOtherPublisher() {
+        publish(stage("other", 12, Triple(c, 12, "com.other")), PublishScope(12, false, null))
+        val targets = (0 until 327).map { Triple(b, 17, "com.example.app$it") }.toTypedArray()
+        val staging = stage("large", 17, *targets)
+        val copies = File(work, "copies")
+        val counter = "cp() { echo copy >> '" + shellPath(copies) + "'; command cp \"\$@\"; };"
+        assertEquals(0, publish(staging, PublishScope(17, false, null), counter))
+        assertEquals(3, copies.readLines().size) // staging + two publisher shares, independent of app count
+        assertEquals(328, index().length())
+        targets.forEach { (_, user, pkg) -> assertEquals("large", profileName(user, pkg)) }
+        assertEquals("other", profileName(12, "com.other"))
+        assertTrue(File(staging, "index.part").isFile)
+        assertFalse(File(root, "state-v1/index.part").exists())
+    }
+
+    @Test fun mainOverrideDoesNotRetainStaleFilesFromTheOtherShare() {
+        val staging = stage("other", 12, Triple(c, 12, "com.a"))
+        val key = CloakStateLayout.key(c, 12, "com.a")
+        File(staging, "$key/pif.json").writeText("{}")
+        publish(staging, PublishScope(12, false, null))
+        publish(stage("main", 0, Triple(c, 12, "com.a")), PublishScope(0, true, listOf(12)))
+        assertEquals("main", JSONObject(File(root, "state-v1/$key/profile.json").readText()).getString("name"))
+        assertFalse(File(root, "state-v1/$key/pif.json").exists())
+    }
+
 }
