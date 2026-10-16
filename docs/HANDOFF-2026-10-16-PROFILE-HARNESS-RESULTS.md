@@ -111,6 +111,9 @@ production app's observations, Cyclone bootstrap acknowledgement, or platform
 compatibility. The installed module hash describes the installed file, not a
 loaded-image attestation. Probe package visibility is Android-filtered.
 
-Release notes are drafted without changing version metadata. Signing credentials
-are not configured in this shell; a signed release gate must run before any
-publication. No commit, tag, push, or release publication was performed.
+At the end of this initial harness run, release notes were drafted without
+changing version metadata. Signing credentials were not configured in the local
+shell, and no commit, tag, push, or release publication had been performed.
+The separately authorized follow-up uses alpha.15/code 39 because alpha.14 was
+already published; its signed CI and asset verification are recorded in
+HANDOFF-2026-10-16-ALPHA15-HARNESS-RELEASE.md.
