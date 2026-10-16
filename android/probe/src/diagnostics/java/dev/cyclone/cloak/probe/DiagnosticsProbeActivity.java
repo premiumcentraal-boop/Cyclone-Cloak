@@ -16,6 +16,8 @@ public final class DiagnosticsProbeActivity extends ProbeActivity {
         required.add(Manifest.permission.ACCESS_COARSE_LOCATION);
         if (Build.VERSION.SDK_INT >= 33) required.add(Manifest.permission.NEARBY_WIFI_DEVICES);
         if (Build.VERSION.SDK_INT >= 31) required.add(Manifest.permission.BLUETOOTH_CONNECT);
+        // Headless harness never waits on a dialog or grants permissions silently.
+        if (getIntent().getBooleanExtra("no_permission_prompt", false)) { ready.run(); return; }
         List<String> missing = new ArrayList<>();
         for (String permission : required) {
             if (checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) missing.add(permission);
@@ -44,7 +46,7 @@ public final class DiagnosticsProbeActivity extends ProbeActivity {
         for (String permission : required) {
             boolean affects = id.equals("bluetooth.name")
                 ? permission.equals(Manifest.permission.BLUETOOTH_CONNECT)
-                : (id.equals("wifi.serviceMac") || id.equals("wifi.ssid"))
+                : (id.equals("wifi.serviceMac") || id.equals("wifi.ssid") || id.equals("wifi.bssid"))
                     && !permission.equals(Manifest.permission.BLUETOOTH_CONNECT);
             if (affects && checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
                 return "PERMISSION_DENIED:" + permission;

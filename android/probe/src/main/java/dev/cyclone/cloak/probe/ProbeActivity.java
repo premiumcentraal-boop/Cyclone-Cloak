@@ -35,8 +35,43 @@ import java.util.UUID;
 @SuppressWarnings("deprecation")
 public class ProbeActivity extends Activity {
     private interface Read { Object get() throws Exception; }
-    private final JSONArray rows = new JSONArray();
+    private JSONArray rows = new JSONArray();
     private JSONObject profile;
+    private String profileDigest;
+
+    private static String hex(byte[] value) {
+        StringBuilder out = new StringBuilder();
+        for (byte b : value) out.append(String.format(Locale.ROOT, "%02x", b & 255));
+        return out.toString();
+    }
+
+    @Override protected void onNewIntent(android.content.Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        rows = new JSONArray();
+        prepareReads(this::startReads); // Same process; an explicit force-stop is measured separately.
+    }
+
+    private static String sourceFor(String id) {
+        if (id.startsWith("properties.nativeCallback.")) return "libc.__system_property_read_callback";
+        if (id.startsWith("properties.native.")) return "libc.__system_property_get";
+        if (id.startsWith("properties.java.")) return "android.os.SystemProperties";
+        if (id.startsWith("build.")) return "android.os.Build";
+        if (id.startsWith("version.")) return "android.os.Build.VERSION";
+        if (id.startsWith("telephony.") || id.startsWith("operator.")) return "android.telephony.TelephonyManager";
+        if (id.startsWith("settings.")) return "android.provider.Settings.Secure";
+        if (id.startsWith("wifi.")) return "android.net.wifi.WifiInfo";
+        if (id.startsWith("bluetooth.")) return "android.bluetooth.BluetoothAdapter";
+        if (id.startsWith("drm.")) return "android.media.MediaDrm";
+        if (id.startsWith("camera.")) return "android.hardware.camera2.CameraCharacteristics";
+        if (id.startsWith("display.")) return "android.util.DisplayMetrics/Display";
+        if (id.startsWith("locale.")) return "java.util.Locale/Configuration";
+        if (id.startsWith("timezone.")) return "java.util.TimeZone";
+        if (id.startsWith("packages.")) return "android.content.pm.PackageManager (caller-visible only)";
+        if (id.startsWith("process.")) return "android.os.Process";
+        if (id.startsWith("runtime.")) return "/proc/self/maps/ClassLoader (observation only)";
+        return "Android API";
+    }
     private TextView matrix;
     static { System.loadLibrary("probe"); }
     private static native String nativeProperty(String key);
@@ -64,19 +99,28 @@ public class ProbeActivity extends Activity {
             try {
                 String fixture = getIntent().getStringExtra("fixture");
                 if (!"b".equals(fixture)) fixture = "a";
-                try (java.io.InputStream stream = getAssets().open("profile-" + fixture + ".json")) {
+                boolean external = getPackageName().endsWith(".diag") && getIntent().getBooleanExtra("external_profile", false);
+                try (java.io.InputStream stream = external
+                        ? Files.newInputStream(new File(getFilesDir(), "expected-profile.json").toPath())
+                        : getAssets().open("profile-" + fixture + ".json")) {
                     java.io.ByteArrayOutputStream bytes = new java.io.ByteArrayOutputStream();
                     byte[] chunk = new byte[4096];
                     int count;
                     while ((count = stream.read(chunk)) != -1) bytes.write(chunk, 0, count);
                     profile = new JSONObject(bytes.toString(StandardCharsets.UTF_8.name()));
+                    profileDigest = hex(java.security.MessageDigest.getInstance("SHA-256").digest(bytes.toByteArray()));
                 }
                 collect();
                 JSONObject report = new JSONObject().put("format", 1)
                     .put("fixture", fixture).put("package", getPackageName())
-                    .put("uid", android.os.Process.myUid()).put("rows", rows);
+                    .put("uid", android.os.Process.myUid()).put("pid", android.os.Process.myPid())
+                    .put("request_id", getIntent().getStringExtra("request_id"))
+                    .put("profile_sha256", profileDigest).put("rows", rows);
                 File output = new File(getFilesDir(), "report.json");
-                Files.write(output.toPath(), report.toString(2).getBytes(StandardCharsets.UTF_8));
+                File partial = new File(getFilesDir(), "report.json.tmp");
+                Files.write(partial.toPath(), report.toString(2).getBytes(StandardCharsets.UTF_8));
+                Files.move(partial.toPath(), output.toPath(), java.nio.file.StandardCopyOption.ATOMIC_MOVE,
+                    java.nio.file.StandardCopyOption.REPLACE_EXISTING);
                 StringBuilder visible = new StringBuilder("Cloak Runtime Probe\n\n");
                 for (int i = 0; i < rows.length(); i++) {
                     JSONObject row = rows.getJSONObject(i);
@@ -86,6 +130,17 @@ public class ProbeActivity extends Activity {
                 }
                 runOnUiThread(() -> matrix.setText(visible));
             } catch (Exception failure) {
+                // A headless caller must receive a structured failure rather than a stale report.
+                try {
+                    JSONObject failed = new JSONObject().put("error", failure.getClass().getSimpleName())
+                        .put("request_id", getIntent().getStringExtra("request_id"))
+                        .put("profile_sha256", profileDigest).put("package", getPackageName())
+                        .put("uid", android.os.Process.myUid()).put("rows", rows);
+                    File partial = new File(getFilesDir(), "report.json.tmp");
+                    Files.write(partial.toPath(), failed.toString().getBytes(StandardCharsets.UTF_8));
+                    Files.move(partial.toPath(), new File(getFilesDir(), "report.json").toPath(),
+                        java.nio.file.StandardCopyOption.ATOMIC_MOVE, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                } catch (Exception ignored) { /* The host also detects missing output. */ }
                 runOnUiThread(() -> matrix.setText("Probe failed: " + failure.getClass().getSimpleName()));
             }
         }, "cloak-probe").start();
@@ -148,12 +203,15 @@ public class ProbeActivity extends Activity {
     }
 
     private void compare(String id, Object expected, Read operation) throws Exception {
-        JSONObject row = new JSONObject().put("id", id)
-            .put("expected", expected == null ? JSONObject.NULL : expected);
+        long started = android.os.SystemClock.elapsedRealtimeNanos();
+        JSONObject row = new JSONObject().put("id", id).put("source", sourceFor(id))
+            .put("has_expectation", expected != null && !expected.toString().isEmpty())
+            .put("actual", JSONObject.NULL).put("expected", expected == null ? JSONObject.NULL : expected);
         try {
             String denied = permissionFailure(id);
             if (denied != null) {
                 row.put("status", "BLOCKED").put("reason", denied);
+                finishRow(row, started);
                 rows.put(row);
                 logDiagnosticRow(id, row);
                 return;
@@ -162,8 +220,8 @@ public class ProbeActivity extends Activity {
             row.put("actual", value == null ? JSONObject.NULL : value);
             boolean unspecified = expected == null || expected.toString().isEmpty();
             boolean matches = !unspecified && expected.toString().equals(String.valueOf(value));
-            row.put("status", unspecified ? "OBSERVED" : matches ? "PASS" : "FAIL")
-                .put("reason", unspecified ? "NO_PROFILE_EXPECTATION" : matches ? "MATCH" : "VALUE_MISMATCH");
+            row.put("status", value == null && expected != JSONObject.NULL ? "MISSING" : unspecified ? "OBSERVED" : matches ? "PASS" : "FAIL")
+                .put("reason", value == null && expected != JSONObject.NULL ? "VALUE_MISSING" : unspecified ? "NO_PROFILE_EXPECTATION" : matches ? "MATCH" : "VALUE_MISMATCH");
         } catch (Exception | LinkageError error) {
             Throwable cause = error instanceof InvocationTargetException ? error.getCause() : error;
             String reason = cause.getClass().getSimpleName();
@@ -177,8 +235,14 @@ public class ProbeActivity extends Activity {
             if (cause instanceof ClassNotFoundException) reason = "SDK_OR_API_ABSENT";
             row.put("status", "BLOCKED").put("reason", reason);
         }
+        finishRow(row, started);
         rows.put(row);
         logDiagnosticRow(id, row);
+    }
+
+    private void finishRow(JSONObject row, long started) throws Exception {
+        row.put("detail", row.optString("reason"))
+            .put("duration_ms", (android.os.SystemClock.elapsedRealtimeNanos() - started) / 1_000_000);
     }
 
     private void logDiagnosticRow(String id, JSONObject row) {
@@ -210,7 +274,9 @@ public class ProbeActivity extends Activity {
         read("build.getRadioVersion", "device.baseband", Build::getRadioVersion);
 
         String[][] properties = {
-            {"ro.product.model", "device.model"}, {"ro.build.version.sdk", "device.sdk_int"},
+            {"ro.product.model", "device.model"}, {"ro.product.manufacturer", "device.manufacturer"},
+            {"ro.product.brand", "device.brand"}, {"ro.product.device", "device.device"},
+            {"ro.product.name", "device.product"}, {"ro.build.version.sdk", "device.sdk_int"},
             {"ro.build.fingerprint", "device.fingerprint"}, {"ro.serialno", "identifiers.serial"},
             {"ro.sf.lcd_density", "display.density"}, {"persist.sys.timezone", "locale.timezone"},
         };
@@ -223,6 +289,9 @@ public class ProbeActivity extends Activity {
             () -> nativePropertyCallback("ro.product.model"));
 
         TelephonyManager tm = getSystemService(TelephonyManager.class);
+        compare("telephony.simState", null, tm::getSimState);
+        compare("telephony.phoneType", null, tm::getPhoneType);
+        compare("telephony.roaming", null, tm::isNetworkRoaming);
         read("telephony.imei0", "identifiers.imei_primary", () -> tm.getImei(0));
         if (((Number) expected("telephony.sim_slot_count")).intValue() == 1)
             compare("telephony.imei1", JSONObject.NULL, () -> tm.getImei(1));
@@ -264,6 +333,8 @@ public class ProbeActivity extends Activity {
         // Builder isolates the getter hook from service permission requirements.
         read("wifi.objectMac", "identifiers.mac", () -> new WifiInfo.Builder().build().getMacAddress());
         read("wifi.serviceMac", "identifiers.mac", () -> getSystemService(WifiManager.class).getConnectionInfo().getMacAddress());
+        compare("wifi.bssid", null, () -> getSystemService(WifiManager.class).getConnectionInfo().getBSSID());
+        compare("wifi.linkSpeed", null, () -> getSystemService(WifiManager.class).getConnectionInfo().getLinkSpeed());
         compare("wifi.ssid", null, () -> getSystemService(WifiManager.class).getConnectionInfo().getSSID());
         read("bluetooth.address", "identifiers.bt_mac", () -> BluetoothAdapter.getDefaultAdapter().getAddress());
         compare("bluetooth.name", null, () -> BluetoothAdapter.getDefaultAdapter().getName());
@@ -321,5 +392,28 @@ public class ProbeActivity extends Activity {
         read("locale.resources.language", "locale.language", () -> getResources().getConfiguration().getLocales().get(0).getLanguage());
         read("locale.resources.country", "locale.country", () -> getResources().getConfiguration().getLocales().get(0).getCountry());
         read("timezone.default", "locale.timezone", () -> TimeZone.getDefault().getID());
+        compare("process.uid", getApplicationInfo().uid, android.os.Process::myUid);
+        int expectedUser = getIntent().getIntExtra("expected_user", -1);
+        compare("process.androidUser", expectedUser < 0 ? null : expectedUser,
+            () -> android.os.Process.myUid() / 100000);
+        compare("packages.visible", null, () -> {
+            java.util.List<String> names = new java.util.ArrayList<>();
+            for (android.content.pm.PackageInfo item : getPackageManager().getInstalledPackages(0)) names.add(item.packageName);
+            java.util.Collections.sort(names);
+            return new JSONArray(names);
+        });
+        compare("runtime.loadedLibraries", null, () -> {
+            java.util.Set<String> names = new java.util.TreeSet<>();
+            for (String line : Files.readAllLines(new File("/proc/self/maps").toPath(), StandardCharsets.UTF_8)) {
+                String name = line.substring(line.lastIndexOf('/') + 1).trim();
+                if (name.endsWith(".so") && (name.contains("cloak") || name.contains("pine")
+                        || name.contains("shadowhook") || name.contains("zygisk"))) names.add(name);
+            }
+            return new JSONArray(names);
+        });
+        compare("runtime.javaBridgeVisible", null, () -> {
+            try { Class.forName("dev.cyclone.cloak.hook.HookBridge", false, getClassLoader()); return true; }
+            catch (ClassNotFoundException absent) { return false; }
+        });
     }
 }
