@@ -1,11 +1,11 @@
 # Cyclone Cloak Architecture
 
-Current prerelease: [v0.11.0-alpha.15](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.15), app/module code 39 (local profile-transition evidence harness; runtime behavior unchanged).
+Current prerelease: [v0.11.0-alpha.16](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.16), app/module code 40 (diagnostics report quality; production runtime behavior unchanged).
 Normal-app publication and preservation of bindings across two Cyclone profiles
 passed on Pixel 8; an independent profile-side publisher is not device-verified.
-The existing main implementation adds the native property callback hook and
-probe row; device proof remains pending. Earlier evidence does not verify this
-new row or the new artifact. No platform verdict is claimed.
+The diagnostics-quality evidence covers the recorded updated probe against the
+installed alpha.15 module in user 0; it does not physically verify alpha.16
+binaries or broader device behavior. No platform verdict is claimed.
 See [CURRENT-STATE.md](CURRENT-STATE.md) for checks and publication status.
 Dated release reports describe their historical releases.
 

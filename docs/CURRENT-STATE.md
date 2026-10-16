@@ -1,21 +1,23 @@
 # Current state
 
-Updated 2026-10-16. **v0.11.0-alpha.15 / versionCode 39** is the
-[latest prerelease](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.15).
-[Alpha.15 notes](RELEASE_0.11.0-alpha.15.md) describe the local profile-transition
-harness and conservative evidence comparison. The small run and 327-target audit
-on the installed alpha.14 module completed with zero critical failures; blocked
-and device-dependent rows remain warnings. These observations do not automatically
-verify newly packaged binaries or the normal companion publication flow.
-No production permissions, schemas, connector or runtime behavior change.
+Updated 2026-10-17. **v0.11.0-alpha.16 / versionCode 40** is the
+[latest prerelease](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.16).
+[Alpha.16 notes](RELEASE_0.11.0-alpha.16.md) describe diagnostics-only SDK,
+fixture-label and summary fixes. Pixel 8 / user-0 captures on 2026-10-16, against
+the installed alpha.15 module, each measured 77 PASS and 12 uncovered observations,
+zero FAIL/BLOCKED/MISSING rows and zero warnings. All 327 production index entries
+and audited stores/module files were preserved. The attached provenance note
+explains the unscoped permission-map limitation. These measurements do not verify
+new alpha.16 binaries, all Android users or normal companion publication flow.
+No production permissions, schemas, connector, binding or runtime behavior change.
 No platform verdict is claimed. See [harness usage](PROFILE-TEST-HARNESS.md).
 
 ## Versions and major components
 
 | Component | Current source version / responsibility |
 | --- | --- |
-| App | `dev.cyclone.cloak`, `0.11.0-alpha.15`, code 39; minimum API 29, target/compile API 36 |
-| Module | `cyclone_cloak`, `v0.11.0-alpha.15`, code 39; ARM64/ARMv7, minimum API 26; native property callback path added on main |
+| App | `dev.cyclone.cloak`, `0.11.0-alpha.16`, code 40; minimum API 29, target/compile API 36 |
+| Module | `cyclone_cloak`, `v0.11.0-alpha.16`, code 40; ARM64/ARMv7, minimum API 26; metadata-only change from alpha.15 |
 | Profile | Schema `0.3`, legacy `0.2` accepted; existing JSON storage unchanged |
 | Binding / reader | Binding schema 2; module index `schemaVersion: 2`; existing key lookup unchanged |
 | Connector | `cyclone.connector/1.3`; Cyclone 5.0.0-alpha.122 or newer |
@@ -36,15 +38,16 @@ No platform verdict is claimed. See [harness usage](PROFILE-TEST-HARNESS.md).
   conservative reconciliation, publisher shares and recovery. This release
   preserves storage layout and connector behavior. Binding work reuses one root
   session after preflight; publication scripts retain their inherited lock descriptor and phase diagnostics.
-- Module/probe: existing runtime inspection implementation and separate diagnostics
-  app. The native property callback hook and probe row are implemented; device
-  verification remains pending. Earlier evidence does not cover the new row; evidence is
-  tracked independently in [RUNTIME-COVERAGE.md](RUNTIME-COVERAGE.md).
+- Module/probe: unchanged runtime implementation and separate diagnostics app.
+  The real advertising-ID SDK and its permissions are diagnostics-only. Optional
+  observations are counted separately, not promoted to verified coverage. Evidence
+  remains artifact-specific; see [RUNTIME-COVERAGE.md](RUNTIME-COVERAGE.md).
 
 ## Local verification and release gate
 
-The connector-resilience checks passed: app **515 passed, zero skipped**, module
-**12 passed**, forge **227 passed**, schema **33 passed**.
+The diagnostics-quality checks passed: app **522 passed, zero skipped**, module
+**12 passed**, forge **293 passed**, schema **33 passed**, probe **15 per flavor**
+and host probe checks **7 passed**.
 WSL enabled the actual publication shell tests on Windows. Debug assembly and module
 packaging succeeded without compiler warnings. The standard release CI gate signs the APK, packages the module and verifies
 that the APK embeds the exact released module ZIP before publishing.
@@ -52,17 +55,19 @@ that the APK embeds the exact released module ZIP before publishing.
 ```powershell
 $env:JAVA_HOME='C:/Program Files/Eclipse Adoptium/jdk-17.0.20.101-hotspot'
 $env:CLOAK_TEST_WSL='1'
-& "$env:TEMP/cloak-build/gradle-8.11.1/bin/gradle.bat" -p android :app:testDebugUnitTest :module:testDebugUnitTest :app:assembleDebug :module:packageModule --offline --no-daemon
+& "$env:TEMP/cloak-build/gradle-8.11.1/bin/gradle.bat" -p android :app:testDebugUnitTest :module:testDebugUnitTest :probe:testStandardDebugUnitTest :probe:testDiagnosticsDebugUnitTest :app:assembleDebug :app:assembleRelease :module:packageModule :probe:assembleStandardDebug :probe:assembleDiagnosticsDebug --offline --no-daemon
 uv run --with pytest -- python -m pytest forge/tests -q
 uv run --with pytest --with jsonschema -- python -m pytest forge/schema_tests -q
-uv run -- python tools/verify_release.py --tag v0.11.0-alpha.13
+uv run -- python -m unittest discover -s android/probe/tests -v
+uv run -- python tools/verify_release.py --tag v0.11.0-alpha.16 --artifacts
 git diff --check
 ```
 
 The release workflow reruns tests, signs the APK using existing CI secrets, packages
 the module and checks exact embedded-module agreement before uploading the prerelease.
 Local debug output: `android/app/build/outputs/apk/debug/app-debug.apk`.
-Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.13.zip`.
+Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.16.zip`,
+`evidence-bundle.zip`, `PROVENANCE-NOTE.md`.
 
 ## Known limits and separately verified device evidence
 
@@ -76,8 +81,7 @@ Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.13.zip`.
 - Existing physical-device checks remain separate, including reboot/activation,
   multi-user behavior, publication/recovery and backup/import UI. See
   [DEFERRED-DEVICE-CHECKS.md](DEFERRED-DEVICE-CHECKS.md) and the runtime coverage ledger.
-  Earlier artifact measurements are not alpha.13 verification, including the new
-  `properties.nativeCallback.ro.product.model` row.
+  Earlier artifact measurements are not physical verification of alpha.16.
 - Publisher swaps retain the existing two-rename reader gap and do not guarantee
   power-loss safety or lock coordination with older/external writers.
 - Profile batch commits coordinate cooperating in-process callers. Downloads

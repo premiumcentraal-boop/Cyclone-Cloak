@@ -11,14 +11,15 @@ not prove that every inspection API sees it.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.11.0-alpha.15 (prerelease)
+## Status: 0.11.0-alpha.16 (prerelease)
 
-Alpha.15 adds a local profile-transition test harness, structured probe rows,
-redacted evidence bundles and conservative transition comparisons. App/module
-code 39. [Release notes](docs/RELEASE_0.11.0-alpha.15.md) describe measured
-alpha.14 device evidence, blocked rows and scope limits. No production permissions,
-profile schemas, connector behavior or runtime behavior change. Local evidence
-is not a platform verdict. A debug-only real-flow invocation seam is deferred.
+Alpha.16 improves the separate diagnostics probe's advertising-ID path, fixture
+labels and summary classification. App/module code 40.
+[Release notes](docs/RELEASE_0.11.0-alpha.16.md) include Pixel 8 / user-0 evidence
+against the installed alpha.15 module: three captures, each 77 PASS and 12
+uncovered observations, zero failures or warnings. This is not physical proof of
+the new alpha.16 binaries. No production permissions, profile schemas, connector,
+binding or runtime behavior change. No platform verdict is claimed.
 See [CURRENT-STATE.md](docs/CURRENT-STATE.md).
 
 - **Companion app** (`android/app`): a Cyclone connector (contract `cyclone.connector/1.3`, Cyclone

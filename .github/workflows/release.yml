@@ -41,7 +41,8 @@ jobs:
         run: |
           uv run --with pytest -- python -m pytest forge/tests -q
           uv run --with pytest --with jsonschema -- python -m pytest forge/schema_tests -q
-          gradle -p android :app:testDebugUnitTest :module:testDebugUnitTest --no-daemon
+          uv run -- python -m unittest discover -s android/probe/tests -v
+          gradle -p android :app:testDebugUnitTest :module:testDebugUnitTest :probe:testStandardDebugUnitTest :probe:testDiagnosticsDebugUnitTest :probe:assembleStandardDebug :probe:assembleDiagnosticsDebug --no-daemon
       - name: Decode Android release keystore
         run: echo "${{ secrets.ANDROID_KEYSTORE_B64 }}" | base64 -d > "$RUNNER_TEMP/cloak.keystore"
       - name: Build release APK
@@ -64,3 +65,5 @@ jobs:
           files: |
             android/app/build/outputs/apk/release/*.apk
             android/module/build/module/*.zip
+            docs/runtime-evidence/2026-10-16-diagnostics-quality-233115/evidence-bundle.zip
+            docs/runtime-evidence/2026-10-16-diagnostics-quality-233115/PROVENANCE-NOTE.md
