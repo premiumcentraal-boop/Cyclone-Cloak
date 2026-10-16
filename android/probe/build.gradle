@@ -44,8 +44,10 @@ tasks.configureEach {
     if (name == "assembleStandardDebug") { finalizedBy(preserveDefaultProbePath) }
 }
 
-// Optional real SDK, never a fake class with the same name. The minimal probe
-// still records SDK_ABSENT explicitly rather than treating it as a passed hook.
-if (providers.gradleProperty("probeAdvertisingSdk").getOrElse("false") == "true") {
-    dependencies { implementation "com.google.android.gms:play-services-ads-identifier:18.3.0" }
+// Only the diagnostics APK carries the real client. The standard APK remains
+// permission-free and can honestly record SDK_OR_API_ABSENT.
+dependencies {
+    diagnosticsImplementation "com.google.android.gms:play-services-ads-identifier:18.3.0"
+    testImplementation "junit:junit:4.13.2"
+    testImplementation "org.json:json:20240303"
 }

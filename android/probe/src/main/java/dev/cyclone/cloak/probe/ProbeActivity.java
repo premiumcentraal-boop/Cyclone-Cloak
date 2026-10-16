@@ -26,7 +26,6 @@ import org.json.JSONObject;
 import java.io.File;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
-import java.lang.reflect.InvocationTargetException;
 import java.util.Locale;
 import java.util.TimeZone;
 import java.util.UUID;
@@ -97,8 +96,8 @@ public class ProbeActivity extends Activity {
         // prevents subsequent rows from being measured.
         new Thread(() -> {
             try {
-                String fixture = getIntent().getStringExtra("fixture");
-                if (!"b".equals(fixture)) fixture = "a";
+                String requestedFixture = getIntent().getStringExtra("fixture");
+                String fixture = "b".equals(requestedFixture) ? "b" : "a";
                 boolean external = getPackageName().endsWith(".diag") && getIntent().getBooleanExtra("external_profile", false);
                 try (java.io.InputStream stream = external
                         ? Files.newInputStream(new File(getFilesDir(), "expected-profile.json").toPath())
@@ -110,6 +109,9 @@ public class ProbeActivity extends Activity {
                     profile = new JSONObject(bytes.toString(StandardCharsets.UTF_8.name()));
                     profileDigest = hex(java.security.MessageDigest.getInstance("SHA-256").digest(bytes.toByteArray()));
                 }
+                fixture = ProbeReportPolicy.fixture(requestedFixture, external,
+                    external && "a".equals(requestedFixture) && sameFixture("a"),
+                    external && "b".equals(requestedFixture) && sameFixture("b"));
                 collect();
                 JSONObject report = new JSONObject().put("format", 1)
                     .put("fixture", fixture).put("package", getPackageName())
@@ -144,6 +146,17 @@ public class ProbeActivity extends Activity {
                 runOnUiThread(() -> matrix.setText("Probe failed: " + failure.getClass().getSimpleName()));
             }
         }, "cloak-probe").start();
+    }
+
+    private boolean sameFixture(String label) throws Exception {
+        try (java.io.InputStream stream = getAssets().open("profile-" + label + ".json")) {
+            java.io.ByteArrayOutputStream bytes = new java.io.ByteArrayOutputStream();
+            byte[] chunk = new byte[4096];
+            int count;
+            while ((count = stream.read(chunk)) != -1) bytes.write(chunk, 0, count);
+            JSONObject fixture = new JSONObject(bytes.toString(StandardCharsets.UTF_8.name()));
+            return ProbeReportPolicy.canonical(profile).equals(ProbeReportPolicy.canonical(fixture));
+        }
     }
 
     /**
@@ -220,20 +233,11 @@ public class ProbeActivity extends Activity {
             row.put("actual", value == null ? JSONObject.NULL : value);
             boolean unspecified = expected == null || expected.toString().isEmpty();
             boolean matches = !unspecified && expected.toString().equals(String.valueOf(value));
-            row.put("status", value == null && expected != JSONObject.NULL ? "MISSING" : unspecified ? "OBSERVED" : matches ? "PASS" : "FAIL")
-                .put("reason", value == null && expected != JSONObject.NULL ? "VALUE_MISSING" : unspecified ? "NO_PROFILE_EXPECTATION" : matches ? "MATCH" : "VALUE_MISMATCH");
+            String status = ProbeReportPolicy.status(!unspecified, value == null && expected != JSONObject.NULL, matches);
+            row.put("status", status)
+                .put("reason", unspecified ? "NO_PROFILE_EXPECTATION" : status.equals("MISSING") ? "VALUE_MISSING" : matches ? "MATCH" : "VALUE_MISMATCH");
         } catch (Exception | LinkageError error) {
-            Throwable cause = error instanceof InvocationTargetException ? error.getCause() : error;
-            String reason = cause.getClass().getSimpleName();
-            // Record permission names, never the full exception (which may expose data).
-            if (cause instanceof SecurityException && cause.getMessage() != null) {
-                java.util.regex.Matcher permission = java.util.regex.Pattern
-                    .compile("android\\.permission\\.[A-Z_]+")
-                    .matcher(cause.getMessage());
-                if (permission.find()) reason += ":" + permission.group();
-            }
-            if (cause instanceof ClassNotFoundException) reason = "SDK_OR_API_ABSENT";
-            row.put("status", "BLOCKED").put("reason", reason);
+            row.put("status", "BLOCKED").put("reason", ProbeReportPolicy.failureReason(error));
         }
         finishRow(row, started);
         rows.put(row);
@@ -338,11 +342,8 @@ public class ProbeActivity extends Activity {
         compare("wifi.ssid", null, () -> getSystemService(WifiManager.class).getConnectionInfo().getSSID());
         read("bluetooth.address", "identifiers.bt_mac", () -> BluetoothAdapter.getDefaultAdapter().getAddress());
         compare("bluetooth.name", null, () -> BluetoothAdapter.getDefaultAdapter().getName());
-        read("advertising.id", "identifiers.advertising_id", () -> {
-            Class<?> client = Class.forName("com.google.android.gms.ads.identifier.AdvertisingIdClient");
-            Object info = client.getMethod("getAdvertisingIdInfo", Context.class).invoke(null, this);
-            return info.getClass().getMethod("getId").invoke(info);
-        });
+        read("advertising.id", "identifiers.advertising_id",
+            () -> AdvertisingIdRead.read(getClassLoader(), Context.class, this));
         read("drm.deviceUniqueId", "identifiers.widevine_id", () -> {
             try (MediaDrm drm = new MediaDrm(UUID.fromString("edef8ba9-79d6-4ace-a3c8-27dcd51d21ed"))) {
                 byte[] value = drm.getPropertyByteArray(MediaDrm.PROPERTY_DEVICE_UNIQUE_ID);

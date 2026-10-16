@@ -1,0 +1,14 @@
+{
+  "apk_sha256": "033714e32fb305fd5d5aff5d6448b669077f2ed0feb91ea6860ec89a6b200ad4",
+  "sdk": "com.google.android.gms:play-services-ads-identifier:18.3.0",
+  "sdk_class_in_dex": true,
+  "call_path": [
+    "AdvertisingIdRead.read",
+    "AdvertisingIdClient.getAdvertisingIdInfo",
+    "AdvertisingIdClient.Info.getId"
+  ],
+  "standard_probe_or_production_apk_installed": false,
+  "permission_grants_changed": false,
+  "denial_path_device_exercised": false,
+  "note": "All required probe permissions were already granted. Optional fields remain OBSERVED, not comparison PASS. No production app/module update or Android-user switch was performed."
+}

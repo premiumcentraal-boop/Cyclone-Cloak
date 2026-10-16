@@ -1,0 +1,10 @@
+{
+  "production_entry_count": 327,
+  "index_semantic_sha256": "409d6d5386be07a6b14b888872cb8467feeb1bf5c21647e716c90bd8a57ba99c",
+  "index_raw_sha256": "409d6d5386be07a6b14b888872cb8467feeb1bf5c21647e716c90bd8a57ba99c",
+  "module_files_sha256": "7fd7fe127e4bc99191588b87f0281e750475ec5bb5b2e061b16fcf286aa0811d",
+  "publisher_shares_sha256": "57c8d17bfc42b1be08995f1754030f99541b2bfbb25b4edc2af2d76eac8b1a2d",
+  "published_bodies_sha256": "52b50c44584b4f8c14292bc9b73a6c9118adfa086fe7db5b9305a277fcf14c2f",
+  "binding_stores_sha256": "f7c1139450e2c4321e3c8772f4e521dbfca5959d2c5cfc2e09f6c53f13dbdbf3",
+  "binding_store_count": 2
+}

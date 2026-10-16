@@ -73,7 +73,7 @@ def test_explicit_null_expectation_survives_redaction():
     (row(), row(actual='b',expected='b'), 'EXPECTED_CHANGE_OBSERVED','INFO'),
     (row(), row(actual='a',expected='b',status='FAIL'), 'EXPECTED_CHANGE_NOT_OBSERVED','FAIL'),
     (row(), row(actual='b',status='FAIL'), 'UNEXPECTED_CHANGE','FAIL'),
-    (row(expected=None,status='OBSERVED'), row(actual='b',expected=None,status='OBSERVED'), 'UNMAPPED_CHANGE','WARNING'),
+    (row(expected=None,status='OBSERVED'), row(actual='b',expected=None,status='OBSERVED'), 'UNMAPPED_CHANGE','INFO'),
     (row(), row(status='BLOCKED'), 'BLOCKED_OR_MISSING','WARNING'),
     (row(), row(status='MISSING'), 'BLOCKED_OR_MISSING','WARNING'),
     (row(status='FAIL'), row(), 'PROFILE_VALUE_MISMATCH','FAIL'),
@@ -310,8 +310,10 @@ def test_device_dependent_changes_keep_stable_ids_without_inferred_pass(key):
     after = report(row(key, actual='user0-value', expected=None, status='OBSERVED'))
     findings = pc.compare(pc.redact_report(before), pc.redact_report(after))
     assert findings == [dict(id=key, changed=True, expected_change=None,
-                             reason='UNMAPPED_CHANGE', severity='WARNING')]
-    assert pc.classify([before, after], findings)['result'] == 'DEGRADED'
+                             reason='UNMAPPED_CHANGE', severity='INFO')]
+    result = pc.classify([before, after], findings)
+    assert result['result'] == 'PASS' and result['warnings'] == 0
+    assert result['not_covered_rows'] == 1 and result['statuses'] == {'OBSERVED': 2}
 
 
 @pytest.mark.parametrize('key', ['build.BOOTLOADER', 'build.getRadioVersion'])
@@ -321,3 +323,75 @@ def test_one_sided_profile_expectation_does_not_verify_transition(key):
     finding = pc.compare(pc.redact_report(before), pc.redact_report(after))[0]
     assert finding['id'] == key and finding['expected_change'] is None
     assert finding['severity'] == 'WARNING'
+
+
+@pytest.mark.parametrize('expected', [None, ''])
+def test_optional_observations_are_not_warnings_or_verified_rows(expected):
+    observed = row('wifi.ssid', expected=expected, status='OBSERVED')
+    result = pc.classify([pc.redact_report(report(row(), observed))] * 3)
+    assert result == dict(result='PASS', critical_failures=0, warnings=0,
+                         blocked_rows=0, not_covered_rows=1, statuses={'PASS': 3, 'OBSERVED': 3})
+
+
+@pytest.mark.parametrize('status', ['BLOCKED', 'MISSING', 'FAIL'])
+def test_optional_rows_do_not_hide_real_collection_errors(status):
+    result = pc.classify([report(row(expected=None, status=status))])
+    assert result['result'] == ('FAIL' if status == 'FAIL' else 'DEGRADED')
+    assert result['not_covered_rows'] == 0
+
+
+def test_explicit_comparison_warning_survives_optional_observations():
+    result = pc.classify([report(row(expected=None, status='OBSERVED'))],
+                         [dict(id='transition', severity='WARNING')])
+    assert result['result'] == 'DEGRADED' and result['warnings'] == 1
+
+
+@pytest.mark.parametrize('fixture', ['a', 'b', 'external'])
+@pytest.mark.parametrize('mismatch', [None, 'fixture', 'hash'])
+def test_capture_preserves_fixture_label_and_requires_matching_hash(tmp_path, fixture, mismatch):
+    item = dict(kind='published' if fixture == 'external' else 'fixture', fixture=fixture,
+                user=17, sha256='c'*64)
+    m = manifest()
+    request = 'd'*32
+
+    class Device:
+        timeout = 1
+        commands = []
+        def root(self, script): return SimpleNamespace(stdout=m['artifact'] + ' module')
+        def index(self): return '', dict(entries={f'17/{pc.PACKAGE}': dict(key=pc.digest([m['run_id'], 17]))})
+        def shell(self, script, **kwargs):
+            self.commands.append(script)
+            if script == 'am get-current-user': return SimpleNamespace(stdout='17')
+            if script.startswith('am start '):
+                assert f'--es fixture {fixture}' in script
+            if script.endswith('cat files/report.json'):
+                value = report()
+                value.update(request_id=request, uid=1701234, package=pc.PACKAGE, pid=123,
+                             fixture='a' if mismatch == 'fixture' else fixture,
+                             profile_sha256='wrong' if mismatch == 'hash' else item['sha256'])
+                # a -> b also exercises mismatches for the a fixture itself.
+                if mismatch == 'fixture' and fixture == 'a': value['fixture'] = 'b'
+                return SimpleNamespace(stdout=json.dumps(value))
+            return SimpleNamespace(stdout='', stderr='')
+
+    from unittest.mock import patch
+    h = pc.Harness(tmp_path, m, Device(), Path('test.apk'))
+    h.body = lambda selected: {}
+    with patch.object(pc.uuid, 'uuid4', return_value=SimpleNamespace(hex=request)):
+        if mismatch:
+            with pytest.raises(ValueError, match='REPORT_FIXTURE_MISMATCH' if mismatch == 'fixture' else 'REPORT_PROFILE_OR_USER_MISMATCH'):
+                h.capture(item)
+        else:
+            result = h.capture(item)
+            assert result['fixture'] == fixture and result['profile_sha256'] == item['sha256']
+
+
+def test_summary_separately_lists_uncovered_rows(tmp_path):
+    m = manifest()
+    m['phases'] = {name: dict(status='COMPLETED') for name in pc.PHASES[:-1]}
+    pc.save(tmp_path/pc.ARTIFACTS['probes'], report(row(), row('wifi.ssid', expected=None, status='OBSERVED')))
+    h = pc.Harness(tmp_path, m, None, Path('test.apk'))
+    result = h.summary()
+    text = (tmp_path/'summary.md').read_text()
+    assert result['result'] == 'PASS'
+    assert 'Warnings: 0' in text and 'Not covered (no expectation): 1' in text

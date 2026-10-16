@@ -12,6 +12,7 @@ public final class DiagnosticsProbeActivity extends ProbeActivity {
     private final List<String> required = new ArrayList<>();
 
     @Override protected void prepareReads(Runnable ready) {
+        required.clear();
         required.add(Manifest.permission.ACCESS_FINE_LOCATION);
         required.add(Manifest.permission.ACCESS_COARSE_LOCATION);
         if (Build.VERSION.SDK_INT >= 33) required.add(Manifest.permission.NEARBY_WIFI_DEVICES);
@@ -43,15 +44,7 @@ public final class DiagnosticsProbeActivity extends ProbeActivity {
     }
 
     @Override protected String permissionFailure(String id) {
-        for (String permission : required) {
-            boolean affects = id.equals("bluetooth.name")
-                ? permission.equals(Manifest.permission.BLUETOOTH_CONNECT)
-                : (id.equals("wifi.serviceMac") || id.equals("wifi.ssid") || id.equals("wifi.bssid"))
-                    && !permission.equals(Manifest.permission.BLUETOOTH_CONNECT);
-            if (affects && checkSelfPermission(permission) != PackageManager.PERMISSION_GRANTED) {
-                return "PERMISSION_DENIED:" + permission;
-            }
-        }
-        return null;
+        return ProbeReportPolicy.permissionFailure(id, Build.VERSION.SDK_INT,
+            permission -> checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED);
     }
 }

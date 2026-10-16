@@ -3,6 +3,7 @@ import argparse
 import sys
 import unittest
 from pathlib import Path
+import xml.etree.ElementTree as ET
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3] / "tools"))
 from run_runtime_probe import PHASES, edited_index, parse_phases
@@ -10,6 +11,19 @@ from render_runtime_matrix import classify, render
 
 
 class RunnerTest(unittest.TestCase):
+    def test_diagnostics_permissions_and_sdk_are_isolated(self):
+        probe = Path(__file__).resolve().parents[1]
+        attr = '{http://schemas.android.com/apk/res/android}name'
+        permissions = {p.attrib[attr] for p in ET.parse(probe/'src/diagnostics/AndroidManifest.xml').getroot().findall('uses-permission')}
+        for permission in ('ACCESS_FINE_LOCATION', 'ACCESS_COARSE_LOCATION', 'ACCESS_WIFI_STATE', 'BLUETOOTH_CONNECT'):
+            self.assertIn('android.permission.' + permission, permissions)
+        self.assertIn('com.google.android.gms.permission.AD_ID', permissions)
+        main = ET.parse(probe/'src/main/AndroidManifest.xml').getroot()
+        self.assertFalse(any(p.attrib[attr].startswith('android.permission.') for p in main.findall('uses-permission')))
+        build = (probe/'build.gradle').read_text()
+        self.assertIn('diagnosticsImplementation "com.google.android.gms:play-services-ads-identifier:18.3.0"', build)
+        self.assertNotIn('implementation "com.google.android.gms:', build)
+
     def test_default_and_subset_order(self):
         self.assertEqual(parse_phases("all"), list(PHASES))
         self.assertEqual(parse_phases("bound-b,bound-a"), ["bound-a", "bound-b"])

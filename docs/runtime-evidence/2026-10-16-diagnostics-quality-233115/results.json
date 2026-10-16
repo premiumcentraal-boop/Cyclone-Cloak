@@ -1,0 +1,46 @@
+{
+  "result": "PASS",
+  "critical_failures": 0,
+  "warnings": 0,
+  "blocked_rows": 0,
+  "not_covered_rows": 12,
+  "statuses": {
+    "PASS": 231,
+    "OBSERVED": 36
+  },
+  "per_report": {
+    "bound-a": {
+      "result": "PASS",
+      "critical_failures": 0,
+      "warnings": 0,
+      "blocked_rows": 0,
+      "not_covered_rows": 12,
+      "statuses": {
+        "PASS": 77,
+        "OBSERVED": 12
+      }
+    },
+    "bound-a-repeat": {
+      "result": "PASS",
+      "critical_failures": 0,
+      "warnings": 0,
+      "blocked_rows": 0,
+      "not_covered_rows": 12,
+      "statuses": {
+        "PASS": 77,
+        "OBSERVED": 12
+      }
+    },
+    "bound-b": {
+      "result": "PASS",
+      "critical_failures": 0,
+      "warnings": 0,
+      "blocked_rows": 0,
+      "not_covered_rows": 12,
+      "statuses": {
+        "PASS": 77,
+        "OBSERVED": 12
+      }
+    }
+  }
+}

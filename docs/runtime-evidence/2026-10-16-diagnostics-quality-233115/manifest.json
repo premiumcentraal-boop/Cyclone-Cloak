@@ -1,0 +1,60 @@
+{
+  "format": 1,
+  "run_id": "04a94c418f964c6eba2aeb3b6884d6b4",
+  "scenario": "diagnostics-report-quality",
+  "started_at": "2026-10-16T21:31:15.511565+00:00",
+  "started_epoch": 1792186275.5115745,
+  "phases": {},
+  "user": 0,
+  "target_user": 0,
+  "serial": "3B171FDJH0061G",
+  "full_profile": false,
+  "apk_sha256": "033714e32fb305fd5d5aff5d6448b669077f2ed0feb91ea6860ec89a6b200ad4",
+  "original_user": 0,
+  "artifact": "ffebdf4436876852db5fe3c8a817a351a470137117411f98410f37e3907020cd",
+  "install": {
+    "package": "dev.cyclone.cloak.probe.diag",
+    "apk_sha256": "033714e32fb305fd5d5aff5d6448b669077f2ed0feb91ea6860ec89a6b200ad4",
+    "android_user": 0,
+    "permissions_granted_by_harness": false
+  },
+  "permissions": {
+    "android.permission.ACCESS_WIFI_STATE": true,
+    "com.google.android.gms.permission.AD_ID": true,
+    "android.permission.ACCESS_FINE_LOCATION": false,
+    "android.permission.NEARBY_WIFI_DEVICES": false,
+    "android.permission.BLUETOOTH_CONNECT": false,
+    "android.permission.ACCESS_COARSE_LOCATION": false
+  },
+  "installed_apk_sha256": "033714e32fb305fd5d5aff5d6448b669077f2ed0feb91ea6860ec89a6b200ad4",
+  "selections": [
+    {
+      "kind": "fixture",
+      "fixture": "b",
+      "user": 0,
+      "target_count": 1,
+      "sha256": "2bb5d74138d14251f316038be1a679fb53b1aad0796e190a8d03e7bb8494482e",
+      "profile_id": "7bf62497-5c67-57db-924e-c9d80e482ab7"
+    }
+  ],
+  "overlay_active": false,
+  "cleanup": {
+    "mode": "temporary probe index overlay; NOT app publication",
+    "production_entries_preserved": true,
+    "entries": 327,
+    "index_sha256": "409d6d5386be07a6b14b888872cb8467feeb1bf5c21647e716c90bd8a57ba99c",
+    "removed": true
+  },
+  "preservation": {
+    "production_entry_count": true,
+    "index_semantic_sha256": true,
+    "module_files_sha256": true,
+    "publisher_shares_sha256": true,
+    "published_bodies_sha256": true,
+    "binding_stores_sha256": true,
+    "binding_store_count": true
+  },
+  "index_raw_bytes_identical": true,
+  "finished_at": "2026-10-16T21:33:50.863742+00:00",
+  "duration_seconds": 155.35
+}

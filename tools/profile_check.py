@@ -81,7 +81,7 @@ def redact_report(report):
     result = json.loads(json.dumps(parse_report(report)))
     for row in result['rows']:
         row['actual_sha256'] = digest(row['actual'])
-        row['has_expectation'] = row.get('has_expectation', row['expected'] is not None)
+        row['has_expectation'] = has_expectation(row)
         row['expected_sha256'] = digest(row['expected']) if row['has_expectation'] else None
         row['actual'] = row['expected'] = None
     return result
@@ -89,6 +89,10 @@ def redact_report(report):
 
 def token(row, name):
     return row.get(name + '_sha256') or digest(row.get(name))
+
+
+def has_expectation(row):
+    return row.get('has_expectation', row.get('expected') not in (None, ''))
 
 
 def compare(before, after):
@@ -106,7 +110,7 @@ def compare(before, after):
             reason, severity = 'BLOCKED_OR_MISSING', 'WARNING'
         else:
             changed = token(a, 'actual') != token(b, 'actual')
-            known = a.get('has_expectation', a.get('expected') is not None) and b.get('has_expectation', b.get('expected') is not None)
+            known = has_expectation(a) and has_expectation(b)
             expected_change = token(a, 'expected') != token(b, 'expected') if known else None
             if a['status'] == 'FAIL' or b['status'] == 'FAIL':
                 reason, severity = 'PROFILE_VALUE_MISMATCH', 'FAIL'
@@ -115,7 +119,8 @@ def compare(before, after):
             elif changed and expected_change is False:
                 reason, severity = 'UNEXPECTED_CHANGE', 'FAIL'
             elif changed and expected_change is None:
-                reason, severity = 'UNMAPPED_CHANGE', 'WARNING'
+                reason = 'UNMAPPED_CHANGE'
+                severity = 'WARNING' if has_expectation(a) or has_expectation(b) else 'INFO'
             elif changed and expected_change:
                 reason = 'EXPECTED_CHANGE_OBSERVED'
         findings.append(dict(id=key, changed=changed, expected_change=expected_change, reason=reason, severity=severity))
@@ -126,13 +131,16 @@ def classify(reports, differences=(), phase_failures=0):
     statuses = Counter(r['status'] for report in reports for r in parse_report(report)['rows'])
     failed = {r['id'] for report in reports for r in report['rows'] if r['status'] == 'FAIL'}
     failed.update(r['id'] for r in differences if r['severity'] == 'FAIL')
-    warned = {r['id'] for report in reports for r in report['rows'] if r['status'] in {'BLOCKED', 'MISSING', 'OBSERVED'}}
+    warned = {r['id'] for report in reports for r in report['rows']
+              if r['status'] in {'BLOCKED', 'MISSING'} or (r['status'] == 'OBSERVED' and has_expectation(r))}
     warned.update(r['id'] for r in differences if r['severity'] == 'WARNING')
     blocked = {r['id'] for report in reports for r in report['rows'] if r['status'] in {'BLOCKED', 'MISSING'}}
+    not_covered = {r['id'] for report in reports for r in report['rows']
+                   if r['status'] == 'OBSERVED' and not has_expectation(r)}
     failures, warnings = len(failed) + phase_failures, len(warned)
     result = 'FAIL' if failures else 'DEGRADED' if warnings or not reports else 'PASS'
     return dict(result=result, critical_failures=failures, warnings=warnings,
-                blocked_rows=len(blocked), statuses=dict(statuses))
+                blocked_rows=len(blocked), not_covered_rows=len(not_covered), statuses=dict(statuses))
 
 
 def selection(index, user, full):
@@ -361,7 +369,8 @@ class Harness:
         before_pid = self.d.shell(f'pidof {PACKAGE}', check=False).stdout.strip()
         if cold:
             self.d.shell(f'am force-stop --user {user} {PACKAGE}')
-        command = f'am start --user {user} -n {PACKAGE}/dev.cyclone.cloak.probe.DiagnosticsProbeActivity --activity-clear-top --activity-single-top --ez external_profile true --ez no_permission_prompt true --ei expected_user {user} --es request_id {request}'
+        fixture = item['fixture'] if item['kind'] == 'fixture' else 'external'
+        command = f'am start --user {user} -n {PACKAGE}/dev.cyclone.cloak.probe.DiagnosticsProbeActivity --activity-clear-top --activity-single-top --ez external_profile true --ez no_permission_prompt true --ei expected_user {user} --es request_id {request} --es fixture {fixture}'
         result = self.d.shell(command)
         if re.search(r'Error|Exception', result.stdout + result.stderr):
             raise RuntimeError('PROBE_LAUNCH_FAILED')
@@ -375,6 +384,8 @@ class Harness:
                     continue
                 if report.get('uid', -1) // 100000 != user or report.get('package') != PACKAGE or report.get('profile_sha256') != item['sha256']:
                     raise ValueError('REPORT_PROFILE_OR_USER_MISMATCH')
+                if report.get('fixture') != fixture:
+                    raise ValueError('REPORT_FIXTURE_MISMATCH')
                 if cold and str(report.get('pid')) in before_pid.split():
                     raise RuntimeError('COLD_RESTART_NOT_OBSERVED')
                 report = redact_report(report)
@@ -470,6 +481,7 @@ class Harness:
             f'Critical failures: {verdict.get("critical_failures", 0) + len(failed)}' + ('; ' + ', '.join(failed) if failed else '') + detail,
             f'Warnings: {verdict.get("warnings", 0)}' + ('; missing phases: ' + ', '.join(missing) if missing else ''),
             f'Blocked rows: {verdict.get("blocked_rows", 0)}',
+            f'Not covered (no expectation): {verdict.get("not_covered_rows", 0)}',
             'Artifacts: manifest.json; phase-*.json/log; evidence-bundle.zip',
             'Scope: local probe evidence; existing production bindings audited, not rewritten; no platform verdict.',
             ''])
