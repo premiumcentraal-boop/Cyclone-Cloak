@@ -1,22 +1,21 @@
 # Current state
 
-Updated 2026-10-16. **v0.11.0-alpha.14 / versionCode 38** is the
-[latest prerelease](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.14).
-[Alpha.14 notes](RELEASE_0.11.0-alpha.14.md) cover the fixed granted-work deadline,
-merge copy batching and runtime exclusion of the companion package. Approval
-retains its 30-second preflight budget; publication work shares a fixed
-120-second deadline anchored to privilege grant. Post-grant publication timeout
-is reported as a publication failure. No stored profile or binding is rewritten.
-Physical-device large-batch timing and Health stability remain UNVERIFIED for
-this artifact. Earlier device evidence does not automatically verify it.
-No platform verdict is claimed.
+Updated 2026-10-16. **v0.11.0-alpha.15 / versionCode 39** is the
+[latest prerelease](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.15).
+[Alpha.15 notes](RELEASE_0.11.0-alpha.15.md) describe the local profile-transition
+harness and conservative evidence comparison. The small run and 327-target audit
+on the installed alpha.14 module completed with zero critical failures; blocked
+and device-dependent rows remain warnings. These observations do not automatically
+verify newly packaged binaries or the normal companion publication flow.
+No production permissions, schemas, connector or runtime behavior change.
+No platform verdict is claimed. See [harness usage](PROFILE-TEST-HARNESS.md).
 
 ## Versions and major components
 
 | Component | Current source version / responsibility |
 | --- | --- |
-| App | `dev.cyclone.cloak`, `0.11.0-alpha.14`, code 38; minimum API 29, target/compile API 36 |
-| Module | `cyclone_cloak`, `v0.11.0-alpha.14`, code 38; ARM64/ARMv7, minimum API 26; native property callback path added on main |
+| App | `dev.cyclone.cloak`, `0.11.0-alpha.15`, code 39; minimum API 29, target/compile API 36 |
+| Module | `cyclone_cloak`, `v0.11.0-alpha.15`, code 39; ARM64/ARMv7, minimum API 26; native property callback path added on main |
 | Profile | Schema `0.3`, legacy `0.2` accepted; existing JSON storage unchanged |
 | Binding / reader | Binding schema 2; module index `schemaVersion: 2`; existing key lookup unchanged |
 | Connector | `cyclone.connector/1.3`; Cyclone 5.0.0-alpha.122 or newer |

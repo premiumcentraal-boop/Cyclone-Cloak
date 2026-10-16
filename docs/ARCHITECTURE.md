@@ -1,6 +1,6 @@
 # Cyclone Cloak Architecture
 
-Current prerelease: [v0.11.0-alpha.14](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.14), app/module code 38 (granted publication budget, batched merge copies and companion runtime exclusion; device verification pending).
+Current prerelease: [v0.11.0-alpha.15](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.15), app/module code 39 (local profile-transition evidence harness; runtime behavior unchanged).
 Normal-app publication and preservation of bindings across two Cyclone profiles
 passed on Pixel 8; an independent profile-side publisher is not device-verified.
 The existing main implementation adds the native property callback hook and

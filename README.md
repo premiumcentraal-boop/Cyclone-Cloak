@@ -11,16 +11,14 @@ not prove that every inspection API sees it.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.11.0-alpha.14 (prerelease)
+## Status: 0.11.0-alpha.15 (prerelease)
 
-Alpha.14 fixes the granted publication budget for large binding batches, reduces
-merge copy processes to one per publisher, and excludes the companion package
-from its own runtime hooks. App/module code 38.
-[Release notes](docs/RELEASE_0.11.0-alpha.14.md) describe the changes and pending
-device checks. Profile/binding schemas, storage layout, connector protocol and
-permissions are unchanged. Physical-device timeout and Health stability checks
-are UNVERIFIED for this artifact. Earlier evidence remains artifact-specific.
-Local evidence is not a platform verdict.
+Alpha.15 adds a local profile-transition test harness, structured probe rows,
+redacted evidence bundles and conservative transition comparisons. App/module
+code 39. [Release notes](docs/RELEASE_0.11.0-alpha.15.md) describe measured
+alpha.14 device evidence, blocked rows and scope limits. No production permissions,
+profile schemas, connector behavior or runtime behavior change. Local evidence
+is not a platform verdict. A debug-only real-flow invocation seam is deferred.
 See [CURRENT-STATE.md](docs/CURRENT-STATE.md).
 
 - **Companion app** (`android/app`): a Cyclone connector (contract `cyclone.connector/1.3`, Cyclone
