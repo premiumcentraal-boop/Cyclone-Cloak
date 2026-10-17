@@ -11,16 +11,17 @@ not prove that every inspection API sees it.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.11.0-alpha.17 (prerelease)
+## Status: 0.11.0-alpha.18 (prerelease)
 
-Alpha.17 adds safe diagnostics expectations for 12 previously uncovered rows.
-App/module code 41; production runtime and module behavior are unchanged.
-[Release notes](docs/RELEASE_0.11.0-alpha.17.md) record three Pixel 8 / user-0
-captures against the installed alpha.16 module: each 82 PASS, 7 OBSERVED and zero
-FAIL/BLOCKED/MISSING rows. Both paired stability checks passed, with zero paired
-warnings or pending rows. Six external-state rows remain observations by design.
-This validates the recorded diagnostics expectation model, not broader device
-compatibility or the new release binaries. No platform verdict is claimed.
+Alpha.18 fixes overlapping diagnostics capture sessions. App/module code 42;
+production runtime, connector, bindings, module behavior and permissions are unchanged.
+[Release notes](docs/RELEASE_0.11.0-alpha.18.md) record a five-phase Pixel 8
+user 0 ↔ user 17 run: 408 PASS, 29 OBSERVED, zero FAIL/MISSING and eight
+BLOCKED occurrences from four expected user-17 permission limitations.
+Fixture/user/hash agreement and warm/cold process behavior passed; production
+state and permissions were preserved. Evidence measures diagnostics commit
+`8e7ab14` against installed alpha.17/code 41, not the new alpha.18 packaging.
+No platform verdict or broader compatibility is claimed.
 See [CURRENT-STATE.md](docs/CURRENT-STATE.md).
 
 - **Companion app** (`android/app`): a Cyclone connector (contract `cyclone.connector/1.3`, Cyclone

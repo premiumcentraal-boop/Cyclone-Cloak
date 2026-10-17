@@ -1,28 +1,32 @@
 # Current state
 
-Updated 2026-10-17. **v0.11.0-alpha.17 / versionCode 41** is the
-[latest prerelease](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.17).
-[Alpha.17 notes](RELEASE_0.11.0-alpha.17.md) describe diagnostics-only safe
-expectations for 12 previously uncovered rows. Run 3 on Pixel 8 / Android user 0
-measured diagnostics commit `fbdc0faa5330bb0672894eb3110318307d738816` against
-the installed alpha.16/code 40 module: three captures, each 82 PASS, 7 OBSERVED,
-0 FAIL/BLOCKED/MISSING. Paired classification: 246 PASS, 21 OBSERVED, zero
-warnings, blocked or pending rows. Both stability comparisons passed; six
-external-state rows remain observations. All 327 production entries and audited
-files were preserved and temporary probe state removed. Permissions unchanged.
-[Run 3 summary](runtime-evidence/2026-10-17-run3-expectations-022627/summary.md)
-and [build provenance](runtime-evidence/2026-10-17-run3-expectations-022627/build-provenance.json)
-identify the measured APK; this does not verify alpha.17 production binaries,
-Android-user transitions or broader compatibility. No platform verdict is claimed.
-No production runtime, connector, binding storage, publication, schemas, permissions
-or module behavior changed. See [harness usage](PROFILE-TEST-HARNESS.md).
+Updated 2026-10-17. **v0.11.0-alpha.18 / versionCode 42** is the
+[latest prerelease](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.18).
+[Alpha.18 notes](RELEASE_0.11.0-alpha.18.md) describe isolated diagnostics capture
+sessions, generation-gated atomic writes, exact completeness validation and
+bounded redacted failure evidence. The five-phase Pixel 8 run measured diagnostics
+commit `8e7ab1407c5ff18a2a50aa6e727b34c52739396c` against installed alpha.17/code 41.
+User 0 fixture A, user 17 fixture B warm/cold, and user 0 fixture A warm/cold return
+all matched user/fixture/report/published-body hashes. Warm reuse and cold process
+replacement were proven. Aggregate: 408 PASS, 29 OBSERVED, zero FAIL/MISSING,
+eight BLOCKED occurrences, four warnings and zero pending stability checks.
+The four user-17 permission limitations remain expected. All 327 production
+entries, 654 published files, 1310 publisher-share files, 3 module files and
+2 accessible binding stores matched before/after; permissions were unchanged
+and temporary state removed. Locked users' private stores remain unaudited.
+[Summary](runtime-evidence/2026-10-17-capture-lifecycle-rerun-031422/summary.md)
+and [provenance](runtime-evidence/2026-10-17-capture-lifecycle-rerun-031422/build-provenance.json)
+identify the measured APK. Newly packaged alpha.18 binaries have no new physical
+verification. No platform verdict or broader compatibility is claimed.
+No production runtime, connector, binding storage, publication, profile schema,
+permissions or module behavior changed. See [harness usage](PROFILE-TEST-HARNESS.md).
 
 ## Versions and major components
 
 | Component | Current source version / responsibility |
 | --- | --- |
-| App | `dev.cyclone.cloak`, `0.11.0-alpha.17`, code 41; minimum API 29, target/compile API 36 |
-| Module | `cyclone_cloak`, `v0.11.0-alpha.17`, code 41; ARM64/ARMv7, minimum API 26; metadata-only change from alpha.16 |
+| App | `dev.cyclone.cloak`, `0.11.0-alpha.18`, code 42; minimum API 29, target/compile API 36 |
+| Module | `cyclone_cloak`, `v0.11.0-alpha.18`, code 42; ARM64/ARMv7, minimum API 26; metadata-only change from alpha.17 |
 | Profile | Schema `0.3`, legacy `0.2` accepted; existing JSON storage unchanged |
 | Binding / reader | Binding schema 2; module index `schemaVersion: 2`; existing key lookup unchanged |
 | Connector | `cyclone.connector/1.3`; Cyclone 5.0.0-alpha.122 or newer |
@@ -51,7 +55,7 @@ or module behavior changed. See [harness usage](PROFILE-TEST-HARNESS.md).
 ## Local verification and release gate
 
 The diagnostics-quality checks passed: app **522 passed, zero skipped**, module
-**12 passed**, forge **411 passed**, schema **33 passed**, probe **79 per flavor**
+**12 passed**, forge **438 passed**, schema **33 passed**, probe **91 per flavor**
 and host probe checks **7 passed**.
 WSL enabled the actual publication shell tests on Windows. Debug assembly and module
 packaging succeeded without compiler warnings. The standard release CI gate signs the APK, packages the module and verifies
@@ -64,14 +68,14 @@ $env:CLOAK_TEST_WSL='1'
 uv run --with pytest -- python -m pytest forge/tests -q
 uv run --with pytest --with jsonschema -- python -m pytest forge/schema_tests -q
 uv run -- python -m unittest discover -s android/probe/tests -v
-uv run -- python tools/verify_release.py --tag v0.11.0-alpha.17 --artifacts
+uv run -- python tools/verify_release.py --tag v0.11.0-alpha.18 --artifacts
 git diff --check
 ```
 
 The release workflow reruns tests, signs the APK using existing CI secrets, packages
 the module and checks exact embedded-module agreement before uploading the prerelease.
 Local debug output: `android/app/build/outputs/apk/debug/app-debug.apk`.
-Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.17.zip`,
+Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.18.zip`,
 `evidence-bundle.zip`, `summary.md`, `build-provenance.json`.
 
 ## Known limits and separately verified device evidence
@@ -84,9 +88,9 @@ Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.17.zip`,
   or an independent profile-side publisher. Cyclone could not open the receiving
   profile for that additional check.
 - Existing physical-device checks remain separate, including reboot/activation,
-  multi-user behavior, publication/recovery and backup/import UI. See
+  multi-user behavior beyond the recorded diagnostics transition, publication/recovery and backup/import UI. See
   [DEFERRED-DEVICE-CHECKS.md](DEFERRED-DEVICE-CHECKS.md) and the runtime coverage ledger.
-  Earlier artifact measurements are not physical verification of alpha.17.
+  Earlier artifact measurements are not physical verification of alpha.18.
 - Publisher swaps retain the existing two-rename reader gap and do not guarantee
   power-loss safety or lock coordination with older/external writers.
 - Profile batch commits coordinate cooperating in-process callers. Downloads

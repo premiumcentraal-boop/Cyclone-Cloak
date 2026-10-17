@@ -65,6 +65,6 @@ jobs:
           files: |
             android/app/build/outputs/apk/release/*.apk
             android/module/build/module/*.zip
-            docs/runtime-evidence/2026-10-17-run3-expectations-022627/evidence-bundle.zip
-            docs/runtime-evidence/2026-10-17-run3-expectations-022627/summary.md
-            docs/runtime-evidence/2026-10-17-run3-expectations-022627/build-provenance.json
+            docs/runtime-evidence/2026-10-17-capture-lifecycle-rerun-031422/evidence-bundle.zip
+            docs/runtime-evidence/2026-10-17-capture-lifecycle-rerun-031422/summary.md
+            docs/runtime-evidence/2026-10-17-capture-lifecycle-rerun-031422/build-provenance.json

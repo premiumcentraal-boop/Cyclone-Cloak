@@ -1,14 +1,18 @@
 # Cyclone Cloak Architecture
 
-Current prerelease: [v0.11.0-alpha.17](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.17), app/module code 41 (diagnostics expectations; production runtime behavior unchanged).
-Diagnostics fixture sidecars define typed/enum, external-state and paired-stability
-checks independently of profile schemas. [Policy documentation](DIAGNOSTIC-EXPECTATION-POLICIES.md)
-explains proof limits. Three Pixel 8 / user-0 captures of diagnostics commit
-`fbdc0faa5330bb0672894eb3110318307d738816` against the installed alpha.16 module
-each produced 82 PASS and 7 OBSERVED; both paired stability checks passed.
-Six external-state rows remain observations. No platform verdict or broader
-device coverage follows. These measurements do not physically verify the newly
-packaged alpha.17 app/module binaries or Android-user transitions.
+Current prerelease: [v0.11.0-alpha.18](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.18), app/module code 42 (diagnostics capture lifecycle; production runtime behavior unchanged).
+Each probe capture owns its request metadata, profile, expectations and rows.
+A generation gate prevents superseded workers from publishing or updating UI;
+only complete sets of 89 unique known rows may be successful reports.
+The harness retains bounded redacted failure evidence before cleanup.
+Five Pixel 8 captures at diagnostics commit `8e7ab14`, against installed
+alpha.17/code 41, proved user 0/A and user 17/B selection across warm/cold
+transitions: 408 PASS, 29 OBSERVED, zero FAIL/MISSING. Four user-17 permission
+limitations account for eight BLOCKED occurrences. Production audits and
+permissions matched before/after. This does not physically verify the newly
+packaged alpha.18 binaries or establish a platform verdict.
+Diagnostics fixture sidecars retain the typed/enum, external-state and paired
+stability policies described in [policy documentation](DIAGNOSTIC-EXPECTATION-POLICIES.md).
 Normal-app publication and preservation across two Cyclone profiles passed in
 older evidence; independent profile-side publication remains unverified.
 See [CURRENT-STATE.md](CURRENT-STATE.md) for checks and publication status.

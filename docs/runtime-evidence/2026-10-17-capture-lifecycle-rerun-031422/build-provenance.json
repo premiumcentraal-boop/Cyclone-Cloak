@@ -1,0 +1,13 @@
+{
+  "installed_release_tag": "v0.11.0-alpha.17",
+  "commit": "8e7ab1407c5ff18a2a50aa6e727b34c52739396c",
+  "clean_checkout": "C:\\Users\\Agent\\Cyclone\\cloak-repo",
+  "apk_path": "C:\\Users\\Agent\\Cyclone\\cloak-repo\\android\\probe\\build\\outputs\\apk\\diagnostics\\debug\\probe-diagnostics-debug.apk",
+  "apk_sha256": "e4b5ebf6a6b1a44ea9eb882b8935ab417088a8cec68d1f2651b222b2184071bd",
+  "installed_apk_hashes": {
+    "0": "e4b5ebf6a6b1a44ea9eb882b8935ab417088a8cec68d1f2651b222b2184071bd",
+    "17": "e4b5ebf6a6b1a44ea9eb882b8935ab417088a8cec68d1f2651b222b2184071bd"
+  },
+  "build_command": "$env:JAVA_HOME=\"C:/Program Files/Eclipse Adoptium/jdk-17.0.20.101-hotspot\"; $env:ANDROID_HOME=\"C:/Users/Agent/android-sdk\"; & \"$env:TEMP/cloak-build/gradle-8.11.1/bin/gradle.bat\" -p android :probe:assembleDiagnosticsDebug --offline --no-daemon --console=plain",
+  "orchestration_sha256": "d3c0ccbc5157b48bb8f3d43faeee5975ef6bae0494c1a9079074771d13d77080"
+}
