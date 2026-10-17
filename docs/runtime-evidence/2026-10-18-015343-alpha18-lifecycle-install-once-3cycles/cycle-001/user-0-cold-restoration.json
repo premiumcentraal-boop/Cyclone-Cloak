@@ -1,0 +1,634 @@
+{
+  "android_user": 0,
+  "result": "RESTORED_WITH_LIMITATIONS",
+  "counts": {
+    "PASS": 73,
+    "OBSERVED": 8,
+    "BLOCKED": 8
+  },
+  "rows": [
+    {
+      "id": "advertising.id",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "77bcdb8aeaf3ee823ff5818103c528a1cb7e83f226449497c8061f721c4c5fc7",
+      "after_sha256": "77bcdb8aeaf3ee823ff5818103c528a1cb7e83f226449497c8061f721c4c5fc7"
+    },
+    {
+      "id": "bluetooth.address",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "26b79907b875570f102ce679893482a1a60446522e1fab2c2bbb410f2eafed91",
+      "after_sha256": "26b79907b875570f102ce679893482a1a60446522e1fab2c2bbb410f2eafed91"
+    },
+    {
+      "id": "bluetooth.name",
+      "status": "OBSERVED",
+      "reason": "DYNAMIC_EXTERNAL_STATE",
+      "before_sha256": "2bbf587a65830ac67b21c2ed04d05bdb774c5f513970059a03ca714d7d91b253",
+      "after_sha256": "2bbf587a65830ac67b21c2ed04d05bdb774c5f513970059a03ca714d7d91b253"
+    },
+    {
+      "id": "build.BOOTLOADER",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "28eff559133c55eb7a85cf1951d29bdd070ae7c0554ce089997945df71931250",
+      "after_sha256": "28eff559133c55eb7a85cf1951d29bdd070ae7c0554ce089997945df71931250"
+    },
+    {
+      "id": "build.BRAND",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "7d0eacef0de836233bf69fc88fcab76ae6d5d1b4bd19982d683eeec79da0cefa",
+      "after_sha256": "7d0eacef0de836233bf69fc88fcab76ae6d5d1b4bd19982d683eeec79da0cefa"
+    },
+    {
+      "id": "build.DEVICE",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "b7fe67906c19c2fadf6c39bb07715db3df9949e9bdcb50b8ec60632473109b0f",
+      "after_sha256": "b7fe67906c19c2fadf6c39bb07715db3df9949e9bdcb50b8ec60632473109b0f"
+    },
+    {
+      "id": "build.FINGERPRINT",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "a8892d47697d8fdfd3b7fd68f33cab9430821652db50bc47940bd7d10b370126",
+      "after_sha256": "a8892d47697d8fdfd3b7fd68f33cab9430821652db50bc47940bd7d10b370126"
+    },
+    {
+      "id": "build.HARDWARE",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "b7fe67906c19c2fadf6c39bb07715db3df9949e9bdcb50b8ec60632473109b0f",
+      "after_sha256": "b7fe67906c19c2fadf6c39bb07715db3df9949e9bdcb50b8ec60632473109b0f"
+    },
+    {
+      "id": "build.ID",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "90e7d54bb14a3bd40ee88889f14ba55da4e5462d8b7453aa33e528e0d56306a7",
+      "after_sha256": "90e7d54bb14a3bd40ee88889f14ba55da4e5462d8b7453aa33e528e0d56306a7"
+    },
+    {
+      "id": "build.MANUFACTURER",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "a4f2cf81a927c6eb9dd7d575978468433f12433f589181b445059b20205d4de1",
+      "after_sha256": "a4f2cf81a927c6eb9dd7d575978468433f12433f589181b445059b20205d4de1"
+    },
+    {
+      "id": "build.MODEL",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "2bbf587a65830ac67b21c2ed04d05bdb774c5f513970059a03ca714d7d91b253",
+      "after_sha256": "2bbf587a65830ac67b21c2ed04d05bdb774c5f513970059a03ca714d7d91b253"
+    },
+    {
+      "id": "build.PRODUCT",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "b7fe67906c19c2fadf6c39bb07715db3df9949e9bdcb50b8ec60632473109b0f",
+      "after_sha256": "b7fe67906c19c2fadf6c39bb07715db3df9949e9bdcb50b8ec60632473109b0f"
+    },
+    {
+      "id": "build.SERIAL",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "eb8bf0d80db323992f6b634aab492b1e6d9e96a8e87a511c2a0db75ab929452c",
+      "after_sha256": "eb8bf0d80db323992f6b634aab492b1e6d9e96a8e87a511c2a0db75ab929452c"
+    },
+    {
+      "id": "build.TAGS",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "64759ff83545dfe4452f8f71fb645b0e14088e2d143042fe89020eed6f5bc16b",
+      "after_sha256": "64759ff83545dfe4452f8f71fb645b0e14088e2d143042fe89020eed6f5bc16b"
+    },
+    {
+      "id": "build.TIME",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "5bb19b80eb10fde6138ef9e54ed53ced0605829f14c7ccca5e92512148bba1a2",
+      "after_sha256": "5bb19b80eb10fde6138ef9e54ed53ced0605829f14c7ccca5e92512148bba1a2"
+    },
+    {
+      "id": "build.TYPE",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "3190d261d186aeead3a8deec202737c7775af5c8d455a9e5ba958c48b5fd3f59",
+      "after_sha256": "3190d261d186aeead3a8deec202737c7775af5c8d455a9e5ba958c48b5fd3f59"
+    },
+    {
+      "id": "build.getRadioVersion",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "233c16101ba35af8ea9e77e207e460ff3741c19ec39c959b4d7585724c31e335",
+      "after_sha256": "233c16101ba35af8ea9e77e207e460ff3741c19ec39c959b4d7585724c31e335"
+    },
+    {
+      "id": "build.getSerial",
+      "status": "BLOCKED",
+      "reason": "PERMISSION_OR_API_LIMITATION",
+      "before_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "after_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "id": "camera.characteristics",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "f03896ced0180c1393a8715d0027b3503f3067434d93c73935425cfa19230dd3",
+      "after_sha256": "f03896ced0180c1393a8715d0027b3503f3067434d93c73935425cfa19230dd3"
+    },
+    {
+      "id": "display.real.density",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "db55da3fc3098e9c42311c6013304ff36b19ef73d12ea932054b5ad51df4f49d",
+      "after_sha256": "db55da3fc3098e9c42311c6013304ff36b19ef73d12ea932054b5ad51df4f49d"
+    },
+    {
+      "id": "display.real.height",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "8350242b2df439d296a664c7c59b117507d0b3c537fa293304c84d84eb85cc43",
+      "after_sha256": "8350242b2df439d296a664c7c59b117507d0b3c537fa293304c84d84eb85cc43"
+    },
+    {
+      "id": "display.real.width",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "32eb1a8dafeb0873c8d00b0e9058c8c77ff6c6d9235b3236989c50ef63d8f9ba",
+      "after_sha256": "32eb1a8dafeb0873c8d00b0e9058c8c77ff6c6d9235b3236989c50ef63d8f9ba"
+    },
+    {
+      "id": "display.refresh",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "39fa9ec190eee7b6f4dff1100d6343e10918d044c75eac8f9e9a2596173f80c9",
+      "after_sha256": "39fa9ec190eee7b6f4dff1100d6343e10918d044c75eac8f9e9a2596173f80c9"
+    },
+    {
+      "id": "display.resources.density",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "db55da3fc3098e9c42311c6013304ff36b19ef73d12ea932054b5ad51df4f49d",
+      "after_sha256": "db55da3fc3098e9c42311c6013304ff36b19ef73d12ea932054b5ad51df4f49d"
+    },
+    {
+      "id": "display.resources.height",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "8350242b2df439d296a664c7c59b117507d0b3c537fa293304c84d84eb85cc43",
+      "after_sha256": "8350242b2df439d296a664c7c59b117507d0b3c537fa293304c84d84eb85cc43"
+    },
+    {
+      "id": "display.resources.width",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "32eb1a8dafeb0873c8d00b0e9058c8c77ff6c6d9235b3236989c50ef63d8f9ba",
+      "after_sha256": "32eb1a8dafeb0873c8d00b0e9058c8c77ff6c6d9235b3236989c50ef63d8f9ba"
+    },
+    {
+      "id": "drm.deviceUniqueId",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "003bdb888c6179b6b381316ff3f3164de5faf71653e511bd44ea9fab95134fcd",
+      "after_sha256": "003bdb888c6179b6b381316ff3f3164de5faf71653e511bd44ea9fab95134fcd"
+    },
+    {
+      "id": "locale.default.country",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "e46213b4be2e7b54d39176cdb74a645c972a1c8531831035e6181135432644ba",
+      "after_sha256": "e46213b4be2e7b54d39176cdb74a645c972a1c8531831035e6181135432644ba"
+    },
+    {
+      "id": "locale.default.language",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "50eac10e7966a04e139902940a2a8e129a4597574c709cb8d01939ace56ff9c3",
+      "after_sha256": "50eac10e7966a04e139902940a2a8e129a4597574c709cb8d01939ace56ff9c3"
+    },
+    {
+      "id": "locale.resources.country",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "e46213b4be2e7b54d39176cdb74a645c972a1c8531831035e6181135432644ba",
+      "after_sha256": "e46213b4be2e7b54d39176cdb74a645c972a1c8531831035e6181135432644ba"
+    },
+    {
+      "id": "locale.resources.language",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "50eac10e7966a04e139902940a2a8e129a4597574c709cb8d01939ace56ff9c3",
+      "after_sha256": "50eac10e7966a04e139902940a2a8e129a4597574c709cb8d01939ace56ff9c3"
+    },
+    {
+      "id": "operator.networkCountry",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "4b798cd3465cd40eb662a4d48c2ce8e3aa78017a0183a80a14da1f4974cf7547",
+      "after_sha256": "4b798cd3465cd40eb662a4d48c2ce8e3aa78017a0183a80a14da1f4974cf7547"
+    },
+    {
+      "id": "operator.networkName",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "d5a96cdf2401a1748c3248e6623a6948dcfe7f8eab8ab5eef67bf4d85f18e839",
+      "after_sha256": "d5a96cdf2401a1748c3248e6623a6948dcfe7f8eab8ab5eef67bf4d85f18e839"
+    },
+    {
+      "id": "operator.networkNumeric",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "6a39117aa91dcd08fd79838b118b4386ed2a8ab8bd1a23ee01124518276c7252",
+      "after_sha256": "6a39117aa91dcd08fd79838b118b4386ed2a8ab8bd1a23ee01124518276c7252"
+    },
+    {
+      "id": "operator.simCountry",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "4b798cd3465cd40eb662a4d48c2ce8e3aa78017a0183a80a14da1f4974cf7547",
+      "after_sha256": "4b798cd3465cd40eb662a4d48c2ce8e3aa78017a0183a80a14da1f4974cf7547"
+    },
+    {
+      "id": "operator.simName",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "d5a96cdf2401a1748c3248e6623a6948dcfe7f8eab8ab5eef67bf4d85f18e839",
+      "after_sha256": "d5a96cdf2401a1748c3248e6623a6948dcfe7f8eab8ab5eef67bf4d85f18e839"
+    },
+    {
+      "id": "operator.simNumeric",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "cbc530c5a6a1ef233d62b44974951e8b30ed5b2ffa2323a74fb07448a6eb1bdc",
+      "after_sha256": "cbc530c5a6a1ef233d62b44974951e8b30ed5b2ffa2323a74fb07448a6eb1bdc"
+    },
+    {
+      "id": "packages.visible",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "5eddd858502790102219e395eb0be509d74323f3616c5cd909a062688ae9ca9d",
+      "after_sha256": "5eddd858502790102219e395eb0be509d74323f3616c5cd909a062688ae9ca9d"
+    },
+    {
+      "id": "process.androidUser",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+      "after_sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9"
+    },
+    {
+      "id": "process.uid",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "1b2f7d7e470f8f47596fc08765003fa9ccef531b760818b70d71803298aef1a9",
+      "after_sha256": "1b2f7d7e470f8f47596fc08765003fa9ccef531b760818b70d71803298aef1a9"
+    },
+    {
+      "id": "properties.java.persist.sys.timezone",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "23510f589b2eb159633806c30557ecea8405d7f391921a6742b1ed9aeb208f79",
+      "after_sha256": "23510f589b2eb159633806c30557ecea8405d7f391921a6742b1ed9aeb208f79"
+    },
+    {
+      "id": "properties.java.ro.build.fingerprint",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "a8892d47697d8fdfd3b7fd68f33cab9430821652db50bc47940bd7d10b370126",
+      "after_sha256": "a8892d47697d8fdfd3b7fd68f33cab9430821652db50bc47940bd7d10b370126"
+    },
+    {
+      "id": "properties.java.ro.build.version.sdk",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "06024be3089840dc57375f951f67e195b31c37b7e819c63a15dcba31e894aa50",
+      "after_sha256": "06024be3089840dc57375f951f67e195b31c37b7e819c63a15dcba31e894aa50"
+    },
+    {
+      "id": "properties.java.ro.product.brand",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "7d0eacef0de836233bf69fc88fcab76ae6d5d1b4bd19982d683eeec79da0cefa",
+      "after_sha256": "7d0eacef0de836233bf69fc88fcab76ae6d5d1b4bd19982d683eeec79da0cefa"
+    },
+    {
+      "id": "properties.java.ro.product.device",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "b7fe67906c19c2fadf6c39bb07715db3df9949e9bdcb50b8ec60632473109b0f",
+      "after_sha256": "b7fe67906c19c2fadf6c39bb07715db3df9949e9bdcb50b8ec60632473109b0f"
+    },
+    {
+      "id": "properties.java.ro.product.manufacturer",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "a4f2cf81a927c6eb9dd7d575978468433f12433f589181b445059b20205d4de1",
+      "after_sha256": "a4f2cf81a927c6eb9dd7d575978468433f12433f589181b445059b20205d4de1"
+    },
+    {
+      "id": "properties.java.ro.product.model",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "2bbf587a65830ac67b21c2ed04d05bdb774c5f513970059a03ca714d7d91b253",
+      "after_sha256": "2bbf587a65830ac67b21c2ed04d05bdb774c5f513970059a03ca714d7d91b253"
+    },
+    {
+      "id": "properties.java.ro.product.name",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "b7fe67906c19c2fadf6c39bb07715db3df9949e9bdcb50b8ec60632473109b0f",
+      "after_sha256": "b7fe67906c19c2fadf6c39bb07715db3df9949e9bdcb50b8ec60632473109b0f"
+    },
+    {
+      "id": "properties.java.ro.serialno",
+      "status": "OBSERVED",
+      "reason": "INSUFFICIENT_VALUE_EVIDENCE",
+      "before_sha256": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+      "after_sha256": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126"
+    },
+    {
+      "id": "properties.java.ro.sf.lcd_density",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "370347485def74965c9325cf412911e204bfb6012003162089f012c0de6bea4b",
+      "after_sha256": "370347485def74965c9325cf412911e204bfb6012003162089f012c0de6bea4b"
+    },
+    {
+      "id": "properties.native.persist.sys.timezone",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "23510f589b2eb159633806c30557ecea8405d7f391921a6742b1ed9aeb208f79",
+      "after_sha256": "23510f589b2eb159633806c30557ecea8405d7f391921a6742b1ed9aeb208f79"
+    },
+    {
+      "id": "properties.native.ro.build.fingerprint",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "a8892d47697d8fdfd3b7fd68f33cab9430821652db50bc47940bd7d10b370126",
+      "after_sha256": "a8892d47697d8fdfd3b7fd68f33cab9430821652db50bc47940bd7d10b370126"
+    },
+    {
+      "id": "properties.native.ro.build.version.sdk",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "06024be3089840dc57375f951f67e195b31c37b7e819c63a15dcba31e894aa50",
+      "after_sha256": "06024be3089840dc57375f951f67e195b31c37b7e819c63a15dcba31e894aa50"
+    },
+    {
+      "id": "properties.native.ro.product.brand",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "7d0eacef0de836233bf69fc88fcab76ae6d5d1b4bd19982d683eeec79da0cefa",
+      "after_sha256": "7d0eacef0de836233bf69fc88fcab76ae6d5d1b4bd19982d683eeec79da0cefa"
+    },
+    {
+      "id": "properties.native.ro.product.device",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "b7fe67906c19c2fadf6c39bb07715db3df9949e9bdcb50b8ec60632473109b0f",
+      "after_sha256": "b7fe67906c19c2fadf6c39bb07715db3df9949e9bdcb50b8ec60632473109b0f"
+    },
+    {
+      "id": "properties.native.ro.product.manufacturer",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "a4f2cf81a927c6eb9dd7d575978468433f12433f589181b445059b20205d4de1",
+      "after_sha256": "a4f2cf81a927c6eb9dd7d575978468433f12433f589181b445059b20205d4de1"
+    },
+    {
+      "id": "properties.native.ro.product.model",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "2bbf587a65830ac67b21c2ed04d05bdb774c5f513970059a03ca714d7d91b253",
+      "after_sha256": "2bbf587a65830ac67b21c2ed04d05bdb774c5f513970059a03ca714d7d91b253"
+    },
+    {
+      "id": "properties.native.ro.product.name",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "b7fe67906c19c2fadf6c39bb07715db3df9949e9bdcb50b8ec60632473109b0f",
+      "after_sha256": "b7fe67906c19c2fadf6c39bb07715db3df9949e9bdcb50b8ec60632473109b0f"
+    },
+    {
+      "id": "properties.native.ro.serialno",
+      "status": "OBSERVED",
+      "reason": "INSUFFICIENT_VALUE_EVIDENCE",
+      "before_sha256": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126",
+      "after_sha256": "12ae32cb1ec02d01eda3581b127c1fee3b0dc53572ed6baf239721a03d82e126"
+    },
+    {
+      "id": "properties.native.ro.sf.lcd_density",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "370347485def74965c9325cf412911e204bfb6012003162089f012c0de6bea4b",
+      "after_sha256": "370347485def74965c9325cf412911e204bfb6012003162089f012c0de6bea4b"
+    },
+    {
+      "id": "properties.nativeCallback.ro.product.model",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "2bbf587a65830ac67b21c2ed04d05bdb774c5f513970059a03ca714d7d91b253",
+      "after_sha256": "2bbf587a65830ac67b21c2ed04d05bdb774c5f513970059a03ca714d7d91b253"
+    },
+    {
+      "id": "runtime.javaBridgeVisible",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "after_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+    },
+    {
+      "id": "runtime.loadedLibraries",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "after_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    },
+    {
+      "id": "sensors.list",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "271ae1a2f8e5143ee11184c2aba685abead75491ecae0f83aa88bbe99e7a09cc",
+      "after_sha256": "271ae1a2f8e5143ee11184c2aba685abead75491ecae0f83aa88bbe99e7a09cc"
+    },
+    {
+      "id": "settings.provider.androidId",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "aeb2b702d81c47a29d2c90f0d9301b9263c6588cb85b6fb9ff585f7214db319c",
+      "after_sha256": "aeb2b702d81c47a29d2c90f0d9301b9263c6588cb85b6fb9ff585f7214db319c"
+    },
+    {
+      "id": "settings.secure.androidId",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "aeb2b702d81c47a29d2c90f0d9301b9263c6588cb85b6fb9ff585f7214db319c",
+      "after_sha256": "aeb2b702d81c47a29d2c90f0d9301b9263c6588cb85b6fb9ff585f7214db319c"
+    },
+    {
+      "id": "settings.unrelatedControl",
+      "status": "OBSERVED",
+      "reason": "DYNAMIC_EXTERNAL_STATE",
+      "before_sha256": "391552c099c101b131feaf24c5795a6a15bc8ec82015424e0d2b4274a369a0bf",
+      "after_sha256": "98089e6d36f78e9766c9ea34d5acb3611f3a92cd81c5eb102095d924ffc7d08b"
+    },
+    {
+      "id": "telephony.activeModemCount",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
+      "after_sha256": "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35"
+    },
+    {
+      "id": "telephony.dataNetworkType",
+      "status": "BLOCKED",
+      "reason": "PERMISSION_OR_API_LIMITATION",
+      "before_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "after_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "id": "telephony.deviceId",
+      "status": "BLOCKED",
+      "reason": "PERMISSION_OR_API_LIMITATION",
+      "before_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "after_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "id": "telephony.imei0",
+      "status": "BLOCKED",
+      "reason": "PERMISSION_OR_API_LIMITATION",
+      "before_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "after_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "id": "telephony.imei1",
+      "status": "BLOCKED",
+      "reason": "PERMISSION_OR_API_LIMITATION",
+      "before_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "after_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "id": "telephony.networkType",
+      "status": "BLOCKED",
+      "reason": "PERMISSION_OR_API_LIMITATION",
+      "before_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "after_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "id": "telephony.phoneCount",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
+      "after_sha256": "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35"
+    },
+    {
+      "id": "telephony.phoneType",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+      "after_sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b"
+    },
+    {
+      "id": "telephony.roaming",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "after_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa"
+    },
+    {
+      "id": "telephony.simSerial",
+      "status": "BLOCKED",
+      "reason": "PERMISSION_OR_API_LIMITATION",
+      "before_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "after_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "id": "telephony.simState",
+      "status": "OBSERVED",
+      "reason": "DYNAMIC_EXTERNAL_STATE",
+      "before_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+      "after_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d"
+    },
+    {
+      "id": "telephony.subscriberId",
+      "status": "BLOCKED",
+      "reason": "PERMISSION_OR_API_LIMITATION",
+      "before_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b",
+      "after_sha256": "74234e98afe7498fb5daf1f36ac2d78acc339464f950703b8c019892f982b90b"
+    },
+    {
+      "id": "timezone.default",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "23510f589b2eb159633806c30557ecea8405d7f391921a6742b1ed9aeb208f79",
+      "after_sha256": "23510f589b2eb159633806c30557ecea8405d7f391921a6742b1ed9aeb208f79"
+    },
+    {
+      "id": "version.INCREMENTAL",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "cd5a4c0fa885c659d5e14aafce7b9282ddb94399ab95dbd3e90e158c0bf036f9",
+      "after_sha256": "cd5a4c0fa885c659d5e14aafce7b9282ddb94399ab95dbd3e90e158c0bf036f9"
+    },
+    {
+      "id": "version.RELEASE",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "17eed2c0e7c9788d0b46fafdf328b3e955aa0a22132c16cde72aa4f32dcd5282",
+      "after_sha256": "17eed2c0e7c9788d0b46fafdf328b3e955aa0a22132c16cde72aa4f32dcd5282"
+    },
+    {
+      "id": "version.SDK_INT",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "76a50887d8f1c2e9301755428990ad81479ee21c25b43215cf524541e0503269",
+      "after_sha256": "76a50887d8f1c2e9301755428990ad81479ee21c25b43215cf524541e0503269"
+    },
+    {
+      "id": "version.SECURITY_PATCH",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "8cfe2736c6095ce25f9c70112b1bb12fc27254eb53d1698157b0a612120eba1b",
+      "after_sha256": "8cfe2736c6095ce25f9c70112b1bb12fc27254eb53d1698157b0a612120eba1b"
+    },
+    {
+      "id": "wifi.bssid",
+      "status": "OBSERVED",
+      "reason": "DYNAMIC_EXTERNAL_STATE",
+      "before_sha256": "0c6ccb7097b7507a622561ac20701daaa79acdec43fa32e9a38a487b82793a5d",
+      "after_sha256": "0c6ccb7097b7507a622561ac20701daaa79acdec43fa32e9a38a487b82793a5d"
+    },
+    {
+      "id": "wifi.linkSpeed",
+      "status": "OBSERVED",
+      "reason": "DYNAMIC_EXTERNAL_STATE",
+      "before_sha256": "c8c9cad7b920b50f713830b8dc55f59fffbbad98335d9f30e0bca8fab5dfeedd",
+      "after_sha256": "6cc6eefb674286f7d1a0e4adaa840670dafa7870f77c7d6d73d5924c44ce3bff"
+    },
+    {
+      "id": "wifi.objectMac",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "26b79907b875570f102ce679893482a1a60446522e1fab2c2bbb410f2eafed91",
+      "after_sha256": "26b79907b875570f102ce679893482a1a60446522e1fab2c2bbb410f2eafed91"
+    },
+    {
+      "id": "wifi.serviceMac",
+      "status": "PASS",
+      "reason": "BASELINE_RESTORED",
+      "before_sha256": "26b79907b875570f102ce679893482a1a60446522e1fab2c2bbb410f2eafed91",
+      "after_sha256": "26b79907b875570f102ce679893482a1a60446522e1fab2c2bbb410f2eafed91"
+    },
+    {
+      "id": "wifi.ssid",
+      "status": "OBSERVED",
+      "reason": "DYNAMIC_EXTERNAL_STATE",
+      "before_sha256": "92dc9517b31e7f385bf73e56d1794a9e5e3167d71c3538e74b28ad8a22b1e881",
+      "after_sha256": "92dc9517b31e7f385bf73e56d1794a9e5e3167d71c3538e74b28ad8a22b1e881"
+    }
+  ]
+}

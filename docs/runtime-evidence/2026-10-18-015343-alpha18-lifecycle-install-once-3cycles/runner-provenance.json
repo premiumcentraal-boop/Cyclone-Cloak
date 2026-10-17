@@ -1,0 +1,7 @@
+{
+  "base_commit": "384a5a023fd96e2512ffe4e0be17a234e6a3422f",
+  "orchestration_sha256": "767d6ee2537f52b95825a0cbb548f1c58f2671868ec3e59528b7b0623223d168",
+  "source_tag": "v0.11.0-alpha.18",
+  "source_commit": "fb1e3c6ae2e4caca56778a54d8025dba696b53b8",
+  "cycles": 3
+}

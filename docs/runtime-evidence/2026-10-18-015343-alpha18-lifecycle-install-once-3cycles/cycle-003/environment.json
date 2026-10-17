@@ -1,0 +1,18 @@
+{
+  "current_user": 0,
+  "user": 0,
+  "target_user": 17,
+  "api": "36",
+  "module_properties": [
+    "id=cyclone_cloak",
+    "name=Cyclone Cloak",
+    "version=v0.11.0-alpha.18",
+    "versionCode=42",
+    "author=Cyclone Cloak contributors",
+    "description=Device-profile engine for Cyclone (platform). Manage per-app profiles from the Cyclone Cloak companion app. Requires platform."
+  ],
+  "installed_module_sha256": "ffebdf4436876852db5fe3c8a817a351a470137117411f98410f37e3907020cd",
+  "module_digest_scope": "installed file; not proof of the in-process binary",
+  "published_entries": 327,
+  "index_sha256": "409d6d5386be07a6b14b888872cb8467feeb1bf5c21647e716c90bd8a57ba99c"
+}
