@@ -1,0 +1,9 @@
+{
+  "source_commit": "fbdc0faa5330bb0672894eb3110318307d738816",
+  "apk_path": "C:\\Users\\Agent\\Cyclone\\cloak-repo\\android\\probe\\build\\outputs\\apk\\diagnostics\\debug\\probe-diagnostics-debug.apk",
+  "apk_sha256": "03c16645995ca8fd3c8f9daa3caf0cf6aff9aa8f2618a26d82a737628ba6cbb7",
+  "installed_apk_sha256": "03c16645995ca8fd3c8f9daa3caf0cf6aff9aa8f2618a26d82a737628ba6cbb7",
+  "build_command": "$env:JAVA_HOME=\"C:/Program Files/Eclipse Adoptium/jdk-17.0.20.101-hotspot\"; $env:CLOAK_TEST_WSL=\"1\"; & \"$env:TEMP/cloak-build/gradle-8.11.1/bin/gradle.bat\" -p android :probe:assembleDiagnosticsDebug --offline --no-daemon --console=plain",
+  "build_result": "BUILD SUCCESSFUL",
+  "runner": "existing profile_check.Harness.overlay/capture and compare; same Android user only"
+}

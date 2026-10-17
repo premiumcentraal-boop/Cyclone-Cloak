@@ -1,11 +1,16 @@
 # Cyclone Cloak Architecture
 
-Current prerelease: [v0.11.0-alpha.16](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.16), app/module code 40 (diagnostics report quality; production runtime behavior unchanged).
-Normal-app publication and preservation of bindings across two Cyclone profiles
-passed on Pixel 8; an independent profile-side publisher is not device-verified.
-The diagnostics-quality evidence covers the recorded updated probe against the
-installed alpha.15 module in user 0; it does not physically verify alpha.16
-binaries or broader device behavior. No platform verdict is claimed.
+Current prerelease: [v0.11.0-alpha.17](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.17), app/module code 41 (diagnostics expectations; production runtime behavior unchanged).
+Diagnostics fixture sidecars define typed/enum, external-state and paired-stability
+checks independently of profile schemas. [Policy documentation](DIAGNOSTIC-EXPECTATION-POLICIES.md)
+explains proof limits. Three Pixel 8 / user-0 captures of diagnostics commit
+`fbdc0faa5330bb0672894eb3110318307d738816` against the installed alpha.16 module
+each produced 82 PASS and 7 OBSERVED; both paired stability checks passed.
+Six external-state rows remain observations. No platform verdict or broader
+device coverage follows. These measurements do not physically verify the newly
+packaged alpha.17 app/module binaries or Android-user transitions.
+Normal-app publication and preservation across two Cyclone profiles passed in
+older evidence; independent profile-side publication remains unverified.
 See [CURRENT-STATE.md](CURRENT-STATE.md) for checks and publication status.
 Dated release reports describe their historical releases.
 

@@ -1,23 +1,28 @@
 # Current state
 
-Updated 2026-10-17. **v0.11.0-alpha.16 / versionCode 40** is the
-[latest prerelease](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.16).
-[Alpha.16 notes](RELEASE_0.11.0-alpha.16.md) describe diagnostics-only SDK,
-fixture-label and summary fixes. Pixel 8 / user-0 captures on 2026-10-16, against
-the installed alpha.15 module, each measured 77 PASS and 12 uncovered observations,
-zero FAIL/BLOCKED/MISSING rows and zero warnings. All 327 production index entries
-and audited stores/module files were preserved. The attached provenance note
-explains the unscoped permission-map limitation. These measurements do not verify
-new alpha.16 binaries, all Android users or normal companion publication flow.
-No production permissions, schemas, connector, binding or runtime behavior change.
-No platform verdict is claimed. See [harness usage](PROFILE-TEST-HARNESS.md).
+Updated 2026-10-17. **v0.11.0-alpha.17 / versionCode 41** is the
+[latest prerelease](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.17).
+[Alpha.17 notes](RELEASE_0.11.0-alpha.17.md) describe diagnostics-only safe
+expectations for 12 previously uncovered rows. Run 3 on Pixel 8 / Android user 0
+measured diagnostics commit `fbdc0faa5330bb0672894eb3110318307d738816` against
+the installed alpha.16/code 40 module: three captures, each 82 PASS, 7 OBSERVED,
+0 FAIL/BLOCKED/MISSING. Paired classification: 246 PASS, 21 OBSERVED, zero
+warnings, blocked or pending rows. Both stability comparisons passed; six
+external-state rows remain observations. All 327 production entries and audited
+files were preserved and temporary probe state removed. Permissions unchanged.
+[Run 3 summary](runtime-evidence/2026-10-17-run3-expectations-022627/summary.md)
+and [build provenance](runtime-evidence/2026-10-17-run3-expectations-022627/build-provenance.json)
+identify the measured APK; this does not verify alpha.17 production binaries,
+Android-user transitions or broader compatibility. No platform verdict is claimed.
+No production runtime, connector, binding storage, publication, schemas, permissions
+or module behavior changed. See [harness usage](PROFILE-TEST-HARNESS.md).
 
 ## Versions and major components
 
 | Component | Current source version / responsibility |
 | --- | --- |
-| App | `dev.cyclone.cloak`, `0.11.0-alpha.16`, code 40; minimum API 29, target/compile API 36 |
-| Module | `cyclone_cloak`, `v0.11.0-alpha.16`, code 40; ARM64/ARMv7, minimum API 26; metadata-only change from alpha.15 |
+| App | `dev.cyclone.cloak`, `0.11.0-alpha.17`, code 41; minimum API 29, target/compile API 36 |
+| Module | `cyclone_cloak`, `v0.11.0-alpha.17`, code 41; ARM64/ARMv7, minimum API 26; metadata-only change from alpha.16 |
 | Profile | Schema `0.3`, legacy `0.2` accepted; existing JSON storage unchanged |
 | Binding / reader | Binding schema 2; module index `schemaVersion: 2`; existing key lookup unchanged |
 | Connector | `cyclone.connector/1.3`; Cyclone 5.0.0-alpha.122 or newer |
@@ -46,7 +51,7 @@ No platform verdict is claimed. See [harness usage](PROFILE-TEST-HARNESS.md).
 ## Local verification and release gate
 
 The diagnostics-quality checks passed: app **522 passed, zero skipped**, module
-**12 passed**, forge **293 passed**, schema **33 passed**, probe **15 per flavor**
+**12 passed**, forge **411 passed**, schema **33 passed**, probe **79 per flavor**
 and host probe checks **7 passed**.
 WSL enabled the actual publication shell tests on Windows. Debug assembly and module
 packaging succeeded without compiler warnings. The standard release CI gate signs the APK, packages the module and verifies
@@ -59,15 +64,15 @@ $env:CLOAK_TEST_WSL='1'
 uv run --with pytest -- python -m pytest forge/tests -q
 uv run --with pytest --with jsonschema -- python -m pytest forge/schema_tests -q
 uv run -- python -m unittest discover -s android/probe/tests -v
-uv run -- python tools/verify_release.py --tag v0.11.0-alpha.16 --artifacts
+uv run -- python tools/verify_release.py --tag v0.11.0-alpha.17 --artifacts
 git diff --check
 ```
 
 The release workflow reruns tests, signs the APK using existing CI secrets, packages
 the module and checks exact embedded-module agreement before uploading the prerelease.
 Local debug output: `android/app/build/outputs/apk/debug/app-debug.apk`.
-Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.16.zip`,
-`evidence-bundle.zip`, `PROVENANCE-NOTE.md`.
+Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.17.zip`,
+`evidence-bundle.zip`, `summary.md`, `build-provenance.json`.
 
 ## Known limits and separately verified device evidence
 
@@ -81,7 +86,7 @@ Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.16.zip`,
 - Existing physical-device checks remain separate, including reboot/activation,
   multi-user behavior, publication/recovery and backup/import UI. See
   [DEFERRED-DEVICE-CHECKS.md](DEFERRED-DEVICE-CHECKS.md) and the runtime coverage ledger.
-  Earlier artifact measurements are not physical verification of alpha.16.
+  Earlier artifact measurements are not physical verification of alpha.17.
 - Publisher swaps retain the existing two-rename reader gap and do not guarantee
   power-loss safety or lock coordination with older/external writers.
 - Profile batch commits coordinate cooperating in-process callers. Downloads

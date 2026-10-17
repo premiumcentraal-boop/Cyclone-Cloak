@@ -11,15 +11,16 @@ not prove that every inspection API sees it.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.11.0-alpha.16 (prerelease)
+## Status: 0.11.0-alpha.17 (prerelease)
 
-Alpha.16 improves the separate diagnostics probe's advertising-ID path, fixture
-labels and summary classification. App/module code 40.
-[Release notes](docs/RELEASE_0.11.0-alpha.16.md) include Pixel 8 / user-0 evidence
-against the installed alpha.15 module: three captures, each 77 PASS and 12
-uncovered observations, zero failures or warnings. This is not physical proof of
-the new alpha.16 binaries. No production permissions, profile schemas, connector,
-binding or runtime behavior change. No platform verdict is claimed.
+Alpha.17 adds safe diagnostics expectations for 12 previously uncovered rows.
+App/module code 41; production runtime and module behavior are unchanged.
+[Release notes](docs/RELEASE_0.11.0-alpha.17.md) record three Pixel 8 / user-0
+captures against the installed alpha.16 module: each 82 PASS, 7 OBSERVED and zero
+FAIL/BLOCKED/MISSING rows. Both paired stability checks passed, with zero paired
+warnings or pending rows. Six external-state rows remain observations by design.
+This validates the recorded diagnostics expectation model, not broader device
+compatibility or the new release binaries. No platform verdict is claimed.
 See [CURRENT-STATE.md](docs/CURRENT-STATE.md).
 
 - **Companion app** (`android/app`): a Cyclone connector (contract `cyclone.connector/1.3`, Cyclone

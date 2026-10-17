@@ -65,5 +65,6 @@ jobs:
           files: |
             android/app/build/outputs/apk/release/*.apk
             android/module/build/module/*.zip
-            docs/runtime-evidence/2026-10-16-diagnostics-quality-233115/evidence-bundle.zip
-            docs/runtime-evidence/2026-10-16-diagnostics-quality-233115/PROVENANCE-NOTE.md
+            docs/runtime-evidence/2026-10-17-run3-expectations-022627/evidence-bundle.zip
+            docs/runtime-evidence/2026-10-17-run3-expectations-022627/summary.md
+            docs/runtime-evidence/2026-10-17-run3-expectations-022627/build-provenance.json
