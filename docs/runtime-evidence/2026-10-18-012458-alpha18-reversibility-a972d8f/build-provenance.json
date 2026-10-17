@@ -1,0 +1,12 @@
+{
+  "tag": "v0.11.0-alpha.18",
+  "commit": "fb1e3c6ae2e4caca56778a54d8025dba696b53b8",
+  "detached_checkout": "C:\\Users\\Agent\\AppData\\Local\\Temp\\cloak-alpha18-reversibility-clean-1792277762",
+  "build_command": "$env:JAVA_HOME=\"C:/Program Files/Eclipse Adoptium/jdk-17.0.20.101-hotspot\"; $env:ANDROID_HOME=\"C:/Users/Agent/android-sdk\"; & \"$env:TEMP/cloak-build/gradle-8.11.1/bin/gradle.bat\" -p \"$env:TEMP/cloak-alpha18-reversibility-clean/android\" :probe:assembleDiagnosticsDebug :probe:testDiagnosticsDebugUnitTest --offline --no-daemon --console=plain",
+  "apk_sha256": "3654e66710ba64fb7229132c69b44424976b578736c343d4c4219013d59294bb",
+  "installed_apk_hashes": {
+    "0": "3654e66710ba64fb7229132c69b44424976b578736c343d4c4219013d59294bb",
+    "17": "3654e66710ba64fb7229132c69b44424976b578736c343d4c4219013d59294bb"
+  },
+  "orchestration_sha256": "998d3bb2c93f900300097a9acf15cbfe038781f24efc04172f3a13cdef49895d"
+}

@@ -1,0 +1,20 @@
+{
+  "runner_commit": "a972d8f2fdef623685ad3f1c02ca0c033d140f85",
+  "execution_checkout_commit": "311b2b074e32034beb82900574a5c63b98770eab",
+  "runner_matches_requested_commit": true,
+  "runner_sha256": "998d3bb2c93f900300097a9acf15cbfe038781f24efc04172f3a13cdef49895d",
+  "source_tag": "v0.11.0-alpha.18",
+  "source_commit": "fb1e3c6ae2e4caca56778a54d8025dba696b53b8",
+  "clean_detached_source_checkout": "C:\\Users\\Agent\\AppData\\Local\\Temp\\cloak-alpha18-reversibility-clean-1792277762",
+  "apk_sha256": "3654e66710ba64fb7229132c69b44424976b578736c343d4c4219013d59294bb",
+  "installed_apk_hashes": {
+    "0": "3654e66710ba64fb7229132c69b44424976b578736c343d4c4219013d59294bb",
+    "17": "3654e66710ba64fb7229132c69b44424976b578736c343d4c4219013d59294bb"
+  },
+  "build_reused": true,
+  "actual_build_command": "$env:JAVA_HOME=\"C:/Program Files/Eclipse Adoptium/jdk-17.0.20.101-hotspot\"; $env:ANDROID_HOME=\"C:/Users/Agent/android-sdk\"; & \"$env:TEMP/cloak-build/gradle-8.11.1/bin/gradle.bat\" -p \"$env:TEMP/cloak-alpha18-reversibility-clean-1792277762/android\" :probe:assembleDiagnosticsDebug :probe:testDiagnosticsDebugUnitTest --offline --no-daemon --console=plain",
+  "build_provenance_correction": "Original runner build-provenance command uses an outdated checkout path. Actual clean checkout and original successful command recorded here. APK reused and hash reverified.",
+  "test_command": "uv run --with pytest -- python -X utf8 -m pytest forge/tests/test_probe_reversibility.py -q",
+  "test_result": "38 passed in 0.09s",
+  "run_command": "uv run -- python -X utf8 tools/run_probe_reversibility.py --source-checkout \"C:\\Users\\Agent\\AppData\\Local\\Temp\\cloak-alpha18-reversibility-clean-1792277762\" --adb C:/Users/Agent/android-sdk/platform-tools/adb.exe --serial 3B171FDJH0061G --secondary 17 --output \"C:\\Users\\Agent\\Cyclone\\cloak-repo\\docs\\runtime-evidence\\2026-10-18-012458-alpha18-reversibility-a972d8f\""
+}
