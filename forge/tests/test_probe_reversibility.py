@@ -8,7 +8,9 @@ import pytest
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[2]/'tools'))
 from run_probe_reversibility import (
-    phases, restoration, cleanup_private, check_metadata, effective_permission_state, PACKAGE)
+    phases, restoration, cleanup_private, check_metadata, effective_permission_state, PACKAGE,
+    cycle_plan, aggregate_summary, run_cycles, parse_args, snapshot_delta,
+    ensure_diagnostics_apk, APK_INSTALL_POLICY)
 
 
 
@@ -166,5 +168,261 @@ def test_duplicate_or_malformed_appop_entries_are_rejected():
     assert effective_permission_state(state_with_allowed_entries([]),duplicate) is False
     with pytest.raises(ValueError,match='INVALID_APPOP_ENTRY'):
         effective_permission_state(state_with_allowed_entries([]),malformed)
+
+
+def test_cycle_plan_repeats_complete_sequence_with_unique_directories():
+    plan = cycle_plan([0,17], 3)
+    assert [step['directory'] for step in plan] == ['cycle-001','cycle-002','cycle-003']
+    assert [step['cycle'] for step in plan] == [1,2,3]
+    assert all(step['phases'] == phases([0,17]) for step in plan)
+    assert sum(len(step['phases']) for step in plan) == 24
+
+
+@pytest.mark.parametrize('count', [0,-1,True,1.5])
+def test_cycle_plan_rejects_invalid_counts(count):
+    with pytest.raises(ValueError,match='INVALID_CYCLES'):
+        cycle_plan([0,17],count)
+
+
+def cycle_args(tmp_path, *extra):
+    return parse_args(['--source-checkout',str(tmp_path/'source'),'--adb','adb',
+                       '--serial','test','--output',str(tmp_path/'evidence'),*extra])
+
+
+def fake_cycle(args, *, failure=None, permissions=None, audit=None):
+    """Exercise orchestration using persisted evidence, without a device."""
+    out = args.output
+    out.mkdir(parents=True,exist_ok=False)
+    def save(name,value):
+        (out/name).write_text(json.dumps(value),encoding='utf-8')
+    state = state_with_allowed_entries([('READ_DEVICE_IDENTIFIERS','deny')])
+    after = copy.deepcopy(state)
+    if permissions:
+        after[PACKAGE]['appop_modes']['0'].append(('CAMERA','allow'))
+    before_audit = {'index_sha256':'a'*64}
+    save('audit-before.json',before_audit)
+    save('audit-after.json',audit or before_audit)
+    save('permissions-before.json',state)
+    save('permissions-after.json',after)
+    save('cleanup-proof.json',{'scratch_removed':True,**{str(u):dict(
+        binding_removed=True,body_directory_removed=True,private_files_removed=True) for u in (0,17)}})
+    save('manifest.json',dict(result='FAIL' if failure else 'RESTORED_WITH_EXPECTED_LIMITATIONS',
+         apk_sha256='f'*64, apk_install=dict(apk_install_policy=APK_INSTALL_POLICY,
+             installation_skipped=True, installed_apk_hashes={'0':'f'*64,'17':'f'*64}),
+         errors=[failure] if failure else [],captures=4 if failure else 8,duration_seconds=1,
+         failed_phase='user-17-bound-cold' if failure else None,
+         restoration={} if failure else {'0':'RESTORED_WITH_LIMITATIONS','17':'RESTORED_WITH_LIMITATIONS'}))
+    return 1 if failure else 0
+
+
+def test_default_and_explicit_one_cycle_keep_existing_paths_and_phase_plan(tmp_path):
+    default = cycle_args(tmp_path)
+    explicit = cycle_args(tmp_path,'--cycles','1')
+    assert default == explicit
+    assert cycle_plan([0,17]) == [dict(cycle=1,directory='.',phases=phases([0,17]))]
+    calls=[]
+    def executor(args):
+        calls.append(args.output)
+        return fake_cycle(args)
+    assert run_cycles(default,executor)==0
+    assert calls==[default.output]
+    assert (default.output/'manifest.json').is_file()
+    assert not (default.output/'cycle-001').exists()
+
+
+def test_three_cycles_aggregate_and_preserve_each_cycle_evidence(tmp_path):
+    args=cycle_args(tmp_path,'--cycles','3')
+    assert run_cycles(args,fake_cycle)==0
+    result=json.loads((args.output/'aggregate-summary.json').read_text())
+    assert result['passed_cycles']==3 and result['failed_cycle'] is None
+    assert not result['permission_state_changed'] and not result['production_state_changed']
+    assert result['cleanup_passed']
+    assert all(row['restoration']=={'0':'RESTORED_WITH_LIMITATIONS','17':'RESTORED_WITH_LIMITATIONS'}
+               for row in result['cycles'])
+    from zipfile import ZipFile
+    with ZipFile(args.output/'lifecycle-evidence-bundle.zip') as bundle:
+        assert bundle.testzip() is None
+        assert all(f'cycle-{n:03d}/cleanup-proof.json' in bundle.namelist() for n in (1,2,3))
+
+
+@pytest.mark.parametrize('failure', ['PROBE_REPORT_TIMEOUT','BOUND_CAPTURE_FAILED'])
+def test_failed_cycle_stops_before_next_and_keeps_phase_and_cleanup(tmp_path,failure):
+    args=cycle_args(tmp_path,'--cycles','3')
+    def executor(child):
+        return fake_cycle(child,failure=failure if child.cycle==2 else None)
+    assert run_cycles(args,executor)==1
+    summary=json.loads((args.output/'aggregate-summary.json').read_text())
+    assert summary['failed_cycle']==2 and summary['completed_cycles']==2
+    assert summary['cycles'][1]['failed_phase']=='user-17-bound-cold'
+    assert summary['cycles'][1]['cleanup_passed']
+    assert not (args.output/'cycle-003').exists()
+
+
+@pytest.mark.parametrize('kind', ['permissions','production','cleanup','boundary'])
+def test_false_success_in_cycle_manifest_is_not_promoted(tmp_path,kind):
+    args=cycle_args(tmp_path,'--cycles','3')
+    def executor(child):
+        code=fake_cycle(child,permissions=kind=='permissions',
+                        audit={'index_sha256':'b'*64} if kind=='production' else None)
+        if kind=='cleanup':
+            (child.output/'cleanup-proof.json').unlink()
+        if kind=='boundary' and child.cycle==2:
+            for name in ['permissions-before.json','permissions-after.json']:
+                path=child.output/name
+                state=json.loads(path.read_text())
+                state[PACKAGE]['appop_modes']['0'].append(['CAMERA','deny'])
+                path.write_text(json.dumps(state))
+        return code
+    assert run_cycles(args,executor)==1
+    summary=json.loads((args.output/'aggregate-summary.json').read_text())
+    assert summary['failed_cycle']==(2 if kind=='boundary' else 1)
+    if kind=='permissions': assert summary['permission_state_changed']
+    if kind=='production': assert summary['production_state_changed']
+    if kind=='cleanup': assert not summary['cleanup_passed']
+    if kind=='boundary':
+        assert summary['permission_state_changed']
+        assert summary['cycles'][-1]['boundary_permission_delta']
+
+
+def test_missing_cycle_evidence_cannot_pass(tmp_path):
+    args=cycle_args(tmp_path,'--cycles','3')
+    assert run_cycles(args,lambda child: 0)==1
+    result=json.loads((args.output/'aggregate-summary.json').read_text())
+    assert result['failed_cycle']==1 and not result['cleanup_passed']
+
+
+def test_existing_output_is_never_overwritten(tmp_path):
+    args=cycle_args(tmp_path,'--cycles','3')
+    args.output.mkdir()
+    with pytest.raises(FileExistsError):
+        run_cycles(args,lambda child: pytest.fail('Must not start device work'))
+
+
+def test_cli_rejects_zero_cycles(tmp_path):
+    with pytest.raises(SystemExit): cycle_args(tmp_path,'--cycles','0')
+
+
+def test_snapshot_delta_reports_added_removed_and_changed_records():
+    assert snapshot_delta({'a':1,'b':2},{'a':3,'c':4})==[
+        dict(path=['a'],change='changed',before=1,after=3),
+        dict(path=['b'],change='removed',before=2),
+        dict(path=['c'],change='added',after=4)]
+    assert snapshot_delta({'a':1},{'a':1})==[]
+
+
+def test_aggregate_incomplete_plan_never_reports_success():
+    assert aggregate_summary([],3)['result']=='FAIL'
+
+
+class ApkDevice:
+    def __init__(self, installed=None):
+        self.installed = dict(installed if installed is not None else {0:'f'*64,17:'f'*64})
+        self.installs = []
+        self.lookups = []
+        self.install_error = None
+
+    def shell(self, command, check=False):
+        from types import SimpleNamespace
+        user = int(command.split()[3])
+        assert command == f'pm path --user {user} {PACKAGE}'
+        self.lookups.append(user)
+        return SimpleNamespace(stdout=f'package:/data/app/probe-{user}/base.apk\n' if user in self.installed else '',
+                               stderr='',returncode=0 if user in self.installed else 1)
+
+    def root(self, command, check=False):
+        from types import SimpleNamespace
+        assert command.startswith('sha256sum /data/app/probe-')
+        user=int(command.split('probe-')[1].split('/')[0])
+        return SimpleNamespace(stdout=self.installed[user]+'  /data/app/base.apk\n',returncode=0)
+
+    def run(self, *command, timeout):
+        from types import SimpleNamespace
+        self.installs.append((command,timeout))
+        assert command[0]=='install' and command[3]=='-r' and timeout==120
+        if self.install_error: raise self.install_error
+        self.installed[int(command[2])]='f'*64
+        return SimpleNamespace(stdout='Success\n')
+
+
+def test_same_hash_reuse_checks_both_users_every_cycle_without_install():
+    device=ApkDevice(); state=dict(install_attempts=0)
+    for _ in range(3):
+        evidence={}
+        assert ensure_diagnostics_apk(device,[0,17],Path('probe.apk'),'f'*64,state,evidence)=={'0':'f'*64,'17':'f'*64}
+        assert evidence['apk_install_policy']==APK_INSTALL_POLICY
+        assert evidence['installation_skipped'] and not evidence['install_attempted']
+        assert [row['android_user'] for row in evidence['checks']]==[0,17]
+        assert all(row['status']=='MATCH' and row['package_path'] for row in evidence['checks'])
+    assert device.lookups==[0,17]*3 and device.installs==[] and state['install_attempts']==0
+
+
+def test_missing_apk_installs_once_and_later_cycles_reuse_it():
+    device=ApkDevice({17:'f'*64}); state=dict(install_attempts=0); evidence={}
+    ensure_diagnostics_apk(device,[0,17],Path('probe.apk'),'f'*64,state,evidence)
+    assert state['install_attempts']==1 and len(device.installs)==1
+    assert not evidence['installation_skipped'] and evidence['install_attempted']
+    assert [row['status'] for row in evidence['checks']]==['MISSING','MATCH','MATCH','MATCH']
+    for _ in range(2):
+        ensure_diagnostics_apk(device,[0,17],Path('probe.apk'),'f'*64,state,{})
+    assert len(device.installs)==1
+    del device.installed[17]
+    with pytest.raises(ValueError,match='DIAGNOSTICS_INSTALL_ALREADY_ATTEMPTED'):
+        ensure_diagnostics_apk(device,[0,17],Path('probe.apk'),'f'*64,state,{})
+    assert len(device.installs)==1
+
+
+@pytest.mark.parametrize('installed', [{0:'e'*64,17:'f'*64},{0:'f'*64,17:'e'*64},{17:'e'*64}])
+def test_installed_hash_mismatch_fails_fast_without_reinstall(installed):
+    device=ApkDevice(installed); state=dict(install_attempts=0); evidence={}
+    with pytest.raises(ValueError,match='^INSTALLED_APK_HASH_MISMATCH$'):
+        ensure_diagnostics_apk(device,[0,17],Path('probe.apk'),'f'*64,state,evidence)
+    assert device.installs==[] and state['install_attempts']==0
+    assert evidence['checks'][-1]['status']=='MISMATCH'
+
+
+def test_timed_out_install_is_counted_and_cannot_be_retried():
+    import subprocess
+    device=ApkDevice({17:'f'*64}); state=dict(install_attempts=0); evidence={}
+    device.install_error=subprocess.TimeoutExpired('adb install',120)
+    with pytest.raises(subprocess.TimeoutExpired):
+        ensure_diagnostics_apk(device,[0,17],Path('probe.apk'),'f'*64,state,evidence)
+    assert state['install_attempts']==1 and evidence['install_attempted']
+    with pytest.raises(ValueError,match='DIAGNOSTICS_INSTALL_ALREADY_ATTEMPTED'):
+        ensure_diagnostics_apk(device,[0,17],Path('probe.apk'),'f'*64,state,{})
+    assert len(device.installs)==1
+
+
+@pytest.mark.parametrize('missing', [False,True])
+def test_lifecycle_records_per_cycle_hash_checks_and_skipped_install(tmp_path,missing):
+    args=cycle_args(tmp_path,'--cycles','3'); device=ApkDevice({17:'f'*64} if missing else None)
+    def executor(child):
+        code=fake_cycle(child)
+        path=child.output/'manifest.json'
+        m=json.loads(path.read_text())
+        m['apk_install']={}
+        ensure_diagnostics_apk(device,[0,17],Path('probe.apk'),'f'*64,child.apk_install_state,m['apk_install'])
+        path.write_text(json.dumps(m))
+        return code
+    assert run_cycles(args,executor)==0
+    summary=json.loads((args.output/'aggregate-summary.json').read_text())
+    assert summary['apk_install_policy']==APK_INSTALL_POLICY
+    assert summary['installation_skipped'] is not missing
+    assert summary['install_attempts']==int(missing) and len(device.installs)==int(missing)
+    assert len(device.lookups)==(8 if missing else 6)
+    assert all(row['installed_apk_check_passed'] for row in summary['cycles'])
+    assert all(len(row['apk_install']['checks'])==2 for row in summary['cycles'][1:])
+
+
+def test_missing_hash_evidence_never_promotes_cycle_to_pass(tmp_path):
+    args=cycle_args(tmp_path,'--cycles','3')
+    def executor(child):
+        code=fake_cycle(child)
+        path=child.output/'manifest.json'
+        m=json.loads(path.read_text()); m.pop('apk_install')
+        path.write_text(json.dumps(m))
+        return code
+    assert run_cycles(args,executor)==1
+    result=json.loads((args.output/'aggregate-summary.json').read_text())
+    assert result['failed_cycle']==1 and not result['cycles'][0]['installed_apk_check_passed']
 
 

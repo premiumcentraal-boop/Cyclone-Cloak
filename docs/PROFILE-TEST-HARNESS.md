@@ -148,3 +148,70 @@ and correlate its existing run ID with diagnostic phase start/end events. It
 must use explicitly selected test targets and test retry/interruption without
 silently creating or replacing production bindings. This endpoint is explicitly
 deferred in this release; no production flow or API is changed to simulate it.
+
+## Repeated diagnostics reversibility cycles
+
+`tools/run_probe_reversibility.py --cycles N` repeats the complete diagnostics
+overlay lifecycle. The default is `--cycles 1`: existing capture names and the
+root-level manifest, snapshots and summary remain unchanged. With multiple
+cycles, each independent run writes into `cycle-001/`, `cycle-002/`, etc.
+Every cycle captures users 0 and 17 in this order:
+
+1. Unbound cold baselines for both users.
+2. Temporary fixture A/user 0 and fixture B/user 17 binding, then cold captures.
+3. Overlay removal, then warm captures of both still-running processes.
+4. Cold post-removal captures compared with each user's own baseline.
+5. Private-file and scratch cleanup, foreground-user restoration, production
+   audit and permission/AppOps audit before the next cycle can begin.
+
+Run from current main; keep the diagnostics APK and base harness pinned to a
+clean detached `v0.11.0-alpha.18` / `fb1e3c6` checkout. For example:
+
+```powershell
+uv run -- python -X utf8 tools/run_probe_reversibility.py --cycles 3 --source-checkout "$env:TEMP/cloak-alpha18-reversibility-clean-1792277762" --adb C:/Users/Agent/android-sdk/platform-tools/adb.exe --serial 3B171FDJH0061G --secondary 17 --output "docs/runtime-evidence/<new-timestamp>-alpha18-lifecycle-3cycles"
+```
+
+Use a new output directory each time; existing directories are rejected. Both
+users must already be running and unlocked. Before each cycle the runner reads
+the diagnostics package path and hashes its APK for each user. Matching installed
+APKs are reused without an install. Any different hash fails immediately with
+`INSTALLED_APK_HASH_MISMATCH`; it is never replaced as a workaround. If the APK
+is missing, a single diagnostics-only install is allowed for the missing user,
+followed by verification of both users. Installation is attempted at most once
+for the entire invocation, including when the 120-second install timeout expires.
+If another user still lacks the APK after that attempt, the run fails rather
+than provisioning users through repeated installs. No install retries are added.
+No production APK/module installation,
+permission reset, grant, AppOps reset, new user, unlock or reboot is performed.
+
+Each cycle preserves all eight captures, restoration comparisons, before/after
+permissions and production audits, cleanup proof, APK provenance and its original
+evidence ZIP. The root `aggregate-summary.json` and `aggregate-summary.md` report
+cycle pass/fail, restoration per user, cleanup, actual snapshot deltas and policy
+results. `lifecycle-evidence-bundle.zip` contains the entire run and runner source.
+`runner-provenance.json` records the base commit and exact script SHA-256; when
+validated before committing, the base commit is the parent of the runner change.
+The lifecycle summary records `apk_install_policy` as
+`reuse_matching_install_missing_once`, `installation_skipped`, and
+`install_attempts`. Each cycle's `apk_install` metadata contains the per-user
+package paths, observed SHA-256 values, match/missing/mismatch states and whether
+that cycle attempted or skipped installation. Missing successful hash evidence
+cannot promote a cycle to PASS.
+
+The first failure stops all subsequent cycles after the failed cycle's normal
+cleanup path. Aggregate checks also reject missing evidence, missing cleanup,
+incomplete captures and changes between cycle boundaries, even if an individual
+manifest says success. No permission delta is normalized away in the summary.
+Identical permission/AppOps snapshots pass. Only new diagnostics read records
+`READ_DEVICE_IDENTIFIERS=deny` and
+`USE_ICC_AUTH_WITH_DEVICE_IDENTIFIER=default` are permitted by the existing
+classifier; removals, mode changes, unrelated additions, malformed entries and
+duplicates still fail. All production audits must match the first baseline.
+
+Raw unbound fixture FAIL rows are expected synthetic-fixture mismatches, not
+restoration failures. Cold restoration uses paired actual-value hashes. Blocked,
+unavailable and external-state rows remain limitations; warm retained values are
+observations. This tests diagnostics reversibility rather than normal companion
+binding/reconciliation, Cyclone bootstrap, or any platform verdict. AppOps audits
+exclude volatile access timestamps/counters; only accessible private stores and
+on-disk module files can be audited.

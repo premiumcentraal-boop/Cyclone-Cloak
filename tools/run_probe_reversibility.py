@@ -5,6 +5,7 @@ Unbound report FAIL statuses compare against fixture expectations, not restorati
 Only paired baseline-versus-cold actual hashes decide restoration.
 """
 import argparse
+import copy
 from collections import Counter
 import hashlib
 import importlib
@@ -22,6 +23,7 @@ from zipfile import ZipFile, ZIP_DEFLATED
 TAG = 'v0.11.0-alpha.18'
 COMMIT = 'fb1e3c6ae2e4caca56778a54d8025dba696b53b8'
 PACKAGE = 'dev.cyclone.cloak.probe.diag'
+APK_INSTALL_POLICY = 'reuse_matching_install_missing_once'
 EXPECTED_DIAGNOSTIC_APPOP_ADDITIONS = {
     'READ_DEVICE_IDENTIFIERS': 'deny',
     'USE_ICC_AUTH_WITH_DEVICE_IDENTIFIER': 'default',
@@ -136,14 +138,229 @@ def _appop_entry(value):
     return name, mode
 
 
-def main():
+def cycle_plan(users, cycles=1):
+    if type(cycles) is not int or cycles < 1:
+        raise ValueError('INVALID_CYCLES')
+    sequence = phases(users)
+    return [dict(cycle=i, directory='.' if cycles == 1 else f'cycle-{i:03d}',
+                 phases=list(sequence)) for i in range(1, cycles + 1)]
+
+
+def ensure_diagnostics_apk(device, users, apk, expected_hash, install_state, evidence):
+    """Read both user APK hashes; never replace mismatches or retry installation."""
+    evidence.update(apk_install_policy=APK_INSTALL_POLICY, installation_skipped=True,
+                    install_attempted=False, expected_sha256=expected_hash, checks=[])
+
+    def inspect(stage):
+        hashes, missing = {}, []
+        for user in users:
+            result = device.shell(f'pm path --user {user} {PACKAGE}', check=False)
+            lines = result.stdout.strip().splitlines()
+            check = dict(stage=stage, android_user=user, package_path=None,
+                         sha256=None, status='MISSING')
+            evidence['checks'].append(check)
+            if not lines:
+                if result.stdout.strip() or result.stderr.strip():
+                    raise ValueError('DIAGNOSTICS_PACKAGE_LOOKUP_FAILED')
+                missing.append(user)
+                continue
+            if result.returncode or len(lines) != 1 or not re.fullmatch(r'package:/[^\r\n]+\.apk', lines[0]):
+                check['status'] = 'INVALID_PATH'
+                raise ValueError('INVALID_DIAGNOSTICS_APK_PATH')
+            path = lines[0].removeprefix('package:')
+            check['package_path'] = path
+            result = device.root('sha256sum '+shlex.quote(path), check=False)
+            sha = result.stdout.split()[0] if result.stdout.split() else None
+            check.update(sha256=sha if sha and re.fullmatch('[a-f0-9]{64}', sha) else None,
+                         status='MATCH' if result.returncode == 0 and sha == expected_hash else 'MISMATCH')
+            if check['status'] != 'MATCH':
+                raise ValueError('INSTALLED_APK_HASH_MISMATCH')
+            hashes[str(user)] = sha
+        return hashes, missing
+
+    hashes, missing = inspect('before-cycle')
+    if missing:
+        if install_state['install_attempts']:
+            raise ValueError('DIAGNOSTICS_INSTALL_ALREADY_ATTEMPTED')
+        install_state['install_attempts'] += 1
+        evidence.update(installation_skipped=False, install_attempted=True)
+        result = device.run('install', '--user', missing[0], '-r', apk, timeout=120)
+        if 'Success' not in result.stdout:
+            raise ValueError('DIAGNOSTICS_INSTALL_FAILED')
+        hashes, missing = inspect('after-install')
+        if missing:
+            raise ValueError('DIAGNOSTICS_NOT_INSTALLED_FOR_USER')
+    evidence['installed_apk_hashes'] = hashes
+    return hashes
+
+
+def snapshot_delta(before, after):
+    """Describe redacted snapshot changes without normalizing away evidence."""
+    if before == after:
+        return []
+    if isinstance(before, dict) and isinstance(after, dict):
+        changes = []
+        for key in sorted(before.keys() | after.keys()):
+            if key not in before:
+                changes.append(dict(path=[key], change='added', after=after[key]))
+            elif key not in after:
+                changes.append(dict(path=[key], change='removed', before=before[key]))
+            else:
+                changes.extend(dict(item, path=[key] + item['path'])
+                               for item in snapshot_delta(before[key], after[key]))
+        return changes
+    return [dict(path=[], change='changed', before=before, after=after)]
+
+
+def aggregate_summary(records, requested_cycles, install_state=None):
+    install_state = install_state or {'install_attempts': 0}
+    passed = len(records) == requested_cycles and all(r['passed'] for r in records)
+    return dict(result='RESTORED_WITH_EXPECTED_LIMITATIONS' if passed else 'FAIL',
+                requested_cycles=requested_cycles, completed_cycles=len(records),
+                apk_install_policy=APK_INSTALL_POLICY,
+                installation_skipped=install_state['install_attempts'] == 0,
+                install_attempts=install_state['install_attempts'],
+                passed_cycles=sum(r['passed'] for r in records), cycles=records,
+                permission_state_changed=any(r['permission_delta'] or r['boundary_permission_delta'] for r in records),
+                permission_policy_passed=all(r['permissions_unchanged'] for r in records),
+                production_state_changed=any(r['production_unchanged'] is not True or r['boundary_production_delta'] for r in records),
+                cleanup_passed=all(r['cleanup_passed'] for r in records),
+                failed_cycle=next((r['cycle'] for r in records if not r['passed']), None))
+
+
+def run_cycles(args, executor=None):
+    executor = executor or run_cycle
+    plan = cycle_plan([0, args.secondary], args.cycles)
+    root = args.output.resolve()
+    if root.exists():
+        raise FileExistsError('OUTPUT_ALREADY_EXISTS')
+    if args.cycles > 1:
+        root.mkdir(parents=True)
+        (root/'.gitignore').write_text('*\n')
+    records = []
+    install_state = dict(install_attempts=0)
+    initial_audit = initial_permissions = previous_audit = previous_permissions = None
+    for step in plan:
+        child = copy.copy(args)
+        child.cycle = step['cycle']
+        child.apk_install_state = install_state
+        child.output = root if args.cycles == 1 else root/step['directory']
+        print('CYCLE', step['cycle'], 'OF', args.cycles, flush=True)
+        error_type = None
+        try:
+            code = executor(child)
+        except Exception as error:
+            code, error_type = 1, type(error).__name__
+        def load(name):
+            path = child.output/name
+            return json.loads(path.read_text(encoding='utf-8')) if path.is_file() else None
+        m, proof = load('manifest.json') or {}, load('cleanup-proof.json') or {}
+        before, after = load('audit-before.json'), load('audit-after.json')
+        perm_before, perm_after = load('permissions-before.json'), load('permissions-after.json')
+        if not records:
+            initial_audit, initial_permissions = before, perm_before
+        boundary_ok = not records or (before == previous_audit and perm_before == previous_permissions)
+        production_ok = before is not None and before == after == initial_audit
+        permissions_ok = False
+        try:
+            permissions_ok = (perm_before is not None and perm_after is not None
+                              and effective_permission_state(perm_before, perm_after)
+                              and effective_permission_state(initial_permissions, perm_after))
+        except (TypeError, ValueError, KeyError):
+            pass
+        cleanup_ok = proof.get('scratch_removed') is True and all(
+            all(proof.get(str(u), {}).get(key) is True for key in
+                ('binding_removed', 'body_directory_removed', 'private_files_removed'))
+            for u in (0, args.secondary))
+        restored = m.get('restoration', {})
+        apk_check = m.get('apk_install', {})
+        apk_ok = (apk_check.get('apk_install_policy') == APK_INSTALL_POLICY
+                  and isinstance(m.get('apk_sha256'), str)
+                  and re.fullmatch('[a-f0-9]{64}', m['apk_sha256']) is not None
+                  and apk_check.get('installed_apk_hashes') ==
+                      {str(u): m['apk_sha256'] for u in (0, args.secondary)})
+        restoration_ok = all(restored.get(str(u)) == 'RESTORED_WITH_LIMITATIONS' for u in (0, args.secondary))
+        passed = (code == 0 and m.get('result') == 'RESTORED_WITH_EXPECTED_LIMITATIONS'
+                  and m.get('captures') == 8 and not m.get('errors') and restoration_ok
+                  and production_ok and permissions_ok and cleanup_ok and boundary_ok and apk_ok)
+        record = dict(cycle=step['cycle'], directory=step['directory'], passed=passed,
+                      result='RESTORED_WITH_EXPECTED_LIMITATIONS' if passed else 'FAIL', restoration=restored,
+                      cleanup_passed=cleanup_ok, cleanup_proof=proof,
+                      apk_install=apk_check, installed_apk_check_passed=apk_ok,
+                      production_unchanged=production_ok, permissions_unchanged=permissions_ok,
+                      permission_delta=snapshot_delta(perm_before, perm_after),
+                      production_delta=snapshot_delta(before, after),
+                      boundary_unchanged=boundary_ok,
+                      boundary_permission_delta=snapshot_delta(previous_permissions, perm_before) if records else [],
+                      boundary_production_delta=snapshot_delta(previous_audit, before) if records else [],
+                      duration_seconds=m.get('duration_seconds'),
+                      failed_phase=m.get('failed_phase') if passed else m.get('failed_phase', 'cycle-audit'),
+                      errors=m.get('errors', []) + ([] if passed else
+                          [reason for ok, reason in ((boundary_ok, 'CYCLE_BOUNDARY_CHANGED'),
+                           (production_ok, 'PRODUCTION_AUDIT_CHANGED'), (permissions_ok, 'PERMISSION_STATE_CHANGED'),
+                           (cleanup_ok, 'CLEANUP_PROOF_FAILED'), (restoration_ok, 'RESTORATION_INCOMPLETE'),
+                           (apk_ok, 'INSTALLED_APK_CHECK_INCOMPLETE')) if not ok]),
+                      error_type=error_type)
+        records.append(record)
+        previous_audit, previous_permissions = after, perm_after
+        # A failed cycle has already run its normal finally/cleanup path. Never retry it.
+        summary = aggregate_summary(records, args.cycles, install_state)
+        root.mkdir(parents=True, exist_ok=True)
+        (root/'aggregate-summary.json').write_text(json.dumps(summary, indent=2)+'\n', encoding='utf-8')
+        lines = ['# Diagnostics lifecycle regression', '', 'Result: '+summary['result'],
+                 f'Cycles passed: {summary["passed_cycles"]}/{args.cycles}', '',
+                 '| Cycle | Result | User 0 restoration | Secondary restoration | Cleanup | Permission policy | Production |',
+                 '|---|---|---|---|---|---|---|']
+        for r in records:
+            lines.append(f'| {r["cycle"]} | {"PASS" if r["passed"] else "FAIL"} | '
+                         f'{r["restoration"].get("0", "not completed")} | '
+                         f'{r["restoration"].get(str(args.secondary), "not completed")} | '
+                         f'{r["cleanup_passed"]} | {r["permissions_unchanged"]} | {r["production_unchanged"]} |')
+        lines += ['', 'Permission snapshot changed: '+str(summary['permission_state_changed']),
+                  'Production snapshot changed: '+str(summary['production_state_changed']),
+                  'APK install policy: '+summary['apk_install_policy'],
+                  'APK installation skipped: '+str(summary['installation_skipped']),
+                  'APK install attempts: '+str(summary['install_attempts']),
+                  'Dynamic or blocked rows remain limitations. No platform verdict.']
+        (root/'aggregate-summary.md').write_text('\n'.join(lines)+'\n', encoding='utf-8')
+        if not passed:
+            break
+    shutil.copyfile(__file__, root/'run_probe_reversibility.py')
+    repo = Path(__file__).resolve().parents[1]
+    revision = subprocess.run(['git', 'rev-parse', 'HEAD'], cwd=repo, capture_output=True, text=True)
+    (root/'runner-provenance.json').write_text(json.dumps(dict(
+        base_commit=revision.stdout.strip() if revision.returncode == 0 else None,
+        orchestration_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        source_tag=TAG, source_commit=COMMIT, cycles=args.cycles), indent=2)+'\n', encoding='utf-8')
+    with ZipFile(root/'lifecycle-evidence-bundle.zip', 'w', ZIP_DEFLATED) as z:
+        for path in sorted(root.rglob('*')):
+            if path.is_file() and path.name not in {'.gitignore', 'lifecycle-evidence-bundle.zip'}:
+                z.write(path, path.relative_to(root).as_posix())
+    print('LIFECYCLE_EVIDENCE', root, flush=True)
+    print('LIFECYCLE_RESULT', summary['result'], flush=True)
+    return 0 if summary['result'] != 'FAIL' else 1
+
+
+def parse_args(argv=None):
     p = argparse.ArgumentParser(description=__doc__)
     p.add_argument('--source-checkout', type=Path, required=True)
     p.add_argument('--adb', required=True)
     p.add_argument('--serial', required=True)
     p.add_argument('--secondary', type=int, default=17)
     p.add_argument('--output', type=Path, required=True)
-    args = p.parse_args()
+    p.add_argument('--cycles', type=int, default=1, help='Full lifecycle repetitions (default: 1)')
+    args = p.parse_args(argv)
+    if args.cycles < 1:
+        p.error('--cycles must be at least 1')
+    return args
+
+
+def main():
+    return run_cycles(parse_args())
+
+
+def run_cycle(args):
+    p = argparse.ArgumentParser(description=__doc__)
     users = [0, args.secondary]
     sequence = phases(users)
     source = args.source_checkout.resolve()
@@ -165,6 +382,8 @@ def main():
     (out/'.gitignore').write_text('*\n')
     d = pc.Device(args.adb, args.serial, 90)
     m = dict(format=1, run_id=uuid.uuid4().hex, user=0, target_user=args.secondary,
+             cycle=getattr(args, 'cycle', 1),
+             apk_install_policy=APK_INSTALL_POLICY, apk_install={},
              full_profile=False, phases={}, started_at=pc.utc(), started_epoch=time.time(),
              source_tag=TAG, source_commit=COMMIT, apk_sha256=apk_hash, overlay_active=False)
     h = pc.Harness(out, m, d, apk)
@@ -281,7 +500,6 @@ def main():
         if not re.search(rf'\bid={args.secondary}, .*type=full.SECONDARY,', inventory): raise ValueError('SECONDARY_USER_UNAVAILABLE')
         for u in users:
             if d.shell(f'am get-started-user-state {u}', check=False).stdout.strip() != 'RUNNING_UNLOCKED': raise ValueError('USER_UNAVAILABLE_OR_LOCKED')
-            if not d.shell(f'pm path --user {u} {PACKAGE}', check=False).stdout.strip(): raise ValueError('DIAGNOSTICS_NOT_INSTALLED_FOR_USER')
         original_user = int(d.shell('am get-current-user').stdout.strip())
         m['original_user'] = original_user
         before = audit(); pc.save(out/'audit-before.json', before)
@@ -295,13 +513,8 @@ def main():
         aapt = Path(args.adb).resolve().parents[1]/'build-tools/35.0.0/aapt.exe'
         badging = subprocess.check_output([str(aapt),'dump','badging',str(apk)], text=True)
         if not re.search(r"^package: name='dev\.cyclone\.cloak\.probe\.diag'",badging,re.M): raise ValueError('WRONG_APK')
-        if 'Success' not in d.run('install','--user',0,'-r',apk,timeout=120).stdout: raise ValueError('DIAGNOSTICS_INSTALL_FAILED')
-        m['installed_apk_hashes'] = {}
-        for u in users:
-            path = d.shell(f'pm path --user {u} {PACKAGE}').stdout.splitlines()[0].removeprefix('package:')
-            sha = d.root('sha256sum '+shlex.quote(path)).stdout.split()[0]
-            m['installed_apk_hashes'][str(u)] = sha
-            if sha != apk_hash: raise ValueError('INSTALLED_APK_HASH_MISMATCH')
+        m['installed_apk_hashes'] = ensure_diagnostics_apk(d, users, apk, apk_hash,
+            getattr(args, 'apk_install_state', dict(install_attempts=0)), m['apk_install'])
         if permission_state() != permissions_before: raise ValueError('INSTALL_CHANGED_PERMISSIONS')
         for u,f in [(0,'a'),(args.secondary,'b')]:
             item = dict(user=u,fixture=f,kind='fixture',target_count=1)
@@ -354,7 +567,7 @@ def main():
         m.update(errors=errors,finished_at=pc.utc(),duration_seconds=round(time.time()-m['started_epoch'],2),
                  result='FAIL' if errors else 'RESTORED_WITH_EXPECTED_LIMITATIONS',captures=len(reports))
         h.checkpoint()
-        build_command='$env:JAVA_HOME="C:/Program Files/Eclipse Adoptium/jdk-17.0.20.101-hotspot"; $env:ANDROID_HOME="C:/Users/Agent/android-sdk"; & "$env:TEMP/cloak-build/gradle-8.11.1/bin/gradle.bat" -p "$env:TEMP/cloak-alpha18-reversibility-clean/android" :probe:assembleDiagnosticsDebug :probe:testDiagnosticsDebugUnitTest --offline --no-daemon --console=plain'
+        build_command=f'$env:JAVA_HOME="C:/Program Files/Eclipse Adoptium/jdk-17.0.20.101-hotspot"; $env:ANDROID_HOME="C:/Users/Agent/android-sdk"; & "$env:TEMP/cloak-build/gradle-8.11.1/bin/gradle.bat" -p "{source.as_posix()}/android" :probe:assembleDiagnosticsDebug :probe:testDiagnosticsDebugUnitTest --offline --no-daemon --console=plain'
         pc.save(out/'build-provenance.json',dict(tag=TAG,commit=COMMIT,detached_checkout=str(source),build_command=build_command,
             apk_sha256=apk_hash,installed_apk_hashes=m.get('installed_apk_hashes'),orchestration_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()))
         lines=['# Diagnostics binding reversibility','',f'Result: {m["result"]}',f'Duration: {m["duration_seconds"]} seconds',
@@ -379,4 +592,3 @@ def main():
 
 if __name__=='__main__':
     raise SystemExit(main())
-
