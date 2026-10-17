@@ -1,6 +1,7 @@
 """Pure diagnostics orchestration tests; no ADB or production writes."""
 import copy
 import hashlib
+import json
 from pathlib import Path
 import sys
 import pytest
@@ -117,11 +118,53 @@ def test_exact_read_created_diagnostic_appops_are_expected_only():
 ])
 def test_other_permission_or_appop_changes_fail(change):
     expected=sorted([('READ_DEVICE_IDENTIFIERS','deny'),('USE_ICC_AUTH_WITH_DEVICE_IDENTIFIER','default')])
-    before={PACKAGE:permission_fixture(appops={'0': [], '17': []}), 'dev.cyclone.cloak':permission_fixture(appops={'0': [], '17': []})}
-    after={PACKAGE:permission_fixture(appops={'0': expected, '17': expected}),
-           'dev.cyclone.cloak':permission_fixture(appops={'0': [], '17': []})}
+    before=state_with_allowed_entries(expected)
+    after=state_with_allowed_entries(expected)
     change(dict(before=before,after=after))
     assert effective_permission_state(before,after) is False
 
+
+
+
+
+def state_with_allowed_entries(entries):
+    return {
+        PACKAGE: permission_fixture(appops={'0': list(entries), '17': list(entries)}),
+        'dev.cyclone.cloak': permission_fixture(appops={'0': [], '17': []}),
+    }
+
+def test_identical_snapshot_with_existing_allowed_records_passes():
+    allowed=sorted([('READ_DEVICE_IDENTIFIERS','deny'),('USE_ICC_AUTH_WITH_DEVICE_IDENTIFIER','default')])
+    before=state_with_allowed_entries(allowed)
+    assert effective_permission_state(before,copy.deepcopy(before)) is True
+
+@pytest.mark.parametrize('added', [
+    [('READ_DEVICE_IDENTIFIERS','deny')],
+    [('USE_ICC_AUTH_WITH_DEVICE_IDENTIFIER','default')],
+    sorted([('READ_DEVICE_IDENTIFIERS','deny'),('USE_ICC_AUTH_WITH_DEVICE_IDENTIFIER','default')]),
+])
+def test_allowed_subset_additions_pass(added):
+    before=state_with_allowed_entries([])
+    after=state_with_allowed_entries(sorted(added))
+    assert effective_permission_state(before,after) is True
+
+def test_allowed_mode_change_or_removal_is_rejected():
+    allowed=[('READ_DEVICE_IDENTIFIERS','deny')]
+    changed=state_with_allowed_entries([('READ_DEVICE_IDENTIFIERS','default')])
+    assert effective_permission_state(state_with_allowed_entries(allowed),changed) is False
+    assert effective_permission_state(state_with_allowed_entries(allowed),state_with_allowed_entries([])) is False
+
+def test_json_round_trip_accepts_unchanged_snapshot():
+    allowed=sorted([('READ_DEVICE_IDENTIFIERS','deny'),('USE_ICC_AUTH_WITH_DEVICE_IDENTIFIER','default')])
+    state=state_with_allowed_entries(allowed)
+    replay=json.loads(json.dumps(state))
+    assert effective_permission_state(state,replay) is True
+
+def test_duplicate_or_malformed_appop_entries_are_rejected():
+    duplicate=state_with_allowed_entries([('READ_DEVICE_IDENTIFIERS','deny'),('READ_DEVICE_IDENTIFIERS','deny')])
+    malformed=state_with_allowed_entries([('READ_DEVICE_IDENTIFIERS',)])
+    assert effective_permission_state(state_with_allowed_entries([]),duplicate) is False
+    with pytest.raises(ValueError,match='INVALID_APPOP_ENTRY'):
+        effective_permission_state(state_with_allowed_entries([]),malformed)
 
 

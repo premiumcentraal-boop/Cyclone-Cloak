@@ -96,7 +96,7 @@ def cleanup_private(device, users):
 
 
 def effective_permission_state(before, after):
-    """Allow only the read-created diagnostics records; reject every other delta."""
+    """Allow only read-created diagnostics records; reject every other delta."""
     if (set(before) != {PACKAGE, 'dev.cyclone.cloak'} or set(before.get(PACKAGE, {})) != set(after.get(PACKAGE, {}))
             or set(before.get('dev.cyclone.cloak', {})) != set(after.get('dev.cyclone.cloak', {}))):
         return False
@@ -108,15 +108,32 @@ def effective_permission_state(before, after):
         return False
     if set(old.get('appop_modes', {})) != set(new.get('appop_modes', {})):
         return False
+    expected = dict(EXPECTED_DIAGNOSTIC_APPOP_ADDITIONS)
     for user in old.get('appop_modes', {}):
-        additions = [entry for entry in new['appop_modes'][user] if entry not in old['appop_modes'][user]]
-        retained = [entry for entry in old['appop_modes'][user] if entry in new['appop_modes'][user]]
-        expected = sorted(EXPECTED_DIAGNOSTIC_APPOP_ADDITIONS.items())
-        if additions != expected or retained != old['appop_modes'][user]:
+        before_entries = [_appop_entry(entry) for entry in old['appop_modes'][user]]
+        after_entries = [_appop_entry(entry) for entry in new['appop_modes'][user]]
+        if len(before_entries) != len(set(before_entries)) or len(after_entries) != len(set(after_entries)):
             return False
-        if len(new['appop_modes'][user]) != len(old['appop_modes'][user]) + len(expected):
+        additions = [entry for entry in after_entries if entry not in before_entries]
+        if any(name not in expected or expected[name] != mode for name, mode in additions):
+            return False
+        if after_entries[:len(before_entries)] != before_entries:
+            return False
+        if after_entries[len(before_entries):] != sorted(additions):
             return False
     return True
+
+
+def _appop_entry(value):
+    if not isinstance(value, (list, tuple)) or len(value) != 2:
+        raise ValueError('INVALID_APPOP_ENTRY')
+    name, mode = value
+    if isinstance(name, str) and name.startswith('Uid mode: '): name = name[len('Uid mode: '):]
+    if not isinstance(name, str) or not re.fullmatch(r'[A-Z_]+', name):
+        raise ValueError('INVALID_APPOP_ENTRY')
+    if not isinstance(mode, str) or not re.fullmatch(r'[a-z]+', mode):
+        raise ValueError('INVALID_APPOP_ENTRY')
+    return name, mode
 
 
 def main():
@@ -362,6 +379,4 @@ def main():
 
 if __name__=='__main__':
     raise SystemExit(main())
-
-
 
