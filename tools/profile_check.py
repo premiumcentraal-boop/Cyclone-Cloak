@@ -95,6 +95,71 @@ def token(row, name):
     return row.get(name + '_sha256') or digest(row.get(name))
 
 
+def failed_report_evidence(value, error_type, context):
+    """Bounded allowlist only; malformed input must never bypass normal redaction."""
+    allowed = set(json.loads((REPO / 'android/probe/src/main/assets/report-row-ids.json').read_text()))
+    reasons = {'DUPLICATE_ROW_ID', 'ROW_ID_EMPTY', 'UNEXPECTED_ROW_ID', 'ROW_INCOMPLETE',
+               'REPORT_INCOMPLETE', 'CAPTURE_FAILED', 'MATCH', 'VALUE_MISMATCH', 'VALUE_MISSING',
+               'NO_PROFILE_EXPECTATION', 'TYPE_VALID', 'ENUM_VALID', 'STABILITY_BASELINE_REQUIRED'}
+    result = dict(status='FAIL', error_type=error_type, report_sha256=digest(value), rows=[])
+    # Context is supplied by the harness, never by arbitrary report text.
+    result['request_metadata'] = {key: context[key] for key in
+        ('request_id', 'android_user', 'fixture', 'profile_sha256', 'published_sha256', 'phase') if key in context}
+    if not isinstance(value, dict):
+        return result
+    for key in ('profile_sha256',):
+        if isinstance(value.get(key), str) and re.fullmatch('[a-f0-9]{64}', value[key]):
+            result[key] = value[key]
+    if value.get('request_id') == context.get('request_id'):
+        result['report_request_matches'] = True
+    if isinstance(value.get('fixture'), str) and value['fixture'] in {'a', 'b', 'external'}:
+        result['fixture'] = value['fixture']
+    for key in ('uid', 'pid', 'session_generation'):
+        if type(value.get(key)) is int and value[key] >= 0:
+            result[key] = value[key]
+    if isinstance(value.get('reason'), str) and value['reason'] in reasons:
+        result['reason'] = value['reason']
+    if isinstance(value.get('error'), str) and value['error'] in {
+            'InvalidCapture', 'JSONException', 'IllegalArgumentException', 'IOException',
+            'SecurityException', 'NullPointerException', 'FileNotFoundException'}:
+        result['probe_error_type'] = value['error']
+    if isinstance(value.get('failed_row_id'), str) and value['failed_row_id'] in allowed:
+        result['failed_row_id'] = value['failed_row_id']
+    counts = Counter()
+    rows = value.get('rows')
+    if not isinstance(rows, list):
+        return result
+    result['row_count'] = len(rows)
+    for row in rows[:256]:
+        if not isinstance(row, dict):
+            continue
+        identifier = row.get('id')
+        safe = {}
+        if isinstance(identifier, str) and identifier in allowed:
+            safe['id'] = identifier
+            counts[identifier] += 1
+        else:
+            safe['id_sha256'] = digest(identifier)
+        if isinstance(row.get('status'), str) and row['status'] in STATUSES:
+            safe['status'] = row['status']
+        reason = row.get('reason')
+        if isinstance(reason, str) and (reason in reasons or re.fullmatch(
+                r'PERMISSION_DENIED:android\.permission\.[A-Z_]+', reason)):
+            safe['reason'] = reason
+        elif reason is not None:
+            safe['reason_sha256'] = digest(reason)
+        for key in ('actual', 'expected'):
+            existing = row.get(key + '_sha256')
+            if row.get(key) is None and isinstance(existing, str) and re.fullmatch('[a-f0-9]{64}', existing):
+                safe[key + '_sha256'] = existing
+            elif key in row:
+                safe[key + '_sha256'] = digest(row[key])
+        result['rows'].append(safe)
+    result['duplicate_row_ids'] = sorted(key for key, count in counts.items() if count > 1)
+    result['truncated'] = len(rows) > 256
+    return result
+
+
 def has_expectation(row):
     return row.get('has_expectation', row.get('expected') not in (None, ''))
 
@@ -397,13 +462,28 @@ class Harness:
         if re.search(r'Error|Exception', result.stdout + result.stderr):
             raise RuntimeError('PROBE_LAUNCH_FAILED')
         deadline = time.monotonic() + self.d.timeout
+        context = dict(request_id=request, android_user=user, fixture=fixture,
+                       profile_sha256=item['sha256'], phase=self.m.get('active_capture', 'capture'))
+        if self.m.get('active_published_sha256'):
+            context['published_sha256'] = self.m['active_published_sha256']
         while time.monotonic() < deadline:
             output = self.d.shell(f'run-as {PACKAGE} --user {user} cat files/report.json', check=False)
+            if output.returncode != 0:
+                time.sleep(.3)
+                continue
+            value = output.stdout
             try:
-                report = json.loads(output.stdout)
+                if len(value.encode('utf-8')) > 262144:
+                    raise ValueError('REPORT_TOO_LARGE')
+                report = json.loads(value)
+                value = report
+                if not isinstance(report, dict):
+                    raise ValueError('REPORT_NOT_OBJECT')
                 if report.get('request_id') != request:
                     time.sleep(.3)
                     continue
+                if report.get('error'):
+                    raise ValueError('PROBE_COLLECTION_FAILED')
                 if report.get('uid', -1) // 100000 != user or report.get('package') != PACKAGE or report.get('profile_sha256') != item['sha256']:
                     raise ValueError('REPORT_PROFILE_OR_USER_MISMATCH')
                 if report.get('fixture') != fixture:
@@ -414,8 +494,12 @@ class Harness:
                 report.update(captured_at=utc(), android_user=user, cold_restart_requested=cold,
                               artifact=self.m['artifact'], request_id=request, process_reused=str(report.get('pid')) in before_pid.split())
                 return report
-            except json.JSONDecodeError:
-                pass
+            except (ValueError, TypeError, KeyError, RuntimeError) as failure:
+                save(self.output / ('failed-capture-' + request + '.json'),
+                     failed_report_evidence(value, type(failure).__name__, context))
+                if isinstance(failure, json.JSONDecodeError):
+                    raise ValueError('REPORT_JSON_INVALID') from None
+                raise
             time.sleep(.3)
         raise RuntimeError('PROBE_REPORT_TIMEOUT')
 

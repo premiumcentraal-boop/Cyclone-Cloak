@@ -371,7 +371,7 @@ def test_capture_preserves_fixture_label_and_requires_matching_hash(tmp_path, fi
                              profile_sha256='wrong' if mismatch == 'hash' else item['sha256'])
                 # a -> b also exercises mismatches for the a fixture itself.
                 if mismatch == 'fixture' and fixture == 'a': value['fixture'] = 'b'
-                return SimpleNamespace(stdout=json.dumps(value))
+                return SimpleNamespace(stdout=json.dumps(value), returncode=0)
             return SimpleNamespace(stdout='', stderr='')
 
     from unittest.mock import patch
