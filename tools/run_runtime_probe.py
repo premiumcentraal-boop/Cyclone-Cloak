@@ -53,6 +53,11 @@ def redact(report):
         if "actual" in row:
             encoded = json.dumps(row.pop("actual"), sort_keys=True, ensure_ascii=True).encode()
             row["actual_sha256"] = hashlib.sha256(encoded).hexdigest()
+        if "expected" in row:
+            if row["expected"] is not None or not row.get("expected_sha256"):
+                encoded = json.dumps(row["expected"], sort_keys=True, ensure_ascii=True).encode()
+                row["expected_sha256"] = hashlib.sha256(encoded).hexdigest()
+            row["expected"] = None
     return report
 
 
@@ -145,7 +150,7 @@ def main():
         def run(name, fixture):
             shell(f"am force-stop --user {args.user} {package}")
             shell(f"run-as {package} --user {args.user} rm -f files/report.json", check=False)
-            launch = shell(f"am start --user {args.user} -n {package}/{activity} --es fixture {fixture}")
+            launch = shell(f"am start --user {args.user} -n {package}/{activity} --es fixture {fixture} --es request_id {nonce}-{name}")
             if "Error" in launch.stdout or "Exception" in launch.stderr:
                 raise RuntimeError("Probe launch failed: " + launch.stdout + launch.stderr)
             deadline = time.monotonic() + 45
@@ -156,6 +161,7 @@ def main():
                     if report.get("package") != package or report["fixture"] != fixture or report["uid"] // 100000 != args.user:
                         raise RuntimeError("Report fixture/user does not match launch")
                     report["run"] = name
+                    report["artifact"] = metadata["module_arm64_sha256"]
                     results.append(redact(report))
                     print(f"{name}: " + ", ".join(f"{s}={sum(r['status'] == s for r in report['rows'])}"
                                                   for s in ("PASS", "FAIL", "BLOCKED", "OBSERVED")), flush=True)

@@ -37,6 +37,7 @@ public class ProbeActivity extends Activity {
     private JSONArray rows = new JSONArray();
     private JSONObject profile;
     private String profileDigest;
+    private JSONObject diagnosticExpectations = new JSONObject();
 
     private static String hex(byte[] value) {
         StringBuilder out = new StringBuilder();
@@ -112,6 +113,17 @@ public class ProbeActivity extends Activity {
                 fixture = ProbeReportPolicy.fixture(requestedFixture, external,
                     external && "a".equals(requestedFixture) && sameFixture("a"),
                     external && "b".equals(requestedFixture) && sameFixture("b"));
+                diagnosticExpectations = new JSONObject();
+                if ("a".equals(fixture) || "b".equals(fixture)) {
+                    try (java.io.InputStream stream = getAssets().open("expectations-" + fixture + ".json")) {
+                        java.io.ByteArrayOutputStream policyBytes = new java.io.ByteArrayOutputStream();
+                        byte[] policyChunk = new byte[4096];
+                        int policyCount;
+                        while ((policyCount = stream.read(policyChunk)) != -1) policyBytes.write(policyChunk, 0, policyCount);
+                        diagnosticExpectations = DiagnosticExpectation.fixture(new JSONObject(
+                            policyBytes.toString(StandardCharsets.UTF_8.name())), fixture);
+                    }
+                }
                 collect();
                 JSONObject report = new JSONObject().put("format", 1)
                     .put("fixture", fixture).put("package", getPackageName())
@@ -217,9 +229,19 @@ public class ProbeActivity extends Activity {
 
     private void compare(String id, Object expected, Read operation) throws Exception {
         long started = android.os.SystemClock.elapsedRealtimeNanos();
+        JSONObject rule = diagnosticExpectations.optJSONObject(id);
         JSONObject row = new JSONObject().put("id", id).put("source", sourceFor(id))
-            .put("has_expectation", expected != null && !expected.toString().isEmpty())
+            .put("has_expectation", rule != null || (expected != null && !expected.toString().isEmpty()))
             .put("actual", JSONObject.NULL).put("expected", expected == null ? JSONObject.NULL : expected);
+        if (rule != null) {
+            JSONObject ruleIdentity = new JSONObject(rule.toString());
+            ruleIdentity.remove("expected_change"); // Edge expectation, not a different value constraint.
+            row.put("expectation_policy", rule.getString("policy")).put("policy_version", 1)
+                .put("expectation_rule_sha256", hex(java.security.MessageDigest.getInstance("SHA-256")
+                    .digest(ProbeReportPolicy.canonical(ruleIdentity).getBytes(StandardCharsets.UTF_8))));
+            if (rule.getString("policy").equals("STABLE_ACROSS_SWITCH")) row.put("expected_change", rule.optBoolean("expected_change", false));
+            if (rule.getString("policy").equals("EXACT")) row.put("expected", rule.get("value"));
+        }
         try {
             String denied = permissionFailure(id);
             if (denied != null) {
@@ -231,6 +253,15 @@ public class ProbeActivity extends Activity {
             }
             Object value = operation.get();
             row.put("actual", value == null ? JSONObject.NULL : value);
+            row.put("actual_available", !DiagnosticExpectation.missing(value));
+            if (rule != null) {
+                JSONObject checked = DiagnosticExpectation.evaluate(rule, value);
+                row.put("status", checked.getString("status")).put("reason", checked.getString("reason"));
+                finishRow(row, started);
+                rows.put(row);
+                logDiagnosticRow(id, row);
+                return;
+            }
             boolean unspecified = expected == null || expected.toString().isEmpty();
             boolean matches = !unspecified && expected.toString().equals(String.valueOf(value));
             String status = ProbeReportPolicy.status(!unspecified, value == null && expected != JSONObject.NULL, matches);
@@ -293,7 +324,7 @@ public class ProbeActivity extends Activity {
             () -> nativePropertyCallback("ro.product.model"));
 
         TelephonyManager tm = getSystemService(TelephonyManager.class);
-        compare("telephony.simState", null, tm::getSimState);
+        compare("telephony.simState", null, () -> tm == null ? null : tm.getSimState());
         compare("telephony.phoneType", null, tm::getPhoneType);
         compare("telephony.roaming", null, tm::isNetworkRoaming);
         read("telephony.imei0", "identifiers.imei_primary", () -> tm.getImei(0));
@@ -337,11 +368,23 @@ public class ProbeActivity extends Activity {
         // Builder isolates the getter hook from service permission requirements.
         read("wifi.objectMac", "identifiers.mac", () -> new WifiInfo.Builder().build().getMacAddress());
         read("wifi.serviceMac", "identifiers.mac", () -> getSystemService(WifiManager.class).getConnectionInfo().getMacAddress());
-        compare("wifi.bssid", null, () -> getSystemService(WifiManager.class).getConnectionInfo().getBSSID());
-        compare("wifi.linkSpeed", null, () -> getSystemService(WifiManager.class).getConnectionInfo().getLinkSpeed());
-        compare("wifi.ssid", null, () -> getSystemService(WifiManager.class).getConnectionInfo().getSSID());
+        compare("wifi.bssid", null, () -> {
+            WifiInfo info = getSystemService(WifiManager.class).getConnectionInfo();
+            return info == null ? null : info.getBSSID();
+        });
+        compare("wifi.linkSpeed", null, () -> {
+            WifiInfo info = getSystemService(WifiManager.class).getConnectionInfo();
+            return info == null ? null : info.getLinkSpeed();
+        });
+        compare("wifi.ssid", null, () -> {
+            WifiInfo info = getSystemService(WifiManager.class).getConnectionInfo();
+            return info == null ? null : info.getSSID();
+        });
         read("bluetooth.address", "identifiers.bt_mac", () -> BluetoothAdapter.getDefaultAdapter().getAddress());
-        compare("bluetooth.name", null, () -> BluetoothAdapter.getDefaultAdapter().getName());
+        compare("bluetooth.name", null, () -> {
+            BluetoothAdapter adapter = BluetoothAdapter.getDefaultAdapter();
+            return adapter == null ? null : adapter.getName();
+        });
         read("advertising.id", "identifiers.advertising_id",
             () -> AdvertisingIdRead.read(getClassLoader(), Context.class, this));
         read("drm.deviceUniqueId", "identifiers.widevine_id", () -> {

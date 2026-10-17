@@ -21,6 +21,7 @@ import tempfile
 import time
 import uuid
 from zipfile import ZipFile, ZIP_DEFLATED
+import diagnostic_expectations as expectations
 
 REPO = Path(__file__).resolve().parents[1]
 PACKAGE = 'dev.cyclone.cloak.probe.diag'
@@ -73,6 +74,7 @@ def parse_report(value):
             raise ValueError('INCOMPLETE_ROW')
         if not isinstance(row['detail'], str) or type(row['duration_ms']) not in (int, float) or row['duration_ms'] < 0:
             raise ValueError('INVALID_ROW_DETAIL_OR_DURATION')
+        expectations.validate_row(row)
     return value
 
 
@@ -80,9 +82,11 @@ def redact_report(report):
     """Retain comparison hashes, never host identifiers, expected bodies or seeds."""
     result = json.loads(json.dumps(parse_report(report)))
     for row in result['rows']:
-        row['actual_sha256'] = digest(row['actual'])
+        if row['actual'] is not None or not row.get('actual_sha256'):
+            row['actual_sha256'] = digest(row['actual'])
         row['has_expectation'] = has_expectation(row)
-        row['expected_sha256'] = digest(row['expected']) if row['has_expectation'] else None
+        if row['expected'] is not None or not row.get('expected_sha256'):
+            row['expected_sha256'] = digest(row['expected']) if row['has_expectation'] else None
         row['actual'] = row['expected'] = None
     return result
 
@@ -106,14 +110,24 @@ def compare(before, after):
         reason, severity = 'UNCHANGED', 'INFO'
         changed = None
         expected_change = None
-        if a is None or b is None or a['status'] in {'BLOCKED', 'MISSING'} or b['status'] in {'BLOCKED', 'MISSING'}:
+        if any(r is not None and r['status'] == 'FAIL' for r in (a, b)):
+            reason, severity = 'PROFILE_VALUE_MISMATCH', 'FAIL'
+            if a is not None and b is not None and has_expectation(a) and has_expectation(b) and token(a, 'expected') != token(b, 'expected') and token(a, 'actual') == token(b, 'actual'):
+                reason = 'EXPECTED_CHANGE_NOT_OBSERVED'
+            elif a is not None and b is not None and not (a.get('expectation_policy') or b.get('expectation_policy')) and has_expectation(a) and has_expectation(b) and token(a, 'expected') == token(b, 'expected') and token(a, 'actual') != token(b, 'actual'):
+                reason = 'UNEXPECTED_CHANGE'
+        elif a is None or b is None or a['status'] in {'BLOCKED', 'MISSING'} or b['status'] in {'BLOCKED', 'MISSING'}:
             reason, severity = 'BLOCKED_OR_MISSING', 'WARNING'
+        elif any(r.get('expectation_policy') == 'STABLE_ACROSS_SWITCH' for r in (a, b)):
+            findings.append(expectations.compare_stable(before, after, a, b, token))
+            continue
+        elif a.get('expectation_policy') or b.get('expectation_policy'):
+            # Shape/external-state policies do not assert value stability or profile identity.
+            reason = 'POLICY_OBSERVATION_ONLY'
         else:
             changed = token(a, 'actual') != token(b, 'actual')
             known = has_expectation(a) and has_expectation(b)
             expected_change = token(a, 'expected') != token(b, 'expected') if known else None
-            if a['status'] == 'FAIL' or b['status'] == 'FAIL':
-                reason, severity = 'PROFILE_VALUE_MISMATCH', 'FAIL'
             if expected_change and not changed:
                 reason, severity = 'EXPECTED_CHANGE_NOT_OBSERVED', 'FAIL'
             elif changed and expected_change is False:
@@ -128,19 +142,27 @@ def compare(before, after):
 
 
 def classify(reports, differences=(), phase_failures=0):
+    differences = list(differences)
+    policy_rows = [r for report in reports for r in report['rows'] if r.get('expectation_policy')]
+    pending = expectations.pending_stability(reports, differences)
     statuses = Counter(r['status'] for report in reports for r in parse_report(report)['rows'])
     failed = {r['id'] for report in reports for r in report['rows'] if r['status'] == 'FAIL'}
     failed.update(r['id'] for r in differences if r['severity'] == 'FAIL')
     warned = {r['id'] for report in reports for r in report['rows']
-              if r['status'] in {'BLOCKED', 'MISSING'} or (r['status'] == 'OBSERVED' and has_expectation(r))}
+              if r['status'] in {'BLOCKED', 'MISSING'} or (r['status'] == 'OBSERVED' and has_expectation(r)
+                  and r.get('expectation_policy') != 'EXTERNAL_STATE'
+                  and (r.get('expectation_policy') != 'STABLE_ACROSS_SWITCH' or r['id'] in pending))}
     warned.update(r['id'] for r in differences if r['severity'] == 'WARNING')
     blocked = {r['id'] for report in reports for r in report['rows'] if r['status'] in {'BLOCKED', 'MISSING'}}
     not_covered = {r['id'] for report in reports for r in report['rows']
                    if r['status'] == 'OBSERVED' and not has_expectation(r)}
     failures, warnings = len(failed) + phase_failures, len(warned)
     result = 'FAIL' if failures else 'DEGRADED' if warnings or not reports else 'PASS'
-    return dict(result=result, critical_failures=failures, warnings=warnings,
+    summary = dict(result=result, critical_failures=failures, warnings=warnings,
                 blocked_rows=len(blocked), not_covered_rows=len(not_covered), statuses=dict(statuses))
+    if policy_rows:
+        summary.update(external_state_rows=len({r['id'] for r in policy_rows if r['expectation_policy'] == 'EXTERNAL_STATE' and r['status'] == 'OBSERVED'}), pending_rows=len(pending))
+    return summary
 
 
 def selection(index, user, full):
@@ -482,6 +504,8 @@ class Harness:
             f'Warnings: {verdict.get("warnings", 0)}' + ('; missing phases: ' + ', '.join(missing) if missing else ''),
             f'Blocked rows: {verdict.get("blocked_rows", 0)}',
             f'Not covered (no expectation): {verdict.get("not_covered_rows", 0)}',
+            f'External state (not a comparison pass): {verdict.get("external_state_rows", 0)}',
+            f'Pending stability checks: {verdict.get("pending_rows", 0)}',
             'Artifacts: manifest.json; phase-*.json/log; evidence-bundle.zip',
             'Scope: local probe evidence; existing production bindings audited, not rewritten; no platform verdict.',
             ''])

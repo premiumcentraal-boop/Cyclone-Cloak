@@ -9,6 +9,12 @@ def classify(reads):
                                  ("bound-a", "bound-a-repeat", "bound-b", "unbound-before", "unbound-after")]
     if not all((a, repeat, b, before, after)):
         return "INCOMPLETE"
+    if any(r.get('expectation_policy') for r in (a, repeat, b, before, after)):
+        if any(r.get('status') == 'FAIL' for r in reads.values()):
+            return 'FAIL'
+        if any(r.get('status') in {'BLOCKED', 'MISSING'} for r in reads.values()):
+            return 'BLOCKED'
+        return 'POLICY_ONLY'
     if a["status"] == "OBSERVED" and b["status"] == "OBSERVED":
         return "UNMAPPED"
     if "BLOCKED" in (a["status"], b["status"]):
@@ -19,7 +25,7 @@ def classify(reads):
         return "UNSTABLE"
     if before.get("actual_sha256") != after.get("actual_sha256"):
         return "CONTROL_CHANGED"
-    if a.get("expected") == b.get("expected"):
+    if (a.get("expected_sha256") or a.get("expected")) == (b.get("expected_sha256") or b.get("expected")):
         return "MATCH_ONLY"
     return "VERIFIED"
 
@@ -31,7 +37,7 @@ def render(evidence):
             reads.setdefault(row["id"], {})[run["run"]] = row
     lines = ["# Runtime measurements", "",
              "Generated from `" + evidence.get("artifact", "installed module") + "`. "
-             "PASS in a raw report means value equality only. VERIFIED below also requires "
+             "PASS means a stated equality or diagnostics policy check passed. POLICY_ONLY never establishes hook coverage. VERIFIED below requires equality checks with "
              "distinct profiles, repeat stability and restoration of the unbound control.", "",
              "Requested phases: " + ", ".join(evidence.get("metadata", {}).get("phases", [run["run"] for run in evidence["runs"]])) + ". Missing phases are not run; partial runs cannot establish VERIFIED proof.", "",
              "Phase availability: " + ", ".join(name + "=" + ("run" if any(run["run"] == name for run in evidence["runs"]) else "not run") for name in ("unbound-before", "bound-a", "bound-a-repeat", "bound-b", "unbound-after")) + ".", "",
