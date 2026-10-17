@@ -1,0 +1,37 @@
+{
+  "production_audits_identical": true,
+  "permissions_snapshots_identical": true,
+  "permission_delta": {
+    "added": [],
+    "removed": [],
+    "changed": []
+  },
+  "cleanup": {
+    "0": {
+      "binding_removed": true,
+      "body_directory_removed": true,
+      "private_files_removed": true
+    },
+    "17": {
+      "binding_removed": true,
+      "body_directory_removed": true,
+      "private_files_removed": true
+    },
+    "scratch_removed": true
+  },
+  "cold_restoration_counts": {
+    "0": {
+      "PASS": 73,
+      "OBSERVED": 8,
+      "BLOCKED": 8
+    },
+    "17": {
+      "PASS": 72,
+      "BLOCKED": 12,
+      "OBSERVED": 5
+    }
+  },
+  "capture_count": 8,
+  "row_ids_per_capture": 89,
+  "sensitive_actual_and_expected_values_redacted": true
+}

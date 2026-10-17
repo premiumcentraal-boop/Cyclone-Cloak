@@ -1,0 +1,10 @@
+user-0-baseline-cold {"PASS": 27, "FAIL": 47, "BLOCKED": 8, "OBSERVED": 7} reused=False
+user-17-baseline-cold {"FAIL": 58, "BLOCKED": 12, "PASS": 15, "OBSERVED": 4} reused=False
+user-0-bound-cold {"PASS": 82, "OBSERVED": 7} reused=False
+user-17-bound-cold {"PASS": 81, "OBSERVED": 4, "BLOCKED": 4} reused=False
+user-0-post-removal-warm {"PASS": 82, "OBSERVED": 7} reused=True
+user-17-post-removal-warm {"PASS": 81, "OBSERVED": 4, "BLOCKED": 4} reused=True
+user-0-post-removal-cold {"PASS": 27, "FAIL": 47, "BLOCKED": 8, "OBSERVED": 7} reused=False
+user-17-post-removal-cold {"FAIL": 58, "BLOCKED": 12, "PASS": 15, "OBSERVED": 4} reused=False
+EVIDENCE C:\Users\Agent\Cyclone\cloak-repo\docs\runtime-evidence\2026-10-18-011943-alpha18-reversibility-a972d8f-retry
+RESULT RESTORED_WITH_EXPECTED_LIMITATIONS
