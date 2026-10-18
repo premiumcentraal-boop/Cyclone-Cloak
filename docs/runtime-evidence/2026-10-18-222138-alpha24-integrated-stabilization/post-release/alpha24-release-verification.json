@@ -1,0 +1,123 @@
+{
+  "result": "PASS",
+  "release_url": "https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.24",
+  "prerelease": true,
+  "tag": "v0.11.0-alpha.24",
+  "release_commit": "93b77477742361c837ede790eb4de616b83e523d",
+  "measured_code_commit": "49564ce0a4d60af158da0e4f67b84583b06ea4c7",
+  "assets": {
+    "app-release.apk": {
+      "size": 43786878,
+      "sha256": "b8688135535f45edd295c01bd9b688d8d27886f687ecc582608c806e2d8646dc",
+      "github_digest_matches": true
+    },
+    "build-provenance.json": {
+      "size": 907,
+      "sha256": "0aa106096a9d98739e20daa9bd028d359751db97822f8ccebc047d0bb3f9c86c",
+      "github_digest_matches": true
+    },
+    "cyclone-cloak-0.11.0-alpha.24.zip": {
+      "size": 1683427,
+      "sha256": "73e03c3a7e453d8e5938cce413563e708e7311b39e85c2b1605ff339ef2cbbce",
+      "github_digest_matches": true
+    },
+    "evidence-bundle.zip": {
+      "size": 1757549,
+      "sha256": "71ff1712848e4c7ff2bc4c63464a20f889dceda651aebf694e1e5e403df99566",
+      "github_digest_matches": true
+    },
+    "summary.md": {
+      "size": 3199,
+      "sha256": "7707b7ca907504963f7ac69bad637fda027b84f49eb5d45b0e6eaf3d693102a5",
+      "github_digest_matches": true
+    }
+  },
+  "signature_and_metadata": {
+    "signature_verified": true,
+    "signer_sha256": "17ca3617b0cbaf250d2ef03e945b319e57695de6d977c652ded243ad5656f553",
+    "embedded_module_exact_match": true,
+    "version": "0.11.0-alpha.24",
+    "code": 48,
+    "libraries": {
+      "zygisk/arm64-v8a.so": "4a3e5099c7ebde60728b19306b7412f8576679ebb4163c2dc05272b1ed2e8900",
+      "zygisk/armeabi-v7a.so": "9dbcca68ed082e5598164bcf5bf3b39d32e9edf5e6142c013357370091150e6d"
+    },
+    "assets": {
+      "app-release.apk": {
+        "size": 43786878,
+        "sha256": "b8688135535f45edd295c01bd9b688d8d27886f687ecc582608c806e2d8646dc"
+      },
+      "cyclone-cloak-0.11.0-alpha.24.zip": {
+        "size": 1683427,
+        "sha256": "73e03c3a7e453d8e5938cce413563e708e7311b39e85c2b1605ff339ef2cbbce"
+      }
+    }
+  },
+  "measured_binary_equivalence": {
+    "measured_code_commit": "49564ce0a4d60af158da0e4f67b84583b06ea4c7",
+    "release_commit": "93b77477742361c837ede790eb4de616b83e523d",
+    "native_library_bytes_identical": true,
+    "module_all_entry_bytes_identical": true,
+    "apk_code_and_resources_identical": true,
+    "apk_different_entries": [
+      "assets/cyclone-cloak-module.zip"
+    ],
+    "explanation": "Module archive container timestamps and VCS provenance may differ; native libraries and app code/resources must be exact.",
+    "assets": {
+      "app-release.apk": {
+        "size": 43786878,
+        "sha256": "b8688135535f45edd295c01bd9b688d8d27886f687ecc582608c806e2d8646dc"
+      },
+      "cyclone-cloak-0.11.0-alpha.24.zip": {
+        "size": 1683427,
+        "sha256": "73e03c3a7e453d8e5938cce413563e708e7311b39e85c2b1605ff339ef2cbbce"
+      }
+    }
+  },
+  "source_equivalence": {
+    "measured_code_commit": "49564ce0a4d60af158da0e4f67b84583b06ea4c7",
+    "release_commit": "93b77477742361c837ede790eb4de616b83e523d",
+    "source_trees_identical": true,
+    "trees": {
+      "android": "1956b748623233e58d7dcfb7a1587f6aa423338c",
+      "forge": "b11eabd25deb7ce818060a37a46a5672d6427232",
+      "catalog": "5f5c04484a2f4c82a65b2e9db91353414fdfc02b",
+      "schema": "124c2d75d2bfe4b890d69730facf9393700c10e6",
+      "tools": "e89cf78b2b2e0d029502165ba2779eefb5115be3"
+    },
+    "non_code_changes": "release notes, documentation, evidence and release asset paths only"
+  },
+  "signed_validation": {
+    "conclusion": "success",
+    "headSha": "93b77477742361c837ede790eb4de616b83e523d",
+    "status": "completed",
+    "url": "https://github.com/premiumcentraal-boop/Cyclone-Cloak/actions/runs/39164478973"
+  },
+  "release_ci": {
+    "conclusion": "success",
+    "headSha": "93b77477742361c837ede790eb4de616b83e523d",
+    "status": "completed",
+    "url": "https://github.com/premiumcentraal-boop/Cyclone-Cloak/actions/runs/39164928184"
+  },
+  "evidence_assets_byte_identical_to_tag": true,
+  "local_tests_passed": 1679,
+  "compiler_warnings": 0,
+  "physical": {
+    "focused_same_process_warm_repetitions": 12,
+    "compacting_gc_observed": true,
+    "lifecycle_cycles": 3,
+    "lifecycle_captures": 24,
+    "bound_linked_failures": 0,
+    "production_entries_before": 327,
+    "production_entries_after": 327,
+    "permissions_appops_unchanged": true,
+    "production_unchanged": true,
+    "cleanup_passed": true
+  },
+  "limitations": [
+    "Four user-17 bound permission blocks remain.",
+    "External-state/unavailable restoration rows remain observations/blocks.",
+    "Factory firmware/HAL approximations and new console UI are not physically verified.",
+    "No platform verdict."
+  ]
+}
