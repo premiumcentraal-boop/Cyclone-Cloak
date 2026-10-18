@@ -6,6 +6,7 @@ Only paired baseline-versus-cold actual hashes decide restoration.
 """
 import argparse
 import copy
+from datetime import datetime, timedelta, timezone
 from collections import Counter
 import hashlib
 import importlib
@@ -28,6 +29,34 @@ EXPECTED_DIAGNOSTIC_APPOP_ADDITIONS = {
     'READ_DEVICE_IDENTIFIERS': 'deny',
     'USE_ICC_AUTH_WITH_DEVICE_IDENTIFIER': 'default',
 }
+
+
+def probe_failure_evidence(exit_info, user, started_at, pid=None, utc_offset='+0000'):
+    """Only a fresh, matching probe crash is a crash; absence is not evidence."""
+    result = dict(reason_code='PROBE_REPORT_TIMEOUT', matched_exit=None)
+    if not re.fullmatch(r'[+-][0-9]{4}', utc_offset):
+        return result
+    minutes = int(utc_offset[1:3]) * 60 + int(utc_offset[3:])
+    if minutes > 14 * 60 or int(utc_offset[3:]) >= 60:
+        return result
+    zone = timezone(timedelta(minutes=minutes * (-1 if utc_offset[0] == '-' else 1)))
+    for block in re.split(r'ApplicationExitInfo #\d+:', exit_info)[1:]:
+        identity = re.search(r'timestamp=([0-9-]+ [0-9:.]+) pid=(\d+).*?user=(\d+)', block)
+        process = re.search(r'process=(\S+) reason=(\d+) ', block)
+        if not identity or not process or process[1] != PACKAGE or int(process[2]) not in (4, 5):
+            continue
+        if int(identity[3]) != user or (pid is not None and int(identity[2]) != pid):
+            continue
+        try:
+            timestamp = datetime.fromisoformat(identity[1]).replace(tzinfo=zone).timestamp()
+        except ValueError:
+            continue
+        if timestamp < started_at:
+            continue
+        result = dict(reason_code='PROBE_CRASHED', matched_exit=dict(pid=int(identity[2]),
+                      android_user=user, process=PACKAGE, reason=int(process[2]), timestamp=timestamp))
+        break
+    return result
 
 
 def phases(users):
@@ -465,11 +494,21 @@ def run_cycle(args):
         prior_pid = prior['pid'] if prior else None
         if cold: d.shell(f'am force-stop --user {user} {PACKAGE}')
         request = uuid.uuid4().hex
+        started_at = float(d.shell('date +%s').stdout.strip())
+        utc_offset = d.shell('date +%z').stdout.strip()
         context = dict(phase=phase, request_id=request, android_user=user, fixture=item['fixture'], profile_sha256=item['sha256'], published_sha256=published)
         launched = d.shell(f'am start --user {user} -n {PACKAGE}/dev.cyclone.cloak.probe.DiagnosticsProbeActivity --activity-clear-top --activity-single-top --ez external_profile true --ez no_permission_prompt true --ei expected_user {user} --es fixture {item["fixture"]} --es request_id {request}')
         if re.search('Error|Exception', launched.stdout+launched.stderr): raise ValueError('PROBE_LAUNCH_FAILED')
         deadline = time.monotonic()+90
+        next_exit_check = time.monotonic()
         while time.monotonic()<deadline:
+            if time.monotonic() >= next_exit_check:
+                next_exit_check = time.monotonic() + 3
+                failure = probe_failure_evidence(d.shell('dumpsys activity exit-info '+PACKAGE, check=False).stdout,
+                    user, started_at, None if cold else prior_pid, utc_offset)
+                if failure['reason_code'] == 'PROBE_CRASHED':
+                    pc.save(out/('failed-'+phase+'-exit.json'), dict(failure, request_metadata=context))
+                    raise ValueError('PROBE_CRASHED')
             output = d.shell(f'run-as {PACKAGE} --user {user} cat files/report.json', check=False)
             if output.returncode: time.sleep(.3); continue
             value = output.stdout

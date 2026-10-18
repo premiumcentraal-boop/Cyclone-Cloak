@@ -9,6 +9,11 @@ Prerelease candidate; app/module version code 48.
 - Active and supported display modes use the same authoritative base-profile tuple.
 - Linked diagnostics retain hashes and add non-sensitive active/supported screen
   tuples and Display.getRefreshRate() for direct failure analysis.
+- Configure the Java hook engine with the actual host API level and ART debug
+  mode captured before profile rewriting. Profile SDK values and concise logging
+  no longer select the engine's runtime configuration.
+- Diagnostics lifecycle failures distinguish a fresh, matching probe crash from
+  a report timeout, ignoring stale exits and unrelated processes.
 - No profile schema, bindings, storage layout, connector, publication or permission
   changes. No networking or platform verdict.
 

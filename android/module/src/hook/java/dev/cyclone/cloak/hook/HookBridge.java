@@ -74,8 +74,10 @@ public final class HookBridge {
     private HookBridge() { }
 
     /** Called from the native module right after the scoped process specializes. */
-    public static void init(String appDataDir, byte[] pineLib) {
+    public static void init(String appDataDir, byte[] pineLib, int runtimeSdk, int runtimeFlags) {
         try {
+            configureRuntime(runtimeSdk, runtimeFlags);
+            log("ART runtime API " + runtimeSdk + ", debuggable=" + PineConfig.debuggable);
             File dir = new File(appDataDir, "code_cache/cloak_hooks");
             if (!dir.isDirectory() && !dir.mkdirs()) {
                 log("cannot create hook lib dir " + dir);
@@ -84,13 +86,26 @@ public final class HookBridge {
             File so = new File(dir, "libpine.so");
             writeIfChanged(so, pineLib);
             PineConfig.debug = false;
-            PineConfig.debuggable = false;
             PineConfig.libLoader = () -> System.load(so.getAbsolutePath());
             installHooks();
             log("java callbacks installed");
         } catch (Throwable t) {
             log("bridge init failed", t);
         }
+    }
+
+    static void configureRuntimeSdk(int runtimeSdk) {
+        if (runtimeSdk < 26) throw new IllegalArgumentException("HOST_RUNTIME_SDK_UNAVAILABLE");
+        // PineConfig otherwise reads the already-rewritten Build.VERSION.SDK_INT.
+        // Its ART configuration must never be selected by a device profile.
+        PineConfig.sdkLevel = runtimeSdk;
+    }
+
+    static void configureRuntime(int runtimeSdk, int runtimeFlags) {
+        configureRuntimeSdk(runtimeSdk);
+        // AOSP Zygote.DEBUG_JAVA_DEBUGGABLE. Pine needs the actual ART mode,
+        // independently of log verbosity and the profile's Build fields.
+        PineConfig.debuggable = (runtimeFlags & (1 << 8)) != 0;
     }
 
     private static void installHooks() {

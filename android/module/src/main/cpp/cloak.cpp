@@ -16,6 +16,7 @@
 #include "runtime_scope.hpp"
 
 #include <android/log.h>
+#include <android/api-level.h>
 #include <jni.h>
 #include <sys/system_properties.h>
 
@@ -120,6 +121,9 @@ std::unordered_map<std::string, std::string> g_props;
 std::string g_active_package;
 std::string g_active_key;
 bool g_active = false;
+// ART belongs to the host OS, even when Build.VERSION is profile-backed.
+int g_runtime_sdk = 0;
+int g_runtime_flags = 0;
 std::string g_app_data_dir;
 bool g_java_callbacks = true;
 bool g_native_hook_enabled = true;
@@ -902,7 +906,7 @@ void init_java_hooks(JNIEnv *env, const std::string &app_data_dir) {
         return;
     }
     jmethodID init = env->GetStaticMethodID(bridge, "init",
-        "(Ljava/lang/String;[B)V");
+        "(Ljava/lang/String;[BII)V");
     if (!init) {
         env->ExceptionClear();
         env->DeleteLocalRef(bridge);
@@ -926,7 +930,7 @@ void init_java_hooks(JNIEnv *env, const std::string &app_data_dir) {
         env->DeleteLocalRef(loader);
         return;
     }
-    env->CallStaticVoidMethod(bridge, init, dataDir, pine);
+    env->CallStaticVoidMethod(bridge, init, dataDir, pine, g_runtime_sdk, g_runtime_flags);
     if (env->ExceptionCheck()) {
         env->ExceptionClear();
         LOGI("hook bridge init reported an error");
@@ -942,9 +946,13 @@ public:
     void onLoad(Api *api, JNIEnv *env) override {
         this->api = api;
         this->env = env;
+        // Read before property hooks or apply_profile can expose a synthetic SDK.
+        g_runtime_sdk = android_get_device_api_level();
     }
 
     void preAppSpecialize(AppSpecializeArgs *args) override {
+        // Observe the process's real ART flags; never change them.
+        g_runtime_flags = args->runtime_flags;
         // app_data_dir looks like /data/user/0/<package>; the last segment is the package.
         g_app_data_dir = string_arg(env, args->app_data_dir);
         g_active_package = g_app_data_dir;

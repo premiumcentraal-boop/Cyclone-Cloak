@@ -426,3 +426,21 @@ def test_missing_hash_evidence_never_promotes_cycle_to_pass(tmp_path):
     assert result['failed_cycle']==1 and not result['cycles'][0]['installed_apk_check_passed']
 
 
+
+@pytest.mark.parametrize('reason,expected', [(5,'PROBE_CRASHED'),(4,'PROBE_CRASHED'),(10,'PROBE_REPORT_TIMEOUT'),(3,'PROBE_REPORT_TIMEOUT')])
+def test_probe_failure_classification(reason, expected):
+    from run_probe_reversibility import probe_failure_evidence
+    value=f'ApplicationExitInfo #0:\n timestamp=2026-10-18 21:31:38.745 pid=12996 realUid=10273 user=0\n process={PACKAGE} reason={reason} (test)'
+    result=probe_failure_evidence(value,0,1792351800,12996,'+0200')
+    assert result['reason_code']==expected
+
+@pytest.mark.parametrize('change', ['pid','user','process','stale','malformed','offset'])
+def test_probe_failure_rejects_unrelated_or_insufficient_evidence(change):
+    from run_probe_reversibility import probe_failure_evidence
+    text=f'ApplicationExitInfo #0:\n timestamp=2026-10-18 21:31:38.745 pid=12996 realUid=10273 user=0\n process={PACKAGE} reason=5 (APP CRASH(NATIVE))'
+    if change=='pid': text=text.replace('pid=12996','pid=12997')
+    if change=='user': text=text.replace('user=0','user=17')
+    if change=='process': text=text.replace(PACKAGE,'unrelated.package')
+    if change=='malformed': text='unparseable'
+    result=probe_failure_evidence(text,0,9999999999 if change=='stale' else 1792351800,12996,'invalid' if change=='offset' else '+0200')
+    assert result==dict(reason_code='PROBE_REPORT_TIMEOUT',matched_exit=None)
