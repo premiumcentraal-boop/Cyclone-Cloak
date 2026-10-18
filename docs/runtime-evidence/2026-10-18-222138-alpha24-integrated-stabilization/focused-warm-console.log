@@ -1,0 +1,15 @@
+user-0-bound-cold {"PASS": 82, "OBSERVED": 7} reused=False
+user-0-post-removal-warm-repeat-1 {"PASS": 82, "OBSERVED": 7} reused=True
+user-0-post-removal-warm-repeat-2 {"PASS": 82, "OBSERVED": 7} reused=True
+user-0-post-removal-warm-repeat-3 {"PASS": 82, "OBSERVED": 7} reused=True
+user-0-post-removal-warm-repeat-4 {"PASS": 82, "OBSERVED": 7} reused=True
+user-0-post-removal-warm-repeat-5 {"PASS": 82, "OBSERVED": 7} reused=True
+user-0-post-removal-warm-repeat-6 {"PASS": 82, "OBSERVED": 7} reused=True
+user-0-post-removal-warm-repeat-7 {"PASS": 82, "OBSERVED": 7} reused=True
+user-0-post-removal-warm-repeat-8 {"PASS": 82, "OBSERVED": 7} reused=True
+user-0-post-removal-warm-repeat-9 {"PASS": 82, "OBSERVED": 7} reused=True
+user-0-post-removal-warm-repeat-10 {"PASS": 82, "OBSERVED": 7} reused=True
+user-0-post-removal-warm-repeat-11 {"PASS": 82, "OBSERVED": 7} reused=True
+user-0-post-removal-warm-repeat-12 {"PASS": 82, "OBSERVED": 7} reused=True
+EVIDENCE C:\Users\Agent\Cyclone\cloak-repo\docs\runtime-evidence\2026-10-18-222138-alpha24-integrated-stabilization\focused-warm
+RESULT FOCUSED_WARM_COMPLETED

@@ -1,0 +1,211 @@
+--------- beginning of events
+10-18 22:35:22.400  8913  8913 I auditd  : type=1400 audit(0.0:398): avc:  granted  { execute } for  comm="loak.probe.diag" path="/data/data/dev.cyclone.cloak.probe.diag/libshadowhook.so" dev="dm-64" ino=197632 scontext=u:r:untrusted_app:s0:c17,c257,c512,c768 tcontext=u:object_r:app_data_file:s0:c17,c257,c512,c768 tclass=file app=dev.cyclone.cloak.probe.diag
+10-18 22:35:22.508  8913  8913 I auditd  : type=1400 audit(0.0:399): avc:  granted  { execute } for  comm="loak.probe.diag" path="/data/data/dev.cyclone.cloak.probe.diag/code_cache/cloak_hooks/libpine.so" dev="dm-64" ino=282472 scontext=u:r:untrusted_app:s0:c17,c257,c512,c768 tcontext=u:object_r:app_data_file:s0:c17,c257,c512,c768 tclass=file app=dev.cyclone.cloak.probe.diag
+--------- beginning of system
+10-18 22:35:22.745  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+--------- beginning of main
+10-18 22:35:22.752  8913  8913 D nativeloader: Configuring clns-10 for other apk /data/app/~~ziZRoiGS6sZHqXkr0IkXEw==/dev.cyclone.cloak.probe.diag--tVihH3_nW3YsttCdQ-nkg==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~ziZRoiGS6sZHqXkr0IkXEw==/dev.cyclone.cloak.probe.diag--tVihH3_nW3YsttCdQ-nkg==/lib/arm64:/data/app/~~ziZRoiGS6sZHqXkr0IkXEw==/dev.cyclone.cloak.probe.diag--tVihH3_nW3YsttCdQ-nkg==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/0/dev.cyclone.cloak.probe.diag
+10-18 22:35:22.756  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.756  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.760  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.763  8913  8913 V GraphicsEnvironment: Currently set values for:
+10-18 22:35:22.763  8913  8913 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[com.android.angle]
+10-18 22:35:22.763  8913  8913 V GraphicsEnvironment:   angle_gl_driver_selection_values=[angle]
+10-18 22:35:22.763  8913  8913 V GraphicsEnvironment: dev.cyclone.cloak.probe.diag is not listed in per-application setting
+10-18 22:35:22.763  8913  8913 V GraphicsEnvironment: No special selections for ANGLE, returning default driver choice
+10-18 22:35:22.763  8913  8913 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+10-18 22:35:22.767  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.872  8913  8913 I auditd  : type=1400 audit(0.0:401): avc:  denied  { read } for  comm="cloak-probe-1" name="u:object_r:serialno_prop:s0" dev="tmpfs" ino=366 scontext=u:r:untrusted_app:s0:c17,c257,c512,c768 tcontext=u:object_r:serialno_prop:s0 tclass=file permissive=0 app=dev.cyclone.cloak.probe.diag
+10-18 22:35:22.872  8913  8913 W cloak-probe-1: type=1400 audit(0.0:401): avc:  denied  { read } for  name="u:object_r:serialno_prop:s0" dev="tmpfs" ino=366 scontext=u:r:untrusted_app:s0:c17,c257,c512,c768 tcontext=u:object_r:serialno_prop:s0 tclass=file permissive=0 app=dev.cyclone.cloak.probe.diag
+10-18 22:35:22.790  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.791  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.795  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.795  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.799  8913  8993 I DisplayManager: Choreographer implicitly registered for the refresh rate.
+10-18 22:35:22.800  8913  8913 D nativeloader: Load /data/app/~~ziZRoiGS6sZHqXkr0IkXEw==/dev.cyclone.cloak.probe.diag--tVihH3_nW3YsttCdQ-nkg==/base.apk!/lib/arm64-v8a/libprobe.so using class loader ns clns-10 (caller=/data/app/~~ziZRoiGS6sZHqXkr0IkXEw==/dev.cyclone.cloak.probe.diag--tVihH3_nW3YsttCdQ-nkg==/base.apk!classes3.dex): ok
+10-18 22:35:22.804  8913  8993 D vulkan  : searching for layers in '/data/app/~~ziZRoiGS6sZHqXkr0IkXEw==/dev.cyclone.cloak.probe.diag--tVihH3_nW3YsttCdQ-nkg==/lib/arm64'
+10-18 22:35:22.805  8913  8993 D vulkan  : searching for layers in '/data/app/~~ziZRoiGS6sZHqXkr0IkXEw==/dev.cyclone.cloak.probe.diag--tVihH3_nW3YsttCdQ-nkg==/base.apk!/lib/arm64-v8a'
+10-18 22:35:22.805  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.805  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.808  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.809  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.823  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.824  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.824  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.824  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.824  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.826  8913  8913 D CompatChangeReporter: Compat change id reported: 377864165; UID 10273; state: ENABLED
+10-18 22:35:22.826  8913  8913 D DesktopExperienceFlags: Toggle override initialized to: false
+10-18 22:35:22.826  8913  8913 D DesktopModeFlags: Toggle override initialized to: OVERRIDE_UNSET
+10-18 22:35:22.829  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.829  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.833  8913  8913 I wm_on_create_called: [82001130,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,performCreate,28]
+10-18 22:35:22.834  8913  8913 I wm_on_start_called: [82001130,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,handleStartActivity,0]
+10-18 22:35:22.838  8913  8913 I wm_on_resume_called: [82001130,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,RESUME_ACTIVITY,4]
+10-18 22:35:22.859  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.859  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.862  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.863  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.868  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722867,"process":8913,"thread":9011,"field":"build.MANUFACTURER","status":"PASS"}
+10-18 22:35:22.868  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722868,"process":8913,"thread":9011,"field":"build.BRAND","status":"PASS"}
+10-18 22:35:22.868  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722868,"process":8913,"thread":9011,"field":"build.MODEL","status":"PASS"}
+10-18 22:35:22.868  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722868,"process":8913,"thread":9011,"field":"build.DEVICE","status":"PASS"}
+10-18 22:35:22.868  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722868,"process":8913,"thread":9011,"field":"build.PRODUCT","status":"PASS"}
+10-18 22:35:22.869  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722868,"process":8913,"thread":9011,"field":"build.HARDWARE","status":"PASS"}
+10-18 22:35:22.869  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722869,"process":8913,"thread":9011,"field":"build.FINGERPRINT","status":"PASS"}
+10-18 22:35:22.869  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722869,"process":8913,"thread":9011,"field":"build.ID","status":"PASS"}
+10-18 22:35:22.869  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.869  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722869,"process":8913,"thread":9011,"field":"build.BOOTLOADER","status":"PASS"}
+10-18 22:35:22.869  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722869,"process":8913,"thread":9011,"field":"build.SERIAL","status":"PASS"}
+10-18 22:35:22.870  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722870,"process":8913,"thread":9011,"field":"build.getSerial","status":"PASS"}
+10-18 22:35:22.870  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722870,"process":8913,"thread":9011,"field":"build.TIME","status":"PASS"}
+10-18 22:35:22.870  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722870,"process":8913,"thread":9011,"field":"build.TYPE","status":"PASS"}
+10-18 22:35:22.870  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722870,"process":8913,"thread":9011,"field":"build.TAGS","status":"PASS"}
+10-18 22:35:22.871  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722870,"process":8913,"thread":9011,"field":"version.SDK_INT","status":"PASS"}
+10-18 22:35:22.871  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722871,"process":8913,"thread":9011,"field":"version.RELEASE","status":"PASS"}
+10-18 22:35:22.871  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722871,"process":8913,"thread":9011,"field":"version.INCREMENTAL","status":"PASS"}
+10-18 22:35:22.871  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722871,"process":8913,"thread":9011,"field":"version.SECURITY_PATCH","status":"PASS"}
+10-18 22:35:22.872  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.872  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722872,"process":8913,"thread":9011,"field":"build.getRadioVersion","status":"PASS"}
+10-18 22:35:22.872  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722872,"process":8913,"thread":9011,"field":"properties.java.ro.product.model","status":"PASS"}
+10-18 22:35:22.872  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722872,"process":8913,"thread":9011,"field":"properties.native.ro.product.model","status":"PASS"}
+10-18 22:35:22.873  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.873  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722873,"process":8913,"thread":9011,"field":"properties.java.ro.product.manufacturer","status":"PASS"}
+10-18 22:35:22.873  8913  8913 I wm_on_top_resumed_gained_called: [82001130,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,topStateChangedWhenResumed]
+10-18 22:35:22.873  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722873,"process":8913,"thread":9011,"field":"properties.native.ro.product.manufacturer","status":"PASS"}
+10-18 22:35:22.873  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722873,"process":8913,"thread":9011,"field":"properties.java.ro.product.brand","status":"PASS"}
+10-18 22:35:22.873  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.874  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722873,"process":8913,"thread":9011,"field":"properties.native.ro.product.brand","status":"PASS"}
+10-18 22:35:22.874  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722874,"process":8913,"thread":9011,"field":"properties.java.ro.product.device","status":"PASS"}
+10-18 22:35:22.874  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.874  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722874,"process":8913,"thread":9011,"field":"properties.native.ro.product.device","status":"PASS"}
+10-18 22:35:22.874  8913  8913 D WindowOnBackDispatcher: setTopOnBackInvokedCallback (unwrapped): android.app.Activity$$ExternalSyntheticLambda0@8dd8c2b
+10-18 22:35:22.874  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722874,"process":8913,"thread":9011,"field":"properties.java.ro.product.name","status":"PASS"}
+10-18 22:35:22.875  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722874,"process":8913,"thread":9011,"field":"properties.native.ro.product.name","status":"PASS"}
+10-18 22:35:22.875  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.875  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722875,"process":8913,"thread":9011,"field":"properties.java.ro.build.version.sdk","status":"PASS"}
+10-18 22:35:22.875  8913  8913 D VRI[DiagnosticsProbeActivity]: WindowInsets changed: 1080x2400 statusBars:[0,132,0,0] navigationBars:[0,0,0,63] mandatorySystemGestures:[0,164,0,84]
+10-18 22:35:22.875  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722875,"process":8913,"thread":9011,"field":"properties.native.ro.build.version.sdk","status":"PASS"}
+10-18 22:35:22.876  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.876  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722875,"process":8913,"thread":9011,"field":"properties.java.ro.build.fingerprint","status":"PASS"}
+10-18 22:35:22.876  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.876  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722876,"process":8913,"thread":9011,"field":"properties.native.ro.build.fingerprint","status":"PASS"}
+10-18 22:35:22.876  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722876,"process":8913,"thread":9011,"field":"properties.java.ro.serialno","status":"PASS"}
+10-18 22:35:22.876  8913  8913 I HWUI    : Using FreeType backend (prop=Auto)
+10-18 22:35:22.878  8913  9011 W libc    : Access denied finding property "ro.serialno"
+10-18 22:35:22.878  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722878,"process":8913,"thread":9011,"field":"properties.native.ro.serialno","status":"PASS"}
+10-18 22:35:22.878  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722878,"process":8913,"thread":9011,"field":"properties.java.ro.sf.lcd_density","status":"PASS"}
+10-18 22:35:22.879  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722878,"process":8913,"thread":9011,"field":"properties.native.ro.sf.lcd_density","status":"PASS"}
+10-18 22:35:22.879  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722879,"process":8913,"thread":9011,"field":"properties.java.persist.sys.timezone","status":"PASS"}
+10-18 22:35:22.879  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722879,"process":8913,"thread":9011,"field":"properties.native.persist.sys.timezone","status":"PASS"}
+10-18 22:35:22.880  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.881  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.881  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722880,"process":8913,"thread":9011,"field":"properties.nativeCallback.ro.product.model","status":"PASS"}
+10-18 22:35:22.897  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722897,"process":8913,"thread":9011,"field":"telephony.simState","status":"OBSERVED"}
+10-18 22:35:22.900  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722900,"process":8913,"thread":9011,"field":"telephony.phoneType","status":"PASS"}
+10-18 22:35:22.904  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.905  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722905,"process":8913,"thread":9011,"field":"telephony.roaming","status":"PASS"}
+10-18 22:35:22.905  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722905,"process":8913,"thread":9011,"field":"telephony.imei0","status":"PASS"}
+10-18 22:35:22.906  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722906,"process":8913,"thread":9011,"field":"telephony.imei1","status":"PASS"}
+10-18 22:35:22.906  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722906,"process":8913,"thread":9011,"field":"telephony.deviceId","status":"PASS"}
+10-18 22:35:22.906  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722906,"process":8913,"thread":9011,"field":"telephony.simSerial","status":"PASS"}
+10-18 22:35:22.906  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722906,"process":8913,"thread":9011,"field":"telephony.phoneCount","status":"PASS"}
+10-18 22:35:22.906  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722906,"process":8913,"thread":9011,"field":"telephony.activeModemCount","status":"PASS"}
+10-18 22:35:22.906  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722906,"process":8913,"thread":9011,"field":"telephony.networkType","status":"PASS"}
+10-18 22:35:22.907  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722906,"process":8913,"thread":9011,"field":"telephony.dataNetworkType","status":"PASS"}
+10-18 22:35:22.907  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722907,"process":8913,"thread":9011,"field":"operator.networkNumeric","status":"PASS"}
+10-18 22:35:22.907  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722907,"process":8913,"thread":9011,"field":"operator.simNumeric","status":"PASS"}
+10-18 22:35:22.907  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722907,"process":8913,"thread":9011,"field":"operator.networkName","status":"PASS"}
+10-18 22:35:22.908  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.908  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.908  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.909  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.909  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.909  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.910  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.910  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.911  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.911  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.911  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.911  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.911  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.911  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.913  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722907,"process":8913,"thread":9011,"field":"operator.simName","status":"PASS"}
+10-18 22:35:22.913  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722913,"process":8913,"thread":9011,"field":"operator.networkCountry","status":"PASS"}
+10-18 22:35:22.913  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722913,"process":8913,"thread":9011,"field":"operator.simCountry","status":"PASS"}
+10-18 22:35:22.913  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722913,"process":8913,"thread":9011,"field":"telephony.subscriberId","status":"PASS"}
+10-18 22:35:22.913  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722913,"process":8913,"thread":9011,"field":"settings.secure.androidId","status":"PASS"}
+10-18 22:35:22.914  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722914,"process":8913,"thread":9011,"field":"settings.provider.androidId","status":"PASS"}
+10-18 22:35:22.922  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722922,"process":8913,"thread":9011,"field":"settings.unrelatedControl","status":"OBSERVED"}
+10-18 22:35:22.923  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722922,"process":8913,"thread":9011,"field":"wifi.objectMac","status":"PASS"}
+10-18 22:35:22.928  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722927,"process":8913,"thread":9011,"field":"wifi.serviceMac","status":"PASS"}
+10-18 22:35:22.931  8913  8913 I viewroot_draw_event: [VRI[DiagnosticsProbeActivity]fc8cfef,reportDrawFinished seqId=0]
+10-18 22:35:22.934  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722934,"process":8913,"thread":9011,"field":"wifi.bssid","status":"OBSERVED"}
+10-18 22:35:22.952  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722951,"process":8913,"thread":9011,"field":"wifi.linkSpeed","status":"OBSERVED"}
+10-18 22:35:22.956  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722955,"process":8913,"thread":9011,"field":"wifi.ssid","status":"OBSERVED"}
+10-18 22:35:22.961  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722961,"process":8913,"thread":9011,"field":"bluetooth.address","status":"PASS"}
+10-18 22:35:22.969  8913  8913 I input_focus: ViewRootImpl focus=true for dev.cyclone.cloak.probe.diag/dev.cyclone.cloak.probe.DiagnosticsProbeActivity
+10-18 22:35:22.970  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:22.973  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722973,"process":8913,"thread":9011,"field":"bluetooth.name","status":"OBSERVED"}
+10-18 22:35:22.974  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355722974,"process":8913,"thread":9011,"field":"advertising.id","status":"PASS"}
+10-18 22:35:22.979  8913  8913 D InsetsController: hide(ime())
+10-18 22:35:22.979  8913  8913 I ImeTracker: dev.cyclone.cloak.probe.diag:828e40d7: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+10-18 22:35:22.981  8913  9011 I DrmHalHidl: No hidl drm factories found
+10-18 22:35:22.982  8913  9011 W DrmHalHidl: Failed to find passthrough drm factories
+10-18 22:35:22.994  8913  9011 I DrmUtils: found IDrmFactory. Instance name:[android.hardware.drm.IDrmFactory/clearkey]
+10-18 22:35:22.998  8913  9011 I DrmUtils: found IDrmFactory. Instance name:[android.hardware.drm.IDrmFactory/widevine]
+10-18 22:35:23.035  8913  9011 I CloakModule: [cloak-hook] widevine identity served
+10-18 22:35:23.041  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355723041,"process":8913,"thread":9011,"field":"drm.deviceUniqueId","status":"PASS"}
+10-18 22:35:23.042  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355723041,"process":8913,"thread":9011,"field":"display.resources.width","status":"PASS"}
+10-18 22:35:23.042  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355723042,"process":8913,"thread":9011,"field":"display.resources.height","status":"PASS"}
+10-18 22:35:23.042  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355723042,"process":8913,"thread":9011,"field":"display.resources.density","status":"PASS"}
+10-18 22:35:23.043  8913  9011 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:23.043  8913  9011 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:23.043  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355723043,"process":8913,"thread":9011,"field":"display.real.width","status":"PASS"}
+10-18 22:35:23.043  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355723043,"process":8913,"thread":9011,"field":"display.real.height","status":"PASS"}
+10-18 22:35:23.043  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355723043,"process":8913,"thread":9011,"field":"display.real.density","status":"PASS"}
+10-18 22:35:23.044  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355723044,"process":8913,"thread":9011,"field":"display.refresh","status":"PASS"}
+10-18 22:35:23.062  8913  9011 I CameraManagerGlobal: Connecting to camera service
+10-18 22:35:23.077  8913  9011 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:23.077  8913  9011 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:23.077  8913  9011 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:23.088  8913  9011 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:23.089  8913  9011 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:23.091  8913  9011 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:23.091  8913  9011 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:23.093  8913  9011 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:23.093  8913  9011 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:23.094  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355723094,"process":8913,"thread":9011,"field":"camera.characteristics","status":"PASS"}
+10-18 22:35:23.122  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355723122,"process":8913,"thread":9011,"field":"sensors.list","status":"PASS"}
+10-18 22:35:23.122  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355723122,"process":8913,"thread":9011,"field":"locale.default.language","status":"PASS"}
+10-18 22:35:23.124  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355723122,"process":8913,"thread":9011,"field":"locale.default.country","status":"PASS"}
+10-18 22:35:23.124  8913  9011 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:23.126  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355723124,"process":8913,"thread":9011,"field":"locale.resources.language","status":"PASS"}
+10-18 22:35:23.127  8913  9011 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:23.127  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355723127,"process":8913,"thread":9011,"field":"locale.resources.country","status":"PASS"}
+10-18 22:35:23.128  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355723127,"process":8913,"thread":9011,"field":"timezone.default","status":"PASS"}
+10-18 22:35:23.128  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355723128,"process":8913,"thread":9011,"field":"process.uid","status":"PASS"}
+10-18 22:35:23.128  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355723128,"process":8913,"thread":9011,"field":"process.androidUser","status":"PASS"}
+10-18 22:35:23.168  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355723168,"process":8913,"thread":9011,"field":"packages.visible","status":"PASS"}
+10-18 22:35:23.312  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355723312,"process":8913,"thread":9011,"field":"runtime.loadedLibraries","status":"PASS"}
+10-18 22:35:23.318  8913  9011 I CloakProbeDiagnostics: {"timestamp":1792355723317,"process":8913,"thread":9011,"field":"runtime.javaBridgeVisible","status":"OBSERVED"}
+10-18 22:35:23.369  8913  9011 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:23.369  8913  9011 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:23.370  8913  9011 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:23.370  8913  9011 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:23.455  8913  9011 I DrmHalHidl: No hidl drm factories found
+10-18 22:35:23.456  8913  9011 W DrmHalHidl: Failed to find passthrough drm factories
+10-18 22:35:23.456  8913  9011 I DrmUtils: found IDrmFactory. Instance name:[android.hardware.drm.IDrmFactory/clearkey]
+10-18 22:35:23.456  8913  9011 I DrmUtils: found IDrmFactory. Instance name:[android.hardware.drm.IDrmFactory/widevine]
+10-18 22:35:23.541  8913  9011 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:23.541  8913  9011 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:23.677  8913  9011 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:23.677  8913  9011 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:23.897  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:23.897  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:23.897  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:23.898  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:23.898  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:23.898  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:23.898  8913  8913 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]
+10-18 22:35:24.089  8913  8975 I loak.probe.diag: Compiler allocated 5116KB to compile void android.view.ViewRootImpl.performTraversals()

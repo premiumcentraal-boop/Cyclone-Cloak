@@ -1,0 +1,1 @@
+Prior candidate 57e90bc failed. These are redacted copies of the preserved original evidence; they are not results for the final 49564ce candidate. Original raw memory remains local and excluded from shared evidence.

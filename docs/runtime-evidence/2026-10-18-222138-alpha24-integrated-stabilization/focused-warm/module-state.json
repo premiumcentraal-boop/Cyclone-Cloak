@@ -1,0 +1,11 @@
+{
+  "module_prop": "id=cyclone_cloak\nname=Cyclone Cloak\nversion=v0.11.0-alpha.24\nversionCode=48\nauthor=Cyclone Cloak contributors\ndescription=Device-profile engine for Cyclone (platform). Manage per-app profiles from the Cyclone Cloak companion app. Requires platform.\n",
+  "libraries": {
+    "/data/app/~~ziZRoiGS6sZHqXkr0IkXEw==/dev.cyclone.cloak.probe.diag--tVihH3_nW3YsttCdQ-nkg==/base.apk": "849349da46ccc1b3e5c1f5f635992159c9556d767d9aafb538d0731e12ce15d0  /data/app/~~ziZRoiGS6sZHqXkr0IkXEw==/dev.cyclone.cloak.probe.diag--tVihH3_nW3YsttCdQ-nkg==/base.apk",
+    "/data/data/dev.cyclone.cloak.probe.diag/code_cache/cloak_hooks/libpine.so": "d3e415243b80b866d2c75408cc9a26ba4fcab0775f798442f9a622097d845e0c  /data/data/dev.cyclone.cloak.probe.diag/code_cache/cloak_hooks/libpine.so",
+    "/data/data/dev.cyclone.cloak.probe.diag/libshadowhook.so": "e222299e4110fad03c4612c369d15c94700549bf3dd637c6a1fcd37d00395980  /data/data/dev.cyclone.cloak.probe.diag/libshadowhook.so"
+  },
+  "installed_libraries": "4a3e5099c7ebde60728b19306b7412f8576679ebb4163c2dc05272b1ed2e8900  /data/adb/modules/cyclone_cloak/zygisk/arm64-v8a.so\n9dbcca68ed082e5598164bcf5bf3b39d32e9edf5e6142c013357370091150e6d  /data/adb/modules/cyclone_cloak/zygisk/armeabi-v7a.so\n",
+  "maps_sha256": "6130b74249f188fc486174c1835d4bc566c0ccf7896727c64358f3e04e081184",
+  "limitation": "Anonymous and deleted mappings cannot be rehashed through their former path; complete map ranges are retained."
+}

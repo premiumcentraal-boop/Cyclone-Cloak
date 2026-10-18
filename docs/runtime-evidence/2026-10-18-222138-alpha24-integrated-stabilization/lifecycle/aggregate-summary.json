@@ -1,0 +1,202 @@
+{
+  "result": "RESTORED_WITH_EXPECTED_LIMITATIONS",
+  "requested_cycles": 3,
+  "completed_cycles": 3,
+  "apk_install_policy": "reuse_matching_install_missing_once",
+  "installation_skipped": true,
+  "install_attempts": 0,
+  "passed_cycles": 3,
+  "cycles": [
+    {
+      "cycle": 1,
+      "directory": "cycle-001",
+      "passed": true,
+      "result": "RESTORED_WITH_EXPECTED_LIMITATIONS",
+      "restoration": {
+        "0": "RESTORED_WITH_LIMITATIONS",
+        "17": "RESTORED_WITH_LIMITATIONS"
+      },
+      "cleanup_passed": true,
+      "cleanup_proof": {
+        "0": {
+          "binding_removed": true,
+          "body_directory_removed": true,
+          "private_files_removed": true
+        },
+        "17": {
+          "binding_removed": true,
+          "body_directory_removed": true,
+          "private_files_removed": true
+        },
+        "scratch_removed": true
+      },
+      "apk_install": {
+        "apk_install_policy": "reuse_matching_install_missing_once",
+        "installation_skipped": true,
+        "install_attempted": false,
+        "expected_sha256": "849349da46ccc1b3e5c1f5f635992159c9556d767d9aafb538d0731e12ce15d0",
+        "checks": [
+          {
+            "stage": "before-cycle",
+            "android_user": 0,
+            "package_path": "/data/app/~~ziZRoiGS6sZHqXkr0IkXEw==/dev.cyclone.cloak.probe.diag--tVihH3_nW3YsttCdQ-nkg==/base.apk",
+            "sha256": "849349da46ccc1b3e5c1f5f635992159c9556d767d9aafb538d0731e12ce15d0",
+            "status": "MATCH"
+          },
+          {
+            "stage": "before-cycle",
+            "android_user": 17,
+            "package_path": "/data/app/~~ziZRoiGS6sZHqXkr0IkXEw==/dev.cyclone.cloak.probe.diag--tVihH3_nW3YsttCdQ-nkg==/base.apk",
+            "sha256": "849349da46ccc1b3e5c1f5f635992159c9556d767d9aafb538d0731e12ce15d0",
+            "status": "MATCH"
+          }
+        ],
+        "installed_apk_hashes": {
+          "0": "849349da46ccc1b3e5c1f5f635992159c9556d767d9aafb538d0731e12ce15d0",
+          "17": "849349da46ccc1b3e5c1f5f635992159c9556d767d9aafb538d0731e12ce15d0"
+        }
+      },
+      "installed_apk_check_passed": true,
+      "production_unchanged": true,
+      "permissions_unchanged": true,
+      "permission_delta": [],
+      "production_delta": [],
+      "boundary_unchanged": true,
+      "boundary_permission_delta": [],
+      "boundary_production_delta": [],
+      "duration_seconds": 51.82,
+      "failed_phase": null,
+      "errors": [],
+      "error_type": null
+    },
+    {
+      "cycle": 2,
+      "directory": "cycle-002",
+      "passed": true,
+      "result": "RESTORED_WITH_EXPECTED_LIMITATIONS",
+      "restoration": {
+        "0": "RESTORED_WITH_LIMITATIONS",
+        "17": "RESTORED_WITH_LIMITATIONS"
+      },
+      "cleanup_passed": true,
+      "cleanup_proof": {
+        "0": {
+          "binding_removed": true,
+          "body_directory_removed": true,
+          "private_files_removed": true
+        },
+        "17": {
+          "binding_removed": true,
+          "body_directory_removed": true,
+          "private_files_removed": true
+        },
+        "scratch_removed": true
+      },
+      "apk_install": {
+        "apk_install_policy": "reuse_matching_install_missing_once",
+        "installation_skipped": true,
+        "install_attempted": false,
+        "expected_sha256": "849349da46ccc1b3e5c1f5f635992159c9556d767d9aafb538d0731e12ce15d0",
+        "checks": [
+          {
+            "stage": "before-cycle",
+            "android_user": 0,
+            "package_path": "/data/app/~~ziZRoiGS6sZHqXkr0IkXEw==/dev.cyclone.cloak.probe.diag--tVihH3_nW3YsttCdQ-nkg==/base.apk",
+            "sha256": "849349da46ccc1b3e5c1f5f635992159c9556d767d9aafb538d0731e12ce15d0",
+            "status": "MATCH"
+          },
+          {
+            "stage": "before-cycle",
+            "android_user": 17,
+            "package_path": "/data/app/~~ziZRoiGS6sZHqXkr0IkXEw==/dev.cyclone.cloak.probe.diag--tVihH3_nW3YsttCdQ-nkg==/base.apk",
+            "sha256": "849349da46ccc1b3e5c1f5f635992159c9556d767d9aafb538d0731e12ce15d0",
+            "status": "MATCH"
+          }
+        ],
+        "installed_apk_hashes": {
+          "0": "849349da46ccc1b3e5c1f5f635992159c9556d767d9aafb538d0731e12ce15d0",
+          "17": "849349da46ccc1b3e5c1f5f635992159c9556d767d9aafb538d0731e12ce15d0"
+        }
+      },
+      "installed_apk_check_passed": true,
+      "production_unchanged": true,
+      "permissions_unchanged": true,
+      "permission_delta": [],
+      "production_delta": [],
+      "boundary_unchanged": true,
+      "boundary_permission_delta": [],
+      "boundary_production_delta": [],
+      "duration_seconds": 52.16,
+      "failed_phase": null,
+      "errors": [],
+      "error_type": null
+    },
+    {
+      "cycle": 3,
+      "directory": "cycle-003",
+      "passed": true,
+      "result": "RESTORED_WITH_EXPECTED_LIMITATIONS",
+      "restoration": {
+        "0": "RESTORED_WITH_LIMITATIONS",
+        "17": "RESTORED_WITH_LIMITATIONS"
+      },
+      "cleanup_passed": true,
+      "cleanup_proof": {
+        "0": {
+          "binding_removed": true,
+          "body_directory_removed": true,
+          "private_files_removed": true
+        },
+        "17": {
+          "binding_removed": true,
+          "body_directory_removed": true,
+          "private_files_removed": true
+        },
+        "scratch_removed": true
+      },
+      "apk_install": {
+        "apk_install_policy": "reuse_matching_install_missing_once",
+        "installation_skipped": true,
+        "install_attempted": false,
+        "expected_sha256": "849349da46ccc1b3e5c1f5f635992159c9556d767d9aafb538d0731e12ce15d0",
+        "checks": [
+          {
+            "stage": "before-cycle",
+            "android_user": 0,
+            "package_path": "/data/app/~~ziZRoiGS6sZHqXkr0IkXEw==/dev.cyclone.cloak.probe.diag--tVihH3_nW3YsttCdQ-nkg==/base.apk",
+            "sha256": "849349da46ccc1b3e5c1f5f635992159c9556d767d9aafb538d0731e12ce15d0",
+            "status": "MATCH"
+          },
+          {
+            "stage": "before-cycle",
+            "android_user": 17,
+            "package_path": "/data/app/~~ziZRoiGS6sZHqXkr0IkXEw==/dev.cyclone.cloak.probe.diag--tVihH3_nW3YsttCdQ-nkg==/base.apk",
+            "sha256": "849349da46ccc1b3e5c1f5f635992159c9556d767d9aafb538d0731e12ce15d0",
+            "status": "MATCH"
+          }
+        ],
+        "installed_apk_hashes": {
+          "0": "849349da46ccc1b3e5c1f5f635992159c9556d767d9aafb538d0731e12ce15d0",
+          "17": "849349da46ccc1b3e5c1f5f635992159c9556d767d9aafb538d0731e12ce15d0"
+        }
+      },
+      "installed_apk_check_passed": true,
+      "production_unchanged": true,
+      "permissions_unchanged": true,
+      "permission_delta": [],
+      "production_delta": [],
+      "boundary_unchanged": true,
+      "boundary_permission_delta": [],
+      "boundary_production_delta": [],
+      "duration_seconds": 58.4,
+      "failed_phase": null,
+      "errors": [],
+      "error_type": null
+    }
+  ],
+  "permission_state_changed": false,
+  "permission_policy_passed": true,
+  "production_state_changed": false,
+  "cleanup_passed": true,
+  "failed_cycle": null
+}

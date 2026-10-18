@@ -1,0 +1,50 @@
+{
+  "result": "PASS",
+  "total_tests": 1679,
+  "tests": {
+    "app:testDebugUnitTest": {
+      "tests": 598,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "module:testDebugUnitTest": {
+      "tests": 40,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "probe:testDiagnosticsDebugUnitTest": {
+      "tests": 109,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "probe:testStandardDebugUnitTest": {
+      "tests": 109,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "forge": {
+      "passed": 735
+    },
+    "schema": {
+      "passed": 81
+    },
+    "probe_host": {
+      "passed": 7
+    }
+  },
+  "compiler_warnings": 0,
+  "builds": [
+    "app debug",
+    "app release",
+    "module ZIP",
+    "standard probe",
+    "diagnostics probe"
+  ],
+  "source_commit": "49564ce0a4d60af158da0e4f67b84583b06ea4c7",
+  "android_source_commit": "625e6914378f6c1fc8a497b9c194441cec89e936",
+  "note": "49564ce only fixes standalone schema-test imports; Android source identical to 625e691."
+}

@@ -1,0 +1,5 @@
+{
+  "installed": true,
+  "reboot_required": true,
+  "reboot_reason": "Magisk stages the replacement module for next boot; one reboot is necessary to load its native library."
+}

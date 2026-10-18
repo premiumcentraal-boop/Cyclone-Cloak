@@ -1,0 +1,11 @@
+{
+  "json_private_material_check": "PASS",
+  "raw_identifier_expected_actual_fields": "null; hashes retained",
+  "raw_screen_mode_values": "allowed non-sensitive display tuples only",
+  "excluded": [
+    "signed-artifacts",
+    "release-assets",
+    "private"
+  ],
+  "prior_tombstone": "raw memory omitted; native stack/registers/mappings retained"
+}

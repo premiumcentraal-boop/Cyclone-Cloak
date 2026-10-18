@@ -1,8 +1,29 @@
 # Cyclone Cloak Architecture
 
-Current source: v0.11.0-alpha.23, app/module code 47. Device Reality v1
+Current source: v0.11.0-alpha.24, app/module code 48. Device Reality v1
 adds optional profile schema 0.4 descriptions and read-only probe observations.
-Existing schema 0.2/0.3 files are accepted as-is. Physical verification UNVERIFIED.
+Existing schema 0.2/0.3 files are accepted as-is. Physical evidence is artifact-specific; see the runtime coverage ledger.
+
+## Alpha.24 integration and hook lifetime
+
+The embedded Java/Pine DEX is loaded with an InMemoryDexClassLoader. Native
+trampolines hold code addresses rather than Java GC roots, so the module retains
+one strong JNI global reference to that loader for the scoped process lifetime,
+including partial installation. Failure to allocate the root aborts Java hook
+installation; local-reference cleanup does not release the global root. No GC
+suppression or forced cold-capture workaround is used. Pine receives the actual
+host API/debug mode before profile Build values can affect its configuration.
+Display mode construction tolerates optional metadata failure and falls back to
+the simple constructor while preserving the same active/supported profile tuple.
+
+Device Factory v1 is a separate opt-in Python API with a frozen twelve-template
+catalog; it does not replace existing Android or Python generators. The Profile
+Operations Console composes existing workshop, validation, binding review,
+reconciliation and journal components. Replacement requires an explicit guarded
+review; it preserves disabled records and rejects stale target snapshots.
+Run journal format 1 accepts optional redacted previous-device references.
+No connector protocol, binding JSON, profile schema or permission change.
+See [factory](DEVICE-FACTORY-V1.md) and [console](PROFILE-OPERATIONS-CONSOLE.md).
 
 ## Reality Studio and Fleet Diversity
 

@@ -1,0 +1,7 @@
+{
+  "device_path": "/data/tombstones/tombstone_20",
+  "pid": 12389,
+  "original_sha256": "42a2eff91db63606e700c402bec29b51b73949418fac9a55779ae0c3442f962e",
+  "bytes": 597298,
+  "redaction": "Raw memory dump lines excluded; original retained locally under ignored private directory."
+}

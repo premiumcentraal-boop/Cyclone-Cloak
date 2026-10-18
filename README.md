@@ -11,15 +11,21 @@ not prove that every inspection API sees it.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.11.0-alpha.23 (prerelease)
+## Status: 0.11.0-alpha.24 (prerelease)
 
-Reality Runtime Bridge maps every schema 0.4 Reality field to a reviewed Android
-surface and capability status. Coverage separates local coherence, read-only
-observations and runtime enforcement. Alpha.23 adds scoped display-mode parity; no new permissions,
-connector or publication behavior. App/module code 47. Physical verification of
-the new contract/probe extension is **UNVERIFIED**; no platform verdict.
-See [Device Reality](docs/DEVICE-REALITY.md), [runtime backlog](docs/REALITY-RUNTIME-BACKLOG.md)
-and [release notes](docs/RELEASE_0.11.0-alpha.23.md).
+Alpha.24 stabilizes profile-backed display modes and retains the Java hook loader
+for the scoped process lifetime. On the measured API 36 artifact, 12 same-process
+warm repetitions survived compacting GC and three two-user lifecycle cycles
+completed with zero bound linked-parity failures. Permission and production audits
+and cleanup passed. Four user-17 bound permission blocks remain explicit.
+See the [physical evidence](docs/runtime-evidence/2026-10-18-222138-alpha24-integrated-stabilization/summary.md) and
+[release notes](docs/RELEASE_0.11.0-alpha.24.md). This is no platform verdict.
+
+This upgrade also includes the opt-in Python [Device Factory](docs/DEVICE-FACTORY-V1.md)
+and the [Profile Operations Console](docs/PROFILE-OPERATIONS-CONSOLE.md).
+Their local checks pass; factory firmware/HAL approximations and the new UI's
+physical workflow remain unverified. App/module code 48; existing profiles remain
+compatible, with no schema, connector protocol or permission change.
 
 - **Companion app** (`android/app`): a Cyclone connector (contract `cyclone.connector/1.3`, Cyclone
   5.0.0-alpha.122 or newer). Imports or creates cloak profiles, binds them to the apps of Cyclone

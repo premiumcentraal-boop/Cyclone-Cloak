@@ -1,0 +1,26 @@
+{
+  "app:testDebugUnitTest": {
+    "tests": 598,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "module:testDebugUnitTest": {
+    "tests": 40,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "probe:testDiagnosticsDebugUnitTest": {
+    "tests": 109,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "probe:testStandardDebugUnitTest": {
+    "tests": 109,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  }
+}

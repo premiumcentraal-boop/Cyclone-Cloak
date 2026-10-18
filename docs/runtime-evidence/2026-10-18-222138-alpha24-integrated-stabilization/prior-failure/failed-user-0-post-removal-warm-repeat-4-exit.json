@@ -1,0 +1,18 @@
+{
+  "reason_code": "PROBE_CRASHED",
+  "matched_exit": {
+    "pid": 12389,
+    "android_user": 0,
+    "process": "dev.cyclone.cloak.probe.diag",
+    "reason": 5,
+    "timestamp": 1792354310.253
+  },
+  "request_metadata": {
+    "phase": "user-0-post-removal-warm-repeat-4",
+    "request_id": "d9e59769eda743d28054c494962db199",
+    "android_user": 0,
+    "fixture": "a",
+    "profile_sha256": "e476b02fd308c62cf207f4fe60e97085bbd14ca6293b405c2cedb996c9555f53",
+    "published_sha256": null
+  }
+}

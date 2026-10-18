@@ -1,0 +1,90 @@
+{
+  "reason": "Git text hygiene only: line endings and trailing whitespace; original full log bytes preserved in original-text-logs.zip",
+  "files": [
+    {
+      "path": "android-gate.log",
+      "original_sha256": "e83d6969b15fe5c53b344df5c7329739320ed11e73b95636d26a7a62256fff82",
+      "normalized_sha256": "c9371c7d10cd95bc4cf5853ee9118ebd03865b151d78c3accc8478bf86ffa1ce"
+    },
+    {
+      "path": "clean-probe-build-final.log",
+      "original_sha256": "72329bb3032500182dc7ce595d2a55fa4d26dae394296548b94179b40b972f00",
+      "normalized_sha256": "7a5e82f3286e7255cefb575409eaa43cc1e27681a22583048438ce3aa039307b"
+    },
+    {
+      "path": "clean-probe-build.log",
+      "original_sha256": "8cb0ef684ead425188ba1d1bd35b1fe42ebad629fe285b5af3cd9a47592101f6",
+      "normalized_sha256": "d26acba5bc8ceb83beb25c6a7ca4e224528a03abecc408e24bfc7541ef717799"
+    },
+    {
+      "path": "companion-install.log",
+      "original_sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3",
+      "normalized_sha256": "781a31c82430c97897af612ece5e0ca2205e301cb5ff121ce2660541ea5182c7"
+    },
+    {
+      "path": "diagnostics-install.log",
+      "original_sha256": "c4aa470acafcf8576c15b0f0b5ae7e852d1ec5413372d0e6a9272e788e1306d3",
+      "normalized_sha256": "781a31c82430c97897af612ece5e0ca2205e301cb5ff121ce2660541ea5182c7"
+    },
+    {
+      "path": "focused-warm/probe-full-logcat.log",
+      "original_sha256": "dd8a115713b63d592a8a574f1542e52cbb91cbde02540f9ecbd6277d5f0ef466",
+      "normalized_sha256": "3def67aab8825b46848b238817d63e6f674b41bac5083085a883b4c878708ce9"
+    },
+    {
+      "path": "focused-warm/probe-startup-logcat.log",
+      "original_sha256": "04b4eedf8dafdb2397eb560594fec4613e83be7aca053351f94ca8a8bf375fd5",
+      "normalized_sha256": "fbe63959754a619e81cf53c02823d85a08cb37f08753dc798375414fe6e542b9"
+    },
+    {
+      "path": "focused-warm-console.log",
+      "original_sha256": "26f9ecda1906f6b948c991e401bbcb26ae346da739fb10fb93f97b8c16f641dd",
+      "normalized_sha256": "08d0a59ef1dcbe9811e9445cf1b5b9d1167c672689dba0ac1975e1a310a23191"
+    },
+    {
+      "path": "forge-tests.log",
+      "original_sha256": "889c3f89a74fbeab932f94fd8899fe2f874fc71f240081c55fbaa70606408735",
+      "normalized_sha256": "a855b7e3398b17d8b8f002536da2c854af3c5a0eb57e7e9c6a9b89365a15dd43"
+    },
+    {
+      "path": "lifecycle-console.log",
+      "original_sha256": "7f61a5ae874e9cf55588e850da35e613b2c6a0c99b357b3bcc22dd1a53e18100",
+      "normalized_sha256": "ed77a3b8bd2e83b59afd225d311b83bda3a69c798f1875170e9cd0d8f49189a7"
+    },
+    {
+      "path": "module-install.log",
+      "original_sha256": "31d761474753f5fb8dc7dec4aed9991ebf3a0d46c507661b89bd109045a3ee88",
+      "normalized_sha256": "8745d8497cc0439dfa604938344a96eaba27bc4aec543a36a1d04e939d5586a4"
+    },
+    {
+      "path": "prior-failure/matching-tombstone.log",
+      "original_sha256": "3b0685b2950f1382b3b4e8dade34fe5abf238eab5cf4726c1587793ddf570cc6",
+      "normalized_sha256": "70cc6e9dfca213ce9b93dc18b192b3cfc6d79eab706b9d4c71c1f74328a90a1e"
+    },
+    {
+      "path": "probe-host-tests.log",
+      "original_sha256": "3aad4e7b52a7812cf06a7a2e3e8cc508a757f1bc28c5193ed90d6952b73b8810",
+      "normalized_sha256": "9d1372f1954495b45516d4c5ce8bcf71a260ff9abea44165fdd10dc6e5578b94"
+    },
+    {
+      "path": "release-metadata.log",
+      "original_sha256": "9192762cd9b0d82410e2a5a1e5617ffc7adfb1d795f5b6762c0f0f1a88c3acfb",
+      "normalized_sha256": "3b49b3787df97ea8d581f898e5f33419be11079948fe94f47288c3b1d20cf5e6"
+    },
+    {
+      "path": "schema-tests-final.log",
+      "original_sha256": "57f9527346403ec90aedaed571f4e452a90b4e564cb680b6ce8e32a0f91b9a3a",
+      "normalized_sha256": "f5b5d3a46afc4ad830cd569df8cec6bdae9121accbc770e43db9b287ec029301"
+    },
+    {
+      "path": "schema-tests.log",
+      "original_sha256": "88a301beacd0908a26f44ce50e10471490e981845ded66ec76dcf3bacd9bdcaa",
+      "normalized_sha256": "a246b052b646f4182575d073c940e12609f6027c91a9ea94e8b9eab28f7f7ca1"
+    },
+    {
+      "path": "signed-apk-verification.log",
+      "original_sha256": "8a4417db41056fe237c6e83c5a23c454679c8bea564a32f3369fb1a84d568bb5",
+      "normalized_sha256": "6ac0ede90a95091ffae9867bcf48c712d1a4060ceb18900c15d3570fdb9c4591"
+    }
+  ]
+}

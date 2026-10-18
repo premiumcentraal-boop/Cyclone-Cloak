@@ -1,6 +1,6 @@
 # Current state
 
-Updated 2026-10-18. Current source **v0.11.0-alpha.23 / versionCode 47**
+Updated 2026-10-18. Current source **v0.11.0-alpha.24 / versionCode 48**
 adds Reality Studio, missing-only repair and Fleet Diversity over Device Reality v1. Optional schema 0.4 sections describe compute, memory,
 panel, camera summaries, sensors, power, DRM level, radio labels, carrier, package
 versions, WebView and environment/input metadata. Existing 0.2/0.3 profiles are
@@ -11,10 +11,24 @@ Kotlin/Python rules share a strict schema and parity vectors. Catalog data is
 conservative and provenance-labelled; unavailable/unknown fields stay empty.
 Reality coverage in Identities separates local coherence from physical evidence.
 A read-only optional probe extension hashes new observations without changing the
-legacy 89 rows. All new physical-device checks are **UNVERIFIED**. No platform
-verdict, new permissions, connector, binding or storage-layout change. Alpha.23 adds
-scoped display-mode callbacks; physical verification is pending.
-See [Device Reality](DEVICE-REALITY.md) and [release notes](RELEASE_0.11.0-alpha.23.md).
+legacy 89 rows. Alpha.24 physical proof covers the recorded display/linked parity
+and capture-lifetime behavior only. Three cycles completed 24 captures across
+users 0 and 17; all six bound captures had 13 linked PASS / 0 FAIL. Twelve focused
+warm repetitions completed in one process through compacting GC. Both users
+restored cold; permissions/AppOps, 327 production entries, published bodies,
+publisher shares and accessible stores were unchanged. Cleanup passed each cycle.
+User 17 retains four bound permission blocks. See
+[measured evidence](runtime-evidence/2026-10-18-222138-alpha24-integrated-stabilization/summary.md) and
+[release notes](RELEASE_0.11.0-alpha.24.md). No platform verdict.
+
+Alpha.24 also integrates the opt-in Python Device Factory (12 frozen canonical
+references, deterministic identifiers, strict quality/uniqueness reports and
+all-or-nothing in-memory batches) and the app Profile Operations Console (explicit
+creation/assignment/replacement review, per-profile readiness/history and document
+picker exports). Existing generators and profile/binding JSON remain compatible.
+Factory firmware/HAL approximations, UI interactions on a phone, and broader
+Reality runtime coverage remain **UNVERIFIED**. See [factory](DEVICE-FACTORY-V1.md)
+and [console](PROFILE-OPERATIONS-CONSOLE.md) scope and limitations.
 
 The existing Batch Identity Workshop remains available:
 
@@ -63,8 +77,8 @@ See [workflow and limitations](REALITY-STUDIO.md). Physical UI checks **UNVERIFI
 
 | Component | Current source version / responsibility |
 | --- | --- |
-| App | `dev.cyclone.cloak`, `0.11.0-alpha.23`, code 47; minimum API 29, target/compile API 36 |
-| Module | `cyclone_cloak`, `v0.11.0-alpha.23`, code 47; ARM64/ARMv7, minimum API 26; scoped display-mode parity callbacks added in alpha.23 |
+| App | `dev.cyclone.cloak`, `0.11.0-alpha.24`, code 48; minimum API 29, target/compile API 36 |
+| Module | `cyclone_cloak`, `v0.11.0-alpha.24`, code 48; ARM64/ARMv7, minimum API 26; scoped display-mode parity callbacks added in alpha.23 |
 | Profile | Schema `0.4`, legacy `0.2`/`0.3` accepted; existing JSON storage unchanged |
 | Binding / reader | Binding schema 2; module index `schemaVersion: 2`; existing key lookup unchanged |
 | Connector | `cyclone.connector/1.3`; Cyclone 5.0.0-alpha.122 or newer |
@@ -106,14 +120,14 @@ $env:CLOAK_TEST_WSL='1'
 uv run --with pytest -- python -X utf8 -m pytest forge/tests -q
 uv run --with pytest --with jsonschema -- python -X utf8 -m pytest forge/schema_tests -q
 uv run -- python -X utf8 -m unittest discover -s android/probe/tests -v
-uv run -- python -X utf8 tools/verify_release.py --tag v0.11.0-alpha.23 --artifacts
+uv run -- python -X utf8 tools/verify_release.py --tag v0.11.0-alpha.24 --artifacts
 git diff --check
 ```
 
 The release workflow reruns tests, signs the APK using existing CI secrets, packages
 the module and checks exact embedded-module agreement before uploading the prerelease.
 Local debug output: `android/app/build/outputs/apk/debug/app-debug.apk`.
-Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.23.zip`,
+Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.24.zip`,
 `evidence-bundle.zip`, `summary.md`, `build-provenance.json`.
 
 ## Known limits and separately verified device evidence

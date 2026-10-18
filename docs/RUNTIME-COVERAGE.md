@@ -1,5 +1,36 @@
 # Runtime coverage and device proof
 
+## Current measured alpha.24 stabilization — 2026-10-18
+
+[Evidence](runtime-evidence/2026-10-18-222138-alpha24-integrated-stabilization/summary.md) measures code `49564ce` (app/module
+0.11.0-alpha.24 / code 48) on the connected API 36 device. The signed-validation
+artifact's native arm64 SHA-256 is
+`4a3e5099c7ebde60728b19306b7412f8576679ebb4163c2dc05272b1ed2e8900`.
+Twelve same-process warm repetitions completed through compacting GC after the
+hook-loader lifetime fix. Three full lifecycle cycles completed 24 captures:
+
+| Bound user / fixture | Legacy PASS | OBSERVED | BLOCKED | Linked PASS / FAIL | Active tuple |
+|---|---:|---:|---:|---|---|
+| 0 / A | 82 | 7 | 0 | 13 / 0 | 1080x2400 @ 90 Hz |
+| 17 / B | 81 | 4 | 4 | 13 / 0 | 1080x2340 @ 120 Hz |
+
+These counts held in each cycle. Supported modes contained the exact active tuple;
+fixture labels, user IDs and report/published hashes agreed. Warm removal captures
+completed without crash; both users restored cold with zero comparison FAIL rows.
+Unbound captures retain expected synthetic-fixture mismatches and permission/API
+limits. Four user-17 bound rows (`wifi.bssid`, `wifi.ssid`, `bluetooth.address`,
+`bluetooth.name`) remain BLOCKED; their permission state was not changed.
+Production entries stayed 327; per-cycle and boundary permission/AppOps, published
+body/share/store/module audits were unchanged. Every cleanup proof passed.
+
+The raw module/APK hashes, signed provenance, prior failed tombstone (redacted),
+phase reports, snapshots and limitations are retained in the evidence. This is
+implemented linked/display parity on the measured artifact, not a platform verdict,
+complete Reality enforcement, factory hardware proof or physical console UI proof.
+The following sections preserve earlier measurements and do not describe the
+currently installed module unless explicitly dated as such.
+
+
 The owner authorized module installation and reboot for B2A DRM verification on
 2026-10-13. This run used a rooted Pixel 8/API 36, Android user 0. The installed
 module retains version `v0.10.0-rc.3`, versionCode 24, with the local DRM fix
