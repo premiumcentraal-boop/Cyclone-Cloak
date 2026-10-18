@@ -29,4 +29,13 @@ public class RealityReportTest {
     @Test public void hashIsStableAcrossObjectKeyOrder() throws Exception {
         assertEquals(RealityReport.hash(new JSONObject("{\"a\":1,\"b\":2}")), RealityReport.hash(new JSONObject("{\"b\":2,\"a\":1}")));
     }
+    @Test public void equivalentNumericRefreshRatesMatchWithoutCoercingTypes() throws Exception {
+        assertEquals("PASS", RealityReport.row("reality.panel.refresh_hz", 90, () -> 90.0f).getString("status"));
+        assertEquals("FAIL", RealityReport.row("reality.panel.refresh_hz", 90, () -> 90.01f).getString("status"));
+        assertEquals("FAIL", RealityReport.row("number", 1, () -> true).getString("status"));
+        assertEquals("FAIL", RealityReport.row("number", 90, () -> "90").getString("status"));
+        assertEquals("MISSING", RealityReport.row("number", 90, () -> Float.NaN).getString("status"));
+        assertEquals(RealityReport.hash(120), RealityReport.hash(120.0d));
+    }
+
 }

@@ -22,12 +22,12 @@ No binding, connector, publication, profile schema, storage or permission change
   catalog/reality-runtime-fields.json and frozen format-1 table;
   runtime contract schemas, generator and shared parity vector.
 - Runtime: HookBridge.java; module build.gradle adds test-only Robolectric.
-- Probe: LinkedParityReport.java, RealityProbe.java, ProbeActivity.java and
+- Probe: LinkedParityReport.java, RealityProbe.java, RealityReport.java, ProbeActivity.java and
   generated runtime table asset.
 - UI: RealityCoverageCard.kt.
 - Tests: RealityRuntimeLinkTest.kt, RealityRuntimeContractTest.kt,
   RealityCoverageCardTest.kt, DisplayModeParityTest.java, HookBridgeTest.java,
-  LinkedParityReportTest.java, test_runtime_link.py, test_runtime_contract_schema.py.
+  LinkedParityReportTest.java, RealityReportTest.java, test_runtime_link.py, test_runtime_contract_schema.py.
 - Release metadata: app/build.gradle, module/module.prop.
 - Docs: README, DEVICE-REALITY, REALITY-RUNTIME-BACKLOG, ARCHITECTURE,
   CURRENT-STATE, RUNTIME-COVERAGE, release notes and this handoff.
@@ -47,8 +47,8 @@ git diff --check
 git diff --cached --check
 ```
 
-Test totals: app 577; module 23; probe 105 per flavor; forge 594;
-schema 69; probe host 7. Total 1,480, zero failures/skips. Debug and release
+Test totals: app 577; module 23; probe 107 per flavor; forge 594;
+schema 69; probe host 7. Total 1,484, zero failures/skips. Debug and release
 packaging gates passed; signing and published artifact checks use the existing CI lane.
 No compiler warnings; Git may report existing LF/CRLF normalization notices.
 
@@ -61,3 +61,7 @@ ART installation and older constructor fallback still need device verification.
 Historical attached alpha.18 evidence does not verify this build. No platform
 verdict or broader compatibility is claimed. A separately coordinated matching
 module update/restart and existing probe run are the next device check.
+
+Pre-publication review caught scalar numeric hash differences (90 versus 90.0).
+The cancelled first release workflow published nothing. Scalar numeric comparison
+is now normalized without coercing strings/booleans or changing historical evidence.

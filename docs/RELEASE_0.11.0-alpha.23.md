@@ -11,6 +11,8 @@ Prerelease; app/module version code 47.
   and refresh rate. Existing display metrics, refresh, locale/timezone and telephony
   behavior is preserved. No physical display settings are changed.
 - Adds 13 digest-only linked probe rows and coverage-card parity/mismatch details.
+  Equivalent scalar JSON numbers (90 and 90.0) compare consistently; strings and
+  booleans are never coerced. Historical evidence is unchanged.
 - No binding, publication, connector, profile schema, storage-layout, permission,
   networking, credential or attestation changes. No platform verdict is claimed.
 

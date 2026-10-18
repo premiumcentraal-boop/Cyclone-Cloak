@@ -44,4 +44,12 @@ public class LinkedParityReportTest {
         r.put("linked.supportedModes",()->new JSONArray("[{\"width\":\"bad\"}]"));
         assertEquals("MISSING",LinkedParityReport.build(profile(),table(),r).getJSONArray("rows").getJSONObject(3).getString("status"));
     }
+    @Test public void linkedRefreshComparesFrameworkFloatToIntegerExpectation() throws Exception {
+        JSONObject t = new JSONObject("{\"fields\":[{\"field_path\":\"reality.panel.values.refresh_hz\",\"linked_base_path\":\"display.refresh_rate_hz\"}]}");
+        Map<String,RealityReport.Reader> r=readers(); r.put("reality.panel.values.refresh_hz",()->120.0f);
+        assertEquals("PASS", LinkedParityReport.build(profile(),t,r).getJSONArray("rows").getJSONObject(0).getString("status"));
+        r.put("reality.panel.values.refresh_hz",()->90.0f);
+        assertEquals("FAIL", LinkedParityReport.build(profile(),t,r).getJSONArray("rows").getJSONObject(0).getString("status"));
+    }
+
 }

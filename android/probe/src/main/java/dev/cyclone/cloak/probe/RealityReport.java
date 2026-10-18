@@ -10,7 +10,11 @@ final class RealityReport {
     interface Reader { Object read() throws Exception; }
     private RealityReport() { }
     static String hash(Object value) throws Exception {
-        byte[] digest = MessageDigest.getInstance("SHA-256").digest(ProbeReportPolicy.canonical(value).getBytes(StandardCharsets.UTF_8));
+        // Android returns refresh rates as float; schema expectations may be integers.
+        // Normalize scalar JSON numbers only, preserving string/boolean type distinctions.
+        String canonical = value instanceof Number ? new java.math.BigDecimal(value.toString()).stripTrailingZeros().toPlainString()
+            : ProbeReportPolicy.canonical(value);
+        byte[] digest = MessageDigest.getInstance("SHA-256").digest(canonical.getBytes(StandardCharsets.UTF_8));
         StringBuilder text = new StringBuilder();
         for (byte b : digest) text.append(String.format(Locale.ROOT, "%02x", b & 255));
         return text.toString();
