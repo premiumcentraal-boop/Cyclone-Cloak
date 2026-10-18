@@ -370,13 +370,15 @@ def validate_catalog_metadata(record: Mapping[str, Any]) -> list[Finding]:
 def validate_catalog_record(record: Mapping[str, Any]) -> list[Finding]:
     """Run profile coherence on template blocks without changing generated data."""
     from .forge import build_ua
+    from .reality import at, user_agent
     profile = {key: record[key] for key in ("device", "display", "telephony", "network", "locale", "camera", "reality") if key in record}
     profile.update(schema_version="0.4", seed="ab" * 32, name="Catalog validation")
     device = record.get("device", {})
     if isinstance(device, Mapping) and all(isinstance(device.get(k), str) for k in ("model", "version_release")):
         display = record.get("display", {})
         screen_class = display.get("screen_size_class", "large") if isinstance(display, Mapping) else "large"
-        profile["ua"] = {"value": build_ua(device, screen_class, "ab" * 32)}
+        declared_ua = at(record, 'reality.webview.values.user_agent')
+        profile["ua"] = {"value": declared_ua if isinstance(declared_ua, str) else user_agent(record.get('reality', {}), build_ua(device, screen_class, "ab" * 32))}
     findings = validate_profile(profile) + validate_catalog_metadata(record)
     display = record.get("display", {})
     if isinstance(display, Mapping):

@@ -31,7 +31,7 @@ are rejected. See `schema/device-reality.schema.json` for exact types and bounds
 
 Generation copies catalog facts and explicit gaps. It derives a local
 `inventory_id` and configured radio labels with domain-separated SHA-256 from
-the seed. These are draft metadata, not physical identifiers or broadcasts.
+the seed. Supplied radio state and WebView provider/version facts are retained; a known WebView version is used in the generated UA. Explicitly unavailable radio/WebView sections remain unavailable. These are draft metadata, not physical identifiers or broadcasts.
 Existing identifier derivation and uniqueness retries remain in use. The index
 also checks those three new distinguishing fields; explicit regeneration edits
 only the selected field in a draft. Shared hardware, package versions and

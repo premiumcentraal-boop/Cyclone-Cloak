@@ -17,8 +17,32 @@ class DeviceRealityTest {
         val importedTemplate = PhoneTemplate.fromProfile("imported", "Imported", generated)
         assertTrue(importedTemplate.reality.getJSONObject("compute").similar(phone.reality.getJSONObject("compute")))
         assertFalse(importedTemplate.reality.has("inventory_id"))
+        assertTrue(ProfileValidator.validatePhone(importedTemplate).none { it.isError })
         assertTrue(ProfileValidator.errors(CloakForge.forgeProfile("Imported", "cd".repeat(32), importedTemplate, "0.4")).isEmpty())
         assertThrows(IllegalArgumentException::class.java) { PhoneTemplate.fromJson(phone.toJson().put("reality", "bad")) }
+    }
+    @Test fun suppliedWebViewVersionAndRadioStateArePreservedAndCoherent() {
+        val reality = JSONObject(TestPhones["pixel_7"].reality.toString())
+        reality.put("webview", JSONObject().put("availability", "known").put("source", "approximated").put("reason", "Test provider")
+            .put("values", JSONObject().put("provider", "com.google.android.webview").put("version", "122.0.6261.115")))
+        reality.put("radio", JSONObject().put("availability", "known").put("source", "approximated").put("reason", "Test state")
+            .put("values", JSONObject().put("wifi_state", "disabled")))
+        val phone = TestPhones["pixel_7"].copy(reality = reality)
+        assertTrue(ProfileValidator.validatePhone(phone).none { it.isError })
+        val p = CloakForge.forgeProfile("Reality", "ab".repeat(32), phone, "0.4")
+        assertTrue(ProfileValidator.errors(p).isEmpty())
+        assertTrue(p.getJSONObject("ua").getString("value").contains("Chrome/122.0.6261.115 "))
+        assertEquals("disabled", DeviceReality.at(p, "reality.radio.values.wifi_state"))
+        assertEquals("com.google.android.webview", DeviceReality.at(p, "reality.webview.values.provider"))
+        assertFalse(CloakForge.forgeProfile("Old", "ab".repeat(32), phone).has("reality"))
+    }
+    @Test fun explicitlyUnavailableSectionsStayUnavailableOnGeneration() {
+        val reality = JSONObject(TestPhones["pixel_7"].reality.toString())
+        for (section in listOf("radio", "webview")) reality.put(section, JSONObject().put("availability", "unavailable")
+            .put("source", "needs verification").put("reason", "No data").put("values", JSONObject()))
+        val p = CloakForge.forgeProfile("Reality", "ab".repeat(32), TestPhones["pixel_7"].copy(reality = reality), "0.4")
+        assertTrue(ProfileValidator.errors(p).isEmpty())
+        for (section in listOf("radio", "webview")) assertTrue(p.getJSONObject("reality").getJSONObject(section).similar(reality.getJSONObject(section)))
     }
     @Test fun everySharedRuleCaseAgreesWithPython() {
         val vector = vector(); val cases = vector.getJSONArray("cases")

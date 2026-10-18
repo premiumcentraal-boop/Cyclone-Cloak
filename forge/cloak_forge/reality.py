@@ -41,12 +41,27 @@ def token(seed, field):
 def generate(template, seed, ua):
     reality = copy.deepcopy(template.get('reality', {}))
     reality['inventory_id'] = token(seed, 'inventory')
-    reality['radio'] = dict(availability='known', source='derived',
-        reason='Local configured names only; no radio state or broadcast is changed.',
-        values=dict(wifi_name='Cloak-' + token(seed, 'wifi')[:12], bluetooth_name='Cloak-' + token(seed, 'bluetooth')[:12]))
-    reality['webview'] = dict(availability='known', source='derived',
-        reason='User agent derived from this profile; installed provider/version remains unknown.', values=dict(user_agent=ua))
+    if at(reality,'radio.availability') != 'unavailable':
+        radio = copy.deepcopy(at(reality,'radio.values') or {})
+        if isinstance(radio,dict):
+            radio.update(wifi_name='Cloak-' + token(seed, 'wifi')[:12], bluetooth_name='Cloak-' + token(seed, 'bluetooth')[:12])
+            reality['radio'] = dict(availability='known', source='derived',
+                reason='Local configured names only; no radio state or broadcast is changed.', values=radio)
+    if at(reality,'webview.availability') != 'unavailable':
+        web = copy.deepcopy(at(reality,'webview.values') or {})
+        if isinstance(web,dict):
+            web['user_agent']=ua
+            reality['webview'] = dict(availability='known', source='derived',
+                reason='User agent derived from this profile; installed provider/version remains unknown.' if 'version' not in web and 'provider' not in web
+                    else 'Provider/version retained from template; user agent derived from profile.', values=web)
     return reality
+
+
+def user_agent(reality, ua):
+    version=at(reality,'webview.values.version')
+    if at(reality,'webview.availability')=='known' and isinstance(version,str) and re.fullmatch(r'[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+',version):
+        return re.sub(r'Chrome/[0-9.]+', 'Chrome/'+version, ua)
+    return ua
 
 
 def validate(profile):

@@ -46,11 +46,13 @@ def forge_profile(
         raise ForgeError(f"unknown template '{template_name}'") from exc
 
     if schema_version not in ("0.2", "0.3", "0.4"): raise ForgeError("Unsupported schema version")
-    from .reality import generate
+    from .reality import generate, user_agent
+    ua = build_ua(template["device"], template["display"]["screen_size_class"], seed)
+    if schema_version == "0.4": ua = user_agent(template.get("reality", {}), ua)
     profile = uuid.uuid5(uuid.NAMESPACE_URL, f"https://cloak.cyclone.dev/{seed}/{name}")
     return {
         "schema_version": schema_version,
-        **({"reality": generate(template, seed, build_ua(template["device"], template["display"]["screen_size_class"], seed))} if schema_version == "0.4" else {}),
+        **({"reality": generate(template, seed, ua)} if schema_version == "0.4" else {}),
         "id": str(profile),
         "name": name,
         "seed": seed,
@@ -61,7 +63,7 @@ def forge_profile(
         "display": copy.deepcopy(template["display"]),
         "locale": copy.deepcopy(template["locale"]),
         **({"camera": copy.deepcopy(template["camera"])} if "camera" in template else {}),
-        "ua": {"value": build_ua(template["device"], template["display"]["screen_size_class"], seed)},
+        "ua": {"value": ua},
         "integrity": {"verdict": "unknown", "checked_at": None, "keybox_tag": None},
         "health": {"state": "new", "last_seen": None},
         "meta": {

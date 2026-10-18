@@ -41,8 +41,8 @@ permission/API failures remain explicit. Old evidence is not reclassified.
 
 ## Verification
 
-Final local target counts: **546 app / 12 module / 96 standard probe /
-96 diagnostics probe / 556 forge / 60 schema / 7 host probe**. Zero skipped
+Final local target counts: **548 app / 12 module / 96 standard probe /
+96 diagnostics probe / 558 forge / 60 schema / 7 host probe**. Zero skipped
 Android tests. Debug/release APK assembly and module packaging use the unchanged
 normal lane. Local release APK may be unsigned; signed validation and release CI
 use the existing release signer before publication.
@@ -67,7 +67,11 @@ Earlier checks caught and corrected: strict package regex rejected Android's
 messages needed preserved UTF-8, and generation/backup tests needed explicit 0.4
 expectations. The warning-only display test now changes both correlated fields;
 a contradictory panel claim is correctly blocking. The full gate is rerun after
-corrections; tests are not bypassed.
+corrections; tests are not bypassed. Final review also added tests for preserving
+known WebView/provider and radio facts, unavailable sections, and validating
+imported template user agents with their device/camera context. The initial CI
+attempts were cancelled before tagging so the corrected commit receives the full
+signed gate.
 
 Release gate: push main, run `signed-validation.yml` with tag input
 `v0.11.0-alpha.20`, wait green, tag the tested commit and allow `release.yml` to

@@ -54,7 +54,7 @@ matching module ZIP. Existing identity files remain in place. Backups retain
 their explicit sensitive-value choice; default export omits the new inventory
 marker and configured radio names. Imports validate rather than infer facts.
 
-Local gate: **546 app**, **12 module**, **96 probe per flavor**, **556 forge**,
+Local gate: **548 app**, **12 module**, **96 probe per flavor**, **558 forge**,
 **60 schema**, **7 probe host** tests. Shared vectors cover deterministic
 generation and all twelve rule groups; focused checks cover legacy preservation,
 backup redaction, uniqueness/regeneration, malformed metadata, read-only report

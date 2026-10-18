@@ -74,8 +74,8 @@ does not verify the workshop or newly packaged alpha.20 binaries.
 
 ## Local verification and release gate
 
-The Device Reality checks: app **546 tests**, module
-**12 tests**, forge **556 passed**, schema **60 passed**, probe **96 per flavor**
+The Device Reality checks: app **548 tests**, module
+**12 tests**, forge **558 passed**, schema **60 passed**, probe **96 per flavor**
 and host probe checks **7 passed**.
 WSL enabled the actual publication shell tests on Windows. Debug assembly and module
 packaging succeeded without compiler warnings. The standard release CI gate signs the APK, packages the module and verifies

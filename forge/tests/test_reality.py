@@ -57,3 +57,28 @@ def test_rule_and_coverage_registries_do_not_drift():
     matrix=json.loads((ROOT/"catalog/reality-coverage.json").read_text())
     assert {r["row_id"] for r in matrix["fields"]}=={f"reality.{s}.{k}" for s,keys in fields.items() for k in keys}
     assert {r["state"] for r in matrix["fields"]}=={"unmapped"}
+
+def test_known_provider_and_radio_state_survive_generation(monkeypatch):
+    from cloak_forge.templates import TEMPLATES
+    from cloak_forge.validate import validate_catalog_record, validate_profile
+    template=copy.deepcopy(TEMPLATES['pixel_7'])
+    template['reality']['webview']=dict(availability='known',source='approximated',reason='Test provider',
+        values=dict(provider='com.google.android.webview',version='122.0.6261.115'))
+    template['reality']['radio']=dict(availability='known',source='approximated',reason='Test state',values=dict(wifi_state='disabled'))
+    monkeypatch.setitem(TEMPLATES,'test_reality',template)
+    p=forge_profile('Reality','ab'*32,'test_reality',schema_version='0.4')
+    assert not validate_profile(p)
+    assert not [f for f in validate_catalog_record(template) if f.severity=='error']
+    assert 'Chrome/122.0.6261.115 ' in p['ua']['value']
+    assert p['reality']['webview']['values']['provider']=='com.google.android.webview'
+    assert p['reality']['radio']['values']['wifi_state']=='disabled'
+
+def test_unavailable_stays_unavailable(monkeypatch):
+    from cloak_forge.templates import TEMPLATES
+    template=copy.deepcopy(TEMPLATES['pixel_7'])
+    for section in ('radio','webview'):
+        template['reality'][section]=dict(availability='unavailable',source='needs verification',reason='No data',values={})
+    monkeypatch.setitem(TEMPLATES,'test_reality',template)
+    p=forge_profile('Reality','ab'*32,'test_reality',schema_version='0.4')
+    assert not validate(p)
+    for section in ('radio','webview'): assert p['reality'][section]==template['reality'][section]

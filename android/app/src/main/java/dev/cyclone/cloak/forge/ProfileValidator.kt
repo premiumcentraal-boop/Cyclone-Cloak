@@ -140,7 +140,15 @@ object ProfileValidator {
         surroundings(findings, asProfile)
         hardware(findings, phone.device, phone.telephony)
         if (phone.camera.length() > 0) camera(findings, phone.camera)
-        if (phone.reality.length() > 0) findings += DeviceReality.validate(asProfile.put("schema_version", "0.4").put("device", phone.device).put("reality", phone.reality))
+        if (phone.reality.length() > 0) {
+            val ua = DeviceReality.at(phone.reality, "webview.values.user_agent") as? String
+                ?: DeviceReality.userAgent(phone.reality, CloakForge.buildUa(phone.device, phone.display.optString("screen_size_class", "large"), "ab".repeat(32)))
+            val agent = JSONObject().put("value", ua)
+            asProfile.put("schema_version", "0.4").put("device", phone.device).put("reality", phone.reality).put("ua", agent)
+            if (phone.camera.length() > 0) asProfile.put("camera", phone.camera)
+            findings += DeviceReality.validate(asProfile)
+            userAgent(findings, agent, phone.device)
+        }
         val claims = JSONObject(phone.corpus.toString())
         if (!claims.has("confidence")) phone.confidence?.let { claims.put("confidence", it) }
         corpus(findings, claims)

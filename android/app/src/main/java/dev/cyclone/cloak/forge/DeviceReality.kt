@@ -12,11 +12,30 @@ object DeviceReality {
     fun at(profile: JSONObject, path: String): Any? = path.split('.').fold(profile as Any?) { value, key -> (value as? JSONObject)?.opt(key) }.let { if (it == JSONObject.NULL) null else it }
     fun token(seed: String, field: String): String = MessageDigest.getInstance("SHA-256")
         .digest("cloak-reality-v1:$seed:$field".toByteArray(Charsets.UTF_8)).joinToString("") { "%02x".format(it) }
-    fun generate(template: JSONObject, seed: String, ua: String): JSONObject = JSONObject(template.toString())
-        .put("inventory_id", token(seed, "inventory"))
-        .put("radio", known(JSONObject().put("wifi_name", "Cloak-" + token(seed, "wifi").take(12))
-            .put("bluetooth_name", "Cloak-" + token(seed, "bluetooth").take(12)), "Local configured names only; no radio state or broadcast is changed."))
-        .put("webview", known(JSONObject().put("user_agent", ua), "User agent derived from this profile; installed provider/version remains unknown."))
+    fun userAgent(template: JSONObject, ua: String): String {
+        val version = at(template, "webview.values.version") as? String
+        return if (at(template, "webview.availability") == "known" && version != null && Regex("[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+").matches(version))
+            ua.replace(Regex("Chrome/[0-9.]+"), "Chrome/$version") else ua
+    }
+    fun generate(template: JSONObject, seed: String, ua: String): JSONObject {
+        val reality = JSONObject(template.toString()).put("inventory_id", token(seed, "inventory"))
+        if (at(reality, "radio.availability") != "unavailable") {
+            val values = at(reality, "radio.values")
+            if (values == null || values is JSONObject) reality.put("radio", known(JSONObject((values ?: JSONObject()).toString())
+                .put("wifi_name", "Cloak-" + token(seed, "wifi").take(12)).put("bluetooth_name", "Cloak-" + token(seed, "bluetooth").take(12)),
+                "Local configured names only; no radio state or broadcast is changed."))
+        }
+        if (at(reality, "webview.availability") != "unavailable") {
+            val values = at(reality, "webview.values")
+            if (values == null || values is JSONObject) {
+                val web = JSONObject((values ?: JSONObject()).toString()).put("user_agent", ua)
+                reality.put("webview", known(web, if (!web.has("version") && !web.has("provider"))
+                    "User agent derived from this profile; installed provider/version remains unknown."
+                    else "Provider/version retained from template; user agent derived from profile."))
+            }
+        }
+        return reality
+    }
     private fun known(values: JSONObject, reason: String) = JSONObject().put("availability", "known").put("source", "derived").put("reason", reason).put("values", values)
 
     private fun canonical(value: Any?): String = when (value) {

@@ -24,9 +24,11 @@ object CloakForge {
     fun forgeProfile(name: String, seed: String, phone: PhoneTemplate, schemaVersion: String = "0.3"): JSONObject {
         val device = phone.device
         val screenClass = phone.display.optString("screen_size_class", "large")
+        val baseUa = buildUa(device, screenClass, seed)
+        val ua = if (schemaVersion == "0.4") DeviceReality.userAgent(phone.reality, baseUa) else baseUa
         return JSONObject()
             .put("schema_version", schemaVersion)
-            .also { require(schemaVersion in setOf("0.2", "0.3", "0.4")); if (schemaVersion == "0.4") it.put("reality", DeviceReality.generate(phone.reality, seed, buildUa(device, screenClass, seed))) }
+            .also { require(schemaVersion in setOf("0.2", "0.3", "0.4")); if (schemaVersion == "0.4") it.put("reality", DeviceReality.generate(phone.reality, seed, ua)) }
             .put("id", uuid5("https://cloak.cyclone.dev/$seed/$name"))
             .put("name", name)
             .put("seed", seed)
@@ -37,7 +39,7 @@ object CloakForge {
             .put("display", JSONObject(phone.display.toString()))
             .put("locale", JSONObject(phone.locale.toString()))
             .also { json -> if (phone.camera.length() > 0) json.put("camera", JSONObject(phone.camera.toString())) }
-            .put("ua", JSONObject().put("value", buildUa(device, screenClass, seed)))
+            .put("ua", JSONObject().put("value", ua))
             .put(
                 "integrity",
                 JSONObject().put("verdict", "unknown").put("checked_at", JSONObject.NULL).put("keybox_tag", JSONObject.NULL),
