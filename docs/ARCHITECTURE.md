@@ -1,8 +1,23 @@
 # Cyclone Cloak Architecture
 
-Current source: v0.11.0-alpha.24, app/module code 48. Device Reality v1
+Current source: v0.11.0-alpha.25, app/module code 49. Device Reality v1
 adds optional profile schema 0.4 descriptions and read-only probe observations.
 Existing schema 0.2/0.3 files are accepted as-is. Physical evidence is artifact-specific; see the runtime coverage ledger.
+
+## Catalog Import Bridge v1
+
+The offline Python bridge parses an allowlisted hardware XML subset into a separate
+provenance manifest with known/unknown/unavailable facts. Matching build properties
+and explicit reviewed corrections complete a draft; disagreement cannot be hidden
+by precedence. Per-source hashes, license review and field evidence/confidence are
+validated before promotion. Missing launch API remains unknown. A digest-bound
+candidate is replayed through completion before
+`DeviceFactory.from_imported_candidates()` admits it to existing deterministic
+derivation, coherence, uniqueness and batch acceptance. Canonical templates and
+saved-profile schemas remain unchanged. No Android import UI or runtime path uses
+the bridge. Reference pages are not licensed hardware artifacts; the promoted
+example is synthetic and imported platform trust stays unknown.
+See [pipeline and promotion rules](CATALOG-IMPORT-BRIDGE-V1.md).
 
 ## Alpha.24 integration and hook lifetime
 

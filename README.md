@@ -11,7 +11,16 @@ not prove that every inspection API sees it.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.11.0-alpha.24 (prerelease)
+## Status: 0.11.0-alpha.25 (prerelease)
+
+Alpha.25 adds the offline, opt-in Python [Catalog Import Bridge v1](docs/CATALOG-IMPORT-BRIDGE-V1.md):
+bounded hardware XML, matching build properties, field-level provenance and explicit
+review before candidates enter Device Factory. Partial hardware drafts stay
+incomplete; conflicts block promotion. The complete example is synthetic, and
+real artifacts still need license/firmware review. No Android import UI is added.
+App/module code 49; no runtime, connector, binding, publication, profile schema,
+storage-layout or permission change. [Release notes](docs/RELEASE_0.11.0-alpha.25.md).
+No new physical verification or platform verdict is claimed.
 
 Alpha.24 stabilizes profile-backed display modes and retains the Java hook loader
 for the scoped process lifetime. On the measured API 36 artifact, 12 same-process
@@ -24,7 +33,7 @@ See the [physical evidence](docs/runtime-evidence/2026-10-18-222138-alpha24-inte
 This upgrade also includes the opt-in Python [Device Factory](docs/DEVICE-FACTORY-V1.md)
 and the [Profile Operations Console](docs/PROFILE-OPERATIONS-CONSOLE.md).
 Their local checks pass; factory firmware/HAL approximations and the new UI's
-physical workflow remain unverified. App/module code 48; existing profiles remain
+physical workflow remain unverified. Existing profiles remain
 compatible, with no schema, connector protocol or permission change.
 
 - **Companion app** (`android/app`): a Cyclone connector (contract `cyclone.connector/1.3`, Cyclone

@@ -65,6 +65,7 @@ jobs:
           files: |
             android/app/build/outputs/apk/release/*.apk
             android/module/build/module/*.zip
-            docs/runtime-evidence/2026-10-18-222138-alpha24-integrated-stabilization/evidence-bundle.zip
-            docs/runtime-evidence/2026-10-18-222138-alpha24-integrated-stabilization/summary.md
-            docs/runtime-evidence/2026-10-18-222138-alpha24-integrated-stabilization/build-provenance.json
+            forge/tests/fixtures/catalog-import/synthetic-candidate.json
+            schema/catalog-provenance.v1.schema.json
+            catalog/import-sources-v1.json
+            docs/HANDOFF-2026-10-18-CATALOG-IMPORT-BRIDGE-V1.md

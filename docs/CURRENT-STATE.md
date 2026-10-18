@@ -1,6 +1,6 @@
 # Current state
 
-Updated 2026-10-18. Current source **v0.11.0-alpha.24 / versionCode 48**
+Updated 2026-10-18. Current source **v0.11.0-alpha.25 / versionCode 49**
 adds Reality Studio, missing-only repair and Fleet Diversity over Device Reality v1. Optional schema 0.4 sections describe compute, memory,
 panel, camera summaries, sensors, power, DRM level, radio labels, carrier, package
 versions, WebView and environment/input metadata. Existing 0.2/0.3 profiles are
@@ -56,6 +56,20 @@ cold post-removal capture and remains a limitation, not a pass.
 [Evidence](runtime-evidence/2026-10-18-015343-alpha18-lifecycle-install-once-3cycles/EXECUTION-REPORT.md)
 does not verify the workshop or newly packaged alpha.23 binaries.
 
+## Alpha.25 Catalog Import Bridge
+
+The opt-in offline Python pipeline creates provenance-aware drafts from a bounded
+hardware XML subset, attaches exactly matching build properties and requires
+explicit review/licensing before candidate promotion. Conflicts block acceptance;
+missing launch API remains unknown. Approved candidates reuse Device Factory
+derivation, validation and supplied-library uniqueness without changing the frozen
+canonical catalog or saved profiles. No Android import UI or device test is added.
+The complete example is synthetic; approved upstream references still need actual
+artifact/license/model/firmware review. No runtime, connector, publication, binding,
+profile schema, storage-layout or permission change. Imported platform trust stays
+unknown. See [pipeline](CATALOG-IMPORT-BRIDGE-V1.md) and
+[alpha.25 release notes](RELEASE_0.11.0-alpha.25.md).
+
 ## Reality Studio and Fleet Diversity
 
 Selected schema 0.4 identities expose twelve section editors with provenance,
@@ -77,8 +91,8 @@ See [workflow and limitations](REALITY-STUDIO.md). Physical UI checks **UNVERIFI
 
 | Component | Current source version / responsibility |
 | --- | --- |
-| App | `dev.cyclone.cloak`, `0.11.0-alpha.24`, code 48; minimum API 29, target/compile API 36 |
-| Module | `cyclone_cloak`, `v0.11.0-alpha.24`, code 48; ARM64/ARMv7, minimum API 26; scoped display-mode parity callbacks added in alpha.23 |
+| App | `dev.cyclone.cloak`, `0.11.0-alpha.25`, code 49; minimum API 29, target/compile API 36 |
+| Module | `cyclone_cloak`, `v0.11.0-alpha.25`, code 49; ARM64/ARMv7, minimum API 26; scoped display-mode parity callbacks added in alpha.23 |
 | Profile | Schema `0.4`, legacy `0.2`/`0.3` accepted; existing JSON storage unchanged |
 | Binding / reader | Binding schema 2; module index `schemaVersion: 2`; existing key lookup unchanged |
 | Connector | `cyclone.connector/1.3`; Cyclone 5.0.0-alpha.122 or newer |
@@ -106,9 +120,9 @@ See [workflow and limitations](REALITY-STUDIO.md). Physical UI checks **UNVERIFI
 
 ## Local verification and release gate
 
-The Reality Studio release checks: app **566 tests**, module
-**12 tests**, forge **558 passed**, schema **60 passed**, probe **96 per flavor**
-and host probe checks **7 passed**.
+Alpha.25 local release checks: app **598 tests**, module **40 tests**, forge
+**810 passed**, schema **94 passed**, probe **109 per flavor** and host probe
+checks **7 passed**: **1,767 total**, zero failures/skips.
 WSL enabled the actual publication shell tests on Windows. Debug assembly and module
 packaging succeeded without compiler warnings. The standard release CI gate signs the APK, packages the module and verifies
 that the APK embeds the exact released module ZIP before publishing.
@@ -120,15 +134,17 @@ $env:CLOAK_TEST_WSL='1'
 uv run --with pytest -- python -X utf8 -m pytest forge/tests -q
 uv run --with pytest --with jsonschema -- python -X utf8 -m pytest forge/schema_tests -q
 uv run -- python -X utf8 -m unittest discover -s android/probe/tests -v
-uv run -- python -X utf8 tools/verify_release.py --tag v0.11.0-alpha.24 --artifacts
+uv run -- python -X utf8 tools/verify_release.py --tag v0.11.0-alpha.25 --artifacts
 git diff --check
 ```
 
 The release workflow reruns tests, signs the APK using existing CI secrets, packages
 the module and checks exact embedded-module agreement before uploading the prerelease.
 Local debug output: `android/app/build/outputs/apk/debug/app-debug.apk`.
-Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.24.zip`,
-`evidence-bundle.zip`, `summary.md`, `build-provenance.json`.
+Release assets: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.25.zip`,
+`synthetic-candidate.json`, `catalog-provenance.v1.schema.json`,
+`import-sources-v1.json` and the Catalog Import Bridge handoff. No old physical
+evidence is attached as new alpha.25 proof.
 
 ## Known limits and separately verified device evidence
 
