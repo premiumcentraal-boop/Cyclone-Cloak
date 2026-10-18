@@ -1291,13 +1291,13 @@
                 "const": false
               },
               "requires_future_runtime_work": {
-                "const": true
-              },
-              "metadata_only": {
                 "const": false
               },
+              "metadata_only": {
+                "const": true
+              },
               "reason": {
-                "const": "Read-only host observation; Reality is not consumed by the module."
+                "const": "Read-only host capability or safety state; descriptive metadata only, never an enforcement target."
               },
               "reader_key": {
                 "const": "drm.security_level"
@@ -3007,13 +3007,13 @@
                 "const": false
               },
               "requires_future_runtime_work": {
-                "const": true
-              },
-              "metadata_only": {
                 "const": false
               },
+              "metadata_only": {
+                "const": true
+              },
               "reason": {
-                "const": "Read-only host observation; Reality is not consumed by the module."
+                "const": "Read-only host capability or safety state; descriptive metadata only, never an enforcement target."
               },
               "reader_key": {
                 "const": "power.battery_percent"
@@ -3051,13 +3051,13 @@
                 "const": false
               },
               "requires_future_runtime_work": {
-                "const": true
-              },
-              "metadata_only": {
                 "const": false
               },
+              "metadata_only": {
+                "const": true
+              },
               "reason": {
-                "const": "Read-only host observation; Reality is not consumed by the module."
+                "const": "Read-only host capability or safety state; descriptive metadata only, never an enforcement target."
               },
               "reader_key": {
                 "const": "power.battery_state"
@@ -3095,13 +3095,13 @@
                 "const": false
               },
               "requires_future_runtime_work": {
-                "const": true
-              },
-              "metadata_only": {
                 "const": false
               },
+              "metadata_only": {
+                "const": true
+              },
               "reason": {
-                "const": "Read-only host observation; Reality is not consumed by the module."
+                "const": "Read-only host capability or safety state; descriptive metadata only, never an enforcement target."
               },
               "reader_key": {
                 "const": "power.charging_source"
@@ -3183,13 +3183,13 @@
                 "const": false
               },
               "requires_future_runtime_work": {
-                "const": true
-              },
-              "metadata_only": {
                 "const": false
               },
+              "metadata_only": {
+                "const": true
+              },
               "reason": {
-                "const": "Read-only host observation; Reality is not consumed by the module."
+                "const": "Read-only host capability or safety state; descriptive metadata only, never an enforcement target."
               },
               "reader_key": {
                 "const": "power.power_save"
@@ -3227,13 +3227,13 @@
                 "const": false
               },
               "requires_future_runtime_work": {
-                "const": true
-              },
-              "metadata_only": {
                 "const": false
               },
+              "metadata_only": {
+                "const": true
+              },
               "reason": {
-                "const": "Read-only host observation; Reality is not consumed by the module."
+                "const": "Read-only host capability or safety state; descriptive metadata only, never an enforcement target."
               },
               "reader_key": {
                 "const": "power.temperature_c"
@@ -3271,13 +3271,13 @@
                 "const": false
               },
               "requires_future_runtime_work": {
-                "const": true
-              },
-              "metadata_only": {
                 "const": false
               },
+              "metadata_only": {
+                "const": true
+              },
               "reason": {
-                "const": "Read-only host observation; Reality is not consumed by the module."
+                "const": "Read-only host capability or safety state; descriptive metadata only, never an enforcement target."
               },
               "reader_key": {
                 "const": "power.thermal_status"

@@ -24,6 +24,10 @@ def test_deterministic_private_and_complete_schema_coverage():
     assert all(r['reason'] and (r['surface'] or r['status'] != 'APPLIED') for r in result['fields'])
     assert len({r['surface'] for r in result['fields'] if r['surface']}) == sum(bool(r['surface']) for r in result['fields'])
     assert PROFILE['seed'] not in json.dumps(result)
+    for row in result['fields']:
+        if row['field_path'].startswith(('reality.drm.values.', 'reality.power.values.')):
+            assert row['metadata_only'] and not row['requires_future_runtime_work']
+            assert not row['safe_representation']
 
 
 @pytest.mark.parametrize('status', STATUSES)

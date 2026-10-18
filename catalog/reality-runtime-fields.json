@@ -286,9 +286,9 @@
       "surface": "android.media.MediaDrm.getPropertyString(securityLevel)",
       "status": "DIAGNOSTIC_ONLY",
       "safe_representation": false,
-      "requires_future_runtime_work": true,
-      "metadata_only": false,
-      "reason": "Read-only host observation; Reality is not consumed by the module.",
+      "requires_future_runtime_work": false,
+      "metadata_only": true,
+      "reason": "Read-only host capability or safety state; descriptive metadata only, never an enforcement target.",
       "reader_key": "drm.security_level"
     },
     {
@@ -676,9 +676,9 @@
       "surface": "android.intent.action.BATTERY_CHANGED:level/scale",
       "status": "DIAGNOSTIC_ONLY",
       "safe_representation": false,
-      "requires_future_runtime_work": true,
-      "metadata_only": false,
-      "reason": "Read-only host observation; Reality is not consumed by the module.",
+      "requires_future_runtime_work": false,
+      "metadata_only": true,
+      "reason": "Read-only host capability or safety state; descriptive metadata only, never an enforcement target.",
       "reader_key": "power.battery_percent"
     },
     {
@@ -686,9 +686,9 @@
       "surface": "android.intent.action.BATTERY_CHANGED:status",
       "status": "DIAGNOSTIC_ONLY",
       "safe_representation": false,
-      "requires_future_runtime_work": true,
-      "metadata_only": false,
-      "reason": "Read-only host observation; Reality is not consumed by the module.",
+      "requires_future_runtime_work": false,
+      "metadata_only": true,
+      "reason": "Read-only host capability or safety state; descriptive metadata only, never an enforcement target.",
       "reader_key": "power.battery_state"
     },
     {
@@ -696,9 +696,9 @@
       "surface": "android.intent.action.BATTERY_CHANGED:plugged",
       "status": "DIAGNOSTIC_ONLY",
       "safe_representation": false,
-      "requires_future_runtime_work": true,
-      "metadata_only": false,
-      "reason": "Read-only host observation; Reality is not consumed by the module.",
+      "requires_future_runtime_work": false,
+      "metadata_only": true,
+      "reason": "Read-only host capability or safety state; descriptive metadata only, never an enforcement target.",
       "reader_key": "power.charging_source"
     },
     {
@@ -716,9 +716,9 @@
       "surface": "android.os.PowerManager.isPowerSaveMode()",
       "status": "DIAGNOSTIC_ONLY",
       "safe_representation": false,
-      "requires_future_runtime_work": true,
-      "metadata_only": false,
-      "reason": "Read-only host observation; Reality is not consumed by the module.",
+      "requires_future_runtime_work": false,
+      "metadata_only": true,
+      "reason": "Read-only host capability or safety state; descriptive metadata only, never an enforcement target.",
       "reader_key": "power.power_save"
     },
     {
@@ -726,9 +726,9 @@
       "surface": "android.intent.action.BATTERY_CHANGED:temperature",
       "status": "DIAGNOSTIC_ONLY",
       "safe_representation": false,
-      "requires_future_runtime_work": true,
-      "metadata_only": false,
-      "reason": "Read-only host observation; Reality is not consumed by the module.",
+      "requires_future_runtime_work": false,
+      "metadata_only": true,
+      "reason": "Read-only host capability or safety state; descriptive metadata only, never an enforcement target.",
       "reader_key": "power.temperature_c"
     },
     {
@@ -736,9 +736,9 @@
       "surface": "android.os.PowerManager.getCurrentThermalStatus()",
       "status": "DIAGNOSTIC_ONLY",
       "safe_representation": false,
-      "requires_future_runtime_work": true,
-      "metadata_only": false,
-      "reason": "Read-only host observation; Reality is not consumed by the module.",
+      "requires_future_runtime_work": false,
+      "metadata_only": true,
+      "reason": "Read-only host capability or safety state; descriptive metadata only, never an enforcement target.",
       "reader_key": "power.thermal_status"
     },
     {

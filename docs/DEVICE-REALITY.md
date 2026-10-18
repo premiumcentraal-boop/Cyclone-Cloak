@@ -139,3 +139,6 @@ Reality coverage displays all six capability counts and the first five pending
 or partially covered paths with their surfaces. Local coherence remains separate
 from runtime enforcement. All new physical-device evidence is **UNVERIFIED**.
 See [runtime backlog](REALITY-RUNTIME-BACKLOG.md) for separately authorized work.
+
+DRM security level and power/safety states are explicitly metadata-only and are
+not future enforcement targets, even when a read-only surface is mapped.
