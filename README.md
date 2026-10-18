@@ -11,15 +11,15 @@ not prove that every inspection API sees it.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.11.0-alpha.22 (prerelease)
+## Status: 0.11.0-alpha.23 (prerelease)
 
 Reality Runtime Bridge maps every schema 0.4 Reality field to a reviewed Android
 surface and capability status. Coverage separates local coherence, read-only
-observations and runtime enforcement. No new runtime hooks, permissions,
-connector or publication behavior. App/module code 46. Physical verification of
+observations and runtime enforcement. Alpha.23 adds scoped display-mode parity; no new permissions,
+connector or publication behavior. App/module code 47. Physical verification of
 the new contract/probe extension is **UNVERIFIED**; no platform verdict.
 See [Device Reality](docs/DEVICE-REALITY.md), [runtime backlog](docs/REALITY-RUNTIME-BACKLOG.md)
-and [release notes](docs/RELEASE_0.11.0-alpha.22.md).
+and [release notes](docs/RELEASE_0.11.0-alpha.23.md).
 
 - **Companion app** (`android/app`): a Cyclone connector (contract `cyclone.connector/1.3`, Cyclone
   5.0.0-alpha.122 or newer). Imports or creates cloak profiles, binds them to the apps of Cyclone

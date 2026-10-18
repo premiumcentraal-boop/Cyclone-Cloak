@@ -1,6 +1,6 @@
 # Cyclone Cloak Architecture
 
-Current source: v0.11.0-alpha.22, app/module code 46. Device Reality v1
+Current source: v0.11.0-alpha.23, app/module code 47. Device Reality v1
 adds optional profile schema 0.4 descriptions and read-only probe observations.
 Existing schema 0.2/0.3 files are accepted as-is. Physical verification UNVERIFIED.
 
@@ -446,7 +446,7 @@ identity (and in an open import preview), with retry/cancel paths. Profile files
 connector behavior, binding and module publication are unchanged.
 
 
-## Reality Runtime Bridge (format 1)
+## Reality Runtime Bridge (formats 1 and 2)
 
 `catalog/reality-runtime-fields.json` is the reviewed shared source for 97 schema
 paths. The generator emits the pure Kotlin table, probe asset and strict JSON
@@ -458,6 +458,41 @@ The capture session adds an optional digest-only `reality_runtime` extension by
 reusing the existing comparison evidence. No readers outside the contract are
 selected. Nested inventory matches are not inferred from aggregate hashes.
 RealityCoverage validates the extension and displays runtime readiness separately
-from local coherence. No Reality fields are fully applied by the module.
-See [format and limitations](DEVICE-REALITY.md#reality-runtime-bridge-format-1)
+from local coherence. Ten linked fields are conditionally applied only with exact base parity; see Phase 1 below.
+See [format and limitations](DEVICE-REALITY.md#reality-runtime-bridge-formats-1-and-2)
 and [authorized future work](REALITY-RUNTIME-BACKLOG.md).
+
+
+## Runtime Linked Parity Phase 1
+
+`RealityRuntimeLink` (Kotlin) and `runtime_link.evaluate` (Python) evaluate ten
+reviewed aliases from the shared runtime table. Base profile fields remain the
+only runtime source. Exact matches are MATCHED; conflicts are MISMATCHED;
+missing Reality is NOT_PRESENT and missing base is BASE_MISSING. Findings expose
+paths/state only, never values, and do not mutate or publish profiles.
+The density link targets the existing `display.density`, not a new density_dpi
+base field. No profile schema or storage migration is introduced.
+
+Contract format 2 records linked_base_path, EXACT/NONE parity_requirement,
+runtime_covered, present, parity_state and nullable parity_passed. The ten linked
+paths are APPLIED only with a present exact match; otherwise PARTIAL. The remaining
+87 statuses stay unchanged. Format 1 contracts and optional report format 1 remain
+readable. APPLIED describes implemented local capability plus required parity,
+not verified execution on any phone. All ten matched: 10 applied, 0 partial,
+5 pending, 42 diagnostic-only, 37 host-only, 3 unsupported.
+
+Scoped Java callbacks construct profile-backed Display.Mode return objects and
+include the same mode in getSupportedModes without changing host mode objects or
+physical display configuration. Missing/invalid base overrides are no-ops or retain
+the missing component. Existing metrics/refresh, locale/timezone and telephony
+surfaces remain authoritative. Framework-object tests cover API 34/35; older
+constructor fallback and ART installation still require physical verification.
+
+The optional `linked_parity` probe extension has 13 digest-only rows: ten linked
+observations plus SIM operator, active modem count and supported-mode membership.
+The latter records a digest of the full aggregate and separately compares whether
+it contains the complete base mode tuple. No base expectation means no PASS.
+Permission/API failures remain explicit. Legacy 89 rows are unchanged. The coverage
+card shows matched/mismatched links, field paths and applied/partial/pending counts.
+Local parity is not a platform verdict. Physical verification: **PENDING**; the
+connected device still has alpha.18/code 42, so it cannot validate these callbacks.

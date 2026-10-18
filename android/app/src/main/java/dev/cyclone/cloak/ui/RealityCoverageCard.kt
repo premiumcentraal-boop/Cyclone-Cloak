@@ -10,6 +10,7 @@ import org.json.JSONObject
 fun RealityCoverageCard(profile: JSONObject, evidence: Map<String, String> = emptyMap()) {
     val summary = RealityCoverage.summarize(profile)
     val runtime = summary.runtime
+    val links = dev.cyclone.cloak.forge.RealityRuntimeLink.evaluate(profile)
     CloakDisclosure("Reality coverage", supporting = "Local coherence and descriptive coverage; no platform verdict") {
         Text("Local coherence: ${summary.score?.let { "$it/100" } ?: "not recorded"} · Schema ${summary.schema}", style = MaterialTheme.typography.bodySmall)
         Text("Missing optional sections: ${summary.missing.joinToString().ifEmpty { "none" }}", style = MaterialTheme.typography.bodySmall)
@@ -20,6 +21,11 @@ fun RealityCoverageCard(profile: JSONObject, evidence: Map<String, String> = emp
             Text("Local coherence does not mean runtime enforcement. Contract status is capability, not device verification.", style = MaterialTheme.typography.bodySmall)
             readiness.missingSurfaces.forEach { Text(it, style = MaterialTheme.typography.bodySmall) }
         }
+        Text("Linked parity: ${links.count { it.parityPassed == true }}/10 matched · ${links.count { it.state == dev.cyclone.cloak.forge.RealityRuntimeLink.State.MISMATCHED }} mismatched", style = MaterialTheme.typography.bodySmall)
+        links.filter { it.state == dev.cyclone.cloak.forge.RealityRuntimeLink.State.MISMATCHED }.forEach {
+            Text("MISMATCHED: ${it.fieldPath} → ${it.basePath}", style = MaterialTheme.typography.bodySmall)
+        }
+        Text("Local parity is not a platform verdict.", style = MaterialTheme.typography.bodySmall)
         Text("Provenance: ${summary.provenance.joinToString().ifEmpty { "not recorded" }}", style = MaterialTheme.typography.bodySmall)
         Text("Read-only coverage: ${summary.rows.size} fields · device verification UNVERIFIED. Coherence does not imply physical hardware support.", style = MaterialTheme.typography.bodySmall)
         if (evidence.keys.any { it.startsWith("reality.") }) Text("Loaded probe fixture evidence only; this saved identity is not verified.", style = MaterialTheme.typography.bodySmall)

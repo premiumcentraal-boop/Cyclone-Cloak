@@ -21,7 +21,15 @@ android {
         }
     }
 
-    testOptions { unitTests.returnDefaultValues = true }
+    testOptions {
+        unitTests.returnDefaultValues = true
+        unitTests.includeAndroidResources = true
+        unitTests.all {
+            dependsOn("copyRobolectricRuntime")
+            systemProperty "robolectric.offline", "true"
+            systemProperty "robolectric.dependency.dir", layout.buildDirectory.dir("robolectric").get().asFile.absolutePath
+        }
+    }
     sourceSets.test.java.srcDir("src/hook/java")
 
     externalNativeBuild {
@@ -81,6 +89,18 @@ dependencies {
     hookD8 "com.android.tools:r8:8.13.25"
     testImplementation "top.canyie.pine:core:0.3.0"
     testImplementation "junit:junit:4.13.2"
+    testImplementation "org.robolectric:robolectric:4.14.1"
+}
+
+configurations { robolectricSdk34; robolectricSdk35 }
+dependencies {
+    robolectricSdk34 "org.robolectric:android-all-instrumented:14-robolectric-10818077-i7"
+    robolectricSdk35 "org.robolectric:android-all-instrumented:15-robolectric-12650502-i7"
+}
+tasks.register("copyRobolectricRuntime", Copy) {
+    from configurations.robolectricSdk34
+    from configurations.robolectricSdk35
+    into layout.buildDirectory.dir("robolectric")
 }
 
 def hookWork = layout.buildDirectory.dir("hook")

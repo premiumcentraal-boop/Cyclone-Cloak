@@ -210,4 +210,40 @@ public class HookBridgeTest {
         assertNull(spec.invoke(null, 1, 2, 3));
         assertArrayEquals(new int[]{0, 4000, 3000}, (int[]) spec.invoke(null, 0, 0, 3));
     }
+    @Test public void simAndNetworkOperatorPreserveMccMncComposition() throws Throwable {
+        for (String mnc : new String[]{"01", "001"}) {
+            String composed = "310" + mnc;
+            PROPS.put("gsm.operator.numeric", composed);
+            PROPS.put("gsm.sim.operator.numeric", composed);
+            Pine.CallFrame sim = frame(), network = frame();
+            identity("KIND_NUMERIC").beforeCall(sim); identity("KIND_NUMERIC").beforeCall(network);
+            assertEquals(composed, sim.getResult()); assertEquals(composed, network.getResult());
+            PROPS.remove("gsm.operator.numeric");
+            Pine.CallFrame fallback = frame(); identity("KIND_NUMERIC").beforeCall(fallback);
+            assertEquals(composed, fallback.getResult());
+        }
+    }
+    @Test public void phoneAndModemCountsUseSameBaseSlotCount() throws Throwable {
+        for (String count : new String[]{"1", "2"}) {
+            PROPS.put("cloak.sim_slot_count", count);
+            Pine.CallFrame phone = frame(), modem = frame();
+            identity("KIND_SLOT_COUNT").beforeCall(phone); identity("KIND_SLOT_COUNT").beforeCall(modem);
+            assertEquals(Integer.valueOf(count), phone.getResult()); assertEquals(phone.getResult(), modem.getResult());
+        }
+    }
+    @Test public void languageCountryTimezoneUseBaseDefaultsAndAbsencePreservesHost() {
+        java.util.Locale locale = java.util.Locale.getDefault(); java.util.TimeZone zone = java.util.TimeZone.getDefault();
+        try {
+            PROPS.put("persist.sys.language", "de"); PROPS.put("persist.sys.country", "DE");
+            PROPS.put("persist.sys.timezone", "Europe/Berlin");
+            HookBridge.applyLocaleDefaults();
+            assertEquals("de", java.util.Locale.getDefault().getLanguage());
+            assertEquals("DE", java.util.Locale.getDefault().getCountry());
+            assertEquals("Europe/Berlin", java.util.TimeZone.getDefault().getID());
+            PROPS.clear(); HookBridge.applyLocaleDefaults();
+            assertEquals("de", java.util.Locale.getDefault().getLanguage());
+            assertEquals("Europe/Berlin", java.util.TimeZone.getDefault().getID());
+        } finally { java.util.Locale.setDefault(locale); java.util.TimeZone.setDefault(zone); }
+    }
+
 }

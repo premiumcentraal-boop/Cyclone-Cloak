@@ -172,10 +172,10 @@ The JNI registration defect is consistent with [AOSP SystemProperties](https://r
 it as a native method rejected the release's registration batch on this device.
 
 
-## Reality Runtime Bridge (format 1)
+## Reality Runtime Bridge (formats 1 and 2)
 
 The contract table maps 97 schema leaf/array paths, including host-only provenance.
-Runtime readiness: **0 applied, 10 partial, 5 pending, 42 diagnostic-only,
+Runtime readiness: **10 applied (when matched), 0 partial, 5 pending, 42 diagnostic-only,
 37 host-only, 3 unsupported**. Partial refers only to existing linked base fields;
 the module does not consume Reality. These counts do not replace measured rows.
 
@@ -185,3 +185,38 @@ measured; no aggregate hash silently verifies a leaf. Historical device evidence
 is unchanged. The new extension is **UNVERIFIED on physical devices**.
 See [format](DEVICE-REALITY.md#reality-runtime-bridge-format-1) and
 [prioritized future surfaces](REALITY-RUNTIME-BACKLOG.md). No platform verdict.
+
+
+## Runtime Linked Parity Phase 1
+
+`RealityRuntimeLink` (Kotlin) and `runtime_link.evaluate` (Python) evaluate ten
+reviewed aliases from the shared runtime table. Base profile fields remain the
+only runtime source. Exact matches are MATCHED; conflicts are MISMATCHED;
+missing Reality is NOT_PRESENT and missing base is BASE_MISSING. Findings expose
+paths/state only, never values, and do not mutate or publish profiles.
+The density link targets the existing `display.density`, not a new density_dpi
+base field. No profile schema or storage migration is introduced.
+
+Contract format 2 records linked_base_path, EXACT/NONE parity_requirement,
+runtime_covered, present, parity_state and nullable parity_passed. The ten linked
+paths are APPLIED only with a present exact match; otherwise PARTIAL. The remaining
+87 statuses stay unchanged. Format 1 contracts and optional report format 1 remain
+readable. APPLIED describes implemented local capability plus required parity,
+not verified execution on any phone. All ten matched: 10 applied, 0 partial,
+5 pending, 42 diagnostic-only, 37 host-only, 3 unsupported.
+
+Scoped Java callbacks construct profile-backed Display.Mode return objects and
+include the same mode in getSupportedModes without changing host mode objects or
+physical display configuration. Missing/invalid base overrides are no-ops or retain
+the missing component. Existing metrics/refresh, locale/timezone and telephony
+surfaces remain authoritative. Framework-object tests cover API 34/35; older
+constructor fallback and ART installation still require physical verification.
+
+The optional `linked_parity` probe extension has 13 digest-only rows: ten linked
+observations plus SIM operator, active modem count and supported-mode membership.
+The latter records a digest of the full aggregate and separately compares whether
+it contains the complete base mode tuple. No base expectation means no PASS.
+Permission/API failures remain explicit. Legacy 89 rows are unchanged. The coverage
+card shows matched/mismatched links, field paths and applied/partial/pending counts.
+Local parity is not a platform verdict. Physical verification: **PENDING**; the
+connected device still has alpha.18/code 42, so it cannot validate these callbacks.

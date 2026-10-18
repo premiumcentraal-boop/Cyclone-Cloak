@@ -170,7 +170,8 @@ public class ProbeActivity extends Activity {
                 JSONObject reality = RealityProbe.collect(ProbeActivity.this, profile, runtimeTable);
                 JSONObject report = envelope().put("rows", new JSONArray(rows.toString()))
                     .put("device_reality", reality)
-                    .put("reality_runtime", RealityRuntimeReport.build(runtimeTable, profile, reality));
+                    .put("reality_runtime", RealityRuntimeReport.build(runtimeTable, profile, reality))
+                    .put("linked_parity", reality.getJSONObject("linked_parity"));
                 StringBuilder visible = new StringBuilder("Cloak Runtime Probe\n\n");
                 for (int i = 0; i < rows.length(); i++) {
                     JSONObject row = rows.getJSONObject(i);

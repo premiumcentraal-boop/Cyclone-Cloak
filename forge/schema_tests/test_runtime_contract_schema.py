@@ -27,3 +27,17 @@ def test_schema_rejects_invalid_capabilities(change):
     elif change=='reason': row['reason']=''
     else: row['private']='secret'
     with pytest.raises(jsonschema.ValidationError): jsonschema.validate(c,SCHEMA)
+
+
+def test_legacy_contract_and_nonmatching_links():
+    from cloak_forge.runtime_contract import LEGACY_TABLE
+    old=dict(format=1,schema_version='0.4',presence='present',fields=[dict(r,present=True) for r in LEGACY_TABLE['fields']])
+    validator=jsonschema.Draft202012Validator(SCHEMA)
+    validator.validate(old)
+    c=generate_contract(PROFILE)
+    row=next(r for r in c['fields'] if r['linked_base_path'])
+    for state, present, passed in [('MISMATCHED',True,False),('NOT_PRESENT',False,None),('BASE_MISSING',True,None)]:
+        row.update(parity_state=state,present=present,parity_passed=passed,status='PARTIAL')
+        validator.validate(c)
+        row['status']='APPLIED'
+        with pytest.raises(jsonschema.ValidationError): validator.validate(c)

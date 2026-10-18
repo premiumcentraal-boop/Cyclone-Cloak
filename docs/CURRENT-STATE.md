@@ -1,6 +1,6 @@
 # Current state
 
-Updated 2026-10-18. Current source **v0.11.0-alpha.22 / versionCode 46**
+Updated 2026-10-18. Current source **v0.11.0-alpha.23 / versionCode 47**
 adds Reality Studio, missing-only repair and Fleet Diversity over Device Reality v1. Optional schema 0.4 sections describe compute, memory,
 panel, camera summaries, sensors, power, DRM level, radio labels, carrier, package
 versions, WebView and environment/input metadata. Existing 0.2/0.3 profiles are
@@ -12,8 +12,9 @@ conservative and provenance-labelled; unavailable/unknown fields stay empty.
 Reality coverage in Identities separates local coherence from physical evidence.
 A read-only optional probe extension hashes new observations without changing the
 legacy 89 rows. All new physical-device checks are **UNVERIFIED**. No platform
-verdict, new runtime hooks, permissions, connector, binding or storage-layout change.
-See [Device Reality](DEVICE-REALITY.md) and [release notes](RELEASE_0.11.0-alpha.22.md).
+verdict, new permissions, connector, binding or storage-layout change. Alpha.23 adds
+scoped display-mode callbacks; physical verification is pending.
+See [Device Reality](DEVICE-REALITY.md) and [release notes](RELEASE_0.11.0-alpha.23.md).
 
 The existing Batch Identity Workshop remains available:
 
@@ -39,7 +40,7 @@ and cleanup passed each cycle, with zero APK installations. Four user-17 bound
 permission blocks remain; advertising.id was BLOCKED/IOException in cycle 3's
 cold post-removal capture and remains a limitation, not a pass.
 [Evidence](runtime-evidence/2026-10-18-015343-alpha18-lifecycle-install-once-3cycles/EXECUTION-REPORT.md)
-does not verify the workshop or newly packaged alpha.21 binaries.
+does not verify the workshop or newly packaged alpha.23 binaries.
 
 ## Reality Studio and Fleet Diversity
 
@@ -62,8 +63,8 @@ See [workflow and limitations](REALITY-STUDIO.md). Physical UI checks **UNVERIFI
 
 | Component | Current source version / responsibility |
 | --- | --- |
-| App | `dev.cyclone.cloak`, `0.11.0-alpha.22`, code 46; minimum API 29, target/compile API 36 |
-| Module | `cyclone_cloak`, `v0.11.0-alpha.22`, code 46; ARM64/ARMv7, minimum API 26; metadata-only module change from alpha.18 |
+| App | `dev.cyclone.cloak`, `0.11.0-alpha.23`, code 47; minimum API 29, target/compile API 36 |
+| Module | `cyclone_cloak`, `v0.11.0-alpha.23`, code 47; ARM64/ARMv7, minimum API 26; scoped display-mode parity callbacks added in alpha.23 |
 | Profile | Schema `0.4`, legacy `0.2`/`0.3` accepted; existing JSON storage unchanged |
 | Binding / reader | Binding schema 2; module index `schemaVersion: 2`; existing key lookup unchanged |
 | Connector | `cyclone.connector/1.3`; Cyclone 5.0.0-alpha.122 or newer |
@@ -105,14 +106,14 @@ $env:CLOAK_TEST_WSL='1'
 uv run --with pytest -- python -X utf8 -m pytest forge/tests -q
 uv run --with pytest --with jsonschema -- python -X utf8 -m pytest forge/schema_tests -q
 uv run -- python -X utf8 -m unittest discover -s android/probe/tests -v
-uv run -- python -X utf8 tools/verify_release.py --tag v0.11.0-alpha.22 --artifacts
+uv run -- python -X utf8 tools/verify_release.py --tag v0.11.0-alpha.23 --artifacts
 git diff --check
 ```
 
 The release workflow reruns tests, signs the APK using existing CI secrets, packages
 the module and checks exact embedded-module agreement before uploading the prerelease.
 Local debug output: `android/app/build/outputs/apk/debug/app-debug.apk`.
-Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.22.zip`,
+Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.23.zip`,
 `evidence-bundle.zip`, `summary.md`, `build-provenance.json`.
 
 ## Known limits and separately verified device evidence
@@ -142,16 +143,52 @@ Historical handoffs preserve their dated evidence; current library behavior is
 in [Run E completion](HANDOFF-2026-10-13-RUN-E-LIBRARY-QUALITY-COMPLETED.md).
 
 
-## Reality Runtime Bridge (format 1)
+## Reality Runtime Bridge (formats 1 and 2)
 
-Alpha.22 / code 46 adds the pure Kotlin/Python contract, generated strict schema,
+Alpha.23 / code 47 extends the pure Kotlin/Python contract, generated strict schema,
 read-only probe extension, coverage readiness counts and prioritized backlog.
-All 97 schema leaf/array paths are represented: **0 applied, 10 partial, 5 pending,
+All 97 schema leaf/array paths are represented: **10 applied (when matched), 0 partial, 5 pending,
 42 diagnostic-only, 37 host-only, 3 unsupported**. These are capability counts,
 not physical measurements. Reality is not consumed by the current module.
 
 Legacy profiles report `not present`; future sections are ignored safely without
 rewriting stored data. New physical verification is **UNVERIFIED**. No platform
-verdict, new hooks, permissions, networking or production behavior changes.
-See [Device Reality](DEVICE-REALITY.md#reality-runtime-bridge-format-1) and
+verdict, new permissions or networking. Scoped display-mode hooks are the only
+new runtime behavior in this sprint.
+See [Device Reality](DEVICE-REALITY.md#reality-runtime-bridge-formats-1-and-2) and
 [runtime backlog](REALITY-RUNTIME-BACKLOG.md).
+
+
+## Runtime Linked Parity Phase 1
+
+`RealityRuntimeLink` (Kotlin) and `runtime_link.evaluate` (Python) evaluate ten
+reviewed aliases from the shared runtime table. Base profile fields remain the
+only runtime source. Exact matches are MATCHED; conflicts are MISMATCHED;
+missing Reality is NOT_PRESENT and missing base is BASE_MISSING. Findings expose
+paths/state only, never values, and do not mutate or publish profiles.
+The density link targets the existing `display.density`, not a new density_dpi
+base field. No profile schema or storage migration is introduced.
+
+Contract format 2 records linked_base_path, EXACT/NONE parity_requirement,
+runtime_covered, present, parity_state and nullable parity_passed. The ten linked
+paths are APPLIED only with a present exact match; otherwise PARTIAL. The remaining
+87 statuses stay unchanged. Format 1 contracts and optional report format 1 remain
+readable. APPLIED describes implemented local capability plus required parity,
+not verified execution on any phone. All ten matched: 10 applied, 0 partial,
+5 pending, 42 diagnostic-only, 37 host-only, 3 unsupported.
+
+Scoped Java callbacks construct profile-backed Display.Mode return objects and
+include the same mode in getSupportedModes without changing host mode objects or
+physical display configuration. Missing/invalid base overrides are no-ops or retain
+the missing component. Existing metrics/refresh, locale/timezone and telephony
+surfaces remain authoritative. Framework-object tests cover API 34/35; older
+constructor fallback and ART installation still require physical verification.
+
+The optional `linked_parity` probe extension has 13 digest-only rows: ten linked
+observations plus SIM operator, active modem count and supported-mode membership.
+The latter records a digest of the full aggregate and separately compares whether
+it contains the complete base mode tuple. No base expectation means no PASS.
+Permission/API failures remain explicit. Legacy 89 rows are unchanged. The coverage
+card shows matched/mismatched links, field paths and applied/partial/pending counts.
+Local parity is not a platform verdict. Physical verification: **PENDING**; the
+connected device still has alpha.18/code 42, so it cannot validate these callbacks.

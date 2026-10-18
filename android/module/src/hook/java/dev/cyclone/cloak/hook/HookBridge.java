@@ -243,7 +243,88 @@ public final class HookBridge {
         hookWith(display, "getMetrics", new DisplayMetricsHook(), android.util.DisplayMetrics.class);
         hookWith(display, "getRealMetrics", new DisplayMetricsHook(), android.util.DisplayMetrics.class);
         hookNoArg(display, "getRefreshRate", KIND_REFRESH_RATE);
+        hookWith(display, "getMode", new DisplayModeHook(false));
+        hookWith(display, "getSupportedModes", new DisplayModeHook(true));
         log("display hooks installed");
+    }
+
+    /** New return objects only: never changes DisplayInfo, hardware or the framework's mode array. */
+    static android.view.Display.Mode profileMode(android.view.Display.Mode host) {
+        if (host == null) return null;
+        int width = parseInt(prop("cloak.display.width"), -1);
+        int height = parseInt(prop("cloak.display.height"), -1);
+        float refresh = -1;
+        try { refresh = Float.parseFloat(prop("cloak.display.refresh")); } catch (NumberFormatException ignored) { }
+        if (!Float.isFinite(refresh) || refresh <= 0) refresh = -1;
+        if (width <= 0 && height <= 0 && refresh <= 0) return host;
+        width = width > 0 ? width : host.getPhysicalWidth();
+        height = height > 0 ? height : host.getPhysicalHeight();
+        refresh = refresh > 0 ? refresh : host.getRefreshRate();
+        if (width == host.getPhysicalWidth() && height == host.getPhysicalHeight()
+                && Float.compare(refresh, host.getRefreshRate()) == 0) return host;
+        try {
+            Class<?> mode = android.view.Display.Mode.class;
+            try {
+                Constructor<?> constructor = mode.getDeclaredConstructor(int.class, int.class, int.class,
+                        float.class, float[].class, int[].class);
+                constructor.setAccessible(true);
+                float[] alternatives = (float[]) mode.getMethod("getAlternativeRefreshRates").invoke(host);
+                int[] hdr = (int[]) mode.getMethod("getSupportedHdrTypes").invoke(host);
+                return (android.view.Display.Mode) constructor.newInstance(host.getModeId(), width, height,
+                        refresh, alternatives.clone(), hdr.clone());
+            } catch (NoSuchMethodException olderFramework) {
+                Constructor<?> constructor = mode.getDeclaredConstructor(int.class, int.class, int.class, float.class);
+                constructor.setAccessible(true);
+                return (android.view.Display.Mode) constructor.newInstance(host.getModeId(), width, height, refresh);
+            }
+        } catch (Throwable error) {
+            log("display mode construction unavailable", error);
+            return host;
+        }
+    }
+
+    static android.view.Display.Mode[] profileModes(android.view.Display.Mode[] host, android.view.Display.Mode current) {
+        if (host == null || current == null) return host;
+        float requestedRefresh = -1;
+        try { requestedRefresh = Float.parseFloat(prop("cloak.display.refresh")); } catch (NumberFormatException ignored) { }
+        if (parseInt(prop("cloak.display.width"), -1) <= 0 && parseInt(prop("cloak.display.height"), -1) <= 0
+                && (!Float.isFinite(requestedRefresh) || requestedRefresh <= 0)) return host;
+        android.view.Display.Mode selected = profileMode(current);
+        android.view.Display.Mode[] result = host.clone();
+        for (int i = 0; i < result.length; i++) {
+            if (result[i].getModeId() == selected.getModeId()) {
+                if (result[i].getPhysicalWidth() == selected.getPhysicalWidth()
+                        && result[i].getPhysicalHeight() == selected.getPhysicalHeight()
+                        && Float.compare(result[i].getRefreshRate(), selected.getRefreshRate()) == 0) return host;
+                result[i] = selected; return result;
+            }
+        }
+        result = java.util.Arrays.copyOf(result, result.length + 1);
+        result[result.length - 1] = selected;
+        return result;
+    }
+
+    private static final class DisplayModeHook extends MethodHook {
+        private final boolean supported;
+        DisplayModeHook(boolean supported) { this.supported = supported; }
+        @Override public void afterCall(Pine.CallFrame frame) {
+            if (frame.hasThrowable()) return;
+            Object result = frame.getResult();
+            if (!supported && result instanceof android.view.Display.Mode) {
+                frame.setResult(profileMode((android.view.Display.Mode) result));
+            } else if (supported && result instanceof android.view.Display.Mode[] && frame.thisObject instanceof android.view.Display) {
+                android.view.Display display = (android.view.Display) frame.thisObject;
+                // getMode may already be rewritten. Compare against each original mode, not object identity.
+                android.view.Display.Mode current = display.getMode();
+                android.view.Display.Mode[] modes = (android.view.Display.Mode[]) result;
+                if (current != null) {
+                    for (android.view.Display.Mode mode : modes) {
+                        if (mode.getModeId() == current.getModeId()) { current = mode; break; }
+                    }
+                }
+                frame.setResult(profileModes(modes, current));
+            }
+        }
     }
 
     /**
@@ -299,14 +380,18 @@ public final class HookBridge {
                 } catch (ClassNotFoundException ignored) {
                     // The SDK is optional; this app does not use it.
                 }
-                String language = prop("persist.sys.language");
-                String country = prop(PROP_COUNTRY);
-                if (!language.isEmpty()) Locale.setDefault(Locale.forLanguageTag(
-                    language + (country.isEmpty() ? "" : "-" + country)));
-                String zone = prop("persist.sys.timezone");
-                if (!zone.isEmpty()) TimeZone.setDefault(TimeZone.getTimeZone(zone));
+                applyLocaleDefaults();
             }
         }, android.app.Application.class);
+    }
+
+    static void applyLocaleDefaults() {
+        String language = prop("persist.sys.language");
+        String country = prop(PROP_COUNTRY);
+        if (!language.isEmpty()) Locale.setDefault(Locale.forLanguageTag(
+            language + (country.isEmpty() ? "" : "-" + country)));
+        String zone = prop("persist.sys.timezone");
+        if (!zone.isEmpty()) TimeZone.setDefault(TimeZone.getTimeZone(zone));
     }
 
     private static void installGsf() throws ClassNotFoundException {

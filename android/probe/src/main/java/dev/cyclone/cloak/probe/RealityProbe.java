@@ -166,10 +166,26 @@ final class RealityProbe {
                 String name = names.getString(i); String key = section + "." + name;
                 // Wi-Fi's network SSID has different semantics from a local device name.
                 Object value = key.equals("radio.wifi_name") ? null : expected == null ? null : expected.opt(name);
+                for (int j = 0; j < contractFields.length(); j++) {
+                    JSONObject field = contractFields.getJSONObject(j);
+                    if (field.optString("reader_key").equals(key) && !field.isNull("linked_base_path"))
+                        value = LinkedParityReport.at(profile, field.getString("linked_base_path"));
+                }
                 rows.put(RealityReport.row("reality." + key, value, readers.get(key)));
             }
         }
-        return new JSONObject().put("format", 1).put("rows", rows);
+        Map<String, RealityReport.Reader> linked = new HashMap<>();
+        for (int i = 0; i < contractFields.length(); i++) {
+            JSONObject field = contractFields.getJSONObject(i);
+            if (!field.isNull("linked_base_path")) linked.put(field.getString("field_path"), readers.get(field.getString("reader_key")));
+        }
+        linked.put("linked.simOperator", telephony::getSimOperator);
+        linked.put("linked.activeModemCount", () -> {
+            if (Build.VERSION.SDK_INT < 30) throw new NoSuchMethodException("ACTIVE_MODEM_COUNT_API_30");
+            return telephony.getActiveModemCount();
+        });
+        linked.put("linked.supportedModes", readers.get("panel.modes"));
+        return new JSONObject().put("format", 1).put("rows", rows).put("linked_parity", LinkedParityReport.build(profile, contractTable, linked));
     }
     private static String numeric(String operator, boolean mcc) {
         return operator != null && operator.matches("[0-9]{5,6}") ? mcc ? operator.substring(0, 3) : operator.substring(3) : null;

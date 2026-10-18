@@ -30,7 +30,7 @@ class RealityCoverageCardTest {
         compose.onNodeWithText("Local coherence: 100/100 · Schema 0.4").assertIsDisplayed()
         compose.onNodeWithText("Missing optional sections:", substring = true).assertExists()
         compose.onNodeWithText("Runtime contract: present").assertExists()
-        compose.onNodeWithText("applied 0", substring = true).assertExists()
+        compose.onNodeWithText("applied 10", substring = true).assertExists()
         compose.onNodeWithText("drm: 1 blocked").performScrollTo().assertIsDisplayed()
         compose.onNodeWithText(p.getJSONObject("reality").getString("inventory_id"), substring = true).assertDoesNotExist()
         compose.onNodeWithText(p.getString("seed"), substring = true).assertDoesNotExist()
@@ -42,4 +42,15 @@ class RealityCoverageCardTest {
         compose.onNodeWithText("Local coherence: not recorded · Schema 0.3").assertIsDisplayed()
         compose.onNodeWithText("Runtime contract: not present").assertExists()
     }
+    @Test fun mismatchesAreVisibleWithoutPrivateValues() {
+        val p = CloakForge.forgeProfile("Reality", "ab".repeat(32), TestPhones["pixel_7"], "0.4")
+        p.getJSONObject("reality").getJSONObject("panel").getJSONObject("values").put("width", p.getJSONObject("display").getInt("width") + 1)
+        compose.setContent { CloakTheme { Column(Modifier.verticalScroll(rememberScrollState())) { RealityCoverageCard(p) } } }
+        compose.onNodeWithText("Reality coverage").performClick()
+        compose.onNodeWithText("Linked parity: 9/10 matched · 1 mismatched").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("MISMATCHED: reality.panel.values.width → display.width").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText("Local parity is not a platform verdict.").performScrollTo().assertIsDisplayed()
+        compose.onNodeWithText(p.getString("seed"), substring = true).assertDoesNotExist()
+    }
+
 }

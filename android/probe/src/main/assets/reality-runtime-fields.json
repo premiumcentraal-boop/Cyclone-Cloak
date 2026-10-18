@@ -1,5 +1,5 @@
 {
-  "format": 1,
+  "format": 2,
   "fields": [
     {
       "field_path": "reality.cameras.availability",
@@ -9,7 +9,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.cameras.reason",
@@ -19,7 +22,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.cameras.source",
@@ -29,7 +35,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.cameras.values.count",
@@ -39,7 +48,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "cameras.count"
+      "reader_key": "cameras.count",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.cameras.values.inventory",
@@ -49,7 +61,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "cameras.inventory"
+      "reader_key": "cameras.inventory",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.cameras.values.inventory[].facing",
@@ -59,7 +74,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "cameras.inventory"
+      "reader_key": "cameras.inventory",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.cameras.values.inventory[].hardware_level",
@@ -69,7 +87,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "cameras.inventory"
+      "reader_key": "cameras.inventory",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.cameras.values.inventory[].id",
@@ -79,7 +100,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "cameras.inventory"
+      "reader_key": "cameras.inventory",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.cameras.values.inventory[].megapixels",
@@ -89,7 +113,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "cameras.inventory"
+      "reader_key": "cameras.inventory",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.carrier.availability",
@@ -99,7 +126,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.carrier.reason",
@@ -109,7 +139,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.carrier.source",
@@ -119,7 +152,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.carrier.values.country",
@@ -129,27 +165,36 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "carrier.country"
+      "reader_key": "carrier.country",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.carrier.values.mcc",
       "surface": "android.telephony.TelephonyManager.getSimOperator():mcc",
-      "status": "PARTIAL",
+      "status": "APPLIED",
       "safe_representation": true,
-      "requires_future_runtime_work": true,
+      "requires_future_runtime_work": false,
       "metadata_only": false,
-      "reason": "Linked base-profile surface only; Reality is not consumed by the module and coverage is incomplete.",
-      "reader_key": "carrier.mcc"
+      "reason": "BASE_RUNTIME_SURFACE_REQUIRES_EXACT_PARITY",
+      "reader_key": "carrier.mcc",
+      "linked_base_path": "telephony.mcc",
+      "parity_requirement": "EXACT",
+      "runtime_covered": true
     },
     {
       "field_path": "reality.carrier.values.mnc",
       "surface": "android.telephony.TelephonyManager.getSimOperator():mnc",
-      "status": "PARTIAL",
+      "status": "APPLIED",
       "safe_representation": true,
-      "requires_future_runtime_work": true,
+      "requires_future_runtime_work": false,
       "metadata_only": false,
-      "reason": "Linked base-profile surface only; Reality is not consumed by the module and coverage is incomplete.",
-      "reader_key": "carrier.mnc"
+      "reason": "BASE_RUNTIME_SURFACE_REQUIRES_EXACT_PARITY",
+      "reader_key": "carrier.mnc",
+      "linked_base_path": "telephony.mnc",
+      "parity_requirement": "EXACT",
+      "runtime_covered": true
     },
     {
       "field_path": "reality.carrier.values.sim_state",
@@ -159,17 +204,23 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "carrier.sim_state"
+      "reader_key": "carrier.sim_state",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.carrier.values.slots",
       "surface": "android.telephony.TelephonyManager.getPhoneCount()",
-      "status": "PARTIAL",
+      "status": "APPLIED",
       "safe_representation": true,
-      "requires_future_runtime_work": true,
+      "requires_future_runtime_work": false,
       "metadata_only": false,
-      "reason": "Linked base-profile surface only; Reality is not consumed by the module and coverage is incomplete.",
-      "reader_key": "carrier.slots"
+      "reason": "BASE_RUNTIME_SURFACE_REQUIRES_EXACT_PARITY",
+      "reader_key": "carrier.slots",
+      "linked_base_path": "telephony.sim_slot_count",
+      "parity_requirement": "EXACT",
+      "runtime_covered": true
     },
     {
       "field_path": "reality.compute.availability",
@@ -179,7 +230,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.compute.reason",
@@ -189,7 +243,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.compute.source",
@@ -199,7 +256,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.compute.values.abis",
@@ -209,7 +269,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "compute.abis"
+      "reader_key": "compute.abis",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.compute.values.abis[]",
@@ -219,7 +282,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "compute.abis"
+      "reader_key": "compute.abis",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.compute.values.cpu_cores",
@@ -229,7 +295,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "No current reader or runtime mapping; separate authorized implementation required.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.compute.values.gpu",
@@ -239,7 +308,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "No current reader or runtime mapping; separate authorized implementation required.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.compute.values.soc",
@@ -249,7 +321,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "compute.soc"
+      "reader_key": "compute.soc",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.drm.availability",
@@ -259,7 +334,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.drm.reason",
@@ -269,7 +347,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.drm.source",
@@ -279,7 +360,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.drm.values.security_level",
@@ -289,7 +373,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Read-only host capability or safety state; descriptive metadata only, never an enforcement target.",
-      "reader_key": "drm.security_level"
+      "reader_key": "drm.security_level",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.environment.availability",
@@ -299,7 +386,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.environment.reason",
@@ -309,7 +399,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.environment.source",
@@ -319,7 +412,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.environment.values.accessibility_enabled",
@@ -329,17 +425,23 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "environment.accessibility_enabled"
+      "reader_key": "environment.accessibility_enabled",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.environment.values.country",
       "surface": "java.util.Locale.getDefault().getCountry()",
-      "status": "PARTIAL",
+      "status": "APPLIED",
       "safe_representation": true,
-      "requires_future_runtime_work": true,
+      "requires_future_runtime_work": false,
       "metadata_only": false,
-      "reason": "Linked base-profile surface only; Reality is not consumed by the module and coverage is incomplete.",
-      "reader_key": "environment.country"
+      "reason": "BASE_RUNTIME_SURFACE_REQUIRES_EXACT_PARITY",
+      "reader_key": "environment.country",
+      "linked_base_path": "locale.country",
+      "parity_requirement": "EXACT",
+      "runtime_covered": true
     },
     {
       "field_path": "reality.environment.values.input_method",
@@ -349,7 +451,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "environment.input_method"
+      "reader_key": "environment.input_method",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.environment.values.keyboard_layout",
@@ -359,27 +464,36 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "No current reader or runtime mapping; separate authorized implementation required.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.environment.values.language",
       "surface": "java.util.Locale.getDefault().getLanguage()",
-      "status": "PARTIAL",
+      "status": "APPLIED",
       "safe_representation": true,
-      "requires_future_runtime_work": true,
+      "requires_future_runtime_work": false,
       "metadata_only": false,
-      "reason": "Linked base-profile surface only; Reality is not consumed by the module and coverage is incomplete.",
-      "reader_key": "environment.language"
+      "reason": "BASE_RUNTIME_SURFACE_REQUIRES_EXACT_PARITY",
+      "reader_key": "environment.language",
+      "linked_base_path": "locale.language",
+      "parity_requirement": "EXACT",
+      "runtime_covered": true
     },
     {
       "field_path": "reality.environment.values.timezone",
       "surface": "java.util.TimeZone.getDefault().getID()",
-      "status": "PARTIAL",
+      "status": "APPLIED",
       "safe_representation": true,
-      "requires_future_runtime_work": true,
+      "requires_future_runtime_work": false,
       "metadata_only": false,
-      "reason": "Linked base-profile surface only; Reality is not consumed by the module and coverage is incomplete.",
-      "reader_key": "environment.timezone"
+      "reason": "BASE_RUNTIME_SURFACE_REQUIRES_EXACT_PARITY",
+      "reader_key": "environment.timezone",
+      "linked_base_path": "locale.timezone",
+      "parity_requirement": "EXACT",
+      "runtime_covered": true
     },
     {
       "field_path": "reality.inventory_id",
@@ -389,7 +503,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.memory.availability",
@@ -399,7 +516,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.memory.reason",
@@ -409,7 +529,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.memory.source",
@@ -419,7 +542,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.memory.values.free_storage_gib",
@@ -429,7 +555,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "memory.free_storage_gib"
+      "reader_key": "memory.free_storage_gib",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.memory.values.ram_gib",
@@ -439,7 +568,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "memory.ram_gib"
+      "reader_key": "memory.ram_gib",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.memory.values.storage_gib",
@@ -449,7 +581,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "No current reader or runtime mapping; separate authorized implementation required.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.packages.availability",
@@ -459,7 +594,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.packages.reason",
@@ -469,7 +607,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.packages.source",
@@ -479,7 +620,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.packages.values.installed",
@@ -489,7 +633,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "packages.installed"
+      "reader_key": "packages.installed",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.packages.values.installed[].package",
@@ -499,7 +646,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "packages.installed"
+      "reader_key": "packages.installed",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.packages.values.installed[].version_code",
@@ -509,7 +659,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "packages.installed"
+      "reader_key": "packages.installed",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.packages.values.installed[].version_name",
@@ -519,7 +672,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "packages.installed"
+      "reader_key": "packages.installed",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.panel.availability",
@@ -529,7 +685,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.panel.reason",
@@ -539,7 +698,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.panel.source",
@@ -549,27 +711,36 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.panel.values.density_dpi",
       "surface": "android.view.Display.getRealMetrics().densityDpi",
-      "status": "PARTIAL",
+      "status": "APPLIED",
       "safe_representation": true,
-      "requires_future_runtime_work": true,
+      "requires_future_runtime_work": false,
       "metadata_only": false,
-      "reason": "Linked base-profile surface only; Reality is not consumed by the module and coverage is incomplete.",
-      "reader_key": "panel.density_dpi"
+      "reason": "BASE_RUNTIME_SURFACE_REQUIRES_EXACT_PARITY",
+      "reader_key": "panel.density_dpi",
+      "linked_base_path": "display.density",
+      "parity_requirement": "EXACT",
+      "runtime_covered": true
     },
     {
       "field_path": "reality.panel.values.height",
       "surface": "android.view.Display.getMode().getPhysicalHeight()",
-      "status": "PARTIAL",
+      "status": "APPLIED",
       "safe_representation": true,
-      "requires_future_runtime_work": true,
+      "requires_future_runtime_work": false,
       "metadata_only": false,
-      "reason": "Linked base-profile surface only; Reality is not consumed by the module and coverage is incomplete.",
-      "reader_key": "panel.height"
+      "reason": "BASE_RUNTIME_SURFACE_REQUIRES_EXACT_PARITY",
+      "reader_key": "panel.height",
+      "linked_base_path": "display.height",
+      "parity_requirement": "EXACT",
+      "runtime_covered": true
     },
     {
       "field_path": "reality.panel.values.modes",
@@ -579,7 +750,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "panel.modes"
+      "reader_key": "panel.modes",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.panel.values.modes[].height",
@@ -589,7 +763,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "panel.modes"
+      "reader_key": "panel.modes",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.panel.values.modes[].refresh_hz",
@@ -599,7 +776,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "panel.modes"
+      "reader_key": "panel.modes",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.panel.values.modes[].width",
@@ -609,17 +789,23 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "panel.modes"
+      "reader_key": "panel.modes",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.panel.values.refresh_hz",
       "surface": "android.view.Display.getMode().getRefreshRate()",
-      "status": "PARTIAL",
+      "status": "APPLIED",
       "safe_representation": true,
-      "requires_future_runtime_work": true,
+      "requires_future_runtime_work": false,
       "metadata_only": false,
-      "reason": "Linked base-profile surface only; Reality is not consumed by the module and coverage is incomplete.",
-      "reader_key": "panel.refresh_hz"
+      "reason": "BASE_RUNTIME_SURFACE_REQUIRES_EXACT_PARITY",
+      "reader_key": "panel.refresh_hz",
+      "linked_base_path": "display.refresh_rate_hz",
+      "parity_requirement": "EXACT",
+      "runtime_covered": true
     },
     {
       "field_path": "reality.panel.values.technology",
@@ -629,17 +815,23 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "No safe public surface with equivalent semantics; descriptive metadata only.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.panel.values.width",
       "surface": "android.view.Display.getMode().getPhysicalWidth()",
-      "status": "PARTIAL",
+      "status": "APPLIED",
       "safe_representation": true,
-      "requires_future_runtime_work": true,
+      "requires_future_runtime_work": false,
       "metadata_only": false,
-      "reason": "Linked base-profile surface only; Reality is not consumed by the module and coverage is incomplete.",
-      "reader_key": "panel.width"
+      "reason": "BASE_RUNTIME_SURFACE_REQUIRES_EXACT_PARITY",
+      "reader_key": "panel.width",
+      "linked_base_path": "display.width",
+      "parity_requirement": "EXACT",
+      "runtime_covered": true
     },
     {
       "field_path": "reality.power.availability",
@@ -649,7 +841,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.power.reason",
@@ -659,7 +854,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.power.source",
@@ -669,7 +867,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.power.values.battery_percent",
@@ -679,7 +880,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Read-only host capability or safety state; descriptive metadata only, never an enforcement target.",
-      "reader_key": "power.battery_percent"
+      "reader_key": "power.battery_percent",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.power.values.battery_state",
@@ -689,7 +893,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Read-only host capability or safety state; descriptive metadata only, never an enforcement target.",
-      "reader_key": "power.battery_state"
+      "reader_key": "power.battery_state",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.power.values.charging_source",
@@ -699,7 +906,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Read-only host capability or safety state; descriptive metadata only, never an enforcement target.",
-      "reader_key": "power.charging_source"
+      "reader_key": "power.charging_source",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.power.values.design_capacity_mah",
@@ -709,7 +919,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "No safe public surface with equivalent semantics; descriptive metadata only.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.power.values.power_save",
@@ -719,7 +932,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Read-only host capability or safety state; descriptive metadata only, never an enforcement target.",
-      "reader_key": "power.power_save"
+      "reader_key": "power.power_save",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.power.values.temperature_c",
@@ -729,7 +945,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Read-only host capability or safety state; descriptive metadata only, never an enforcement target.",
-      "reader_key": "power.temperature_c"
+      "reader_key": "power.temperature_c",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.power.values.thermal_status",
@@ -739,7 +958,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Read-only host capability or safety state; descriptive metadata only, never an enforcement target.",
-      "reader_key": "power.thermal_status"
+      "reader_key": "power.thermal_status",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.radio.availability",
@@ -749,7 +971,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.radio.reason",
@@ -759,7 +984,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.radio.source",
@@ -769,7 +997,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.radio.values.bluetooth_name",
@@ -779,7 +1010,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "radio.bluetooth_name"
+      "reader_key": "radio.bluetooth_name",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.radio.values.bluetooth_state",
@@ -789,7 +1023,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "radio.bluetooth_state"
+      "reader_key": "radio.bluetooth_state",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.radio.values.wifi_name",
@@ -799,7 +1036,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "No safe public surface with equivalent semantics; descriptive metadata only.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.radio.values.wifi_state",
@@ -809,7 +1049,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "radio.wifi_state"
+      "reader_key": "radio.wifi_state",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.sensors.availability",
@@ -819,7 +1062,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.sensors.reason",
@@ -829,7 +1075,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.sensors.source",
@@ -839,7 +1088,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.sensors.values.inventory",
@@ -849,7 +1101,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "sensors.inventory"
+      "reader_key": "sensors.inventory",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.sensors.values.inventory[].max_delay_us",
@@ -859,7 +1114,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "sensors.inventory"
+      "reader_key": "sensors.inventory",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.sensors.values.inventory[].min_delay_us",
@@ -869,7 +1127,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "sensors.inventory"
+      "reader_key": "sensors.inventory",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.sensors.values.inventory[].name",
@@ -879,7 +1140,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "sensors.inventory"
+      "reader_key": "sensors.inventory",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.sensors.values.inventory[].range",
@@ -889,7 +1153,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "sensors.inventory"
+      "reader_key": "sensors.inventory",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.sensors.values.inventory[].resolution",
@@ -899,7 +1166,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "sensors.inventory"
+      "reader_key": "sensors.inventory",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.sensors.values.inventory[].type",
@@ -909,7 +1179,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "sensors.inventory"
+      "reader_key": "sensors.inventory",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.webview.availability",
@@ -919,7 +1192,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.webview.reason",
@@ -929,7 +1205,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.webview.source",
@@ -939,7 +1218,10 @@
       "requires_future_runtime_work": false,
       "metadata_only": true,
       "reason": "Local provenance or inventory metadata; never runtime-applied.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.webview.values.provider",
@@ -949,7 +1231,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "webview.provider"
+      "reader_key": "webview.provider",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.webview.values.user_agent",
@@ -959,7 +1244,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "No current reader or runtime mapping; separate authorized implementation required.",
-      "reader_key": null
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     },
     {
       "field_path": "reality.webview.values.version",
@@ -969,7 +1257,10 @@
       "requires_future_runtime_work": true,
       "metadata_only": false,
       "reason": "Read-only host observation; Reality is not consumed by the module.",
-      "reader_key": "webview.version"
+      "reader_key": "webview.version",
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
     }
   ]
 }

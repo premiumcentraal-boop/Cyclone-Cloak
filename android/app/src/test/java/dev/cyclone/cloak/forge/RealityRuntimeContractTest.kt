@@ -15,7 +15,9 @@ class RealityRuntimeContractTest {
         assertFalse(contract.toString().contains(p.getString("seed")))
         val source = JSONObject(javaClass.classLoader!!.getResource("reality-runtime-fields.json")!!.readText())
         val rows = contract.getJSONArray("fields")
-        for (i in 0 until rows.length()) rows.getJSONObject(i).remove("present")
+        for (i in 0 until rows.length()) {
+            rows.getJSONObject(i).remove("present"); rows.getJSONObject(i).remove("parity_state"); rows.getJSONObject(i).remove("parity_passed")
+        }
         assertTrue(rows.similar(source.getJSONArray("fields")))
     }
     @Test fun oldProfilesAndFutureSectionsRemainReadable() {
@@ -47,7 +49,7 @@ class RealityRuntimeContractTest {
     }
     @Test fun readinessIsNotVerification() {
         val summary = RealityCoverage.summarize(profile()).runtime!!
-        assertEquals(0, summary.counts[RealityRuntimeContract.Status.APPLIED]); assertEquals(97, summary.counts.values.sum())
+        assertEquals(10, summary.counts[RealityRuntimeContract.Status.APPLIED]); assertEquals(97, summary.counts.values.sum())
         assertTrue(summary.missingSurfaces.isNotEmpty())
     }
     @Test fun reportCompatibilityAndUnprovenMatchRejected() {
