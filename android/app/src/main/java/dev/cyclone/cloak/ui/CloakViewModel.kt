@@ -117,6 +117,7 @@ data class CloakState(
     val backupMessage: String? = null,
     val backups: List<Pair<String, JSONObject>> = emptyList(),
     val workshop: BatchWorkshopState? = null,
+    val compatibleCreation: Boolean = false,
 ) {
     val uniqueness: ProfileUniqueness get() = ProfileUniqueness(identities)
     val registry: List<CycloneProfile> get() = (report?.snapshot ?: connection.cached?.snapshot)?.registry.orEmpty()
@@ -564,7 +565,19 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun openBatchWorkshop() { _state.update { it.copy(workshop = BatchWorkshopState()) } }
-    fun closeBatchWorkshop() { if (_state.value.busy == null) _state.update { it.copy(workshop = null) } }
+    fun newCompatibleDevice() { if (_state.value.busy == null) _state.update { it.copy(workshop = BatchWorkshopState(), compatibleCreation = true) } }
+    fun closeBatchWorkshop() { if (_state.value.busy == null) _state.update { it.copy(workshop = null, compatibleCreation = false) } }
+    fun assignCreatedDevice(identityId: String, profileId: String) {
+        if (_state.value.busy != null) return
+        val workshop = _state.value.workshop ?: return
+        val saved = workshop.results.filter { it.status == "SAVED" }.map { it.key }.toSet()
+        if (workshop.plan?.drafts?.none { it.key in saved && it.profile?.optString("id") == identityId } != false) return
+        val profile = _state.value.registry.firstOrNull { it.id == profileId } ?: return
+        val input = bindingInputs(freshLocal = true)
+        val draft = ProfileOperations.draft(profile, input, ProfileAction.BIND_ALL).copy(identityId = identityId, step = BindingStep.REVIEW)
+        _state.update { it.copy(workshop = null, compatibleCreation = false,
+            bindingFlow = draft.copy(reviewStamp = BindingFlow.stamp(draft, input))) }
+    }
     private fun batchWork(label: String, block: () -> Unit) = launchWork(label) {
         try { block() } catch (failure: Exception) {
             val reason = when (failure) {
@@ -576,9 +589,11 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
     fun previewBatch(templateIds: List<String>, count: Int, prefix: String) = batchWork("Planning local drafts…") {
+        val library = CloakStore.all(app).map { it.second }
+        val labelPrefix = if (_state.value.compatibleCreation) ProfileOperations.availablePrefix(prefix, library) else prefix
         val plan = dev.cyclone.cloak.forge.BatchIdentityPlanner().plan(
-            dev.cyclone.cloak.forge.BatchIdentityPlanner.Request(templateIds, count, CloakForge.newSeed(), prefix),
-            _state.value.phones, CloakStore.all(app).map { it.second })
+            dev.cyclone.cloak.forge.BatchIdentityPlanner.Request(templateIds, count, CloakForge.newSeed(), labelPrefix),
+            _state.value.phones, library)
         _state.update { it.copy(workshop = BatchWorkshopState(plan)) }
     }
     fun regenerateBatch(selected: Set<String>) = batchWork("Regenerating drafts…") {
@@ -730,6 +745,18 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         if (_state.value.busy != null || _state.value.bindingFlow?.running == true) return
         _state.update { it.copy(bindingFlow = BindingDraft(identityId = identityId)) }
     }
+    fun profileOperation(profileId: String, action: ProfileAction) {
+        if (_state.value.busy != null || _state.value.bindingFlow?.running == true) return
+        val input = bindingInputs(freshLocal = true)
+        val profile = input.profiles.firstOrNull { it.id == profileId } ?: return
+        val draft = ProfileOperations.draft(profile, input, action)
+        // Bind-all reuses an unambiguous current identity; otherwise ask the user to choose one.
+        val reviewed = draft.copy(step = BindingStep.REVIEW)
+        if (ProfileOperations.oneTapBindAll(reviewed, input)) {
+            _state.update { it.copy(bindingFlow = reviewed.copy(acknowledged = true, reviewStamp = BindingFlow.stamp(reviewed, input))) }
+            confirmBindingFlow()
+        } else _state.update { it.copy(bindingFlow = draft) }
+    }
     fun closeBindingFlow() {
         _state.update { if (it.bindingFlow?.running == true) it else it.copy(bindingFlow = null) }
     }
@@ -741,7 +768,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
     private fun changeBinding(transform: (BindingDraft) -> BindingDraft) {
         _state.update { state -> state.copy(bindingFlow = state.bindingFlow?.let { if (it.running) it else transform(it) }) }
     }
-    fun chooseBindingProfile(id: String) = changeBinding { BindingFlow.chooseProfile(it, id) }
+    fun chooseBindingProfile(id: String) = changeBinding { if (it.action == ProfileAction.REPLACE) it else BindingFlow.chooseProfile(it, id) }
     fun chooseBindingApps(packages: Set<String>) = changeBinding { BindingFlow.selectApps(it, packages) }
     fun chooseBindingIdentity(id: String) = changeBinding { it.copy(identityId = id, reviewStamp = null, acknowledged = false, note = null) }
     fun acknowledgeBinding(value: Boolean) = changeBinding { it.copy(acknowledged = value) }
@@ -752,8 +779,13 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
     fun backBindingStep() {
         val flow = _state.value.bindingFlow ?: return
         if (flow.running) return
-        if (flow.step == BindingStep.PROFILE) return closeBindingFlow()
-        changeBinding { it.copy(step = if (it.step == BindingStep.RESULT) BindingStep.REVIEW else BindingStep.entries[it.step.ordinal - 1],
+        if (flow.step == BindingStep.PROFILE || (flow.action != ProfileAction.BIND && flow.step == BindingStep.IDENTITY)) return closeBindingFlow()
+        changeBinding { it.copy(step = when {
+            it.step == BindingStep.RESULT -> BindingStep.REVIEW
+            it.action == ProfileAction.REPLACE && it.step == BindingStep.REVIEW -> BindingStep.APP
+            it.action == ProfileAction.REPLACE && it.step == BindingStep.APP -> BindingStep.IDENTITY
+            else -> BindingStep.entries[it.step.ordinal - 1]
+        },
             reviewStamp = null, acknowledged = false, outcome = null, note = null) }
         if (_state.value.bindingFlow?.step == BindingStep.REVIEW) changeBinding { it.copy(reviewStamp = BindingFlow.stamp(it, bindingInputs())) }
     }
@@ -783,7 +815,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         val draft = _state.value.bindingFlow ?: return
         if (draft.running || _state.value.busy != null || !BindingFlow.canConfirm(draft, bindingInputs())) return
         changeBinding { it.copy(running = true) }
-        launchBindingWork("Saving binding…", RunOperation.BIND, draftTargets(draft)) {
+        launchBindingWork("Saving binding…", if (draft.action == ProfileAction.REPLACE) RunOperation.REPLACE else RunOperation.BIND, draftTargets(draft)) {
             try {
                 val input = bindingInputs(freshLocal = true)
                 if (!BindingFlow.canConfirm(draft, input)) {
@@ -815,7 +847,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         launchBindingWork("Retrying reconciliation…", RunOperation.RETRY_RECONCILIATION, draftTargets(draft)) {
             try {
                 val input = bindingInputs(freshLocal = true)
-                val errors = BindingFlow.findings(draft, input).filter { it.isError }
+                val errors = BindingFlow.findings(draft.copy(action = ProfileAction.BIND), input).filter { it.isError }
                 require(BindingFlow.saved(draft, input.bindings))
                 if (errors.isNotEmpty()) {
                     _state.update { it.copy(bindingFlow = draft.copy(running = false, outcome = BindingOutcome(false, true,
@@ -967,7 +999,9 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
 
     private fun draftTargets(draft: BindingDraft): List<RunTarget> = listOf(RunTarget(draft.profileId.orEmpty(),
         _state.value.registry.firstOrNull { it.id == draft.profileId }?.androidUserId,
-        draft.packageNames.sorted(), draft.identityId.orEmpty()))
+        draft.packageNames.sorted(), draft.identityId.orEmpty(), previousDeviceProfiles =
+            _state.value.bindings.filter { it.profileId == draft.profileId && it.packageName in draft.packageNames }
+                .associate { it.packageName to it.cloakProfileId }))
 
     /** Reuse publication/sync only; never restore a historical record or re-enable a binding. */
     fun retryRun(run: BindingRun) {
@@ -994,7 +1028,9 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
     private fun saveBindingRecords(records: List<CloakBinding>, expected: List<CloakBinding>? = null) {
         currentRun?.let { observation -> observation.resolvedTargets = observation.resolvedTargets.orEmpty() +
             records.groupBy { it.profileId to it.cloakProfileId }.values.map { group ->
-                RunTarget(group.first().profileId, group.first().androidUserId, group.map { it.packageName }, group.first().cloakProfileId)
+                RunTarget(group.first().profileId, group.first().androidUserId, group.map { it.packageName }, group.first().cloakProfileId,
+                    previousDeviceProfiles = expected.orEmpty().filter { old -> old.profileId == group.first().profileId && group.any { it.packageName == old.packageName } }
+                        .associate { it.packageName to it.cloakProfileId })
             } }
         CloakBindingStore.update(app) { current ->
             require(expected == null || current == expected) { "Bindings changed. Return to review before saving." }

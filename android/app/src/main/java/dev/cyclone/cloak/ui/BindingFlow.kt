@@ -20,6 +20,9 @@ data class BindingDraft(
     val running: Boolean = false,
     val outcome: BindingOutcome? = null,
     val note: String? = null,
+    val action: ProfileAction = ProfileAction.BIND,
+    val originalUser: Int? = null,
+    val originalBindings: List<CloakBinding> = emptyList(),
 )
 data class BindingInputs(
     val profiles: List<CycloneProfile>, val identities: List<Pair<String, JSONObject>>,
@@ -31,6 +34,7 @@ data class BindingOutcome(val ready: Boolean, val saved: Boolean, val message: S
 object BindingFlow {
     fun findings(draft: BindingDraft, input: BindingInputs): List<ProfileValidator.Finding> {
         val out = mutableListOf<ProfileValidator.Finding>()
+        out += ProfileOperations.replacementFindings(draft, input)
         fun issue(field: String, code: String, message: String, warning: Boolean = false) {
             out += ProfileValidator.Finding(if (warning) ProfileValidator.WARNING else ProfileValidator.ERROR, code, message, field)
         }
@@ -89,7 +93,7 @@ object BindingFlow {
     fun stamp(draft: BindingDraft, input: BindingInputs): String {
         val profile = input.profiles.firstOrNull { it.id == draft.profileId }
         val identity = input.identities.firstOrNull { it.first == draft.identityId }?.second
-        val text = listOf(profile.toString(), draft.packageNames.sorted().joinToString("\n"), identity?.toString(),
+        val text = listOf(draft.action, draft.originalUser, draft.originalBindings, profile.toString(), draft.packageNames.sorted().joinToString("\n"), identity?.toString(),
             input.bindings.toString(), input.canBind, input.ownProfileId, findings(draft, input).toString()).joinToString("\n")
         return MessageDigest.getInstance("SHA-256").digest(text.toByteArray()).joinToString("") { "%02x".format(it) }
     }
@@ -118,7 +122,7 @@ object BindingFlow {
         return draft.packageNames.sorted().map { pkg ->
             val existing = input.bindings.singleOrNull { it.profileId == profile.id && it.packageName == pkg }
             existing?.copy(androidUserId = profile.androidUserId!!, cloakProfileId = draft.identityId!!,
-                enabled = true, updatedAt = now, state = "pending") ?: CloakBinding(profile.id, profile.androidUserId!!,
+                enabled = if (draft.action == ProfileAction.REPLACE) existing.enabled else true, updatedAt = now, state = "pending") ?: CloakBinding(profile.id, profile.androidUserId!!,
                 pkg, draft.identityId!!, 0, true, now, "pending")
         }
     }
@@ -130,7 +134,8 @@ object BindingFlow {
     fun saved(draft: BindingDraft, records: List<CloakBinding>): Boolean =
         draft.packageNames.isNotEmpty() && draft.packageNames.all { pkg ->
             records.filter { it.profileId == draft.profileId && it.packageName == pkg }.singleOrNull()?.let {
-                it.enabled && it.cloakProfileId == draft.identityId && it.origin == CloakBinding.ORIGIN_LOCAL
+                (if (draft.action == ProfileAction.REPLACE) it.enabled == (draft.originalBindings.singleOrNull { old -> old.packageName == pkg }?.enabled ?: true) &&
+                    it.androidUserId == draft.originalUser else it.enabled) && it.cloakProfileId == draft.identityId && it.origin == CloakBinding.ORIGIN_LOCAL
             } == true
         }
     fun completion(draft: BindingDraft, root: RootDoctorResult, report: SyncReport?, records: List<CloakBinding>): BindingOutcome {
@@ -142,7 +147,7 @@ object BindingFlow {
             report?.issues?.get(bindingKey(draft.profileId!!, pkg))?.let { "$pkg: $it" }
         }.takeIf { it.isNotEmpty() }?.joinToString("\n")
         val ready = root.published && report?.headline == "Connected" && report.failureCode == null && report.gate?.bindings == true && reconcile != null &&
-            reconcile.stoppedBy == null && issue == null && held.all { CloakHealth.cycloneState(it.state) == CloakHealth.READY }
+            reconcile.stoppedBy == null && issue == null && held.filter { it.enabled }.all { CloakHealth.cycloneState(it.state) == CloakHealth.READY }
         val reason = when {
             !root.published -> "${root.title}: ${root.message}"
             issue != null -> issue

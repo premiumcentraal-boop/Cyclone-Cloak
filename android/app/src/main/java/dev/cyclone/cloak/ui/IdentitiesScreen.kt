@@ -29,7 +29,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -37,7 +36,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.cyclone.cloak.data.EngineMetadataStore
-import dev.cyclone.cloak.forge.CloakFleet
 import dev.cyclone.cloak.forge.RuntimeEvidence
 
 @OptIn(ExperimentalLayoutApi::class)
@@ -49,11 +47,6 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
         if (uri != null && target != null) vm.loadDiagnosticsForPosture(uri, target)
         diagnosticsTarget = null
     }
-    var phoneId by rememberSaveable { mutableStateOf<String?>(null) }
-    val phone = state.phone(phoneId) ?: state.phones.firstOrNull()
-    var name by rememberSaveable { mutableStateOf("") }
-    var count by rememberSaveable { mutableIntStateOf(5) }
-    var fleet by rememberSaveable { mutableStateOf(false) }
     var query by rememberSaveable { mutableStateOf("") }
     var selected by rememberSaveable { mutableStateOf<String?>(null) }
     var renaming by remember { mutableStateOf<Identity?>(null) }
@@ -78,69 +71,11 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        item { CloakSectionHeader("New identity") }
         item {
-            FilledTonalButton(onClick = vm::openBatchWorkshop, enabled = state.busy == null,
-                modifier = Modifier.fillMaxWidth()) { Text("Batch Identity Workshop") }
+            Button(onClick = vm::newCompatibleDevice, enabled = state.busy == null,
+                modifier = Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.small) { Text("New compatible device") }
+            TextButton(onClick = vm::openBatchWorkshop, enabled = state.busy == null) { Text("Advanced batch workshop") }
         }
-        item {
-            CloakGroup {
-                Column(Modifier.fillMaxWidth().padding(CloakSpace.inner), verticalArrangement = Arrangement.spacedBy(CloakSpace.item)) {
-                    Text(
-                        "A copy of a phone with its own fresh identifiers. They are generated, never read from your own phone.",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                    CloakSegmented(listOf(false to "One identity", true to "A fleet"), fleet, { fleet = it })
-                    CloakSelectField(
-                        label = "Phone",
-                        value = phone?.label ?: "No phones yet",
-                        options = state.phones,
-                        optionLabel = { it.label },
-                        optionSupporting = { it.summary.takeIf(String::isNotBlank) },
-                        onSelect = { phoneId = it.id },
-                        enabled = state.phones.isNotEmpty(),
-                    )
-                    phone?.let { Text(it.summary, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant) }
-                    if (!fleet) {
-                        OutlinedTextField(
-                            value = name,
-                            onValueChange = { if (it.length <= 64) name = it },
-                            modifier = Modifier.fillMaxWidth(),
-                            label = { Text("Name") },
-                            placeholder = { Text("For example, Work Pixel") },
-                            singleLine = true,
-                        )
-                        Button(
-                            onClick = { phone?.let { vm.createIdentity(name, it.id); name = "" } },
-                            enabled = name.isNotBlank() && phone != null && state.busy == null,
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = MaterialTheme.shapes.small,
-                        ) { Text("Create identity") }
-                    } else {
-                        Text(
-                            "Several identities from the same phone, named ${CloakFleet.FLEET_PREFIX} 01, 02, … Making the same fleet again gives the same identities.",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        )
-                        CloakStepper("Identities", count, 1..CloakFleet.MAX_FLEET_SIZE, { count = it })
-                        Button(
-                            onClick = { phone?.let { vm.forgeFleet(it.id, count) } },
-                            enabled = phone != null && state.busy == null,
-                            modifier = Modifier.fillMaxWidth(),
-                            shape = MaterialTheme.shapes.small,
-                        ) { Text("Create $count from ${phone?.label ?: "a phone"}") }
-                    }
-                    Text(
-                        if (state.identities.isEmpty()) "Next: bind the new identity to apps from its card below or in Profiles."
-                        else "After creating, bind it to apps from its card below.",
-                        style = MaterialTheme.typography.labelMedium,
-                        color = MaterialTheme.colorScheme.primary,
-                    )
-                }
-            }
-        }
-
         item {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 CloakActionButton("Import", Icons.Rounded.FileOpen, { importer.launch(arrayOf("*/*")) }, Modifier.weight(1f), outlined = true)

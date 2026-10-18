@@ -64,6 +64,11 @@ fun CloakApp(vm: CloakViewModel) {
     LaunchedEffect(vm) { vm.messages.collect { snackbar.showSnackbar(it) } }
 
     state.workshop?.let { workshop ->
+        if (state.compatibleCreation) {
+            CompatibleDeviceScreen(workshop, state.phones, state.registry, state.busy != null,
+                vm::previewBatch, vm::saveApprovedBatch, vm::assignCreatedDevice, vm::closeBatchWorkshop)
+            return
+        }
         BatchIdentityWorkshop(workshop, state.phones, state.busy != null,
             vm::previewBatch, vm::regenerateBatch, vm::removeBatch, vm::saveApprovedBatch,
             vm::importBatchPlan, vm::exportBatchPlan, vm::closeBatchWorkshop)

@@ -19,6 +19,10 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.platform.LocalContext
+import dev.cyclone.cloak.diagnostics.BindingRuns
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -34,6 +38,12 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
     val mainTarget = openTargets.firstOrNull { it.isOwner }
     var profileFilter by rememberSaveable { mutableStateOf<String?>(null) }
     var packageQuery by rememberSaveable { mutableStateOf("") }
+    var historyProfile by rememberSaveable { mutableStateOf<String?>(null) }
+    val context = LocalContext.current
+    val journal = remember(context) { BindingRuns.journal(context) }
+    val runs by journal.runs.collectAsState()
+    @Suppress("DEPRECATION")
+    val appVersion = remember(context) { context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: "unknown" }
     val profiles = state.registry.associateBy { it.id }
     val knownProfileIds = state.report?.snapshot?.registry?.map { it.id }?.toSet()
     val visibleBindings = filterBindings(state.bindings, profileFilter, packageQuery)
@@ -57,12 +67,12 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
         item {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                 CloakActionButton("Refresh", Icons.Rounded.Refresh, vm::refresh, Modifier.weight(1f), outlined = true)
-                CloakActionButton("Bind all", Icons.Rounded.Layers, vm::bulkBind, Modifier.weight(1f), outlined = true)
+                CloakActionButton("Assign fleet", Icons.Rounded.Layers, vm::bulkBind, Modifier.weight(1f), outlined = true)
             }
         }
         item {
             Text(
-                "Bind all gives every ready profile without bindings the next unused identity.",
+                "Assign fleet gives every ready profile without bindings the next unused identity.",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
@@ -110,7 +120,18 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
                 onClick = {},
                 onOpen = { vm.openInCyclone(profile) },
             )
+            if (!profile.isOwner) ProfileReadinessCard(profileReadiness(state, profile, appVersion, runs),
+                state.busy == null && !state.syncing && !managedElsewhere,
+                { vm.profileOperation(profile.id, ProfileAction.BIND_ALL) },
+                { vm.profileOperation(profile.id, ProfileAction.REPLACE) }, { historyProfile = profile.id })
         } } }
+
+        historyProfile?.let { id -> item {
+            CloakGroup { Column(Modifier.fillMaxWidth()) {
+                TextButton(onClick = { historyProfile = null }) { Text("Close run history") }
+                BindingRunsSection(state, vm::retryRun, id)
+            } }
+        } }
 
         item { CloakSectionHeader("Bound apps", state.bindings.size) }
         if (state.bindings.isNotEmpty()) {

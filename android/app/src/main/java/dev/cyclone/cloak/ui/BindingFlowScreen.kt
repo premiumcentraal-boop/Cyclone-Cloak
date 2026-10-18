@@ -31,7 +31,7 @@ internal fun BindingFlowScreen(
     Scaffold { padding ->
         Column(Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState()).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text("Bind a device profile", style = MaterialTheme.typography.headlineSmall)
+            Text(if (draft.action == ProfileAction.REPLACE) "Replace device profile" else if (draft.action == ProfileAction.BIND_ALL) "Bind all apps" else "Bind a device profile", style = MaterialTheme.typography.headlineSmall)
             Text("Choose a Cyclone profile and apps, then select the device profile to bind.", style = MaterialTheme.typography.bodySmall)
             Text("Step ${draft.step.ordinal + 1} of 5 · ${when (draft.step) {
                 BindingStep.PROFILE -> "Choose Cyclone profile"; BindingStep.APP -> "App selection"
@@ -97,6 +97,14 @@ internal fun BindingFlowScreen(
                             draft.packageNames.sorted().forEach { Text("App package: $it") }
                             Text("Android user: ${profile?.androidUserId ?: "Not assigned"}")
                             Text("Device profile: ${identity?.optString("name") ?: draft.identityId.orEmpty()}")
+                            if (draft.action == ProfileAction.REPLACE) {
+                                Text("Before: " + draft.originalBindings.groupBy { it.cloakProfileId }.entries.joinToString("\n") { (id, bindings) ->
+                                    "${input.identities.firstOrNull { it.first == id }?.second?.optString("name") ?: id}: ${bindings.joinToString { it.packageName }}"
+                                })
+                                Text("After: ${identity?.optString("name") ?: "Choose a device profile"} for ${draft.packageNames.size} apps")
+                                Text("Cyclone profile and Android user stay the same. Existing enabled/disabled states are retained.")
+                                TextButton(onClick = onBack, enabled = !locked) { Text("Change app selection") }
+                            }
                             Text("One binding per selected app will be saved.", style = MaterialTheme.typography.bodySmall)
                         }
                     }
@@ -118,7 +126,7 @@ internal fun BindingFlowScreen(
                         Text("The target or library changed. Review the latest summary before confirming.")
                         TextButton(onClick = onNext, enabled = !locked) { Text("Review latest summary") }
                     }
-                    Button(onClick = onConfirm, enabled = !locked && BindingFlow.canConfirm(draft, input)) { Text("Confirm binding") }
+                    Button(onClick = onConfirm, enabled = !locked && BindingFlow.canConfirm(draft, input)) { Text(if (draft.action == ProfileAction.REPLACE) "Confirm replacement" else "Confirm binding") }
                 } else Button(onClick = onNext, enabled = !locked && BindingFlow.canAdvance(draft, input)) { Text("Continue") }
             } else {
                 val outcome = draft.outcome

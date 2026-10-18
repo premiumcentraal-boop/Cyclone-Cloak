@@ -1,6 +1,7 @@
 package dev.cyclone.cloak.ui
 
-import android.content.Intent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,14 +26,30 @@ import kotlinx.coroutines.withContext
 import java.time.Instant
 
 @Composable
-internal fun BindingRunsSection(state: CloakState, onRetry: (BindingRun) -> Unit) {
+internal fun BindingRunsSection(state: CloakState, onRetry: (BindingRun) -> Unit, profileId: String? = null) {
     val context = LocalContext.current
     val journal = remember(context) { BindingRuns.journal(context) }
-    val runs by journal.runs.collectAsState()
+    val allRuns by journal.runs.collectAsState()
+    val runs = allRuns.filter { run -> profileId == null || run.targets.any { RunPrivacy.reference(it.profileId) == RunPrivacy.reference(profileId) } }
     val failures by journal.failures.collectAsState()
     val scope = rememberCoroutineScope()
     var exporting by remember { mutableStateOf(false) }
     var message by remember { mutableStateOf<String?>(null) }
+    var pendingBundle by remember { mutableStateOf<ByteArray?>(null) }
+    val downloader = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
+        val bytes = pendingBundle
+        pendingBundle = null
+        if (uri == null || bytes == null) {
+            exporting = false
+            message = "Download cancelled. Choose Download debug bundle to try again."
+        } else scope.launch {
+            val saved = withContext(Dispatchers.IO) { runCatching {
+                requireNotNull(context.contentResolver.openOutputStream(uri)).use { it.write(bytes) }
+            }.isSuccess }
+            exporting = false
+            message = if (saved) "Diagnostic bundle saved." else "Could not save the bundle. Check storage and choose Download debug bundle to retry."
+        }
+    }
     @Suppress("DEPRECATION")
     val appVersion = remember(context) { context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: "unknown" }
     fun export(run: BindingRun?) {
@@ -45,14 +62,18 @@ internal fun BindingRunsSection(state: CloakState, onRetry: (BindingRun) -> Unit
                 val files = BindingRunBundle.build(run?.let { listOf(it) } ?: runs, LogBus.registry.events(), CloakBindingStore.all(context),
                     state.rootDoctor, state.report, appVersion, run?.timestamp ?: (now - 86_400_000),
                     run?.takeUnless { it.active }?.end ?: now, now, failures)
-                RunBundleShare.prepare(context, BindingRunBundle.zip(files))
+                BindingRunBundle.zip(files)
             } }
-            message = if (result.isSuccess) {
-                if (runCatching { context.startActivity(Intent.createChooser(result.getOrThrow(), "Save or share binding diagnostics")) }.isSuccess)
-                    "Redacted bundle ready. Choose an app to save or share it."
-                else "No sharing app is available. Install or enable a local file manager and retry."
-            } else "Could not create the debug bundle. Check available storage and retry."
-            exporting = false
+            if (result.isSuccess) {
+                pendingBundle = result.getOrThrow()
+                if (runCatching { downloader.launch("cloak-binding-diagnostics.zip") }.isFailure) {
+                    pendingBundle = null; exporting = false
+                    message = "No file picker is available. Enable the system Files app and retry."
+                }
+            } else {
+                message = "Could not create the debug bundle. Check available storage and retry."
+                exporting = false
+            }
         }
     }
     CloakSectionHeader("Runs", runs.size)
@@ -62,7 +83,7 @@ internal fun BindingRunsSection(state: CloakState, onRetry: (BindingRun) -> Unit
         color = MaterialTheme.colorScheme.error)
     TextButton(enabled = !exporting, onClick = { export(null) }) { Text("Download debug bundle · last 24h") }
     message?.let { Text(it, style = MaterialTheme.typography.bodySmall) }
-    if (runs.isEmpty()) Text("No binding runs recorded yet.")
+    if (runs.isEmpty()) Text("No binding runs recorded yet. Choose Bind all apps to start an operation.")
     else LazyColumn(Modifier.fillMaxWidth().height(360.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
         items(runs.asReversed(), key = { it.id }) { run -> BindingRunCard(run, !exporting && state.busy == null,
             { onRetry(run) }, { export(run) }) }
@@ -89,7 +110,8 @@ internal fun BindingRunCard(run: BindingRun, enabled: Boolean, onRetry: () -> Un
                 Text("App: ${run.appVersion ?: "not recorded"} · module: ${run.moduleVersion ?: "not recorded"}")
                 run.targets.forEach { target ->
                     Text("Profile: ${target.profileId}\nAndroid user: ${target.androidUser ?: "not assigned"}\n" +
-                        "Apps: ${target.packages.joinToString()}\nDevice profile: ${target.deviceProfileId}")
+                        "Apps: ${target.packages.joinToString()}\nNew device profile: ${target.deviceProfileId}\n" +
+                        "Old device profiles: ${target.previousDeviceProfiles.entries.joinToString { "${it.key}: ${it.value}" }.ifBlank { "not recorded" }}")
                 }
                 Text("Reasons: ${run.reasons.joinToString().ifBlank { "none" }}")
                 run.reconciliation?.let { Text("Reconciliation: ${it.written} written · ${it.cleared} cleared · ${it.issues} issues") }

@@ -9,7 +9,7 @@ import java.util.UUID
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-enum class RunOperation { BIND, RETRY_RECONCILIATION, ENABLE, DISABLE, REMOVE }
+enum class RunOperation { BIND, RETRY_RECONCILIATION, ENABLE, DISABLE, REMOVE, REPLACE }
 enum class RunOutcome(val label: String) { READY("ready"), FAILED("failed"), NEEDS_ATTENTION("needs-attention") }
 
 object RunPrivacy {
@@ -34,16 +34,23 @@ object RunPrivacy {
 }
 
 data class RunTarget(val profileId: String, val androidUser: Int?, val packages: List<String>, val deviceProfileId: String,
-                     val expectedPresent: Boolean = true, val expectedEnabled: Boolean? = null) {
+                     val expectedPresent: Boolean = true, val expectedEnabled: Boolean? = null,
+                     val previousDeviceProfiles: Map<String, String> = emptyMap()) {
     fun json(): JSONObject = JSONObject().put("profile_id", RunPrivacy.reference(profileId))
         .put("android_user", androidUser ?: JSONObject.NULL)
         .put("packages", JSONArray(packages.distinct().sorted().mapNotNull(DiagnosticPrivacy::target)))
         .put("device_profile_id", RunPrivacy.reference(deviceProfileId)).put("expected_present", expectedPresent)
         .put("expected_enabled", expectedEnabled ?: JSONObject.NULL)
+        .put("previous_device_profiles", JSONObject().also { j -> previousDeviceProfiles.forEach { (pkg, id) ->
+            DiagnosticPrivacy.target(pkg)?.let { j.put(it, RunPrivacy.reference(id)) }
+        } })
     companion object {
         fun parse(j: JSONObject) = RunTarget(j.getString("profile_id"), if (j.isNull("android_user")) null else j.getInt("android_user"),
             j.getJSONArray("packages").let { a -> (0 until a.length()).map(a::getString) }, j.getString("device_profile_id"),
-            j.optBoolean("expected_present", true), if (j.isNull("expected_enabled")) null else j.getBoolean("expected_enabled"))
+            j.optBoolean("expected_present", true), if (j.isNull("expected_enabled")) null else j.getBoolean("expected_enabled"),
+            j.optJSONObject("previous_device_profiles")?.let { old -> old.keys().asSequence().mapNotNull { pkg ->
+                DiagnosticPrivacy.target(pkg)?.let { it to RunPrivacy.reference(old.getString(pkg)) }
+            }.toMap() }.orEmpty())
     }
 }
 
