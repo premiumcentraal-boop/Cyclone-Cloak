@@ -124,6 +124,9 @@ bool g_active = false;
 // ART belongs to the host OS, even when Build.VERSION is profile-backed.
 int g_runtime_sdk = 0;
 int g_runtime_flags = 0;
+// Native trampolines retain code addresses, not Java GC roots. Keep their DEX
+// loader alive for the whole scoped process, including partially installed hooks.
+jobject g_hook_loader = nullptr;
 std::string g_app_data_dir;
 bool g_java_callbacks = true;
 bool g_native_hook_enabled = true;
@@ -851,7 +854,7 @@ void apply_profile(JNIEnv *env) {
 // install the Java framework callbacks. Fail-open: any failure only logs and
 // leaves the prop-level coverage in place.
 void init_java_hooks(JNIEnv *env, const std::string &app_data_dir) {
-    if (!g_active || !g_java_callbacks) {
+    if (!g_active || !g_java_callbacks || g_hook_loader != nullptr) {
         return;
     }
     jobject dexBuffer = env->NewDirectByteBuffer(
@@ -925,6 +928,19 @@ void init_java_hooks(JNIEnv *env, const std::string &app_data_dir) {
     jstring dataDir = env->NewStringUTF(app_data_dir.c_str());
     if (!dataDir) {
         env->ExceptionClear();
+        env->DeleteLocalRef(pine);
+        env->DeleteLocalRef(bridge);
+        env->DeleteLocalRef(loader);
+        return;
+    }
+    // Pin before installing even the first callback. Static references inside
+    // this loader are a self-contained cycle, not roots; deleting the local
+    // references otherwise lets ART unload methods still used by trampolines.
+    g_hook_loader = env->NewGlobalRef(loader);
+    if (!g_hook_loader) {
+        env->ExceptionClear();
+        LOGI("hook bridge lifetime root unavailable");
+        env->DeleteLocalRef(dataDir);
         env->DeleteLocalRef(pine);
         env->DeleteLocalRef(bridge);
         env->DeleteLocalRef(loader);
