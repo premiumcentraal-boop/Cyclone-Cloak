@@ -1,6 +1,41 @@
 # Cyclone Cloak Architecture
 
-Current prerelease: [v0.11.0-alpha.18](https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.18), app/module code 42 (diagnostics capture lifecycle; production runtime behavior unchanged).
+Current source: v0.11.0-alpha.19, app/module code 43. The app adds a local
+Batch Identity Workshop; module runtime and connector behavior remain unchanged.
+Physical workshop and document-picker verification is UNVERIFIED.
+
+## Batch Identity Workshop
+
+`BatchIdentityPlanner` is a pure planning layer over `DeviceProfileEngine`, the
+existing coherence validator and `ProfileUniqueness`. A request selects distinct
+template IDs, 1–20 drafts per template (100 total maximum), a batch seed and an
+optional label prefix. Stable SHA-256 derivation separates each template, ordinal
+and regeneration revision. The engine retries identifier collisions against the
+library snapshot and already planned drafts. Every draft retains requested and
+chosen seeds, attempt count, template digest, revision, label and findings.
+
+The Identities entry opens a Material 3 preview, with selection, regeneration,
+removal, private details, an aggregate summary and explicit save confirmation.
+`BatchIdentitySave` revalidates each approved item against the current library and
+earlier successes. It reports SAVED/FAILED/SKIPPED per item and continues after a
+failed write. The ViewModel uses the existing atomic additive `CloakStore.importBatch`
+for one profile at a time and the existing hash-bound `EngineMetadataStore` for
+engine metadata. It never calls the identity save path that can republish an
+existing binding, reconciliation, publication or the connector. There is no
+existing-identity replacement option. Removing a preview cannot delete saved data.
+
+Batch-plan JSON version 1 contains planner/engine/schema versions, template IDs
+and hashes, counts, labels, seeds, revisions, retries and a descriptive validation
+summary. Strict parsing rejects duplicate keys, oversized/deep data, unsupported
+versions, missing/drifted templates and inconsistent seed derivations. Import
+reproduces bodies from the current matching templates and recomputes validation
+and uniqueness; imported summaries cannot authorize saving. No profile bodies or
+raw identifier values are exported, but reproduction seeds are private and an
+explicit warning precedes local document export. Plans remain separate from the
+profile schema, sidecar format and binding storage. Closing discards only drafts.
+
+## Existing diagnostics evidence
+
 Each probe capture owns its request metadata, profile, expectations and rows.
 A generation gate prevents superseded workers from publishing or updating UI;
 only complete sets of 89 unique known rows may be successful reports.

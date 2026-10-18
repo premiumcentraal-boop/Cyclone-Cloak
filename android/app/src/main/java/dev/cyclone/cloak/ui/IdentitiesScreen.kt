@@ -80,6 +80,10 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
     ) {
         item { CloakSectionHeader("New identity") }
         item {
+            FilledTonalButton(onClick = vm::openBatchWorkshop, enabled = state.busy == null,
+                modifier = Modifier.fillMaxWidth()) { Text("Batch Identity Workshop") }
+        }
+        item {
             CloakGroup {
                 Column(Modifier.fillMaxWidth().padding(CloakSpace.inner), verticalArrangement = Arrangement.spacedBy(CloakSpace.item)) {
                     Text(

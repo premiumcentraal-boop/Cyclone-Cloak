@@ -11,17 +11,17 @@ not prove that every inspection API sees it.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.11.0-alpha.18 (prerelease)
+## Status: 0.11.0-alpha.19 (prerelease)
 
-Alpha.18 fixes overlapping diagnostics capture sessions. App/module code 42;
-production runtime, connector, bindings, module behavior and permissions are unchanged.
-[Release notes](docs/RELEASE_0.11.0-alpha.18.md) record a five-phase Pixel 8
-user 0 ↔ user 17 run: 408 PASS, 29 OBSERVED, zero FAIL/MISSING and eight
-BLOCKED occurrences from four expected user-17 permission limitations.
-Fixture/user/hash agreement and warm/cold process behavior passed; production
-state and permissions were preserved. Evidence measures diagnostics commit
-`8e7ab14` against installed alpha.17/code 41, not the new alpha.18 packaging.
-No platform verdict or broader compatibility is claimed.
+Alpha.19 adds the preview-first **Batch Identity Workshop** in Identities.
+Plan up to 100 local drafts from multiple templates, review coherence and
+uniqueness, regenerate or remove selected drafts, and explicitly save approved
+items with per-item results. Private JSON plans can reproduce a batch later.
+App/module code 43; profile schema, binding storage, connector and module behavior
+are unchanged. No automatic bindings, new permissions, networking or platform
+verdict. Workshop device/SAF behavior remains UNVERIFIED.
+[Release notes](docs/RELEASE_0.11.0-alpha.19.md) distinguish local tests from
+the separately recorded alpha.18 diagnostics lifecycle evidence.
 See [CURRENT-STATE.md](docs/CURRENT-STATE.md).
 
 - **Companion app** (`android/app`): a Cyclone connector (contract `cyclone.connector/1.3`, Cyclone

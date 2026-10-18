@@ -116,6 +116,7 @@ data class CloakState(
     val backupReview: ProfileBackup.Review? = null,
     val backupMessage: String? = null,
     val backups: List<Pair<String, JSONObject>> = emptyList(),
+    val workshop: BatchWorkshopState? = null,
 ) {
     val uniqueness: ProfileUniqueness get() = ProfileUniqueness(identities)
     val registry: List<CycloneProfile> get() = (report?.snapshot ?: connection.cached?.snapshot)?.registry.orEmpty()
@@ -552,6 +553,70 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     // ---- Identities -------------------------------------------------------------------------------------------------
+
+    fun openBatchWorkshop() { _state.update { it.copy(workshop = BatchWorkshopState()) } }
+    fun closeBatchWorkshop() { if (_state.value.busy == null) _state.update { it.copy(workshop = null) } }
+    private fun batchWork(label: String, block: () -> Unit) = launchWork(label) {
+        try { block() } catch (failure: Exception) {
+            val reason = when (failure) {
+                is org.json.JSONException -> "Malformed batch plan. Check its structure and try again."
+                is IllegalArgumentException -> failure.message ?: "Invalid batch plan. Review the inputs."
+                else -> "Batch action failed (${failure.javaClass.simpleName}). Nothing was replaced."
+            }
+            _state.update { it.copy(workshop = it.workshop?.copy(message = reason)) }
+        }
+    }
+    fun previewBatch(templateIds: List<String>, count: Int, prefix: String) = batchWork("Planning local drafts…") {
+        val plan = dev.cyclone.cloak.forge.BatchIdentityPlanner().plan(
+            dev.cyclone.cloak.forge.BatchIdentityPlanner.Request(templateIds, count, CloakForge.newSeed(), prefix),
+            _state.value.phones, CloakStore.all(app).map { it.second })
+        _state.update { it.copy(workshop = BatchWorkshopState(plan)) }
+    }
+    fun regenerateBatch(selected: Set<String>) = batchWork("Regenerating drafts…") {
+        val workshop = requireNotNull(_state.value.workshop)
+        val saved = workshop.results.filter { it.status == "SAVED" }.map { it.key }.toSet()
+        val plan = dev.cyclone.cloak.forge.BatchIdentityPlanner().regenerate(requireNotNull(workshop.plan), selected - saved,
+            _state.value.phones, CloakStore.all(app).map { it.second })
+        _state.update { it.copy(workshop = workshop.copy(plan = plan, results = workshop.results.filter { item -> item.key !in selected || item.status == "SAVED" }, message = null)) }
+    }
+    fun removeBatch(selected: Set<String>) {
+        if (_state.value.busy != null) return
+        _state.update { state -> state.copy(workshop = state.workshop?.let { w ->
+            w.copy(plan = w.plan?.let { p -> dev.cyclone.cloak.forge.BatchIdentityPlanner().review(
+                p.copy(drafts = p.drafts.filter { it.key !in selected }), state.identities.map { it.second }) },
+                results = w.results.filter { it.key !in selected })
+        }) }
+    }
+    fun saveApprovedBatch(approved: Set<String>) = batchWork("Saving approved drafts…") {
+        val workshop = requireNotNull(_state.value.workshop)
+        val alreadySaved = workshop.results.filter { it.status == "SAVED" }
+        val savedKeys = alreadySaved.map { it.key }.toSet()
+        val result = dev.cyclone.cloak.forge.BatchIdentitySave.save(requireNotNull(workshop.plan), approved - savedKeys,
+            existing = { CloakStore.all(app).map { it.second } }, persist = { profile, metadata ->
+                // Existing atomic additive storage: never replaces an existing (even unreadable) file.
+                engineMetadataStore.save(profile, metadata) {
+                    CloakStore.importBatch(app, listOf(it)); it.getString("id")
+                }
+            })
+        _state.update { it.copy(workshop = workshop.copy(results = alreadySaved + result.filter { item -> item.key !in savedKeys },
+            message = "Local save finished. Review each item's status; no bindings were created.")) }
+    }
+    fun importBatchPlan(uri: Uri) = batchWork("Reading batch plan…") {
+        val text = app.contentResolver.openInputStream(uri)?.use { stream ->
+            val buffer = ByteArray(200_001); var size = 0
+            while (size < buffer.size) { val n = stream.read(buffer, size, buffer.size - size); if (n < 0) break; size += n }
+            require(size <= 200_000) { "Batch plan is too large." }
+            String(buffer, 0, size, Charsets.UTF_8)
+        } ?: error("Could not read the selected plan.")
+        val plan = dev.cyclone.cloak.forge.BatchIdentityPlanner().decode(text, _state.value.phones, CloakStore.all(app).map { it.second })
+        _state.update { it.copy(workshop = BatchWorkshopState(plan, message = "Imported for review only. Nothing was saved.")) }
+    }
+    fun exportBatchPlan(uri: Uri) = batchWork("Exporting private plan…") {
+        val text = dev.cyclone.cloak.forge.BatchIdentityPlanner().encode(requireNotNull(_state.value.workshop?.plan))
+        app.contentResolver.openOutputStream(uri, "wt")?.use { it.write(text.toByteArray(Charsets.UTF_8)) }
+            ?: error("Could not export the plan.")
+        _state.update { it.copy(workshop = it.workshop?.copy(message = "Private batch plan exported locally.")) }
+    }
 
     private suspend fun saveIdentity(profile: JSONObject, verb: String, allowDuplicates: Boolean = false, engineMetadata: JSONObject? = null): Boolean {
         val existing = CloakStore.all(app)

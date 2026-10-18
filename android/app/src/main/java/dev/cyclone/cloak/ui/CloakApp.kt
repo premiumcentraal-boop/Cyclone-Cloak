@@ -63,6 +63,13 @@ fun CloakApp(vm: CloakViewModel) {
     var tab by rememberSaveable { mutableIntStateOf(CloakDestination.HOME.ordinal) }
     LaunchedEffect(vm) { vm.messages.collect { snackbar.showSnackbar(it) } }
 
+    state.workshop?.let { workshop ->
+        BatchIdentityWorkshop(workshop, state.phones, state.busy != null,
+            vm::previewBatch, vm::regenerateBatch, vm::removeBatch, vm::saveApprovedBatch,
+            vm::importBatchPlan, vm::exportBatchPlan, vm::closeBatchWorkshop)
+        return
+    }
+
     val editor = state.editor
     if (editor != null) {
         BackHandler { vm.closeEditor() }
