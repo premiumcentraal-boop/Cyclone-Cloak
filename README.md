@@ -37,6 +37,9 @@ and [release notes](docs/RELEASE_0.11.0-alpha.23.md).
 - **Profile Forge** (`forge/`): reference implementation of the coherence rules (fingerprint vs.
   model vs. patch level vs. API level), dump parsing, and stable identifier derivation
   (HMAC seeds, Luhn-valid IMEIs). Stdlib-only Python, pytest-tested.
+- **Device Factory v1**: opt-in [pure factory API](docs/DEVICE-FACTORY-V1.md) with twelve
+  canonical hardware references, strict acceptance, quality reports and deterministic
+  batches. Existing generators and runtime behavior are unchanged.
 - **Current state**: [docs/CURRENT-STATE.md](docs/CURRENT-STATE.md) records local verification and
   remaining work. Identifier callbacks exist; physical-device validation and integrity verification
   remain unresolved.

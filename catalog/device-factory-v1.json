@@ -1,0 +1,3144 @@
+{
+  "format": 1,
+  "templates": [
+    {
+      "id": "pixel_6",
+      "label": "Pixel 6",
+      "device": {
+        "manufacturer": "Google",
+        "brand": "google",
+        "model": "Pixel 6",
+        "product": "oriole",
+        "device": "oriole",
+        "hardware": "gs101",
+        "fingerprint": "google/oriole/oriole:14/UP1A.231005.007/catalog.20231005:user/release-keys",
+        "version_release": "14",
+        "sdk_int": 34,
+        "security_patch": "2023-10-05",
+        "build_id": "UP1A.231005.007",
+        "version_incremental": "catalog.20231005",
+        "build_date_utc": 1697068800,
+        "first_api_level": 31,
+        "bootloader": "slider-1.0-11000000",
+        "baseband": "g5123b-124494-230721-B-10520321"
+      },
+      "display": {
+        "width": 1080,
+        "height": 2400,
+        "density": 420,
+        "refresh_rate_hz": 90,
+        "screen_size_class": "normal"
+      },
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8160,
+            "pixel_height": 6144
+          },
+          {
+            "facing": 1,
+            "hardware_level": 0,
+            "pixel_width": 4032,
+            "pixel_height": 3024
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 3264,
+            "pixel_height": 2448
+          }
+        ]
+      },
+      "locale": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      },
+      "network": {
+        "egress_hint": "us-east"
+      },
+      "telephony": {
+        "sim_slot_count": 2,
+        "carrier_name": "T-Mobile",
+        "mcc": "310",
+        "mnc": "260",
+        "network_type": "5G"
+      },
+      "reality": {
+        "compute": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "soc": "Google Tensor",
+            "gpu": "Mali-G78",
+            "cpu_cores": 8,
+            "abis": [
+              "arm64-v8a"
+            ]
+          }
+        },
+        "memory": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "ram_gib": 8,
+            "storage_gib": 128
+          }
+        },
+        "panel": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "width": 1080,
+            "height": 2400,
+            "density_dpi": 420,
+            "refresh_hz": 90,
+            "technology": "OLED",
+            "modes": [
+              {
+                "width": 1080,
+                "height": 2400,
+                "refresh_hz": 60
+              },
+              {
+                "width": 1080,
+                "height": 2400,
+                "refresh_hz": 90
+              }
+            ]
+          }
+        },
+        "cameras": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "count": 3,
+            "inventory": [
+              {
+                "id": "0",
+                "facing": "back",
+                "megapixels": 50.1,
+                "hardware_level": "full"
+              },
+              {
+                "id": "1",
+                "facing": "back",
+                "megapixels": 12.2,
+                "hardware_level": "limited"
+              },
+              {
+                "id": "2",
+                "facing": "front",
+                "megapixels": 8.0,
+                "hardware_level": "limited"
+              }
+            ]
+          }
+        },
+        "sensors": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "inventory": [
+              {
+                "type": 1,
+                "name": "Accelerometer"
+              },
+              {
+                "type": 2,
+                "name": "Magnetic field"
+              },
+              {
+                "type": 4,
+                "name": "Gyroscope"
+              },
+              {
+                "type": 5,
+                "name": "Light"
+              },
+              {
+                "type": 8,
+                "name": "Proximity"
+              },
+              {
+                "type": 6,
+                "name": "Pressure"
+              }
+            ]
+          }
+        },
+        "power": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "design_capacity_mah": 4614
+          }
+        },
+        "carrier": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "slots": 2,
+            "mcc": "310",
+            "mnc": "260",
+            "country": "US",
+            "sim_state": "ready"
+          }
+        },
+        "webview": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "provider": "com.google.android.webview",
+            "version": "126.0.6478.122"
+          }
+        },
+        "environment": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "language": "en",
+            "country": "US",
+            "timezone": "America/New_York"
+          }
+        }
+      },
+      "classes": {
+        "display_inches": 6.4,
+        "mode_class": "oled-variable",
+        "refresh_capabilities_hz": [
+          60,
+          90
+        ],
+        "camera_class": "dual-rear-front",
+        "sensor_inventory_class": "phone-motion-environment",
+        "ram_storage_class": "8GiB/128GiB",
+        "battery_class": "li-ion",
+        "browser_class": "chromium-126-android",
+        "graphics_adapter_class": "Mali-G78",
+        "play_services_expectations": {
+          "packages": [
+            "com.google.android.gms",
+            "com.android.vending"
+          ],
+          "certification": "unverified",
+          "attestation": "requires runtime evidence"
+        },
+        "modem_patterns": {
+          "bootloader": "slider-[0-9.]+-[0-9]+",
+          "baseband": "g5123b-[0-9]+-[0-9]+-B-[0-9]+"
+        },
+        "carrier_region": {
+          "country": "US",
+          "mcc": "310",
+          "mnc": "260",
+          "iccid_prefix": "8901260"
+        },
+        "imei_class": "synthetic-luhn-valid-allocation-unverified-tac"
+      },
+      "firmware_binding": {
+        "fingerprint": "google/oriole/oriole:14/UP1A.231005.007/catalog.20231005:user/release-keys",
+        "security_patch": "2023-10-05",
+        "build_id": "UP1A.231005.007",
+        "version_incremental": "catalog.20231005",
+        "build_date_utc": 1697068800
+      },
+      "sources": [
+        "https://support.google.com/pixelphone/answer/7158570"
+      ]
+    },
+    {
+      "id": "pixel_6a",
+      "label": "Pixel 6a",
+      "device": {
+        "manufacturer": "Google",
+        "brand": "google",
+        "model": "Pixel 6a",
+        "product": "bluejay",
+        "device": "bluejay",
+        "hardware": "gs101",
+        "fingerprint": "google/bluejay/bluejay:14/UP1A.231005.007/catalog.20231005:user/release-keys",
+        "version_release": "14",
+        "sdk_int": 34,
+        "security_patch": "2023-10-05",
+        "build_id": "UP1A.231005.007",
+        "version_incremental": "catalog.20231005",
+        "build_date_utc": 1697068800,
+        "first_api_level": 32,
+        "bootloader": "bluejay-1.2-9465321",
+        "baseband": "g5123b-124494-230721-B-10520321"
+      },
+      "display": {
+        "width": 1080,
+        "height": 2400,
+        "density": 420,
+        "refresh_rate_hz": 60,
+        "screen_size_class": "normal"
+      },
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 4032,
+            "pixel_height": 3024
+          },
+          {
+            "facing": 1,
+            "hardware_level": 0,
+            "pixel_width": 4032,
+            "pixel_height": 3024
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 3264,
+            "pixel_height": 2448
+          }
+        ]
+      },
+      "locale": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      },
+      "network": {
+        "egress_hint": "us-east"
+      },
+      "telephony": {
+        "sim_slot_count": 2,
+        "carrier_name": "T-Mobile",
+        "mcc": "310",
+        "mnc": "260",
+        "network_type": "5G"
+      },
+      "reality": {
+        "compute": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "soc": "Google Tensor",
+            "gpu": "Mali-G78",
+            "cpu_cores": 8,
+            "abis": [
+              "arm64-v8a"
+            ]
+          }
+        },
+        "memory": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "ram_gib": 6,
+            "storage_gib": 128
+          }
+        },
+        "panel": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "width": 1080,
+            "height": 2400,
+            "density_dpi": 420,
+            "refresh_hz": 60,
+            "technology": "OLED",
+            "modes": [
+              {
+                "width": 1080,
+                "height": 2400,
+                "refresh_hz": 60
+              }
+            ]
+          }
+        },
+        "cameras": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "count": 3,
+            "inventory": [
+              {
+                "id": "0",
+                "facing": "back",
+                "megapixels": 12.2,
+                "hardware_level": "full"
+              },
+              {
+                "id": "1",
+                "facing": "back",
+                "megapixels": 12.2,
+                "hardware_level": "limited"
+              },
+              {
+                "id": "2",
+                "facing": "front",
+                "megapixels": 8.0,
+                "hardware_level": "limited"
+              }
+            ]
+          }
+        },
+        "sensors": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "inventory": [
+              {
+                "type": 1,
+                "name": "Accelerometer"
+              },
+              {
+                "type": 2,
+                "name": "Magnetic field"
+              },
+              {
+                "type": 4,
+                "name": "Gyroscope"
+              },
+              {
+                "type": 5,
+                "name": "Light"
+              },
+              {
+                "type": 8,
+                "name": "Proximity"
+              },
+              {
+                "type": 6,
+                "name": "Pressure"
+              }
+            ]
+          }
+        },
+        "power": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "design_capacity_mah": 4410
+          }
+        },
+        "carrier": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "slots": 2,
+            "mcc": "310",
+            "mnc": "260",
+            "country": "US",
+            "sim_state": "ready"
+          }
+        },
+        "webview": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "provider": "com.google.android.webview",
+            "version": "126.0.6478.122"
+          }
+        },
+        "environment": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "language": "en",
+            "country": "US",
+            "timezone": "America/New_York"
+          }
+        }
+      },
+      "classes": {
+        "display_inches": 6.1,
+        "mode_class": "fixed-60",
+        "refresh_capabilities_hz": [
+          60
+        ],
+        "camera_class": "dual-rear-front",
+        "sensor_inventory_class": "phone-motion-environment",
+        "ram_storage_class": "6GiB/128GiB",
+        "battery_class": "li-ion",
+        "browser_class": "chromium-126-android",
+        "graphics_adapter_class": "Mali-G78",
+        "play_services_expectations": {
+          "packages": [
+            "com.google.android.gms",
+            "com.android.vending"
+          ],
+          "certification": "unverified",
+          "attestation": "requires runtime evidence"
+        },
+        "modem_patterns": {
+          "bootloader": "bluejay-[0-9.]+-[0-9]+",
+          "baseband": "g5123b-[0-9]+-[0-9]+-B-[0-9]+"
+        },
+        "carrier_region": {
+          "country": "US",
+          "mcc": "310",
+          "mnc": "260",
+          "iccid_prefix": "8901260"
+        },
+        "imei_class": "synthetic-luhn-valid-allocation-unverified-tac"
+      },
+      "firmware_binding": {
+        "fingerprint": "google/bluejay/bluejay:14/UP1A.231005.007/catalog.20231005:user/release-keys",
+        "security_patch": "2023-10-05",
+        "build_id": "UP1A.231005.007",
+        "version_incremental": "catalog.20231005",
+        "build_date_utc": 1697068800
+      },
+      "sources": [
+        "https://support.google.com/pixelphone/answer/7158570",
+        "https://android.googlesource.com/device/google/bluejay/+/04f3deeef41ddb2321796ae2bde412b985221ec2/device-bluejay.mk"
+      ]
+    },
+    {
+      "id": "pixel_6_pro",
+      "label": "Pixel 6 Pro",
+      "device": {
+        "manufacturer": "Google",
+        "brand": "google",
+        "model": "Pixel 6 Pro",
+        "product": "raven",
+        "device": "raven",
+        "hardware": "gs101",
+        "fingerprint": "google/raven/raven:14/AP2A.240805.005.F1/catalog.20240805:user/release-keys",
+        "version_release": "14",
+        "sdk_int": 34,
+        "security_patch": "2024-08-05",
+        "build_id": "AP2A.240805.005.F1",
+        "version_incremental": "catalog.20240805",
+        "build_date_utc": 1724544000,
+        "first_api_level": 31,
+        "bootloader": "slider-1.0-11000000",
+        "baseband": "g5123b-124494-230721-B-10520321"
+      },
+      "display": {
+        "width": 1440,
+        "height": 3120,
+        "density": 480,
+        "refresh_rate_hz": 120,
+        "screen_size_class": "normal"
+      },
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8160,
+            "pixel_height": 6144
+          },
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8000,
+            "pixel_height": 6000
+          },
+          {
+            "facing": 1,
+            "hardware_level": 0,
+            "pixel_width": 4032,
+            "pixel_height": 3024
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 3840,
+            "pixel_height": 2880
+          }
+        ]
+      },
+      "locale": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      },
+      "network": {
+        "egress_hint": "us-east"
+      },
+      "telephony": {
+        "sim_slot_count": 2,
+        "carrier_name": "T-Mobile",
+        "mcc": "310",
+        "mnc": "260",
+        "network_type": "5G"
+      },
+      "reality": {
+        "compute": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "soc": "Google Tensor",
+            "gpu": "Mali-G78",
+            "cpu_cores": 8,
+            "abis": [
+              "arm64-v8a"
+            ]
+          }
+        },
+        "memory": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "ram_gib": 12,
+            "storage_gib": 128
+          }
+        },
+        "panel": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "width": 1440,
+            "height": 3120,
+            "density_dpi": 480,
+            "refresh_hz": 120,
+            "technology": "OLED",
+            "modes": [
+              {
+                "width": 1440,
+                "height": 3120,
+                "refresh_hz": 60
+              },
+              {
+                "width": 1440,
+                "height": 3120,
+                "refresh_hz": 120
+              }
+            ]
+          }
+        },
+        "cameras": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "count": 4,
+            "inventory": [
+              {
+                "id": "0",
+                "facing": "back",
+                "megapixels": 50.1,
+                "hardware_level": "full"
+              },
+              {
+                "id": "1",
+                "facing": "back",
+                "megapixels": 48.0,
+                "hardware_level": "full"
+              },
+              {
+                "id": "2",
+                "facing": "back",
+                "megapixels": 12.2,
+                "hardware_level": "limited"
+              },
+              {
+                "id": "3",
+                "facing": "front",
+                "megapixels": 11.1,
+                "hardware_level": "limited"
+              }
+            ]
+          }
+        },
+        "sensors": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "inventory": [
+              {
+                "type": 1,
+                "name": "Accelerometer"
+              },
+              {
+                "type": 2,
+                "name": "Magnetic field"
+              },
+              {
+                "type": 4,
+                "name": "Gyroscope"
+              },
+              {
+                "type": 5,
+                "name": "Light"
+              },
+              {
+                "type": 8,
+                "name": "Proximity"
+              },
+              {
+                "type": 6,
+                "name": "Pressure"
+              }
+            ]
+          }
+        },
+        "power": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "design_capacity_mah": 5003
+          }
+        },
+        "carrier": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "slots": 2,
+            "mcc": "310",
+            "mnc": "260",
+            "country": "US",
+            "sim_state": "ready"
+          }
+        },
+        "webview": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "provider": "com.google.android.webview",
+            "version": "126.0.6478.122"
+          }
+        },
+        "environment": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "language": "en",
+            "country": "US",
+            "timezone": "America/New_York"
+          }
+        }
+      },
+      "classes": {
+        "display_inches": 6.7,
+        "mode_class": "oled-variable",
+        "refresh_capabilities_hz": [
+          60,
+          120
+        ],
+        "camera_class": "triple-rear-front",
+        "sensor_inventory_class": "phone-motion-environment",
+        "ram_storage_class": "12GiB/128GiB",
+        "battery_class": "li-ion",
+        "browser_class": "chromium-126-android",
+        "graphics_adapter_class": "Mali-G78",
+        "play_services_expectations": {
+          "packages": [
+            "com.google.android.gms",
+            "com.android.vending"
+          ],
+          "certification": "unverified",
+          "attestation": "requires runtime evidence"
+        },
+        "modem_patterns": {
+          "bootloader": "slider-[0-9.]+-[0-9]+",
+          "baseband": "g5123b-[0-9]+-[0-9]+-B-[0-9]+"
+        },
+        "carrier_region": {
+          "country": "US",
+          "mcc": "310",
+          "mnc": "260",
+          "iccid_prefix": "8901260"
+        },
+        "imei_class": "synthetic-luhn-valid-allocation-unverified-tac"
+      },
+      "firmware_binding": {
+        "fingerprint": "google/raven/raven:14/AP2A.240805.005.F1/catalog.20240805:user/release-keys",
+        "security_patch": "2024-08-05",
+        "build_id": "AP2A.240805.005.F1",
+        "version_incremental": "catalog.20240805",
+        "build_date_utc": 1724544000
+      },
+      "sources": [
+        "https://support.google.com/pixelphone/answer/7158570"
+      ]
+    },
+    {
+      "id": "pixel_7",
+      "label": "Pixel 7",
+      "device": {
+        "manufacturer": "Google",
+        "brand": "google",
+        "model": "Pixel 7",
+        "product": "panther",
+        "device": "panther",
+        "hardware": "gs201",
+        "fingerprint": "google/panther/panther:13/TQ3A.230805.001/10193186:user/release-keys",
+        "version_release": "13",
+        "sdk_int": 33,
+        "security_patch": "2023-08-05",
+        "build_id": "TQ3A.230805.001",
+        "version_incremental": "10193186",
+        "build_date_utc": 1691712000,
+        "first_api_level": 33,
+        "bootloader": "cloudripper-1.0-11000000",
+        "baseband": "g5300g-230323-230525-B-10200345"
+      },
+      "display": {
+        "width": 1080,
+        "height": 2400,
+        "density": 420,
+        "refresh_rate_hz": 90,
+        "screen_size_class": "normal"
+      },
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8160,
+            "pixel_height": 6144
+          },
+          {
+            "facing": 1,
+            "hardware_level": 0,
+            "pixel_width": 4032,
+            "pixel_height": 3024
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 4164,
+            "pixel_height": 2604
+          }
+        ]
+      },
+      "locale": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      },
+      "network": {
+        "egress_hint": "us-east"
+      },
+      "telephony": {
+        "sim_slot_count": 2,
+        "carrier_name": "T-Mobile",
+        "mcc": "310",
+        "mnc": "260",
+        "network_type": "5G"
+      },
+      "reality": {
+        "compute": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "soc": "Google Tensor G2",
+            "gpu": "Mali-G710",
+            "cpu_cores": 8,
+            "abis": [
+              "arm64-v8a"
+            ]
+          }
+        },
+        "memory": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "ram_gib": 8,
+            "storage_gib": 128
+          }
+        },
+        "panel": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "width": 1080,
+            "height": 2400,
+            "density_dpi": 420,
+            "refresh_hz": 90,
+            "technology": "OLED",
+            "modes": [
+              {
+                "width": 1080,
+                "height": 2400,
+                "refresh_hz": 60
+              },
+              {
+                "width": 1080,
+                "height": 2400,
+                "refresh_hz": 90
+              }
+            ]
+          }
+        },
+        "cameras": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "count": 3,
+            "inventory": [
+              {
+                "id": "0",
+                "facing": "back",
+                "megapixels": 50.1,
+                "hardware_level": "full"
+              },
+              {
+                "id": "1",
+                "facing": "back",
+                "megapixels": 12.2,
+                "hardware_level": "limited"
+              },
+              {
+                "id": "2",
+                "facing": "front",
+                "megapixels": 10.8,
+                "hardware_level": "limited"
+              }
+            ]
+          }
+        },
+        "sensors": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "inventory": [
+              {
+                "type": 1,
+                "name": "Accelerometer"
+              },
+              {
+                "type": 2,
+                "name": "Magnetic field"
+              },
+              {
+                "type": 4,
+                "name": "Gyroscope"
+              },
+              {
+                "type": 5,
+                "name": "Light"
+              },
+              {
+                "type": 8,
+                "name": "Proximity"
+              },
+              {
+                "type": 6,
+                "name": "Pressure"
+              }
+            ]
+          }
+        },
+        "power": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "design_capacity_mah": 4355
+          }
+        },
+        "carrier": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "slots": 2,
+            "mcc": "310",
+            "mnc": "260",
+            "country": "US",
+            "sim_state": "ready"
+          }
+        },
+        "webview": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "provider": "com.google.android.webview",
+            "version": "126.0.6478.122"
+          }
+        },
+        "environment": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "language": "en",
+            "country": "US",
+            "timezone": "America/New_York"
+          }
+        }
+      },
+      "classes": {
+        "display_inches": 6.3,
+        "mode_class": "oled-variable",
+        "refresh_capabilities_hz": [
+          60,
+          90
+        ],
+        "camera_class": "dual-rear-front",
+        "sensor_inventory_class": "phone-motion-environment",
+        "ram_storage_class": "8GiB/128GiB",
+        "battery_class": "li-ion",
+        "browser_class": "chromium-126-android",
+        "graphics_adapter_class": "Mali-G710",
+        "play_services_expectations": {
+          "packages": [
+            "com.google.android.gms",
+            "com.android.vending"
+          ],
+          "certification": "unverified",
+          "attestation": "requires runtime evidence"
+        },
+        "modem_patterns": {
+          "bootloader": "cloudripper-[0-9.]+-[0-9]+",
+          "baseband": "g5300g-[0-9]+-[0-9]+-B-[0-9]+"
+        },
+        "carrier_region": {
+          "country": "US",
+          "mcc": "310",
+          "mnc": "260",
+          "iccid_prefix": "8901260"
+        },
+        "imei_class": "synthetic-luhn-valid-allocation-unverified-tac"
+      },
+      "firmware_binding": {
+        "fingerprint": "google/panther/panther:13/TQ3A.230805.001/10193186:user/release-keys",
+        "security_patch": "2023-08-05",
+        "build_id": "TQ3A.230805.001",
+        "version_incremental": "10193186",
+        "build_date_utc": 1691712000
+      },
+      "sources": [
+        "https://support.google.com/pixelphone/answer/7158570"
+      ]
+    },
+    {
+      "id": "pixel_7a",
+      "label": "Pixel 7a",
+      "device": {
+        "manufacturer": "Google",
+        "brand": "google",
+        "model": "Pixel 7a",
+        "product": "lynx",
+        "device": "lynx",
+        "hardware": "gs201",
+        "fingerprint": "google/lynx/lynx:14/UP1A.231005.007/catalog.20231005:user/release-keys",
+        "version_release": "14",
+        "sdk_int": 34,
+        "security_patch": "2023-10-05",
+        "build_id": "UP1A.231005.007",
+        "version_incremental": "catalog.20231005",
+        "build_date_utc": 1697068800,
+        "first_api_level": 33,
+        "bootloader": "cloudripper-1.0-11000000",
+        "baseband": "g5300g-230323-230525-B-10200345"
+      },
+      "display": {
+        "width": 1080,
+        "height": 2400,
+        "density": 420,
+        "refresh_rate_hz": 90,
+        "screen_size_class": "normal"
+      },
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 9248,
+            "pixel_height": 6944
+          },
+          {
+            "facing": 1,
+            "hardware_level": 0,
+            "pixel_width": 4164,
+            "pixel_height": 3124
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 4164,
+            "pixel_height": 3124
+          }
+        ]
+      },
+      "locale": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      },
+      "network": {
+        "egress_hint": "us-east"
+      },
+      "telephony": {
+        "sim_slot_count": 2,
+        "carrier_name": "T-Mobile",
+        "mcc": "310",
+        "mnc": "260",
+        "network_type": "5G"
+      },
+      "reality": {
+        "compute": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "soc": "Google Tensor G2",
+            "gpu": "Mali-G710",
+            "cpu_cores": 8,
+            "abis": [
+              "arm64-v8a"
+            ]
+          }
+        },
+        "memory": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "ram_gib": 8,
+            "storage_gib": 128
+          }
+        },
+        "panel": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "width": 1080,
+            "height": 2400,
+            "density_dpi": 420,
+            "refresh_hz": 90,
+            "technology": "OLED",
+            "modes": [
+              {
+                "width": 1080,
+                "height": 2400,
+                "refresh_hz": 60
+              },
+              {
+                "width": 1080,
+                "height": 2400,
+                "refresh_hz": 90
+              }
+            ]
+          }
+        },
+        "cameras": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "count": 3,
+            "inventory": [
+              {
+                "id": "0",
+                "facing": "back",
+                "megapixels": 64.2,
+                "hardware_level": "full"
+              },
+              {
+                "id": "1",
+                "facing": "back",
+                "megapixels": 13.0,
+                "hardware_level": "limited"
+              },
+              {
+                "id": "2",
+                "facing": "front",
+                "megapixels": 13.0,
+                "hardware_level": "limited"
+              }
+            ]
+          }
+        },
+        "sensors": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "inventory": [
+              {
+                "type": 1,
+                "name": "Accelerometer"
+              },
+              {
+                "type": 2,
+                "name": "Magnetic field"
+              },
+              {
+                "type": 4,
+                "name": "Gyroscope"
+              },
+              {
+                "type": 5,
+                "name": "Light"
+              },
+              {
+                "type": 8,
+                "name": "Proximity"
+              },
+              {
+                "type": 6,
+                "name": "Pressure"
+              }
+            ]
+          }
+        },
+        "power": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "design_capacity_mah": 4385
+          }
+        },
+        "carrier": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "slots": 2,
+            "mcc": "310",
+            "mnc": "260",
+            "country": "US",
+            "sim_state": "ready"
+          }
+        },
+        "webview": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "provider": "com.google.android.webview",
+            "version": "126.0.6478.122"
+          }
+        },
+        "environment": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "language": "en",
+            "country": "US",
+            "timezone": "America/New_York"
+          }
+        }
+      },
+      "classes": {
+        "display_inches": 6.1,
+        "mode_class": "oled-variable",
+        "refresh_capabilities_hz": [
+          60,
+          90
+        ],
+        "camera_class": "dual-rear-front",
+        "sensor_inventory_class": "phone-motion-environment",
+        "ram_storage_class": "8GiB/128GiB",
+        "battery_class": "li-ion",
+        "browser_class": "chromium-126-android",
+        "graphics_adapter_class": "Mali-G710",
+        "play_services_expectations": {
+          "packages": [
+            "com.google.android.gms",
+            "com.android.vending"
+          ],
+          "certification": "unverified",
+          "attestation": "requires runtime evidence"
+        },
+        "modem_patterns": {
+          "bootloader": "cloudripper-[0-9.]+-[0-9]+",
+          "baseband": "g5300g-[0-9]+-[0-9]+-B-[0-9]+"
+        },
+        "carrier_region": {
+          "country": "US",
+          "mcc": "310",
+          "mnc": "260",
+          "iccid_prefix": "8901260"
+        },
+        "imei_class": "synthetic-luhn-valid-allocation-unverified-tac"
+      },
+      "firmware_binding": {
+        "fingerprint": "google/lynx/lynx:14/UP1A.231005.007/catalog.20231005:user/release-keys",
+        "security_patch": "2023-10-05",
+        "build_id": "UP1A.231005.007",
+        "version_incremental": "catalog.20231005",
+        "build_date_utc": 1697068800
+      },
+      "sources": [
+        "https://support.google.com/pixelphone/answer/7158570"
+      ]
+    },
+    {
+      "id": "pixel_7_pro",
+      "label": "Pixel 7 Pro",
+      "device": {
+        "manufacturer": "Google",
+        "brand": "google",
+        "model": "Pixel 7 Pro",
+        "product": "cheetah",
+        "device": "cheetah",
+        "hardware": "gs201",
+        "fingerprint": "google/cheetah/cheetah:14/AP2A.240805.005/catalog.20240805:user/release-keys",
+        "version_release": "14",
+        "sdk_int": 34,
+        "security_patch": "2024-08-05",
+        "build_id": "AP2A.240805.005",
+        "version_incremental": "catalog.20240805",
+        "build_date_utc": 1724544000,
+        "first_api_level": 33,
+        "bootloader": "cloudripper-1.0-11000000",
+        "baseband": "g5300g-230323-230525-B-10200345"
+      },
+      "display": {
+        "width": 1440,
+        "height": 3120,
+        "density": 480,
+        "refresh_rate_hz": 120,
+        "screen_size_class": "normal"
+      },
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8160,
+            "pixel_height": 6144
+          },
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8000,
+            "pixel_height": 6000
+          },
+          {
+            "facing": 1,
+            "hardware_level": 0,
+            "pixel_width": 4032,
+            "pixel_height": 3024
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 4164,
+            "pixel_height": 2604
+          }
+        ]
+      },
+      "locale": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      },
+      "network": {
+        "egress_hint": "us-east"
+      },
+      "telephony": {
+        "sim_slot_count": 2,
+        "carrier_name": "T-Mobile",
+        "mcc": "310",
+        "mnc": "260",
+        "network_type": "5G"
+      },
+      "reality": {
+        "compute": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "soc": "Google Tensor G2",
+            "gpu": "Mali-G710",
+            "cpu_cores": 8,
+            "abis": [
+              "arm64-v8a"
+            ]
+          }
+        },
+        "memory": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "ram_gib": 12,
+            "storage_gib": 128
+          }
+        },
+        "panel": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "width": 1440,
+            "height": 3120,
+            "density_dpi": 480,
+            "refresh_hz": 120,
+            "technology": "OLED",
+            "modes": [
+              {
+                "width": 1440,
+                "height": 3120,
+                "refresh_hz": 60
+              },
+              {
+                "width": 1440,
+                "height": 3120,
+                "refresh_hz": 120
+              }
+            ]
+          }
+        },
+        "cameras": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "count": 4,
+            "inventory": [
+              {
+                "id": "0",
+                "facing": "back",
+                "megapixels": 50.1,
+                "hardware_level": "full"
+              },
+              {
+                "id": "1",
+                "facing": "back",
+                "megapixels": 48.0,
+                "hardware_level": "full"
+              },
+              {
+                "id": "2",
+                "facing": "back",
+                "megapixels": 12.2,
+                "hardware_level": "limited"
+              },
+              {
+                "id": "3",
+                "facing": "front",
+                "megapixels": 10.8,
+                "hardware_level": "limited"
+              }
+            ]
+          }
+        },
+        "sensors": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "inventory": [
+              {
+                "type": 1,
+                "name": "Accelerometer"
+              },
+              {
+                "type": 2,
+                "name": "Magnetic field"
+              },
+              {
+                "type": 4,
+                "name": "Gyroscope"
+              },
+              {
+                "type": 5,
+                "name": "Light"
+              },
+              {
+                "type": 8,
+                "name": "Proximity"
+              },
+              {
+                "type": 6,
+                "name": "Pressure"
+              }
+            ]
+          }
+        },
+        "power": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "design_capacity_mah": 5000
+          }
+        },
+        "carrier": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "slots": 2,
+            "mcc": "310",
+            "mnc": "260",
+            "country": "US",
+            "sim_state": "ready"
+          }
+        },
+        "webview": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "provider": "com.google.android.webview",
+            "version": "126.0.6478.122"
+          }
+        },
+        "environment": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "language": "en",
+            "country": "US",
+            "timezone": "America/New_York"
+          }
+        }
+      },
+      "classes": {
+        "display_inches": 6.7,
+        "mode_class": "oled-variable",
+        "refresh_capabilities_hz": [
+          60,
+          120
+        ],
+        "camera_class": "triple-rear-front",
+        "sensor_inventory_class": "phone-motion-environment",
+        "ram_storage_class": "12GiB/128GiB",
+        "battery_class": "li-ion",
+        "browser_class": "chromium-126-android",
+        "graphics_adapter_class": "Mali-G710",
+        "play_services_expectations": {
+          "packages": [
+            "com.google.android.gms",
+            "com.android.vending"
+          ],
+          "certification": "unverified",
+          "attestation": "requires runtime evidence"
+        },
+        "modem_patterns": {
+          "bootloader": "cloudripper-[0-9.]+-[0-9]+",
+          "baseband": "g5300g-[0-9]+-[0-9]+-B-[0-9]+"
+        },
+        "carrier_region": {
+          "country": "US",
+          "mcc": "310",
+          "mnc": "260",
+          "iccid_prefix": "8901260"
+        },
+        "imei_class": "synthetic-luhn-valid-allocation-unverified-tac"
+      },
+      "firmware_binding": {
+        "fingerprint": "google/cheetah/cheetah:14/AP2A.240805.005/catalog.20240805:user/release-keys",
+        "security_patch": "2024-08-05",
+        "build_id": "AP2A.240805.005",
+        "version_incremental": "catalog.20240805",
+        "build_date_utc": 1724544000
+      },
+      "sources": [
+        "https://support.google.com/pixelphone/answer/7158570"
+      ]
+    },
+    {
+      "id": "pixel_8",
+      "label": "Pixel 8",
+      "device": {
+        "manufacturer": "Google",
+        "brand": "google",
+        "model": "Pixel 8",
+        "product": "shiba",
+        "device": "shiba",
+        "hardware": "zuma",
+        "fingerprint": "google/shiba/shiba:14/UD1A.230803.022.A5/catalog.20230905:user/release-keys",
+        "version_release": "14",
+        "sdk_int": 34,
+        "security_patch": "2023-09-05",
+        "build_id": "UD1A.230803.022.A5",
+        "version_incremental": "catalog.20230905",
+        "build_date_utc": 1697068800,
+        "first_api_level": 34,
+        "bootloader": "ripcurrent-1.0-11000000",
+        "baseband": "g5300i-240624-240725-B-12119395"
+      },
+      "display": {
+        "width": 1080,
+        "height": 2400,
+        "density": 420,
+        "refresh_rate_hz": 120,
+        "screen_size_class": "normal"
+      },
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8160,
+            "pixel_height": 6144
+          },
+          {
+            "facing": 1,
+            "hardware_level": 0,
+            "pixel_width": 4032,
+            "pixel_height": 3024
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 3744,
+            "pixel_height": 2808
+          }
+        ]
+      },
+      "locale": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      },
+      "network": {
+        "egress_hint": "us-east"
+      },
+      "telephony": {
+        "sim_slot_count": 2,
+        "carrier_name": "T-Mobile",
+        "mcc": "310",
+        "mnc": "260",
+        "network_type": "5G"
+      },
+      "reality": {
+        "compute": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "soc": "Google Tensor G3",
+            "gpu": "Mali-G715",
+            "cpu_cores": 9,
+            "abis": [
+              "arm64-v8a"
+            ]
+          }
+        },
+        "memory": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "ram_gib": 8,
+            "storage_gib": 128
+          }
+        },
+        "panel": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "width": 1080,
+            "height": 2400,
+            "density_dpi": 420,
+            "refresh_hz": 120,
+            "technology": "OLED",
+            "modes": [
+              {
+                "width": 1080,
+                "height": 2400,
+                "refresh_hz": 60
+              },
+              {
+                "width": 1080,
+                "height": 2400,
+                "refresh_hz": 120
+              }
+            ]
+          }
+        },
+        "cameras": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "count": 3,
+            "inventory": [
+              {
+                "id": "0",
+                "facing": "back",
+                "megapixels": 50.1,
+                "hardware_level": "full"
+              },
+              {
+                "id": "1",
+                "facing": "back",
+                "megapixels": 12.2,
+                "hardware_level": "limited"
+              },
+              {
+                "id": "2",
+                "facing": "front",
+                "megapixels": 10.5,
+                "hardware_level": "limited"
+              }
+            ]
+          }
+        },
+        "sensors": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "inventory": [
+              {
+                "type": 1,
+                "name": "Accelerometer"
+              },
+              {
+                "type": 2,
+                "name": "Magnetic field"
+              },
+              {
+                "type": 4,
+                "name": "Gyroscope"
+              },
+              {
+                "type": 5,
+                "name": "Light"
+              },
+              {
+                "type": 8,
+                "name": "Proximity"
+              },
+              {
+                "type": 6,
+                "name": "Pressure"
+              }
+            ]
+          }
+        },
+        "power": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "design_capacity_mah": 4575
+          }
+        },
+        "carrier": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "slots": 2,
+            "mcc": "310",
+            "mnc": "260",
+            "country": "US",
+            "sim_state": "ready"
+          }
+        },
+        "webview": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "provider": "com.google.android.webview",
+            "version": "126.0.6478.122"
+          }
+        },
+        "environment": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "language": "en",
+            "country": "US",
+            "timezone": "America/New_York"
+          }
+        }
+      },
+      "classes": {
+        "display_inches": 6.2,
+        "mode_class": "oled-variable",
+        "refresh_capabilities_hz": [
+          60,
+          120
+        ],
+        "camera_class": "dual-rear-front",
+        "sensor_inventory_class": "phone-motion-environment",
+        "ram_storage_class": "8GiB/128GiB",
+        "battery_class": "li-ion",
+        "browser_class": "chromium-126-android",
+        "graphics_adapter_class": "Mali-G715",
+        "play_services_expectations": {
+          "packages": [
+            "com.google.android.gms",
+            "com.android.vending"
+          ],
+          "certification": "unverified",
+          "attestation": "requires runtime evidence"
+        },
+        "modem_patterns": {
+          "bootloader": "ripcurrent-[0-9.]+-[0-9]+",
+          "baseband": "g5300i-[0-9]+-[0-9]+-B-[0-9]+"
+        },
+        "carrier_region": {
+          "country": "US",
+          "mcc": "310",
+          "mnc": "260",
+          "iccid_prefix": "8901260"
+        },
+        "imei_class": "synthetic-luhn-valid-allocation-unverified-tac"
+      },
+      "firmware_binding": {
+        "fingerprint": "google/shiba/shiba:14/UD1A.230803.022.A5/catalog.20230905:user/release-keys",
+        "security_patch": "2023-09-05",
+        "build_id": "UD1A.230803.022.A5",
+        "version_incremental": "catalog.20230905",
+        "build_date_utc": 1697068800
+      },
+      "sources": [
+        "https://support.google.com/pixelphone/answer/7158570"
+      ]
+    },
+    {
+      "id": "pixel_8a",
+      "label": "Pixel 8a",
+      "device": {
+        "manufacturer": "Google",
+        "brand": "google",
+        "model": "Pixel 8a",
+        "product": "akita",
+        "device": "akita",
+        "hardware": "zuma",
+        "fingerprint": "google/akita/akita:14/AP2A.240805.005.E1/catalog.20240805:user/release-keys",
+        "version_release": "14",
+        "sdk_int": 34,
+        "security_patch": "2024-08-05",
+        "build_id": "AP2A.240805.005.E1",
+        "version_incremental": "catalog.20240805",
+        "build_date_utc": 1724544000,
+        "first_api_level": 34,
+        "bootloader": "ripcurrent-1.0-11000000",
+        "baseband": "g5300i-240624-240725-B-12119395"
+      },
+      "display": {
+        "width": 1080,
+        "height": 2400,
+        "density": 420,
+        "refresh_rate_hz": 120,
+        "screen_size_class": "normal"
+      },
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 9248,
+            "pixel_height": 6944
+          },
+          {
+            "facing": 1,
+            "hardware_level": 0,
+            "pixel_width": 4164,
+            "pixel_height": 3124
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 4164,
+            "pixel_height": 3124
+          }
+        ]
+      },
+      "locale": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      },
+      "network": {
+        "egress_hint": "us-east"
+      },
+      "telephony": {
+        "sim_slot_count": 2,
+        "carrier_name": "T-Mobile",
+        "mcc": "310",
+        "mnc": "260",
+        "network_type": "5G"
+      },
+      "reality": {
+        "compute": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "soc": "Google Tensor G3",
+            "gpu": "Mali-G715",
+            "cpu_cores": 9,
+            "abis": [
+              "arm64-v8a"
+            ]
+          }
+        },
+        "memory": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "ram_gib": 8,
+            "storage_gib": 128
+          }
+        },
+        "panel": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "width": 1080,
+            "height": 2400,
+            "density_dpi": 420,
+            "refresh_hz": 120,
+            "technology": "OLED",
+            "modes": [
+              {
+                "width": 1080,
+                "height": 2400,
+                "refresh_hz": 60
+              },
+              {
+                "width": 1080,
+                "height": 2400,
+                "refresh_hz": 120
+              }
+            ]
+          }
+        },
+        "cameras": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "count": 3,
+            "inventory": [
+              {
+                "id": "0",
+                "facing": "back",
+                "megapixels": 64.2,
+                "hardware_level": "full"
+              },
+              {
+                "id": "1",
+                "facing": "back",
+                "megapixels": 13.0,
+                "hardware_level": "limited"
+              },
+              {
+                "id": "2",
+                "facing": "front",
+                "megapixels": 13.0,
+                "hardware_level": "limited"
+              }
+            ]
+          }
+        },
+        "sensors": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "inventory": [
+              {
+                "type": 1,
+                "name": "Accelerometer"
+              },
+              {
+                "type": 2,
+                "name": "Magnetic field"
+              },
+              {
+                "type": 4,
+                "name": "Gyroscope"
+              },
+              {
+                "type": 5,
+                "name": "Light"
+              },
+              {
+                "type": 8,
+                "name": "Proximity"
+              },
+              {
+                "type": 6,
+                "name": "Pressure"
+              }
+            ]
+          }
+        },
+        "power": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "design_capacity_mah": 4492
+          }
+        },
+        "carrier": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "slots": 2,
+            "mcc": "310",
+            "mnc": "260",
+            "country": "US",
+            "sim_state": "ready"
+          }
+        },
+        "webview": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "provider": "com.google.android.webview",
+            "version": "126.0.6478.122"
+          }
+        },
+        "environment": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "language": "en",
+            "country": "US",
+            "timezone": "America/New_York"
+          }
+        }
+      },
+      "classes": {
+        "display_inches": 6.1,
+        "mode_class": "oled-variable",
+        "refresh_capabilities_hz": [
+          60,
+          120
+        ],
+        "camera_class": "dual-rear-front",
+        "sensor_inventory_class": "phone-motion-environment",
+        "ram_storage_class": "8GiB/128GiB",
+        "battery_class": "li-ion",
+        "browser_class": "chromium-126-android",
+        "graphics_adapter_class": "Mali-G715",
+        "play_services_expectations": {
+          "packages": [
+            "com.google.android.gms",
+            "com.android.vending"
+          ],
+          "certification": "unverified",
+          "attestation": "requires runtime evidence"
+        },
+        "modem_patterns": {
+          "bootloader": "ripcurrent-[0-9.]+-[0-9]+",
+          "baseband": "g5300i-[0-9]+-[0-9]+-B-[0-9]+"
+        },
+        "carrier_region": {
+          "country": "US",
+          "mcc": "310",
+          "mnc": "260",
+          "iccid_prefix": "8901260"
+        },
+        "imei_class": "synthetic-luhn-valid-allocation-unverified-tac"
+      },
+      "firmware_binding": {
+        "fingerprint": "google/akita/akita:14/AP2A.240805.005.E1/catalog.20240805:user/release-keys",
+        "security_patch": "2024-08-05",
+        "build_id": "AP2A.240805.005.E1",
+        "version_incremental": "catalog.20240805",
+        "build_date_utc": 1724544000
+      },
+      "sources": [
+        "https://support.google.com/pixelphone/answer/7158570"
+      ]
+    },
+    {
+      "id": "pixel_8_pro",
+      "label": "Pixel 8 Pro",
+      "device": {
+        "manufacturer": "Google",
+        "brand": "google",
+        "model": "Pixel 8 Pro",
+        "product": "husky",
+        "device": "husky",
+        "hardware": "zuma",
+        "fingerprint": "google/husky/husky:14/AP2A.240805.005.D1/catalog.20240805:user/release-keys",
+        "version_release": "14",
+        "sdk_int": 34,
+        "security_patch": "2024-08-05",
+        "build_id": "AP2A.240805.005.D1",
+        "version_incremental": "catalog.20240805",
+        "build_date_utc": 1724544000,
+        "first_api_level": 34,
+        "bootloader": "ripcurrent-1.0-11000000",
+        "baseband": "g5300i-240624-240725-B-12119395"
+      },
+      "display": {
+        "width": 1344,
+        "height": 2992,
+        "density": 480,
+        "refresh_rate_hz": 120,
+        "screen_size_class": "normal"
+      },
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 3,
+            "pixel_width": 8160,
+            "pixel_height": 6144
+          },
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8000,
+            "pixel_height": 6000
+          },
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8000,
+            "pixel_height": 6000
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 3744,
+            "pixel_height": 2808
+          }
+        ]
+      },
+      "locale": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      },
+      "network": {
+        "egress_hint": "us-east"
+      },
+      "telephony": {
+        "sim_slot_count": 2,
+        "carrier_name": "T-Mobile",
+        "mcc": "310",
+        "mnc": "260",
+        "network_type": "5G"
+      },
+      "reality": {
+        "compute": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "soc": "Google Tensor G3",
+            "gpu": "Mali-G715",
+            "cpu_cores": 9,
+            "abis": [
+              "arm64-v8a"
+            ]
+          }
+        },
+        "memory": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "ram_gib": 12,
+            "storage_gib": 128
+          }
+        },
+        "panel": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "width": 1344,
+            "height": 2992,
+            "density_dpi": 480,
+            "refresh_hz": 120,
+            "technology": "OLED",
+            "modes": [
+              {
+                "width": 1344,
+                "height": 2992,
+                "refresh_hz": 60
+              },
+              {
+                "width": 1344,
+                "height": 2992,
+                "refresh_hz": 120
+              }
+            ]
+          }
+        },
+        "cameras": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "count": 4,
+            "inventory": [
+              {
+                "id": "0",
+                "facing": "back",
+                "megapixels": 50.1,
+                "hardware_level": "level3"
+              },
+              {
+                "id": "1",
+                "facing": "back",
+                "megapixels": 48.0,
+                "hardware_level": "full"
+              },
+              {
+                "id": "2",
+                "facing": "back",
+                "megapixels": 48.0,
+                "hardware_level": "full"
+              },
+              {
+                "id": "3",
+                "facing": "front",
+                "megapixels": 10.5,
+                "hardware_level": "limited"
+              }
+            ]
+          }
+        },
+        "sensors": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "inventory": [
+              {
+                "type": 1,
+                "name": "Accelerometer"
+              },
+              {
+                "type": 2,
+                "name": "Magnetic field"
+              },
+              {
+                "type": 4,
+                "name": "Gyroscope"
+              },
+              {
+                "type": 5,
+                "name": "Light"
+              },
+              {
+                "type": 8,
+                "name": "Proximity"
+              },
+              {
+                "type": 6,
+                "name": "Pressure"
+              }
+            ]
+          }
+        },
+        "power": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "design_capacity_mah": 5050
+          }
+        },
+        "carrier": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "slots": 2,
+            "mcc": "310",
+            "mnc": "260",
+            "country": "US",
+            "sim_state": "ready"
+          }
+        },
+        "webview": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "provider": "com.google.android.webview",
+            "version": "126.0.6478.122"
+          }
+        },
+        "environment": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "language": "en",
+            "country": "US",
+            "timezone": "America/New_York"
+          }
+        }
+      },
+      "classes": {
+        "display_inches": 6.7,
+        "mode_class": "oled-variable",
+        "refresh_capabilities_hz": [
+          60,
+          120
+        ],
+        "camera_class": "triple-rear-front",
+        "sensor_inventory_class": "phone-motion-environment",
+        "ram_storage_class": "12GiB/128GiB",
+        "battery_class": "li-ion",
+        "browser_class": "chromium-126-android",
+        "graphics_adapter_class": "Mali-G715",
+        "play_services_expectations": {
+          "packages": [
+            "com.google.android.gms",
+            "com.android.vending"
+          ],
+          "certification": "unverified",
+          "attestation": "requires runtime evidence"
+        },
+        "modem_patterns": {
+          "bootloader": "ripcurrent-[0-9.]+-[0-9]+",
+          "baseband": "g5300i-[0-9]+-[0-9]+-B-[0-9]+"
+        },
+        "carrier_region": {
+          "country": "US",
+          "mcc": "310",
+          "mnc": "260",
+          "iccid_prefix": "8901260"
+        },
+        "imei_class": "synthetic-luhn-valid-allocation-unverified-tac"
+      },
+      "firmware_binding": {
+        "fingerprint": "google/husky/husky:14/AP2A.240805.005.D1/catalog.20240805:user/release-keys",
+        "security_patch": "2024-08-05",
+        "build_id": "AP2A.240805.005.D1",
+        "version_incremental": "catalog.20240805",
+        "build_date_utc": 1724544000
+      },
+      "sources": [
+        "https://support.google.com/pixelphone/answer/7158570"
+      ]
+    },
+    {
+      "id": "pixel_9",
+      "label": "Pixel 9",
+      "device": {
+        "manufacturer": "Google",
+        "brand": "google",
+        "model": "Pixel 9",
+        "product": "tokay",
+        "device": "tokay",
+        "hardware": "zumapro",
+        "fingerprint": "google/tokay/tokay:14/AD1A.240530.047/catalog.20240805:user/release-keys",
+        "version_release": "14",
+        "sdk_int": 34,
+        "security_patch": "2024-08-05",
+        "build_id": "AD1A.240530.047",
+        "version_incremental": "catalog.20240805",
+        "build_date_utc": 1724544000,
+        "first_api_level": 34,
+        "bootloader": "ripcurrentpro-1.0-11000000",
+        "baseband": "g5400c-240701-240805-B-12119395"
+      },
+      "display": {
+        "width": 1080,
+        "height": 2424,
+        "density": 420,
+        "refresh_rate_hz": 120,
+        "screen_size_class": "normal"
+      },
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 3,
+            "pixel_width": 8160,
+            "pixel_height": 6144
+          },
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8000,
+            "pixel_height": 6000
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 3744,
+            "pixel_height": 2808
+          }
+        ]
+      },
+      "locale": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      },
+      "network": {
+        "egress_hint": "us-east"
+      },
+      "telephony": {
+        "sim_slot_count": 2,
+        "carrier_name": "T-Mobile",
+        "mcc": "310",
+        "mnc": "260",
+        "network_type": "5G"
+      },
+      "reality": {
+        "compute": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "soc": "Google Tensor G4",
+            "gpu": "Mali-G715",
+            "cpu_cores": 8,
+            "abis": [
+              "arm64-v8a"
+            ]
+          }
+        },
+        "memory": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "ram_gib": 12,
+            "storage_gib": 128
+          }
+        },
+        "panel": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "width": 1080,
+            "height": 2424,
+            "density_dpi": 420,
+            "refresh_hz": 120,
+            "technology": "OLED",
+            "modes": [
+              {
+                "width": 1080,
+                "height": 2424,
+                "refresh_hz": 60
+              },
+              {
+                "width": 1080,
+                "height": 2424,
+                "refresh_hz": 120
+              }
+            ]
+          }
+        },
+        "cameras": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "count": 3,
+            "inventory": [
+              {
+                "id": "0",
+                "facing": "back",
+                "megapixels": 50.1,
+                "hardware_level": "level3"
+              },
+              {
+                "id": "1",
+                "facing": "back",
+                "megapixels": 48.0,
+                "hardware_level": "full"
+              },
+              {
+                "id": "2",
+                "facing": "front",
+                "megapixels": 10.5,
+                "hardware_level": "limited"
+              }
+            ]
+          }
+        },
+        "sensors": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "inventory": [
+              {
+                "type": 1,
+                "name": "Accelerometer"
+              },
+              {
+                "type": 2,
+                "name": "Magnetic field"
+              },
+              {
+                "type": 4,
+                "name": "Gyroscope"
+              },
+              {
+                "type": 5,
+                "name": "Light"
+              },
+              {
+                "type": 8,
+                "name": "Proximity"
+              },
+              {
+                "type": 6,
+                "name": "Pressure"
+              }
+            ]
+          }
+        },
+        "power": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "design_capacity_mah": 4700
+          }
+        },
+        "carrier": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "slots": 2,
+            "mcc": "310",
+            "mnc": "260",
+            "country": "US",
+            "sim_state": "ready"
+          }
+        },
+        "webview": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "provider": "com.google.android.webview",
+            "version": "126.0.6478.122"
+          }
+        },
+        "environment": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "language": "en",
+            "country": "US",
+            "timezone": "America/New_York"
+          }
+        }
+      },
+      "classes": {
+        "display_inches": 6.3,
+        "mode_class": "oled-variable",
+        "refresh_capabilities_hz": [
+          60,
+          120
+        ],
+        "camera_class": "dual-rear-front",
+        "sensor_inventory_class": "phone-motion-environment",
+        "ram_storage_class": "12GiB/128GiB",
+        "battery_class": "li-ion",
+        "browser_class": "chromium-126-android",
+        "graphics_adapter_class": "Mali-G715",
+        "play_services_expectations": {
+          "packages": [
+            "com.google.android.gms",
+            "com.android.vending"
+          ],
+          "certification": "unverified",
+          "attestation": "requires runtime evidence"
+        },
+        "modem_patterns": {
+          "bootloader": "ripcurrentpro-[0-9.]+-[0-9]+",
+          "baseband": "g5400c-[0-9]+-[0-9]+-B-[0-9]+"
+        },
+        "carrier_region": {
+          "country": "US",
+          "mcc": "310",
+          "mnc": "260",
+          "iccid_prefix": "8901260"
+        },
+        "imei_class": "synthetic-luhn-valid-allocation-unverified-tac"
+      },
+      "firmware_binding": {
+        "fingerprint": "google/tokay/tokay:14/AD1A.240530.047/catalog.20240805:user/release-keys",
+        "security_patch": "2024-08-05",
+        "build_id": "AD1A.240530.047",
+        "version_incremental": "catalog.20240805",
+        "build_date_utc": 1724544000
+      },
+      "sources": [
+        "https://support.google.com/pixelphone/answer/7158570"
+      ]
+    },
+    {
+      "id": "pixel_9_pro",
+      "label": "Pixel 9 Pro",
+      "device": {
+        "manufacturer": "Google",
+        "brand": "google",
+        "model": "Pixel 9 Pro",
+        "product": "caiman",
+        "device": "caiman",
+        "hardware": "zumapro",
+        "fingerprint": "google/caiman/caiman:14/AD1A.240530.047/catalog.20240805:user/release-keys",
+        "version_release": "14",
+        "sdk_int": 34,
+        "security_patch": "2024-08-05",
+        "build_id": "AD1A.240530.047",
+        "version_incremental": "catalog.20240805",
+        "build_date_utc": 1724544000,
+        "first_api_level": 34,
+        "bootloader": "ripcurrentpro-1.0-11000000",
+        "baseband": "g5400c-240701-240805-B-12119395"
+      },
+      "display": {
+        "width": 1280,
+        "height": 2856,
+        "density": 480,
+        "refresh_rate_hz": 120,
+        "screen_size_class": "normal"
+      },
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 3,
+            "pixel_width": 8160,
+            "pixel_height": 6144
+          },
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8000,
+            "pixel_height": 6000
+          },
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8000,
+            "pixel_height": 6000
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 7488,
+            "pixel_height": 5616
+          }
+        ]
+      },
+      "locale": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      },
+      "network": {
+        "egress_hint": "us-east"
+      },
+      "telephony": {
+        "sim_slot_count": 2,
+        "carrier_name": "T-Mobile",
+        "mcc": "310",
+        "mnc": "260",
+        "network_type": "5G"
+      },
+      "reality": {
+        "compute": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "soc": "Google Tensor G4",
+            "gpu": "Mali-G715",
+            "cpu_cores": 8,
+            "abis": [
+              "arm64-v8a"
+            ]
+          }
+        },
+        "memory": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "ram_gib": 16,
+            "storage_gib": 128
+          }
+        },
+        "panel": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "width": 1280,
+            "height": 2856,
+            "density_dpi": 480,
+            "refresh_hz": 120,
+            "technology": "OLED",
+            "modes": [
+              {
+                "width": 1280,
+                "height": 2856,
+                "refresh_hz": 60
+              },
+              {
+                "width": 1280,
+                "height": 2856,
+                "refresh_hz": 120
+              }
+            ]
+          }
+        },
+        "cameras": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "count": 4,
+            "inventory": [
+              {
+                "id": "0",
+                "facing": "back",
+                "megapixels": 50.1,
+                "hardware_level": "level3"
+              },
+              {
+                "id": "1",
+                "facing": "back",
+                "megapixels": 48.0,
+                "hardware_level": "full"
+              },
+              {
+                "id": "2",
+                "facing": "back",
+                "megapixels": 48.0,
+                "hardware_level": "full"
+              },
+              {
+                "id": "3",
+                "facing": "front",
+                "megapixels": 42.1,
+                "hardware_level": "limited"
+              }
+            ]
+          }
+        },
+        "sensors": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "inventory": [
+              {
+                "type": 1,
+                "name": "Accelerometer"
+              },
+              {
+                "type": 2,
+                "name": "Magnetic field"
+              },
+              {
+                "type": 4,
+                "name": "Gyroscope"
+              },
+              {
+                "type": 5,
+                "name": "Light"
+              },
+              {
+                "type": 8,
+                "name": "Proximity"
+              },
+              {
+                "type": 6,
+                "name": "Pressure"
+              }
+            ]
+          }
+        },
+        "power": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "design_capacity_mah": 4700
+          }
+        },
+        "carrier": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "slots": 2,
+            "mcc": "310",
+            "mnc": "260",
+            "country": "US",
+            "sim_state": "ready"
+          }
+        },
+        "webview": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "provider": "com.google.android.webview",
+            "version": "126.0.6478.122"
+          }
+        },
+        "environment": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "language": "en",
+            "country": "US",
+            "timezone": "America/New_York"
+          }
+        }
+      },
+      "classes": {
+        "display_inches": 6.3,
+        "mode_class": "oled-variable",
+        "refresh_capabilities_hz": [
+          60,
+          120
+        ],
+        "camera_class": "triple-rear-front",
+        "sensor_inventory_class": "phone-motion-environment",
+        "ram_storage_class": "16GiB/128GiB",
+        "battery_class": "li-ion",
+        "browser_class": "chromium-126-android",
+        "graphics_adapter_class": "Mali-G715",
+        "play_services_expectations": {
+          "packages": [
+            "com.google.android.gms",
+            "com.android.vending"
+          ],
+          "certification": "unverified",
+          "attestation": "requires runtime evidence"
+        },
+        "modem_patterns": {
+          "bootloader": "ripcurrentpro-[0-9.]+-[0-9]+",
+          "baseband": "g5400c-[0-9]+-[0-9]+-B-[0-9]+"
+        },
+        "carrier_region": {
+          "country": "US",
+          "mcc": "310",
+          "mnc": "260",
+          "iccid_prefix": "8901260"
+        },
+        "imei_class": "synthetic-luhn-valid-allocation-unverified-tac"
+      },
+      "firmware_binding": {
+        "fingerprint": "google/caiman/caiman:14/AD1A.240530.047/catalog.20240805:user/release-keys",
+        "security_patch": "2024-08-05",
+        "build_id": "AD1A.240530.047",
+        "version_incremental": "catalog.20240805",
+        "build_date_utc": 1724544000
+      },
+      "sources": [
+        "https://support.google.com/pixelphone/answer/7158570"
+      ]
+    },
+    {
+      "id": "galaxy_s23",
+      "label": "Galaxy S23",
+      "device": {
+        "manufacturer": "samsung",
+        "brand": "samsung",
+        "model": "SM-S911B",
+        "product": "dm1q",
+        "device": "dm1q",
+        "hardware": "qcom",
+        "fingerprint": "samsung/dm1q/dm1q:13/TP1A.220624.014/S911BXXU1AWBD:user/release-keys",
+        "version_release": "13",
+        "sdk_int": 33,
+        "security_patch": "2023-02-01",
+        "build_id": "TP1A.220624.014",
+        "version_incremental": "S911BXXU1AWBD",
+        "build_date_utc": 1676419200,
+        "first_api_level": 33,
+        "bootloader": "S911BXXU1AWBD",
+        "baseband": "S911BXXU1AWBD"
+      },
+      "display": {
+        "width": 1080,
+        "height": 2340,
+        "density": 420,
+        "refresh_rate_hz": 120,
+        "screen_size_class": "normal"
+      },
+      "camera": {
+        "cameras": [
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8160,
+            "pixel_height": 6144
+          },
+          {
+            "facing": 1,
+            "hardware_level": 0,
+            "pixel_width": 4032,
+            "pixel_height": 3024
+          },
+          {
+            "facing": 1,
+            "hardware_level": 0,
+            "pixel_width": 3648,
+            "pixel_height": 2736
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 4032,
+            "pixel_height": 3024
+          }
+        ]
+      },
+      "locale": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      },
+      "network": {
+        "egress_hint": "eu-central"
+      },
+      "telephony": {
+        "sim_slot_count": 2,
+        "carrier_name": "T-Mobile",
+        "mcc": "310",
+        "mnc": "260",
+        "network_type": "5G"
+      },
+      "reality": {
+        "compute": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "soc": "Snapdragon 8 Gen 2 for Galaxy",
+            "gpu": "Adreno 740",
+            "cpu_cores": 8,
+            "abis": [
+              "arm64-v8a"
+            ]
+          }
+        },
+        "memory": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "ram_gib": 8,
+            "storage_gib": 128
+          }
+        },
+        "panel": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "width": 1080,
+            "height": 2340,
+            "density_dpi": 420,
+            "refresh_hz": 120,
+            "technology": "OLED",
+            "modes": [
+              {
+                "width": 1080,
+                "height": 2340,
+                "refresh_hz": 60
+              },
+              {
+                "width": 1080,
+                "height": 2340,
+                "refresh_hz": 120
+              }
+            ]
+          }
+        },
+        "cameras": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "count": 4,
+            "inventory": [
+              {
+                "id": "0",
+                "facing": "back",
+                "megapixels": 50.1,
+                "hardware_level": "full"
+              },
+              {
+                "id": "1",
+                "facing": "back",
+                "megapixels": 12.2,
+                "hardware_level": "limited"
+              },
+              {
+                "id": "2",
+                "facing": "back",
+                "megapixels": 10.0,
+                "hardware_level": "limited"
+              },
+              {
+                "id": "3",
+                "facing": "front",
+                "megapixels": 12.2,
+                "hardware_level": "limited"
+              }
+            ]
+          }
+        },
+        "sensors": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "inventory": [
+              {
+                "type": 1,
+                "name": "Accelerometer"
+              },
+              {
+                "type": 2,
+                "name": "Magnetic field"
+              },
+              {
+                "type": 4,
+                "name": "Gyroscope"
+              },
+              {
+                "type": 5,
+                "name": "Light"
+              },
+              {
+                "type": 8,
+                "name": "Proximity"
+              },
+              {
+                "type": 6,
+                "name": "Pressure"
+              }
+            ]
+          }
+        },
+        "power": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "design_capacity_mah": 3900
+          }
+        },
+        "carrier": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "slots": 2,
+            "mcc": "310",
+            "mnc": "260",
+            "country": "US",
+            "sim_state": "ready"
+          }
+        },
+        "webview": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "provider": "com.google.android.webview",
+            "version": "126.0.6478.122"
+          }
+        },
+        "environment": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+          "values": {
+            "language": "en",
+            "country": "US",
+            "timezone": "America/New_York"
+          }
+        }
+      },
+      "classes": {
+        "display_inches": 6.1,
+        "mode_class": "oled-variable",
+        "refresh_capabilities_hz": [
+          60,
+          120
+        ],
+        "camera_class": "triple-rear-front",
+        "sensor_inventory_class": "phone-motion-environment",
+        "ram_storage_class": "8GiB/128GiB",
+        "battery_class": "li-ion",
+        "browser_class": "chromium-126-android",
+        "graphics_adapter_class": "Adreno 740",
+        "play_services_expectations": {
+          "packages": [
+            "com.google.android.gms",
+            "com.android.vending"
+          ],
+          "certification": "unverified",
+          "attestation": "requires runtime evidence"
+        },
+        "modem_patterns": {
+          "bootloader": "S911B[A-Z0-9]+",
+          "baseband": "S911B[A-Z0-9]+"
+        },
+        "carrier_region": {
+          "country": "US",
+          "mcc": "310",
+          "mnc": "260",
+          "iccid_prefix": "8901260"
+        },
+        "imei_class": "synthetic-luhn-valid-allocation-unverified-tac"
+      },
+      "firmware_binding": {
+        "fingerprint": "samsung/dm1q/dm1q:13/TP1A.220624.014/S911BXXU1AWBD:user/release-keys",
+        "security_patch": "2023-02-01",
+        "build_id": "TP1A.220624.014",
+        "version_incremental": "S911BXXU1AWBD",
+        "build_date_utc": 1676419200
+      },
+      "sources": [
+        "https://www.samsung.com/ae/smartphones/galaxy-s/galaxy-s23-phantom-black-128gb-sm-s911bzkbmea/"
+      ]
+    }
+  ]
+}
