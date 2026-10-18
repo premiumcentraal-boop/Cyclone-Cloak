@@ -554,6 +554,15 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
 
     // ---- Identities -------------------------------------------------------------------------------------------------
 
+    fun saveReality(id: String, preview: dev.cyclone.cloak.forge.RealityStudio.Preview) = launchWork("Saving local Reality descriptions…") {
+        val current = CloakStore.find(app, id) ?: error("That identity is no longer readable.")
+        dev.cyclone.cloak.forge.RealityStudio.save(preview, current, CloakStore.all(app), confirmed = true) {
+            // Deliberately bypass saveIdentity: Reality Studio must never publish or reconcile.
+            CloakStore.save(app, it)
+        }
+        say("Reality descriptions saved locally. Existing bindings and publication are unchanged.")
+    }
+
     fun openBatchWorkshop() { _state.update { it.copy(workshop = BatchWorkshopState()) } }
     fun closeBatchWorkshop() { if (_state.value.busy == null) _state.update { it.copy(workshop = null) } }
     private fun batchWork(label: String, block: () -> Unit) = launchWork(label) {

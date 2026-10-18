@@ -1,7 +1,7 @@
 # Current state
 
-Updated 2026-10-18. Current source **v0.11.0-alpha.20 / versionCode 44**
-adds Device Reality v1. Optional schema 0.4 sections describe compute, memory,
+Updated 2026-10-18. Current source **v0.11.0-alpha.21 / versionCode 45**
+adds Reality Studio, missing-only repair and Fleet Diversity over Device Reality v1. Optional schema 0.4 sections describe compute, memory,
 panel, camera summaries, sensors, power, DRM level, radio labels, carrier, package
 versions, WebView and environment/input metadata. Existing 0.2/0.3 profiles are
 not migrated. New-profile and workshop flows explicitly request 0.4; direct
@@ -13,7 +13,7 @@ Reality coverage in Identities separates local coherence from physical evidence.
 A read-only optional probe extension hashes new observations without changing the
 legacy 89 rows. All new physical-device checks are **UNVERIFIED**. No platform
 verdict, new runtime hooks, permissions, connector, binding or storage-layout change.
-See [Device Reality](DEVICE-REALITY.md) and [release notes](RELEASE_0.11.0-alpha.20.md).
+See [Device Reality](DEVICE-REALITY.md) and [release notes](RELEASE_0.11.0-alpha.21.md).
 
 The existing Batch Identity Workshop remains available:
 
@@ -39,14 +39,31 @@ and cleanup passed each cycle, with zero APK installations. Four user-17 bound
 permission blocks remain; advertising.id was BLOCKED/IOException in cycle 3's
 cold post-removal capture and remains a limitation, not a pass.
 [Evidence](runtime-evidence/2026-10-18-015343-alpha18-lifecycle-install-once-3cycles/EXECUTION-REPORT.md)
-does not verify the workshop or newly packaged alpha.20 binaries.
+does not verify the workshop or newly packaged alpha.21 binaries.
+
+## Reality Studio and Fleet Diversity
+
+Selected schema 0.4 identities expose twelve section editors with provenance,
+availability, validation and temporary preservation locks. Edits are draft-only
+until an explicit before/after confirmation; stale drafts or invalid/duplicate
+values cannot save. Repair requires an exact compatible template, preserves
+unavailable facts, and fills only missing optional values. Regeneration reproduces
+catalog/seed facts, not new physical hardware. Old profiles remain unchanged.
+
+The library diversity disclosure shows repeated paths, labels, counts and local
+recommendations without raw identifiers. Balanced batch rounds prefer distinct
+selected combinations and show unavoidable repetition. Version 1 plans without a
+diversity policy remain readable. Saves do not invoke binding/publication flows;
+existing published state is not refreshed automatically. Hash-bound evidence and
+engine sidecars may become stale after a confirmed edit. Locks are editor-local.
+See [workflow and limitations](REALITY-STUDIO.md). Physical UI checks **UNVERIFIED**.
 
 ## Versions and major components
 
 | Component | Current source version / responsibility |
 | --- | --- |
-| App | `dev.cyclone.cloak`, `0.11.0-alpha.20`, code 44; minimum API 29, target/compile API 36 |
-| Module | `cyclone_cloak`, `v0.11.0-alpha.20`, code 44; ARM64/ARMv7, minimum API 26; metadata-only module change from alpha.18 |
+| App | `dev.cyclone.cloak`, `0.11.0-alpha.21`, code 45; minimum API 29, target/compile API 36 |
+| Module | `cyclone_cloak`, `v0.11.0-alpha.21`, code 45; ARM64/ARMv7, minimum API 26; metadata-only module change from alpha.18 |
 | Profile | Schema `0.4`, legacy `0.2`/`0.3` accepted; existing JSON storage unchanged |
 | Binding / reader | Binding schema 2; module index `schemaVersion: 2`; existing key lookup unchanged |
 | Connector | `cyclone.connector/1.3`; Cyclone 5.0.0-alpha.122 or newer |
@@ -74,7 +91,7 @@ does not verify the workshop or newly packaged alpha.20 binaries.
 
 ## Local verification and release gate
 
-The Device Reality checks: app **548 tests**, module
+The Reality Studio release checks: app **566 tests**, module
 **12 tests**, forge **558 passed**, schema **60 passed**, probe **96 per flavor**
 and host probe checks **7 passed**.
 WSL enabled the actual publication shell tests on Windows. Debug assembly and module
@@ -84,18 +101,18 @@ that the APK embeds the exact released module ZIP before publishing.
 ```powershell
 $env:JAVA_HOME='C:/Program Files/Eclipse Adoptium/jdk-17.0.20.101-hotspot'
 $env:CLOAK_TEST_WSL='1'
-& "$env:TEMP/cloak-build/gradle-8.11.1/bin/gradle.bat" -p android :app:testDebugUnitTest :module:testDebugUnitTest :probe:testStandardDebugUnitTest :probe:testDiagnosticsDebugUnitTest :app:assembleDebug :app:assembleRelease :module:packageModule :probe:assembleStandardDebug :probe:assembleDiagnosticsDebug --offline --no-daemon
-uv run --with pytest -- python -m pytest forge/tests -q
-uv run --with pytest --with jsonschema -- python -m pytest forge/schema_tests -q
-uv run -- python -m unittest discover -s android/probe/tests -v
-uv run -- python tools/verify_release.py --tag v0.11.0-alpha.20 --artifacts
+& "$env:TEMP/cloak-build/gradle-8.11.1/bin/gradle.bat" -p android :app:testDebugUnitTest :module:testDebugUnitTest :probe:testStandardDebugUnitTest :probe:testDiagnosticsDebugUnitTest :app:assembleDebug :app:assembleRelease :module:packageModule :probe:assembleStandardDebug :probe:assembleDiagnosticsDebug --offline --no-daemon --console=plain
+uv run --with pytest -- python -X utf8 -m pytest forge/tests -q
+uv run --with pytest --with jsonschema -- python -X utf8 -m pytest forge/schema_tests -q
+uv run -- python -X utf8 -m unittest discover -s android/probe/tests -v
+uv run -- python -X utf8 tools/verify_release.py --tag v0.11.0-alpha.21 --artifacts
 git diff --check
 ```
 
 The release workflow reruns tests, signs the APK using existing CI secrets, packages
 the module and checks exact embedded-module agreement before uploading the prerelease.
 Local debug output: `android/app/build/outputs/apk/debug/app-debug.apk`.
-Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.20.zip`,
+Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.21.zip`,
 `evidence-bundle.zip`, `summary.md`, `build-provenance.json`.
 
 ## Known limits and separately verified device evidence
@@ -110,7 +127,7 @@ Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.20.zip`,
 - Existing physical-device checks remain separate, including reboot/activation,
   multi-user behavior beyond the recorded diagnostics transition, publication/recovery and backup/import UI. See
   [DEFERRED-DEVICE-CHECKS.md](DEFERRED-DEVICE-CHECKS.md) and the runtime coverage ledger.
-  Earlier artifact measurements are not physical verification of alpha.20.
+  Earlier artifact measurements are not physical verification of alpha.21.
 - Publisher swaps retain the existing two-rename reader gap and do not guarantee
   power-loss safety or lock coordination with older/external writers.
 - Profile batch commits coordinate cooperating in-process callers. Downloads

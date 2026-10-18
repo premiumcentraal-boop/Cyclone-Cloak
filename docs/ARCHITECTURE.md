@@ -1,8 +1,44 @@
 # Cyclone Cloak Architecture
 
-Current source: v0.11.0-alpha.20, app/module code 44. Device Reality v1
+Current source: v0.11.0-alpha.21, app/module code 45. Device Reality v1
 adds optional profile schema 0.4 descriptions and read-only probe observations.
 Existing schema 0.2/0.3 files are accepted as-is. Physical verification UNVERIFIED.
+
+## Reality Studio and Fleet Diversity
+
+`RealityStudio.Session` owns a defensive copy and ephemeral field locks. Only
+schema-listed Reality value paths are editable; identifiers and the base profile
+are outside its editing capability. Validation runs before accepting each draft
+operation. User edits use the existing `needs verification` source and an explicit
+`User-set fields:` reason marker, without changing the profile schema. Mixed
+provenance is conservative rather than labelling retained edits as public facts.
+
+Repair adds missing values only from an exact model/firmware/API/hardware-compatible
+template. Regeneration restores catalog/seed values in one section, preserving locks
+and unavailable envelopes. Neither operation fabricates unknown hardware. A preview
+lists every changed leaf path, with sensitive labels hidden. Explicit save compares
+the original profile hash and rechecks coherence and library uniqueness. The
+ViewModel calls the existing atomic CloakStore writer directly; it does not call
+saveIdentity, publication, reconciliation, the connector or binding storage.
+Hash-bound engine metadata/evidence can become stale, and publication is not
+refreshed automatically. Locks and unsaved drafts end when the editor closes.
+Older schemas are read-only here, without implicit migration.
+
+`FleetDiversity` groups readable profiles by model, firmware, camera, display,
+recorded storage and SoC characteristics, plus a correlated core group. It hashes
+comparison values internally and returns only paths, labels, counts and section
+recommendations. Score is the fraction of distinct known characteristics over all
+profile pairs and six characteristics; missing facts earn no points, and no
+comparable pairs produces an unrecorded score. This is similarity of local data,
+not runtime coverage or a platform verdict.
+
+The pure batch planner defaults to balanced fair rounds across selected template
+clusters before repeats. Per-template counts and seed/uniqueness derivations are
+unchanged. Format 1 adds optional `request.diversity_policy` (`balanced` or `legacy`).
+Absent policy means legacy ordering; bodies are reproduced from the recorded
+seeds, current matching template digests and derivation metadata. Imported summaries
+are never trusted. Repeated clusters and diversity score are recomputed for review.
+No invented firmware, camera, SoC or storage variants are generated to raise a score.
 
 ## Device Reality v1
 

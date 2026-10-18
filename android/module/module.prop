@@ -1,6 +1,6 @@
 id=cyclone_cloak
 name=Cyclone Cloak
-version=v0.11.0-alpha.20
-versionCode=44
+version=v0.11.0-alpha.21
+versionCode=45
 author=Cyclone Cloak contributors
 description=Device-profile engine for Cyclone (platform). Manage per-app profiles from the Cyclone Cloak companion app. Requires platform.

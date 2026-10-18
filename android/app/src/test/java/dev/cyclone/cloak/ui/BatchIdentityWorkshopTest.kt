@@ -38,6 +38,7 @@ class BatchIdentityWorkshopTest {
                 { _, _, _ -> }, {}, {}, { saves++ }, {}, {}, {})
         } }
         compose.onNodeWithText("Batch review").assertIsDisplayed()
+        compose.onNodeWithText("Local diversity: not enough comparable facts · policy balanced").assertExists()
         compose.onNodeWithText(plan.drafts.single().chosenSeed).assertDoesNotExist()
         compose.onNodeWithText("Save approved drafts").performScrollTo().assertIsNotEnabled()
         compose.onAllNodes(isToggleable())[0].performScrollTo().performClick()

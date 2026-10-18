@@ -90,6 +90,9 @@ internal fun BatchIdentityWorkshop(state: BatchWorkshopState, phones: List<Phone
                         Text("Uniqueness not checked: ${summary.getInt("uniqueness_not_checked")}")
                         Text("Engine 1 · schema ${summary.getString("schema_version")} · planner ${BatchIdentityPlanner.VERSION}")
                         Text("Warnings: ${summary.getInt("warnings")}. Review draft details before approving.")
+                        Text("Local diversity: ${if (summary.isNull("diversity_score")) "not enough comparable facts" else "${summary.getInt("diversity_score")}/100"} · policy ${plan.request.diversityPolicy}")
+                        val repeats = summary.getInt("repeated_reality_clusters")
+                        if (repeats > 0) Text("$repeats repeated reality clusters. More drafts than distinct selected hardware/firmware combinations; reseeding cannot change fixed hardware.", color = MaterialTheme.colorScheme.error)
                         plan.drafts.groupingBy { it.templateName }.eachCount().forEach { (name, n) -> Text("$name: $n") }
                     }
                 }

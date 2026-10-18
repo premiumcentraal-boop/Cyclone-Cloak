@@ -8,7 +8,7 @@ private val uniquenessCodes = setOf("DUPLICATE_IDENTIFIER", "PROFILE_EXISTS", "N
 
 /** Pure local planning. No Android context, file writes, connector or binding capability. */
 class BatchIdentityPlanner(private val engine: DeviceProfileEngine = DefaultDeviceProfileEngine()) {
-    data class Request(val templateIds: List<String>, val perTemplate: Int, val seed: String, val labelPrefix: String = "", val schemaVersion: String = "0.4")
+    data class Request(val templateIds: List<String>, val perTemplate: Int, val seed: String, val labelPrefix: String = "", val schemaVersion: String = "0.4", val diversityPolicy: String = "balanced")
     data class Draft(val key: String, val templateId: String, val templateName: String, val index: Int,
         val revision: Int, val requestedSeed: String, val chosenSeed: String, val attempts: Int,
         val label: String, val templateDigest: String, val profile: JSONObject?, val metadata: JSONObject?,
@@ -25,14 +25,18 @@ class BatchIdentityPlanner(private val engine: DeviceProfileEngine = DefaultDevi
             .put("warnings", drafts.sumOf { d -> d.findings.count { it.severity == ProfileValidator.WARNING } })
             .put("templates", JSONObject(drafts.groupingBy { it.templateId }.eachCount()))
             .put("engine_version", "1").put("schema_version", request.schemaVersion)
+            .put("diversity_score", FleetDiversity.analyze(drafts.mapNotNull { it.profile }).score ?: JSONObject.NULL)
+            .put("repeated_reality_clusters", drafts.mapNotNull { it.profile }.groupingBy { FleetDiversity.clusterKey(it) }.eachCount().values.sumOf { maxOf(0, it - 1) })
+            .put("diversity_policy", request.diversityPolicy)
     }
 
     fun plan(request: Request, templates: List<PhoneTemplate>, existing: List<JSONObject>): Plan {
         val selected = validate(request, templates)
         val drafts = mutableListOf<Draft>()
-        for (phone in selected) for (index in 0 until request.perTemplate) {
-            drafts += generate(request, phone, index, 0, existing + drafts.mapNotNull { it.profile })
-        }
+        val slots = if (request.diversityPolicy == "balanced")
+            (0 until request.perTemplate).flatMap { index -> FleetDiversity.order(selected).map { it to index } }
+        else selected.flatMap { phone -> (0 until request.perTemplate).map { phone to it } }
+        for ((phone, index) in slots) drafts += generate(request, phone, index, 0, existing + drafts.mapNotNull { it.profile })
         require(drafts.map { it.chosenSeed }.distinct().size == drafts.size) { "DUPLICATE_SEED: generated drafts reused a seed." }
         return review(Plan(request, drafts), existing)
     }
@@ -81,6 +85,7 @@ class BatchIdentityPlanner(private val engine: DeviceProfileEngine = DefaultDevi
     }
 
     private fun validate(request: Request, templates: List<PhoneTemplate>): List<PhoneTemplate> {
+        require(request.diversityPolicy in setOf("balanced", "legacy")) { "Unsupported diversity policy." }
         require(request.schemaVersion in setOf("0.2", "0.3", "0.4")) { "Unsupported profile schema." }
         require(request.templateIds.isNotEmpty() && request.templateIds.distinct().size == request.templateIds.size) { "Select distinct base templates." }
         require(request.perTemplate in 1..20 && request.templateIds.size <= 100 / request.perTemplate) { "Choose 1–20 drafts per template, up to 100 total." }
@@ -96,7 +101,8 @@ class BatchIdentityPlanner(private val engine: DeviceProfileEngine = DefaultDevi
         return JSONObject().put("planner_version", VERSION).put("engine_version", "1")
             .put("schema_version", request.schemaVersion)
             .put("request", JSONObject().put("template_ids", JSONArray(request.templateIds.sorted()))
-                .put("per_template", request.perTemplate).put("seed", request.seed).put("label_prefix", request.labelPrefix))
+                .put("per_template", request.perTemplate).put("seed", request.seed).put("label_prefix", request.labelPrefix)
+                .also { if (request.diversityPolicy != "legacy") it.put("diversity_policy", request.diversityPolicy) })
             .put("drafts", JSONArray().also { array -> plan.drafts.forEach { d -> array.put(JSONObject()
                 .put("template_id", d.templateId).put("index", d.index).put("revision", d.revision)
                 .put("seed", d.chosenSeed).put("attempt_count", d.attempts).put("label", d.label)
@@ -112,10 +118,11 @@ class BatchIdentityPlanner(private val engine: DeviceProfileEngine = DefaultDevi
         require(root.keys().asSequence().toSet() == setOf("planner_version", "engine_version", "schema_version", "request", "drafts", "validation_summary")) { "Unsupported batch plan fields." }
         require(root.opt("planner_version") == VERSION && root.opt("engine_version") == "1" && root.opt("schema_version") in setOf("0.2", "0.3", "0.4")) { "Unsupported planner, engine or schema version." }
         val r = root.getJSONObject("request")
-        require(r.keys().asSequence().toSet() == setOf("template_ids", "per_template", "seed", "label_prefix") && r.opt("per_template") is Int && r.opt("seed") is String && r.opt("label_prefix") is String) { "Malformed batch request." }
+        require(r.keys().asSequence().toSet() - "diversity_policy" == setOf("template_ids", "per_template", "seed", "label_prefix") &&
+            (!r.has("diversity_policy") || r.opt("diversity_policy") is String) && r.opt("per_template") is Int && r.opt("seed") is String && r.opt("label_prefix") is String) { "Malformed batch request." }
         val ids = r.getJSONArray("template_ids")
         val request = Request((0 until ids.length()).map { require(ids.get(it) is String); ids.getString(it) },
-            r.getInt("per_template"), r.getString("seed"), r.getString("label_prefix"), root.getString("schema_version"))
+            r.getInt("per_template"), r.getString("seed"), r.getString("label_prefix"), root.getString("schema_version"), if (r.has("diversity_policy")) r.getString("diversity_policy") else "legacy")
         val phones = validate(request, templates).associateBy { it.id }
         val rows = root.getJSONArray("drafts")
         require(rows.length() in 1..request.perTemplate * phones.size) { "Invalid draft count." }

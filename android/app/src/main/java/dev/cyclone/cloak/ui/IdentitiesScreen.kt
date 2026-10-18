@@ -164,6 +164,7 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
             }
         }
         item { CloakSectionHeader("Saved identities", state.identities.size) }
+        item { FleetDiversityCard(state.identities.map { it.second }) }
         if (state.identities.size > 6) {
             item {
                 OutlinedTextField(
@@ -212,6 +213,7 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
                             ), contentDescription = "More for ${profile.optString("name")}")
                         }
                         CloakGroupDivider()
+                        RealityStudioCard(profile, state.phones, state.busy != null) { vm.saveReality(id, it) }
                         CloakDisclosure("Diagnostics & evidence", supporting = "Local checks, kept apart from the saved identity values") {
                             RealityCoverageCard(profile, state.engineCoverage)
                             CompatibilityReportCard(state.postures[id], id, EngineMetadataStore.digest(profile),
