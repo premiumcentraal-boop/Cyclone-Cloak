@@ -96,3 +96,46 @@ permissions, networking, platform bypass, key material or account logic is added
 
 Rule parity check: `uv run -- python -X utf8 tools/generate_reality_rules.py --check`.
 Regenerate the embedded Kotlin rules with the same command without `--check`.
+
+
+## Reality Runtime Bridge (format 1)
+
+The shared reviewed table `catalog/reality-runtime-fields.json` describes all 97
+schema 0.4 paths, including array containers, wildcard item paths and provenance.
+`RealityRuntimeContract.generate` (Kotlin) and `generate_contract` (Python) produce
+an ordered format 1 contract without profile values. `present` means the field is
+recorded, not that its Android surface is enforced. A known array item path uses
+`[]`; an empty array has no present items. Availability/source/reason and the
+inventory marker are host-only metadata.
+
+Statuses are APPLIED, PARTIAL, PENDING, DIAGNOSTIC_ONLY, HOST_ONLY and UNSUPPORTED.
+There are currently **zero APPLIED Reality paths**: the module does not consume
+Reality. PARTIAL means linked base fields have limited existing coverage, not a
+new Reality hook. Read-only API mappings describe caller-visible host values.
+Safe representation means the linked base value can be represented by the current
+engine; it is not a platform verdict, universal enforcement or device proof.
+
+`tools/generate_runtime_contract.py` generates the Kotlin table, probe asset and
+strict `schema/reality-runtime.contract.json`. Both semantic validators require
+complete ordered table agreement; the JSON schema rejects unknown capabilities,
+duplicate paths (even with different presence), changed surfaces and unsupported
+status promotions. Capability transitions require reviewed table changes and
+regeneration. No raw values, identifiers or seed enter the contract.
+
+Profiles without Reality return `not present`, including 0.2/0.3. Unknown future
+Reality sections are ignored in a defensive projection; invalid known fields are
+still rejected. Profiles are never changed or migrated by this layer.
+
+The optional `reality_runtime` probe extension has format 1, presence and rows:
+`field_path`, `surface`, `observation_status`, `digest`, `duration_ms`, `reason`.
+Existing expectation-backed PASS/FAIL rows also retain `expected_digest` so the
+consumer can check the comparison. PASS means match-only, never verified.
+Nested item observations are currently UNMAPPED, even if an aggregate inventory
+has a matching hash. Provenance and unsupported fields are never read as hardware.
+The existing 89-row report and `device_reality` extension remain compatible.
+The existing capture session owns the extension and final generation gate.
+
+Reality coverage displays all six capability counts and the first five pending
+or partially covered paths with their surfaces. Local coherence remains separate
+from runtime enforcement. All new physical-device evidence is **UNVERIFIED**.
+See [runtime backlog](REALITY-RUNTIME-BACKLOG.md) for separately authorized work.

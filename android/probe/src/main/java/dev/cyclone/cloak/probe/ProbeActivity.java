@@ -163,8 +163,14 @@ public class ProbeActivity extends Activity {
                 }
                 collect();
                 validateComplete();
+                JSONObject runtimeTable;
+                try (java.io.InputStream stream = getAssets().open("reality-runtime-fields.json")) {
+                    runtimeTable = new JSONObject(new String(readBytes(stream), StandardCharsets.UTF_8));
+                }
+                JSONObject reality = RealityProbe.collect(ProbeActivity.this, profile, runtimeTable);
                 JSONObject report = envelope().put("rows", new JSONArray(rows.toString()))
-                    .put("device_reality", RealityProbe.collect(ProbeActivity.this, profile));
+                    .put("device_reality", reality)
+                    .put("reality_runtime", RealityRuntimeReport.build(runtimeTable, profile, reality));
                 StringBuilder visible = new StringBuilder("Cloak Runtime Probe\n\n");
                 for (int i = 0; i < rows.length(); i++) {
                     JSONObject row = rows.getJSONObject(i);

@@ -6,8 +6,9 @@ import org.json.JSONObject
 object RealityCoverage {
     data class Row(val field: String, val state: String, val mismatch: Boolean = false)
     data class Summary(val score: Int?, val missing: List<String>, val warnings: Int, val schema: String,
-        val provenance: List<String>, val rows: List<Row>)
+        val provenance: List<String>, val rows: List<Row>, val runtime: RealityRuntimeContract.Readiness? = null)
     fun summarize(profile: JSONObject, report: JSONObject? = null): Summary {
+        report?.optJSONObject("reality_runtime")?.let { RealityRuntimeContract.validateObservation(it) }
         val reality = profile.optJSONObject("reality")
         val findings = ProfileValidator.validateProfile(profile)
         val errors = findings.count { it.severity == ProfileValidator.ERROR }
@@ -41,6 +42,6 @@ object RealityCoverage {
                 val status = readings[id]?.optString("status")
                 Row(id, when (status) { "PASS" -> "match-only"; "OBSERVED" -> "observed"; "BLOCKED" -> "blocked"
                     "MISSING", "FAIL" -> "missing"; else -> "unmapped" }, status == "FAIL")
-            })
+            }, runCatching { RealityRuntimeContract.readiness(profile) }.getOrNull())
     }
 }

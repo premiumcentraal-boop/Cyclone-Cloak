@@ -170,3 +170,18 @@ remain blocked; those require a separately authorized test environment to prove.
 The JNI registration defect is consistent with [AOSP SystemProperties](https://raw.githubusercontent.com/aosp-mirror/platform_frameworks_base/master/core/java/android/os/SystemProperties.java):
 `native_get(String)` is a Java forwarding method on modern Android. Registering
 it as a native method rejected the release's registration batch on this device.
+
+
+## Reality Runtime Bridge (format 1)
+
+The contract table maps 97 schema leaf/array paths, including host-only provenance.
+Runtime readiness: **0 applied, 10 partial, 5 pending, 42 diagnostic-only,
+37 host-only, 3 unsupported**. Partial refers only to existing linked base fields;
+the module does not consume Reality. These counts do not replace measured rows.
+
+Optional `reality_runtime` observations reuse digest-only comparisons. PASS means
+match-only, not verified. Nested inventory leaves stay unmapped until individually
+measured; no aggregate hash silently verifies a leaf. Historical device evidence
+is unchanged. The new extension is **UNVERIFIED on physical devices**.
+See [format](DEVICE-REALITY.md#reality-runtime-bridge-format-1) and
+[prioritized future surfaces](REALITY-RUNTIME-BACKLOG.md). No platform verdict.

@@ -1,6 +1,6 @@
 # Current state
 
-Updated 2026-10-18. Current source **v0.11.0-alpha.21 / versionCode 45**
+Updated 2026-10-18. Current source **v0.11.0-alpha.22 / versionCode 46**
 adds Reality Studio, missing-only repair and Fleet Diversity over Device Reality v1. Optional schema 0.4 sections describe compute, memory,
 panel, camera summaries, sensors, power, DRM level, radio labels, carrier, package
 versions, WebView and environment/input metadata. Existing 0.2/0.3 profiles are
@@ -13,7 +13,7 @@ Reality coverage in Identities separates local coherence from physical evidence.
 A read-only optional probe extension hashes new observations without changing the
 legacy 89 rows. All new physical-device checks are **UNVERIFIED**. No platform
 verdict, new runtime hooks, permissions, connector, binding or storage-layout change.
-See [Device Reality](DEVICE-REALITY.md) and [release notes](RELEASE_0.11.0-alpha.21.md).
+See [Device Reality](DEVICE-REALITY.md) and [release notes](RELEASE_0.11.0-alpha.22.md).
 
 The existing Batch Identity Workshop remains available:
 
@@ -62,8 +62,8 @@ See [workflow and limitations](REALITY-STUDIO.md). Physical UI checks **UNVERIFI
 
 | Component | Current source version / responsibility |
 | --- | --- |
-| App | `dev.cyclone.cloak`, `0.11.0-alpha.21`, code 45; minimum API 29, target/compile API 36 |
-| Module | `cyclone_cloak`, `v0.11.0-alpha.21`, code 45; ARM64/ARMv7, minimum API 26; metadata-only module change from alpha.18 |
+| App | `dev.cyclone.cloak`, `0.11.0-alpha.22`, code 46; minimum API 29, target/compile API 36 |
+| Module | `cyclone_cloak`, `v0.11.0-alpha.22`, code 46; ARM64/ARMv7, minimum API 26; metadata-only module change from alpha.18 |
 | Profile | Schema `0.4`, legacy `0.2`/`0.3` accepted; existing JSON storage unchanged |
 | Binding / reader | Binding schema 2; module index `schemaVersion: 2`; existing key lookup unchanged |
 | Connector | `cyclone.connector/1.3`; Cyclone 5.0.0-alpha.122 or newer |
@@ -105,14 +105,14 @@ $env:CLOAK_TEST_WSL='1'
 uv run --with pytest -- python -X utf8 -m pytest forge/tests -q
 uv run --with pytest --with jsonschema -- python -X utf8 -m pytest forge/schema_tests -q
 uv run -- python -X utf8 -m unittest discover -s android/probe/tests -v
-uv run -- python -X utf8 tools/verify_release.py --tag v0.11.0-alpha.21 --artifacts
+uv run -- python -X utf8 tools/verify_release.py --tag v0.11.0-alpha.22 --artifacts
 git diff --check
 ```
 
 The release workflow reruns tests, signs the APK using existing CI secrets, packages
 the module and checks exact embedded-module agreement before uploading the prerelease.
 Local debug output: `android/app/build/outputs/apk/debug/app-debug.apk`.
-Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.21.zip`,
+Release asset names: `app-release.apk`, `cyclone-cloak-0.11.0-alpha.22.zip`,
 `evidence-bundle.zip`, `summary.md`, `build-provenance.json`.
 
 ## Known limits and separately verified device evidence
@@ -140,3 +140,18 @@ Architecture and contracts: [ARCHITECTURE.md](ARCHITECTURE.md),
 [STATE_LAYOUT.md](STATE_LAYOUT.md), [CYCLONE_PROFILES_REPORT.md](CYCLONE_PROFILES_REPORT.md).
 Historical handoffs preserve their dated evidence; current library behavior is
 in [Run E completion](HANDOFF-2026-10-13-RUN-E-LIBRARY-QUALITY-COMPLETED.md).
+
+
+## Reality Runtime Bridge (format 1)
+
+Alpha.22 / code 46 adds the pure Kotlin/Python contract, generated strict schema,
+read-only probe extension, coverage readiness counts and prioritized backlog.
+All 97 schema leaf/array paths are represented: **0 applied, 10 partial, 5 pending,
+42 diagnostic-only, 37 host-only, 3 unsupported**. These are capability counts,
+not physical measurements. Reality is not consumed by the current module.
+
+Legacy profiles report `not present`; future sections are ignored safely without
+rewriting stored data. New physical verification is **UNVERIFIED**. No platform
+verdict, new hooks, permissions, networking or production behavior changes.
+See [Device Reality](DEVICE-REALITY.md#reality-runtime-bridge-format-1) and
+[runtime backlog](REALITY-RUNTIME-BACKLOG.md).

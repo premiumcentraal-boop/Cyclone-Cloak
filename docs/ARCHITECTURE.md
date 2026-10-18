@@ -1,6 +1,6 @@
 # Cyclone Cloak Architecture
 
-Current source: v0.11.0-alpha.21, app/module code 45. Device Reality v1
+Current source: v0.11.0-alpha.22, app/module code 46. Device Reality v1
 adds optional profile schema 0.4 descriptions and read-only probe observations.
 Existing schema 0.2/0.3 files are accepted as-is. Physical verification UNVERIFIED.
 
@@ -444,3 +444,20 @@ Replay history is retained. Both actions recheck the reviewed record before writ
 a changed record requires another review. Errors remain visible on the selected
 identity (and in an open import preview), with retry/cancel paths. Profile files,
 connector behavior, binding and module publication are unchanged.
+
+
+## Reality Runtime Bridge (format 1)
+
+`catalog/reality-runtime-fields.json` is the reviewed shared source for 97 schema
+paths. The generator emits the pure Kotlin table, probe asset and strict JSON
+contract schema. Python and Kotlin produce the same ordered capability contract
+without copying profile values. Semantic validation requires exact reviewed-table
+agreement; unknown future Reality sections are ignored without changing profiles.
+
+The capture session adds an optional digest-only `reality_runtime` extension by
+reusing the existing comparison evidence. No readers outside the contract are
+selected. Nested inventory matches are not inferred from aggregate hashes.
+RealityCoverage validates the extension and displays runtime readiness separately
+from local coherence. No Reality fields are fully applied by the module.
+See [format and limitations](DEVICE-REALITY.md#reality-runtime-bridge-format-1)
+and [authorized future work](REALITY-RUNTIME-BACKLOG.md).

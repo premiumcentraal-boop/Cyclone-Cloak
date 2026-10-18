@@ -11,17 +11,15 @@ not prove that every inspection API sees it.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.11.0-alpha.21 (prerelease)
+## Status: 0.11.0-alpha.22 (prerelease)
 
-Reality Studio adds a preview-first editor and missing-field repair inside each
-schema 0.4 identity. Fleet Diversity reports repeated local descriptions without
-showing identifiers. Batch Workshop spreads drafts across distinct selected
-catalog combinations and warns about unavoidable repeats. Existing profiles and
-version 1 plans remain readable. App/module code 45. No runtime, connector,
-publication, permission or storage-layout changes; no platform verdict.
-Physical UI verification is **UNVERIFIED**.
-See [Studio and Fleet Diversity](docs/REALITY-STUDIO.md) and
-[release notes](docs/RELEASE_0.11.0-alpha.21.md).
+Reality Runtime Bridge maps every schema 0.4 Reality field to a reviewed Android
+surface and capability status. Coverage separates local coherence, read-only
+observations and runtime enforcement. No new runtime hooks, permissions,
+connector or publication behavior. App/module code 46. Physical verification of
+the new contract/probe extension is **UNVERIFIED**; no platform verdict.
+See [Device Reality](docs/DEVICE-REALITY.md), [runtime backlog](docs/REALITY-RUNTIME-BACKLOG.md)
+and [release notes](docs/RELEASE_0.11.0-alpha.22.md).
 
 - **Companion app** (`android/app`): a Cyclone connector (contract `cyclone.connector/1.3`, Cyclone
   5.0.0-alpha.122 or newer). Imports or creates cloak profiles, binds them to the apps of Cyclone

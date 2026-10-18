@@ -33,7 +33,7 @@ import org.json.JSONObject;
 @SuppressWarnings("deprecation")
 final class RealityProbe {
     private RealityProbe() { }
-    static JSONObject collect(Activity activity, JSONObject profile) throws Exception {
+    static JSONObject collect(Activity activity, JSONObject profile, JSONObject contractTable) throws Exception {
         Map<String, RealityReport.Reader> readers = new HashMap<>();
         readers.put("compute.soc", () -> Build.VERSION.SDK_INT >= 31 ? Build.SOC_MODEL : null);
         readers.put("compute.abis", () -> new JSONArray(Build.SUPPORTED_ABIS));
@@ -142,6 +142,13 @@ final class RealityProbe {
         readers.put("environment.timezone", () -> TimeZone.getDefault().getID());
         readers.put("environment.input_method", () -> Settings.Secure.getString(activity.getContentResolver(), Settings.Secure.DEFAULT_INPUT_METHOD));
         readers.put("environment.accessibility_enabled", () -> Settings.Secure.getInt(activity.getContentResolver(), Settings.Secure.ACCESSIBILITY_ENABLED, 0) != 0);
+        java.util.Set<String> allowedReaders = new java.util.HashSet<>();
+        JSONArray contractFields = contractTable.getJSONArray("fields");
+        for (int i = 0; i < contractFields.length(); i++) {
+            JSONObject field = contractFields.getJSONObject(i);
+            if (!field.isNull("surface") && !field.isNull("reader_key")) allowedReaders.add(field.getString("reader_key"));
+        }
+        readers.keySet().retainAll(allowedReaders);
         JSONObject fields;
         try (java.io.InputStream stream = activity.getAssets().open("reality-fields.json")) {
             java.io.ByteArrayOutputStream bytes = new java.io.ByteArrayOutputStream();
