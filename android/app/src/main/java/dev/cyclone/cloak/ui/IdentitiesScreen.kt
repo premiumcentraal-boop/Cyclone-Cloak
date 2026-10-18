@@ -213,6 +213,7 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
                         }
                         CloakGroupDivider()
                         CloakDisclosure("Diagnostics & evidence", supporting = "Local checks, kept apart from the saved identity values") {
+                            RealityCoverageCard(profile, state.engineCoverage)
                             CompatibilityReportCard(state.postures[id], id, EngineMetadataStore.digest(profile),
                                 state.currentArtifactDigest, state.busy != null, state.postureErrors[id],
                                 onLoad = { postureTarget = id; postureImporter.launch(arrayOf("application/json", "text/plain")) },

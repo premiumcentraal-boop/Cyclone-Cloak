@@ -13,8 +13,8 @@ object ProfileValidator {
     const val ERROR = "error"
     const val WARNING = "warning"
     const val INFO = "info"
-    const val SCHEMA_VERSION = "0.3"
-    val LEGACY_SCHEMA_VERSIONS = setOf("0.2")
+    const val SCHEMA_VERSION = "0.4"
+    val LEGACY_SCHEMA_VERSIONS = setOf("0.2", "0.3")
 
     /** One problem. [field] is the dotted path it is about ("device.fingerprint"), when there is one. */
     data class Finding(val severity: String, val code: String, val message: String, val field: String? = null) {
@@ -107,6 +107,7 @@ object ProfileValidator {
         requiredDevice(findings, device)
         if (findings.any { it.isError }) return summarize(findings).findings
 
+        findings += DeviceReality.validate(profile)
         // Summary ordering is independent of rule execution and JSON key order.
         fingerprint(findings, device)
         versions(findings, device)
@@ -139,6 +140,7 @@ object ProfileValidator {
         surroundings(findings, asProfile)
         hardware(findings, phone.device, phone.telephony)
         if (phone.camera.length() > 0) camera(findings, phone.camera)
+        if (phone.reality.length() > 0) findings += DeviceReality.validate(asProfile.put("schema_version", "0.4").put("device", phone.device).put("reality", phone.reality))
         val claims = JSONObject(phone.corpus.toString())
         if (!claims.has("confidence")) phone.confidence?.let { claims.put("confidence", it) }
         corpus(findings, claims)

@@ -20,9 +20,9 @@ TEST_STATES = {"VERIFIED", "PASS", "FAIL", "BLOCKED", "OBSERVED", "MATCH_ONLY", 
 
 def generate(request: Mapping[str, Any]) -> dict[str, Any]:
     version = request.get("schema_version", "0.3")
-    if version not in ("0.2", "0.3"):
-        raise ValueError("schema_version must be 0.2 or 0.3")
-    profile = forge_profile(request["name"], request["seed"], request["template"])
+    if version not in ("0.2", "0.3", "0.4"):
+        raise ValueError("schema_version must be 0.2, 0.3 or 0.4")
+    profile = forge_profile(request["name"], request["seed"], request["template"], version)
     profile["schema_version"] = version
     return {"profile": profile, "posture": derive_posture(profile),
             "findings": [asdict(f) for f in validate(profile)],
@@ -68,25 +68,21 @@ def derive_posture(profile: Mapping[str, Any]) -> dict[str, str]:
 
 def check_uniqueness(profile: Mapping[str, Any], library: Iterable[Mapping[str, Any]]) -> list[Finding]:
     """Mirror the existing Kotlin derived index, including own-ID exclusion."""
-    identifiers = profile.get("identifiers")
-    if not isinstance(identifiers, Mapping):
-        return []
+    from .reality import UNIQUE_PATHS, at
     saved = list(library)
     findings = []
-    for field in sorted(IDENTIFIER_FIELDS):
-        value = identifiers.get(field)
+    for path in sorted(["identifiers." + f for f in IDENTIFIER_FIELDS] + list(UNIQUE_PATHS)):
+        value = at(profile, path)
         if not isinstance(value, str) or not value.strip():
             continue
         owners = set()
         for other in saved:
             if not isinstance(other, Mapping) or other.get("id", "") == profile.get("id", ""):
                 continue
-            ids = other.get("identifiers")
-            candidate = ids.get(field) if isinstance(ids, Mapping) else None
+            candidate = at(other, path)
             if isinstance(candidate, str) and candidate.strip() and candidate.lower() == value.lower():
                 owners.add(other.get("id", ""))
         if owners:
-            path = f"identifiers.{field}"
             findings.append(Finding("warning", "DUPLICATE_IDENTIFIER",
                 f"{path}: this value already exists in {len(owners)} other saved profile(s). "
                 "Regenerate it or explicitly keep the duplicate.", path))

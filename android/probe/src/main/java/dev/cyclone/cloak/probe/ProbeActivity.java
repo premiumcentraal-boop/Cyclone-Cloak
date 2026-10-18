@@ -163,7 +163,8 @@ public class ProbeActivity extends Activity {
                 }
                 collect();
                 validateComplete();
-                JSONObject report = envelope().put("rows", new JSONArray(rows.toString()));
+                JSONObject report = envelope().put("rows", new JSONArray(rows.toString()))
+                    .put("device_reality", RealityProbe.collect(ProbeActivity.this, profile));
                 StringBuilder visible = new StringBuilder("Cloak Runtime Probe\n\n");
                 for (int i = 0; i < rows.length(); i++) {
                     JSONObject row = rows.getJSONObject(i);

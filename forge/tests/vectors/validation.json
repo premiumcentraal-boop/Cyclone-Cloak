@@ -297,7 +297,7 @@
           "error",
           "SCHEMA_VERSION",
           "schema_version",
-          "schema_version must be 0.3"
+          "schema_version must be 0.4"
         ]
       ]
     },

@@ -22,6 +22,7 @@ data class PhoneTemplate(
     val camera: JSONObject = JSONObject(),
     /** Catalog-only optional device facts; never copied into a generated profile. */
     val corpus: JSONObject = JSONObject(),
+    val reality: JSONObject = JSONObject(),
 ) {
     /** "Google · Android 13 · panther". */
     val summary: String get() = listOf(
@@ -38,6 +39,7 @@ data class PhoneTemplate(
         .put("network", JSONObject(network.toString()))
         .put("display", JSONObject(display.toString()))
         .put("locale", JSONObject(locale.toString()))
+        .also { if (reality.length() > 0) it.put("reality", JSONObject(reality.toString())) }
         .also { json ->
             corpus.keys().forEach { json.put(it, corpus.get(it)) }
             confidence?.let { json.put("confidence", it) }
@@ -51,6 +53,7 @@ data class PhoneTemplate(
             "sensor_class_list", "drm_security_level", "board", "sources")
 
         fun fromJson(o: JSONObject, builtIn: Boolean = false): PhoneTemplate {
+            require(!o.has("reality") || o.opt("reality") is JSONObject) { "reality must be an object" }
             val id = o.optString("id")
             require(ID.matches(id)) { "phone id must be lowercase letters, digits, - or _" }
             val label = o.optString("label").trim().ifBlank { id }
@@ -60,13 +63,23 @@ data class PhoneTemplate(
                 (o.opt("confidence") as? String), o.optJSONObject("classification")?.let { JSONObject(it.toString()) },
                 blocks.getValue("camera"), JSONObject().also { facts ->
                     CORPUS.filter(o::has).forEach { facts.put(it, o.get(it)) }
-                })
+                }, o.optJSONObject("reality")?.let { JSONObject(it.toString()) } ?: JSONObject())
         }
 
         /** The phone a profile was made from (any profile: forged, imported or from a dump). */
         fun fromProfile(id: String, label: String, profile: JSONObject): PhoneTemplate = fromJson(
             JSONObject().put("id", id).put("label", label).also { o ->
                 BLOCKS.forEach { block -> profile.optJSONObject(block)?.let { o.put(block, it) } }
+                profile.optJSONObject("reality")?.let { source ->
+                    val reality = JSONObject(source.toString()).also { it.remove("inventory_id") }
+                    reality.optJSONObject("radio")?.let { radio ->
+                        radio.optJSONObject("values")?.let { values ->
+                            values.remove("wifi_name"); values.remove("bluetooth_name")
+                            if (values.length() == 0) radio.put("availability", "unknown").put("reason", "Identity-specific labels omitted from template.")
+                        }
+                    }
+                    o.put("reality", reality)
+                }
             },
         )
 

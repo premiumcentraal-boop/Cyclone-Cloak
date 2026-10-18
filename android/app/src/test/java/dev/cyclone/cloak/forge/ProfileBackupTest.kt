@@ -15,7 +15,7 @@ class ProfileBackupTest {
         assertFalse(body.has("seed")); assertFalse(body.has("identifiers")); assertFalse(body.has("id"))
         for (secret in listOf("private-token", "Cyclone_private", "private-key", "private-host", source.getString("seed"))) assertFalse(backup.toString().contains(secret))
         val manifest = backup.getJSONObject("manifest")
-        assertEquals("0.3", manifest.getString("schema_version")); assertEquals("0.10.0-rc.1", manifest.getString("app_version"))
+        assertEquals("0.4", manifest.getString("schema_version")); assertEquals("0.10.0-rc.1", manifest.getString("app_version"))
         assertEquals(1, manifest.getInt("profile_count")); assertEquals("Weekend", manifest.getString("label"))
     }
     @Test fun safeBackupImportsWithFreshIdentityAndExplicitConfirmation() {

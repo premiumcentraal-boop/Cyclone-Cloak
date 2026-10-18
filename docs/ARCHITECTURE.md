@@ -1,8 +1,31 @@
 # Cyclone Cloak Architecture
 
-Current source: v0.11.0-alpha.19, app/module code 43. The app adds a local
-Batch Identity Workshop; module runtime and connector behavior remain unchanged.
-Physical workshop and document-picker verification is UNVERIFIED.
+Current source: v0.11.0-alpha.20, app/module code 44. Device Reality v1
+adds optional profile schema 0.4 descriptions and read-only probe observations.
+Existing schema 0.2/0.3 files are accepted as-is. Physical verification UNVERIFIED.
+
+## Device Reality v1
+
+`DeviceReality` is pure: no storage, Android APIs, hooks or connector calls.
+`schema/device-reality.schema.json` defines bounded sections and availability;
+Python validation and generated Kotlin `RealityRules` share those definitions.
+Explicit cross-field rules bind panel, carrier, environment and WebView values to
+the base profile, and check SoC/API/hardware, storage, camera inventory and power.
+New-profile UI and batch planning request 0.4; direct engine/forge defaults stay
+0.3 for API compatibility. Plans retain an explicit schema version. No stored
+profile is rewritten. Existing storage/import paths carry the additive body.
+
+Catalog facts are copied deterministically; unknown hardware stays unknown.
+A seed-derived inventory marker and configured radio labels participate in local
+uniqueness checks. Neither a marker nor a label claims a physical hardware ID.
+
+The probe retains its 89 legacy rows and adds optional `device_reality` format 1
+with hashed observations. Capture-session ownership and final generation gating
+also cover this extension. `RealityCoverage` validates extension hashes and IDs;
+`RuntimeEvidence` merges fixture results conservatively into existing in-memory
+coverage state. Match-only never promotes to verified. Identity coverage shows
+local coherence separately from missing facts and probe fixture evidence.
+See [Device Reality](DEVICE-REALITY.md) for sources, format and limitations.
 
 ## Batch Identity Workshop
 
@@ -148,7 +171,7 @@ This flow does not publish bindings or change the connector/runtime contracts.
 
 ## Data and synchronization
 
-The profile contract is `schema/cloak-profile.schema.json`, `schema_version: "0.2"`.
+The profile contract is `schema/cloak-profile.schema.json`, `schema_version: "0.4"` (0.2/0.3 accepted unchanged).
 Python `forge/cloak_forge/` and Kotlin `forge/ProfileValidator.kt` implement
 coherence checks. They consume `catalog/phones.json` and cases in `forge/tests/vectors/`.
 

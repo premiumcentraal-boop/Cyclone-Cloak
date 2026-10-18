@@ -18,8 +18,8 @@ WARNING = "warning"
 INFO = "info"
 _SEVERITY_ORDER = {ERROR: 0, WARNING: 1, INFO: 2}
 
-SCHEMA_VERSION = "0.3"
-_LEGACY_SCHEMA_VERSIONS = ("0.2",)
+SCHEMA_VERSION = "0.4"
+_LEGACY_SCHEMA_VERSIONS = ("0.2", "0.3")
 
 _SEED_RE = re.compile(r"^[0-9a-f]{64}$")
 _ANDROID_ID_RE = re.compile(r"^[0-9a-f]{16}$")
@@ -323,6 +323,8 @@ def validate_profile(profile: Mapping[str, Any]) -> list[Finding]:
     if has_errors(findings):
         return sorted(findings, key=_finding_key)
 
+    from .reality import validate as validate_reality
+    findings.extend(Finding(severity, code, message, field) for severity, code, field, message in validate_reality(profile))
     _validate_fingerprint(findings, device)
     _validate_versions(findings, device)
     _validate_patch(findings, device)
@@ -368,8 +370,8 @@ def validate_catalog_metadata(record: Mapping[str, Any]) -> list[Finding]:
 def validate_catalog_record(record: Mapping[str, Any]) -> list[Finding]:
     """Run profile coherence on template blocks without changing generated data."""
     from .forge import build_ua
-    profile = {key: record[key] for key in ("device", "display", "telephony", "network", "locale", "camera") if key in record}
-    profile.update(schema_version="0.3", seed="ab" * 32, name="Catalog validation")
+    profile = {key: record[key] for key in ("device", "display", "telephony", "network", "locale", "camera", "reality") if key in record}
+    profile.update(schema_version="0.4", seed="ab" * 32, name="Catalog validation")
     device = record.get("device", {})
     if isinstance(device, Mapping) and all(isinstance(device.get(k), str) for k in ("model", "version_release")):
         display = record.get("display", {})

@@ -1,0 +1,272 @@
+{
+  "format": 1,
+  "schema_version": "0.4",
+  "states": [
+    "verified",
+    "match-only",
+    "observed",
+    "blocked",
+    "missing",
+    "unmapped"
+  ],
+  "fields": [
+    {
+      "field": "reality.compute.values.soc",
+      "row_id": "reality.compute.soc",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.compute.values.gpu",
+      "row_id": "reality.compute.gpu",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.compute.values.cpu_cores",
+      "row_id": "reality.compute.cpu_cores",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.compute.values.abis",
+      "row_id": "reality.compute.abis",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.memory.values.ram_gib",
+      "row_id": "reality.memory.ram_gib",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.memory.values.storage_gib",
+      "row_id": "reality.memory.storage_gib",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.memory.values.free_storage_gib",
+      "row_id": "reality.memory.free_storage_gib",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.panel.values.width",
+      "row_id": "reality.panel.width",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.panel.values.height",
+      "row_id": "reality.panel.height",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.panel.values.density_dpi",
+      "row_id": "reality.panel.density_dpi",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.panel.values.refresh_hz",
+      "row_id": "reality.panel.refresh_hz",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.panel.values.technology",
+      "row_id": "reality.panel.technology",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.panel.values.modes",
+      "row_id": "reality.panel.modes",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.cameras.values.count",
+      "row_id": "reality.cameras.count",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.cameras.values.inventory",
+      "row_id": "reality.cameras.inventory",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.sensors.values.inventory",
+      "row_id": "reality.sensors.inventory",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.power.values.design_capacity_mah",
+      "row_id": "reality.power.design_capacity_mah",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.power.values.battery_percent",
+      "row_id": "reality.power.battery_percent",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.power.values.battery_state",
+      "row_id": "reality.power.battery_state",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.power.values.charging_source",
+      "row_id": "reality.power.charging_source",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.power.values.temperature_c",
+      "row_id": "reality.power.temperature_c",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.power.values.thermal_status",
+      "row_id": "reality.power.thermal_status",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.power.values.power_save",
+      "row_id": "reality.power.power_save",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.drm.values.security_level",
+      "row_id": "reality.drm.security_level",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.radio.values.wifi_name",
+      "row_id": "reality.radio.wifi_name",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.radio.values.bluetooth_name",
+      "row_id": "reality.radio.bluetooth_name",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.radio.values.wifi_state",
+      "row_id": "reality.radio.wifi_state",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.radio.values.bluetooth_state",
+      "row_id": "reality.radio.bluetooth_state",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.carrier.values.slots",
+      "row_id": "reality.carrier.slots",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.carrier.values.mcc",
+      "row_id": "reality.carrier.mcc",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.carrier.values.mnc",
+      "row_id": "reality.carrier.mnc",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.carrier.values.country",
+      "row_id": "reality.carrier.country",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.carrier.values.sim_state",
+      "row_id": "reality.carrier.sim_state",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.packages.values.installed",
+      "row_id": "reality.packages.installed",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.webview.values.provider",
+      "row_id": "reality.webview.provider",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.webview.values.version",
+      "row_id": "reality.webview.version",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.webview.values.user_agent",
+      "row_id": "reality.webview.user_agent",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.environment.values.language",
+      "row_id": "reality.environment.language",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.environment.values.country",
+      "row_id": "reality.environment.country",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.environment.values.timezone",
+      "row_id": "reality.environment.timezone",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.environment.values.keyboard_layout",
+      "row_id": "reality.environment.keyboard_layout",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.environment.values.input_method",
+      "row_id": "reality.environment.input_method",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    },
+    {
+      "field": "reality.environment.values.accessibility_enabled",
+      "row_id": "reality.environment.accessibility_enabled",
+      "state": "unmapped",
+      "note": "Read-only probe mapping; physical verification UNVERIFIED."
+    }
+  ]
+}

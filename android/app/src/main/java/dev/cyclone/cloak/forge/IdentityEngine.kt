@@ -13,10 +13,10 @@ object IdentityEngine {
     )
 
     fun generate(request: GenerationRequest): JSONObject {
-        require(request.schema_version in setOf("0.2", "0.3")) { "schema_version must be 0.2 or 0.3" }
+        require(request.schema_version in setOf("0.2", "0.3", "0.4")) { "schema_version must be 0.2, 0.3 or 0.4" }
         require(request.name.isNotBlank()) { "name must be a non-empty string" }
         require(Regex("[0-9a-f]{64}").matches(request.seed)) { "seed must be 64 lowercase hex characters" }
-        val profile = CloakForge.forgeProfile(request.name, request.seed, request.template)
+        val profile = CloakForge.forgeProfile(request.name, request.seed, request.template, request.schema_version)
             .put("schema_version", request.schema_version)
         return JSONObject().put("profile", profile).put("posture", derive_posture(profile))
             .put("findings", findingsJson(validate(profile)))

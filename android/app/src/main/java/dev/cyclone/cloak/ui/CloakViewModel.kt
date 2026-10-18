@@ -678,7 +678,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         launchWork("Creating identity…") {
             val clean = name.trim()
             require(clean.length in 1..64) { "Names are 1 to 64 characters." }
-            val bundle = engine.generate_unique(IdentityEngine.GenerationRequest(clean, CloakForge.newSeed(), phone), CloakStore.all(app).map { it.second })
+            val bundle = engine.generate_unique(IdentityEngine.GenerationRequest(clean, CloakForge.newSeed(), phone, "0.4"), CloakStore.all(app).map { it.second })
             val profile = bundle.getJSONObject("profile")
             ProfileValidator.errors(profile).firstOrNull()?.let { throw IllegalArgumentException(it) }
             saveIdentity(profile, "Created", engineMetadata = bundle.getJSONObject("metadata"))

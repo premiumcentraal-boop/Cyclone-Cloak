@@ -11,18 +11,15 @@ not prove that every inspection API sees it.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.11.0-alpha.19 (prerelease)
+## Status: 0.11.0-alpha.20 (prerelease)
 
-Alpha.19 adds the preview-first **Batch Identity Workshop** in Identities.
-Plan up to 100 local drafts from multiple templates, review coherence and
-uniqueness, regenerate or remove selected drafts, and explicitly save approved
-items with per-item results. Private JSON plans can reproduce a batch later.
-App/module code 43; profile schema, binding storage, connector and module behavior
-are unchanged. No automatic bindings, new permissions, networking or platform
-verdict. Workshop device/SAF behavior remains UNVERIFIED.
-[Release notes](docs/RELEASE_0.11.0-alpha.19.md) distinguish local tests from
-the separately recorded alpha.18 diagnostics lifecycle evidence.
-See [CURRENT-STATE.md](docs/CURRENT-STATE.md).
+Device Reality v1 adds optional, strictly validated schema 0.4 device descriptions,
+conservative catalog provenance, deterministic local metadata and Reality coverage
+in Identities. Existing 0.2/0.3 profiles remain readable without migration. New
+fields describe local drafts; they do not add physical hardware or runtime hooks.
+App/module code 44. No connector, binding, storage-layout, permission or module
+behavior changes. Physical verification is **UNVERIFIED**; no platform verdict.
+See [Device Reality](docs/DEVICE-REALITY.md) and [release notes](docs/RELEASE_0.11.0-alpha.20.md).
 
 - **Companion app** (`android/app`): a Cyclone connector (contract `cyclone.connector/1.3`, Cyclone
   5.0.0-alpha.122 or newer). Imports or creates cloak profiles, binds them to the apps of Cyclone
@@ -201,7 +198,7 @@ docs/ARCHITECTURE.md      system design and integration contract
 docs/COMPAT_SURFACE.md    every renderable surface, by phase
 forge/                    profile forge: dump parsing, coherence validation, ID derivation
   tests/vectors/          cases the Python and Kotlin forge must answer the same
-schema/                   profile JSON Schema (schema_version 0.2)
+schema/                   profile JSON Schema (0.4; 0.2/0.3 accepted)
 ```
 
 The app's layers only depend downwards (forge and data → root → cyclone → ui); `ArchitectureTest`

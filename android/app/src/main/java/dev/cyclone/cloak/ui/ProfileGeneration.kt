@@ -45,7 +45,7 @@ object ProfileGeneration {
         }
         val bundle = try {
             // The seed is allocated once, and copied into the same profile that is validated and saved.
-            engine.generate_unique(IdentityEngine.GenerationRequest(name, seedFactory(), phone), existing.map { it.second })
+            engine.generate_unique(IdentityEngine.GenerationRequest(name, seedFactory(), phone, "0.4"), existing.map { it.second })
         } catch (invalid: DefaultDeviceProfileEngine.InvalidProfile) {
             return Result.Rejected(invalid.findings)
         } catch (_: Exception) {

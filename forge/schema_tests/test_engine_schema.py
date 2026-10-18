@@ -22,7 +22,7 @@ def validator(name):
     return Draft202012Validator(schema, registry=REGISTRY)
 
 
-@pytest.mark.parametrize("version", ["0.2", "0.3"])
+@pytest.mark.parametrize("version", ["0.2", "0.3", "0.4"])
 @pytest.mark.parametrize("phone", load_catalog(), ids=lambda p: p["id"])
 def test_every_emitted_bundle_validates(phone, version):
     bundle = generate({"name": "Schema test", "seed": "ab" * 32, "template": phone["id"], "schema_version": version})
@@ -50,3 +50,16 @@ def test_unique_metadata_is_additive_and_rejects_incomplete_retry_pair():
     v.validate(bundle)
     bundle["metadata"].pop("chosen_seed")
     assert list(v.iter_errors(bundle))
+
+
+@pytest.mark.parametrize("section", ["compute", "memory", "panel", "cameras", "sensors", "power", "drm", "radio", "carrier", "packages", "webview", "environment"])
+def test_reality_rejects_private_unknown_fields_and_availability_contradictions(section):
+    profile = generate({"name": "Reality", "seed": "ab" * 32, "template": "pixel_7", "schema_version": "0.4"})["profile"]
+    v = validator("cloak-profile.schema.json")
+    entry = profile["reality"][section]
+    entry["values"] = {"private_key": "must never be accepted"}
+    assert list(v.iter_errors(profile))
+    entry["availability"] = "known"; entry["values"] = {}
+    assert list(v.iter_errors(profile))
+    entry["availability"] = "unavailable"
+    v.validate(profile)

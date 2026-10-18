@@ -21,11 +21,12 @@ object CloakForge {
     // MARK: public surface
 
     /** Builds a full, coherent, deterministic cloak profile for a seed, from [phone]. */
-    fun forgeProfile(name: String, seed: String, phone: PhoneTemplate): JSONObject {
+    fun forgeProfile(name: String, seed: String, phone: PhoneTemplate, schemaVersion: String = "0.3"): JSONObject {
         val device = phone.device
         val screenClass = phone.display.optString("screen_size_class", "large")
         return JSONObject()
-            .put("schema_version", "0.3")
+            .put("schema_version", schemaVersion)
+            .also { require(schemaVersion in setOf("0.2", "0.3", "0.4")); if (schemaVersion == "0.4") it.put("reality", DeviceReality.generate(phone.reality, seed, buildUa(device, screenClass, seed))) }
             .put("id", uuid5("https://cloak.cyclone.dev/$seed/$name"))
             .put("name", name)
             .put("seed", seed)
@@ -50,7 +51,7 @@ object CloakForge {
         val cleanName = name.trim()
         require(cleanName.isNotEmpty()) { "Enter a name for this device identity." }
         require(cleanName.length <= 64) { "Device identity names can be up to 64 characters." }
-        return forgeProfile(cleanName, newSeed(), phone)
+        return forgeProfile(cleanName, newSeed(), phone, "0.4")
     }
 
     /** One cryptographic seed per generation; the full profile persists it for stable derivation. */

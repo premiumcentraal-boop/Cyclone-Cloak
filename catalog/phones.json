@@ -84,7 +84,94 @@
       ],
       "sources": [
         "https://support.google.com/pixelphone/answer/16043605?hl=en"
-      ]
+      ],
+      "reality": {
+        "compute": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "memory": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "panel": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "width": 1080,
+            "height": 2280,
+            "density_dpi": 440,
+            "refresh_hz": 90
+          }
+        },
+        "cameras": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "sensors": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "power": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "drm": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "radio": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "carrier": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "slots": 1,
+            "mcc": "310",
+            "mnc": "260"
+          }
+        },
+        "packages": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "webview": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "environment": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "language": "en",
+            "country": "US",
+            "timezone": "America/New_York"
+          }
+        }
+      }
     },
     {
       "id": "pixel_7",
@@ -95,7 +182,7 @@
         "model": "Pixel 7",
         "product": "panther",
         "device": "panther",
-        "hardware": "gs101",
+        "hardware": "gs201",
         "fingerprint": "google/panther/panther:13/TQ3A.230805.001/10193186:user/release-keys",
         "version_release": "13",
         "sdk_int": 33,
@@ -167,8 +254,103 @@
         "magnetometer"
       ],
       "sources": [
-        "https://support.google.com/pixelphone/answer/7158570?hl=en"
-      ]
+        "https://support.google.com/pixelphone/answer/7158570?hl=en",
+        "https://support.google.com/pixelphone/answer/7158570"
+      ],
+      "reality": {
+        "compute": {
+          "availability": "known",
+          "source": "public reference",
+          "reason": "Google Pixel hardware specifications: https://support.google.com/pixelphone/answer/7158570",
+          "values": {
+            "soc": "Google Tensor G2"
+          }
+        },
+        "memory": {
+          "availability": "known",
+          "source": "public reference",
+          "reason": "Pixel 7 8 GB / 128 GB SKU; Google Pixel hardware specifications. Other capacities require a separate selection.",
+          "values": {
+            "ram_gib": 8,
+            "storage_gib": 128
+          }
+        },
+        "panel": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "width": 1080,
+            "height": 2400,
+            "density_dpi": 420,
+            "refresh_hz": 90
+          }
+        },
+        "cameras": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "sensors": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "power": {
+          "availability": "known",
+          "source": "public reference",
+          "reason": "Typical capacity for Pixel 7; Google Pixel hardware specifications. Live power/thermal state is unknown.",
+          "values": {
+            "design_capacity_mah": 4355
+          }
+        },
+        "drm": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "radio": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "carrier": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "slots": 1,
+            "mcc": "310",
+            "mnc": "260"
+          }
+        },
+        "packages": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "webview": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "environment": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "language": "en",
+            "country": "US",
+            "timezone": "America/New_York"
+          }
+        }
+      }
     },
     {
       "id": "galaxy_s23",
@@ -177,10 +359,10 @@
         "manufacturer": "samsung",
         "brand": "samsung",
         "model": "SM-S911B",
-        "product": "beyond1q",
-        "device": "beyond1q",
-        "hardware": "exynos2200",
-        "fingerprint": "samsung/beyond1q/beyond1q:13/TP1A.220624.014/S911BXXU2AWA1:user/release-keys",
+        "product": "dm1q",
+        "device": "dm1q",
+        "hardware": "qcom",
+        "fingerprint": "samsung/dm1q/dm1q:13/TP1A.220624.014/S911BXXU2AWA1:user/release-keys",
         "version_release": "13",
         "sdk_int": 33,
         "security_patch": "2023-08-01",
@@ -188,7 +370,7 @@
         "version_incremental": "S911BXXU2AWA1",
         "build_date_utc": 1691952000,
         "first_api_level": 33,
-        "bootloader": "beyond1q-1.0-24551412",
+        "bootloader": "dm1q-1.0-24551412",
         "baseband": "S911BXXU2AWA1"
       },
       "telephony": {
@@ -257,8 +439,99 @@
         "magnetometer"
       ],
       "sources": [
-        "https://www.samsung.com/au/smartphones/galaxy-s/galaxy-s23-phantom-black-128gb-sm-s911bzkaats/"
-      ]
+        "https://www.samsung.com/au/smartphones/galaxy-s/galaxy-s23-phantom-black-128gb-sm-s911bzkaats/",
+        "https://image-us.samsung.com/SamsungUS/samsungbusiness/pdf/spec-sheets/s23/att/hhp-s23-spec-att.pdf",
+        "https://blob.lineageos.org/preview/wiki/505004/devices/dm1q/"
+      ],
+      "reality": {
+        "compute": {
+          "availability": "known",
+          "source": "public reference",
+          "reason": "Samsung Galaxy S23 specifications: https://image-us.samsung.com/SamsungUS/samsungbusiness/pdf/spec-sheets/s23/att/hhp-s23-spec-att.pdf",
+          "values": {
+            "soc": "Snapdragon 8 Gen 2 for Galaxy"
+          }
+        },
+        "memory": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "panel": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "width": 1080,
+            "height": 2340,
+            "density_dpi": 420,
+            "refresh_hz": 120
+          }
+        },
+        "cameras": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "sensors": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "power": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "drm": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "radio": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "carrier": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "slots": 2,
+            "mcc": "262",
+            "mnc": "02"
+          }
+        },
+        "packages": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "webview": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "environment": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "language": "de",
+            "country": "DE",
+            "timezone": "Europe/Berlin"
+          }
+        }
+      }
     },
     {
       "id": "pixel_6",
@@ -342,7 +615,94 @@
       ],
       "sources": [
         "https://support.google.com/pixelphone/answer/7158570?hl=en"
-      ]
+      ],
+      "reality": {
+        "compute": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "memory": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "panel": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "width": 1080,
+            "height": 2400,
+            "density_dpi": 420,
+            "refresh_hz": 90
+          }
+        },
+        "cameras": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "sensors": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "power": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "drm": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "radio": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "carrier": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "slots": 2,
+            "mcc": "310",
+            "mnc": "260"
+          }
+        },
+        "packages": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "webview": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "environment": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "language": "en",
+            "country": "US",
+            "timezone": "America/New_York"
+          }
+        }
+      }
     },
     {
       "id": "pixel_6a",
@@ -426,7 +786,94 @@
       ],
       "sources": [
         "https://support.google.com/pixelphone/answer/7158570?hl=en"
-      ]
+      ],
+      "reality": {
+        "compute": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "memory": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "panel": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "width": 1080,
+            "height": 2400,
+            "density_dpi": 420,
+            "refresh_hz": 60
+          }
+        },
+        "cameras": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "sensors": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "power": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "drm": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "radio": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "carrier": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "slots": 2,
+            "mcc": "310",
+            "mnc": "260"
+          }
+        },
+        "packages": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "webview": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "environment": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "language": "en",
+            "country": "US",
+            "timezone": "America/New_York"
+          }
+        }
+      }
     },
     {
       "id": "pixel_7a",
@@ -509,8 +956,98 @@
         "magnetometer"
       ],
       "sources": [
-        "https://support.google.com/pixelphone/answer/7158570?hl=en"
-      ]
+        "https://support.google.com/pixelphone/answer/7158570?hl=en",
+        "https://support.google.com/pixelphone/answer/7158570"
+      ],
+      "reality": {
+        "compute": {
+          "availability": "known",
+          "source": "public reference",
+          "reason": "Google Pixel hardware specifications: https://support.google.com/pixelphone/answer/7158570",
+          "values": {
+            "soc": "Google Tensor G2"
+          }
+        },
+        "memory": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "panel": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "width": 1080,
+            "height": 2400,
+            "density_dpi": 420,
+            "refresh_hz": 90
+          }
+        },
+        "cameras": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "sensors": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "power": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "drm": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "radio": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "carrier": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "slots": 2,
+            "mcc": "310",
+            "mnc": "260"
+          }
+        },
+        "packages": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "webview": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "environment": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "language": "en",
+            "country": "US",
+            "timezone": "America/New_York"
+          }
+        }
+      }
     },
     {
       "id": "pixel_8",
@@ -594,7 +1131,94 @@
       ],
       "sources": [
         "https://support.google.com/pixelphone/answer/7158570?hl=en"
-      ]
+      ],
+      "reality": {
+        "compute": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "memory": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "panel": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "width": 1080,
+            "height": 2400,
+            "density_dpi": 420,
+            "refresh_hz": 120
+          }
+        },
+        "cameras": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "sensors": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "power": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "drm": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "radio": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "carrier": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "slots": 2,
+            "mcc": "310",
+            "mnc": "260"
+          }
+        },
+        "packages": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "webview": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "environment": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "language": "en",
+            "country": "US",
+            "timezone": "America/New_York"
+          }
+        }
+      }
     },
     {
       "id": "pixel_6_pro",
@@ -693,7 +1317,94 @@
       ],
       "sources": [
         "https://support.google.com/pixelphone/answer/7158570?hl=en"
-      ]
+      ],
+      "reality": {
+        "compute": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "memory": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "panel": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "width": 1440,
+            "height": 3120,
+            "density_dpi": 480,
+            "refresh_hz": 120
+          }
+        },
+        "cameras": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "sensors": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "power": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "drm": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "radio": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "carrier": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "slots": 2,
+            "mcc": "310",
+            "mnc": "260"
+          }
+        },
+        "packages": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "webview": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "environment": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "language": "en",
+            "country": "US",
+            "timezone": "America/New_York"
+          }
+        }
+      }
     },
     {
       "id": "pixel_7_pro",
@@ -790,8 +1501,98 @@
         "magnetometer"
       ],
       "sources": [
-        "https://support.google.com/pixelphone/answer/7158570?hl=en"
-      ]
+        "https://support.google.com/pixelphone/answer/7158570?hl=en",
+        "https://support.google.com/pixelphone/answer/7158570"
+      ],
+      "reality": {
+        "compute": {
+          "availability": "known",
+          "source": "public reference",
+          "reason": "Google Pixel hardware specifications: https://support.google.com/pixelphone/answer/7158570",
+          "values": {
+            "soc": "Google Tensor G2"
+          }
+        },
+        "memory": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "panel": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "width": 1440,
+            "height": 3120,
+            "density_dpi": 480,
+            "refresh_hz": 120
+          }
+        },
+        "cameras": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "sensors": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "power": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "drm": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "radio": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "carrier": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "slots": 2,
+            "mcc": "310",
+            "mnc": "260"
+          }
+        },
+        "packages": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "webview": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "environment": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "language": "en",
+            "country": "US",
+            "timezone": "America/New_York"
+          }
+        }
+      }
     },
     {
       "id": "pixel_8_pro",
@@ -889,7 +1690,94 @@
       ],
       "sources": [
         "https://support.google.com/pixelphone/answer/7158570?hl=en"
-      ]
+      ],
+      "reality": {
+        "compute": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "memory": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "panel": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "width": 1344,
+            "height": 2992,
+            "density_dpi": 480,
+            "refresh_hz": 120
+          }
+        },
+        "cameras": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "sensors": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "power": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "drm": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "radio": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "carrier": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "slots": 2,
+            "mcc": "310",
+            "mnc": "260"
+          }
+        },
+        "packages": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "webview": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "environment": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "language": "en",
+            "country": "US",
+            "timezone": "America/New_York"
+          }
+        }
+      }
     },
     {
       "id": "pixel_8a",
@@ -982,7 +1870,94 @@
       ],
       "sources": [
         "https://support.google.com/pixelphone/answer/7158570?hl=en"
-      ]
+      ],
+      "reality": {
+        "compute": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "memory": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "panel": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "width": 1080,
+            "height": 2400,
+            "density_dpi": 420,
+            "refresh_hz": 120
+          }
+        },
+        "cameras": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "sensors": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "power": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "drm": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "radio": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "carrier": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "slots": 2,
+            "mcc": "310",
+            "mnc": "260"
+          }
+        },
+        "packages": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "webview": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "environment": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "language": "en",
+            "country": "US",
+            "timezone": "America/New_York"
+          }
+        }
+      }
     },
     {
       "id": "pixel_9",
@@ -1075,7 +2050,94 @@
       ],
       "sources": [
         "https://support.google.com/pixelphone/answer/7158570?hl=en"
-      ]
+      ],
+      "reality": {
+        "compute": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "memory": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "panel": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "width": 1080,
+            "height": 2424,
+            "density_dpi": 420,
+            "refresh_hz": 120
+          }
+        },
+        "cameras": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "sensors": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "power": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "drm": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "radio": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "carrier": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "slots": 2,
+            "mcc": "310",
+            "mnc": "260"
+          }
+        },
+        "packages": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "webview": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "environment": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "language": "en",
+            "country": "US",
+            "timezone": "America/New_York"
+          }
+        }
+      }
     },
     {
       "id": "pixel_9_pro",
@@ -1174,7 +2236,94 @@
       ],
       "sources": [
         "https://support.google.com/pixelphone/answer/7158570?hl=en"
-      ]
+      ],
+      "reality": {
+        "compute": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "memory": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "panel": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "width": 1280,
+            "height": 2856,
+            "density_dpi": 480,
+            "refresh_hz": 120
+          }
+        },
+        "cameras": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "sensors": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "power": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "drm": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "radio": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "carrier": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "slots": 2,
+            "mcc": "310",
+            "mnc": "260"
+          }
+        },
+        "packages": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "webview": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "environment": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "language": "en",
+            "country": "US",
+            "timezone": "America/New_York"
+          }
+        }
+      }
     },
     {
       "id": "pixel_9_pro_xl",
@@ -1273,7 +2422,94 @@
       ],
       "sources": [
         "https://support.google.com/pixelphone/answer/7158570?hl=en"
-      ]
+      ],
+      "reality": {
+        "compute": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "memory": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "panel": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "width": 1344,
+            "height": 2992,
+            "density_dpi": 480,
+            "refresh_hz": 120
+          }
+        },
+        "cameras": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "sensors": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "power": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "drm": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "radio": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "carrier": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "slots": 2,
+            "mcc": "310",
+            "mnc": "260"
+          }
+        },
+        "packages": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "webview": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "environment": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "language": "en",
+            "country": "US",
+            "timezone": "America/New_York"
+          }
+        }
+      }
     },
     {
       "id": "pixel_9a",
@@ -1360,7 +2596,94 @@
       ],
       "sources": [
         "https://support.google.com/pixelphone/answer/7158570?hl=en"
-      ]
+      ],
+      "reality": {
+        "compute": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "memory": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "panel": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "width": 1080,
+            "height": 2424,
+            "density_dpi": 420,
+            "refresh_hz": 120
+          }
+        },
+        "cameras": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "sensors": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "power": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "drm": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "radio": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "carrier": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "slots": 2,
+            "mcc": "310",
+            "mnc": "260"
+          }
+        },
+        "packages": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "webview": {
+          "availability": "unknown",
+          "source": "needs verification",
+          "reason": "No verified template value; collect read-only evidence for this field.",
+          "values": {}
+        },
+        "environment": {
+          "availability": "known",
+          "source": "derived",
+          "reason": "Copied from the base template configuration; not a physical measurement.",
+          "values": {
+            "language": "en",
+            "country": "US",
+            "timezone": "America/New_York"
+          }
+        }
+      }
     }
   ]
 }

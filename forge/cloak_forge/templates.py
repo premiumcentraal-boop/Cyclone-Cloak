@@ -12,7 +12,7 @@ from typing import Any
 
 CATALOG_PATH = Path(__file__).resolve().parents[2] / "catalog" / "phones.json"
 
-_TEMPLATE_BLOCKS = ("device", "telephony", "network", "display", "locale", "camera")
+_TEMPLATE_BLOCKS = ("device", "telephony", "network", "display", "locale", "camera", "reality")
 
 
 def load_catalog(path: Path = CATALOG_PATH) -> list[dict[str, Any]]:

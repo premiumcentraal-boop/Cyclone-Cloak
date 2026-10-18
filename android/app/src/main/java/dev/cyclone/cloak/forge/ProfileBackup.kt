@@ -21,6 +21,19 @@ object ProfileBackup {
         sections.forEach { (section, keys) -> profile.optJSONObject(section)?.let { source ->
             val block = JSONObject(); keys.forEach { key -> if (source.has(key)) block.put(key, source.get(key)) }; out.put(section, block)
         } }
+        profile.optJSONObject("camera")?.let { out.put("camera", JSONObject(it.toString())) }
+        profile.optJSONObject("reality")?.let { source ->
+            val reality = JSONObject(source.toString())
+            if (!sensitive) {
+                reality.remove("inventory_id")
+                reality.optJSONObject("radio")?.let { radio ->
+                    val values = radio.optJSONObject("values") ?: JSONObject()
+                    values.remove("wifi_name"); values.remove("bluetooth_name")
+                    if (values.length() == 0) radio.put("availability", "unknown").put("reason", "Private configured names omitted.")
+                }
+            }
+            out.put("reality", reality)
+        }
         if (sensitive) {
             out.put("id", profile.opt("id")).put("seed", profile.opt("seed"))
             val identifiers = JSONObject(); val source = profile.optJSONObject("identifiers")
@@ -57,7 +70,7 @@ object ProfileBackup {
             KIND -> {
                 require(root.opt("schemaVersion") == FORMAT) { "BACKUP_VERSION: unsupported backup format." }
                 manifest = root.getJSONObject("manifest")
-                require(manifest.opt("schema_version") == ProfileValidator.SCHEMA_VERSION) { "SCHEMA_VERSION: backup schema mismatch." }
+                require(manifest.opt("schema_version") in (ProfileValidator.LEGACY_SCHEMA_VERSIONS + ProfileValidator.SCHEMA_VERSION)) { "SCHEMA_VERSION: backup schema mismatch." }
                 Instant.parse(manifest.getString("created_at"))
                 require(manifest.opt("app_version") is String && manifest.getString("app_version").isNotBlank()) { "MANIFEST: app version missing." }
                 require(!manifest.has("label") || (manifest.opt("label") is String && manifest.getString("label").length <= 128)) { "MANIFEST: invalid label." }
@@ -80,7 +93,7 @@ object ProfileBackup {
         val occupied = existing.map { it.first }.toMutableSet()
         val names = existing.map { it.second.optString("name").lowercase() }.toMutableSet()
         val profiles = raw.map { source ->
-            require(source.opt("schema_version") == ProfileValidator.SCHEMA_VERSION) { "SCHEMA_VERSION: profile schema mismatch." }
+            require(source.opt("schema_version") in (ProfileValidator.LEGACY_SCHEMA_VERSIONS + ProfileValidator.SCHEMA_VERSION)) { "SCHEMA_VERSION: profile schema mismatch." }
             val profile = project(source, sensitive)
             if (!sensitive) {
                 val fresh = seed(); profile.put("seed", fresh).put("id", uuid())

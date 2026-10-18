@@ -30,7 +30,7 @@ def test_catalog_schema_ids_and_additions():
 def test_every_catalog_entry_validates_without_findings_or_mutation(phone):
     before = copy.deepcopy(phone)
     assert {"id", "label", *BLOCKS} <= set(phone)
-    assert set(phone) <= {"id", "label", *BLOCKS, "camera", "confidence", "classification",
+    assert set(phone) <= {"id", "label", *BLOCKS, "camera", "reality", "confidence", "classification",
                           "source_confidence", "camera_class", "expected_capability_set", "sensor_class_list",
                           "drm_security_level", "board", "sources"}
     assert validate_catalog_record(phone) == []

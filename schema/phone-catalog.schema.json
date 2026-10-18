@@ -119,6 +119,9 @@
               "L2",
               "L3"
             ]
+          },
+          "reality": {
+            "$ref": "device-reality.schema.json"
           }
         }
       }

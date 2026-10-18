@@ -35,6 +35,7 @@ def forge_profile(
     name: str,
     seed: str,
     template_name: str = "pixel_7",
+    schema_version: str = "0.3",
 ) -> dict[str, Any]:
     """Generate a complete, coherent, deterministic Cloak profile."""
     if not name or not name.strip():
@@ -44,9 +45,12 @@ def forge_profile(
     except KeyError as exc:
         raise ForgeError(f"unknown template '{template_name}'") from exc
 
+    if schema_version not in ("0.2", "0.3", "0.4"): raise ForgeError("Unsupported schema version")
+    from .reality import generate
     profile = uuid.uuid5(uuid.NAMESPACE_URL, f"https://cloak.cyclone.dev/{seed}/{name}")
     return {
-        "schema_version": "0.3",
+        "schema_version": schema_version,
+        **({"reality": generate(template, seed, build_ua(template["device"], template["display"]["screen_size_class"], seed))} if schema_version == "0.4" else {}),
         "id": str(profile),
         "name": name,
         "seed": seed,

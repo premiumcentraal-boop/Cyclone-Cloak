@@ -5,37 +5,100 @@
   "description": "A fully coherent device profile served to a scoped app by the Cyclone Cloak engine.",
   "type": "object",
   "additionalProperties": false,
-  "required": ["schema_version", "id", "name", "seed", "device"],
+  "required": [
+    "schema_version",
+    "id",
+    "name",
+    "seed",
+    "device"
+  ],
   "properties": {
-    "schema_version": { "enum": ["0.2", "0.3"] },
-    "id": { "$ref": "#/$defs/profileId" },
-    "name": { "type": "string", "minLength": 1, "maxLength": 64 },
-    "seed": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
-    "device": { "$ref": "#/$defs/device" },
-    "identifiers": { "$ref": "#/$defs/identifiers" },
-    "telephony": { "$ref": "#/$defs/telephony" },
-    "display": { "$ref": "#/$defs/display" },
-    "health": { "$ref": "#/$defs/health" },
-    "locale": { "$ref": "#/$defs/locale" },
-    "camera": { "$ref": "#/$defs/camera" },
-    "ua": { "$ref": "#/$defs/ua" },
+    "schema_version": {
+      "enum": [
+        "0.2",
+        "0.3",
+        "0.4"
+      ]
+    },
+    "id": {
+      "$ref": "#/$defs/profileId"
+    },
+    "name": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "seed": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "device": {
+      "$ref": "#/$defs/device"
+    },
+    "identifiers": {
+      "$ref": "#/$defs/identifiers"
+    },
+    "telephony": {
+      "$ref": "#/$defs/telephony"
+    },
+    "display": {
+      "$ref": "#/$defs/display"
+    },
+    "health": {
+      "$ref": "#/$defs/health"
+    },
+    "locale": {
+      "$ref": "#/$defs/locale"
+    },
+    "camera": {
+      "$ref": "#/$defs/camera"
+    },
+    "ua": {
+      "$ref": "#/$defs/ua"
+    },
     "network": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "egress_hint": { "type": "string", "maxLength": 128 }
+        "egress_hint": {
+          "type": "string",
+          "maxLength": 128
+        }
       }
     },
     "integrity": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "verdict": { "enum": ["unknown", "basic", "device", "strong"] },
-        "checked_at": { "type": ["string", "null"] },
-        "keybox_tag": { "type": ["string", "null"] }
+        "verdict": {
+          "enum": [
+            "unknown",
+            "basic",
+            "device",
+            "strong"
+          ]
+        },
+        "checked_at": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "keybox_tag": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
       }
     },
-    "meta": { "type": "object", "additionalProperties": true }
+    "meta": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "reality": {
+      "$ref": "device-reality.schema.json"
+    }
   },
   "$defs": {
     "profileId": {
@@ -50,83 +113,221 @@
       "type": "object",
       "additionalProperties": false,
       "required": [
-        "manufacturer", "brand", "model", "product", "device", "hardware",
-        "fingerprint", "version_release", "sdk_int", "security_patch",
-        "build_id", "version_incremental", "build_date_utc", "first_api_level"
+        "manufacturer",
+        "brand",
+        "model",
+        "product",
+        "device",
+        "hardware",
+        "fingerprint",
+        "version_release",
+        "sdk_int",
+        "security_patch",
+        "build_id",
+        "version_incremental",
+        "build_date_utc",
+        "first_api_level"
       ],
       "properties": {
-        "manufacturer": { "type": "string", "minLength": 1 },
-        "brand": { "type": "string", "minLength": 1 },
-        "model": { "type": "string", "minLength": 1 },
-        "product": { "type": "string", "minLength": 1 },
-        "device": { "type": "string", "minLength": 1 },
-        "hardware": { "type": "string", "minLength": 1 },
+        "manufacturer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "brand": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model": {
+          "type": "string",
+          "minLength": 1
+        },
+        "product": {
+          "type": "string",
+          "minLength": 1
+        },
+        "device": {
+          "type": "string",
+          "minLength": 1
+        },
+        "hardware": {
+          "type": "string",
+          "minLength": 1
+        },
         "fingerprint": {
           "type": "string",
           "pattern": "^[^/]+/[^/]+/[^:]+:[0-9.]+/[^/]+/[^:]+:[^:/]+/(release-keys|dev-keys)$"
         },
-        "version_release": { "type": "string", "minLength": 1 },
-        "sdk_int": { "type": "integer", "minimum": 26 },
-        "security_patch": { "type": "string", "pattern": "^\\d{4}-\\d{2}-\\d{2}$" },
-        "build_id": { "type": "string", "minLength": 1 },
-        "version_incremental": { "type": "string", "minLength": 1 },
-        "build_date_utc": { "type": "integer", "minimum": 0 },
-        "first_api_level": { "type": "integer", "minimum": 26 },
-        "bootloader": { "type": "string" },
-        "baseband": { "type": "string" }
+        "version_release": {
+          "type": "string",
+          "minLength": 1
+        },
+        "sdk_int": {
+          "type": "integer",
+          "minimum": 26
+        },
+        "security_patch": {
+          "type": "string",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "build_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version_incremental": {
+          "type": "string",
+          "minLength": 1
+        },
+        "build_date_utc": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "first_api_level": {
+          "type": "integer",
+          "minimum": 26
+        },
+        "bootloader": {
+          "type": "string"
+        },
+        "baseband": {
+          "type": "string"
+        }
       }
     },
     "identifiers": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "android_id": { "type": "string", "pattern": "^[0-9a-f]{16}$" },
-        "advertising_id": { "$ref": "#/$defs/uuid4" },
-        "app_set_id": { "$ref": "#/$defs/uuid4" },
-        "mac": { "type": "string", "pattern": "^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$" },
-        "bt_mac": { "type": "string", "pattern": "^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$" },
-        "imei_primary": { "type": "string", "pattern": "^[0-9]{15}$" },
-        "imei_secondary": { "type": "string", "pattern": "^[0-9]{15}$" },
-        "sim_serial": { "type": "string", "pattern": "^[0-9]{19,20}$" },
-        "gsf_id": { "type": "string", "pattern": "^[0-9a-f]{16}$" },
-        "widevine_id": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
-        "serial": { "type": "string", "pattern": "^[0-9A-Z]{6,16}$" }
+        "android_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{16}$"
+        },
+        "advertising_id": {
+          "$ref": "#/$defs/uuid4"
+        },
+        "app_set_id": {
+          "$ref": "#/$defs/uuid4"
+        },
+        "mac": {
+          "type": "string",
+          "pattern": "^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$"
+        },
+        "bt_mac": {
+          "type": "string",
+          "pattern": "^([0-9A-Fa-f]{2}:){5}[0-9A-Fa-f]{2}$"
+        },
+        "imei_primary": {
+          "type": "string",
+          "pattern": "^[0-9]{15}$"
+        },
+        "imei_secondary": {
+          "type": "string",
+          "pattern": "^[0-9]{15}$"
+        },
+        "sim_serial": {
+          "type": "string",
+          "pattern": "^[0-9]{19,20}$"
+        },
+        "gsf_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{16}$"
+        },
+        "widevine_id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "serial": {
+          "type": "string",
+          "pattern": "^[0-9A-Z]{6,16}$"
+        }
       }
     },
     "telephony": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "sim_slot_count": { "type": "integer", "minimum": 1, "maximum": 2 },
-        "carrier_name": { "type": "string", "minLength": 1 },
-        "mcc": { "type": "string", "pattern": "^[0-9]{3}$" },
-        "mnc": { "type": "string", "pattern": "^[0-9]{2,3}$" },
-        "network_type": { "enum": ["5G", "LTE", "HSPA", "UMTS", "GSM"] }
+        "sim_slot_count": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 2
+        },
+        "carrier_name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mcc": {
+          "type": "string",
+          "pattern": "^[0-9]{3}$"
+        },
+        "mnc": {
+          "type": "string",
+          "pattern": "^[0-9]{2,3}$"
+        },
+        "network_type": {
+          "enum": [
+            "5G",
+            "LTE",
+            "HSPA",
+            "UMTS",
+            "GSM"
+          ]
+        }
       }
     },
     "display": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "width": { "type": "integer", "minimum": 1 },
-        "height": { "type": "integer", "minimum": 1 },
-        "density": { "type": "integer", "minimum": 1 },
-        "refresh_rate_hz": { "type": "integer", "minimum": 1 },
-        "screen_size_class": { "enum": ["small", "normal", "large"] }
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "density": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "refresh_rate_hz": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "screen_size_class": {
+          "enum": [
+            "small",
+            "normal",
+            "large"
+          ]
+        }
       }
     },
     "health": {
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "state": { "enum": ["new", "ready", "degraded", "failed"] },
-        "last_seen": { "type": ["string", "null"] }
+        "state": {
+          "enum": [
+            "new",
+            "ready",
+            "degraded",
+            "failed"
+          ]
+        },
+        "last_seen": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
       }
     },
     "camera": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["cameras"],
+      "required": [
+        "cameras"
+      ],
       "properties": {
         "cameras": {
           "type": "array",
@@ -135,12 +336,33 @@
           "items": {
             "type": "object",
             "additionalProperties": false,
-            "required": ["facing", "hardware_level", "pixel_width", "pixel_height"],
+            "required": [
+              "facing",
+              "hardware_level",
+              "pixel_width",
+              "pixel_height"
+            ],
             "properties": {
-              "facing": { "type": "integer", "minimum": 0, "maximum": 2 },
-              "hardware_level": { "type": "integer", "minimum": 0, "maximum": 4 },
-              "pixel_width": { "type": "integer", "minimum": 320, "maximum": 20000 },
-              "pixel_height": { "type": "integer", "minimum": 240, "maximum": 20000 }
+              "facing": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 2
+              },
+              "hardware_level": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 4
+              },
+              "pixel_width": {
+                "type": "integer",
+                "minimum": 320,
+                "maximum": 20000
+              },
+              "pixel_height": {
+                "type": "integer",
+                "minimum": 240,
+                "maximum": 20000
+              }
             }
           }
         }
@@ -150,15 +372,26 @@
       "type": "object",
       "additionalProperties": false,
       "properties": {
-        "language": { "type": "string", "pattern": "^[a-z]{2}$" },
-        "country": { "type": "string", "pattern": "^[A-Z]{2}$" },
-        "timezone": { "type": "string", "pattern": "^[A-Za-z0-9_+-]+(/[A-Za-z0-9_+-]+)*$" }
+        "language": {
+          "type": "string",
+          "pattern": "^[a-z]{2}$"
+        },
+        "country": {
+          "type": "string",
+          "pattern": "^[A-Z]{2}$"
+        },
+        "timezone": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_+-]+(/[A-Za-z0-9_+-]+)*$"
+        }
       }
     },
     "ua": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["value"],
+      "required": [
+        "value"
+      ],
       "properties": {
         "value": {
           "type": "string",
@@ -167,5 +400,21 @@
         }
       }
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "required": [
+          "reality"
+        ]
+      },
+      "then": {
+        "properties": {
+          "schema_version": {
+            "const": "0.4"
+          }
+        }
+      }
+    }
+  ]
 }

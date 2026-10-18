@@ -126,7 +126,7 @@ object RuntimeEvidence {
 
     fun toScoreInput(evidence: JSONObject): Map<String, String> {
         val reads = readResults(evidence).mapValues { it.value.status }
-        return mappings.mapValues { (_, ids) ->
+        val base = mappings.mapValues { (_, ids) ->
             val states = ids.map { reads[it] ?: "INCOMPLETE" }
             when {
                 "FAIL" in states -> "FAIL"
@@ -137,6 +137,21 @@ object RuntimeEvidence {
                 else -> "MATCH_ONLY"
             }
         }
+        val runs = evidence.getJSONArray("runs")
+        val reality = (0 until runs.length()).map { RealityCoverage.summarize(JSONObject(), runs.getJSONObject(it)).rows }
+        val additional = reality.flatten().map { it.field }.distinct().associateWith { field ->
+            val rows = reality.map { batch -> batch.single { it.field == field } }
+            when {
+                rows.any { it.mismatch } -> "FAIL"
+                rows.any { it.state == "blocked" } -> "BLOCKED"
+                rows.any { it.state == "missing" } -> "INCOMPLETE"
+                rows.all { it.state == "match-only" } -> "MATCH_ONLY"
+                rows.any { it.state == "observed" } -> "OBSERVED"
+                else -> "UNMAPPED"
+            }
+        }
+        // Old reports without this optional extension retain exactly the old score-input shape.
+        return if ((0 until runs.length()).none { runs.getJSONObject(it).has("device_reality") }) base else base + additional
     }
 
     data class FieldCoverage(val field: String, val state: String, val testStatus: String)

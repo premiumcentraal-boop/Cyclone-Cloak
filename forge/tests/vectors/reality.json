@@ -1,0 +1,881 @@
+{
+  "profile": {
+    "schema_version": "0.4",
+    "reality": {
+      "compute": {
+        "availability": "known",
+        "source": "public reference",
+        "reason": "Google Pixel hardware specifications: https://support.google.com/pixelphone/answer/7158570",
+        "values": {
+          "soc": "Google Tensor G2"
+        }
+      },
+      "memory": {
+        "availability": "known",
+        "source": "public reference",
+        "reason": "Pixel 7 8 GB / 128 GB SKU; Google Pixel hardware specifications. Other capacities require a separate selection.",
+        "values": {
+          "ram_gib": 8,
+          "storage_gib": 128
+        }
+      },
+      "panel": {
+        "availability": "known",
+        "source": "derived",
+        "reason": "Copied from the base template configuration; not a physical measurement.",
+        "values": {
+          "width": 1080,
+          "height": 2400,
+          "density_dpi": 420,
+          "refresh_hz": 90
+        }
+      },
+      "cameras": {
+        "availability": "unknown",
+        "source": "needs verification",
+        "reason": "No verified template value; collect read-only evidence for this field.",
+        "values": {}
+      },
+      "sensors": {
+        "availability": "unknown",
+        "source": "needs verification",
+        "reason": "No verified template value; collect read-only evidence for this field.",
+        "values": {}
+      },
+      "power": {
+        "availability": "known",
+        "source": "public reference",
+        "reason": "Typical capacity for Pixel 7; Google Pixel hardware specifications. Live power/thermal state is unknown.",
+        "values": {
+          "design_capacity_mah": 4355
+        }
+      },
+      "drm": {
+        "availability": "unknown",
+        "source": "needs verification",
+        "reason": "No verified template value; collect read-only evidence for this field.",
+        "values": {}
+      },
+      "radio": {
+        "availability": "known",
+        "source": "derived",
+        "reason": "Local configured names only; no radio state or broadcast is changed.",
+        "values": {
+          "wifi_name": "Cloak-6b5265dd17f8",
+          "bluetooth_name": "Cloak-5750560f4104"
+        }
+      },
+      "carrier": {
+        "availability": "known",
+        "source": "derived",
+        "reason": "Copied from the base template configuration; not a physical measurement.",
+        "values": {
+          "slots": 1,
+          "mcc": "310",
+          "mnc": "260"
+        }
+      },
+      "packages": {
+        "availability": "unknown",
+        "source": "needs verification",
+        "reason": "No verified template value; collect read-only evidence for this field.",
+        "values": {}
+      },
+      "webview": {
+        "availability": "known",
+        "source": "derived",
+        "reason": "User agent derived from this profile; installed provider/version remains unknown.",
+        "values": {
+          "user_agent": "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
+        }
+      },
+      "environment": {
+        "availability": "known",
+        "source": "derived",
+        "reason": "Copied from the base template configuration; not a physical measurement.",
+        "values": {
+          "language": "en",
+          "country": "US",
+          "timezone": "America/New_York"
+        }
+      },
+      "inventory_id": "9deef0e27201dd9550b5357470d39ba0194986eb6e51035f75e683e86b73c772"
+    },
+    "id": "2b1cec3d-b89b-5652-a17f-870079bf9666",
+    "name": "Reality",
+    "seed": "abababababababababababababababababababababababababababababababab",
+    "device": {
+      "manufacturer": "Google",
+      "brand": "google",
+      "model": "Pixel 7",
+      "product": "panther",
+      "device": "panther",
+      "hardware": "gs201",
+      "fingerprint": "google/panther/panther:13/TQ3A.230805.001/10193186:user/release-keys",
+      "version_release": "13",
+      "sdk_int": 33,
+      "security_patch": "2023-08-05",
+      "build_id": "TQ3A.230805.001",
+      "version_incremental": "10193186",
+      "build_date_utc": 1691712000,
+      "first_api_level": 33,
+      "bootloader": "panther-1.0-8769422",
+      "baseband": "g5123-230712-230712-B10046521"
+    },
+    "identifiers": {
+      "android_id": "3a4cf3a7fcd4e8cb",
+      "advertising_id": "d3500169-d39a-40b1-bcfa-f9d9d1739be7",
+      "app_set_id": "3d2eb31f-1124-489c-bcd6-61b985491917",
+      "mac": "1A:35:32:1E:77:25",
+      "bt_mac": "3A:B4:66:9A:D8:54",
+      "imei_primary": "472186978248637",
+      "imei_secondary": "710989943352422",
+      "sim_serial": "2622829857001513606",
+      "gsf_id": "f043b6a655d7a57a",
+      "widevine_id": "f2b9c7904bec4ec0755b7aec3eca856e1deb43ab9cbd564f038af27837d568d3",
+      "serial": "U6UV1SJBJET5"
+    },
+    "telephony": {
+      "sim_slot_count": 1,
+      "carrier_name": "T-Mobile",
+      "mcc": "310",
+      "mnc": "260",
+      "network_type": "5G"
+    },
+    "network": {
+      "egress_hint": "us-east"
+    },
+    "display": {
+      "width": 1080,
+      "height": 2400,
+      "density": 420,
+      "refresh_rate_hz": 90,
+      "screen_size_class": "large"
+    },
+    "locale": {
+      "language": "en",
+      "country": "US",
+      "timezone": "America/New_York"
+    },
+    "camera": {
+      "cameras": [
+        {
+          "facing": 1,
+          "hardware_level": 1,
+          "pixel_width": 8160,
+          "pixel_height": 6144
+        },
+        {
+          "facing": 1,
+          "hardware_level": 0,
+          "pixel_width": 4032,
+          "pixel_height": 3024
+        },
+        {
+          "facing": 0,
+          "hardware_level": 0,
+          "pixel_width": 4000,
+          "pixel_height": 3000
+        }
+      ]
+    },
+    "ua": {
+      "value": "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
+    },
+    "integrity": {
+      "verdict": "unknown",
+      "checked_at": null,
+      "keybox_tag": null
+    },
+    "health": {
+      "state": "new",
+      "last_seen": null
+    },
+    "meta": {
+      "source": "forge",
+      "forge_version": "0.2.0",
+      "template": "pixel_7"
+    }
+  },
+  "cases": [
+    {
+      "name": "valid compute",
+      "patch": {
+        "reality.compute": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {
+            "soc": "Google Tensor G2",
+            "gpu": "Mali-G710",
+            "cpu_cores": 8,
+            "abis": [
+              "arm64-v8a"
+            ]
+          }
+        }
+      },
+      "findings": []
+    },
+    {
+      "name": "valid memory",
+      "patch": {
+        "reality.memory": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {
+            "ram_gib": 8,
+            "storage_gib": 128,
+            "free_storage_gib": 50
+          }
+        }
+      },
+      "findings": []
+    },
+    {
+      "name": "valid panel",
+      "patch": {
+        "reality.panel": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {
+            "width": 1080,
+            "height": 2400,
+            "density_dpi": 420,
+            "refresh_hz": 90,
+            "modes": [
+              {
+                "width": 1080,
+                "height": 2400,
+                "refresh_hz": 90
+              }
+            ]
+          }
+        }
+      },
+      "findings": []
+    },
+    {
+      "name": "valid cameras",
+      "patch": {
+        "reality.cameras": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {
+            "count": 3
+          }
+        }
+      },
+      "findings": []
+    },
+    {
+      "name": "valid sensors",
+      "patch": {
+        "reality.sensors": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {
+            "inventory": [
+              {
+                "type": 1,
+                "name": "Test",
+                "min_delay_us": 100,
+                "max_delay_us": 1000,
+                "range": 10,
+                "resolution": 0.1
+              }
+            ]
+          }
+        }
+      },
+      "findings": []
+    },
+    {
+      "name": "valid power",
+      "patch": {
+        "reality.power": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {
+            "battery_percent": 100,
+            "battery_state": "full",
+            "charging_source": "ac",
+            "thermal_status": 0,
+            "power_save": false
+          }
+        }
+      },
+      "findings": []
+    },
+    {
+      "name": "valid drm",
+      "patch": {
+        "reality.drm": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {
+            "security_level": "L3"
+          }
+        }
+      },
+      "findings": []
+    },
+    {
+      "name": "valid radio",
+      "patch": {
+        "reality.radio": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {
+            "wifi_name": "Local-label",
+            "bluetooth_name": "Local-label",
+            "wifi_state": "disabled"
+          }
+        }
+      },
+      "findings": []
+    },
+    {
+      "name": "valid carrier",
+      "patch": {
+        "reality.carrier": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {
+            "slots": 1,
+            "mcc": "310",
+            "mnc": "260",
+            "sim_state": "ready"
+          }
+        }
+      },
+      "findings": []
+    },
+    {
+      "name": "valid packages",
+      "patch": {
+        "reality.packages": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {
+            "installed": [
+              {
+                "package": "android",
+                "version_name": "13",
+                "version_code": 33
+              }
+            ]
+          }
+        }
+      },
+      "findings": []
+    },
+    {
+      "name": "valid webview",
+      "patch": {
+        "reality.webview": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {
+            "user_agent": "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
+          }
+        }
+      },
+      "findings": []
+    },
+    {
+      "name": "valid environment",
+      "patch": {
+        "reality.environment": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {
+            "language": "en",
+            "country": "US",
+            "timezone": "America/New_York",
+            "input_method": "com.example.ime/.IME",
+            "accessibility_enabled": false
+          }
+        }
+      },
+      "findings": []
+    },
+    {
+      "name": "invalid compute0",
+      "patch": {
+        "reality.compute": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {
+            "soc": "Google Tensor G2",
+            "gpu": "Adreno 740"
+          }
+        }
+      },
+      "findings": [
+        {
+          "severity": "error",
+          "code": "REALITY_SOC",
+          "field": "reality.compute",
+          "message": "reality.compute: SoC, GPU family, Android API or hardware label disagree."
+        }
+      ]
+    },
+    {
+      "name": "invalid memory1",
+      "patch": {
+        "reality.memory": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {
+            "storage_gib": 128,
+            "free_storage_gib": 200
+          }
+        }
+      },
+      "findings": [
+        {
+          "severity": "error",
+          "code": "REALITY_STORAGE",
+          "field": "reality.memory",
+          "message": "reality.memory: memory/storage shape is inconsistent."
+        }
+      ]
+    },
+    {
+      "name": "invalid panel2",
+      "patch": {
+        "reality.panel": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {
+            "width": 1
+          }
+        }
+      },
+      "findings": [
+        {
+          "severity": "error",
+          "code": "REALITY_RANGE",
+          "field": "reality.panel.values.width",
+          "message": "reality.panel.values.width: is outside the supported range."
+        }
+      ]
+    },
+    {
+      "name": "invalid panel3",
+      "patch": {
+        "reality.panel": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {
+            "width": 1080,
+            "height": 2400,
+            "density_dpi": 420,
+            "refresh_hz": 90,
+            "modes": []
+          }
+        }
+      },
+      "findings": [
+        {
+          "severity": "error",
+          "code": "REALITY_MODE",
+          "field": "reality.panel",
+          "message": "reality.panel: active dimensions/refresh must occur in supported modes."
+        }
+      ]
+    },
+    {
+      "name": "invalid cameras4",
+      "patch": {
+        "reality.cameras": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {
+            "count": 2,
+            "inventory": [
+              {
+                "id": "0",
+                "facing": "back"
+              }
+            ]
+          }
+        }
+      },
+      "findings": [
+        {
+          "severity": "error",
+          "code": "REALITY_CAMERA",
+          "field": "reality.cameras",
+          "message": "reality.cameras: camera count or camera IDs are inconsistent."
+        },
+        {
+          "severity": "error",
+          "code": "REALITY_CAMERA",
+          "field": "reality.cameras",
+          "message": "reality.cameras: camera count or camera IDs are inconsistent."
+        },
+        {
+          "severity": "error",
+          "code": "REALITY_CAMERA",
+          "field": "reality.cameras",
+          "message": "reality.cameras: camera count or camera IDs are inconsistent."
+        }
+      ]
+    },
+    {
+      "name": "invalid cameras5",
+      "patch": {
+        "reality.cameras": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {
+            "count": 0,
+            "inventory": []
+          }
+        }
+      },
+      "findings": [
+        {
+          "severity": "error",
+          "code": "REALITY_CAMERA",
+          "field": "reality.cameras",
+          "message": "reality.cameras: camera count or camera IDs are inconsistent."
+        },
+        {
+          "severity": "error",
+          "code": "REALITY_CAMERA",
+          "field": "reality.cameras",
+          "message": "reality.cameras: camera count or camera IDs are inconsistent."
+        }
+      ]
+    },
+    {
+      "name": "invalid sensors6",
+      "patch": {
+        "reality.sensors": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {
+            "inventory": [
+              {
+                "type": 1,
+                "name": "Test",
+                "min_delay_us": 1000,
+                "max_delay_us": 10
+              }
+            ]
+          }
+        }
+      },
+      "findings": [
+        {
+          "severity": "error",
+          "code": "REALITY_SENSOR",
+          "field": "reality.sensors",
+          "message": "reality.sensors: sampling delays or resolution/range are inconsistent."
+        }
+      ]
+    },
+    {
+      "name": "invalid power7",
+      "patch": {
+        "reality.power": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {
+            "battery_percent": 10,
+            "battery_state": "full"
+          }
+        }
+      },
+      "findings": [
+        {
+          "severity": "error",
+          "code": "REALITY_POWER",
+          "field": "reality.power",
+          "message": "reality.power: power state is inconsistent."
+        }
+      ]
+    },
+    {
+      "name": "invalid drm8",
+      "patch": {
+        "reality.drm": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {
+            "security_level": "L0"
+          }
+        }
+      },
+      "findings": [
+        {
+          "severity": "error",
+          "code": "REALITY_ENUM",
+          "field": "reality.drm.values.security_level",
+          "message": "reality.drm.values.security_level: is not an allowed value."
+        }
+      ]
+    },
+    {
+      "name": "invalid radio9",
+      "patch": {
+        "reality.radio": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {
+            "wifi_name": "private\nvalue"
+          }
+        }
+      },
+      "findings": [
+        {
+          "severity": "error",
+          "code": "REALITY_FORMAT",
+          "field": "reality.radio.values.wifi_name",
+          "message": "reality.radio.values.wifi_name: has an invalid format."
+        }
+      ]
+    },
+    {
+      "name": "invalid carrier10",
+      "patch": {
+        "reality.carrier": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {
+            "slots": 0,
+            "mcc": "310",
+            "mnc": "260",
+            "sim_state": "ready"
+          }
+        }
+      },
+      "findings": [
+        {
+          "severity": "error",
+          "code": "REALITY_LINK",
+          "field": "reality.carrier",
+          "message": "reality.carrier: disagrees with the corresponding base profile field."
+        },
+        {
+          "severity": "error",
+          "code": "REALITY_LINK",
+          "field": "reality.carrier.values.slots",
+          "message": "reality.carrier.values.slots: disagrees with the corresponding base profile field."
+        }
+      ]
+    },
+    {
+      "name": "invalid packages11",
+      "patch": {
+        "reality.packages": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {
+            "installed": [
+              {
+                "package": "android",
+                "version_name": "99",
+                "version_code": 1
+              }
+            ]
+          }
+        }
+      },
+      "findings": [
+        {
+          "severity": "error",
+          "code": "REALITY_LINK",
+          "field": "reality.packages",
+          "message": "reality.packages: disagrees with the corresponding base profile field."
+        }
+      ]
+    },
+    {
+      "name": "invalid webview12",
+      "patch": {
+        "reality.webview": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {
+            "version": "123.0.0.1",
+            "user_agent": "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
+          }
+        }
+      },
+      "findings": [
+        {
+          "severity": "error",
+          "code": "REALITY_WEBVIEW",
+          "field": "reality.webview",
+          "message": "reality.webview: WebView version, package version and user agent disagree."
+        }
+      ]
+    },
+    {
+      "name": "invalid environment13",
+      "patch": {
+        "reality.environment": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {
+            "language": "en",
+            "country": "US",
+            "timezone": "Mars/Fake"
+          }
+        }
+      },
+      "findings": [
+        {
+          "severity": "error",
+          "code": "REALITY_LINK",
+          "field": "reality.environment.values.timezone",
+          "message": "reality.environment.values.timezone: disagrees with the corresponding base profile field."
+        }
+      ]
+    },
+    {
+      "name": "unavailable empty",
+      "patch": {
+        "reality.drm": {
+          "availability": "unavailable",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {}
+        }
+      },
+      "findings": []
+    },
+    {
+      "name": "unavailable contradiction",
+      "patch": {
+        "reality.drm": {
+          "availability": "unavailable",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {
+            "security_level": "L1"
+          }
+        }
+      },
+      "findings": [
+        {
+          "severity": "error",
+          "code": "REALITY_AVAILABILITY",
+          "field": "reality.drm",
+          "message": "reality.drm: known requires values; unknown/unavailable requires empty values."
+        }
+      ]
+    },
+    {
+      "name": "known empty",
+      "patch": {
+        "reality.drm": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {}
+        }
+      },
+      "findings": [
+        {
+          "severity": "error",
+          "code": "REALITY_AVAILABILITY",
+          "field": "reality.drm",
+          "message": "reality.drm: known requires values; unknown/unavailable requires empty values."
+        }
+      ]
+    },
+    {
+      "name": "private key rejected",
+      "patch": {
+        "reality.drm": {
+          "availability": "known",
+          "source": "approximated",
+          "reason": "Test only.",
+          "values": {
+            "private_key": "never export"
+          }
+        }
+      },
+      "findings": [
+        {
+          "severity": "error",
+          "code": "REALITY_FIELD",
+          "field": "reality.drm.values",
+          "message": "reality.drm.values: contains an unsupported field; private material is not accepted."
+        }
+      ]
+    },
+    {
+      "name": "wrong type",
+      "patch": {
+        "reality.memory": []
+      },
+      "findings": [
+        {
+          "severity": "error",
+          "code": "REALITY_TYPE",
+          "field": "reality.memory",
+          "message": "reality.memory: has an invalid JSON type."
+        }
+      ]
+    },
+    {
+      "name": "schema three cannot carry reality",
+      "patch": {
+        "schema_version": "0.3"
+      },
+      "findings": [
+        {
+          "severity": "error",
+          "code": "REALITY_SCHEMA",
+          "field": "reality",
+          "message": "reality: requires profile schema 0.4."
+        }
+      ]
+    },
+    {
+      "name": "bad sdk type does not crash",
+      "patch": {
+        "device.sdk_int": "bad"
+      },
+      "findings": [
+        {
+          "severity": "error",
+          "code": "REALITY_SOC",
+          "field": "reality.compute",
+          "message": "reality.compute: SoC, GPU family, Android API or hardware label disagree."
+        }
+      ]
+    }
+  ]
+}

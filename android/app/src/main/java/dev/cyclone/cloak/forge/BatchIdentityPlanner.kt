@@ -8,7 +8,7 @@ private val uniquenessCodes = setOf("DUPLICATE_IDENTIFIER", "PROFILE_EXISTS", "N
 
 /** Pure local planning. No Android context, file writes, connector or binding capability. */
 class BatchIdentityPlanner(private val engine: DeviceProfileEngine = DefaultDeviceProfileEngine()) {
-    data class Request(val templateIds: List<String>, val perTemplate: Int, val seed: String, val labelPrefix: String = "")
+    data class Request(val templateIds: List<String>, val perTemplate: Int, val seed: String, val labelPrefix: String = "", val schemaVersion: String = "0.4")
     data class Draft(val key: String, val templateId: String, val templateName: String, val index: Int,
         val revision: Int, val requestedSeed: String, val chosenSeed: String, val attempts: Int,
         val label: String, val templateDigest: String, val profile: JSONObject?, val metadata: JSONObject?,
@@ -24,7 +24,7 @@ class BatchIdentityPlanner(private val engine: DeviceProfileEngine = DefaultDevi
             .put("uniqueness_not_checked", drafts.count { it.profile == null })
             .put("warnings", drafts.sumOf { d -> d.findings.count { it.severity == ProfileValidator.WARNING } })
             .put("templates", JSONObject(drafts.groupingBy { it.templateId }.eachCount()))
-            .put("engine_version", "1").put("schema_version", ProfileValidator.SCHEMA_VERSION)
+            .put("engine_version", "1").put("schema_version", request.schemaVersion)
     }
 
     fun plan(request: Request, templates: List<PhoneTemplate>, existing: List<JSONObject>): Plan {
@@ -67,7 +67,7 @@ class BatchIdentityPlanner(private val engine: DeviceProfileEngine = DefaultDevi
         val base = Draft("${phone.id}:$index", phone.id, phone.label, index, revision, requested, requested, 1,
             label, templateDigest(phone), null, null, emptyList())
         return try {
-            val bundle = engine.generate_unique(IdentityEngine.GenerationRequest(label, requested, phone), existing)
+            val bundle = engine.generate_unique(IdentityEngine.GenerationRequest(label, requested, phone, request.schemaVersion), existing)
             val profile = bundle.getJSONObject("profile")
             val metadata = bundle.getJSONObject("metadata")
             EngineBundleCodec.validateMetadata(metadata, profile)
@@ -81,6 +81,7 @@ class BatchIdentityPlanner(private val engine: DeviceProfileEngine = DefaultDevi
     }
 
     private fun validate(request: Request, templates: List<PhoneTemplate>): List<PhoneTemplate> {
+        require(request.schemaVersion in setOf("0.2", "0.3", "0.4")) { "Unsupported profile schema." }
         require(request.templateIds.isNotEmpty() && request.templateIds.distinct().size == request.templateIds.size) { "Select distinct base templates." }
         require(request.perTemplate in 1..20 && request.templateIds.size <= 100 / request.perTemplate) { "Choose 1–20 drafts per template, up to 100 total." }
         require(SEED.matches(request.seed)) { "Malformed batch seed." }
@@ -93,7 +94,7 @@ class BatchIdentityPlanner(private val engine: DeviceProfileEngine = DefaultDevi
     fun encode(plan: Plan): String {
         val request = plan.request
         return JSONObject().put("planner_version", VERSION).put("engine_version", "1")
-            .put("schema_version", ProfileValidator.SCHEMA_VERSION)
+            .put("schema_version", request.schemaVersion)
             .put("request", JSONObject().put("template_ids", JSONArray(request.templateIds.sorted()))
                 .put("per_template", request.perTemplate).put("seed", request.seed).put("label_prefix", request.labelPrefix))
             .put("drafts", JSONArray().also { array -> plan.drafts.forEach { d -> array.put(JSONObject()
@@ -109,12 +110,12 @@ class BatchIdentityPlanner(private val engine: DeviceProfileEngine = DefaultDevi
         val root = JSONObject(text)
         require(root.optJSONObject("validation_summary") != null) { "Malformed validation summary." }
         require(root.keys().asSequence().toSet() == setOf("planner_version", "engine_version", "schema_version", "request", "drafts", "validation_summary")) { "Unsupported batch plan fields." }
-        require(root.opt("planner_version") == VERSION && root.opt("engine_version") == "1" && root.opt("schema_version") == ProfileValidator.SCHEMA_VERSION) { "Unsupported planner, engine or schema version." }
+        require(root.opt("planner_version") == VERSION && root.opt("engine_version") == "1" && root.opt("schema_version") in setOf("0.2", "0.3", "0.4")) { "Unsupported planner, engine or schema version." }
         val r = root.getJSONObject("request")
         require(r.keys().asSequence().toSet() == setOf("template_ids", "per_template", "seed", "label_prefix") && r.opt("per_template") is Int && r.opt("seed") is String && r.opt("label_prefix") is String) { "Malformed batch request." }
         val ids = r.getJSONArray("template_ids")
         val request = Request((0 until ids.length()).map { require(ids.get(it) is String); ids.getString(it) },
-            r.getInt("per_template"), r.getString("seed"), r.getString("label_prefix"))
+            r.getInt("per_template"), r.getString("seed"), r.getString("label_prefix"), root.getString("schema_version"))
         val phones = validate(request, templates).associateBy { it.id }
         val rows = root.getJSONArray("drafts")
         require(rows.length() in 1..request.perTemplate * phones.size) { "Invalid draft count." }
@@ -129,7 +130,7 @@ class BatchIdentityPlanner(private val engine: DeviceProfileEngine = DefaultDevi
             val requested = deriveSeed(request.seed, phone.id, index, revision)
             val chosen = if (attempts == 1) requested else DefaultDeviceProfileEngine.retrySeed(requested, attempts)
             require(d.opt("seed") == chosen) { "Seed does not match its derivation metadata." }
-            val bundle = engine.generate(IdentityEngine.GenerationRequest(d.getString("label"), chosen, phone))
+            val bundle = engine.generate(IdentityEngine.GenerationRequest(d.getString("label"), chosen, phone, request.schemaVersion))
             val metadata = bundle.getJSONObject("metadata").put("chosen_seed", chosen).put("attempt_count", attempts)
             val profile = bundle.getJSONObject("profile")
             EngineBundleCodec.validateMetadata(metadata, profile)

@@ -46,7 +46,7 @@ object EngineBundleCodec {
     fun validateMetadata(metadata: JSONObject, profile: JSONObject) {
         require(metadata.keys().asSequence().toSet().all { it in metadataKeys }) { "Unsupported engine metadata field." }
         require(metadata.opt("engine_version") == "1") { "Unsupported engine version." }
-        require(metadata.opt("schema_version") in setOf("0.2", "0.3") && metadata.opt("schema_version") == profile.opt("schema_version")) { "Engine/profile schema versions disagree." }
+        require(metadata.opt("schema_version") in setOf("0.2", "0.3", "0.4") && metadata.opt("schema_version") == profile.opt("schema_version")) { "Engine/profile schema versions disagree." }
         require(metadata.opt("template") is String && metadata.getString("template").length in 1..128) { "Missing template ID." }
         val profileTemplate = profile.optJSONObject("meta")?.optString("template").orEmpty()
         require(profileTemplate.isEmpty() || metadata.getString("template") == profileTemplate) { "Engine/profile template IDs disagree." }

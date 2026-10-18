@@ -20,7 +20,7 @@ class ProfileGenerationTest {
     @Test fun normalGenerationDeliversMetadataAndUnchangedBodyToTheSidecarSavePath() {
         val result = ProfileGeneration.generate(phone, emptyList(), save = { fail("Sidecar callback must be used"); "" }, seedFactory = { seed },
             saveEngine = { profile, metadata ->
-                assertTrue(profile.similar(CloakForge.forgeProfile(profile.getString("name"), seed, phone)))
+                assertTrue(profile.similar(CloakForge.forgeProfile(profile.getString("name"), seed, phone, "0.4")))
                 assertEquals(seed, metadata.getString("chosen_seed"))
                 assertEquals(1, metadata.getInt("attempt_count"))
                 profile.getString("id")
@@ -44,8 +44,8 @@ class ProfileGenerationTest {
         assertEquals(1, seedCalls)
         assertEquals(1, saveCalls)
         assertEquals(seed, saved.getString("seed"))
-        assertTrue(CloakForge.forgeProfile(result.name, seed, phone).similar(saved))
-        assertEquals(setOf("schema_version", "id", "name", "seed", "device", "identifiers", "telephony", "network", "display", "locale", "camera", "ua", "integrity", "health", "meta"), saved.keySet())
+        assertTrue(CloakForge.forgeProfile(result.name, seed, phone, "0.4").similar(saved))
+        assertEquals(setOf("schema_version", "id", "name", "seed", "device", "identifiers", "telephony", "network", "display", "locale", "camera", "ua", "integrity", "health", "meta", "reality"), saved.keySet())
         assertTrue(before.similar(phone.toJson()))
         assertEquals(listOf("${result.id}.json"), folder.listFiles()!!.map { it.name })
     }
@@ -116,7 +116,9 @@ class ProfileGenerationTest {
     @Test
     fun warningsAreSavedAndReturnedForDisplay() {
         val (_, store) = store()
-        val uncertain = phone.copy(display = JSONObject(phone.display.toString()).put("refresh_rate_hz", 300))
+        val reality = JSONObject(phone.reality.toString())
+        reality.getJSONObject("panel").getJSONObject("values").put("refresh_hz", 300)
+        val uncertain = phone.copy(display = JSONObject(phone.display.toString()).put("refresh_rate_hz", 300), reality = reality)
         val result = ProfileGeneration.generate(uncertain, emptyList(), save = {
             store.write(it.getString("id"), it); it.getString("id")
         }, seedFactory = { seed }) as ProfileGeneration.Result.Saved
@@ -177,7 +179,7 @@ class ProfileGenerationTest {
         assertTrue(Regex("[0-9a-f]{64}").matches(seedA))
         assertTrue(Regex("[0-9a-f]{64}").matches(seedB))
         assertNotEquals(seedA, seedB)
-        assertTrue(CloakForge.forgeProfile(first.name, seedA, phone).similar(store.read(first.id)))
+        assertTrue(CloakForge.forgeProfile(first.name, seedA, phone, "0.4").similar(store.read(first.id)))
     }
     @Test fun duplicateIdentifiersTriggerUniqueGenerationBeforeSaving() {
         val original = CloakForge.forgeProfile("Original", seed, phone)

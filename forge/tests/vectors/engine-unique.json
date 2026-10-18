@@ -214,7 +214,7 @@
         "model": "Pixel 7",
         "product": "panther",
         "device": "panther",
-        "hardware": "gs101",
+        "hardware": "gs201",
         "fingerprint": "google/panther/panther:13/TQ3A.230805.001/10193186:user/release-keys",
         "version_release": "13",
         "sdk_int": 33,
