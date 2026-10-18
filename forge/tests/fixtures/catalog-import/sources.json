@@ -1,0 +1,35 @@
+[
+  {
+    "id": "synthetic-hardware",
+    "local_label": "Self-authored SYNTHETIC fixture: hardware.xml",
+    "sha256": "6e725aa25644777c1d0153c4b2e92672004e9230344db1d5fb522026ece64d17",
+    "license": "CC0-1.0",
+    "notice": "Copyright 2026 Cyclone Cloak contributors. Synthetic compatibility facts; not hardware measurements.",
+    "observed_on": "2026-10-18",
+    "format": "hardware-xml",
+    "role": "hardware",
+    "license_reviewed": true
+  },
+  {
+    "id": "synthetic-build",
+    "local_label": "Self-authored SYNTHETIC fixture: matching.build.prop",
+    "sha256": "1cc2d911900c1fbe127e28f7e09a9a560993076a0ab8ea6cc28e51362afb61b3",
+    "license": "CC0-1.0",
+    "notice": "Copyright 2026 Cyclone Cloak contributors. Synthetic compatibility facts; not hardware measurements.",
+    "observed_on": "2026-10-18",
+    "format": "build-prop",
+    "role": "build",
+    "license_reviewed": true
+  },
+  {
+    "id": "synthetic-review",
+    "local_label": "Self-authored SYNTHETIC fixture: synthetic-completion.json",
+    "sha256": "0b4ff9ccf52d032922fccbea725548eb793ae8f346b3c066c1889c58796ad6bf",
+    "license": "CC0-1.0",
+    "notice": "Copyright 2026 Cyclone Cloak contributors. Synthetic compatibility facts; not hardware measurements.",
+    "observed_on": "2026-10-18",
+    "format": "review-json",
+    "role": "review",
+    "license_reviewed": true
+  }
+]

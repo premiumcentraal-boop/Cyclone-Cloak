@@ -1,0 +1,1700 @@
+{
+  "format": 1,
+  "kind": "catalog-import-candidate",
+  "template": {
+    "camera": {
+      "cameras": [
+        {
+          "facing": 1,
+          "hardware_level": 1,
+          "pixel_width": 8160,
+          "pixel_height": 6144
+        },
+        {
+          "facing": 1,
+          "hardware_level": 0,
+          "pixel_width": 4032,
+          "pixel_height": 3024
+        },
+        {
+          "facing": 0,
+          "hardware_level": 0,
+          "pixel_width": 4164,
+          "pixel_height": 2604
+        }
+      ]
+    },
+    "classes": {
+      "battery_class": "li-ion",
+      "browser_class": "chromium-126-android",
+      "camera_class": "dual-rear-front",
+      "carrier_region": {
+        "country": "US",
+        "iccid_prefix": "8901260",
+        "mcc": "310",
+        "mnc": "260"
+      },
+      "display_inches": 6.3,
+      "graphics_adapter_class": "Mali-G710",
+      "imei_class": "synthetic-luhn-valid-allocation-unverified-tac",
+      "mode_class": "oled-variable",
+      "modem_patterns": {
+        "baseband": "g5300g-[0-9]+-[0-9]+-B-[0-9]+",
+        "bootloader": "cloudripper-[0-9.]+-[0-9]+"
+      },
+      "play_services_expectations": {
+        "attestation": "unknown",
+        "certification": "unknown",
+        "packages": [
+          "com.google.android.gms",
+          "com.android.vending"
+        ]
+      },
+      "ram_storage_class": "8GiB/128GiB",
+      "refresh_capabilities_hz": [
+        60,
+        90
+      ],
+      "sensor_inventory_class": "phone-motion-environment"
+    },
+    "device": {
+      "baseband": "g5300g-230323-230525-B-10200345",
+      "bootloader": "cloudripper-1.0-11000000",
+      "brand": "google",
+      "build_date_utc": 1691712000,
+      "build_id": "TQ3A.230805.001",
+      "device": "panther",
+      "fingerprint": "google/panther/panther:13/TQ3A.230805.001/10193186:user/release-keys",
+      "first_api_level": 33,
+      "hardware": "gs201",
+      "manufacturer": "Google",
+      "model": "Pixel 7",
+      "product": "panther",
+      "sdk_int": 33,
+      "security_patch": "2023-08-05",
+      "version_incremental": "10193186",
+      "version_release": "13"
+    },
+    "display": {
+      "density": 420,
+      "height": 2400,
+      "refresh_rate_hz": 90,
+      "screen_size_class": "normal",
+      "width": 1080
+    },
+    "firmware_binding": {
+      "build_date_utc": 1691712000,
+      "build_id": "TQ3A.230805.001",
+      "fingerprint": "google/panther/panther:13/TQ3A.230805.001/10193186:user/release-keys",
+      "security_patch": "2023-08-05",
+      "version_incremental": "10193186"
+    },
+    "id": "synthetic_pixel7_import",
+    "label": "SYNTHETIC Pixel 7 import demonstration",
+    "locale": {
+      "country": "US",
+      "language": "en",
+      "timezone": "America/New_York"
+    },
+    "network": {
+      "egress_hint": "us-east"
+    },
+    "reality": {
+      "cameras": {
+        "availability": "known",
+        "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+        "source": "approximated",
+        "values": {
+          "count": 3,
+          "inventory": [
+            {
+              "id": "0",
+              "facing": "back",
+              "megapixels": 50.1,
+              "hardware_level": "full"
+            },
+            {
+              "id": "1",
+              "facing": "back",
+              "megapixels": 12.2,
+              "hardware_level": "limited"
+            },
+            {
+              "id": "2",
+              "facing": "front",
+              "megapixels": 10.8,
+              "hardware_level": "limited"
+            }
+          ]
+        }
+      },
+      "carrier": {
+        "availability": "known",
+        "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+        "source": "approximated",
+        "values": {
+          "country": "US",
+          "mcc": "310",
+          "mnc": "260",
+          "sim_state": "ready",
+          "slots": 2
+        }
+      },
+      "compute": {
+        "availability": "known",
+        "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+        "source": "approximated",
+        "values": {
+          "abis": [
+            "arm64-v8a"
+          ],
+          "cpu_cores": 8,
+          "gpu": "Mali-G710",
+          "soc": "Google Tensor G2"
+        }
+      },
+      "environment": {
+        "availability": "known",
+        "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+        "source": "approximated",
+        "values": {
+          "country": "US",
+          "language": "en",
+          "timezone": "America/New_York"
+        }
+      },
+      "memory": {
+        "availability": "known",
+        "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+        "source": "approximated",
+        "values": {
+          "ram_gib": 8,
+          "storage_gib": 128
+        }
+      },
+      "panel": {
+        "availability": "known",
+        "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+        "source": "approximated",
+        "values": {
+          "density_dpi": 420,
+          "height": 2400,
+          "modes": [
+            {
+              "width": 1080,
+              "height": 2400,
+              "refresh_hz": 60
+            },
+            {
+              "width": 1080,
+              "height": 2400,
+              "refresh_hz": 90
+            }
+          ],
+          "refresh_hz": 90,
+          "technology": "OLED",
+          "width": 1080
+        }
+      },
+      "power": {
+        "availability": "known",
+        "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+        "source": "approximated",
+        "values": {
+          "design_capacity_mah": 4355
+        }
+      },
+      "sensors": {
+        "availability": "known",
+        "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+        "source": "approximated",
+        "values": {
+          "inventory": [
+            {
+              "type": 1,
+              "name": "Accelerometer"
+            },
+            {
+              "type": 2,
+              "name": "Magnetic field"
+            },
+            {
+              "type": 4,
+              "name": "Gyroscope"
+            },
+            {
+              "type": 5,
+              "name": "Light"
+            },
+            {
+              "type": 8,
+              "name": "Proximity"
+            },
+            {
+              "type": 6,
+              "name": "Pressure"
+            }
+          ]
+        }
+      },
+      "webview": {
+        "availability": "known",
+        "reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+        "source": "approximated",
+        "values": {
+          "provider": "com.google.android.webview",
+          "version": "126.0.6478.122"
+        }
+      }
+    },
+    "telephony": {
+      "carrier_name": "T-Mobile",
+      "mcc": "310",
+      "mnc": "260",
+      "network_type": "5G",
+      "sim_slot_count": 2
+    },
+    "sources": [
+      "Self-authored SYNTHETIC fixture: hardware.xml",
+      "Self-authored SYNTHETIC fixture: matching.build.prop",
+      "Self-authored SYNTHETIC fixture: synthetic-completion.json"
+    ]
+  },
+  "provenance": {
+    "format": 1,
+    "sources": [
+      {
+        "id": "synthetic-hardware",
+        "local_label": "Self-authored SYNTHETIC fixture: hardware.xml",
+        "sha256": "6e725aa25644777c1d0153c4b2e92672004e9230344db1d5fb522026ece64d17",
+        "license": "CC0-1.0",
+        "notice": "Copyright 2026 Cyclone Cloak contributors. Synthetic compatibility facts; not hardware measurements.",
+        "observed_on": "2026-10-18",
+        "format": "hardware-xml",
+        "role": "hardware",
+        "license_reviewed": true
+      },
+      {
+        "id": "synthetic-build",
+        "local_label": "Self-authored SYNTHETIC fixture: matching.build.prop",
+        "sha256": "1cc2d911900c1fbe127e28f7e09a9a560993076a0ab8ea6cc28e51362afb61b3",
+        "license": "CC0-1.0",
+        "notice": "Copyright 2026 Cyclone Cloak contributors. Synthetic compatibility facts; not hardware measurements.",
+        "observed_on": "2026-10-18",
+        "format": "build-prop",
+        "role": "build",
+        "license_reviewed": true
+      },
+      {
+        "id": "synthetic-review",
+        "local_label": "Self-authored SYNTHETIC fixture: synthetic-completion.json",
+        "sha256": "0b4ff9ccf52d032922fccbea725548eb793ae8f346b3c066c1889c58796ad6bf",
+        "license": "CC0-1.0",
+        "notice": "Copyright 2026 Cyclone Cloak contributors. Synthetic compatibility facts; not hardware measurements.",
+        "observed_on": "2026-10-18",
+        "format": "review-json",
+        "role": "review",
+        "license_reviewed": true
+      }
+    ],
+    "facts": [
+      {
+        "path": "device.model",
+        "value": "Pixel 7",
+        "source_id": "synthetic-hardware",
+        "evidence": "device/name",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "7d77be1cdc0cbc7a6a9f51193d05dd68d5138f987ab952ad50c0ffe34cbe795b"
+      },
+      {
+        "path": "device.manufacturer",
+        "value": "Google",
+        "source_id": "synthetic-hardware",
+        "evidence": "device/manufacturer",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "ba51036ef7c4aa277a37070858dd6ea37c0c3d11abb212694c0bef1e2a3ca816"
+      },
+      {
+        "path": "display.width",
+        "value": 1080,
+        "source_id": "synthetic-hardware",
+        "evidence": "hardware/screen/dimensions/x-dimension",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "4b5caf45885e4aca51286d1deb03e7b2c8f6319d722fff8f4c10166d261091e4"
+      },
+      {
+        "path": "display.height",
+        "value": 2400,
+        "source_id": "synthetic-hardware",
+        "evidence": "hardware/screen/dimensions/y-dimension",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "a0bc43efe93f95a263765f1c99f12957639fb4f92b788bc748916daeaeb81b8d"
+      },
+      {
+        "path": "display.screen_size_class",
+        "value": "normal",
+        "source_id": "synthetic-hardware",
+        "evidence": "hardware/screen/screen-size",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "3d4f6a3fdcfd80b36f6d553215ba3d2b21ee003fd0f5f2ac0020db0578e21f14"
+      },
+      {
+        "path": "hardware.diagonal_inches",
+        "value": 6.3,
+        "source_id": "synthetic-hardware",
+        "evidence": "hardware/screen/diagonal-length",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "49417e50c7ec5285f563d300e02f93b38308c25d4f7d785fa4ef26e490bef190"
+      },
+      {
+        "path": "hardware.physical_xdpi",
+        "value": 416.5,
+        "source_id": "synthetic-hardware",
+        "evidence": "hardware/screen/xdpi",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "f380ca39547dca83be6ee4d3f71c90cb7f3168617e3b052877c39af519d89d2a"
+      },
+      {
+        "path": "hardware.physical_ydpi",
+        "value": 416.5,
+        "source_id": "synthetic-hardware",
+        "evidence": "hardware/screen/ydpi",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "e278d3b96b4d874a0b5baae0b35dc07948c776a83508d90b47c81a3a2b454f78"
+      },
+      {
+        "path": "hardware.cpu_label",
+        "value": "Google Tensor G2",
+        "source_id": "synthetic-hardware",
+        "evidence": "hardware/cpu",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "03e456b175e8d2ffb0901516b194bbb21086d8c54efabcee0f7f3b32039fecc5"
+      },
+      {
+        "path": "hardware.gpu_label",
+        "value": "Mali-G710",
+        "source_id": "synthetic-hardware",
+        "evidence": "hardware/gpu",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "41b28655dd3208f819b6b6e985b7b64631d5c0ad8e07777bc5fb0e56146e1e79"
+      },
+      {
+        "path": "hardware.microphone",
+        "value": true,
+        "source_id": "synthetic-hardware",
+        "evidence": "hardware/mic",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "ce880d152d788bbceb2ff3208ae89f89fe7951344ceca8a41016eb3dd3b24de5"
+      },
+      {
+        "path": "hardware.keyboard",
+        "value": "nokeys",
+        "source_id": "synthetic-hardware",
+        "evidence": "hardware/keyboard",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "965c710585969eefa9e62d93d5309b883d17f3bee51109677ceaef69660ef668"
+      },
+      {
+        "path": "hardware.navigation",
+        "value": "nonav",
+        "source_id": "synthetic-hardware",
+        "evidence": "hardware/nav",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "66c4c5d8dfa2bfac7e6897a2b3ae572b42087b7f271ef4616ea5708dbeeaa8cd"
+      },
+      {
+        "path": "hardware.power_type",
+        "value": "battery",
+        "source_id": "synthetic-hardware",
+        "evidence": "hardware/power-type",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "726befecb3f9925f8344d3e7daf538c287dd16bc9e21bbbe83aefcc2a1d44d03"
+      },
+      {
+        "path": "hardware.touch",
+        "value": "finger",
+        "source_id": "synthetic-hardware",
+        "evidence": "hardware/screen/touch/mechanism",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "e5f65397dd641574f0fd477722d74b52559cae8b06444b6d983900d850fcfc49"
+      },
+      {
+        "path": "display.density",
+        "value": 420,
+        "source_id": "synthetic-hardware",
+        "evidence": "hardware/screen/pixel-density",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "d784f754fdb656ad6d010427cc044f0519deba95fadfba94deb5b8cedf2c9af8"
+      },
+      {
+        "path": "hardware.ram_bytes",
+        "value": 8589934592,
+        "source_id": "synthetic-hardware",
+        "evidence": "hardware/ram",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "dab0587a5d1d1efb9aca91a5da4b7795539e8be591393cc4340786f8b5b21a03"
+      },
+      {
+        "path": "hardware.storage_bytes",
+        "value": 137438953472,
+        "source_id": "synthetic-hardware",
+        "evidence": "hardware/internal-storage",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "ee1e3b1f244e0075567194a5b61c0f95582af8d7ec770cb7d58d2f4c74c3ff08"
+      },
+      {
+        "path": "hardware.networking",
+        "value": [
+          "Bluetooth",
+          "NFC",
+          "Wifi"
+        ],
+        "source_id": "synthetic-hardware",
+        "evidence": "hardware/networking",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "74a2ce345bc21323a3d8cf12458239a2839a36d3b50e2d291bd09498bbd47838"
+      },
+      {
+        "path": "hardware.sensors",
+        "value": [
+          "Accelerometer",
+          "Gyroscope",
+          "LightSensor",
+          "ProximitySensor"
+        ],
+        "source_id": "synthetic-hardware",
+        "evidence": "hardware/sensors",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "373b670dbc74629f5e382712c8c73442dd87fa84693005cff27b4b6a2ecad7e3"
+      },
+      {
+        "path": "hardware.abi",
+        "value": [
+          "arm64-v8a"
+        ],
+        "source_id": "synthetic-hardware",
+        "evidence": "hardware/abi",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "47bfe92917d858c8d3ed1e9e0bbe43f6745d6ae8c4545c77d79e6d7de4a6160a"
+      },
+      {
+        "path": "hardware.cameras",
+        "value": [
+          {
+            "location": "back",
+            "autofocus": true,
+            "flash": true
+          },
+          {
+            "location": "front",
+            "autofocus": false,
+            "flash": false
+          }
+        ],
+        "source_id": "synthetic-hardware",
+        "evidence": "hardware/camera; presence only, no HAL/megapixel claim",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "545a6e2734da415e3be4142ed67b071616e65774baf13bf35d1df9559648591f"
+      },
+      {
+        "path": "device.manufacturer",
+        "value": "Google",
+        "source_id": "synthetic-build",
+        "evidence": "property:ro.product.manufacturer",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "c03c0b3ab71647d8bc3bef8d7a593f9b87636d892271896ffaf196d6c8d940f5"
+      },
+      {
+        "path": "device.brand",
+        "value": "google",
+        "source_id": "synthetic-build",
+        "evidence": "property:ro.product.brand",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "80ee9cfa0c80c3856b84f018766e5cac0e3dece3762d952c94278ce96d5e8fe6"
+      },
+      {
+        "path": "device.model",
+        "value": "Pixel 7",
+        "source_id": "synthetic-build",
+        "evidence": "property:ro.product.model",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "1736a70cee21ea82bafb2b530fbbc97568797108f069fcfdb90241e05c02f5f0"
+      },
+      {
+        "path": "device.product",
+        "value": "panther",
+        "source_id": "synthetic-build",
+        "evidence": "property:ro.product.name",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "3f9dfa1a477e030ed0d178221aea38a6c02afa6fd69c3ae629f799cca1d8436e"
+      },
+      {
+        "path": "device.device",
+        "value": "panther",
+        "source_id": "synthetic-build",
+        "evidence": "property:ro.product.device",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "a132b8640a063da02d21fccde7453447785c9d64c2dab0a7009ae0a7a3e51938"
+      },
+      {
+        "path": "device.hardware",
+        "value": "gs201",
+        "source_id": "synthetic-build",
+        "evidence": "property:ro.hardware",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "512e39a3f86ceaf063ea6413923e4838491abe65899973172897e29e94bfe86e"
+      },
+      {
+        "path": "device.fingerprint",
+        "value": "google/panther/panther:13/TQ3A.230805.001/10193186:user/release-keys",
+        "source_id": "synthetic-build",
+        "evidence": "property:ro.build.fingerprint",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "4c68eff4388f4b9145e53d71eb32aac68c8d500412baa33df378afa9e646cc46"
+      },
+      {
+        "path": "device.version_release",
+        "value": "13",
+        "source_id": "synthetic-build",
+        "evidence": "property:ro.build.version.release",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "70e4710e62860b4489ccd2662be0d417cc1c3f507dda6c16587d393281799468"
+      },
+      {
+        "path": "device.sdk_int",
+        "value": 33,
+        "source_id": "synthetic-build",
+        "evidence": "property:ro.build.version.sdk",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "5c5c34548f427550e7436b6ad9a6a5ac22c74b7d586b68137bf623631d94f1ff"
+      },
+      {
+        "path": "device.security_patch",
+        "value": "2023-08-05",
+        "source_id": "synthetic-build",
+        "evidence": "property:ro.build.version.security_patch",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "9e3c097d22f3820dbccdc764108c08c62f4727a2e3cbed2f21cd228bc2ab3ba8"
+      },
+      {
+        "path": "device.build_id",
+        "value": "TQ3A.230805.001",
+        "source_id": "synthetic-build",
+        "evidence": "property:ro.build.id",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "40b8c6fe0e5d22d4cce562db549f42ad254bf8e5aa0459172c310902ca88cb17"
+      },
+      {
+        "path": "device.version_incremental",
+        "value": "10193186",
+        "source_id": "synthetic-build",
+        "evidence": "property:ro.build.version.incremental",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "734b470b027aee0555d10ed4ac5fb9d981015bbdd9dbf3ced59900e2dcd97913"
+      },
+      {
+        "path": "device.build_date_utc",
+        "value": 1691712000,
+        "source_id": "synthetic-build",
+        "evidence": "property:ro.build.date.utc",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "cf9bccb0b1924bd80ed8b2558b1d8e6c53bf4daf7021df6633d28683826a2972"
+      },
+      {
+        "path": "device.first_api_level",
+        "value": 33,
+        "source_id": "synthetic-build",
+        "evidence": "property:ro.product.first_api_level",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "9692af023831e7d8910d67135ed7be670dbcf973ba1c2d28b2e86271702b3bf4"
+      },
+      {
+        "path": "device.bootloader",
+        "value": "cloudripper-1.0-11000000",
+        "source_id": "synthetic-build",
+        "evidence": "property:ro.bootloader",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "791c597c91c7c58339d611465fd2ea55215dddaf2151f977f53dfc6664d30887"
+      },
+      {
+        "path": "device.baseband",
+        "value": "g5300g-230323-230525-B-10200345",
+        "source_id": "synthetic-build",
+        "evidence": "property:ro.baseband",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "2234ac458f2820377e386dc4e7df37cfde456d3825c8c74275f37b279a81585a"
+      },
+      {
+        "path": "display.density",
+        "value": 420,
+        "source_id": "synthetic-build",
+        "evidence": "property:ro.sf.lcd_density",
+        "confidence": "declared",
+        "availability": "known",
+        "resolves": [],
+        "id": "2379e272498e6c3b85cd68edb1e81ad8f1a49d0673a0a7d63bb38c2b6c9b326a"
+      },
+      {
+        "path": "id",
+        "value": "synthetic_pixel7_import",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "47b140bb1e0d85dfdd7bbf9509b64a18d735425170f43629e3d67d0812e31976"
+      },
+      {
+        "path": "label",
+        "value": "SYNTHETIC Pixel 7 import demonstration",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "55485771a0772006084ce88b82ce45da5e1e717214df4a43351ce46baf940831"
+      },
+      {
+        "path": "display.refresh_rate_hz",
+        "value": 90,
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "04a4c88ff49dc435d06b9c0bfa85717688df4aa3f53a5f75a5f395c5d32a3156"
+      },
+      {
+        "path": "camera.cameras",
+        "value": [
+          {
+            "facing": 1,
+            "hardware_level": 1,
+            "pixel_width": 8160,
+            "pixel_height": 6144
+          },
+          {
+            "facing": 1,
+            "hardware_level": 0,
+            "pixel_width": 4032,
+            "pixel_height": 3024
+          },
+          {
+            "facing": 0,
+            "hardware_level": 0,
+            "pixel_width": 4164,
+            "pixel_height": 2604
+          }
+        ],
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "8e8fc49ece60598c96fbcc13afd6e294bbe7e8f705e1c494cab88a1927fec76a"
+      },
+      {
+        "path": "locale.language",
+        "value": "en",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "21a2ab5af7ff295a5c3201a4fa5f041101be1d9c672c355568c5549b2fd455ff"
+      },
+      {
+        "path": "locale.country",
+        "value": "US",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "8f5c6e3429df1d8bd38b46dc87382a5bd4baa6e8790ad1761da55193006404f9"
+      },
+      {
+        "path": "locale.timezone",
+        "value": "America/New_York",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "d85ed63d62b891e26c8bba70657baa93a63f226272b5b039cebe008ff2b03ff1"
+      },
+      {
+        "path": "network.egress_hint",
+        "value": "us-east",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "0e16f8d83dbf656ebb94110480d354a2c4874f446075d9f8c7608d803024b72c"
+      },
+      {
+        "path": "telephony.sim_slot_count",
+        "value": 2,
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "43367f5526f7accddc409510fbfaf1853aa55ed31e5e7a5cf28c47d4eb852c9a"
+      },
+      {
+        "path": "telephony.carrier_name",
+        "value": "T-Mobile",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "cc491104397f9a8f26c1b01cf6afe5a2a2c7716c03ae7575dad054e82c7f078b"
+      },
+      {
+        "path": "telephony.mcc",
+        "value": "310",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "d4e88ad236be9d28c4e59b9e06f981254ed5f4957dd4718f847a770b1257c0e1"
+      },
+      {
+        "path": "telephony.mnc",
+        "value": "260",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "320e4744819601ac7f88d7235694b07da7b6ab1527b13dae34a9fbca594a5876"
+      },
+      {
+        "path": "telephony.network_type",
+        "value": "5G",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "7f85e261feb826e71bc636f193bec1fa8c8d04f7fe25a7f4a2febf98cca2433c"
+      },
+      {
+        "path": "reality.compute.availability",
+        "value": "known",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "32c1a6c38de368b043453eb6e99e3eed5619de0d1e3e141bc5eda2da7c85daa1"
+      },
+      {
+        "path": "reality.compute.source",
+        "value": "approximated",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "46224fad564fe15647a5f33b7682a3bdf73ddb27b8e3e475033d2f4410a83b50"
+      },
+      {
+        "path": "reality.compute.reason",
+        "value": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "ebc0e437fa7eaf526cbbe03120a812cc351f626771cb64aefcc7c23dbb7c1c4a"
+      },
+      {
+        "path": "reality.compute.values.soc",
+        "value": "Google Tensor G2",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "0adf41713fd36189f7a4b28025bc8dcef5581b63ef84ec7d65187675d023ebd6"
+      },
+      {
+        "path": "reality.compute.values.gpu",
+        "value": "Mali-G710",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "33ce94d37ae017a7c36442afc1d04d80f8d07c3faa536c611de6ee773e6f63c3"
+      },
+      {
+        "path": "reality.compute.values.cpu_cores",
+        "value": 8,
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "0346c268395b6e8b94427fb7f1ac4263a8640a91053ceadb6ed914498980c55d"
+      },
+      {
+        "path": "reality.compute.values.abis",
+        "value": [
+          "arm64-v8a"
+        ],
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "b928d55e0f985487faea2abf16f1c7c430ddb6916bd52d5e4723c6a753437864"
+      },
+      {
+        "path": "reality.memory.availability",
+        "value": "known",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "baf0502d58b6bda357e08a832781be63e8f10d567cf56ca4c66609ec41af67da"
+      },
+      {
+        "path": "reality.memory.source",
+        "value": "approximated",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "1d4e0eb3c33c9e9c1b240bcb1d08932fa6fd8935ef94fe518d1440ecc4f1cfec"
+      },
+      {
+        "path": "reality.memory.reason",
+        "value": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "f6f1bc9c134c5de3a37c40107fd32e7a32aca0f59773c153fc066c27dfa794d5"
+      },
+      {
+        "path": "reality.memory.values.ram_gib",
+        "value": 8,
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "35e834a9000eb0df223cd63ebc2c648066fa25cce0b94f5108d519fcdc3b9fde"
+      },
+      {
+        "path": "reality.memory.values.storage_gib",
+        "value": 128,
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "df3471fb4eac2047eb3cad7f2d6ebfd76c115185aa4302c22f136447b9b07e8d"
+      },
+      {
+        "path": "reality.panel.availability",
+        "value": "known",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "b25b39ed601af139ad2f2a79aa0c377b9a7b43ee7ff0ec1547c3c0aca59f76df"
+      },
+      {
+        "path": "reality.panel.source",
+        "value": "approximated",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "f59661328fc92eebf5b2a814ea525e37c8c88e9389d08bbb901e81f0f4335f6d"
+      },
+      {
+        "path": "reality.panel.reason",
+        "value": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "7c4256d6e9bfc4094e96b368e29a753e318f6fb61bfb8a212efcc6b0df7f8cae"
+      },
+      {
+        "path": "reality.panel.values.width",
+        "value": 1080,
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "2ae791014547132515967a450881fc62c61c51bd903a78bd813b8848e0af9a49"
+      },
+      {
+        "path": "reality.panel.values.height",
+        "value": 2400,
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "6e0ff0d629a55d2ca88c6c28a857d4edd44e3cb0bf2b4f3d31d6cd8647fbc16b"
+      },
+      {
+        "path": "reality.panel.values.density_dpi",
+        "value": 420,
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "057cf9d98acbeea1bad13e728b28e16ae51b1ff1b8cd0e4e6d453890ee4f5a3f"
+      },
+      {
+        "path": "reality.panel.values.refresh_hz",
+        "value": 90,
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "76df2bd08fcc84b1590c0e1b5f5912765f5821cb80872ae50049582f3756b4a5"
+      },
+      {
+        "path": "reality.panel.values.technology",
+        "value": "OLED",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "355fbcda383f28ca2417d822da27cd80a1911d30a664447392b2e40e3105d1d4"
+      },
+      {
+        "path": "reality.panel.values.modes",
+        "value": [
+          {
+            "width": 1080,
+            "height": 2400,
+            "refresh_hz": 60
+          },
+          {
+            "width": 1080,
+            "height": 2400,
+            "refresh_hz": 90
+          }
+        ],
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "3d0561437d0d4a9d0af5fb31b6836f512ff42ab7f9ca78f95efd0013e97d8023"
+      },
+      {
+        "path": "reality.cameras.availability",
+        "value": "known",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "b3e7251a65f044cd742357d3499de7752d6caf21592198f0664ea34968342d57"
+      },
+      {
+        "path": "reality.cameras.source",
+        "value": "approximated",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "90f044209f5ad2b3877d94ced9dbbb4dfc07a350abc3b2196b166817c055c2d7"
+      },
+      {
+        "path": "reality.cameras.reason",
+        "value": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "d20f3f035237a1de2536945b3a7ac7709250a45fb0d498d23935842b0a3de33a"
+      },
+      {
+        "path": "reality.cameras.values.count",
+        "value": 3,
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "a8b61f0fd87aa38741052c77f3a7102f07e7ce4e26e43114804c430af75a6c8b"
+      },
+      {
+        "path": "reality.cameras.values.inventory",
+        "value": [
+          {
+            "id": "0",
+            "facing": "back",
+            "megapixels": 50.1,
+            "hardware_level": "full"
+          },
+          {
+            "id": "1",
+            "facing": "back",
+            "megapixels": 12.2,
+            "hardware_level": "limited"
+          },
+          {
+            "id": "2",
+            "facing": "front",
+            "megapixels": 10.8,
+            "hardware_level": "limited"
+          }
+        ],
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "40986bdad4bdb043d2b9be017e6f570b243251bf6e709f0cd1d11a0d7403ac32"
+      },
+      {
+        "path": "reality.sensors.availability",
+        "value": "known",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "a4414795242a1c9d5204259ede22c220775e14f552cdbf9599e956114d9b2d7b"
+      },
+      {
+        "path": "reality.sensors.source",
+        "value": "approximated",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "eff6aecb9501a392c8d4ee2fbd3a694033852f4a785e766c14b9374bd3ec3421"
+      },
+      {
+        "path": "reality.sensors.reason",
+        "value": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "8a418f4ec244cfd5b47315a7396ce242bf419d6c052f23d76eb3668f9e9454f1"
+      },
+      {
+        "path": "reality.sensors.values.inventory",
+        "value": [
+          {
+            "type": 1,
+            "name": "Accelerometer"
+          },
+          {
+            "type": 2,
+            "name": "Magnetic field"
+          },
+          {
+            "type": 4,
+            "name": "Gyroscope"
+          },
+          {
+            "type": 5,
+            "name": "Light"
+          },
+          {
+            "type": 8,
+            "name": "Proximity"
+          },
+          {
+            "type": 6,
+            "name": "Pressure"
+          }
+        ],
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "901ceb4092b9e8ba8ceb51d1da848f1a797fa2f21014349b758efac322e09630"
+      },
+      {
+        "path": "reality.power.availability",
+        "value": "known",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "61a82d9506f293c6b55fc845cead2472d1f3d814d687ebf551aaab3f823eb955"
+      },
+      {
+        "path": "reality.power.source",
+        "value": "approximated",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "3329d88f73475579ac061b8de031d88f36e27167d7c4b1ac5a944f14864a1fd1"
+      },
+      {
+        "path": "reality.power.reason",
+        "value": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "949fc00d0d94800fbdf502559fdf39a410956578942a3be63859e2c3a9544e99"
+      },
+      {
+        "path": "reality.power.values.design_capacity_mah",
+        "value": 4355,
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "805e77b3ca0b02273dc23fe25927683ca09472a906febef6f5daa70ef48d2508"
+      },
+      {
+        "path": "reality.carrier.availability",
+        "value": "known",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "2edceb5c375a2632657cedbeabb2a63de01453775a171b460e1ba4d394580047"
+      },
+      {
+        "path": "reality.carrier.source",
+        "value": "approximated",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "621e2d76a41e7c2c54ecf7399ec8d061bf51ebab11a137dec8f8c6dcda8b5e08"
+      },
+      {
+        "path": "reality.carrier.reason",
+        "value": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "47014170c7ffc979ef7b6c1aa82ff8fd16b97af484311d8094472c835eb5e802"
+      },
+      {
+        "path": "reality.carrier.values.slots",
+        "value": 2,
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "63e330e70165a6b41d090543e257c95e2800fd5b61224638e6e9da6d7effbd3d"
+      },
+      {
+        "path": "reality.carrier.values.mcc",
+        "value": "310",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "894221d897fec93e96e3734202d0e198a9e02a2d41e2b81fdeff599d53266118"
+      },
+      {
+        "path": "reality.carrier.values.mnc",
+        "value": "260",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "c4f380c9a4b2acddab9b2b299009744f5e8bd8161ec30a5b1157642f827fe9b4"
+      },
+      {
+        "path": "reality.carrier.values.country",
+        "value": "US",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "880383909264505181a5505c725a7e5822e17ea0c0856af0b503bfe0f7ac02ff"
+      },
+      {
+        "path": "reality.carrier.values.sim_state",
+        "value": "ready",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "8f55fc5daa015c18eca275a3d59b2a66b19e8aef250a33addc96e356e3951e87"
+      },
+      {
+        "path": "reality.webview.availability",
+        "value": "known",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "d20a03e2df2b2c82bf730f9394c4f88763173acf2fed586fd9e90772f50bd8c1"
+      },
+      {
+        "path": "reality.webview.source",
+        "value": "approximated",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "fcc0d83dc0259fd4b311ecc91059dcb3a2f9a6f5799bcac63d8b4b6a612bae96"
+      },
+      {
+        "path": "reality.webview.reason",
+        "value": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "7186566c18b56d9cf1fb9959d246d5e0cc0d87187986f13c9b1fcde10129d5a1"
+      },
+      {
+        "path": "reality.webview.values.provider",
+        "value": "com.google.android.webview",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "f556bd622b0530e740d17b48f493c1923587e727249b32e0d3713ff13cb2f3ab"
+      },
+      {
+        "path": "reality.webview.values.version",
+        "value": "126.0.6478.122",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "ca2569794379dc29ebb36254b2980d051e28af675b01109b0dbacf2b81208816"
+      },
+      {
+        "path": "reality.environment.availability",
+        "value": "known",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "e2131bb3a659d5931bf4adbdea3d981a1516f64c3d9b5a10229bfc7ee6963ec7"
+      },
+      {
+        "path": "reality.environment.source",
+        "value": "approximated",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "95bd4cd29f40791112026641d4926d5975b4867333e0001a1656e672851f7f14"
+      },
+      {
+        "path": "reality.environment.reason",
+        "value": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "e2e3b77fa08216fba39831a106441be4a8e5f95d1c1f740557a7280f2e4c9c33"
+      },
+      {
+        "path": "reality.environment.values.language",
+        "value": "en",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "b7df77c42f3cb61a833636de7d3d4363961342920469af5eafbb5815987b7e63"
+      },
+      {
+        "path": "reality.environment.values.country",
+        "value": "US",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "007b98ef6602bd659b431c7e831013833357918fb67f4020ec40f9cff72058b2"
+      },
+      {
+        "path": "reality.environment.values.timezone",
+        "value": "America/New_York",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "8e7ed5b17b7004ff862a8ed438ebcfd14b927adbd2b7759d21cc2ba50462ac4c"
+      },
+      {
+        "path": "classes.display_inches",
+        "value": 6.3,
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "fce4004af39343f08465efbb4a06010313a40a22dbc6348bca6864e71b26200c"
+      },
+      {
+        "path": "classes.mode_class",
+        "value": "oled-variable",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "51b5e1bc2ba8ef7a08f2b53338ac1df3428bcb3e1eed25b72958abee2dd41fd2"
+      },
+      {
+        "path": "classes.refresh_capabilities_hz",
+        "value": [
+          60,
+          90
+        ],
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "94dcc0d421438a996fda1525091b7c4fee80ed7c1e3ae0cf5618efb5b594b323"
+      },
+      {
+        "path": "classes.camera_class",
+        "value": "dual-rear-front",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "63f417d6b93a6bf841b3d14004918c2e68507e542ff228e7249693f4cb8b2cac"
+      },
+      {
+        "path": "classes.sensor_inventory_class",
+        "value": "phone-motion-environment",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "9000f8df4bd919abe919bb508408646576becb4aa5ae3eb631648f6f785cfbfd"
+      },
+      {
+        "path": "classes.ram_storage_class",
+        "value": "8GiB/128GiB",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "6a18376e61432d345994db92243ee88a35b4b75e5dcde7bd50fa15d4a5906c5c"
+      },
+      {
+        "path": "classes.battery_class",
+        "value": "li-ion",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "ead94148b850ada70743968bdb542b1aa94d52dd5554ed7a3f92b97311b5dc39"
+      },
+      {
+        "path": "classes.browser_class",
+        "value": "chromium-126-android",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "f41df11c030f4ed2cbd68b99c371dc0dac6af8c3e7feddc6536cdd14642287c5"
+      },
+      {
+        "path": "classes.graphics_adapter_class",
+        "value": "Mali-G710",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "e333fa0d58e3d7f4ca70ae862880b01911cb51362de40fe520a6f22a182ab067"
+      },
+      {
+        "path": "classes.play_services_expectations.packages",
+        "value": [
+          "com.google.android.gms",
+          "com.android.vending"
+        ],
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "17abb252280f5a758b75a5b77046d64aab70acd8a8bfab1373e967d8de1d5538"
+      },
+      {
+        "path": "classes.play_services_expectations.certification",
+        "value": "unknown",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "857d11e2ad6a27c36cce23ac08888ff437c9c36c3fca4e32ca559abfc5792555"
+      },
+      {
+        "path": "classes.play_services_expectations.attestation",
+        "value": "unknown",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "0b41559576760f004f48e3e439bd4eaf7ea146a317e514bba8ce80f669b72d7b"
+      },
+      {
+        "path": "classes.modem_patterns.bootloader",
+        "value": "cloudripper-[0-9.]+-[0-9]+",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "31a747b5a5e616a14aa3770902fdac14aab0f1eefc8683b38615b00a1a45bb39"
+      },
+      {
+        "path": "classes.modem_patterns.baseband",
+        "value": "g5300g-[0-9]+-[0-9]+-B-[0-9]+",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "5339806281e4059fc57291abada198f1f487a3d8937d0ea5821eb5a0a6694ab7"
+      },
+      {
+        "path": "classes.carrier_region.country",
+        "value": "US",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "327a8088dcfda0bfae0153913c10776b949791c41aed5a2d751254cb86d37bea"
+      },
+      {
+        "path": "classes.carrier_region.mcc",
+        "value": "310",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "46474e07f674f9c48a8c0fa1b6b11d578644170892e90b6a9993171375d2189f"
+      },
+      {
+        "path": "classes.carrier_region.mnc",
+        "value": "260",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "9e2c8c83d2588aa013a831b961bd0443a338e25b1d5a810a543994bd2db302cb"
+      },
+      {
+        "path": "classes.carrier_region.iccid_prefix",
+        "value": "8901260",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "ba3860cbd34d098c49da74c2447b171527565d41813eb705a97ccc2ce04e7afc"
+      },
+      {
+        "path": "classes.imei_class",
+        "value": "synthetic-luhn-valid-allocation-unverified-tac",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "6a45a0df4df602e08b4e080d2cb61e92060a7561db2802a83e0cf7921b7bcf49"
+      },
+      {
+        "path": "firmware_binding.fingerprint",
+        "value": "google/panther/panther:13/TQ3A.230805.001/10193186:user/release-keys",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "51de62ea7feeaa1c246245c9d512caee2bf9dac52f268daa657c01b5fec2459e"
+      },
+      {
+        "path": "firmware_binding.security_patch",
+        "value": "2023-08-05",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "7c368953105893f3d4708cfab656f66210a4fba246eebe5da60c012d8ab04b38"
+      },
+      {
+        "path": "firmware_binding.build_id",
+        "value": "TQ3A.230805.001",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "c6c7a683424704a465a8a152a7b77ddd83f0ed889d19a97c7d66502dae5d1678"
+      },
+      {
+        "path": "firmware_binding.version_incremental",
+        "value": "10193186",
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "fff9b454646981766484b76a812fafb7e6ea5e56f7d290e369e11a8ab7b98fbc"
+      },
+      {
+        "path": "firmware_binding.build_date_utc",
+        "value": 1691712000,
+        "source_id": "synthetic-review",
+        "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+        "confidence": "approximated",
+        "availability": "known",
+        "resolves": [],
+        "id": "c8bca8e7d7e0358e0f1d99b86fae38269253775e5c2505d95d22bdf0b83dd9ec"
+      }
+    ]
+  },
+  "reviewer": "Synthetic example review only",
+  "platform_trust": "unknown",
+  "digest": "bc6e1fc7dbd226b5bd7b4d85bffb725d80369a149c3ffd67bde3b64fafae8ca2"
+}

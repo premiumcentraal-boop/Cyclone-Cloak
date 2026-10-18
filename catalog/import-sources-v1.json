@@ -1,0 +1,102 @@
+{
+  "format": 1,
+  "notice": "Bound reference set only. Hashes identify the observed reference pages, not downloadable hardware artifacts. No third-party device records are vendored or promoted. Source approval does not confer a redistribution license.",
+  "sources": [
+    {
+      "id": "aosp",
+      "url": "https://android.googlesource.com/platform/tools/base/+/eac8f291215dd282f4439078298a287449af2d59",
+      "sha256": "09b1cfc93ed77276b56f70f15408429a4dde0891da2d9748cda0ed4b774144ec",
+      "license": "Apache-2.0 (verify individual file notice)",
+      "license_reviewed": false,
+      "notice": "Hardware definitions; emulator configurations are not physical-device certification.",
+      "observed_on": "2026-10-18",
+      "format": "reference",
+      "role": "reference",
+      "revision": "eac8f291215dd282f4439078298a287449af2d59"
+    },
+    {
+      "id": "avd-workflow",
+      "url": "https://developer.android.com/studio/run/managing-avds",
+      "sha256": "e7e0415347c4ab7b92efc401b7fe0785e466b3c0396b76ca04291d407a3f352b",
+      "license": "LicenseRef-ReviewRequired-GoogleDocs",
+      "license_reviewed": false,
+      "notice": "Workflow reference only, no hardware facts imported.",
+      "observed_on": "2026-10-18",
+      "format": "reference",
+      "role": "reference"
+    },
+    {
+      "id": "sony",
+      "url": "https://developer.sony.com/develop/drivers/",
+      "sha256": "122d8e2a755ac3f38b2b2bfda4feaadb99484d8e2719396e46f0cdc20f907341",
+      "license": "LicenseRef-ReviewRequired-SonyArtifact",
+      "license_reviewed": false,
+      "notice": "Driver download reference; artifact-specific licenses and matching model/SKU need review.",
+      "observed_on": "2026-10-18",
+      "format": "reference",
+      "role": "reference"
+    },
+    {
+      "id": "android-device-names",
+      "url": "https://github.com/jaredrummler/AndroidDeviceNames",
+      "sha256": "ef3181dde594c9e33ee78a53542aefa9a23c293dfd266c55e228fe3bc8b279e2",
+      "license": "Apache-2.0",
+      "license_reviewed": false,
+      "notice": "Name/model cross-check only; bundled database provenance requires per-artifact review.",
+      "observed_on": "2026-10-18",
+      "format": "reference",
+      "role": "reference"
+    },
+    {
+      "id": "matomo",
+      "url": "https://github.com/matomo-org/device-detector",
+      "sha256": "81374162721f088b66bcae0e7a76316309bdb6bf959edd50f8a511abf00e050c",
+      "license": "LGPL-3.0-or-later",
+      "license_reviewed": false,
+      "notice": "Naming/UA cross-check only; not a hardware inventory or shipped firmware definition.",
+      "observed_on": "2026-10-18",
+      "format": "reference",
+      "role": "reference"
+    },
+    {
+      "id": "play-catalog",
+      "url": "https://support.google.com/googleplay/android-developer/answer/9859371?hl=en",
+      "sha256": "ed194f36bff4a49c06dceadefd7468bb20132922a16e892a8dc4d9a8179ca529",
+      "license": "LicenseRef-ReviewRequired-GoogleDocs",
+      "license_reviewed": false,
+      "notice": "Supported-device cross-check; listing does not establish certification or attestation.",
+      "observed_on": "2026-10-18",
+      "format": "reference",
+      "role": "reference"
+    },
+    {
+      "id": "firebase",
+      "url": "https://firebase.google.com/docs/test-lab/android/available-testing-devices",
+      "sha256": "45198f89cc47b4520159dea713c51f3f5829268552634b888c25de2385cde7e6",
+      "license": "LicenseRef-ReviewRequired-GoogleDocs",
+      "license_reviewed": false,
+      "notice": "Test Lab catalog cross-check; a lab device entry does not prove imported runtime behavior.",
+      "observed_on": "2026-10-18",
+      "format": "reference",
+      "role": "reference"
+    },
+    {
+      "id": "redroid",
+      "url": "https://github.com/remote-android/redroid-doc",
+      "sha256": "4fef398385ffe09dcc15fd64233d7c0a2a021b00e336809c0bcd7cdd4011cc9c",
+      "license": "Apache-2.0 (kernel GPL-2.0; inspect component notices)",
+      "license_reviewed": false,
+      "notice": "Backend/reference implementation only; never treat virtual hardware as physical measured facts.",
+      "observed_on": "2026-10-18",
+      "format": "reference",
+      "role": "reference"
+    }
+  ],
+  "field_confidence": {
+    "hardware-profile-xml": "declared; template facts only, not physical verification",
+    "name-cross-check": "public-reference; manufacturer/model naming only",
+    "build-prop": "declared; exact matching model/manufacturer required",
+    "review-json": "reviewed or approximated per explicit fact; never inferred certification",
+    "reference-page": "unknown; no imported fact evidence"
+  }
+}

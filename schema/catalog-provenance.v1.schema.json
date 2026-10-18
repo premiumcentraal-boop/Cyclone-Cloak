@@ -1,0 +1,359 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyclone.local/schema/catalog-provenance.v1.schema.json",
+  "title": "Catalog Import Bridge v1 provenance (not a profile schema)",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "sources",
+    "facts"
+  ],
+  "properties": {
+    "format": {
+      "const": 1,
+      "type": "integer"
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 64,
+      "items": {
+        "$ref": "#/$defs/source"
+      }
+    },
+    "facts": {
+      "type": "array",
+      "maxItems": 4096,
+      "items": {
+        "$ref": "#/$defs/fact"
+      }
+    }
+  },
+  "$defs": {
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "sha256",
+        "license",
+        "notice",
+        "observed_on",
+        "format",
+        "role",
+        "license_reviewed"
+      ],
+      "oneOf": [
+        {
+          "required": [
+            "url"
+          ],
+          "not": {
+            "required": [
+              "local_label"
+            ]
+          }
+        },
+        {
+          "required": [
+            "local_label"
+          ],
+          "not": {
+            "required": [
+              "url"
+            ]
+          }
+        }
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "maxLength": 64,
+          "pattern": "^[A-Za-z0-9_-]+$"
+        },
+        "url": {
+          "type": "string",
+          "maxLength": 2048,
+          "pattern": "^https://"
+        },
+        "local_label": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+        },
+        "revision": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 256,
+          "pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "license": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[^\\u0000-\\u001f\\u007f]+$",
+          "not": {
+            "enum": [
+              "unknown",
+              "none",
+              "unreviewed",
+              "pending"
+            ]
+          }
+        },
+        "notice": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 4096,
+          "pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+        },
+        "observed_on": {
+          "type": "string",
+          "format": "date",
+          "pattern": "^\\d{4}-\\d{2}-\\d{2}$"
+        },
+        "format": {
+          "enum": [
+            "hardware-xml",
+            "build-prop",
+            "review-json",
+            "reference"
+          ]
+        },
+        "role": {
+          "enum": [
+            "hardware",
+            "build",
+            "review",
+            "reference"
+          ]
+        },
+        "license_reviewed": {
+          "type": "boolean"
+        }
+      }
+    },
+    "fact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "path",
+        "value",
+        "source_id",
+        "evidence",
+        "confidence",
+        "availability",
+        "resolves"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "path": {
+          "enum": [
+            "camera.cameras",
+            "classes.battery_class",
+            "classes.browser_class",
+            "classes.camera_class",
+            "classes.carrier_region.country",
+            "classes.carrier_region.iccid_prefix",
+            "classes.carrier_region.mcc",
+            "classes.carrier_region.mnc",
+            "classes.display_inches",
+            "classes.graphics_adapter_class",
+            "classes.imei_class",
+            "classes.mode_class",
+            "classes.modem_patterns.baseband",
+            "classes.modem_patterns.bootloader",
+            "classes.play_services_expectations.attestation",
+            "classes.play_services_expectations.certification",
+            "classes.play_services_expectations.packages",
+            "classes.ram_storage_class",
+            "classes.refresh_capabilities_hz",
+            "classes.sensor_inventory_class",
+            "device.baseband",
+            "device.bootloader",
+            "device.brand",
+            "device.build_date_utc",
+            "device.build_id",
+            "device.device",
+            "device.fingerprint",
+            "device.first_api_level",
+            "device.hardware",
+            "device.manufacturer",
+            "device.model",
+            "device.product",
+            "device.sdk_int",
+            "device.security_patch",
+            "device.version_incremental",
+            "device.version_release",
+            "display.density",
+            "display.height",
+            "display.refresh_rate_hz",
+            "display.screen_size_class",
+            "display.width",
+            "firmware_binding.build_date_utc",
+            "firmware_binding.build_id",
+            "firmware_binding.fingerprint",
+            "firmware_binding.security_patch",
+            "firmware_binding.version_incremental",
+            "hardware.abi",
+            "hardware.cameras",
+            "hardware.cpu_label",
+            "hardware.diagonal_inches",
+            "hardware.dock",
+            "hardware.gpu_label",
+            "hardware.keyboard",
+            "hardware.microphone",
+            "hardware.navigation",
+            "hardware.networking",
+            "hardware.physical_xdpi",
+            "hardware.physical_ydpi",
+            "hardware.power_type",
+            "hardware.ram_bytes",
+            "hardware.removable_bytes",
+            "hardware.sensors",
+            "hardware.storage_bytes",
+            "hardware.touch",
+            "id",
+            "label",
+            "locale.country",
+            "locale.language",
+            "locale.timezone",
+            "network.egress_hint",
+            "reality.cameras.availability",
+            "reality.cameras.reason",
+            "reality.cameras.source",
+            "reality.cameras.values.count",
+            "reality.cameras.values.inventory",
+            "reality.carrier.availability",
+            "reality.carrier.reason",
+            "reality.carrier.source",
+            "reality.carrier.values.country",
+            "reality.carrier.values.mcc",
+            "reality.carrier.values.mnc",
+            "reality.carrier.values.sim_state",
+            "reality.carrier.values.slots",
+            "reality.compute.availability",
+            "reality.compute.reason",
+            "reality.compute.source",
+            "reality.compute.values.abis",
+            "reality.compute.values.cpu_cores",
+            "reality.compute.values.gpu",
+            "reality.compute.values.soc",
+            "reality.environment.availability",
+            "reality.environment.reason",
+            "reality.environment.source",
+            "reality.environment.values.country",
+            "reality.environment.values.language",
+            "reality.environment.values.timezone",
+            "reality.memory.availability",
+            "reality.memory.reason",
+            "reality.memory.source",
+            "reality.memory.values.ram_gib",
+            "reality.memory.values.storage_gib",
+            "reality.panel.availability",
+            "reality.panel.reason",
+            "reality.panel.source",
+            "reality.panel.values.density_dpi",
+            "reality.panel.values.height",
+            "reality.panel.values.modes",
+            "reality.panel.values.refresh_hz",
+            "reality.panel.values.technology",
+            "reality.panel.values.width",
+            "reality.power.availability",
+            "reality.power.reason",
+            "reality.power.source",
+            "reality.power.values.design_capacity_mah",
+            "reality.sensors.availability",
+            "reality.sensors.reason",
+            "reality.sensors.source",
+            "reality.sensors.values.inventory",
+            "reality.webview.availability",
+            "reality.webview.reason",
+            "reality.webview.source",
+            "reality.webview.values.provider",
+            "reality.webview.values.version",
+            "telephony.carrier_name",
+            "telephony.mcc",
+            "telephony.mnc",
+            "telephony.network_type",
+            "telephony.sim_slot_count"
+          ]
+        },
+        "value": {},
+        "source_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+        },
+        "evidence": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1024,
+          "pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+        },
+        "confidence": {
+          "enum": [
+            "declared",
+            "public-reference",
+            "reviewed",
+            "approximated"
+          ]
+        },
+        "availability": {
+          "enum": [
+            "known",
+            "unknown",
+            "unavailable"
+          ]
+        },
+        "resolves": {
+          "type": "array",
+          "maxItems": 4096,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "availability": {
+                "const": "known"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "value": {
+                "not": {
+                  "type": "null"
+                }
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "value": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

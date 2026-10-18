@@ -1,0 +1,19 @@
+# SYNTHETIC MATCHING BUILD PROPERTIES. Not captured from a physical device.
+# Copyright 2026 Cyclone Cloak contributors. SPDX-License-Identifier: CC0-1.0
+ro.product.manufacturer=Google
+ro.product.brand=google
+ro.product.model=Pixel 7
+ro.product.name=panther
+ro.product.device=panther
+ro.hardware=gs201
+ro.build.fingerprint=google/panther/panther:13/TQ3A.230805.001/10193186:user/release-keys
+ro.build.version.release=13
+ro.build.version.sdk=33
+ro.build.version.security_patch=2023-08-05
+ro.build.id=TQ3A.230805.001
+ro.build.version.incremental=10193186
+ro.build.date.utc=1691712000
+ro.product.first_api_level=33
+ro.bootloader=cloudripper-1.0-11000000
+ro.baseband=g5300g-230323-230525-B-10200345
+ro.sf.lcd_density=420

@@ -344,6 +344,29 @@ class DeviceFactory:
     def catalog(self):
         return copy.deepcopy(list(self._templates.values()))
 
+    @classmethod
+    def from_imported_candidates(cls, candidates):
+        """Opt-in reviewed catalog snapshot; canonical catalog checks stay unchanged.
+
+        Rebuild every candidate from its provenance, then reuse this factory's
+        derivation, strict profile acceptance, library uniqueness and batch gates.
+        Does not register models globally or write any catalog/profile file.
+        """
+        from .hardware_xml import validate_candidate
+
+        if not isinstance(candidates, (list, tuple)) or len(candidates) > 128:
+            raise FactoryError([_error("CATALOG_FORMAT", "catalog")])
+        factory = cls.__new__(cls)
+        factory._templates = {}
+        for candidate in candidates:
+            template = validate_candidate(candidate)
+            if template["id"] in factory._templates:
+                raise FactoryError([_error("DUPLICATE_TEMPLATE", "catalog")])
+            factory._templates[template["id"]] = template
+        if not factory._templates:
+            raise FactoryError([_error("EMPTY_CATALOG", "catalog")])
+        return factory
+
     def _template(self, template_id):
         if template_id not in self._templates:
             raise FactoryError([_error("UNKNOWN_TEMPLATE", "template_id")])

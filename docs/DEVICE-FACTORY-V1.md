@@ -1,5 +1,11 @@
 # Device Factory v1
 
+The opt-in [Catalog Import Bridge v1](CATALOG-IMPORT-BRIDGE-V1.md) can now admit
+explicitly reviewed, complete provenance-bound candidates through
+`DeviceFactory.from_imported_candidates()`. It reuses factory derivation and
+uniqueness checks without replacing the canonical catalog or saved profiles.
+Hardware-only drafts remain incomplete; imported platform trust stays unknown.
+
 `forge/cloak_forge/device_factory.py` is an opt-in, pure Python factory. It does
 not change the Android app's existing generator, profile imports, persistence,
 bindings, publication, module, hooks, connector transport, evidence system or

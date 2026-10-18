@@ -1,0 +1,806 @@
+{
+  "facts": [
+    {
+      "path": "id",
+      "value": "synthetic_pixel7_import",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "label",
+      "value": "SYNTHETIC Pixel 7 import demonstration",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "display.refresh_rate_hz",
+      "value": 90,
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "camera.cameras",
+      "value": [
+        {
+          "facing": 1,
+          "hardware_level": 1,
+          "pixel_width": 8160,
+          "pixel_height": 6144
+        },
+        {
+          "facing": 1,
+          "hardware_level": 0,
+          "pixel_width": 4032,
+          "pixel_height": 3024
+        },
+        {
+          "facing": 0,
+          "hardware_level": 0,
+          "pixel_width": 4164,
+          "pixel_height": 2604
+        }
+      ],
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "locale.language",
+      "value": "en",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "locale.country",
+      "value": "US",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "locale.timezone",
+      "value": "America/New_York",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "network.egress_hint",
+      "value": "us-east",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "telephony.sim_slot_count",
+      "value": 2,
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "telephony.carrier_name",
+      "value": "T-Mobile",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "telephony.mcc",
+      "value": "310",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "telephony.mnc",
+      "value": "260",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "telephony.network_type",
+      "value": "5G",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.compute.availability",
+      "value": "known",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.compute.source",
+      "value": "approximated",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.compute.reason",
+      "value": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.compute.values.soc",
+      "value": "Google Tensor G2",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.compute.values.gpu",
+      "value": "Mali-G710",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.compute.values.cpu_cores",
+      "value": 8,
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.compute.values.abis",
+      "value": [
+        "arm64-v8a"
+      ],
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.memory.availability",
+      "value": "known",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.memory.source",
+      "value": "approximated",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.memory.reason",
+      "value": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.memory.values.ram_gib",
+      "value": 8,
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.memory.values.storage_gib",
+      "value": 128,
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.panel.availability",
+      "value": "known",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.panel.source",
+      "value": "approximated",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.panel.reason",
+      "value": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.panel.values.width",
+      "value": 1080,
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.panel.values.height",
+      "value": 2400,
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.panel.values.density_dpi",
+      "value": 420,
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.panel.values.refresh_hz",
+      "value": 90,
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.panel.values.technology",
+      "value": "OLED",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.panel.values.modes",
+      "value": [
+        {
+          "width": 1080,
+          "height": 2400,
+          "refresh_hz": 60
+        },
+        {
+          "width": 1080,
+          "height": 2400,
+          "refresh_hz": 90
+        }
+      ],
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.cameras.availability",
+      "value": "known",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.cameras.source",
+      "value": "approximated",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.cameras.reason",
+      "value": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.cameras.values.count",
+      "value": 3,
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.cameras.values.inventory",
+      "value": [
+        {
+          "id": "0",
+          "facing": "back",
+          "megapixels": 50.1,
+          "hardware_level": "full"
+        },
+        {
+          "id": "1",
+          "facing": "back",
+          "megapixels": 12.2,
+          "hardware_level": "limited"
+        },
+        {
+          "id": "2",
+          "facing": "front",
+          "megapixels": 10.8,
+          "hardware_level": "limited"
+        }
+      ],
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.sensors.availability",
+      "value": "known",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.sensors.source",
+      "value": "approximated",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.sensors.reason",
+      "value": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.sensors.values.inventory",
+      "value": [
+        {
+          "type": 1,
+          "name": "Accelerometer"
+        },
+        {
+          "type": 2,
+          "name": "Magnetic field"
+        },
+        {
+          "type": 4,
+          "name": "Gyroscope"
+        },
+        {
+          "type": 5,
+          "name": "Light"
+        },
+        {
+          "type": 8,
+          "name": "Proximity"
+        },
+        {
+          "type": 6,
+          "name": "Pressure"
+        }
+      ],
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.power.availability",
+      "value": "known",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.power.source",
+      "value": "approximated",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.power.reason",
+      "value": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.power.values.design_capacity_mah",
+      "value": 4355,
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.carrier.availability",
+      "value": "known",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.carrier.source",
+      "value": "approximated",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.carrier.reason",
+      "value": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.carrier.values.slots",
+      "value": 2,
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.carrier.values.mcc",
+      "value": "310",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.carrier.values.mnc",
+      "value": "260",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.carrier.values.country",
+      "value": "US",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.carrier.values.sim_state",
+      "value": "ready",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.webview.availability",
+      "value": "known",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.webview.source",
+      "value": "approximated",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.webview.reason",
+      "value": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.webview.values.provider",
+      "value": "com.google.android.webview",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.webview.values.version",
+      "value": "126.0.6478.122",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.environment.availability",
+      "value": "known",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.environment.source",
+      "value": "approximated",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.environment.reason",
+      "value": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.environment.values.language",
+      "value": "en",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.environment.values.country",
+      "value": "US",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "reality.environment.values.timezone",
+      "value": "America/New_York",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "classes.display_inches",
+      "value": 6.3,
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "classes.mode_class",
+      "value": "oled-variable",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "classes.refresh_capabilities_hz",
+      "value": [
+        60,
+        90
+      ],
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "classes.camera_class",
+      "value": "dual-rear-front",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "classes.sensor_inventory_class",
+      "value": "phone-motion-environment",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "classes.ram_storage_class",
+      "value": "8GiB/128GiB",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "classes.battery_class",
+      "value": "li-ion",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "classes.browser_class",
+      "value": "chromium-126-android",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "classes.graphics_adapter_class",
+      "value": "Mali-G710",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "classes.play_services_expectations.packages",
+      "value": [
+        "com.google.android.gms",
+        "com.android.vending"
+      ],
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "classes.play_services_expectations.certification",
+      "value": "unknown",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "classes.play_services_expectations.attestation",
+      "value": "unknown",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "classes.modem_patterns.bootloader",
+      "value": "cloudripper-[0-9.]+-[0-9]+",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "classes.modem_patterns.baseband",
+      "value": "g5300g-[0-9]+-[0-9]+-B-[0-9]+",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "classes.carrier_region.country",
+      "value": "US",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "classes.carrier_region.mcc",
+      "value": "310",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "classes.carrier_region.mnc",
+      "value": "260",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "classes.carrier_region.iccid_prefix",
+      "value": "8901260",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "classes.imei_class",
+      "value": "synthetic-luhn-valid-allocation-unverified-tac",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "firmware_binding.fingerprint",
+      "value": "google/panther/panther:13/TQ3A.230805.001/10193186:user/release-keys",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "firmware_binding.security_patch",
+      "value": "2023-08-05",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "firmware_binding.build_id",
+      "value": "TQ3A.230805.001",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "firmware_binding.version_incremental",
+      "value": "10193186",
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    },
+    {
+      "path": "firmware_binding.build_date_utc",
+      "value": 1691712000,
+      "availability": "known",
+      "confidence": "approximated",
+      "evidence": "Self-authored SYNTHETIC review; inherited compatibility approximations, not device evidence.",
+      "resolves": []
+    }
+  ]
+}
