@@ -1,0 +1,39 @@
+{
+  "tag": "v0.11.0-alpha.25",
+  "commit": "119df8398e224d2944a538f00a7171cf663414ad",
+  "version": "0.11.0-alpha.25",
+  "code": 49,
+  "local_tests": {
+    "app": 598,
+    "module": 40,
+    "probe_standard": 109,
+    "probe_diagnostics": 109,
+    "forge": 810,
+    "schema": 94,
+    "probe_host": 7,
+    "total": 1767,
+    "failures": 0,
+    "skipped": 0
+  },
+  "local_build": "debug/release assembly and module packaging passed; local release unsigned, existing key used by signed CI",
+  "compiler_warnings": [],
+  "dependency_note": "Initial PyPI index timeouts; Python gates passed using cached dependencies with --offline.",
+  "commands": [
+    "$env:JAVA_HOME='C:/Program Files/Eclipse Adoptium/jdk-17.0.20.101-hotspot'",
+    "$env:ANDROID_HOME='C:/Users/Agent/android-sdk'",
+    "$env:CLOAK_TEST_WSL='1'",
+    "& \"$env:TEMP/cloak-build/gradle-8.11.1/bin/gradle.bat\" -p android :app:testDebugUnitTest :module:testDebugUnitTest :probe:testStandardDebugUnitTest :probe:testDiagnosticsDebugUnitTest :app:assembleDebug :app:assembleRelease :module:packageModule :probe:assembleStandardDebug :probe:assembleDiagnosticsDebug --offline --no-daemon --console=plain",
+    "uv run --offline --with pytest -- python -X utf8 -m pytest forge/tests -q",
+    "uv run --offline --with pytest --with jsonschema -- python -X utf8 -m pytest forge/schema_tests -q",
+    "uv run -- python -X utf8 -m unittest discover -s android/probe/tests -v",
+    "uv run --offline --with ruff -- ruff check forge/cloak_forge/catalog_provenance.py forge/cloak_forge/hardware_xml.py forge/tests/test_hardware_xml.py forge/schema_tests/test_catalog_import_schema.py",
+    "uv run --offline --with ruff -- ruff format --check forge/cloak_forge/catalog_provenance.py forge/cloak_forge/hardware_xml.py forge/tests/test_hardware_xml.py forge/schema_tests/test_catalog_import_schema.py",
+    "uv run --offline -- python -X utf8 tools/verify_release.py --tag v0.11.0-alpha.25 --artifacts",
+    "git diff --check",
+    "git diff --cached --check"
+  ],
+  "signed_validation_url": "https://github.com/premiumcentraal-boop/Cyclone-Cloak/actions/runs/39168650095",
+  "device_actions": false,
+  "platform_verdict": false,
+  "ci_retry_note": "Signed validation attempt 1 cancelled after Android SDK setup stalled; attempt 2 reruns the same full workflow on commit 119df8398e224d2944a538f00a7171cf663414ad. No gates changed."
+}
