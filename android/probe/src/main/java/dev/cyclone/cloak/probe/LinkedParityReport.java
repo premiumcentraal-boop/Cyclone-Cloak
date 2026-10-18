@@ -48,6 +48,46 @@ final class LinkedParityReport {
         }).put("aggregate_sha256", aggregate[0] == null ? JSONObject.NULL : aggregate[0]);
         if (!complete && aggregate[0] != null) supported.put("status", "OBSERVED").put("reason", "BASE_MODE_INCOMPLETE");
         rows.put(supported);
-        return new JSONObject().put("format", 1).put("rows", rows);
+        return new JSONObject().put("format", 1).put("rows", rows)
+            .put("display_diagnostics", displayDiagnostics(readers));
+    }
+
+    /** Explicit allowlist: screen geometry/rates only, never arbitrary reader values. */
+    static JSONObject displayDiagnostics(Map<String, RealityReport.Reader> readers) throws Exception {
+        JSONObject result = new JSONObject();
+        for (String name : new String[]{"active_mode", "supported_modes", "refresh_rate_hz"}) {
+            JSONObject entry = new JSONObject().put("value", JSONObject.NULL);
+            RealityReport.Reader reader = readers.get("diagnostic." + name);
+            try {
+                Object value = reader == null ? null : reader.read();
+                if (value != null && value != JSONObject.NULL) {
+                    if (name.equals("supported_modes")) {
+                        JSONArray values = (JSONArray)value, safe = new JSONArray();
+                        for (int i = 0; i < values.length(); i++) safe.put(modeTuple(values.getJSONObject(i)));
+                        value = safe;
+                    } else if (name.equals("active_mode")) value = modeTuple((JSONObject)value);
+                    else value = positiveNumber(value);
+                }
+                entry.put("status", reader == null ? "UNMAPPED" : value == null || value == JSONObject.NULL ? "MISSING" : "OBSERVED")
+                    .put("value", value == null ? JSONObject.NULL : value);
+            } catch (Exception error) {
+                entry.put("status", error instanceof SecurityException ? "BLOCKED" : "MISSING")
+                    .put("reason", error.getClass().getSimpleName());
+            }
+            result.put(name, entry);
+        }
+        return result;
+    }
+
+    private static Number positiveNumber(Object value) {
+        if (!(value instanceof Number) || !Double.isFinite(((Number)value).doubleValue()) || ((Number)value).doubleValue() <= 0)
+            throw new IllegalArgumentException("INVALID_DISPLAY_VALUE");
+        return (Number)value;
+    }
+
+    private static JSONObject modeTuple(JSONObject value) throws Exception {
+        return new JSONObject().put("width", positiveNumber(value.get("width")))
+            .put("height", positiveNumber(value.get("height")))
+            .put("refresh_hz", positiveNumber(value.get("refresh_hz")));
     }
 }

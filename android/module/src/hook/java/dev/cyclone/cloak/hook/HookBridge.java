@@ -262,25 +262,67 @@ public final class HookBridge {
         refresh = refresh > 0 ? refresh : host.getRefreshRate();
         if (width == host.getPhysicalWidth() && height == host.getPhysicalHeight()
                 && Float.compare(refresh, host.getRefreshRate()) == 0) return host;
-        try {
-            Class<?> mode = android.view.Display.Mode.class;
-            try {
-                Constructor<?> constructor = mode.getDeclaredConstructor(int.class, int.class, int.class,
-                        float.class, float[].class, int[].class);
-                constructor.setAccessible(true);
-                float[] alternatives = (float[]) mode.getMethod("getAlternativeRefreshRates").invoke(host);
-                int[] hdr = (int[]) mode.getMethod("getSupportedHdrTypes").invoke(host);
-                return (android.view.Display.Mode) constructor.newInstance(host.getModeId(), width, height,
-                        refresh, alternatives.clone(), hdr.clone());
-            } catch (NoSuchMethodException olderFramework) {
-                Constructor<?> constructor = mode.getDeclaredConstructor(int.class, int.class, int.class, float.class);
-                constructor.setAccessible(true);
-                return (android.view.Display.Mode) constructor.newInstance(host.getModeId(), width, height, refresh);
-            }
-        } catch (Throwable error) {
-            log("display mode construction unavailable", error);
-            return host;
+        return constructProfileMode(host, width, height, refresh, REFLECTIVE_MODE_ACCESS);
+    }
+
+    interface ModeAccess {
+        Object metadata(android.view.Display.Mode host, String name) throws Throwable;
+        android.view.Display.Mode construct(int id, int width, int height, float refresh,
+                float[] alternatives, int[] hdr, boolean rich) throws Throwable;
+    }
+
+    private static final ModeAccess REFLECTIVE_MODE_ACCESS = new ModeAccess() {
+        public Object metadata(android.view.Display.Mode host, String name) throws Throwable {
+            return android.view.Display.Mode.class.getMethod(name).invoke(host);
         }
+        public android.view.Display.Mode construct(int id, int width, int height, float refresh,
+                float[] alternatives, int[] hdr, boolean rich) throws Throwable {
+            Class<?>[] signature = rich
+                ? new Class<?>[]{int.class, int.class, int.class, float.class, float[].class, int[].class}
+                : new Class<?>[]{int.class, int.class, int.class, float.class};
+            // Some ART builds reject exact lookup while exposing the constructor in this list.
+            // Select only the reviewed signature; no hidden-API exemptions or framework mutation.
+            Constructor<?> constructor = null;
+            for (Constructor<?> candidate : android.view.Display.Mode.class.getDeclaredConstructors()) {
+                if (java.util.Arrays.equals(candidate.getParameterTypes(), signature)) { constructor = candidate; break; }
+            }
+            if (constructor == null) throw new NoSuchMethodException("DISPLAY_MODE_SIGNATURE_UNAVAILABLE");
+            constructor.setAccessible(true);
+            return (android.view.Display.Mode)(rich
+                ? constructor.newInstance(id, width, height, refresh, alternatives, hdr)
+                : constructor.newInstance(id, width, height, refresh));
+        }
+    };
+
+    static android.view.Display.Mode constructProfileMode(android.view.Display.Mode host, int width,
+            int height, float refresh, ModeAccess access) {
+        if (host == null) return null;
+        if (width <= 0 || height <= 0 || !Float.isFinite(refresh) || refresh <= 0) return host;
+        float[] alternatives = new float[0];
+        int[] hdr = new int[0];
+        // Optional metadata is independent of the authoritative profile tuple.
+        try {
+            Object value = access.metadata(host, "getAlternativeRefreshRates");
+            if (value instanceof float[]) alternatives = ((float[])value).clone();
+        } catch (Throwable unavailable) { /* Empty metadata is valid. */ }
+        try {
+            Object value = access.metadata(host, "getSupportedHdrTypes");
+            if (value instanceof int[]) hdr = ((int[])value).clone();
+        } catch (Throwable unavailable) { /* Preserve the other optional value. */ }
+        try {
+            android.view.Display.Mode result = access.construct(host.getModeId(), width, height, refresh, alternatives, hdr, true);
+            if (matchesMode(result, width, height, refresh)) return result;
+        } catch (Throwable unavailable) { /* Try the simpler constructor on any rich-path failure. */ }
+        try {
+            android.view.Display.Mode result = access.construct(host.getModeId(), width, height, refresh, alternatives, hdr, false);
+            if (matchesMode(result, width, height, refresh)) return result;
+        } catch (Throwable error) { log("display mode construction unavailable", error); }
+        return host;
+    }
+
+    private static boolean matchesMode(android.view.Display.Mode mode, int width, int height, float refresh) {
+        return mode != null && mode.getPhysicalWidth() == width && mode.getPhysicalHeight() == height
+            && Float.compare(mode.getRefreshRate(), refresh) == 0;
     }
 
     static android.view.Display.Mode[] profileModes(android.view.Display.Mode[] host, android.view.Display.Mode current) {

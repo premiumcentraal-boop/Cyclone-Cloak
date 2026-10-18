@@ -73,4 +73,62 @@ public class DisplayModeParityTest {
         assertSame(failure, frame.getThrowable());
     }
 
+    private class Access implements HookBridge.ModeAccess {
+        int metadataMode, richCalls, simpleCalls;
+        float[] receivedAlternatives;
+        int[] receivedHdr;
+        boolean failRich, failSimple;
+        public Object metadata(Display.Mode host, String name) throws Throwable {
+            if (metadataMode == 1) throw new NoSuchMethodException(name);
+            if (metadataMode == 2) return null;
+            if ((metadataMode == 3 && name.equals("getAlternativeRefreshRates"))
+                    || (metadataMode == 4 && name.equals("getSupportedHdrTypes"))) throw new IllegalStateException("optional");
+            return name.equals("getAlternativeRefreshRates") ? new float[]{60} : new int[]{2};
+        }
+        public Display.Mode construct(int id, int w, int h, float hz, float[] alternatives, int[] hdr, boolean rich) throws Throwable {
+            receivedAlternatives = alternatives; receivedHdr = hdr;
+            if (rich) { richCalls++; if (failRich) throw new IllegalStateException("rich"); }
+            else { simpleCalls++; if (failSimple) throw new NoSuchMethodException("simple"); }
+            return mode(id, w, h, hz);
+        }
+    }
+    private void assertProfileTuple(Display.Mode actual) {
+        assertEquals(1080, actual.getPhysicalWidth()); assertEquals(2400, actual.getPhysicalHeight());
+        assertEquals(120f, actual.getRefreshRate(), 0f);
+    }
+    @Test public void missingOptionalMethodsPreserveRequestedMode() throws Exception {
+        Access a = new Access(); a.metadataMode = 1;
+        assertProfileTuple(HookBridge.constructProfileMode(mode(1,1440,3120,60),1080,2400,120,a));
+        assertEquals(0,a.receivedAlternatives.length); assertEquals(0,a.receivedHdr.length);
+    }
+    @Test public void nullOptionalMetadataPreservesRequestedMode() throws Exception {
+        Access a = new Access(); a.metadataMode = 2;
+        assertProfileTuple(HookBridge.constructProfileMode(mode(1,1440,3120,60),1080,2400,120,a));
+        assertEquals(0,a.receivedAlternatives.length); assertEquals(0,a.receivedHdr.length);
+    }
+    @Test public void throwingOptionalMetadataDoesNotDiscardIndependentHdr() throws Exception {
+        Access a = new Access(); a.metadataMode = 3;
+        assertProfileTuple(HookBridge.constructProfileMode(mode(1,1440,3120,60),1080,2400,120,a));
+        assertEquals(0,a.receivedAlternatives.length); assertArrayEquals(new int[]{2},a.receivedHdr);
+        a.metadataMode = 4;
+        assertProfileTuple(HookBridge.constructProfileMode(mode(1,1440,3120,60),1080,2400,120,a));
+        assertArrayEquals(new float[]{60},a.receivedAlternatives,0f); assertEquals(0,a.receivedHdr.length);
+    }
+    @Test public void anyRichConstructorFailureUsesSimpleConstructor() throws Exception {
+        Access a = new Access(); a.failRich = true;
+        assertProfileTuple(HookBridge.constructProfileMode(mode(1,1440,3120,60),1080,2400,120,a));
+        assertEquals(1,a.richCalls); assertEquals(1,a.simpleCalls);
+    }
+    @Test public void bothConstructorFailuresRetainHost() throws Exception {
+        Access a = new Access(); a.failRich = a.failSimple = true; Display.Mode host = mode(1,1440,3120,60);
+        assertSame(host,HookBridge.constructProfileMode(host,1080,2400,120,a));
+    }
+    @Test public void activeAndSupportedModesAgreeOnExactRefreshTuple() throws Exception {
+        PROPS.put("cloak.display.width","1080"); PROPS.put("cloak.display.height","2400"); PROPS.put("cloak.display.refresh","120");
+        Display.Mode host=mode(1,1440,3120,60), active=HookBridge.profileMode(host);
+        assertProfileTuple(active);
+        Display.Mode[] supported=HookBridge.profileModes(new Display.Mode[]{host,mode(2,720,1560,60)},host);
+        assertProfileTuple(supported[0]); assertEquals(active,supported[0]);
+    }
+
 }

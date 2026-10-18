@@ -185,6 +185,13 @@ final class RealityProbe {
             return telephony.getActiveModemCount();
         });
         linked.put("linked.supportedModes", readers.get("panel.modes"));
+        linked.put("diagnostic.active_mode", () -> {
+            Display.Mode mode = display.getMode();
+            return new JSONObject().put("width", mode.getPhysicalWidth()).put("height", mode.getPhysicalHeight())
+                .put("refresh_hz", mode.getRefreshRate());
+        });
+        linked.put("diagnostic.supported_modes", readers.get("panel.modes"));
+        linked.put("diagnostic.refresh_rate_hz", display::getRefreshRate);
         return new JSONObject().put("format", 1).put("rows", rows).put("linked_parity", LinkedParityReport.build(profile, contractTable, linked));
     }
     private static String numeric(String operator, boolean mcc) {

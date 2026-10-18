@@ -52,4 +52,28 @@ public class LinkedParityReportTest {
         assertEquals("FAIL", LinkedParityReport.build(profile(),t,r).getJSONArray("rows").getJSONObject(0).getString("status"));
     }
 
+    @Test public void rawDisplayDiagnosticsAreAllowlistedWithoutIdentifierLeak() throws Exception {
+        Map<String,RealityReport.Reader> r=readers();
+        r.put("diagnostic.active_mode",()->new JSONObject("{\"width\":1080,\"height\":2400,\"refresh_hz\":90,\"secret\":\"private\"}"));
+        r.put("diagnostic.supported_modes",()->new JSONArray("[{\"width\":1080,\"height\":2400,\"refresh_hz\":60},{\"width\":1080,\"height\":2400,\"refresh_hz\":90}]"));
+        r.put("diagnostic.refresh_rate_hz",()->90f);
+        JSONObject report=LinkedParityReport.build(profile(),table(),r), d=report.getJSONObject("display_diagnostics");
+        assertEquals(90,d.getJSONObject("active_mode").getJSONObject("value").getInt("refresh_hz"));
+        assertEquals(2,d.getJSONObject("supported_modes").getJSONArray("value").length());
+        assertEquals(90,d.getJSONObject("refresh_rate_hz").getDouble("value"),0);
+        assertFalse(report.toString().contains("private")); assertFalse(report.toString().contains("31001"));
+        assertEquals("OBSERVED",d.getJSONObject("active_mode").getString("status"));
+    }
+    @Test public void rawDisplayFailuresRemainPreciseAndNeverLeakMessages() throws Exception {
+        Map<String,RealityReport.Reader> r=readers();
+        r.put("diagnostic.active_mode",()->{throw new SecurityException("private");});
+        r.put("diagnostic.refresh_rate_hz",()->Float.NaN);
+        JSONObject d=LinkedParityReport.displayDiagnostics(r);
+        assertEquals("BLOCKED",d.getJSONObject("active_mode").getString("status"));
+        assertEquals("SecurityException",d.getJSONObject("active_mode").getString("reason"));
+        assertEquals("MISSING",d.getJSONObject("refresh_rate_hz").getString("status"));
+        assertEquals("UNMAPPED",d.getJSONObject("supported_modes").getString("status"));
+        assertFalse(d.toString().contains("private"));
+    }
+
 }
