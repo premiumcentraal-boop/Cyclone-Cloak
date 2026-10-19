@@ -1,6 +1,6 @@
 # Cyclone Cloak Architecture
 
-Current source: v0.11.0-alpha.25, app/module code 49. Device Reality v1
+Current source: v0.11.0-alpha.26, app/module code 50. Device Reality v1
 adds optional profile schema 0.4 descriptions and read-only probe observations.
 Existing schema 0.2/0.3 files are accepted as-is. Physical evidence is artifact-specific; see the runtime coverage ledger.
 

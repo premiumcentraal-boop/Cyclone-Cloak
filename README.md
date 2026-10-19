@@ -11,14 +11,24 @@ not prove that every inspection API sees it.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.11.0-alpha.25 (prerelease)
+## Status: 0.11.0-alpha.26 (prerelease)
+
+Alpha.26 adds [Play Surface Contract v1](docs/PLAY-SURFACE-CONTRACT-V1.md):
+an optional profile section for local account-slot and Play/service expectations,
+shared Kotlin/Python validation, explicit conflicts and hash-bound local readiness
+records. Missing or mismatched evidence stays UNKNOWN. This is a contract only:
+no account setup, service isolation, observation collector or new UI. Existing
+profiles remain compatible without migration. App/module code 50; runtime,
+connector, publication, binding storage and permissions are unchanged.
+[Release notes](docs/RELEASE_0.11.0-alpha.26.md). No new physical verification or
+platform verdict is claimed.
 
 Alpha.25 adds the offline, opt-in Python [Catalog Import Bridge v1](docs/CATALOG-IMPORT-BRIDGE-V1.md):
 bounded hardware XML, matching build properties, field-level provenance and explicit
 review before candidates enter Device Factory. Partial hardware drafts stay
 incomplete; conflicts block promotion. The complete example is synthetic, and
 real artifacts still need license/firmware review. No Android import UI is added.
-App/module code 49; no runtime, connector, binding, publication, profile schema,
+Alpha.25 used app/module code 49; no runtime, connector, binding, publication, profile schema,
 storage-layout or permission change. [Release notes](docs/RELEASE_0.11.0-alpha.25.md).
 No new physical verification or platform verdict is claimed.
 
