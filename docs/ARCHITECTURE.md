@@ -28,6 +28,18 @@ persistent review flags. Reads re-evaluate evidence rather than trust stored REA
 No runtime, collection, connector, publication or profile schema behavior changes.
 See [report format, policy and APIs](PLAY-READINESS-EVALUATION-V1.md).
 
+## Play/Google Evidence Harness v1 (development)
+
+The separate `:playEvidence` diagnostics APK collects only user-initiated,
+caller-visible Google/Play observations. It copies the pure readiness parser at
+build time and has no production app/module dependency. Sixteen bounded,
+redacted rows are exported under a strict format-1 schema, with a conservative
+readiness-report projection. Settings resolution and account visibility do not
+establish full access or ownership. Play Protect and decoded Integrity verdicts
+remain unmeasured. Optional public Integrity requests require explicit confirmation
+and retain token-receipt digests only. The host runner never installs, grants,
+switches users or writes production data. See [harness and limits](PLAY-EVIDENCE-HARNESS-V1.md).
+
 ## Google Surface Isolation v1 (development)
 
 A separate app-private assignment sidecar binds approved Play Surface snapshots

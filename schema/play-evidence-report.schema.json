@@ -1,0 +1,1589 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyclone.local/schema/play-evidence-report.v1.json",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "profile_id",
+    "profile_hash",
+    "artifact_hash",
+    "android_user_id",
+    "timestamp",
+    "request_id",
+    "rows",
+    "warnings",
+    "readiness_report"
+  ],
+  "properties": {
+    "format": {
+      "const": 1
+    },
+    "profile_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,95}$"
+    },
+    "profile_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "artifact_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "android_user_id": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 21474
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "request_id": {
+      "type": "string",
+      "pattern": "^[A-Za-z0-9_-]{1,80}$"
+    },
+    "rows": {
+      "type": "array",
+      "minItems": 16,
+      "maxItems": 16,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "status",
+          "reason",
+          "metadata",
+          "duration_ms"
+        ],
+        "properties": {
+          "id": {
+            "enum": [
+              "package.com.google.android.gms",
+              "package.com.android.vending",
+              "package.com.google.android.gsf",
+              "package.com.google.android.webview",
+              "package.com.android.webview",
+              "package.com.android.chrome",
+              "play_services.availability",
+              "play_store.availability",
+              "play_protect.state",
+              "web_provider.state",
+              "google_settings.access",
+              "account.association",
+              "process.android_user",
+              "profile.binding",
+              "integrity.api",
+              "integrity.verdict"
+            ]
+          },
+          "status": {
+            "enum": [
+              "PASS",
+              "FAIL",
+              "OBSERVED",
+              "BLOCKED",
+              "MISSING",
+              "NOT_RUN"
+            ]
+          },
+          "reason": {
+            "enum": [
+              "SERVICE_AVAILABLE",
+              "USER_MATCHED",
+              "PROFILE_HASH_MATCHED",
+              "SERVICE_UNAVAILABLE",
+              "USER_MISMATCH",
+              "PROFILE_HASH_MISMATCH",
+              "COLLECTION_FAILED",
+              "PACKAGE_OBSERVED",
+              "PROVIDER_OBSERVED",
+              "RESOLVABLE_NOT_ACCESS_PROOF",
+              "VISIBLE_ACCOUNT",
+              "NO_CALLER_VISIBLE_ACCOUNT",
+              "TOKEN_RECEIVED",
+              "PERMISSION_DENIED",
+              "API_ERROR",
+              "PACKAGE_DISABLED",
+              "INTEGRITY_API_ERROR",
+              "NOT_VISIBLE_OR_MISSING",
+              "NO_PROVIDER",
+              "SETTINGS_NOT_RESOLVABLE",
+              "PROFILE_INPUT_MISSING",
+              "NO_PUBLIC_OBSERVATION",
+              "USER_NOT_REQUESTED",
+              "BACKEND_VERIFICATION_REQUIRED"
+            ]
+          },
+          "metadata": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [],
+            "properties": {
+              "package_name": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 200,
+                "pattern": "^[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z][A-Za-z0-9_]*)+$"
+              },
+              "version_name": {
+                "type": "string",
+                "maxLength": 128,
+                "pattern": "^[^\\x00-\\x1f\\x7f]*$"
+              },
+              "version_code": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "enabled": {
+                "type": [
+                  "boolean",
+                  "null"
+                ]
+              },
+              "installer": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "maxLength": 200,
+                "pattern": "^[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z][A-Za-z0-9_]*)+$"
+              },
+              "installer_reason": {
+                "enum": [
+                  "PACKAGE_OBSERVED",
+                  "PERMISSION_DENIED",
+                  "NOT_VISIBLE_OR_MISSING",
+                  "API_ERROR"
+                ]
+              },
+              "api_code": {
+                "type": "integer"
+              },
+              "visible_account": {
+                "type": "boolean"
+              },
+              "android_user_id": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 21474
+              },
+              "actual_profile_hash": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "response_digest": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "received_at": {
+                "type": "string",
+                "format": "date-time",
+                "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+              },
+              "request_hash": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "provider_id": {
+                "const": "public.play.integrity"
+              }
+            }
+          },
+          "duration_ms": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 300000
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "PASS"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "reason": {
+                  "enum": [
+                    "SERVICE_AVAILABLE",
+                    "USER_MATCHED",
+                    "PROFILE_HASH_MATCHED"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "FAIL"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "reason": {
+                  "enum": [
+                    "SERVICE_UNAVAILABLE",
+                    "USER_MISMATCH",
+                    "PROFILE_HASH_MISMATCH",
+                    "COLLECTION_FAILED"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "OBSERVED"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "reason": {
+                  "enum": [
+                    "PACKAGE_OBSERVED",
+                    "PROVIDER_OBSERVED",
+                    "RESOLVABLE_NOT_ACCESS_PROOF",
+                    "VISIBLE_ACCOUNT",
+                    "NO_CALLER_VISIBLE_ACCOUNT",
+                    "TOKEN_RECEIVED"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "BLOCKED"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "reason": {
+                  "enum": [
+                    "PERMISSION_DENIED",
+                    "API_ERROR",
+                    "PACKAGE_DISABLED",
+                    "INTEGRITY_API_ERROR"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "MISSING"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "reason": {
+                  "enum": [
+                    "NOT_VISIBLE_OR_MISSING",
+                    "NO_PROVIDER",
+                    "SETTINGS_NOT_RESOLVABLE",
+                    "PROFILE_INPUT_MISSING"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "const": "NOT_RUN"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "reason": {
+                  "enum": [
+                    "NO_PUBLIC_OBSERVATION",
+                    "USER_NOT_REQUESTED",
+                    "BACKEND_VERIFICATION_REQUIRED"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "id": {
+                  "const": "package.com.google.android.gms"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "reason": {
+                  "enum": [
+                    "PACKAGE_OBSERVED",
+                    "NOT_VISIBLE_OR_MISSING",
+                    "PACKAGE_DISABLED",
+                    "USER_NOT_REQUESTED",
+                    "PERMISSION_DENIED",
+                    "API_ERROR"
+                  ]
+                },
+                "metadata": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "package_name": {},
+                    "version_name": {},
+                    "version_code": {},
+                    "enabled": {},
+                    "installer": {},
+                    "installer_reason": {}
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "id": {
+                  "const": "package.com.android.vending"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "reason": {
+                  "enum": [
+                    "PACKAGE_OBSERVED",
+                    "NOT_VISIBLE_OR_MISSING",
+                    "PACKAGE_DISABLED",
+                    "USER_NOT_REQUESTED",
+                    "PERMISSION_DENIED",
+                    "API_ERROR"
+                  ]
+                },
+                "metadata": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "package_name": {},
+                    "version_name": {},
+                    "version_code": {},
+                    "enabled": {},
+                    "installer": {},
+                    "installer_reason": {}
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "id": {
+                  "const": "package.com.google.android.gsf"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "reason": {
+                  "enum": [
+                    "PACKAGE_OBSERVED",
+                    "NOT_VISIBLE_OR_MISSING",
+                    "PACKAGE_DISABLED",
+                    "USER_NOT_REQUESTED",
+                    "PERMISSION_DENIED",
+                    "API_ERROR"
+                  ]
+                },
+                "metadata": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "package_name": {},
+                    "version_name": {},
+                    "version_code": {},
+                    "enabled": {},
+                    "installer": {},
+                    "installer_reason": {}
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "id": {
+                  "const": "package.com.google.android.webview"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "reason": {
+                  "enum": [
+                    "PACKAGE_OBSERVED",
+                    "NOT_VISIBLE_OR_MISSING",
+                    "PACKAGE_DISABLED",
+                    "USER_NOT_REQUESTED",
+                    "PERMISSION_DENIED",
+                    "API_ERROR"
+                  ]
+                },
+                "metadata": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "package_name": {},
+                    "version_name": {},
+                    "version_code": {},
+                    "enabled": {},
+                    "installer": {},
+                    "installer_reason": {}
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "id": {
+                  "const": "package.com.android.webview"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "reason": {
+                  "enum": [
+                    "PACKAGE_OBSERVED",
+                    "NOT_VISIBLE_OR_MISSING",
+                    "PACKAGE_DISABLED",
+                    "USER_NOT_REQUESTED",
+                    "PERMISSION_DENIED",
+                    "API_ERROR"
+                  ]
+                },
+                "metadata": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "package_name": {},
+                    "version_name": {},
+                    "version_code": {},
+                    "enabled": {},
+                    "installer": {},
+                    "installer_reason": {}
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "id": {
+                  "const": "package.com.android.chrome"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "reason": {
+                  "enum": [
+                    "PACKAGE_OBSERVED",
+                    "NOT_VISIBLE_OR_MISSING",
+                    "PACKAGE_DISABLED",
+                    "USER_NOT_REQUESTED",
+                    "PERMISSION_DENIED",
+                    "API_ERROR"
+                  ]
+                },
+                "metadata": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "package_name": {},
+                    "version_name": {},
+                    "version_code": {},
+                    "enabled": {},
+                    "installer": {},
+                    "installer_reason": {}
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "id": {
+                  "const": "play_store.availability"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "reason": {
+                  "enum": [
+                    "PACKAGE_OBSERVED",
+                    "NOT_VISIBLE_OR_MISSING",
+                    "PACKAGE_DISABLED",
+                    "USER_NOT_REQUESTED",
+                    "PERMISSION_DENIED",
+                    "API_ERROR"
+                  ]
+                },
+                "metadata": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "package_name": {},
+                    "version_name": {},
+                    "version_code": {},
+                    "enabled": {},
+                    "installer": {},
+                    "installer_reason": {}
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "id": {
+                  "const": "play_services.availability"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "reason": {
+                  "enum": [
+                    "SERVICE_AVAILABLE",
+                    "SERVICE_UNAVAILABLE",
+                    "USER_NOT_REQUESTED",
+                    "PERMISSION_DENIED",
+                    "API_ERROR"
+                  ]
+                },
+                "metadata": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "api_code": {}
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "id": {
+                  "const": "play_protect.state"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "reason": {
+                  "enum": [
+                    "NO_PUBLIC_OBSERVATION",
+                    "USER_NOT_REQUESTED",
+                    "PERMISSION_DENIED",
+                    "API_ERROR"
+                  ]
+                },
+                "metadata": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {}
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "id": {
+                  "const": "web_provider.state"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "reason": {
+                  "enum": [
+                    "PROVIDER_OBSERVED",
+                    "NO_PROVIDER",
+                    "USER_NOT_REQUESTED",
+                    "PERMISSION_DENIED",
+                    "API_ERROR",
+                    "PACKAGE_DISABLED"
+                  ]
+                },
+                "metadata": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "package_name": {},
+                    "version_name": {},
+                    "version_code": {},
+                    "enabled": {},
+                    "installer": {},
+                    "installer_reason": {}
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "id": {
+                  "const": "google_settings.access"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "reason": {
+                  "enum": [
+                    "RESOLVABLE_NOT_ACCESS_PROOF",
+                    "SETTINGS_NOT_RESOLVABLE",
+                    "USER_NOT_REQUESTED",
+                    "PERMISSION_DENIED",
+                    "API_ERROR"
+                  ]
+                },
+                "metadata": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {}
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "id": {
+                  "const": "account.association"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "reason": {
+                  "enum": [
+                    "VISIBLE_ACCOUNT",
+                    "NO_CALLER_VISIBLE_ACCOUNT",
+                    "USER_NOT_REQUESTED",
+                    "PERMISSION_DENIED",
+                    "API_ERROR"
+                  ]
+                },
+                "metadata": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "visible_account": {}
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "id": {
+                  "const": "process.android_user"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "reason": {
+                  "enum": [
+                    "USER_MATCHED",
+                    "USER_MISMATCH",
+                    "USER_NOT_REQUESTED",
+                    "PERMISSION_DENIED",
+                    "API_ERROR"
+                  ]
+                },
+                "metadata": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "android_user_id": {}
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "id": {
+                  "const": "profile.binding"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "reason": {
+                  "enum": [
+                    "PROFILE_HASH_MATCHED",
+                    "PROFILE_HASH_MISMATCH",
+                    "PROFILE_INPUT_MISSING",
+                    "COLLECTION_FAILED",
+                    "USER_NOT_REQUESTED",
+                    "PERMISSION_DENIED",
+                    "API_ERROR"
+                  ]
+                },
+                "metadata": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "actual_profile_hash": {}
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "id": {
+                  "const": "integrity.api"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "reason": {
+                  "enum": [
+                    "TOKEN_RECEIVED",
+                    "INTEGRITY_API_ERROR",
+                    "USER_NOT_REQUESTED",
+                    "PERMISSION_DENIED",
+                    "API_ERROR"
+                  ]
+                },
+                "metadata": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "api_code": {},
+                    "response_digest": {},
+                    "received_at": {},
+                    "request_hash": {},
+                    "provider_id": {}
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "id": {
+                  "const": "integrity.verdict"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "reason": {
+                  "enum": [
+                    "BACKEND_VERIFICATION_REQUIRED",
+                    "USER_NOT_REQUESTED",
+                    "PERMISSION_DENIED",
+                    "API_ERROR"
+                  ]
+                },
+                "metadata": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {}
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "reason": {
+                  "const": "PROFILE_HASH_MATCHED"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "metadata": {
+                  "required": [
+                    "actual_profile_hash"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "reason": {
+                  "const": "PROFILE_HASH_MISMATCH"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "metadata": {
+                  "required": [
+                    "actual_profile_hash"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "reason": {
+                  "const": "USER_MATCHED"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "metadata": {
+                  "required": [
+                    "android_user_id"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "reason": {
+                  "const": "USER_MISMATCH"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "metadata": {
+                  "required": [
+                    "android_user_id"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "reason": {
+                  "const": "SERVICE_AVAILABLE"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "metadata": {
+                  "required": [
+                    "api_code"
+                  ],
+                  "properties": {
+                    "api_code": {
+                      "const": 0
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "reason": {
+                  "const": "SERVICE_UNAVAILABLE"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "metadata": {
+                  "required": [
+                    "api_code"
+                  ],
+                  "properties": {
+                    "api_code": {
+                      "not": {
+                        "const": 0
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "reason": {
+                  "const": "VISIBLE_ACCOUNT"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "metadata": {
+                  "required": [
+                    "visible_account"
+                  ],
+                  "properties": {
+                    "visible_account": {
+                      "const": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "reason": {
+                  "const": "NO_CALLER_VISIBLE_ACCOUNT"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "metadata": {
+                  "required": [
+                    "visible_account"
+                  ],
+                  "properties": {
+                    "visible_account": {
+                      "const": false
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "reason": {
+                  "const": "TOKEN_RECEIVED"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "metadata": {
+                  "required": [
+                    "response_digest",
+                    "received_at",
+                    "request_hash",
+                    "provider_id"
+                  ]
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "reason": {
+                  "const": "PACKAGE_OBSERVED"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "metadata": {
+                  "required": [
+                    "package_name",
+                    "version_name",
+                    "version_code",
+                    "enabled"
+                  ],
+                  "properties": {
+                    "enabled": {
+                      "const": true
+                    },
+                    "package_name": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "reason": {
+                  "const": "PROVIDER_OBSERVED"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "metadata": {
+                  "required": [
+                    "package_name",
+                    "version_name",
+                    "version_code",
+                    "enabled"
+                  ],
+                  "properties": {
+                    "enabled": {
+                      "const": true
+                    },
+                    "package_name": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "reason": {
+                  "const": "PACKAGE_DISABLED"
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "metadata": {
+                  "required": [
+                    "package_name",
+                    "version_name",
+                    "version_code",
+                    "enabled"
+                  ],
+                  "properties": {
+                    "enabled": {
+                      "const": false
+                    },
+                    "package_name": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "allOf": [
+        {
+          "contains": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "const": "package.com.google.android.gms"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "const": "package.com.android.vending"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "const": "package.com.google.android.gsf"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "const": "package.com.google.android.webview"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "const": "package.com.android.webview"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "const": "package.com.android.chrome"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "const": "play_services.availability"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "const": "play_store.availability"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "const": "play_protect.state"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "const": "web_provider.state"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "const": "google_settings.access"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "const": "account.association"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "const": "process.android_user"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "const": "profile.binding"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "const": "integrity.api"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "type": "object",
+            "required": [
+              "id"
+            ],
+            "properties": {
+              "id": {
+                "const": "integrity.verdict"
+              }
+            }
+          },
+          "minContains": 1,
+          "maxContains": 1
+        }
+      ]
+    },
+    "warnings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "SERVICE_AVAILABLE",
+          "USER_MATCHED",
+          "PROFILE_HASH_MATCHED",
+          "SERVICE_UNAVAILABLE",
+          "USER_MISMATCH",
+          "PROFILE_HASH_MISMATCH",
+          "COLLECTION_FAILED",
+          "PACKAGE_OBSERVED",
+          "PROVIDER_OBSERVED",
+          "RESOLVABLE_NOT_ACCESS_PROOF",
+          "VISIBLE_ACCOUNT",
+          "NO_CALLER_VISIBLE_ACCOUNT",
+          "TOKEN_RECEIVED",
+          "PERMISSION_DENIED",
+          "API_ERROR",
+          "PACKAGE_DISABLED",
+          "INTEGRITY_API_ERROR",
+          "NOT_VISIBLE_OR_MISSING",
+          "NO_PROVIDER",
+          "SETTINGS_NOT_RESOLVABLE",
+          "PROFILE_INPUT_MISSING",
+          "NO_PUBLIC_OBSERVATION",
+          "USER_NOT_REQUESTED",
+          "BACKEND_VERIFICATION_REQUIRED"
+        ]
+      }
+    },
+    "readiness_report": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "profile_id",
+        "profile_hash",
+        "artifact_hash",
+        "android_user_id",
+        "timestamp",
+        "play_services",
+        "play_store",
+        "web_provider",
+        "play_protect",
+        "google_account",
+        "google_settings_access",
+        "integrity_api",
+        "warnings",
+        "failures"
+      ],
+      "properties": {
+        "format": {
+          "const": 1
+        },
+        "profile_id": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,95}$"
+        },
+        "profile_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "artifact_hash": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "android_user_id": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 21474
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+        },
+        "play_services": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "package_name",
+            "state"
+          ],
+          "properties": {
+            "package_name": {
+              "const": "com.google.android.gms"
+            },
+            "state": {
+              "enum": [
+                "enabled",
+                "disabled",
+                "missing",
+                "blocked",
+                "permission_denied",
+                "unknown"
+              ]
+            },
+            "version_name": {
+              "type": "string",
+              "maxLength": 128,
+              "pattern": "^[^\\x00-\\x1f\\x7f]*$"
+            }
+          }
+        },
+        "play_store": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "package_name",
+            "state"
+          ],
+          "properties": {
+            "package_name": {
+              "const": "com.android.vending"
+            },
+            "state": {
+              "enum": [
+                "enabled",
+                "disabled",
+                "missing",
+                "blocked",
+                "permission_denied",
+                "unknown"
+              ]
+            },
+            "version_name": {
+              "type": "string",
+              "maxLength": 128,
+              "pattern": "^[^\\x00-\\x1f\\x7f]*$"
+            }
+          }
+        },
+        "web_provider": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "package_name",
+            "state"
+          ],
+          "properties": {
+            "package_name": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "maxLength": 200,
+              "pattern": "^[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z][A-Za-z0-9_]*)+$"
+            },
+            "state": {
+              "enum": [
+                "enabled",
+                "disabled",
+                "missing",
+                "blocked",
+                "permission_denied",
+                "unknown"
+              ]
+            },
+            "version_name": {
+              "type": "string",
+              "maxLength": 128,
+              "pattern": "^[^\\x00-\\x1f\\x7f]*$"
+            }
+          }
+        },
+        "play_protect": {
+          "const": "unknown"
+        },
+        "google_account": {
+          "enum": [
+            "associated",
+            "permission_denied",
+            "unknown"
+          ]
+        },
+        "google_settings_access": {
+          "const": "unknown"
+        },
+        "integrity_api": {
+          "enum": [
+            "available",
+            "unknown"
+          ]
+        },
+        "warnings": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "PERMISSION_LIMITATION",
+              "PACKAGE_LIMITATION"
+            ]
+          }
+        },
+        "failures": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "const": "LOCAL_CHECK_FAILED"
+          }
+        },
+        "integrity_response": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "response_digest",
+            "received_at",
+            "provider_id"
+          ],
+          "properties": {
+            "response_digest": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "received_at": {
+              "type": "string",
+              "format": "date-time",
+              "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+            },
+            "provider_id": {
+              "const": "public.play.integrity"
+            }
+          }
+        }
+      }
+    }
+  }
+}

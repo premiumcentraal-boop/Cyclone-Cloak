@@ -1,0 +1,23 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Visibility declarations, not permissions. No account or package mutation APIs. -->
+    <queries>
+        <package android:name="com.google.android.gms" />
+        <package android:name="com.android.vending" />
+        <package android:name="com.google.android.gsf" />
+        <package android:name="com.google.android.webview" />
+        <package android:name="com.android.webview" />
+        <package android:name="com.android.chrome" />
+        <intent><action android:name="com.google.android.gms.settings.GOOGLE_SETTINGS" /></intent>
+    </queries>
+    <application android:label="@string/app_name" android:allowBackup="false"
+        android:fullBackupContent="false" android:dataExtractionRules="@xml/no_evidence_backup"
+        android:icon="@android:drawable/ic_menu_info_details"
+        android:theme="@android:style/Theme.Material.Light.NoActionBar">
+        <activity android:name=".EvidenceActivity" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

@@ -1,0 +1,43 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+}
+
+// Copy only pure contracts; this APK has no dependency on the production app/module.
+def contracts = tasks.register('prepareReadinessContracts', Sync) {
+    from('../app/src/main/java') {
+        include 'dev/cyclone/cloak/play/PlayReadinessReport.kt'
+        include 'dev/cyclone/cloak/forge/StrictJson.kt'
+    }
+    into(layout.buildDirectory.dir('generated/contracts'))
+}
+
+android {
+    namespace 'dev.cyclone.cloak.playevidence'
+    compileSdk 36
+    defaultConfig {
+        applicationId 'dev.cyclone.cloak.playevidence'
+        minSdk 29
+        targetSdk 36
+        versionCode 1
+        versionName '1.0-diagnostics'
+    }
+    sourceSets.main.java.srcDir(layout.buildDirectory.dir('generated/contracts'))
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+    testOptions {
+        unitTests.returnDefaultValues = true
+        unitTests.all { systemProperty 'evidence.fixture', rootProject.file('../forge/tests/fixtures/play_evidence_report.json').absolutePath }
+    }
+}
+tasks.configureEach {
+    if (name == 'preBuild' || name.startsWith('compile') && name.endsWith('Kotlin')) dependsOn(contracts)
+}
+dependencies {
+    implementation 'com.google.android.gms:play-services-basement:18.9.0'
+    implementation 'com.google.android.play:integrity:1.6.0'
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'org.json:json:20250517'
+}

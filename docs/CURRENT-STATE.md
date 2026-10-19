@@ -1,5 +1,13 @@
 # Current state
 
+Development branch `codex/play-evidence-harness-v1` adds a separate diagnostics APK
+and local evidence export runner. All collection requires a user tap; optional
+public Integrity requests require separate confirmation. Sixteen strict rows cover
+caller-visible Play/Google surfaces, with unknowns preserved and no production
+mutation. Play Protect, actual settings access and decoded Integrity verdicts
+remain unmeasured; physical collection is UNVERIFIED. No permissions or release
+metadata change. See [Play evidence harness](PLAY-EVIDENCE-HARNESS-V1.md).
+
 Development branch `codex/play-readiness-evaluation-v1` adds strict local Play
 readiness report parsing, conservative evidence-bound evaluation and a separate
 app-private readiness store. Missing evidence remains UNKNOWN; stale or mismatched

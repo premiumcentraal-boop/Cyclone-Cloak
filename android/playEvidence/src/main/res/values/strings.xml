@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">Cloak Play Evidence</string>
+    <string name="title">Play/Google evidence · diagnostics only</string>
+    <string name="intro">Read-only caller-visible evidence. No account changes or platform verdict. Nothing runs until you tap.</string>
+    <string name="profile_id_hint">Cyclone profile ID</string>
+    <string name="artifact_hint">Measured app/module artifact SHA-256</string>
+    <string name="choose_profile">Choose profile JSON (read only)</string>
+    <string name="collect_local">Collect local evidence</string>
+    <string name="project_hint">Optional Google Cloud project number</string>
+    <string name="collect_integrity">Collect + request Play Integrity</string>
+    <string name="confirm_title">Request public Play Integrity API?</string>
+    <string name="confirm_message">This contacts Google through its public API using your project number. Only token receipt metadata is saved. Decoded verdicts require backend verification and remain NOT_RUN.</string>
+    <string name="cancel">Cancel</string>
+    <string name="request_once">Request once</string>
+    <string name="setup_hint">Choose a profile file and enter its Cyclone profile ID and measured artifact digest.</string>
+    <string name="no_checks">Select a profile JSON. No checks have run.</string>
+    <string name="selected_ready">Selected profile hash: %1$s\nTap Collect to begin.</string>
+    <string name="selected_hash">Selected profile hash: %1$s</string>
+    <string name="invalid_binding">INVALID_BINDING: Select a valid profile JSON and binding.</string>
+    <string name="invalid_profile">INVALID_PROFILE_INPUT: No evidence collected.</string>
+    <string name="invalid_request">INVALID_BINDING: Select a valid profile, IDs and SHA-256. Integrity also requires a valid project number.</string>
+    <string name="collecting">Collecting read-only evidence…</string>
+    <string name="report_saved">Saved reports/%1$s.json\n%2$s\nLocal evidence only. Integrity verdict NOT_RUN.</string>
+    <string name="write_failed">REPORT_WRITE_FAILED: Retry collection.</string>
+</resources>
