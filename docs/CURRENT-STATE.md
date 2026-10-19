@@ -1,5 +1,14 @@
 # Current state
 
+Development branch `codex/google-surface-isolation-v1` adds a local Google surface
+assignment store and pure isolation/review model over Play Surface Contract v1.
+It records approved configuration, requires explicit current-inventory review for
+shared slots, and checks supplied profile/user/hash-bound observations. Missing
+evidence stays UNKNOWN. This is a state layer, with no new collector, UI flow,
+runtime enforcement or platform verdict. Existing profiles and bindings are
+unchanged; physical verification is UNVERIFIED. See
+[Google Surface Isolation v1](GOOGLE-SURFACE-ISOLATION-V1.md).
+
 Updated 2026-10-19. Current source **v0.11.0-alpha.26 / versionCode 50**
 adds Play Surface Contract v1 over the existing Reality Studio, missing-only repair
 and Fleet Diversity workflows. Optional schema 0.4 sections describe compute, memory,

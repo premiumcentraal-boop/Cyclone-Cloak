@@ -12,9 +12,24 @@ Schema generates Kotlin rules and is consumed directly by Python. Both pure
 validators use common vectors; absent sections preserve existing profiles.
 Separate readiness records bind local evidence to profile ID/body, artifact and
 report digests. Mismatches or missing evidence yield UNKNOWN, never promotion.
-Active slot reuse requires explicit sharing consent on every assignment. No
-provider collection, persistence, UI or Google/platform verdict is implemented.
+Active slot reuse requires explicit sharing consent on every assignment. This
+contract does not collect observations, persist readiness records or provide UI
+or a Google/platform verdict. Assignment persistence is described below.
 See [contract and APIs](PLAY-SURFACE-CONTRACT-V1.md).
+
+## Google Surface Isolation v1 (development)
+
+A separate app-private assignment sidecar binds approved Play Surface snapshots
+to Cyclone profile ID, Android user and canonical compatibility-profile hash.
+Pure evaluation exposes six local isolation checks and explicit review/conflict
+states. Reused account slots require digest-bound confirmation of the current
+active sharing group; imported sharing flags are insufficient. Unknown or foreign
+observations never become ready, and corrupt inventories block assignments.
+Package rules describe scope and requirements without enforcing Android access.
+No collector or confirmation UI is connected in this state-layer sprint; callers
+must obtain explicit approval before using the confirmation API. Profile files,
+bindings, connectors, publication, posture and runtime remain unchanged.
+See [storage, APIs and limits](GOOGLE-SURFACE-ISOLATION-V1.md).
 
 ## Catalog Import Bridge v1
 
