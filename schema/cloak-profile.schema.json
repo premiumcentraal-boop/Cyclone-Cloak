@@ -98,6 +98,9 @@
     },
     "reality": {
       "$ref": "device-reality.schema.json"
+    },
+    "play_surface": {
+      "$ref": "play-surface.schema.json"
     }
   },
   "$defs": {

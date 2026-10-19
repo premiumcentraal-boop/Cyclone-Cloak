@@ -1,0 +1,452 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "account",
+    "services"
+  ],
+  "properties": {
+    "format": {
+      "type": "integer",
+      "const": 1
+    },
+    "account": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "mode",
+        "slot_id",
+        "display_hint",
+        "shared",
+        "provisioning_state",
+        "allowed_packages",
+        "last_reviewed_at"
+      ],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "enum": [
+            "none",
+            "dedicated",
+            "managed",
+            "unknown"
+          ]
+        },
+        "slot_id": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 96,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,95}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "display_hint": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 96,
+              "pattern": "^[^\\u0000-\\u001f\\u007f]+$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "shared": {
+          "type": "boolean"
+        },
+        "provisioning_state": {
+          "type": "string",
+          "enum": [
+            "unprovisioned",
+            "ready",
+            "needs_review",
+            "blocked"
+          ]
+        },
+        "allowed_packages": {
+          "type": "array",
+          "maxItems": 256,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 200,
+            "pattern": "^[a-zA-Z][a-zA-Z0-9_]*(\\.[a-zA-Z][a-zA-Z0-9_]*)+$"
+          }
+        },
+        "last_reviewed_at": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 20,
+              "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$",
+              "format": "date-time"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "mode": {
+                "enum": [
+                  "dedicated",
+                  "managed"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "slot_id": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 96,
+                "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,95}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "mode": {
+                "const": "none"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "slot_id": {
+                "type": "null"
+              },
+              "shared": {
+                "const": false
+              }
+            }
+          }
+        }
+      ]
+    },
+    "services": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "play_services",
+        "play_store",
+        "play_protect",
+        "web_provider",
+        "google_settings_access",
+        "install_origin",
+        "backup_sync"
+      ],
+      "properties": {
+        "play_services": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "state",
+            "package_name"
+          ],
+          "properties": {
+            "package_name": {
+              "const": "com.google.android.gms",
+              "type": "string"
+            },
+            "state": {
+              "type": "string",
+              "enum": [
+                "enabled",
+                "disabled",
+                "missing",
+                "unknown"
+              ]
+            },
+            "version_name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 96,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._+() -]{0,95}$"
+            }
+          }
+        },
+        "play_store": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "state",
+            "package_name"
+          ],
+          "properties": {
+            "package_name": {
+              "const": "com.android.vending",
+              "type": "string"
+            },
+            "state": {
+              "type": "string",
+              "enum": [
+                "enabled",
+                "disabled",
+                "missing",
+                "unknown"
+              ]
+            },
+            "version_name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 96,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._+() -]{0,95}$"
+            }
+          }
+        },
+        "play_protect": {
+          "type": "string",
+          "enum": [
+            "enabled",
+            "disabled",
+            "unavailable",
+            "unknown"
+          ]
+        },
+        "web_provider": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "state"
+          ],
+          "properties": {
+            "package_name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 200,
+              "pattern": "^[a-zA-Z][a-zA-Z0-9_]*(\\.[a-zA-Z][a-zA-Z0-9_]*)+$"
+            },
+            "state": {
+              "type": "string",
+              "enum": [
+                "enabled",
+                "disabled",
+                "missing",
+                "unknown"
+              ]
+            },
+            "version_name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 96,
+              "pattern": "^[A-Za-z0-9][A-Za-z0-9._+() -]{0,95}$"
+            }
+          }
+        },
+        "google_settings_access": {
+          "type": "string",
+          "enum": [
+            "accessible",
+            "blocked",
+            "unavailable",
+            "unknown"
+          ]
+        },
+        "install_origin": {
+          "type": "string",
+          "enum": [
+            "play_store",
+            "system",
+            "sideload",
+            "managed",
+            "unknown"
+          ]
+        },
+        "backup_sync": {
+          "type": "string",
+          "enum": [
+            "enabled",
+            "disabled",
+            "managed",
+            "unknown"
+          ]
+        }
+      }
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/premiumcentraal-boop/Cyclone-Cloak/schema/play-surface.schema.json",
+  "title": "Play Surface Contract v1 \u2014 local expectations only",
+  "$defs": {
+    "readiness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "format",
+        "profile_id",
+        "state",
+        "reason_codes",
+        "evidence_digest",
+        "report_timestamp",
+        "profile_hash",
+        "artifact_hash",
+        "provider_id"
+      ],
+      "properties": {
+        "format": {
+          "type": "integer",
+          "const": 1
+        },
+        "profile_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 96,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,95}$"
+        },
+        "state": {
+          "type": "string",
+          "enum": [
+            "READY",
+            "DEGRADED",
+            "BLOCKED",
+            "UNKNOWN"
+          ]
+        },
+        "reason_codes": {
+          "type": "array",
+          "maxItems": 11,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "PS_NO_EVIDENCE",
+              "PS_PROFILE_MISMATCH",
+              "PS_ARTIFACT_MISMATCH",
+              "PS_EVIDENCE_MISMATCH",
+              "PS_ACCOUNT_SLOT_CONFLICT",
+              "PS_PACKAGE_CONFLICT",
+              "PS_EXPECTATION_CONFLICT",
+              "PS_EXPECTATION_UNKNOWN",
+              "PS_NOT_PRESENT",
+              "PS_REVIEW_REQUIRED",
+              "PS_LOCAL_CHECKS_PASSED"
+            ]
+          }
+        },
+        "evidence_digest": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "report_timestamp": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 20,
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$",
+          "format": "date-time"
+        },
+        "profile_hash": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64,
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "artifact_hash": {
+          "anyOf": [
+            {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "provider_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 96,
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,95}$"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "not": {
+                  "const": "UNKNOWN"
+                }
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "evidence_digest": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64,
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "artifact_hash": {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64,
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "state": {
+                "const": "READY"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "reason_codes": {
+                "const": [
+                  "PS_LOCAL_CHECKS_PASSED"
+                ]
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "reason_codes": {
+                "minItems": 1,
+                "not": {
+                  "contains": {
+                    "const": "PS_LOCAL_CHECKS_PASSED"
+                  }
+                }
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "$comment": "No credentials, account contents, certification or platform verdict. All evidence is local."
+}

@@ -1,0 +1,6 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/premiumcentraal-boop/Cyclone-Cloak/schema/play-readiness.schema.json",
+  "title": "Play Surface local readiness record v1",
+  "$ref": "play-surface.schema.json#/$defs/readiness"
+}

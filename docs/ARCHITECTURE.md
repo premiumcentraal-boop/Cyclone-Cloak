@@ -4,6 +4,18 @@ Current source: v0.11.0-alpha.25, app/module code 49. Device Reality v1
 adds optional profile schema 0.4 descriptions and read-only probe observations.
 Existing schema 0.2/0.3 files are accepted as-is. Physical evidence is artifact-specific; see the runtime coverage ledger.
 
+## Play Surface Contract v1
+
+An optional `play_surface` describes local account-slot and package/service
+expectations without account operations or runtime enforcement. A shared JSON
+Schema generates Kotlin rules and is consumed directly by Python. Both pure
+validators use common vectors; absent sections preserve existing profiles.
+Separate readiness records bind local evidence to profile ID/body, artifact and
+report digests. Mismatches or missing evidence yield UNKNOWN, never promotion.
+Active slot reuse requires explicit sharing consent on every assignment. No
+provider collection, persistence, UI or Google/platform verdict is implemented.
+See [contract and APIs](PLAY-SURFACE-CONTRACT-V1.md).
+
 ## Catalog Import Bridge v1
 
 The offline Python bridge parses an allowlisted hardware XML subset into a separate

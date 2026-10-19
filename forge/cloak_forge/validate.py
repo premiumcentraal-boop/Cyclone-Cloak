@@ -325,6 +325,8 @@ def validate_profile(profile: Mapping[str, Any]) -> list[Finding]:
 
     from .reality import validate as validate_reality
     findings.extend(Finding(severity, code, message, field) for severity, code, field, message in validate_reality(profile))
+    from .play_surface import validate_profile_section
+    findings.extend(Finding(ERROR, issue.code, issue.message, issue.field) for issue in validate_profile_section(profile))
     _validate_fingerprint(findings, device)
     _validate_versions(findings, device)
     _validate_patch(findings, device)

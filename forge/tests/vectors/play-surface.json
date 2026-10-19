@@ -1,0 +1,1349 @@
+{
+  "surface": {
+    "format": 1,
+    "account": {
+      "mode": "dedicated",
+      "slot_id": "local-slot-1",
+      "display_hint": "Work slot",
+      "shared": false,
+      "provisioning_state": "ready",
+      "allowed_packages": [
+        "com.example.reader"
+      ],
+      "last_reviewed_at": "2026-10-19T00:00:00Z"
+    },
+    "services": {
+      "play_services": {
+        "package_name": "com.google.android.gms",
+        "state": "enabled",
+        "version_name": "25.40.30"
+      },
+      "play_store": {
+        "package_name": "com.android.vending",
+        "state": "enabled"
+      },
+      "play_protect": "unknown",
+      "web_provider": {
+        "state": "enabled",
+        "package_name": "com.google.android.webview"
+      },
+      "google_settings_access": "accessible",
+      "install_origin": "play_store",
+      "backup_sync": "disabled"
+    }
+  },
+  "readiness": {
+    "format": 1,
+    "profile_id": "profile-a",
+    "state": "READY",
+    "reason_codes": [
+      "PS_LOCAL_CHECKS_PASSED"
+    ],
+    "evidence_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "report_timestamp": "2026-10-19T00:00:00Z",
+    "profile_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "artifact_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "provider_id": "local.test"
+  },
+  "surface_cases": [
+    {
+      "name": "valid",
+      "value": {
+        "format": 1,
+        "account": {
+          "mode": "dedicated",
+          "slot_id": "local-slot-1",
+          "display_hint": "Work slot",
+          "shared": false,
+          "provisioning_state": "ready",
+          "allowed_packages": [
+            "com.example.reader"
+          ],
+          "last_reviewed_at": "2026-10-19T00:00:00Z"
+        },
+        "services": {
+          "play_services": {
+            "package_name": "com.google.android.gms",
+            "state": "enabled",
+            "version_name": "25.40.30"
+          },
+          "play_store": {
+            "package_name": "com.android.vending",
+            "state": "enabled"
+          },
+          "play_protect": "unknown",
+          "web_provider": {
+            "state": "enabled",
+            "package_name": "com.google.android.webview"
+          },
+          "google_settings_access": "accessible",
+          "install_origin": "play_store",
+          "backup_sync": "disabled"
+        }
+      },
+      "issues": []
+    },
+    {
+      "name": "unknown_mode",
+      "value": {
+        "format": 1,
+        "account": {
+          "mode": "unknown",
+          "slot_id": "local-slot-1",
+          "display_hint": "Work slot",
+          "shared": false,
+          "provisioning_state": "ready",
+          "allowed_packages": [
+            "com.example.reader"
+          ],
+          "last_reviewed_at": "2026-10-19T00:00:00Z"
+        },
+        "services": {
+          "play_services": {
+            "package_name": "com.google.android.gms",
+            "state": "enabled",
+            "version_name": "25.40.30"
+          },
+          "play_store": {
+            "package_name": "com.android.vending",
+            "state": "enabled"
+          },
+          "play_protect": "unknown",
+          "web_provider": {
+            "state": "enabled",
+            "package_name": "com.google.android.webview"
+          },
+          "google_settings_access": "accessible",
+          "install_origin": "play_store",
+          "backup_sync": "disabled"
+        }
+      },
+      "issues": []
+    },
+    {
+      "name": "bad_mode",
+      "value": {
+        "format": 1,
+        "account": {
+          "mode": "future",
+          "slot_id": "local-slot-1",
+          "display_hint": "Work slot",
+          "shared": false,
+          "provisioning_state": "ready",
+          "allowed_packages": [
+            "com.example.reader"
+          ],
+          "last_reviewed_at": "2026-10-19T00:00:00Z"
+        },
+        "services": {
+          "play_services": {
+            "package_name": "com.google.android.gms",
+            "state": "enabled",
+            "version_name": "25.40.30"
+          },
+          "play_store": {
+            "package_name": "com.android.vending",
+            "state": "enabled"
+          },
+          "play_protect": "unknown",
+          "web_provider": {
+            "state": "enabled",
+            "package_name": "com.google.android.webview"
+          },
+          "google_settings_access": "accessible",
+          "install_origin": "play_store",
+          "backup_sync": "disabled"
+        }
+      },
+      "issues": [
+        {
+          "field": "play_surface.account.mode",
+          "code": "PS_VALUE"
+        }
+      ]
+    },
+    {
+      "name": "null_slot",
+      "value": {
+        "format": 1,
+        "account": {
+          "mode": "dedicated",
+          "slot_id": null,
+          "display_hint": "Work slot",
+          "shared": false,
+          "provisioning_state": "ready",
+          "allowed_packages": [
+            "com.example.reader"
+          ],
+          "last_reviewed_at": "2026-10-19T00:00:00Z"
+        },
+        "services": {
+          "play_services": {
+            "package_name": "com.google.android.gms",
+            "state": "enabled",
+            "version_name": "25.40.30"
+          },
+          "play_store": {
+            "package_name": "com.android.vending",
+            "state": "enabled"
+          },
+          "play_protect": "unknown",
+          "web_provider": {
+            "state": "enabled",
+            "package_name": "com.google.android.webview"
+          },
+          "google_settings_access": "accessible",
+          "install_origin": "play_store",
+          "backup_sync": "disabled"
+        }
+      },
+      "issues": [
+        {
+          "field": "play_surface.account.slot_id",
+          "code": "PS_ACCOUNT"
+        }
+      ]
+    },
+    {
+      "name": "bad_slot",
+      "value": {
+        "format": 1,
+        "account": {
+          "mode": "dedicated",
+          "slot_id": "has space",
+          "display_hint": "Work slot",
+          "shared": false,
+          "provisioning_state": "ready",
+          "allowed_packages": [
+            "com.example.reader"
+          ],
+          "last_reviewed_at": "2026-10-19T00:00:00Z"
+        },
+        "services": {
+          "play_services": {
+            "package_name": "com.google.android.gms",
+            "state": "enabled",
+            "version_name": "25.40.30"
+          },
+          "play_store": {
+            "package_name": "com.android.vending",
+            "state": "enabled"
+          },
+          "play_protect": "unknown",
+          "web_provider": {
+            "state": "enabled",
+            "package_name": "com.google.android.webview"
+          },
+          "google_settings_access": "accessible",
+          "install_origin": "play_store",
+          "backup_sync": "disabled"
+        }
+      },
+      "issues": [
+        {
+          "field": "play_surface.account.slot_id",
+          "code": "PS_VALUE"
+        }
+      ]
+    },
+    {
+      "name": "bad_package",
+      "value": {
+        "format": 1,
+        "account": {
+          "mode": "dedicated",
+          "slot_id": "local-slot-1",
+          "display_hint": "Work slot",
+          "shared": false,
+          "provisioning_state": "ready",
+          "allowed_packages": [
+            "invalid/package"
+          ],
+          "last_reviewed_at": "2026-10-19T00:00:00Z"
+        },
+        "services": {
+          "play_services": {
+            "package_name": "com.google.android.gms",
+            "state": "enabled",
+            "version_name": "25.40.30"
+          },
+          "play_store": {
+            "package_name": "com.android.vending",
+            "state": "enabled"
+          },
+          "play_protect": "unknown",
+          "web_provider": {
+            "state": "enabled",
+            "package_name": "com.google.android.webview"
+          },
+          "google_settings_access": "accessible",
+          "install_origin": "play_store",
+          "backup_sync": "disabled"
+        }
+      },
+      "issues": [
+        {
+          "field": "play_surface.account.allowed_packages[0]",
+          "code": "PS_VALUE"
+        }
+      ]
+    },
+    {
+      "name": "duplicates",
+      "value": {
+        "format": 1,
+        "account": {
+          "mode": "dedicated",
+          "slot_id": "local-slot-1",
+          "display_hint": "Work slot",
+          "shared": false,
+          "provisioning_state": "ready",
+          "allowed_packages": [
+            "com.example.a",
+            "com.example.a"
+          ],
+          "last_reviewed_at": "2026-10-19T00:00:00Z"
+        },
+        "services": {
+          "play_services": {
+            "package_name": "com.google.android.gms",
+            "state": "enabled",
+            "version_name": "25.40.30"
+          },
+          "play_store": {
+            "package_name": "com.android.vending",
+            "state": "enabled"
+          },
+          "play_protect": "unknown",
+          "web_provider": {
+            "state": "enabled",
+            "package_name": "com.google.android.webview"
+          },
+          "google_settings_access": "accessible",
+          "install_origin": "play_store",
+          "backup_sync": "disabled"
+        }
+      },
+      "issues": [
+        {
+          "field": "play_surface.account.allowed_packages",
+          "code": "PS_VALUE"
+        }
+      ]
+    },
+    {
+      "name": "credential",
+      "value": {
+        "format": 1,
+        "account": {
+          "mode": "dedicated",
+          "slot_id": "local-slot-1",
+          "display_hint": "Work slot",
+          "shared": false,
+          "provisioning_state": "ready",
+          "allowed_packages": [
+            "com.example.reader"
+          ],
+          "last_reviewed_at": "2026-10-19T00:00:00Z",
+          "password": "DO_NOT_ECHO_SECRET"
+        },
+        "services": {
+          "play_services": {
+            "package_name": "com.google.android.gms",
+            "state": "enabled",
+            "version_name": "25.40.30"
+          },
+          "play_store": {
+            "package_name": "com.android.vending",
+            "state": "enabled"
+          },
+          "play_protect": "unknown",
+          "web_provider": {
+            "state": "enabled",
+            "package_name": "com.google.android.webview"
+          },
+          "google_settings_access": "accessible",
+          "install_origin": "play_store",
+          "backup_sync": "disabled"
+        }
+      },
+      "issues": [
+        {
+          "field": "play_surface.account",
+          "code": "PS_FIELD"
+        }
+      ]
+    },
+    {
+      "name": "unknown_field",
+      "value": {
+        "format": 1,
+        "account": {
+          "mode": "dedicated",
+          "slot_id": "local-slot-1",
+          "display_hint": "Work slot",
+          "shared": false,
+          "provisioning_state": "ready",
+          "allowed_packages": [
+            "com.example.reader"
+          ],
+          "last_reviewed_at": "2026-10-19T00:00:00Z"
+        },
+        "services": {
+          "play_services": {
+            "package_name": "com.google.android.gms",
+            "state": "enabled",
+            "version_name": "25.40.30"
+          },
+          "play_store": {
+            "package_name": "com.android.vending",
+            "state": "enabled"
+          },
+          "play_protect": "unknown",
+          "web_provider": {
+            "state": "enabled",
+            "package_name": "com.google.android.webview"
+          },
+          "google_settings_access": "accessible",
+          "install_origin": "play_store",
+          "backup_sync": "disabled"
+        },
+        "future": true
+      },
+      "issues": [
+        {
+          "field": "play_surface",
+          "code": "PS_FIELD"
+        }
+      ]
+    },
+    {
+      "name": "wrong_package",
+      "value": {
+        "format": 1,
+        "account": {
+          "mode": "dedicated",
+          "slot_id": "local-slot-1",
+          "display_hint": "Work slot",
+          "shared": false,
+          "provisioning_state": "ready",
+          "allowed_packages": [
+            "com.example.reader"
+          ],
+          "last_reviewed_at": "2026-10-19T00:00:00Z"
+        },
+        "services": {
+          "play_services": {
+            "package_name": "com.example.other",
+            "state": "enabled",
+            "version_name": "25.40.30"
+          },
+          "play_store": {
+            "package_name": "com.android.vending",
+            "state": "enabled"
+          },
+          "play_protect": "unknown",
+          "web_provider": {
+            "state": "enabled",
+            "package_name": "com.google.android.webview"
+          },
+          "google_settings_access": "accessible",
+          "install_origin": "play_store",
+          "backup_sync": "disabled"
+        }
+      },
+      "issues": [
+        {
+          "field": "play_surface.services.play_services.package_name",
+          "code": "PS_VALUE"
+        }
+      ]
+    },
+    {
+      "name": "bad_timestamp",
+      "value": {
+        "format": 1,
+        "account": {
+          "mode": "dedicated",
+          "slot_id": "local-slot-1",
+          "display_hint": "Work slot",
+          "shared": false,
+          "provisioning_state": "ready",
+          "allowed_packages": [
+            "com.example.reader"
+          ],
+          "last_reviewed_at": "2026-02-30T00:00:00Z"
+        },
+        "services": {
+          "play_services": {
+            "package_name": "com.google.android.gms",
+            "state": "enabled",
+            "version_name": "25.40.30"
+          },
+          "play_store": {
+            "package_name": "com.android.vending",
+            "state": "enabled"
+          },
+          "play_protect": "unknown",
+          "web_provider": {
+            "state": "enabled",
+            "package_name": "com.google.android.webview"
+          },
+          "google_settings_access": "accessible",
+          "install_origin": "play_store",
+          "backup_sync": "disabled"
+        }
+      },
+      "issues": [
+        {
+          "field": "play_surface.account.last_reviewed_at",
+          "code": "PS_VALUE"
+        }
+      ]
+    },
+    {
+      "name": "bad_format",
+      "value": {
+        "format": true,
+        "account": {
+          "mode": "dedicated",
+          "slot_id": "local-slot-1",
+          "display_hint": "Work slot",
+          "shared": false,
+          "provisioning_state": "ready",
+          "allowed_packages": [
+            "com.example.reader"
+          ],
+          "last_reviewed_at": "2026-10-19T00:00:00Z"
+        },
+        "services": {
+          "play_services": {
+            "package_name": "com.google.android.gms",
+            "state": "enabled",
+            "version_name": "25.40.30"
+          },
+          "play_store": {
+            "package_name": "com.android.vending",
+            "state": "enabled"
+          },
+          "play_protect": "unknown",
+          "web_provider": {
+            "state": "enabled",
+            "package_name": "com.google.android.webview"
+          },
+          "google_settings_access": "accessible",
+          "install_origin": "play_store",
+          "backup_sync": "disabled"
+        }
+      },
+      "issues": [
+        {
+          "field": "play_surface.format",
+          "code": "PS_TYPE"
+        }
+      ]
+    },
+    {
+      "name": "null_surface",
+      "value": null,
+      "issues": [
+        {
+          "field": "play_surface",
+          "code": "PS_TYPE"
+        }
+      ]
+    },
+    {
+      "name": "none_with_slot",
+      "value": {
+        "format": 1,
+        "account": {
+          "mode": "none",
+          "slot_id": "local-slot-1",
+          "display_hint": "Work slot",
+          "shared": false,
+          "provisioning_state": "ready",
+          "allowed_packages": [
+            "com.example.reader"
+          ],
+          "last_reviewed_at": "2026-10-19T00:00:00Z"
+        },
+        "services": {
+          "play_services": {
+            "package_name": "com.google.android.gms",
+            "state": "enabled",
+            "version_name": "25.40.30"
+          },
+          "play_store": {
+            "package_name": "com.android.vending",
+            "state": "enabled"
+          },
+          "play_protect": "unknown",
+          "web_provider": {
+            "state": "enabled",
+            "package_name": "com.google.android.webview"
+          },
+          "google_settings_access": "accessible",
+          "install_origin": "play_store",
+          "backup_sync": "disabled"
+        }
+      },
+      "issues": [
+        {
+          "field": "play_surface.account.slot_id",
+          "code": "PS_ACCOUNT"
+        }
+      ]
+    },
+    {
+      "name": "bad_state",
+      "value": {
+        "format": 1,
+        "account": {
+          "mode": "dedicated",
+          "slot_id": "local-slot-1",
+          "display_hint": "Work slot",
+          "shared": false,
+          "provisioning_state": "ready",
+          "allowed_packages": [
+            "com.example.reader"
+          ],
+          "last_reviewed_at": "2026-10-19T00:00:00Z"
+        },
+        "services": {
+          "play_services": {
+            "package_name": "com.google.android.gms",
+            "state": "enabled",
+            "version_name": "25.40.30"
+          },
+          "play_store": {
+            "package_name": "com.android.vending",
+            "state": "enabled"
+          },
+          "play_protect": "certified",
+          "web_provider": {
+            "state": "enabled",
+            "package_name": "com.google.android.webview"
+          },
+          "google_settings_access": "accessible",
+          "install_origin": "play_store",
+          "backup_sync": "disabled"
+        }
+      },
+      "issues": [
+        {
+          "field": "play_surface.services.play_protect",
+          "code": "PS_VALUE"
+        }
+      ]
+    },
+    {
+      "name": "bad_type",
+      "value": {
+        "format": 1,
+        "account": {
+          "mode": "dedicated",
+          "slot_id": "local-slot-1",
+          "display_hint": "Work slot",
+          "shared": "false",
+          "provisioning_state": "ready",
+          "allowed_packages": [
+            "com.example.reader"
+          ],
+          "last_reviewed_at": "2026-10-19T00:00:00Z"
+        },
+        "services": {
+          "play_services": {
+            "package_name": "com.google.android.gms",
+            "state": "enabled",
+            "version_name": "25.40.30"
+          },
+          "play_store": {
+            "package_name": "com.android.vending",
+            "state": "enabled"
+          },
+          "play_protect": "unknown",
+          "web_provider": {
+            "state": "enabled",
+            "package_name": "com.google.android.webview"
+          },
+          "google_settings_access": "accessible",
+          "install_origin": "play_store",
+          "backup_sync": "disabled"
+        }
+      },
+      "issues": [
+        {
+          "field": "play_surface.account.shared",
+          "code": "PS_TYPE"
+        }
+      ]
+    },
+    {
+      "name": "blank_hint",
+      "value": {
+        "format": 1,
+        "account": {
+          "mode": "dedicated",
+          "slot_id": "local-slot-1",
+          "display_hint": "",
+          "shared": false,
+          "provisioning_state": "ready",
+          "allowed_packages": [
+            "com.example.reader"
+          ],
+          "last_reviewed_at": "2026-10-19T00:00:00Z"
+        },
+        "services": {
+          "play_services": {
+            "package_name": "com.google.android.gms",
+            "state": "enabled",
+            "version_name": "25.40.30"
+          },
+          "play_store": {
+            "package_name": "com.android.vending",
+            "state": "enabled"
+          },
+          "play_protect": "unknown",
+          "web_provider": {
+            "state": "enabled",
+            "package_name": "com.google.android.webview"
+          },
+          "google_settings_access": "accessible",
+          "install_origin": "play_store",
+          "backup_sync": "disabled"
+        }
+      },
+      "issues": [
+        {
+          "field": "play_surface.account.display_hint",
+          "code": "PS_VALUE"
+        }
+      ]
+    },
+    {
+      "name": "control_hint",
+      "value": {
+        "format": 1,
+        "account": {
+          "mode": "dedicated",
+          "slot_id": "local-slot-1",
+          "display_hint": "bad\nhint",
+          "shared": false,
+          "provisioning_state": "ready",
+          "allowed_packages": [
+            "com.example.reader"
+          ],
+          "last_reviewed_at": "2026-10-19T00:00:00Z"
+        },
+        "services": {
+          "play_services": {
+            "package_name": "com.google.android.gms",
+            "state": "enabled",
+            "version_name": "25.40.30"
+          },
+          "play_store": {
+            "package_name": "com.android.vending",
+            "state": "enabled"
+          },
+          "play_protect": "unknown",
+          "web_provider": {
+            "state": "enabled",
+            "package_name": "com.google.android.webview"
+          },
+          "google_settings_access": "accessible",
+          "install_origin": "play_store",
+          "backup_sync": "disabled"
+        }
+      },
+      "issues": [
+        {
+          "field": "play_surface.account.display_hint",
+          "code": "PS_VALUE"
+        }
+      ]
+    },
+    {
+      "name": "bad_provider",
+      "value": {
+        "format": 1,
+        "account": {
+          "mode": "dedicated",
+          "slot_id": "local-slot-1",
+          "display_hint": "Work slot",
+          "shared": false,
+          "provisioning_state": "ready",
+          "allowed_packages": [
+            "com.example.reader"
+          ],
+          "last_reviewed_at": "2026-10-19T00:00:00Z"
+        },
+        "services": {
+          "play_services": {
+            "package_name": "com.google.android.gms",
+            "state": "enabled",
+            "version_name": "25.40.30"
+          },
+          "play_store": {
+            "package_name": "com.android.vending",
+            "state": "enabled"
+          },
+          "play_protect": "unknown",
+          "web_provider": {
+            "state": "READY",
+            "package_name": "com.google.android.webview"
+          },
+          "google_settings_access": "accessible",
+          "install_origin": "play_store",
+          "backup_sync": "disabled"
+        }
+      },
+      "issues": [
+        {
+          "field": "play_surface.services.web_provider.state",
+          "code": "PS_VALUE"
+        }
+      ]
+    },
+    {
+      "name": "future_field",
+      "value": {
+        "format": 1,
+        "account": {
+          "mode": "dedicated",
+          "slot_id": "local-slot-1",
+          "display_hint": "Work slot",
+          "shared": false,
+          "provisioning_state": "ready",
+          "allowed_packages": [
+            "com.example.reader"
+          ],
+          "last_reviewed_at": "2026-10-19T00:00:00Z"
+        },
+        "services": {
+          "play_services": {
+            "package_name": "com.google.android.gms",
+            "state": "enabled",
+            "version_name": "25.40.30"
+          },
+          "play_store": {
+            "package_name": "com.android.vending",
+            "state": "enabled",
+            "future": "secret"
+          },
+          "play_protect": "unknown",
+          "web_provider": {
+            "state": "enabled",
+            "package_name": "com.google.android.webview"
+          },
+          "google_settings_access": "accessible",
+          "install_origin": "play_store",
+          "backup_sync": "disabled"
+        }
+      },
+      "issues": [
+        {
+          "field": "play_surface.services.play_store",
+          "code": "PS_FIELD"
+        }
+      ]
+    }
+  ],
+  "readiness_cases": [
+    {
+      "name": "READY",
+      "value": {
+        "format": 1,
+        "profile_id": "profile-a",
+        "state": "READY",
+        "reason_codes": [
+          "PS_LOCAL_CHECKS_PASSED"
+        ],
+        "evidence_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "report_timestamp": "2026-10-19T00:00:00Z",
+        "profile_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "artifact_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "provider_id": "local.test"
+      },
+      "issues": []
+    },
+    {
+      "name": "DEGRADED",
+      "value": {
+        "format": 1,
+        "profile_id": "profile-a",
+        "state": "DEGRADED",
+        "reason_codes": [
+          "PS_REVIEW_REQUIRED"
+        ],
+        "evidence_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "report_timestamp": "2026-10-19T00:00:00Z",
+        "profile_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "artifact_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "provider_id": "local.test"
+      },
+      "issues": []
+    },
+    {
+      "name": "BLOCKED",
+      "value": {
+        "format": 1,
+        "profile_id": "profile-a",
+        "state": "BLOCKED",
+        "reason_codes": [
+          "PS_REVIEW_REQUIRED"
+        ],
+        "evidence_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "report_timestamp": "2026-10-19T00:00:00Z",
+        "profile_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "artifact_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "provider_id": "local.test"
+      },
+      "issues": []
+    },
+    {
+      "name": "UNKNOWN",
+      "value": {
+        "format": 1,
+        "profile_id": "profile-a",
+        "state": "UNKNOWN",
+        "reason_codes": [
+          "PS_REVIEW_REQUIRED"
+        ],
+        "evidence_digest": null,
+        "report_timestamp": "2026-10-19T00:00:00Z",
+        "profile_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "artifact_hash": null,
+        "provider_id": "local.test"
+      },
+      "issues": []
+    },
+    {
+      "name": "missing_evidence",
+      "value": {
+        "format": 1,
+        "profile_id": "profile-a",
+        "state": "READY",
+        "reason_codes": [
+          "PS_LOCAL_CHECKS_PASSED"
+        ],
+        "evidence_digest": null,
+        "report_timestamp": "2026-10-19T00:00:00Z",
+        "profile_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "artifact_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "provider_id": "local.test"
+      },
+      "issues": [
+        {
+          "field": "readiness",
+          "code": "PS_RECORD"
+        }
+      ]
+    },
+    {
+      "name": "missing_artifact",
+      "value": {
+        "format": 1,
+        "profile_id": "profile-a",
+        "state": "READY",
+        "reason_codes": [
+          "PS_LOCAL_CHECKS_PASSED"
+        ],
+        "evidence_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "report_timestamp": "2026-10-19T00:00:00Z",
+        "profile_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "artifact_hash": null,
+        "provider_id": "local.test"
+      },
+      "issues": [
+        {
+          "field": "readiness",
+          "code": "PS_RECORD"
+        }
+      ]
+    },
+    {
+      "name": "no_reasons",
+      "value": {
+        "format": 1,
+        "profile_id": "profile-a",
+        "state": "READY",
+        "reason_codes": [],
+        "evidence_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "report_timestamp": "2026-10-19T00:00:00Z",
+        "profile_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "artifact_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "provider_id": "local.test"
+      },
+      "issues": [
+        {
+          "field": "readiness",
+          "code": "PS_RECORD"
+        }
+      ]
+    },
+    {
+      "name": "conflicting_ready",
+      "value": {
+        "format": 1,
+        "profile_id": "profile-a",
+        "state": "READY",
+        "reason_codes": [
+          "PS_PACKAGE_CONFLICT"
+        ],
+        "evidence_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "report_timestamp": "2026-10-19T00:00:00Z",
+        "profile_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "artifact_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "provider_id": "local.test"
+      },
+      "issues": [
+        {
+          "field": "readiness",
+          "code": "PS_RECORD"
+        }
+      ]
+    },
+    {
+      "name": "unknown_reason",
+      "value": {
+        "format": 1,
+        "profile_id": "profile-a",
+        "state": "READY",
+        "reason_codes": [
+          "ARBITRARY"
+        ],
+        "evidence_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "report_timestamp": "2026-10-19T00:00:00Z",
+        "profile_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "artifact_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "provider_id": "local.test"
+      },
+      "issues": [
+        {
+          "field": "readiness.reason_codes[0]",
+          "code": "PS_VALUE"
+        }
+      ]
+    },
+    {
+      "name": "bad_hash",
+      "value": {
+        "format": 1,
+        "profile_id": "profile-a",
+        "state": "READY",
+        "reason_codes": [
+          "PS_LOCAL_CHECKS_PASSED"
+        ],
+        "evidence_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "report_timestamp": "2026-10-19T00:00:00Z",
+        "profile_hash": "abc",
+        "artifact_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "provider_id": "local.test"
+      },
+      "issues": [
+        {
+          "field": "readiness.profile_hash",
+          "code": "PS_VALUE"
+        }
+      ]
+    },
+    {
+      "name": "bad_time",
+      "value": {
+        "format": 1,
+        "profile_id": "profile-a",
+        "state": "READY",
+        "reason_codes": [
+          "PS_LOCAL_CHECKS_PASSED"
+        ],
+        "evidence_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "report_timestamp": "2026-02-30T00:00:00Z",
+        "profile_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "artifact_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "provider_id": "local.test"
+      },
+      "issues": [
+        {
+          "field": "readiness.report_timestamp",
+          "code": "PS_VALUE"
+        }
+      ]
+    },
+    {
+      "name": "future_state",
+      "value": {
+        "format": 1,
+        "profile_id": "profile-a",
+        "state": "future",
+        "reason_codes": [
+          "PS_LOCAL_CHECKS_PASSED"
+        ],
+        "evidence_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "report_timestamp": "2026-10-19T00:00:00Z",
+        "profile_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "artifact_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "provider_id": "local.test"
+      },
+      "issues": [
+        {
+          "field": "readiness.state",
+          "code": "PS_VALUE"
+        }
+      ]
+    },
+    {
+      "name": "extra",
+      "value": {
+        "format": 1,
+        "profile_id": "profile-a",
+        "state": "READY",
+        "reason_codes": [
+          "PS_LOCAL_CHECKS_PASSED"
+        ],
+        "evidence_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "report_timestamp": "2026-10-19T00:00:00Z",
+        "profile_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "artifact_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "provider_id": "local.test",
+        "credential": "DO_NOT_ECHO_SECRET"
+      },
+      "issues": [
+        {
+          "field": "readiness",
+          "code": "PS_FIELD"
+        }
+      ]
+    },
+    {
+      "name": "format_bool",
+      "value": {
+        "format": true,
+        "profile_id": "profile-a",
+        "state": "READY",
+        "reason_codes": [
+          "PS_LOCAL_CHECKS_PASSED"
+        ],
+        "evidence_digest": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+        "report_timestamp": "2026-10-19T00:00:00Z",
+        "profile_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+        "artifact_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+        "provider_id": "local.test"
+      },
+      "issues": [
+        {
+          "field": "readiness.format",
+          "code": "PS_TYPE"
+        }
+      ]
+    }
+  ],
+  "service_cases": [
+    {
+      "name": "same",
+      "observed": {
+        "play_services": {
+          "package_name": "com.google.android.gms",
+          "state": "enabled",
+          "version_name": "25.40.30"
+        },
+        "play_store": {
+          "package_name": "com.android.vending",
+          "state": "enabled"
+        },
+        "play_protect": "unknown",
+        "web_provider": {
+          "state": "enabled",
+          "package_name": "com.google.android.webview"
+        },
+        "google_settings_access": "accessible",
+        "install_origin": "play_store",
+        "backup_sync": "disabled"
+      },
+      "issues": [
+        {
+          "field": "play_surface.services.play_protect",
+          "code": "PS_EXPECTATION_UNKNOWN"
+        }
+      ]
+    },
+    {
+      "name": "missing",
+      "observed": null,
+      "issues": [
+        {
+          "field": "play_surface.services",
+          "code": "PS_NO_EVIDENCE"
+        }
+      ]
+    },
+    {
+      "name": "package_state",
+      "observed": {
+        "play_services": {
+          "package_name": "com.google.android.gms",
+          "state": "disabled",
+          "version_name": "25.40.30"
+        },
+        "play_store": {
+          "package_name": "com.android.vending",
+          "state": "enabled"
+        },
+        "play_protect": "unknown",
+        "web_provider": {
+          "state": "enabled",
+          "package_name": "com.google.android.webview"
+        },
+        "google_settings_access": "accessible",
+        "install_origin": "play_store",
+        "backup_sync": "disabled"
+      },
+      "issues": [
+        {
+          "field": "play_surface.services.play_protect",
+          "code": "PS_EXPECTATION_UNKNOWN"
+        },
+        {
+          "field": "play_surface.services.play_services",
+          "code": "PS_PACKAGE_CONFLICT"
+        }
+      ]
+    },
+    {
+      "name": "version",
+      "observed": {
+        "play_services": {
+          "package_name": "com.google.android.gms",
+          "state": "enabled",
+          "version_name": "25.30.10"
+        },
+        "play_store": {
+          "package_name": "com.android.vending",
+          "state": "enabled"
+        },
+        "play_protect": "unknown",
+        "web_provider": {
+          "state": "enabled",
+          "package_name": "com.google.android.webview"
+        },
+        "google_settings_access": "accessible",
+        "install_origin": "play_store",
+        "backup_sync": "disabled"
+      },
+      "issues": [
+        {
+          "field": "play_surface.services.play_protect",
+          "code": "PS_EXPECTATION_UNKNOWN"
+        },
+        {
+          "field": "play_surface.services.play_services",
+          "code": "PS_PACKAGE_CONFLICT"
+        }
+      ]
+    },
+    {
+      "name": "protect",
+      "observed": {
+        "play_services": {
+          "package_name": "com.google.android.gms",
+          "state": "enabled",
+          "version_name": "25.40.30"
+        },
+        "play_store": {
+          "package_name": "com.android.vending",
+          "state": "enabled"
+        },
+        "play_protect": "enabled",
+        "web_provider": {
+          "state": "enabled",
+          "package_name": "com.google.android.webview"
+        },
+        "google_settings_access": "accessible",
+        "install_origin": "play_store",
+        "backup_sync": "disabled"
+      },
+      "issues": [
+        {
+          "field": "play_surface.services.play_protect",
+          "code": "PS_EXPECTATION_UNKNOWN"
+        }
+      ]
+    },
+    {
+      "name": "unknown_state",
+      "observed": {
+        "play_services": {
+          "package_name": "com.google.android.gms",
+          "state": "enabled",
+          "version_name": "25.40.30"
+        },
+        "play_store": {
+          "package_name": "com.android.vending",
+          "state": "unknown"
+        },
+        "play_protect": "unknown",
+        "web_provider": {
+          "state": "enabled",
+          "package_name": "com.google.android.webview"
+        },
+        "google_settings_access": "accessible",
+        "install_origin": "play_store",
+        "backup_sync": "disabled"
+      },
+      "issues": [
+        {
+          "field": "play_surface.services.play_protect",
+          "code": "PS_EXPECTATION_UNKNOWN"
+        },
+        {
+          "field": "play_surface.services.play_store",
+          "code": "PS_EXPECTATION_UNKNOWN"
+        }
+      ]
+    }
+  ],
+  "messages": {
+    "PS_TYPE": "Expected a value of the declared type.",
+    "PS_FIELD": "Only declared fields are allowed; credentials are not supported.",
+    "PS_REQUIRED": "A required contract field is missing.",
+    "PS_VALUE": "Value is outside the allowed format, range or vocabulary.",
+    "PS_ACCOUNT": "Account mode and slot assignment disagree.",
+    "PS_RECORD": "Readiness state and evidence requirements disagree.",
+    "PS_NO_EVIDENCE": "Complete local evidence is not available.",
+    "PS_PROFILE_MISMATCH": "Evidence belongs to another profile or profile body.",
+    "PS_ARTIFACT_MISMATCH": "Evidence belongs to a different artifact.",
+    "PS_EVIDENCE_MISMATCH": "Evidence digest does not match the supplied report.",
+    "PS_ACCOUNT_SLOT_CONFLICT": "Active profiles reuse an account slot without shared consent on every assignment.",
+    "PS_PACKAGE_CONFLICT": "Package expectations disagree with the supplied local observation.",
+    "PS_EXPECTATION_CONFLICT": "Service expectations disagree with the supplied local observation.",
+    "PS_EXPECTATION_UNKNOWN": "An expectation or its observation is unknown.",
+    "PS_NOT_PRESENT": "No Play surface expectations are recorded.",
+    "PS_REVIEW_REQUIRED": "Local account setup needs review.",
+    "PS_LOCAL_CHECKS_PASSED": "Supplied local checks passed; no platform verdict is implied."
+  },
+  "account_modes": [
+    "none",
+    "dedicated",
+    "managed",
+    "unknown"
+  ],
+  "readiness_states": [
+    "READY",
+    "DEGRADED",
+    "BLOCKED",
+    "UNKNOWN"
+  ],
+  "reason_codes": [
+    "PS_NO_EVIDENCE",
+    "PS_PROFILE_MISMATCH",
+    "PS_ARTIFACT_MISMATCH",
+    "PS_EVIDENCE_MISMATCH",
+    "PS_ACCOUNT_SLOT_CONFLICT",
+    "PS_PACKAGE_CONFLICT",
+    "PS_EXPECTATION_CONFLICT",
+    "PS_EXPECTATION_UNKNOWN",
+    "PS_NOT_PRESENT",
+    "PS_REVIEW_REQUIRED",
+    "PS_LOCAL_CHECKS_PASSED"
+  ]
+}
