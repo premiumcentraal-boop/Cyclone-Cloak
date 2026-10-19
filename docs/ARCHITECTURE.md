@@ -17,6 +17,17 @@ contract does not collect observations, persist readiness records or provide UI
 or a Google/platform verdict. Assignment persistence is described below.
 See [contract and APIs](PLAY-SURFACE-CONTRACT-V1.md).
 
+## Play Readiness Evaluation v1 (development)
+
+A strict, bounded local report parser feeds a pure provider interface and four-state
+evaluator. Required unknown evidence remains UNKNOWN; optional Integrity metadata
+never becomes a pass or platform verdict. Profile/user/artifact binding and a
+configurable freshness policy reject foreign or stale reports. A separate private
+store retains exact report evidence, contract-compatible readiness snapshots and
+persistent review flags. Reads re-evaluate evidence rather than trust stored READY.
+No runtime, collection, connector, publication or profile schema behavior changes.
+See [report format, policy and APIs](PLAY-READINESS-EVALUATION-V1.md).
+
 ## Google Surface Isolation v1 (development)
 
 A separate app-private assignment sidecar binds approved Play Surface snapshots

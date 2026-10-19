@@ -1,5 +1,12 @@
 # Current state
 
+Development branch `codex/play-readiness-evaluation-v1` adds strict local Play
+readiness report parsing, conservative evidence-bound evaluation and a separate
+app-private readiness store. Missing evidence remains UNKNOWN; stale or mismatched
+evidence requires review. Integrity metadata stays optional evidence, not a
+platform verdict. No runtime, collector, UI or release metadata changes.
+See [local readiness evaluation](PLAY-READINESS-EVALUATION-V1.md).
+
 Development branch `codex/google-surface-isolation-v1` adds a local Google surface
 assignment store and pure isolation/review model over Play Surface Contract v1.
 It records approved configuration, requires explicit current-inventory review for
