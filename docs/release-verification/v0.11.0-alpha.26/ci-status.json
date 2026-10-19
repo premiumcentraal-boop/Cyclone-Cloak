@@ -1,0 +1,20 @@
+{
+  "main": {
+    "conclusion": "success",
+    "headSha": "ca285b8c98bc5fc83a00229006f16c950c91a680",
+    "status": "completed",
+    "url": "https://github.com/premiumcentraal-boop/Cyclone-Cloak/actions/runs/39232277001"
+  },
+  "signed_validation": {
+    "conclusion": "success",
+    "headSha": "ca285b8c98bc5fc83a00229006f16c950c91a680",
+    "status": "completed",
+    "url": "https://github.com/premiumcentraal-boop/Cyclone-Cloak/actions/runs/39232287345"
+  },
+  "release": {
+    "conclusion": "success",
+    "headSha": "ca285b8c98bc5fc83a00229006f16c950c91a680",
+    "status": "completed",
+    "url": "https://github.com/premiumcentraal-boop/Cyclone-Cloak/actions/runs/39233055932"
+  }
+}

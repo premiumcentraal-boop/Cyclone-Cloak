@@ -1,0 +1,21 @@
+{
+  "signature_verified": true,
+  "signer_sha256": "17ca3617b0cbaf250d2ef03e945b319e57695de6d977c652ded243ad5656f553",
+  "embedded_module_exact_match": true,
+  "version": "0.11.0-alpha.26",
+  "code": 50,
+  "libraries": {
+    "zygisk/arm64-v8a.so": "4a3e5099c7ebde60728b19306b7412f8576679ebb4163c2dc05272b1ed2e8900",
+    "zygisk/armeabi-v7a.so": "9dbcca68ed082e5598164bcf5bf3b39d32e9edf5e6142c013357370091150e6d"
+  },
+  "assets": {
+    "app-release.apk": {
+      "size": 43806227,
+      "sha256": "289e537b63da7fe75426d1e36425bb68acf2b78b81c3fb9a91feb5825d3d3903"
+    },
+    "cyclone-cloak-0.11.0-alpha.26.zip": {
+      "size": 1683427,
+      "sha256": "d6ba72bb06b97bdd726063bb73670ae518d27c3666efba0d3032c8c9114dbbb2"
+    }
+  }
+}

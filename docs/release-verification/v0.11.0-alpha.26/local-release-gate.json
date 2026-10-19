@@ -1,0 +1,39 @@
+{
+  "tag": "v0.11.0-alpha.26",
+  "commit": "ca285b8c98bc5fc83a00229006f16c950c91a680",
+  "version": "0.11.0-alpha.26",
+  "code": 50,
+  "tests": {
+    "app": 608,
+    "module": 40,
+    "probe_standard": 109,
+    "probe_diagnostics": 109,
+    "forge": 876,
+    "schema": 131,
+    "probe_host": 7
+  },
+  "total": 1880,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "compiler_warnings": [],
+  "local_build": "debug/release, module packaging, both probe variants and artifact metadata passed; local release unsigned; signed CI uses existing release key",
+  "commands": [
+    "$env:JAVA_HOME='C:/Program Files/Eclipse Adoptium/jdk-17.0.20.101-hotspot'",
+    "$env:ANDROID_HOME='C:/Users/Agent/android-sdk'",
+    "$env:CLOAK_TEST_WSL='1'",
+    "& \"$env:TEMP/cloak-build/gradle-8.11.1/bin/gradle.bat\" -p android :app:testDebugUnitTest :module:testDebugUnitTest :probe:testStandardDebugUnitTest :probe:testDiagnosticsDebugUnitTest :app:assembleDebug :app:assembleRelease :module:packageModule :probe:assembleStandardDebug :probe:assembleDiagnosticsDebug --offline --no-daemon --console=plain",
+    "uv run --offline --with pytest -- python -X utf8 -m pytest forge/tests -q",
+    "uv run --offline --with pytest --with jsonschema -- python -X utf8 -m pytest forge/schema_tests -q",
+    "uv run --offline -- python -X utf8 -m unittest discover -s android/probe/tests -v",
+    "uv run --offline -- python -X utf8 tools/verify_release.py --tag v0.11.0-alpha.26 --artifacts",
+    "git diff --check",
+    "git diff --cached --check",
+    "uv run --offline -- python tools/generate_play_surface.py --check",
+    "uv run --offline --with ruff -- ruff check forge/cloak_forge/play_surface.py forge/tests/test_play_surface.py forge/schema_tests/test_play_surface_schema.py tools/generate_play_surface.py",
+    "uv run --offline --with ruff -- ruff format --check forge/cloak_forge/play_surface.py forge/tests/test_play_surface.py forge/schema_tests/test_play_surface_schema.py tools/generate_play_surface.py"
+  ],
+  "signed_validation_url": "https://github.com/premiumcentraal-boop/Cyclone-Cloak/actions/runs/39232287345",
+  "device_actions": false,
+  "platform_verdict": false
+}

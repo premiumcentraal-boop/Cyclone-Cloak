@@ -1,0 +1,47 @@
+{
+  "release_url": "https://github.com/premiumcentraal-boop/Cyclone-Cloak/releases/tag/v0.11.0-alpha.26",
+  "tag": "v0.11.0-alpha.26",
+  "commit": "ca285b8c98bc5fc83a00229006f16c950c91a680",
+  "prerelease": true,
+  "published_digests_match": true,
+  "source_assets_match_tag": true,
+  "signed_validation_payload_match": {
+    "app-release.apk": {
+      "all_entry_data_identical": false,
+      "changed_entries": [
+        "assets/cyclone-cloak-module.zip"
+      ]
+    },
+    "cyclone-cloak-0.11.0-alpha.26.zip": {
+      "all_entry_data_identical": true,
+      "changed_entries": []
+    }
+  },
+  "assets": {
+    "app-release.apk": {
+      "size": 43806231,
+      "sha256": "c27c7a3c1a95617f323f8b9539dc2c56e24dab907db39cc6ab1e380ec7848707"
+    },
+    "cyclone-cloak-0.11.0-alpha.26.zip": {
+      "size": 1683427,
+      "sha256": "a2e932b9bf0bbefa6022d590fc68f6606ebdf3cd36b41d63d6c13ebf0e38382f"
+    },
+    "HANDOFF-2026-10-19-PLAY-SURFACE-CONTRACT-V1.md": {
+      "size": 5245,
+      "sha256": "6a653e2cbfa52a43e4c8772f417163f0fb8b1db05ee0c886f12fef577d21c8d0"
+    },
+    "play-readiness.schema.json": {
+      "size": 272,
+      "sha256": "d134d2336b91921efe3fa204f7bc1bfe21bbd0a6289d6066bdb529764990935a"
+    },
+    "PLAY-SURFACE-CONTRACT-V1.md": {
+      "size": 6562,
+      "sha256": "8f351e6736c1862d9ef9d9b805764f48d564a07dd29d83d99c152498d4446c52"
+    },
+    "play-surface.schema.json": {
+      "size": 11005,
+      "sha256": "9474c58d6d922c349f38f9b567b42136c013fcaeac95675521762485100c588d"
+    }
+  },
+  "module_native_matches_alpha25": true
+}
