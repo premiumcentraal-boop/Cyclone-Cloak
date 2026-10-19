@@ -15,7 +15,9 @@ class ArchitectureTest {
         "data" to setOf("diagnostics"),
         "root" to setOf("data", "forge", "diagnostics"),
         "cyclone" to setOf("data", "forge", "root", "diagnostics"),
-        "ui" to setOf("data", "forge", "root", "cyclone", "diagnostics"),
+        // playevidence is the generated pure envelope parser, not the diagnostics APK.
+        "play" to setOf("data", "forge", "playevidence"),
+        "ui" to setOf("data", "forge", "root", "cyclone", "diagnostics", "play"),
     )
 
     @Test

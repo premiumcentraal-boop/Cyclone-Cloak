@@ -71,6 +71,13 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import org.json.JSONObject
 import java.time.Instant
+import dev.cyclone.cloak.play.PlayEvidenceArtifacts
+import dev.cyclone.cloak.play.PlayEvidenceImport
+import dev.cyclone.cloak.play.PlayEvidenceRepository
+import dev.cyclone.cloak.play.PlayImportPreview
+import dev.cyclone.cloak.play.PlayReadinessCardState
+import dev.cyclone.cloak.play.GoogleSurfaceStore
+import dev.cyclone.cloak.play.readBounded
 
 /** An identity on this phone: its id and its full cloak profile. */
 typealias Identity = Pair<String, JSONObject>
@@ -118,6 +125,10 @@ data class CloakState(
     val backups: List<Pair<String, JSONObject>> = emptyList(),
     val workshop: BatchWorkshopState? = null,
     val compatibleCreation: Boolean = false,
+    val playReadiness: Map<String, PlayReadinessCardState> = emptyMap(),
+    val playIdentitySelection: Map<String, String> = emptyMap(),
+    val playErrors: Map<String, String> = emptyMap(),
+    val playImportReview: PlayImportPreview? = null,
 ) {
     val uniqueness: ProfileUniqueness get() = ProfileUniqueness(identities)
     val registry: List<CycloneProfile> get() = (report?.snapshot ?: connection.cached?.snapshot)?.registry.orEmpty()
@@ -147,6 +158,8 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
     private val postureStore by lazy { PostureStore(app) }
     private val bundledArtifactDigest by lazy { PostureArtifacts.bundledModuleDigest(app) }
     private val postureProvenance by lazy { PostureProvenanceStore(app) }
+    private val playArtifactDigest by lazy { PlayEvidenceArtifacts.current(app) }
+    private val playEvidence by lazy { PlayEvidenceRepository(app, artifact = { playArtifactDigest }) }
     private val app: Context get() = getApplication()
     private var currentRun: BindingRunResult? = null
     private var checkpointRun: (() -> Unit)? = null
@@ -226,13 +239,85 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
                 unreadableIdentityIds = unreadable, bindings = CloakBindingStore.all(app),
                 backups = backupDirectory().all().mapNotNull { (id, value) -> value.optJSONObject("manifest")?.let { manifest -> id to manifest } })
         }
+        loadPlayReadiness()
     }
+
+    private fun loadPlayReadiness() {
+        val state = _state.value
+        val assignments = GoogleSurfaceStore(app).snapshot().records
+        val cards = state.registry.associate { profile ->
+            val bound = state.bindings.filter { it.profileId == profile.id && it.enabled }.map { it.cloakProfileId }.distinct()
+            val saved = assignments.firstOrNull { it.profileId == profile.id }
+            val selected = state.playIdentitySelection[profile.id] ?: bound.singleOrNull() ?: if (bound.isEmpty())
+                state.identities.singleOrNull { (_, body) -> saved?.profileHash == EngineMetadataStore.digest(body) }?.first else null
+            profile.id to playEvidence.card(profile.id, profile.androidUserId, selected)
+        }
+        _state.update { it.copy(playReadiness = cards) }
+    }
+
+    fun selectPlayIdentity(profileId: String, identityId: String) = launchWork("Selecting local evidence context…") {
+        require(_state.value.identities.any { it.first == identityId }) { "Saved device profile is unavailable." }
+        _state.update { it.copy(playIdentitySelection = it.playIdentitySelection + (profileId to identityId),
+            playErrors = it.playErrors - profileId, playImportReview = null) }
+    }
+
+    private fun playTarget(profileId: String): dev.cyclone.cloak.play.PlayImportTarget {
+        val state = _state.value
+        val profile = state.registry.singleOrNull { it.id == profileId }
+            ?: throw PlayEvidenceImport.Rejected(listOf("This Cyclone profile is no longer in the current registry."))
+        if (profile.state != "ready" || state.ownProfileId != null && state.ownProfileId != profile.id)
+            throw PlayEvidenceImport.Rejected(listOf("Open this profile's Cloak copy or complete Cyclone setup before importing."))
+        return playEvidence.target(profileId, profile.androidUserId, state.playIdentitySelection[profileId] ?: state.playReadiness[profileId]?.identityId)
+    }
+
+    private fun playWork(profileId: String, label: String, block: () -> Unit) = launchWork(label) {
+        _state.update { it.copy(playErrors = it.playErrors - profileId) }
+        try { block() }
+        catch (changed: PlayEvidenceRepository.ReviewChanged) {
+            _state.update { it.copy(playImportReview = changed.preview,
+                playErrors = it.playErrors + (profileId to "The profile, artifact or account assignment changed. Review the updated report before saving.")) }
+        } catch (error: Exception) {
+            if (error is kotlinx.coroutines.CancellationException) throw error
+            val reason = when (error) {
+                is PlayEvidenceImport.Rejected -> error.reasons.joinToString(" ")
+                is GoogleSurfaceStore.ReviewRequired -> "Shared account-slot use needs explicit confirmation for the current profiles."
+                is PlayEvidenceRepository.PartialSave -> "Approved account-slot metadata was saved, but the readiness save did not complete. Review the saved state before retrying."
+                else -> "Local evidence could not be imported or saved. Check the selected profile, report and saved readiness state before retrying. No profile or binding changes were made."
+            }
+            _state.update { it.copy(playErrors = it.playErrors + (profileId to reason)) }
+        }
+    }
+
+    fun importPlayEvidence(profileId: String, uri: Uri) = playWork(profileId, "Reading local Play/Google report…") {
+        _state.update { it.copy(playImportReview = null) }
+        val bytes = app.contentResolver.openInputStream(uri)?.use { it.readBounded(dev.cyclone.cloak.playevidence.EvidenceReport.MAX_BYTES) }
+            ?: throw PlayEvidenceImport.Rejected(listOf("The local diagnostics report could not be opened."))
+        val text = Charsets.UTF_8.newDecoder().onMalformedInput(java.nio.charset.CodingErrorAction.REPORT)
+            .decode(java.nio.ByteBuffer.wrap(bytes)).toString()
+        val review = playEvidence.preview(text, playTarget(profileId))
+        _state.update { it.copy(playImportReview = review) }
+    }
+
+    fun savePlayEvidence(confirmShared: Boolean) {
+        val review = _state.value.playImportReview ?: return
+        playWork(review.target.profileId, "Saving reviewed local Play/Google evidence…") {
+            // Re-read the registry, saved profile bytes and artifact context immediately before writing.
+            playEvidence.save(review, playTarget(review.target.profileId), confirmShared)
+            _state.update { it.copy(playImportReview = null) }
+            say("Saved evidence-bound local readiness. No platform verdict is claimed.")
+        }
+    }
+
+    fun dismissPlayEvidence() = _state.update { if (it.busy == null) it.copy(playImportReview = null) else it }
 
     // ---- Cyclone ----------------------------------------------------------------------------------------------------
 
     fun refresh() { ConnectionLifecycle.trigger(app, ReconnectReason.MANUAL) }
 
-    fun reconnectOnResume() { ConnectionLifecycle.trigger(app, ReconnectReason.RESUME) }
+    fun reconnectOnResume() {
+        ConnectionLifecycle.trigger(app, ReconnectReason.RESUME)
+        viewModelScope.launch(Dispatchers.IO) { loadPlayReadiness() }
+    }
 
     fun checkCompanionPresence() {
         if (_state.value.checkingCompanions) return

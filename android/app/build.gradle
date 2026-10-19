@@ -73,6 +73,17 @@ android.sourceSets.test.resources.srcDirs += ["../../catalog", "../../forge/test
 // Coverage parser/screen tests consume the same bundled facts as the Health tab.
 android.sourceSets.test.resources.srcDir("src/main/assets")
 
+// Reuse only the diagnostics envelope's pure validator; no diagnostics SDK/UI dependency.
+def playEvidenceContract = tasks.register('preparePlayEvidenceContract', Sync) {
+    from('../playEvidence/src/main/java') { include 'dev/cyclone/cloak/playevidence/EvidenceReport.kt' }
+    into(layout.buildDirectory.dir('generated/playEvidenceContract'))
+}
+android.sourceSets.main.java.srcDir(layout.buildDirectory.dir('generated/playEvidenceContract'))
+android.sourceSets.test.resources.srcDir('../../forge/tests/fixtures')
+tasks.configureEach {
+    if (name == 'preBuild' || name.startsWith('compile') && name.endsWith('Kotlin')) dependsOn(playEvidenceContract)
+}
+
 // Embed the module built from this exact source/version in the app so Root Doctor can repair
 // missing or outdated installs even when the phone has no network connection.
 def cloakModuleZipName = "cyclone-cloak-${android.defaultConfig.versionName}.zip"

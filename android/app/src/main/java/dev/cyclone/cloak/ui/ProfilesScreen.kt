@@ -1,5 +1,8 @@
 package dev.cyclone.cloak.ui
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -39,6 +42,12 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
     var profileFilter by rememberSaveable { mutableStateOf<String?>(null) }
     var packageQuery by rememberSaveable { mutableStateOf("") }
     var historyProfile by rememberSaveable { mutableStateOf<String?>(null) }
+    var playTarget by rememberSaveable { mutableStateOf<String?>(null) }
+    val playImporter = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        val target = playTarget
+        playTarget = null
+        if (uri != null && target != null) vm.importPlayEvidence(target, uri)
+    }
     val context = LocalContext.current
     val journal = remember(context) { BindingRuns.journal(context) }
     val runs by journal.runs.collectAsState()
@@ -46,6 +55,8 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
     val appVersion = remember(context) { context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: "unknown" }
     val profiles = state.registry.associateBy { it.id }
     val knownProfileIds = state.report?.snapshot?.registry?.map { it.id }?.toSet()
+    state.playImportReview?.let { review -> PlayEvidenceReviewDialog(review, state.busy == null,
+        state.playErrors[review.target.profileId], { profiles[it]?.label ?: it }, vm::savePlayEvidence, vm::dismissPlayEvidence) }
     val visibleBindings = filterBindings(state.bindings, profileFilter, packageQuery)
     val profileChoices = (profiles.keys + state.bindings.map { it.profileId }).sorted()
     LazyColumn(
@@ -124,6 +135,11 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
                 state.busy == null && !state.syncing && !managedElsewhere,
                 { vm.profileOperation(profile.id, ProfileAction.BIND_ALL) },
                 { vm.profileOperation(profile.id, ProfileAction.REPLACE) }, { historyProfile = profile.id })
+            PlayReadinessCard(state.playReadiness[profile.id] ?: dev.cyclone.cloak.play.PlayReadinessCardState(),
+                state.identities.map { (id, body) -> id to body.optString("name", id) },
+                state.busy == null && !managedElsewhere && profile.state == "ready",
+                state.playErrors[profile.id], { profiles[it]?.label ?: it },
+                { vm.selectPlayIdentity(profile.id, it) }, { playTarget = profile.id; playImporter.launch(arrayOf("application/json")) })
         } } }
 
         historyProfile?.let { id -> item {

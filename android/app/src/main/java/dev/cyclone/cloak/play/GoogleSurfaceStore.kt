@@ -64,6 +64,13 @@ class GoogleSurfaceStore(context: Context) {
         try { Snapshot(load().records, true) } catch (_: InventoryUnreadable) { Snapshot(emptyList(), false) }
     }
     fun read(profileId: String): GoogleSurfaceRecord? = snapshot().records.firstOrNull { it.profileId == profileId }
+    /** Consent applies only to the exact prospective active group, never an imported shared flag. */
+    fun sharingConfirmed(record: GoogleSurfaceRecord): Boolean = synchronized(lock) {
+        GoogleSurfaceCodec.validate(record)
+        val library = load()
+        val next = library.records.filterNot { it.profileId == record.profileId } + record
+        groupDigest(record, next)?.let { it in library.confirmations } ?: false
+    }
     fun review(record: GoogleSurfaceRecord): AssignmentReview = synchronized(lock) {
         GoogleSurfaceCodec.validate(record)
         val next = load().records.filterNot { it.profileId == record.profileId } + record

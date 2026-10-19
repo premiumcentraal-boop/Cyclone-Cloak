@@ -1,5 +1,18 @@
 # Cyclone Cloak Architecture
 
+## Play/Google readiness integration (development)
+
+Profiles renders `PlayReadinessCard` over existing registry/identity metadata.
+`PlayEvidenceRepository` validates full diagnostics envelopes with the shared pure
+`EvidenceReport`, then delegates their consistent projection to the existing local
+readiness evaluator/store. Exact saved profile bytes, Android user, current
+APK/bundled ZIP digests and freshness bind import, preview and explicit save.
+Required unknowns remain UNKNOWN. Sharing review reuses the existing Google
+surface store and inventory-bound consent. No binding, connector, publisher or
+runtime writer is called. Diagnostics remains a separate zero-permission APK;
+only its pure envelope validator is copied into production at build time. See
+[integration contract](PLAY-READINESS-INTEGRATION-V1.md).
+
 Current source: v0.11.0-alpha.26, app/module code 50. Device Reality v1
 adds optional profile schema 0.4 descriptions and read-only probe observations.
 Existing schema 0.2/0.3 files are accepted as-is. Physical evidence is artifact-specific; see the runtime coverage ledger.

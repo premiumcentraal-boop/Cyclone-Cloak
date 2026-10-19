@@ -1,5 +1,16 @@
 # Current state
 
+Development branch `codex/play-readiness-integration-v1` adds explicit local
+Play/Google diagnostics import and per-profile readiness cards in Profiles.
+Envelope validation binds exact profile bytes, Android user, current APK/bundled
+module artifact set and freshness. Missing required observations remain UNKNOWN;
+stale/mismatched evidence requires review. Account-slot conflicts require explicit
+inventory-bound sharing confirmation. Physical capture/import is PENDING: no ADB
+device was attached. No runtime, binding, permissions or release metadata changes.
+Release remains blocked by missing device evidence and inherited legacy-probe
+lint errors (9 per flavor); no probe permissions or source were changed. See
+[integration flow and limitations](PLAY-READINESS-INTEGRATION-V1.md).
+
 Development branch `codex/play-evidence-harness-v1` adds a separate diagnostics APK
 and local evidence export runner. All collection requires a user tap; optional
 public Integrity requests require separate confirmation. Sixteen strict rows cover

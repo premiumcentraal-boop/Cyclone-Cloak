@@ -80,4 +80,9 @@ class PlayReadinessStore(context: Context) {
         checkId(profileId)
         check(preferences.edit().remove(profileId).commit()) { "PR_SAVE_FAILED: Could not clear local readiness evidence." }
     }
+    /** Validated stored projection for display only; readiness must still be re-evaluated. */
+    fun evidence(profileId: String): String? = synchronized(lock) {
+        try { load(profileId).report } catch (_: UnreadableStore) { null }
+    }
+    internal fun checkReadable(profileId: String) = synchronized(lock) { load(profileId); Unit }
 }

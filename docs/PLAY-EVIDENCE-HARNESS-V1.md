@@ -72,7 +72,9 @@ The runner separately records the installed **diagnostics** APK hash.
 `readiness_report` is consumable by the existing strict Play Readiness Evaluation
 parser. Play Protect and actual Google settings access remain unknown, so this
 harness cannot promote the existing required-evidence evaluator to READY. There
-is no automatic import into production readiness storage. Review/export only.
+is no automatic import into production readiness storage. The development
+[integration flow](PLAY-READINESS-INTEGRATION-V1.md) adds explicit production
+import, preview and save of the original full envelope.
 
 Only the current capture generation may atomically write its private report;
 new intents invalidate old workers. The latest 20 reports are retained. No profile
