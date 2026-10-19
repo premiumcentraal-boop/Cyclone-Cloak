@@ -32,7 +32,7 @@ jobs:
           uv run --with pytest -- python -m pytest forge/tests -q
           uv run --with pytest --with jsonschema -- python -m pytest forge/schema_tests -q
           uv run -- python -m unittest discover -s android/probe/tests -v
-          gradle -p android :app:testDebugUnitTest :module:testDebugUnitTest :probe:testStandardDebugUnitTest :probe:testDiagnosticsDebugUnitTest :probe:assembleStandardDebug :probe:assembleDiagnosticsDebug --no-daemon
+          gradle -p android :app:testDebugUnitTest :module:testDebugUnitTest :playEvidence:testDebugUnitTest :playEvidence:lintDebug :probe:testStandardDebugUnitTest :probe:testDiagnosticsDebugUnitTest :probe:assembleStandardDebug :probe:assembleDiagnosticsDebug --no-daemon
       - name: Decode existing release keystore
         env:
           KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_B64 }}
@@ -41,7 +41,7 @@ jobs:
         env:
           CLOAK_KEYSTORE_PATH: ${{ runner.temp }}/cloak.keystore
           CLOAK_KEYSTORE_PASSWORD: ${{ secrets.CLOAK_KEYSTORE_PASSWORD }}
-        run: gradle -p android :app:assembleRelease :module:packageModule --no-daemon
+        run: gradle -p android :app:assembleRelease :module:packageModule :playEvidence:assembleRelease --no-daemon
       - name: Verify matching artifacts
         env:
           TAG: ${{ inputs.tag }}
@@ -52,4 +52,5 @@ jobs:
           path: |
             android/app/build/outputs/apk/release/*.apk
             android/module/build/module/*.zip
+            android/playEvidence/build/outputs/apk/release/*.apk
           if-no-files-found: error

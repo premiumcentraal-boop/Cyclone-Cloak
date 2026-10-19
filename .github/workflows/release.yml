@@ -42,14 +42,14 @@ jobs:
           uv run --with pytest -- python -m pytest forge/tests -q
           uv run --with pytest --with jsonschema -- python -m pytest forge/schema_tests -q
           uv run -- python -m unittest discover -s android/probe/tests -v
-          gradle -p android :app:testDebugUnitTest :module:testDebugUnitTest :probe:testStandardDebugUnitTest :probe:testDiagnosticsDebugUnitTest :probe:assembleStandardDebug :probe:assembleDiagnosticsDebug --no-daemon
+          gradle -p android :app:testDebugUnitTest :module:testDebugUnitTest :playEvidence:testDebugUnitTest :playEvidence:lintDebug :probe:testStandardDebugUnitTest :probe:testDiagnosticsDebugUnitTest :probe:assembleStandardDebug :probe:assembleDiagnosticsDebug --no-daemon
       - name: Decode Android release keystore
         run: echo "${{ secrets.ANDROID_KEYSTORE_B64 }}" | base64 -d > "$RUNNER_TEMP/cloak.keystore"
       - name: Build release APK
         env:
           CLOAK_KEYSTORE_PATH: ${{ runner.temp }}/cloak.keystore
           CLOAK_KEYSTORE_PASSWORD: ${{ secrets.CLOAK_KEYSTORE_PASSWORD }}
-        run: gradle -p android :app:assembleRelease :module:packageModule --no-daemon
+        run: gradle -p android :app:assembleRelease :module:packageModule :playEvidence:assembleRelease --no-daemon
       - name: Verify APK and module artifacts
         env:
           TAG: ${{ inputs.tag || github.ref_name }}
@@ -65,7 +65,12 @@ jobs:
           files: |
             android/app/build/outputs/apk/release/*.apk
             android/module/build/module/*.zip
+            android/playEvidence/build/outputs/apk/release/*.apk
             schema/play-surface.schema.json
             schema/play-readiness.schema.json
             docs/PLAY-SURFACE-CONTRACT-V1.md
             docs/HANDOFF-2026-10-19-PLAY-SURFACE-CONTRACT-V1.md
+            schema/play-evidence-report.schema.json
+            docs/PLAY-EVIDENCE-HARNESS-V1.md
+            docs/PLAY-READINESS-INTEGRATION-V1.md
+            docs/HANDOFF-2026-10-19-PLAY-READINESS-INTEGRATION-V1.md

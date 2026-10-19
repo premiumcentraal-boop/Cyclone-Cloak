@@ -1,6 +1,6 @@
 # Cyclone Cloak Architecture
 
-## Play/Google readiness integration (development)
+## Play/Google readiness integration (alpha.27)
 
 Profiles renders `PlayReadinessCard` over existing registry/identity metadata.
 `PlayEvidenceRepository` validates full diagnostics envelopes with the shared pure
@@ -13,7 +13,9 @@ runtime writer is called. Diagnostics remains a separate zero-permission APK;
 only its pure envelope validator is copied into production at build time. See
 [integration contract](PLAY-READINESS-INTEGRATION-V1.md).
 
-Current source: v0.11.0-alpha.26, app/module code 50. Device Reality v1
+Current source: v0.11.0-alpha.27, app/module code 51. Physical Play/Google
+capture/import remains UNVERIFIED; the documented evidence/lint limitations were
+explicitly accepted for this prerelease, subject to successful signed CI. Device Reality v1
 adds optional profile schema 0.4 descriptions and read-only probe observations.
 Existing schema 0.2/0.3 files are accepted as-is. Physical evidence is artifact-specific; see the runtime coverage ledger.
 
@@ -30,7 +32,7 @@ contract does not collect observations, persist readiness records or provide UI
 or a Google/platform verdict. Assignment persistence is described below.
 See [contract and APIs](PLAY-SURFACE-CONTRACT-V1.md).
 
-## Play Readiness Evaluation v1 (development)
+## Play Readiness Evaluation v1 (alpha.27)
 
 A strict, bounded local report parser feeds a pure provider interface and four-state
 evaluator. Required unknown evidence remains UNKNOWN; optional Integrity metadata
@@ -41,7 +43,7 @@ persistent review flags. Reads re-evaluate evidence rather than trust stored REA
 No runtime, collection, connector, publication or profile schema behavior changes.
 See [report format, policy and APIs](PLAY-READINESS-EVALUATION-V1.md).
 
-## Play/Google Evidence Harness v1 (development)
+## Play/Google Evidence Harness v1 (alpha.27)
 
 The separate `:playEvidence` diagnostics APK collects only user-initiated,
 caller-visible Google/Play observations. It copies the pure readiness parser at
@@ -53,7 +55,7 @@ remain unmeasured. Optional public Integrity requests require explicit confirmat
 and retain token-receipt digests only. The host runner never installs, grants,
 switches users or writes production data. See [harness and limits](PLAY-EVIDENCE-HARNESS-V1.md).
 
-## Google Surface Isolation v1 (development)
+## Google Surface Isolation v1 (alpha.27)
 
 A separate app-private assignment sidecar binds approved Play Surface snapshots
 to Cyclone profile ID, Android user and canonical compatibility-profile hash.

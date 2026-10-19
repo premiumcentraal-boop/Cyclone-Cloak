@@ -1,8 +1,8 @@
 # Play/Google Readiness Integration v1
 
-Development branch `codex/play-readiness-integration-v1` consolidates the existing
+Alpha.27 integrates branch `codex/play-readiness-integration-v1`, consolidating the existing
 local isolation/evaluation layers and the separate diagnostics harness. The
-published foundation remains alpha.26. Physical evidence is pending.
+foundation from alpha.26. Physical evidence is pending.
 
 ## User flow
 
@@ -87,5 +87,7 @@ verdict or permanent proof.
 
 No attached ADB device was available. Installation, user-initiated capture and
 on-device import remain **PENDING**. No permissions, module/runtime, connector,
-publication, binding layout or release metadata changed. Release is blocked until
-physical evidence and all required gates exist and pass.
+publication or binding layout changed. The owner explicitly approved alpha.27
+with pending physical evidence and known legacy probe lint errors documented,
+subject to signed CI passing. This exception does not convert missing evidence
+into a verified result. See [release limitations](RELEASE_0.11.0-alpha.27.md).

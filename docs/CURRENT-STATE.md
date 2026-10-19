@@ -1,32 +1,34 @@
 # Current state
 
-Development branch `codex/play-readiness-integration-v1` adds explicit local
+Alpha.27 integrates `codex/play-readiness-integration-v1` with explicit local
 Play/Google diagnostics import and per-profile readiness cards in Profiles.
 Envelope validation binds exact profile bytes, Android user, current APK/bundled
 module artifact set and freshness. Missing required observations remain UNKNOWN;
 stale/mismatched evidence requires review. Account-slot conflicts require explicit
 inventory-bound sharing confirmation. Physical capture/import is PENDING: no ADB
-device was attached. No runtime, binding, permissions or release metadata changes.
-Release remains blocked by missing device evidence and inherited legacy-probe
-lint errors (9 per flavor); no probe permissions or source were changed. See
+device was attached. No runtime, binding or permissions changes.
+The owner explicitly approved release with missing device evidence and inherited
+legacy-probe lint errors (9 per flavor) documented, subject to signed CI passing.
+No probe permissions or source were changed. See
 [integration flow and limitations](PLAY-READINESS-INTEGRATION-V1.md).
 
-Development branch `codex/play-evidence-harness-v1` adds a separate diagnostics APK
+Alpha.27 includes the `codex/play-evidence-harness-v1` separate diagnostics APK
 and local evidence export runner. All collection requires a user tap; optional
 public Integrity requests require separate confirmation. Sixteen strict rows cover
 caller-visible Play/Google surfaces, with unknowns preserved and no production
 mutation. Play Protect, actual settings access and decoded Integrity verdicts
-remain unmeasured; physical collection is UNVERIFIED. No permissions or release
-metadata change. See [Play evidence harness](PLAY-EVIDENCE-HARNESS-V1.md).
+remain unmeasured; physical collection is UNVERIFIED. No permissions added.
+See [Play evidence harness](PLAY-EVIDENCE-HARNESS-V1.md).
 
-Development branch `codex/play-readiness-evaluation-v1` adds strict local Play
+Alpha.27 includes the `codex/play-readiness-evaluation-v1` strict local Play
 readiness report parsing, conservative evidence-bound evaluation and a separate
 app-private readiness store. Missing evidence remains UNKNOWN; stale or mismatched
 evidence requires review. Integrity metadata stays optional evidence, not a
-platform verdict. No runtime, collector, UI or release metadata changes.
+platform verdict. The evaluator itself does not collect observations or enforce
+runtime behavior; the integrated UI is described above.
 See [local readiness evaluation](PLAY-READINESS-EVALUATION-V1.md).
 
-Development branch `codex/google-surface-isolation-v1` adds a local Google surface
+Alpha.27 includes the `codex/google-surface-isolation-v1` local Google surface
 assignment store and pure isolation/review model over Play Surface Contract v1.
 It records approved configuration, requires explicit current-inventory review for
 shared slots, and checks supplied profile/user/hash-bound observations. Missing
@@ -35,8 +37,8 @@ runtime enforcement or platform verdict. Existing profiles and bindings are
 unchanged; physical verification is UNVERIFIED. See
 [Google Surface Isolation v1](GOOGLE-SURFACE-ISOLATION-V1.md).
 
-Updated 2026-10-19. Current source **v0.11.0-alpha.26 / versionCode 50**
-adds Play Surface Contract v1 over the existing Reality Studio, missing-only repair
+Updated 2026-10-19. Current source **v0.11.0-alpha.27 / versionCode 51**
+adds local Play readiness integration over Play Surface Contract v1 and the existing Reality Studio, missing-only repair
 and Fleet Diversity workflows. Optional schema 0.4 sections describe compute, memory,
 panel, camera summaries, sensors, power, DRM level, radio labels, carrier, package
 versions, WebView and environment/input metadata. Existing 0.2/0.3 profiles are

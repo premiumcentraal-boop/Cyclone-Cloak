@@ -1,5 +1,10 @@
 # Play/Google Readiness Integration v1 — 2026-10-19
 
+Release follow-up: after this code run, the owner explicitly approved alpha.27
+with the missing device evidence and known legacy-probe lint findings documented,
+subject to signed CI passing. The original run results below remain historical;
+this approval adds no physical evidence. See [alpha.27 notes](RELEASE_0.11.0-alpha.27.md).
+
 Branch: `codex/play-readiness-integration-v1`. Released foundation remains
 `v0.11.0-alpha.26` / code 50, main base `5c70727`.
 

@@ -22,6 +22,24 @@ android {
         versionCode 1
         versionName '1.0-diagnostics'
     }
+    // Separate package, existing release identity; no new signer or permission.
+    signingConfigs {
+        release {
+            def ksPath = System.getenv('CLOAK_KEYSTORE_PATH')
+            def ksPass = System.getenv('CLOAK_KEYSTORE_PASSWORD')
+            if (ksPath != null && ksPass != null) {
+                storeFile file(ksPath)
+                storePassword ksPass
+                keyAlias 'cloak'
+                keyPassword ksPass
+            }
+        }
+    }
+    buildTypes {
+        release {
+            if (System.getenv('CLOAK_KEYSTORE_PATH') != null) signingConfig signingConfigs.release
+        }
+    }
     sourceSets.main.java.srcDir(layout.buildDirectory.dir('generated/contracts'))
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_17

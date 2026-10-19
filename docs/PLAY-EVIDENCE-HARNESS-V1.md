@@ -94,6 +94,13 @@ Install this separate diagnostics app explicitly through your normal development
 process; the runner never installs anything. Select an already running/unlocked
 user where it is installed. The runner never starts/switches/unlocks users.
 
+Alpha.27 also publishes `playEvidence-release.apk`, signed with the existing
+release identity. It is a separate optional developer app (version 1.0-diagnostics,
+code 1), not the production companion. A locally debug-signed copy can have a
+different certificate and may not accept an in-place update. Preserve reports
+before any separately approved replacement; this release run does not change a
+device or clear data.
+
 ```powershell
 uv run --with jsonschema -- python -X utf8 tools/run_play_evidence.py --adb C:/Users/Agent/android-sdk/platform-tools/adb.exe --serial 3B171FDJH0061G --user 17 --profile C:/local/approved-profile.json --profile-id profile-17 --artifact-digest <64-lowercase-hex>
 ```
