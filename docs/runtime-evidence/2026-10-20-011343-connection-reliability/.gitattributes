@@ -1,0 +1,2 @@
+# Preserve captured bytes and manifest hashes across Windows/Linux checkouts.
+* -text whitespace=cr-at-eol

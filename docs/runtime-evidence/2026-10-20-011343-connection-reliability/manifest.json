@@ -1,7 +1,8 @@
 {
-  "created_at": "2026-10-20T10:45:01.194962+00:00",
+  "created_at": "2026-10-20T10:46:11.977397+00:00",
   "result": "PARTIAL_DEVICE_DISCONNECTED",
   "sha256": {
+    ".gitattributes": "c9bfd341657f078982b09c4b0c026bfd68d2d15333a31a8bd4072e679af64dd8",
     "apk-signature-followup.txt": "8a4417db41056fe237c6e83c5a23c454679c8bea564a32f3369fb1a84d568bb5",
     "bindings-all-records-ready.json": "a9ee8ec97de01fa1685b6ea0c283b29d6ad2ca7eb3290ef077087b45da023c51",
     "bindings-before.json": "ea140dee3cf8724b1c5cff1f6651b605fa4df196deb94b40e3f6772a525ccf85",
@@ -29,7 +30,7 @@
     "cyclone-candidate-provenance.json": "faf3d47aa56a79f12824ff97359c90201cba6596253c9c44c3e7e2ac790848d0",
     "device-interruption.json": "fe0e7afb936fb043df33f2fafb94e47747004f7e4408716d2e05cab9b1003648",
     "forge-schema-followup.log": "e07a01e39e2b27a1acaa648c908fe1a45258547d08d98a5a9cf3711c4a9db5e0",
-    "gradle-followup.log": "50387ecd983aa58dce07c3fa355558c7aa2ec0558d9f900f43f1a5916f93dd5b",
+    "gradle-followup.log.zip": "6bd86451f38c85c9f2f9a17d38680d0a55aec0d345103157f0601b291d8f931e",
     "installed-apk-verification.json": "dcbb8819d44f4c561a75f1669f2ac06cc996958c28be5dc7264eb821d0bf25f1",
     "installed-followup-verification.json": "1eb8c725357e6e063b5418d62c8809babfcce1fc0ef82fb1a505b119f95d18e3",
     "local-followup-verification.json": "7e416c5cc1fbc46cfe4cc86a4a31aef88cfb844571147f7a4b7822f68c553282",
@@ -55,7 +56,7 @@
     "production-mid-reconciliation.json": "bc9a923f50244d07949d1ff3dee12a29d6cd0701af6136e04b97d9b55e9401b7",
     "production-user17-repair-before-cyclone.json": "e11b5b4fec13d18f2c16b8dbe26c057e8084f5b716b58bab83ccb3a622aaea4d",
     "reconciliation-progress.jsonl": "67f2eac86a47397f79303f6cac67a4f33174501624e630a773071ec4c3ea64de",
-    "summary.md": "e87a77f4dfbcab19dca942ab11beea6eb66221aa929caec9aee1ad4e97c33270",
+    "summary.md": "7da5eb3a8f50658c53be62024c39f0a8a974dda162f30e8aff6a0953d549d723",
     "user0-followup-progress.json": "6a0b7caa26f19d3e50f7ff1a47aef0c416b1db2f0e563e0700a531a222f80b59",
     "user0-followup-repair-events.json": "8be446ed1a2d21d9c2978be0932c25ba3038a4f6caeef51ec3d6fb964b6e6472",
     "user0-in-app-diagnostics-before-followup.zip": "fd4c1cc0e1afb41cce2b1f9d6257e370f71a7fef8236e7b70e736d3b3a3bc2a0",

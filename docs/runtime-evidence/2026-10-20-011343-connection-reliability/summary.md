@@ -92,3 +92,7 @@ Exact local test/build commands are in
 hashes, intermediate audits, publication events and the disconnection boundary
 are retained beside this summary. No production profile bodies or credentials
 are included.
+
+Raw Gradle stdout is retained byte-for-byte in `gradle-followup.log.zip`, including
+its original trailing whitespace. The evidence directory preserves captured
+line endings so manifest hashes remain valid across checkouts.
