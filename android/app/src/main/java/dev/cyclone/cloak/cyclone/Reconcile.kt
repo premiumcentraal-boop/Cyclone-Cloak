@@ -98,8 +98,11 @@ object ReconcilePlanner {
                 state = CloakHealth.cycloneState(binding.state),
             )
         }
+        // Lost bookkeeping is not authority to scan or clear unrelated profiles.
+        // Include disabled local bindings so their stale tuples can still be cleared.
+        val managedProfiles = inScope.map { it.profileId }.toSet()
         val sweep = when (placement) {
-            is Placement.Main -> snapshot.registry.filter { it.bindable }
+            is Placement.Main -> snapshot.registry.filter { it.bindable && it.id in managedProfiles }
             is Placement.InProfile -> listOfNotNull(snapshot.byId(placement.profile.id)?.takeIf { it.bindable })
         }
         return Plan(desired, moves, emptySet(), issues, sweep, preserve)

@@ -169,6 +169,47 @@ class CycloneSyncTest {
     }
 
     @Test
+    fun firstRunPreservesUnrelatedProfilesWithoutReadingTheirApps() {
+        val api = cyclone()
+        api.setConfig(C, 12, APP, JSONObject().put("cloakProfileId", "unrelated"))
+        api.calls.clear()
+        val local = FakeLocal(0, listOf(binding(B, 11, APP), binding(B, 11, APP2)))
+        val report = engine(api, local).sync()
+        assertTrue(report.issues.isEmpty())
+        assertEquals(2, api.calls.count { it == "config.get.v1" })
+        assertEquals(0, report.reconcile!!.cleared)
+        assertEquals("unrelated", api.config.getValue(tupleKey(C, 12, APP))
+            .getJSONObject("value").getString("cloakProfileId"))
+    }
+
+    @Test
+    fun firstRunWithNoLocalBindingsDoesNotSweepRegistry() {
+        val api = cyclone()
+        api.setConfig(C, 12, APP, JSONObject().put("cloakProfileId", "retained"))
+        api.calls.clear()
+        val report = engine(api, FakeLocal(0)).sync()
+        assertTrue(report.issues.isEmpty())
+        assertFalse(api.calls.any { it.startsWith("config.") })
+        assertTrue(api.config.containsKey(tupleKey(C, 12, APP)))
+    }
+
+    @Test
+    fun firstRunDisabledLocalBindingStillScopesStaleCleanup() {
+        val api = cyclone()
+        api.setConfig(B, 11, APP, JSONObject().put("cloakProfileId", "disabled"))
+        api.setConfig(C, 12, APP, JSONObject().put("cloakProfileId", "unrelated"))
+        api.calls.clear()
+        val local = FakeLocal(0, listOf(binding(B, 11, APP, enabled = false)))
+        val report = engine(api, local).sync()
+        assertEquals(1, report.reconcile!!.cleared)
+        assertTrue(api.config.getValue(tupleKey(B, 11, APP)).isNull("value"))
+        assertTrue(api.config.containsKey(tupleKey(C, 12, APP)))
+        assertEquals(2, api.calls.count { it == "config.get.v1" })
+        assertEquals(1, local.store.size)
+        assertFalse(local.store.single().enabled)
+    }
+
+    @Test
     fun anAppMissingFromCyclonesListIsReportedNotSent() {
         val api = cyclone()
         val local = FakeLocal(0, listOf(binding(C, 12, APP2)))
