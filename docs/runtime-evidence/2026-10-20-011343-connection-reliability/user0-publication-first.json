@@ -1,0 +1,32 @@
+[
+  {
+    "timestamp": 1792459658679,
+    "severity": "INFO",
+    "source": "app",
+    "subsystem": "publication",
+    "action_id": "result",
+    "thread": "54",
+    "process": "30078",
+    "target_id": null,
+    "transition": "COMPLETED",
+    "message": "Action completed",
+    "reason": "COMPLETED",
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792459658679,
+    "severity": "INFO",
+    "source": "app",
+    "subsystem": "publication",
+    "action_id": "publish.7bf05545",
+    "thread": "54",
+    "process": "30078",
+    "target_id": null,
+    "transition": "COMPLETED",
+    "message": "Action completed",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": 4740
+  }
+]

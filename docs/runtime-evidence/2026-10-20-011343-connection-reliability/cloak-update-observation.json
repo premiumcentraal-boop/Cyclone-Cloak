@@ -1,0 +1,16 @@
+{
+  "user": 17,
+  "app_update": "installed successfully, existing signer verified",
+  "launch_wait_ms": 218,
+  "initial_connection_chip": "Connected",
+  "last_seen_was_live": true,
+  "repair_control_visible_without_scroll": true,
+  "readiness_before_repair": {
+    "pass": 1313,
+    "warning": 331,
+    "fail": 0
+  },
+  "enabled_bindings": 327,
+  "disabled_bindings": 0,
+  "cyclone_capacity_candidate_installation": "pending CI"
+}

@@ -1,0 +1,12 @@
+{
+  "commit": "7e001f4ee80dbc329464b04b8a730df5c4762793",
+  "ci_run": 39352440392,
+  "ci_conclusion": "success",
+  "version_name": "5.0.0-alpha.144.dev2",
+  "version_code": 299,
+  "apk_sha256": "1c0ed0e107a5351a3a6ecc187aab9aabedb4bff0f969f1bcc1fc936a06ba94a4",
+  "apk_size": 66441537,
+  "certificate_sha256": "e78c6e0b32d66da05839243c65e9987ba54722d402543f00408b57b1585dbf60",
+  "signature_verified": true,
+  "test_candidate_not_published": true
+}

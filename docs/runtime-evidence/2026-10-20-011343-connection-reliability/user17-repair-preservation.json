@@ -1,0 +1,9 @@
+{
+  "changed_paths": [
+    "/data/adb/cyclone_cloak/state-v1/index.json",
+    "/data/user/17/dev.cyclone.cloak/no_backup/cloak-bindings-v1.json"
+  ],
+  "permissions_equal": true,
+  "main_published_bodies_index_unchanged": false,
+  "module_files_unchanged": true
+}

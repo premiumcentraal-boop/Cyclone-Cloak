@@ -1,0 +1,562 @@
+[
+  {
+    "elapsed_seconds": 0.4,
+    "latest_sync": {
+      "timestamp": 1792492068834,
+      "action_id": "sync.9b298f56",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492071911,
+      "action_id": "reconnect.process_start.2",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 20.9,
+    "latest_sync": {
+      "timestamp": 1792492068834,
+      "action_id": "sync.9b298f56",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492071911,
+      "action_id": "reconnect.process_start.2",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 41.4,
+    "latest_sync": {
+      "timestamp": 1792492068834,
+      "action_id": "sync.9b298f56",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492071911,
+      "action_id": "reconnect.process_start.2",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 61.9,
+    "latest_sync": {
+      "timestamp": 1792492068834,
+      "action_id": "sync.9b298f56",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492071911,
+      "action_id": "reconnect.process_start.2",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 82.3,
+    "latest_sync": {
+      "timestamp": 1792492068834,
+      "action_id": "sync.9b298f56",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492071911,
+      "action_id": "reconnect.process_start.2",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 102.8,
+    "latest_sync": {
+      "timestamp": 1792492068834,
+      "action_id": "sync.9b298f56",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492071911,
+      "action_id": "reconnect.process_start.2",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 123.2,
+    "latest_sync": {
+      "timestamp": 1792492286659,
+      "action_id": "sync.d51b88e9",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492286664,
+      "action_id": "reconnect.process_start.2",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 143.7,
+    "latest_sync": {
+      "timestamp": 1792492286659,
+      "action_id": "sync.d51b88e9",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492286664,
+      "action_id": "reconnect.process_start.2",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 164.1,
+    "latest_sync": {
+      "timestamp": 1792492286659,
+      "action_id": "sync.d51b88e9",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492286664,
+      "action_id": "reconnect.process_start.2",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 184.5,
+    "latest_sync": {
+      "timestamp": 1792492286659,
+      "action_id": "sync.d51b88e9",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492286664,
+      "action_id": "reconnect.process_start.2",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 205.0,
+    "latest_sync": {
+      "timestamp": 1792492286659,
+      "action_id": "sync.d51b88e9",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492286664,
+      "action_id": "reconnect.process_start.2",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 225.3,
+    "latest_sync": {
+      "timestamp": 1792492286659,
+      "action_id": "sync.d51b88e9",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492286664,
+      "action_id": "reconnect.process_start.2",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 245.7,
+    "latest_sync": {
+      "timestamp": 1792492286659,
+      "action_id": "sync.d51b88e9",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492286664,
+      "action_id": "reconnect.process_start.2",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 266.2,
+    "latest_sync": {
+      "timestamp": 1792492286659,
+      "action_id": "sync.d51b88e9",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492286664,
+      "action_id": "reconnect.process_start.2",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 286.6,
+    "latest_sync": {
+      "timestamp": 1792492286659,
+      "action_id": "sync.d51b88e9",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492286664,
+      "action_id": "reconnect.process_start.2",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 307.1,
+    "latest_sync": {
+      "timestamp": 1792492286659,
+      "action_id": "sync.d51b88e9",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492286664,
+      "action_id": "reconnect.process_start.2",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 327.4,
+    "latest_sync": {
+      "timestamp": 1792492286659,
+      "action_id": "sync.d51b88e9",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492286664,
+      "action_id": "reconnect.process_start.2",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 347.9,
+    "latest_sync": {
+      "timestamp": 1792492503130,
+      "action_id": "sync.40a6d326",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492286664,
+      "action_id": "reconnect.process_start.2",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 368.4,
+    "latest_sync": {
+      "timestamp": 1792492503130,
+      "action_id": "sync.40a6d326",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492286664,
+      "action_id": "reconnect.process_start.2",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 388.9,
+    "latest_sync": {
+      "timestamp": 1792492503130,
+      "action_id": "sync.40a6d326",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492286664,
+      "action_id": "reconnect.process_start.2",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 409.3,
+    "latest_sync": {
+      "timestamp": 1792492503130,
+      "action_id": "sync.40a6d326",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492286664,
+      "action_id": "reconnect.process_start.2",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 429.7,
+    "latest_sync": {
+      "timestamp": 1792492503130,
+      "action_id": "sync.40a6d326",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492286664,
+      "action_id": "reconnect.process_start.2",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 450.2,
+    "latest_sync": {
+      "timestamp": 1792492503130,
+      "action_id": "sync.40a6d326",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492286664,
+      "action_id": "reconnect.process_start.2",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 470.6,
+    "latest_sync": {
+      "timestamp": 1792492503130,
+      "action_id": "sync.40a6d326",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492286664,
+      "action_id": "reconnect.process_start.2",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 491.0,
+    "latest_sync": {
+      "timestamp": 1792492503130,
+      "action_id": "sync.40a6d326",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492286664,
+      "action_id": "reconnect.process_start.2",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 511.4,
+    "latest_sync": {
+      "timestamp": 1792492503130,
+      "action_id": "sync.40a6d326",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492286664,
+      "action_id": "reconnect.process_start.2",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 531.8,
+    "latest_sync": {
+      "timestamp": 1792492503130,
+      "action_id": "sync.40a6d326",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492286664,
+      "action_id": "reconnect.process_start.2",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 552.3,
+    "latest_sync": {
+      "timestamp": 1792492722262,
+      "action_id": "sync.25b684cb",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492725684,
+      "action_id": "reconnect.module_state_change.1",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 572.7,
+    "latest_sync": {
+      "timestamp": 1792492722262,
+      "action_id": "sync.25b684cb",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492725684,
+      "action_id": "reconnect.module_state_change.1",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 593.1,
+    "latest_sync": {
+      "timestamp": 1792492722262,
+      "action_id": "sync.25b684cb",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492725684,
+      "action_id": "reconnect.module_state_change.1",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 613.5,
+    "latest_sync": {
+      "timestamp": 1792492722262,
+      "action_id": "sync.25b684cb",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492725684,
+      "action_id": "reconnect.module_state_change.1",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 634.0,
+    "latest_sync": {
+      "timestamp": 1792492722262,
+      "action_id": "sync.25b684cb",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492725684,
+      "action_id": "reconnect.module_state_change.1",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 654.6,
+    "latest_sync": {
+      "timestamp": 1792492722262,
+      "action_id": "sync.25b684cb",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492725684,
+      "action_id": "reconnect.module_state_change.1",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 675.0,
+    "latest_sync": {
+      "timestamp": 1792492722262,
+      "action_id": "sync.25b684cb",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492725684,
+      "action_id": "reconnect.module_state_change.1",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  },
+  {
+    "elapsed_seconds": 695.3,
+    "latest_sync": {
+      "timestamp": 1792492722262,
+      "action_id": "sync.25b684cb",
+      "transition": "STARTED",
+      "duration_ms": null
+    },
+    "latest_reconnect": {
+      "timestamp": 1792492725684,
+      "action_id": "reconnect.module_state_change.1",
+      "transition": "COMPLETED",
+      "reason": "CONNECTED"
+    },
+    "settled": false
+  }
+]

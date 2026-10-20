@@ -1,0 +1,14 @@
+{
+  "commit": "37818061fc2b307b4dd65185bfc74d84a9ce4268",
+  "ci_run": 39352373058,
+  "ci_conclusion": "success",
+  "apk_sha256": "3994c7b37a68db3603e327032523fe6a681d27d9effb9326d66d31fdc75b0afa",
+  "apk_size": 44002843,
+  "certificate_sha256": "17ca3617b0cbaf250d2ef03e945b319e57695de6d977c652ded243ad5656f553",
+  "version_name": "0.11.0-alpha.27",
+  "version_code": 51,
+  "test_candidate_not_published": true,
+  "bundled_module_sha256": "67addeb18e5ecbd4f9dfd06505ffb7c84dfd71598f16a628b53ef4ecb92d0140",
+  "embedded_module_exact_match": true,
+  "module_installation": false
+}

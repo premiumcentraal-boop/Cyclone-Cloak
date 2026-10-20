@@ -1,0 +1,22 @@
+{
+  "0/dev.cyclone.cloak": {
+    "sha256": "2bb80cf73a1e33e7d262a9bab63998f62a3bb847c80da64e5a0875cc23e6932c",
+    "expected_sha256": "2bb80cf73a1e33e7d262a9bab63998f62a3bb847c80da64e5a0875cc23e6932c",
+    "match": true
+  },
+  "0/com.cyclone.mobile": {
+    "sha256": "1c0ed0e107a5351a3a6ecc187aab9aabedb4bff0f969f1bcc1fc936a06ba94a4",
+    "expected_sha256": "1c0ed0e107a5351a3a6ecc187aab9aabedb4bff0f969f1bcc1fc936a06ba94a4",
+    "match": true
+  },
+  "17/dev.cyclone.cloak": {
+    "sha256": "2bb80cf73a1e33e7d262a9bab63998f62a3bb847c80da64e5a0875cc23e6932c",
+    "expected_sha256": "2bb80cf73a1e33e7d262a9bab63998f62a3bb847c80da64e5a0875cc23e6932c",
+    "match": true
+  },
+  "17/com.cyclone.mobile": {
+    "sha256": "1c0ed0e107a5351a3a6ecc187aab9aabedb4bff0f969f1bcc1fc936a06ba94a4",
+    "expected_sha256": "1c0ed0e107a5351a3a6ecc187aab9aabedb4bff0f969f1bcc1fc936a06ba94a4",
+    "match": true
+  }
+}

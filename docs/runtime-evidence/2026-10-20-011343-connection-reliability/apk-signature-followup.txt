@@ -1,0 +1,17 @@
+Verifies
+Verified using v1 scheme (JAR signing): false
+Verified using v2 scheme (APK Signature Scheme v2): true
+Verified using v3 scheme (APK Signature Scheme v3): false
+Verified using v3.1 scheme (APK Signature Scheme v3.1): false
+Verified using v4 scheme (APK Signature Scheme v4): false
+Verified for SourceStamp: false
+Number of signers: 1
+Signer #1 certificate DN: CN=Cyclone Cloak, O=Cyclone
+Signer #1 certificate SHA-256 digest: 17ca3617b0cbaf250d2ef03e945b319e57695de6d977c652ded243ad5656f553
+Signer #1 certificate SHA-1 digest: 309adfd8259d5c435911e8a7033cf9992c851a79
+Signer #1 certificate MD5 digest: 2f2f7105db964d752dcb673ac9a11dea
+Signer #1 key algorithm: RSA
+Signer #1 key size (bits): 2048
+Signer #1 public key SHA-256 digest: 49f41e8446329870f268c00432190ee107f5238dd847aa43b9115a2da5321212
+Signer #1 public key SHA-1 digest: f35abeb4133550e49aa497f717a4fb7494985609
+Signer #1 public key MD5 digest: c0a2de98ad4f40ca7df0e6403ca44c5f

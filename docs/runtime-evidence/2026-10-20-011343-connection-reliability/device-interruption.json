@@ -1,0 +1,14 @@
+{
+  "observed_at": "2026-10-20T12:42:03+02:00",
+  "serial": "3B171FDJH0061G",
+  "reason": "ADB_DEVICE_NOT_FOUND",
+  "adb_devices": [],
+  "active_user_at_last_check": 0,
+  "phase": "user0-followup-settle-observation",
+  "last_ui_result": {"connection": "Connected", "readiness": "Ready", "pass": 1644, "warning": 0, "fail": 0},
+  "last_remote_record_check": {"user0_ready": 327, "user17_ready": 327, "assignment_mismatches": 0},
+  "completed": ["local_tests", "signed_validation", "signature_and_embedded_zip_verification", "companion_update", "installed_hash_checks_both_users", "user0_publication_completed"],
+  "pending": ["final_user0_settle_observation", "final_user17_reconnection_and_health", "fresh_play_report_on_final_candidate", "final_preservation_audit", "return_to_user17"],
+  "device_reboot_or_data_clear_performed": false,
+  "not_a_classification_of_app_failure": true
+}

@@ -1,0 +1,28 @@
+{
+  "cloak_commit": "3781806",
+  "cyclone_commit": "7e001f4e",
+  "cloak_tests": {
+    "app": 700,
+    "module": 40,
+    "play_diagnostics": 20,
+    "standard_probe": 109,
+    "diagnostics_probe": 109,
+    "forge_schema": 1045,
+    "host_probe": 7,
+    "total": 2030
+  },
+  "cyclone_mobile_tests": 2909,
+  "debug_builds": "passed",
+  "lint_errors": 0,
+  "existing_lint_warnings": {
+    "app": 19,
+    "standard_probe": 12,
+    "diagnostics_probe": 12
+  },
+  "signed_validation_runs": {
+    "cloak": 39352373058,
+    "cyclone": 39352440392
+  },
+  "release_published": false,
+  "module_update_requested": false
+}

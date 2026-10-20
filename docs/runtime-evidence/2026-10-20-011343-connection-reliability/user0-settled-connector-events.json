@@ -1,0 +1,164 @@
+[
+  {
+    "timestamp": 1792461137725,
+    "subsystem": "reconciliation",
+    "action_id": "reconcile.e7806aba",
+    "transition": "STARTED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792461349613,
+    "subsystem": "reconciliation",
+    "action_id": "reconcile.e7806aba",
+    "transition": "COMPLETED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": 211887
+  },
+  {
+    "timestamp": 1792461349620,
+    "subsystem": "connector",
+    "action_id": "sync.db9f7edf",
+    "transition": "COMPLETED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": 215476
+  },
+  {
+    "timestamp": 1792461349641,
+    "subsystem": "connector",
+    "action_id": "reconnect.manual.3",
+    "transition": "COMPLETED",
+    "reason": "CONNECTED",
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792461349642,
+    "subsystem": "connector",
+    "action_id": "reconnect.module_state_change.4",
+    "transition": "STARTED",
+    "reason": "MODULE_STATE_CHANGE",
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792461349651,
+    "subsystem": "connector",
+    "action_id": "sync.5780e3c4",
+    "transition": "STARTED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792461352734,
+    "subsystem": "connector",
+    "action_id": "reconnect.module_state_change.4",
+    "transition": "COMPLETED",
+    "reason": "CONNECTED",
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792461352957,
+    "subsystem": "reconciliation",
+    "action_id": "reconcile.4b568575",
+    "transition": "STARTED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792461569438,
+    "subsystem": "reconciliation",
+    "action_id": "reconcile.4b568575",
+    "transition": "COMPLETED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": 216481
+  },
+  {
+    "timestamp": 1792461569448,
+    "subsystem": "connector",
+    "action_id": "sync.5780e3c4",
+    "transition": "COMPLETED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": 219797
+  },
+  {
+    "timestamp": 1792461569472,
+    "subsystem": "connector",
+    "action_id": "reconnect.module_state_change.4",
+    "transition": "COMPLETED",
+    "reason": "CONNECTED",
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792491236016,
+    "subsystem": "connector",
+    "action_id": "reconnect.resume.1",
+    "transition": "STARTED",
+    "reason": "RESUME",
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792491236130,
+    "subsystem": "connector",
+    "action_id": "sync.76395b94",
+    "transition": "STARTED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792491242021,
+    "subsystem": "connector",
+    "action_id": "reconnect.resume.1",
+    "transition": "COMPLETED",
+    "reason": "CONNECTED",
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792491242330,
+    "subsystem": "reconciliation",
+    "action_id": "reconcile.1194fd86",
+    "transition": "STARTED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792491461539,
+    "subsystem": "reconciliation",
+    "action_id": "reconcile.1194fd86",
+    "transition": "COMPLETED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": 219209
+  },
+  {
+    "timestamp": 1792491461549,
+    "subsystem": "connector",
+    "action_id": "sync.76395b94",
+    "transition": "COMPLETED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": 225419
+  },
+  {
+    "timestamp": 1792491461567,
+    "subsystem": "connector",
+    "action_id": "reconnect.resume.1",
+    "transition": "COMPLETED",
+    "reason": "CONNECTED",
+    "error_summary": null,
+    "duration_ms": null
+  }
+]

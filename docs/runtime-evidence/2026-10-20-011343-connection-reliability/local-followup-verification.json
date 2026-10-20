@@ -1,0 +1,23 @@
+{
+  "cloak_commit": "c6371704791166376e0c48e6fa19b402597c3f2d",
+  "cyclone_commit": "7e001f4ee80dbc329464b04b8a730df5c4762793",
+  "tests": {
+    "app": 703,
+    "module": 40,
+    "play_diagnostics": 20,
+    "standard_probe": 109,
+    "diagnostics_probe": 109,
+    "forge_schema": 1045,
+    "host_probe": 7,
+    "total": 2033,
+    "cyclone_mobile_separate_candidate": 2909
+  },
+  "debug_build": "passed",
+  "lint_errors": 0,
+  "new_compiler_warnings": 0,
+  "existing_lint_warnings": {"app": 19, "standard_probe": 12, "diagnostics_probe": 12},
+  "signed_validation_run": 39406349015,
+  "signed_validation_result": "success",
+  "release_published": false,
+  "module_installed": false
+}

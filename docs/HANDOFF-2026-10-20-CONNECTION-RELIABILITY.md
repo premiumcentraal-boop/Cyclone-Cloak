@@ -105,3 +105,18 @@ records in unrelated profiles are preserved instead of scanned or deleted.
 Three regression tests cover unrelated-profile preservation without reads,
 empty-library preservation, and cleanup for disabled bindings. Existing
 same-profile stale cleanup remains tested.
+
+The follow-up is commit `c6371704791166376e0c48e6fa19b402597c3f2d`.
+The full local gate above passed again with 703 app tests / 2,033 total.
+Signed validation also passed:
+https://github.com/premiumcentraal-boop/Cyclone-Cloak/actions/runs/39406349015
+This workflow only validates/builds signed test artifacts; it does not publish.
+
+The final signed follow-up installed successfully and its installed hash matched
+for users 0 and 17. Main displayed Connected / Ready, 1,644 pass, zero warning
+and zero fail; publication completed in 2,143 ms. The phone then disappeared from
+ADB at 12:42 local time during the final settle observation. The final profile-17
+check, fresh Play capture on this artifact, and final after-audit remain pending
+reconnection. `device-interruption.json` records this boundary. Earlier matching
+audits must not be described as the final after-audit. The phone was last active
+on user 0 and should be returned to user 17 after verification.

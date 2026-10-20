@@ -1,0 +1,56 @@
+[
+  {
+    "timestamp": 1792491869935,
+    "subsystem": "reconciliation",
+    "action_id": "reconcile.ef9df149",
+    "transition": "STARTED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792492068821,
+    "subsystem": "reconciliation",
+    "action_id": "reconcile.ef9df149",
+    "transition": "COMPLETED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": 198886
+  },
+  {
+    "timestamp": 1792492068825,
+    "subsystem": "connector",
+    "action_id": "sync.349d2956",
+    "transition": "COMPLETED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": 202772
+  },
+  {
+    "timestamp": 1792492068834,
+    "subsystem": "connector",
+    "action_id": "sync.9b298f56",
+    "transition": "STARTED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792492071911,
+    "subsystem": "connector",
+    "action_id": "reconnect.process_start.2",
+    "transition": "COMPLETED",
+    "reason": "CONNECTED",
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792492072156,
+    "subsystem": "reconciliation",
+    "action_id": "reconcile.5c20b598",
+    "transition": "STARTED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  }
+]

@@ -1,0 +1,227 @@
+[
+  {
+    "timestamp": 1792491668331,
+    "subsystem": "reconciliation",
+    "action_id": "reconcile.5eda90b2",
+    "transition": "STARTED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792491699073,
+    "subsystem": "app",
+    "action_id": "local-work.cdf7887e",
+    "transition": "STARTED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792491699074,
+    "subsystem": "publication",
+    "action_id": "publish.4ff13e38",
+    "transition": "STARTED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792491699074,
+    "subsystem": "publication",
+    "action_id": "staging-create.c59c3687",
+    "transition": "STARTED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792491699076,
+    "subsystem": "publication",
+    "action_id": "staging-create.c59c3687",
+    "transition": "COMPLETED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": 2
+  },
+  {
+    "timestamp": 1792491699375,
+    "subsystem": "publication",
+    "action_id": "staging-validation",
+    "transition": "STARTED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792491699463,
+    "subsystem": "publication",
+    "action_id": "staging-validation",
+    "transition": "COMPLETED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792491701073,
+    "subsystem": "publication",
+    "action_id": "precheck",
+    "transition": "STARTED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792491701073,
+    "subsystem": "publication",
+    "action_id": "precheck",
+    "transition": "COMPLETED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792491701073,
+    "subsystem": "publication",
+    "action_id": "lock_open",
+    "transition": "STARTED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792491701073,
+    "subsystem": "publication",
+    "action_id": "lock_open",
+    "transition": "COMPLETED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792491701073,
+    "subsystem": "publication",
+    "action_id": "lock_acquire",
+    "transition": "STARTED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792491701073,
+    "subsystem": "publication",
+    "action_id": "lock_acquire",
+    "transition": "COMPLETED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792491701073,
+    "subsystem": "publication",
+    "action_id": "recovery",
+    "transition": "STARTED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792491701073,
+    "subsystem": "publication",
+    "action_id": "recovery",
+    "transition": "COMPLETED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792491701073,
+    "subsystem": "publication",
+    "action_id": "staging",
+    "transition": "STARTED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792491701073,
+    "subsystem": "publication",
+    "action_id": "staging",
+    "transition": "COMPLETED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792491701073,
+    "subsystem": "publication",
+    "action_id": "merge",
+    "transition": "STARTED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792491701073,
+    "subsystem": "publication",
+    "action_id": "merge",
+    "transition": "COMPLETED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792491701073,
+    "subsystem": "publication",
+    "action_id": "atomic_swap",
+    "transition": "STARTED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792491701074,
+    "subsystem": "publication",
+    "action_id": "atomic_swap",
+    "transition": "COMPLETED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792491701074,
+    "subsystem": "publication",
+    "action_id": "completion",
+    "transition": "COMPLETED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792491701074,
+    "subsystem": "module",
+    "action_id": "check",
+    "transition": "COMPLETED",
+    "reason": "READY",
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792491701217,
+    "subsystem": "publication",
+    "action_id": "result",
+    "transition": "COMPLETED",
+    "reason": "COMPLETED",
+    "error_summary": null,
+    "duration_ms": null
+  },
+  {
+    "timestamp": 1792491701217,
+    "subsystem": "publication",
+    "action_id": "publish.4ff13e38",
+    "transition": "COMPLETED",
+    "reason": null,
+    "error_summary": null,
+    "duration_ms": 2143
+  }
+]

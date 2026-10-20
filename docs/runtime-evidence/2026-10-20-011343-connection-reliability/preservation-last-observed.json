@@ -1,0 +1,21 @@
+{
+  "audit_phase": "followup-main-published",
+  "final_after_audit": false,
+  "module_files": {
+    "unchanged": true,
+    "files": 3
+  },
+  "saved_identity_files": {
+    "unchanged": true,
+    "files": 2
+  },
+  "effective_profile_bodies": {
+    "unchanged": true,
+    "files": 654
+  },
+  "main_publisher_share": {
+    "unchanged": true,
+    "files": 655
+  },
+  "permissions_and_appops_unchanged": true
+}

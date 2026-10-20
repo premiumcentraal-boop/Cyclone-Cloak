@@ -1,0 +1,26 @@
+{
+  "0": {
+    "records": 327,
+    "states": {
+      "ready": 327
+    },
+    "android_users": {
+      "17": 327
+    },
+    "current_local_assignment_mismatches": 0,
+    "differences_from_original_local_assignment": 0,
+    "original_main_assignment_mismatches": 0
+  },
+  "17": {
+    "records": 327,
+    "states": {
+      "ready": 327
+    },
+    "android_users": {
+      "17": 327
+    },
+    "current_local_assignment_mismatches": 0,
+    "differences_from_original_local_assignment": 327,
+    "original_main_assignment_mismatches": 0
+  }
+}

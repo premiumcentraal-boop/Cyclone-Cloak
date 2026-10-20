@@ -1,0 +1,14 @@
+{
+  "dev.cyclone.cloak": {
+    "version_name": "0.11.0-alpha.27",
+    "version_code": 51
+  },
+  "com.cyclone.mobile": {
+    "version_name": "5.0.0-alpha.144.dev2",
+    "version_code": 299
+  },
+  "module": {
+    "version": "v0.11.0-alpha.27",
+    "versionCode": "51"
+  }
+}
