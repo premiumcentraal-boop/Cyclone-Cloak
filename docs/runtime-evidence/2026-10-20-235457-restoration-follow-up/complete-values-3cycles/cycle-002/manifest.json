@@ -1,0 +1,98 @@
+{
+  "format": 1,
+  "run_id": "064b15a9ba04430fb8db60cffd91c3c4",
+  "user": 0,
+  "target_user": 17,
+  "cycle": 2,
+  "apk_install_policy": "reuse_matching_install_missing_once",
+  "apk_install": {
+    "apk_install_policy": "reuse_matching_install_missing_once",
+    "installation_skipped": true,
+    "install_attempted": false,
+    "expected_sha256": "e4f6d3d13a810f1e17ef4d3ae0317e01e78d9cdc37bbb8d483f1565bf1f4e9d8",
+    "checks": [
+      {
+        "stage": "before-cycle",
+        "android_user": 0,
+        "package_path": "/data/app/~~H87Aj_NIxJLMt8MWCi8F-w==/dev.cyclone.cloak.probe.diag-5Jty_NfTNTeojISPyDOF5Q==/base.apk",
+        "sha256": "e4f6d3d13a810f1e17ef4d3ae0317e01e78d9cdc37bbb8d483f1565bf1f4e9d8",
+        "status": "MATCH"
+      },
+      {
+        "stage": "before-cycle",
+        "android_user": 17,
+        "package_path": "/data/app/~~H87Aj_NIxJLMt8MWCi8F-w==/dev.cyclone.cloak.probe.diag-5Jty_NfTNTeojISPyDOF5Q==/base.apk",
+        "sha256": "e4f6d3d13a810f1e17ef4d3ae0317e01e78d9cdc37bbb8d483f1565bf1f4e9d8",
+        "status": "MATCH"
+      }
+    ],
+    "installed_apk_hashes": {
+      "0": "e4f6d3d13a810f1e17ef4d3ae0317e01e78d9cdc37bbb8d483f1565bf1f4e9d8",
+      "17": "e4f6d3d13a810f1e17ef4d3ae0317e01e78d9cdc37bbb8d483f1565bf1f4e9d8"
+    }
+  },
+  "full_profile": false,
+  "phases": {},
+  "started_at": "2026-10-20T22:21:35.044791+00:00",
+  "started_epoch": 1792534895.0448132,
+  "source_tag": null,
+  "source_commit": "1c9ce900930b7c52d3d7130b8ca8a741e183b73a",
+  "apk_sha256": "e4f6d3d13a810f1e17ef4d3ae0317e01e78d9cdc37bbb8d483f1565bf1f4e9d8",
+  "overlay_active": false,
+  "original_user": 0,
+  "artifact": "b8e320978d6694276278068b95b2694d829278f30560fb1eeeb77b863337b636",
+  "installed_versions": {
+    "module": "v0.11.0-alpha.27",
+    "module_code": "51",
+    "app_version": "0.11.0-alpha.27",
+    "app_code": "51"
+  },
+  "installed_apk_hashes": {
+    "0": "e4f6d3d13a810f1e17ef4d3ae0317e01e78d9cdc37bbb8d483f1565bf1f4e9d8",
+    "17": "e4f6d3d13a810f1e17ef4d3ae0317e01e78d9cdc37bbb8d483f1565bf1f4e9d8"
+  },
+  "selections": [
+    {
+      "user": 0,
+      "fixture": "external",
+      "scenario_fixture": "a",
+      "kind": "fixture",
+      "target_count": 1,
+      "sha256": "553ddf0e6ad459157f838f0d01fc040a1ecadd3f8ecb8aba2dff2a4889f52c77",
+      "profile_id": "33c17c2b-802b-555b-8533-5fae16105f0e"
+    },
+    {
+      "user": 17,
+      "fixture": "external",
+      "scenario_fixture": "b",
+      "kind": "fixture",
+      "target_count": 1,
+      "sha256": "d954dd6f25d7cfe8c4f32f645d0ce9f0cda3116e05a936d317206fdd23a0866c",
+      "profile_id": "6e0eef85-9164-58c7-966f-da4842762292"
+    }
+  ],
+  "active_capture": "user-17-post-removal-cold",
+  "restoration": {
+    "0": "FAIL",
+    "17": "FAIL"
+  },
+  "production_unchanged": true,
+  "diagnostic_appop_records_expected": [
+    [
+      "READ_DEVICE_IDENTIFIERS",
+      "deny"
+    ],
+    [
+      "USE_ICC_AUTH_WITH_DEVICE_IDENTIFIER",
+      "default"
+    ]
+  ],
+  "permissions_unchanged": true,
+  "errors": [
+    "COLD_RESTORATION_FAILED"
+  ],
+  "finished_at": "2026-10-20T22:22:56.937461+00:00",
+  "duration_seconds": 81.89,
+  "result": "FAIL",
+  "captures": 8
+}

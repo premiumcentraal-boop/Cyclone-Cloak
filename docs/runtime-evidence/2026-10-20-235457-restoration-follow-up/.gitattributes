@@ -1,0 +1,4 @@
+# Preserve captured evidence bytes; logs and patch snapshots are raw artifacts.
+** -text whitespace=cr-at-eol
+*.log -diff
+*.patch -diff
