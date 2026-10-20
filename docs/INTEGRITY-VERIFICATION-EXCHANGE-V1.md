@@ -109,6 +109,78 @@ signature, freshness, request ID/hash, selected profile ID/hash, Android user, a
 artifact digest. Missing/mismatched local evidence stays UNKNOWN or NEEDS REVIEW;
 a passing decoded verdict cannot silently promote missing evidence to READY.
 
+## Owner operations checklist (before the later phone test)
+
+All three operational modes are local-only. They do not resolve ADC, contact
+Google, provision trust, or change Android state. They cannot be combined with
+`--confirm-send`. No real credentials, bundles or verdicts are repository fixtures.
+
+1. **Preflight** with the owner's external signing key and non-secret provider/key
+   IDs. Encrypted PEM uses the existing `CYCLONE_SIGNING_KEY_PASSWORD` environment
+   variable, set privately; never place its value in a command or log.
+
+   ```powershell
+   uv run --with 'cryptography>=44' --with 'google-auth[requests]>=2.38' -- python tools/integrity_backend.py --doctor --provider owner.backend --key-id owner-key-1 --signing-key C:/private/backend-signing.pem --output-dir C:/private
+   ```
+
+   Doctor checks dependency imports, RSA size (2048–8192 bits), derivation of the
+   public key, IDs and output-directory writability using an empty temporary file
+   removed on close. Add `--pin-file C:/private/public-trust.json` to check the
+   existing format-1 trust config and exact selected key. Add `--bundle` after
+   phone export to check its strict parser, hashes and freshness without printing
+   it. Optional checks say `NOT_REQUESTED`. Pass means local setup checks passed,
+   not that Google credentials, project linkage or platform access were verified.
+
+2. **Optional offline synthetic test**, after dependencies are cached:
+
+   ```powershell
+   uv run --offline --with cryptography -- python tools/integrity_backend.py --self-test
+   ```
+
+   This generates a fresh in-memory RSA key, rebases only the clock in the explicitly
+   synthetic repository fixture, and exercises bundle/hash/decode-shape extraction,
+   safe signing and strict pinned-envelope verification, including negative hash
+   and signature checks. Only a fixed `SYNTHETIC_ONLY_SELF_TEST_PASS`, check count
+   and public digests are printed. No artifact or owner key is written/read. The
+   Python contract verifier is also tested against the actual Kotlin importer in
+   `IntegrityBackendInteropTest`; the CLI itself does not require Android/Gradle.
+   Synthetic UNEVALUATED fields are not a real Google result or readiness evidence.
+
+3. **Derive and independently provision the public pin**:
+
+   ```powershell
+   uv run --offline --with cryptography -- python tools/integrity_backend.py --show-pin --provider owner.backend --key-id owner-key-1 --signing-key C:/private/backend-signing.pem
+   ```
+
+   Output has only `provider`, `key_id`, `public_key_sha256` and `public_key`.
+   The fingerprint hashes DER SubjectPublicKeyInfo bytes. Put only `provider`,
+   `key_id`, `public_key` into the existing `{"format":1,"keys":[...]}` trust config;
+   retain the fingerprint separately for owner comparison. Do not add the fingerprint
+   to the app's closed entry format. Provision that public config separately using
+   the existing approved owner setup. Missing/revoked pins remain fail-closed.
+
+4. **Later, on the phone**, request explicitly, opt into retention, export the
+   sensitive verification bundle to local storage, and retain the matching ordinary
+   receipt report. Do not reuse a historical bundle. Run doctor again with the
+   exported `--bundle` and independently reviewed `--pin-file` if desired.
+5. **Run the existing real backend command once**, using ADC/project configuration
+   prepared by the owner, `--confirm-send`, the current bundle and a new output
+   filename. The package target remains exactly `dev.cyclone.cloak.playevidence`.
+   None of the operational modes can substitute for a genuine decode response.
+6. **Import the matching ordinary receipt report**, then **import the signed
+   verdict** through the existing authenticated import action. Confirm current
+   profile/hash/user/artifact/freshness and independently provisioned trust.
+7. **Capture redacted evidence only**: safe operation result/check names, digests,
+   timestamps and local review state. Exclude ciphertext bundles, credentials,
+   private keys/passwords and Google HTTP response bodies. A backend assertion is
+   not an offline Google signature, platform certification or proof for other apps.
+
+Failure output is bounded and fixed: doctor emits named PASS/FAIL/NOT_REQUESTED
+checks; other failures use `INTEGRITY_SHOW_PIN_FAILED`,
+`SYNTHETIC_ONLY_SELF_TEST_FAILED`, `INTEGRITY_ARGUMENTS_FAILED`, or the unchanged
+`INTEGRITY_EXCHANGE_FAILED` message. No exception or arbitrary command-line value
+is echoed. Doctor tests imports only and never inspects credential path contents.
+
 This sprint includes no device collection, real Google decode, release, permission
 change, account write, module change, or credential provisioning. Later owner
 verification must exercise the real project, diagnostics package, pin, document

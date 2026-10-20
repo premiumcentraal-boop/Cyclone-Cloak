@@ -10,6 +10,26 @@ import java.util.concurrent.TimeUnit
 
 /** The only key used is generated in memory by IntegrityFixtures; stdin is never logged. */
 class IntegrityBackendInteropTest {
+    @Test fun offlineOperationsSelfTestUsesActualAndroidVerdictParser() {
+        val root = generateSequence(File(requireNotNull(System.getProperty("user.dir")))) { it.parentFile }
+            .first { File(it, "tools/integrity_backend.py").isFile }
+        val process = ProcessBuilder("uv", "run", "--offline", "--with", "cryptography", "--", "python", "-c",
+            "import json; from tools.integrity_backend import synthetic_roundtrip; print(json.dumps(synthetic_roundtrip()))")
+            .directory(root).start()
+        if (!process.waitFor(30, TimeUnit.SECONDS)) { process.destroyForcibly(); error("Synthetic self-test timed out") }
+        assertEquals("Synthetic self-test failed", 0, process.exitValue())
+        val artifact = JSONObject(process.inputStream.bufferedReader().readText())
+        val pin = artifact.getJSONObject("public_pin")
+        val key = java.security.KeyFactory.getInstance("RSA").generatePublic(
+            java.security.spec.X509EncodedKeySpec(Base64.getDecoder().decode(pin.getString("public_key"))))
+        val trust = IntegrityTrust { provider, id ->
+            if (provider == "synthetic.self-test" && id == "ephemeral") key else null
+        }
+        val verdict = IntegrityVerdicts.parse(artifact.getJSONObject("envelope").toString(), trust)
+        assertEquals("synthetic.self-test", verdict.provider)
+        assertEquals("UNEVALUATED", verdict.appRecognition)
+        assertEquals(artifact.getString("payload_sha256"), verdict.evidenceDigest)
+    }
     @Test fun pythonRs256EnvelopeIsAcceptedByExistingImporter() {
         val root = generateSequence(File(requireNotNull(System.getProperty("user.dir")))) { it.parentFile }
             .first { File(it, "tools/integrity_backend.py").isFile }

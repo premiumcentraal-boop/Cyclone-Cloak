@@ -1,0 +1,27 @@
+{
+  "synthetic_only": true,
+  "synthetic_binding": {
+    "request_id": "synthetic-request",
+    "profile_id": "synthetic-profile",
+    "profile_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "artifact_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "android_user_id": 17
+  },
+  "tokenPayloadExternal": {
+    "requestDetails": {
+      "requestPackageName": "dev.cyclone.cloak.playevidence",
+      "requestHash": "8100a78cbbebe0b0f82c236af18a0dea088e61651e50b6cb7ce2891ed99491a9",
+      "timestampMillis": "0"
+    },
+    "appIntegrity": {
+      "appRecognitionVerdict": "UNEVALUATED",
+      "packageName": "dev.cyclone.cloak.playevidence"
+    },
+    "accountDetails": {
+      "appLicensingVerdict": "UNEVALUATED"
+    },
+    "deviceIntegrity": {
+      "deviceRecognitionVerdict": []
+    }
+  }
+}
