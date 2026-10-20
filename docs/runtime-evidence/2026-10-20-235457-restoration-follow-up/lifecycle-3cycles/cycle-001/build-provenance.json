@@ -1,0 +1,12 @@
+{
+  "tag": null,
+  "commit": "1c9ce900930b7c52d3d7130b8ca8a741e183b73a",
+  "source_checkout": "C:\\Users\\Agent\\Cyclone\\cloak-repo",
+  "build_command": "$env:JAVA_HOME=\"C:/Program Files/Eclipse Adoptium/jdk-17.0.20.101-hotspot\"; $env:ANDROID_HOME=\"C:/Users/Agent/android-sdk\"; & \"$env:TEMP/cloak-build/gradle-8.11.1/bin/gradle.bat\" -p \"C:/Users/Agent/Cyclone/cloak-repo/android\" :probe:assembleDiagnosticsDebug :probe:testDiagnosticsDebugUnitTest --offline --no-daemon --console=plain",
+  "apk_sha256": "e4f6d3d13a810f1e17ef4d3ae0317e01e78d9cdc37bbb8d483f1565bf1f4e9d8",
+  "installed_apk_hashes": {
+    "0": "e4f6d3d13a810f1e17ef4d3ae0317e01e78d9cdc37bbb8d483f1565bf1f4e9d8",
+    "17": "e4f6d3d13a810f1e17ef4d3ae0317e01e78d9cdc37bbb8d483f1565bf1f4e9d8"
+  },
+  "orchestration_sha256": "bc7d6a191d3ffd0824be9c6a1402b8051a6d8639f8e87b02ebf0ca6b7d4eb38d"
+}

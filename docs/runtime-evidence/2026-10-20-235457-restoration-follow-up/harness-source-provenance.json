@@ -1,0 +1,15 @@
+{
+  "candidate_source_commit": "1c9ce900930b7c52d3d7130b8ca8a741e183b73a",
+  "harness_working_tree_changes": {
+    "tools/run_probe_reversibility.py": "5a9ddbfe70e602aac38483770effb442f6df1242bcb2b480fef9345f93b03a4b",
+    "tools/restoration_evidence.py": "b32d0e47eda5bafc62ccb051f866c5e395df354e239d82dacde06669dd561bda",
+    "forge/tests/test_restoration_evidence.py": "df7f93e6692b2c88533761270b63254d1d9222a1af1670fabb87eaaf3383fb47",
+    "forge/tests/test_profile_check.py": "3833523cc7f239b04d71e7fb58879aba0752d103b653235c756ca118a8266441",
+    "docs/PROFILE-TEST-HARNESS.md": "cd26e598be95e1973c93011598ce9efdd0a6e1a0449728b4c002e2808700e613"
+  },
+  "no_product_source_changes": true,
+  "policy_assets": {
+    "expectations-a.json": "c9607b5acbe731a493b6b36323828837532a2d37751494082dce998def5df70b",
+    "expectations-b.json": "cb669bf06b105140ad5f25acc2f6c9e665d0917168674ff18d267c57216c0d36"
+  }
+}

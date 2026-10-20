@@ -1,0 +1,8 @@
+CYCLE 1 OF 1
+warning: in the working copy of 'forge/tests/test_profile_check.py', LF will be replaced by CRLF the next time Git touches it
+user-0-baseline-cold {"PASS": 32, "FAIL": 37, "BLOCKED": 8, "OBSERVED": 12} reused=False
+STOP HOST_CONTROL_READER_BOUND
+EVIDENCE C:\Users\Agent\Cyclone\cloak-repo\docs\runtime-evidence\2026-10-20-235457-restoration-follow-up\host-policy-cycle1
+RESULT FAIL
+LIFECYCLE_EVIDENCE C:\Users\Agent\Cyclone\cloak-repo\docs\runtime-evidence\2026-10-20-235457-restoration-follow-up\host-policy-cycle1
+LIFECYCLE_RESULT FAIL
