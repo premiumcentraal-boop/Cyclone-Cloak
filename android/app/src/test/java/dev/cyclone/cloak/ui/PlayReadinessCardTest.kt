@@ -26,6 +26,16 @@ class PlayReadinessCardTest {
     @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
     private fun card() = PlayReadinessCardState(identityId = "device-a", identityLabel = "Local phone", timestamp = "2026-10-19T12:00:00Z",
         source = "Imported local report", details = linkedMapOf("Play Services" to "enabled", "Play Store" to "enabled", "Web provider" to "enabled", "Account association" to "unknown"), contextAvailable = true)
+    @Test fun serviceIsolationStatesAndReasonsAreVisible() {
+        val state = mutableStateOf(card().copy(details = emptyMap()))
+        compose.setContent { CloakTheme { PlayReadinessCard(state.value, emptyList(), true, null, { it }, {}, {}) } }
+        for (value in ServiceIsolationState.entries) {
+            compose.runOnIdle { state.value = state.value.copy(serviceIsolation = mapOf("com.android.vending" to
+                ServiceIsolationResult(value, listOf(if (value == ServiceIsolationState.STALE) "SSI_STALE" else "SSI_NO_EVIDENCE")))) }
+            compose.onNodeWithText("com.android.vending: ${value.name}").assertIsDisplayed()
+        }
+        compose.onNodeWithText("Service isolation: local evidence only").assertIsDisplayed()
+    }
     @Test fun integrityStatesAndReviewReasonsAreVisibleWithoutCertification() {
         val state = mutableStateOf(card().copy(details = emptyMap()))
         compose.setContent { CloakTheme { PlayReadinessCard(state.value, emptyList(), true, null, { it }, {}, {}) } }
@@ -50,7 +60,8 @@ class PlayReadinessCardTest {
             LocalPlayReadinessProvider().evaluate(context, projection), "stamp", emptyList(), false, null, null, emptyList())
     }
     @Test fun allFiveStatesAreVisibleWithProvenance() {
-        val state = mutableStateOf(card())
+        val state = mutableStateOf(card().copy(serviceIsolation = mapOf("com.android.vending" to
+            ServiceIsolationResult(ServiceIsolationState.ISOLATED, emptyList()))))
         compose.setContent { CloakTheme { PlayReadinessCard(state.value, emptyList(), true, null, { it }, {}, {}) } }
         for (verdict in listOf("READY", "DEGRADED", "BLOCKED", "UNKNOWN", "NEEDS REVIEW")) {
             compose.runOnIdle { state.value = state.value.copy(verdict = verdict) }
@@ -59,6 +70,13 @@ class PlayReadinessCardTest {
         compose.onNodeWithText("Checked: 2026-10-19T12:00:00Z").assertIsDisplayed()
         compose.onNodeWithText("Source: Imported local report").assertIsDisplayed()
         compose.onNodeWithText("Account association: unknown").assertIsDisplayed()
+    }
+    @Test fun oldReadyLabelCannotHideAServiceConflict() {
+        compose.setContent { CloakTheme { PlayReadinessCard(card().copy(verdict = "READY", details = emptyMap(),
+            serviceIsolation = mapOf("com.android.vending" to ServiceIsolationResult(ServiceIsolationState.CONFLICT, listOf("GS_SHARED_REVIEW")))),
+            emptyList(), true, null, { it }, {}, {}) } }
+        compose.onNodeWithText("Play/Google local readiness · NEEDS REVIEW").assertIsDisplayed()
+        compose.onNodeWithText("com.android.vending: CONFLICT").assertIsDisplayed()
     }
     @Test fun missingContextBlocksImportAndExplainsNextStep() {
         compose.setContent { CloakTheme { PlayReadinessCard(PlayReadinessCardState(reasons = listOf("Choose a saved device profile.")), emptyList(), true, null, { it }, {}, {}) } }

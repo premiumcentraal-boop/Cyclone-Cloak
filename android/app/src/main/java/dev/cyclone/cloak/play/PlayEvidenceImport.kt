@@ -12,7 +12,8 @@ import java.time.Instant
 
 /** Exact saved-file bytes bind reports; assignment records keep their existing canonical hash. */
 data class PlayImportTarget(val profileId: String, val identityId: String, val androidUserId: Int,
-    val profileText: String, val artifactHash: String) {
+    val profileText: String, val artifactHash: String, val appPackages: List<String> = emptyList()) {
+    init { require(appPackages.size <= 256 && appPackages.all { it.length <= 200 && GoogleSurfaceCodec.packageName.matches(it) }) { "PR_INVALID_APP_SCOPE" } }
     val profile: JSONObject get() = JSONObject(profileText)
     fun context(now: Instant) = PlayReadinessContext(profileId, EvidenceReport.digest(profileText.toByteArray(Charsets.UTF_8)), androidUserId, artifactHash, now)
 }
@@ -26,7 +27,8 @@ data class PlayReadinessCardState(val identityId: String? = null, val identityLa
     val details: Map<String, String> = emptyMap(), val reasons: List<String> = emptyList(),
     val sharedProfiles: List<String> = emptyList(), val sharingConfirmed: Boolean = false,
     val profileHash: String? = null, val artifactHash: String? = null, val contextAvailable: Boolean = false,
-    val integrity: IntegrityResult = IntegrityResult(IntegrityState.NO_REQUEST, "IV_NO_REQUEST"))
+    val integrity: IntegrityResult = IntegrityResult(IntegrityState.NO_REQUEST, "IV_NO_REQUEST"),
+    val serviceIsolation: Map<String, ServiceIsolationResult> = emptyMap())
 
 object PlayEvidenceImport {
     class Rejected(val reasons: List<String>) : IllegalArgumentException("PR_IMPORT_REJECTED")
@@ -77,9 +79,11 @@ class PlayEvidenceRepository(private val app: Context, private val clock: () -> 
     private val readiness = PlayReadinessStore(app)
     private val surfaces = GoogleSurfaceStore(app)
     private val integrity = IntegrityVerdictStore(app)
+    private val serviceIsolation = ServiceSurfaceStore(app)
     class ReviewChanged(val preview: PlayImportPreview) : IllegalStateException("PR_REVIEW_CHANGED")
     class PartialSave : IllegalStateException("PR_ASSIGNMENT_SAVED_READINESS_FAILED")
     class IntegrityReceiptSaveFailed : IllegalStateException("PR_READINESS_SAVED_INTEGRITY_RECEIPT_FAILED")
+    class IsolationSaveFailed : IllegalStateException("PR_READINESS_SAVED_ISOLATION_FAILED")
     private fun assignment(target: PlayImportTarget): GoogleSurfaceRecord? {
         val proposed = PlayEvidenceImport.assignment(target) ?: return null
         val previous = surfaces.read(target.profileId)
@@ -108,7 +112,8 @@ class PlayEvidenceRepository(private val app: Context, private val clock: () -> 
             .filter { it.getString("status") in setOf("FAIL", "BLOCKED", "MISSING", "NOT_RUN") }
             .map { "${it.getString("id")}: ${it.getString("status")} · ${it.getString("reason")}" } }
         val stamp = EvidenceReport.digest(listOf(target.profileId, target.identityId, target.context(clock()).profileHash,
-            target.androidUserId.toString(), target.artifactHash, EvidenceReport.digest(text.toByteArray(Charsets.UTF_8)), review?.digest ?: "no-assignment", confirmed.toString()).joinToString("\n").toByteArray())
+            target.androidUserId.toString(), target.artifactHash, EvidenceReport.digest(text.toByteArray(Charsets.UTF_8)), review?.digest ?: "no-assignment", confirmed.toString(),
+            target.appPackages.distinct().sorted().joinToString(",")).joinToString("\n").toByteArray())
         return PlayImportPreview(target, text, projection, result, stamp, review?.sharedProfileIds.orEmpty(), confirmed, record, review?.digest, notes)
     }
     fun save(review: PlayImportPreview, current: PlayImportTarget, confirmedShared: Boolean): PlayReadinessResult {
@@ -123,6 +128,23 @@ class PlayEvidenceRepository(private val app: Context, private val clock: () -> 
             if (latest.assignment != null) throw PartialSave()
             throw error
         }
+        try {
+            latest.assignment?.let { assignment ->
+                val report = PlayReadinessReport.parse(latest.projection).json
+                val packages = listOf("play_services", "play_store", "web_provider").map { report.getJSONObject(it) }
+                    .filterNot { it.isNull("package_name") }
+                // Caller visibility is not evidence of slot ownership, backup policy or private-data boundaries.
+                val observation = GoogleSurfaceObservation(assignment.profileId, current.androidUserId, assignment.profileHash,
+                    "local.play.report", PlayReadinessReport.timestamp(report.getString("timestamp")),
+                    packageStates = packages.groupBy { it.getString("package_name") }.mapValues { (_, rows) ->
+                        rows.map { it.getString("state") }.distinct().singleOrNull()?.takeIf { it in setOf("enabled", "disabled", "missing") } ?: "unknown"
+                    }, packageVersions = packages.filter { it.has("version_name") }.groupBy { it.getString("package_name") }
+                        .mapNotNull { (name, rows) -> rows.map { it.getString("version_name") }.distinct().singleOrNull()?.let { name to it } }.toMap())
+                current.appPackages.distinct().sorted().forEach { packageName ->
+                    serviceIsolation.save(ServiceSurfaceEvidence(ServiceSurfaceBinding(assignment, packageName, current.artifactHash), observation), reviewConfirmed = true)
+                }
+            }
+        } catch (_: Exception) { throw IsolationSaveFailed() }
         try { integrity.recordRequest(current.context(clock()), latest.envelope) }
         catch (_: Exception) { throw IntegrityReceiptSaveFailed() }
         return saved
@@ -139,7 +161,8 @@ class PlayEvidenceRepository(private val app: Context, private val clock: () -> 
         if (integrity.read(context, report).reason == "IV_RECEIPT_MISMATCH") throw IntegrityVerdicts.Rejected("IV_RECEIPT_MISMATCH")
         return integrity.save(context, text)
     }
-    fun card(profileId: String, user: Int?, identityId: String?): PlayReadinessCardState = try {
+    fun card(profileId: String, user: Int?, identityId: String?, appPackages: List<String> = emptyList(),
+        mismatchedApps: Set<String> = emptySet()): PlayReadinessCardState = try {
         val target = target(profileId, user, identityId)
         val localReport = readiness.evidence(profileId)
         val integrityResult = integrity.read(target.context(clock()), localReport).let { evidence ->
@@ -154,11 +177,19 @@ class PlayEvidenceRepository(private val app: Context, private val clock: () -> 
         val review = record?.let(surfaces::review)
         val confirmed = record?.let(surfaces::sharingConfirmed) ?: false
         val conflict = !confirmed && !review?.sharedProfileIds.isNullOrEmpty()
+        val isolation = appPackages.distinct().sorted().associateWith { packageName ->
+            if (packageName in mismatchedApps) ServiceIsolationResult(ServiceIsolationState.NEEDS_REVIEW, listOf("SSI_BINDING_MISMATCH"))
+            else if (record == null) ServiceIsolationResult(ServiceIsolationState.UNKNOWN, listOf("SSI_NO_EVIDENCE"))
+            else serviceIsolation.evaluate(ServiceSurfaceBinding(record, packageName, target.artifactHash),
+                target.context(clock()).copy(profileHash = EngineMetadataStore.digest(target.profile)))
+        }
+        val baseVerdict = if (conflict || assignmentChanged || result.review == PlayReviewState.NEEDS_REVIEW) "NEEDS REVIEW" else result.state.name
         PlayEvidenceImport.display(result, readiness.evidence(profileId)).copy(identityId = identityId, integrity = integrityResult,
             identityLabel = target.profile.optString("name", identityId ?: "Device profile"),
-            verdict = if (conflict || assignmentChanged) "NEEDS REVIEW" else if (result.review == PlayReviewState.NEEDS_REVIEW) "NEEDS REVIEW" else result.state.name,
+            verdict = ServiceSurfaceIsolation.gate(baseVerdict, isolation.values.toList()), serviceIsolation = isolation,
             reasons = PlayEvidenceImport.display(result, readiness.evidence(profileId)).reasons +
-                if (assignmentChanged) listOf("Stored account assignment belongs to a different device profile or Android user. Review the assignment; no account changes were made.") else emptyList(),
+                (if (assignmentChanged) listOf("Stored account assignment belongs to a different device profile or Android user. Review the assignment; no account changes were made.") else emptyList()) +
+                if (appPackages.isEmpty()) listOf("No enabled app binding is available for service isolation review. (SSI_NO_BINDING)") else emptyList(),
             sharedProfiles = review?.sharedProfileIds.orEmpty(), sharingConfirmed = confirmed,
             profileHash = target.context(clock()).profileHash, artifactHash = target.artifactHash, contextAvailable = true)
     } catch (_: Exception) {

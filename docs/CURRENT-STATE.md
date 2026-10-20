@@ -1,5 +1,13 @@
 # Current state
 
+Unreleased: Service surface isolation v2 adds profile/app-scoped local evidence
+states (ISOLATED, SHARED_CONFIRMED, CONFLICT, STALE, UNKNOWN, NEEDS_REVIEW).
+The readiness card checks package scope, current sharing consent, evidence age
+and profile/user/artifact binding. Existing Play captures cannot prove account-slot
+ownership or private boundaries; these gaps remain UNKNOWN. No account, device,
+runtime, connector, publication, binding-layout, permission or release action was
+performed for this sprint. See [model and limits](SERVICE-SURFACE-ISOLATION-V2.md).
+
 Unreleased: Runtime envelope phase 2 adds scoped read-only callbacks and 15
 digest-only probe rows. Seventeen contract paths are PARTIAL; none is newly
 APPLIED. Local tests are not physical evidence. Two-profile cold-start, user

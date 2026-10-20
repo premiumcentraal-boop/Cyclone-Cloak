@@ -1,5 +1,17 @@
 # Cyclone Cloak Architecture
 
+## Service surface isolation v2 (unreleased)
+
+`ServiceSurfaceIsolation` evaluates one profile/app assignment against current
+inventory, exact-group sharing consent, profile/user/artifact binding and evidence
+freshness. `ServiceSurfaceStore` adds bounded binding sidecars to existing private
+assignment preferences without changing their format-1 library. Explicit report
+imports project only measured package facts; missing account ownership and data
+boundary evidence stay unknown. The existing readiness card gates every enabled
+app and cannot display READY over stale/conflicting/unconfirmed isolation.
+This is local evidence review, not Android enforcement or a platform verdict.
+See [states, storage and evidence limitations](SERVICE-SURFACE-ISOLATION-V2.md).
+
 ## Runtime envelope phase 2 (unreleased)
 
 The existing native bound-user/package lookup supplies a profile projection to

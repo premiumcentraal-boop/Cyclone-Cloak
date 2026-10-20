@@ -250,7 +250,9 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
             val saved = assignments.firstOrNull { it.profileId == profile.id }
             val selected = state.playIdentitySelection[profile.id] ?: bound.singleOrNull() ?: if (bound.isEmpty())
                 state.identities.singleOrNull { (_, body) -> saved?.profileHash == EngineMetadataStore.digest(body) }?.first else null
-            profile.id to playEvidence.card(profile.id, profile.androidUserId, selected)
+            profile.id to playEvidence.card(profile.id, profile.androidUserId, selected,
+                state.bindings.filter { it.profileId == profile.id && it.enabled }.map { it.packageName },
+                state.bindings.filter { it.profileId == profile.id && it.enabled && it.cloakProfileId != selected }.map { it.packageName }.toSet())
         }
         _state.update { it.copy(playReadiness = cards) }
     }
@@ -267,7 +269,10 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
             ?: throw PlayEvidenceImport.Rejected(listOf("This Cyclone profile is no longer in the current registry."))
         if (profile.state != "ready" || state.ownProfileId != null && state.ownProfileId != profile.id)
             throw PlayEvidenceImport.Rejected(listOf("Open this profile's Cloak copy or complete Cyclone setup before importing."))
-        return playEvidence.target(profileId, profile.androidUserId, state.playIdentitySelection[profileId] ?: state.playReadiness[profileId]?.identityId)
+        val target = playEvidence.target(profileId, profile.androidUserId, state.playIdentitySelection[profileId] ?: state.playReadiness[profileId]?.identityId)
+        return target.copy(appPackages = state.bindings.filter {
+            it.profileId == profileId && it.enabled && it.cloakProfileId == target.identityId
+        }.map { it.packageName })
     }
 
     private fun playWork(profileId: String, label: String, block: () -> Unit) = launchWork(label) {
@@ -283,6 +288,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
                 is GoogleSurfaceStore.ReviewRequired -> "Shared account-slot use needs explicit confirmation for the current profiles."
                 is PlayEvidenceRepository.PartialSave -> "Approved account-slot metadata was saved, but the readiness save did not complete. Review the saved state before retrying."
                 is PlayEvidenceRepository.IntegrityReceiptSaveFailed -> "Local readiness was saved, but its Integrity request receipt was not saved. Import the original diagnostics report again before a verdict."
+                is PlayEvidenceRepository.IsolationSaveFailed -> "Local readiness was saved, but app-scoped isolation evidence was not fully saved. Review the affected apps before retrying."
                 is dev.cyclone.cloak.play.IntegrityVerdicts.Rejected -> dev.cyclone.cloak.play.IntegrityResult(
                     dev.cyclone.cloak.play.IntegrityState.NEEDS_REVIEW, error.code).let { "${it.description} (${it.reason})" }
                 else -> "Local evidence could not be imported or saved. Check the selected profile, report and saved readiness state before retrying. No profile or binding changes were made."

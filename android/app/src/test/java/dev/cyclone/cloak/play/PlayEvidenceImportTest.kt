@@ -197,4 +197,32 @@ class PlayEvidenceImportTest {
         assertThrows(IllegalArgumentException::class.java) { ByteArray(9).inputStream().readBounded(8) }
         assertArrayEquals(ByteArray(8), ByteArray(8).inputStream().readBounded(8))
     }
+    @Test fun importedPackagesDoNotInventAccountOrBoundaryEvidence() {
+        CloakStore.save(app, target().profile.put("play_surface", SurfaceFixtures.record().surface))
+        val t = target().copy(appPackages = listOf("com.android.vending"))
+        val review = repo.preview(envelope(t), t)
+        repo.save(review, t, false)
+        val saved = ServiceSurfaceStore(app).read(t.profileId, "com.android.vending").evidence!!
+        assertEquals(t.artifactHash, saved.binding.artifactHash)
+        assertNull(saved.observation.privateDataBoundary)
+        assertNull(saved.observation.accountSlotId)
+        assertNull(saved.observation.backupSync)
+        assertTrue(saved.observation.packageStates.isNotEmpty())
+        assertEquals(ServiceIsolationState.UNKNOWN, repo.card(t.profileId, t.androidUserId, t.identityId, t.appPackages)
+            .serviceIsolation.getValue("com.android.vending").state)
+        assertNotEquals("READY", repo.card(t.profileId, t.androidUserId, t.identityId, t.appPackages).verdict)
+    }
+    @Test fun changingAppScopeInvalidatesTheReviewStamp() {
+        val t = target().copy(appPackages = listOf("com.android.vending"))
+        val review = repo.preview(envelope(t), t)
+        assertThrows(PlayEvidenceRepository.ReviewChanged::class.java) {
+            repo.save(review, t.copy(appPackages = listOf("com.google.android.gms")), false)
+        }
+        assertNull(PlayReadinessStore(app).evidence(t.profileId))
+    }
+    @Test fun appBoundToAnotherIdentityCannotBorrowTheSelectedIdentityEvidence() {
+        val card = repo.card("synthetic-profile", 17, "device-a", listOf("com.android.vending"), setOf("com.android.vending"))
+        assertEquals("NEEDS REVIEW", card.verdict)
+        assertEquals(listOf("SSI_BINDING_MISMATCH"), card.serviceIsolation.getValue("com.android.vending").reasons)
+    }
 }

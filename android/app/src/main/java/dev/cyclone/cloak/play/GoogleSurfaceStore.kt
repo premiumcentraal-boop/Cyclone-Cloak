@@ -104,4 +104,14 @@ class GoogleSurfaceStore(context: Context) {
         GoogleSurfaceIsolation.evaluate(record, profileId, androidUserId, profileHash, library.records, observation,
             record?.let { groupDigest(it, library.records) in library.confirmations } ?: false)
     }
+
+    /** Inventory and its exact-group consent must come from the same locked snapshot. */
+    internal fun evaluateService(binding: ServiceSurfaceBinding, context: PlayReadinessContext,
+        evidence: ServiceSurfaceEvidence?, reviewRequested: Boolean, readable: Boolean): ServiceIsolationResult = synchronized(lock) {
+        val library = try { load() } catch (_: InventoryUnreadable) {
+            return@synchronized ServiceIsolationResult(ServiceIsolationState.UNKNOWN, listOf("SSI_STORE_UNREADABLE"))
+        }
+        ServiceSurfaceIsolation.evaluate(binding, context, library.records, evidence,
+            groupDigest(binding.assignment, library.records) in library.confirmations, reviewRequested, readable)
+    }
 }
