@@ -1,6 +1,16 @@
 # Current state
 
-Unreleased: Service surface isolation v2 adds profile/app-scoped local evidence
+Alpha.28 restoration proof: focused cycle and all three lifecycle cycles completed
+for users 0/17, with zero restoration failures, unchanged production fields and
+permission/AppOps snapshots, and cleanup passing after every cycle. Full inventories
+(132/126 packages) matched. Expected blocked/external rows remain limitations.
+Historical package deltas remain unattributed; historical index changes were
+serialization-only and the unrelated control followed independently measured host
+state. Evidence uses candidate alpha.27/code51 metadata with exact artifact hashes,
+not published-alpha.27 identity or alpha.28 physical verification.
+[Evidence summary](runtime-evidence/2026-10-20-235457-restoration-follow-up/summary.md).
+
+Alpha.28: Service surface isolation v2 adds profile/app-scoped local evidence
 states (ISOLATED, SHARED_CONFIRMED, CONFLICT, STALE, UNKNOWN, NEEDS_REVIEW).
 The readiness card checks package scope, current sharing consent, evidence age
 and profile/user/artifact binding. Existing Play captures cannot prove account-slot
@@ -8,15 +18,16 @@ ownership or private boundaries; these gaps remain UNKNOWN. No account, device,
 runtime, connector, publication, binding-layout, permission or release action was
 performed for this sprint. See [model and limits](SERVICE-SURFACE-ISOLATION-V2.md).
 
-Unreleased: Runtime envelope phase 2 adds scoped read-only callbacks and 15
+Alpha.28: Runtime envelope phase 2 adds scoped read-only callbacks and 15
 digest-only probe rows. Seventeen contract paths are PARTIAL; none is newly
-APPLIED. Local tests are not physical evidence. Two-profile cold-start, user
-isolation and cold unbound restoration remain UNVERIFIED for this module.
+APPLIED. Local tests are not physical evidence. The measured candidate completed three two-user cold-start and cold-restoration
+cycles with explicit permission/API limitations; this does not verify every new
+surface or the repackaged alpha.28 artifact.
 Nominal capacity and physical cores remain descriptive where API meanings differ.
 No release, permission, binding or publication change. See
 [runtime envelope boundaries](RUNTIME-ENVELOPE-PHASE-2.md).
 
-Unreleased: Instance realism v1 adds opt-in deterministic, provenance-labelled
+Alpha.28: Instance realism v1 adds opt-in deterministic, provenance-labelled
 generation from approved complete tuples in Python Device Factory and the
 Python/Kotlin identity engine. Reviewed SKU/configuration alternatives and matched
 catalog firmware bundles vary together; unsupported hardware/carrier/package facts
@@ -24,7 +35,7 @@ stay fixed or unknown. Existing generation and schema 0.2/0.3/0.4 imports remain
 compatible. No runtime or device changes; physical verification is UNVERIFIED.
 See [instance realism policies and limits](INSTANCE-REALISM-V1.md).
 
-Unreleased: Cohort separation v1 adds pure Python/Kotlin read-only analysis over
+Alpha.28: Cohort separation v1 adds pure Python/Kotlin read-only analysis over
 saved profile bodies. Seven category scores, shared groups, duplicate/near-duplicate
 identifier flags, missing Reality facts and conservative recommendations contain
 only IDs/labels and structural metadata. Unknown facts reduce confidence. No UI,
@@ -68,7 +79,7 @@ runtime enforcement or platform verdict. Existing profiles and bindings are
 unchanged; physical verification is UNVERIFIED. See
 [Google Surface Isolation v1](GOOGLE-SURFACE-ISOLATION-V1.md).
 
-Updated 2026-10-19. Current source **v0.11.0-alpha.27 / versionCode 51**
+Updated 2026-10-21. Current source **v0.11.0-alpha.28 / versionCode 52**
 adds local Play readiness integration over Play Surface Contract v1 and the existing Reality Studio, missing-only repair
 and Fleet Diversity workflows. Optional schema 0.4 sections describe compute, memory,
 panel, camera summaries, sensors, power, DRM level, radio labels, carrier, package

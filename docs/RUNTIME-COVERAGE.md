@@ -261,3 +261,21 @@ Permission/API failures remain explicit. Legacy 89 rows are unchanged. The cover
 card shows matched/mismatched links, field paths and applied/partial/pending counts.
 Local parity is not a platform verdict. Physical verification: **PENDING**; the
 connected device still has alpha.18/code 42, so it cannot validate these callbacks.
+
+
+## 2026-10-21 candidate restoration follow-up (packaged in alpha.28)
+
+The focused cycle and three lifecycle cycles completed for users 0 and 17.
+Cold restoration had zero FAIL rows: user 0 each cycle 102 PASS / 7 OBSERVED /
+8 BLOCKED; user 17 cycle 1 100 PASS / 4 OBSERVED / 13 BLOCKED and cycles 2/3
+101 PASS / 4 OBSERVED / 12 BLOCKED. These are restoration comparisons, not
+counts of runtime hooks verified. Package inventories and production/permission/
+AppOps snapshots matched; all cleanup proofs passed. Warm removal retained
+in-memory profile values until cold restart, as explicitly observed.
+
+The artifact was the measured candidate with alpha.27/code51 metadata. Exact
+hashes are recorded in the evidence; it is not the published alpha.27 binary or
+a physical alpha.28 release validation. Blocked and external-state rows remain
+limitations. No contract status is promoted by this harness-only correction.
+[Summary](runtime-evidence/2026-10-20-235457-restoration-follow-up/summary.md) and
+[diagnosis/commands](HANDOFF-2026-10-21-RESTORATION-HARNESS-FOLLOW-UP.md).

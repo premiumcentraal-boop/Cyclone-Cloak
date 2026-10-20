@@ -11,16 +11,19 @@ not prove that every inspection API sees it.
 
 The thin line that turns one playboy billionaire into twenty masked vigilantes.
 
-## Status: 0.11.0-alpha.27 (prerelease)
+## Status: 0.11.0-alpha.28 (prerelease)
 
-Alpha.27 adds explicit local [Play/Google evidence import and readiness review](docs/PLAY-READINESS-INTEGRATION-V1.md),
-metadata-only Google surface assignments and confirmed account-slot sharing.
-A separate zero-permission diagnostics APK collects evidence only after a user tap.
-Unknown required observations stay UNKNOWN; stale or mismatched evidence needs review.
-App/module code 51. No runtime, connector, publication, binding-layout or permission
-changes. Physical capture/import is **UNVERIFIED**. Known legacy probe lint findings
-are disclosed; release with these limits was explicitly approved, subject to signed CI.
-[Release notes](docs/RELEASE_0.11.0-alpha.27.md). No platform verdict is claimed.
+Alpha.28 consolidates local Integrity verdict/exchange tooling, cohort separation,
+instance realism, the scoped runtime envelope and service-surface isolation review.
+The restoration harness retains full non-sensitive comparison values, separates
+semantic production state from index serialization and compares stable permission
+and AppOps records. App/module code 52.
+
+A measured candidate completed three two-user restoration cycles with expected
+permission/API and external-state limitations. This evidence does not identify
+alpha.28 release binaries or verify every runtime surface. Historical package
+changes remain unattributed because their raw lists were not retained.
+[Release notes](docs/RELEASE_0.11.0-alpha.28.md). No platform verdict is claimed.
 
 Alpha.26 adds [Play Surface Contract v1](docs/PLAY-SURFACE-CONTRACT-V1.md):
 an optional profile section for local account-slot and Play/service expectations,

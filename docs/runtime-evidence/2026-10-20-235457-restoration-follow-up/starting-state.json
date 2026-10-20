@@ -1,0 +1,105 @@
+{
+  "commit": "1c9ce900930b7c52d3d7130b8ca8a741e183b73a",
+  "branch": "main",
+  "working_tree": [
+    "?? docs/HANDOFF-2026-10-14-COMPANION-UI-REDESIGN.md",
+    "?? docs/HANDOFF-2026-10-14-CYCLONE-PROFILE-APPS.md",
+    "?? docs/HANDOFF-2026-10-15-CONNECTOR-RESILIENCE-RUN-HISTORY.md",
+    "?? docs/HANDOFF-2026-10-15-USER17-SETUP-VERIFICATION.md",
+    "?? docs/HANDOFF-2026-10-16-CYCLE-FIX-BRIEF.md",
+    "?? docs/HANDOFF-2026-10-16-PROFILE-HARNESS-FOLLOWUP.md",
+    "?? docs/HANDOFF-2026-10-16-PROFILE-TEST-HARNESS.md",
+    "?? docs/HANDOFF-2026-10-17-ALPHA17-CROSS-USER.md",
+    "?? docs/HANDOFF-2026-10-18-REVERSIBILITY-CLASSIFIER.md",
+    "?? docs/HANDOFF-2026-10-19-PLAY-GOOGLE-COMBINED.md",
+    "?? docs/HANDOFF-2026-10-20-ALPHA27-ONWARD-CONSOLIDATED.md",
+    "?? docs/HANDOFF-2026-10-20-CANDIDATE-DEVICE-VALIDATION.md",
+    "?? docs/HANDOFF-2026-10-20-CONSOLIDATED-PLAY-BRIDGE-TO-SERVICE-ISOLATION-V2.md",
+    "?? docs/TEST-HARNESS-DESIGN-2026-10-16.md",
+    "?? docs/runtime-evidence/2026-10-15-user17-root-timeout-screen.png",
+    "?? docs/runtime-evidence/2026-10-15-user17-setup-root-timeout-24h.zip",
+    "?? docs/runtime-evidence/2026-10-16-alpha13-run/",
+    "?? docs/runtime-evidence/2026-10-18-205729-alpha23-physical-validation/",
+    "?? docs/runtime-evidence/2026-10-18-210231-alpha23-physical-resume/",
+    "?? docs/runtime-evidence/2026-10-18-211440-display-mode-reproduction/",
+    "?? docs/runtime-evidence/2026-10-18-212333-alpha24-display-parity/",
+    "?? docs/runtime-evidence/2026-10-18-214341-alpha24-warm-stabilization/",
+    "?? docs/runtime-evidence/2026-10-18-215640-alpha24-host-runtime-stabilization/",
+    "?? docs/runtime-evidence/2026-10-18-221509-alpha24-loader-lifetime/",
+    "?? docs/runtime-evidence/2026-10-19-233634-alpha27-play-readiness/",
+    "?? docs/runtime-evidence/2026-10-20-000008-alpha27-play-runner-fix/",
+    "?? docs/runtime-evidence/2026-10-20-000207-alpha27-play-runner-fixed/",
+    "?? docs/runtime-evidence/2026-10-20-000610-alpha27-play-runner-verified/",
+    "?? docs/runtime-evidence/2026-10-20-000729-alpha27-play-runner-verified/",
+    "?? docs/runtime-evidence/2026-10-20-225427-candidate-runtime-validation/"
+  ],
+  "installed": {
+    "dev.cyclone.cloak": {
+      "version": [
+        "0.11.0-alpha.27"
+      ],
+      "code": [
+        "51"
+      ],
+      "users": {
+        "0": {
+          "path": "/data/app/~~oxxPf3k1Ggejx1aZFZie2A==/dev.cyclone.cloak-FKdzo6WgSOJ9SiRjvLslLQ==/base.apk",
+          "sha256": "df37f86da7ea617fcd1aad65504b23c95aaad56a1f9726ca3270846f8165cffc"
+        },
+        "17": {
+          "path": "/data/app/~~oxxPf3k1Ggejx1aZFZie2A==/dev.cyclone.cloak-FKdzo6WgSOJ9SiRjvLslLQ==/base.apk",
+          "sha256": "df37f86da7ea617fcd1aad65504b23c95aaad56a1f9726ca3270846f8165cffc"
+        }
+      }
+    },
+    "dev.cyclone.cloak.probe.diag": {
+      "version": [
+        "1.0-diag"
+      ],
+      "code": [
+        "1"
+      ],
+      "users": {
+        "0": {
+          "path": "/data/app/~~H87Aj_NIxJLMt8MWCi8F-w==/dev.cyclone.cloak.probe.diag-5Jty_NfTNTeojISPyDOF5Q==/base.apk",
+          "sha256": "e4f6d3d13a810f1e17ef4d3ae0317e01e78d9cdc37bbb8d483f1565bf1f4e9d8"
+        },
+        "17": {
+          "path": "/data/app/~~H87Aj_NIxJLMt8MWCi8F-w==/dev.cyclone.cloak.probe.diag-5Jty_NfTNTeojISPyDOF5Q==/base.apk",
+          "sha256": "e4f6d3d13a810f1e17ef4d3ae0317e01e78d9cdc37bbb8d483f1565bf1f4e9d8"
+        }
+      }
+    },
+    "dev.cyclone.cloak.playevidence": {
+      "version": [
+        "1.0-diagnostics"
+      ],
+      "code": [
+        "1"
+      ],
+      "users": {
+        "0": {
+          "path": "/data/app/~~PFpkAclz5dwnkpfuTZMxtA==/dev.cyclone.cloak.playevidence-ZufhjJ801emrDP3ntySeyg==/base.apk",
+          "sha256": "b129bd72c88a38817a29abf9c400e83416fc1605955b9b5a4e8af0896d368ef0"
+        },
+        "17": {
+          "path": "/data/app/~~PFpkAclz5dwnkpfuTZMxtA==/dev.cyclone.cloak.playevidence-ZufhjJ801emrDP3ntySeyg==/base.apk",
+          "sha256": "b129bd72c88a38817a29abf9c400e83416fc1605955b9b5a4e8af0896d368ef0"
+        }
+      }
+    }
+  },
+  "users": {
+    "0": "RUNNING_UNLOCKED",
+    "17": "RUNNING_UNLOCKED"
+  },
+  "module_prop": [
+    "id=cyclone_cloak",
+    "name=Cyclone Cloak",
+    "version=v0.11.0-alpha.27",
+    "versionCode=51",
+    "author=Cyclone Cloak contributors",
+    "description=Device-profile engine for Cyclone (platform). Manage per-app profiles from the Cyclone Cloak companion app. Requires platform."
+  ],
+  "module_native_sha256": "b8e320978d6694276278068b95b2694d829278f30560fb1eeeb77b863337b636"
+}

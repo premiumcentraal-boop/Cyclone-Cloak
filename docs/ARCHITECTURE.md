@@ -1,6 +1,13 @@
 # Cyclone Cloak Architecture
 
-## Service surface isolation v2 (unreleased)
+Current release source: **0.11.0-alpha.28 / code 52**. The diagnostics restoration
+harness compares full package/control values, independently corroborates host
+control changes and gates semantic production fields plus all other file hashes.
+Only raw index JSON serialization is an observation. Shared checked-in external
+Wi-Fi/Bluetooth policies remain observations, never runtime verification.
+See [restoration follow-up](HANDOFF-2026-10-21-RESTORATION-HARNESS-FOLLOW-UP.md).
+
+## Service surface isolation v2 (alpha.28)
 
 `ServiceSurfaceIsolation` evaluates one profile/app assignment against current
 inventory, exact-group sharing consent, profile/user/artifact binding and evidence
