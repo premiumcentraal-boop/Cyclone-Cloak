@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyclone.dev/schema/integrity-verdict.schema.json",
+  "title": "Authenticated backend Integrity verdict envelope v1",
+  "description": "Schema validity does not authenticate evidence. Verify RS256 over the exact decoded payload bytes against separately provisioned provider pins, then validate the payload and current request binding.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["format", "algorithm", "provider", "key_id", "payload", "signature"],
+  "properties": {
+    "format": {"const": 1},
+    "algorithm": {"const": "RS256"},
+    "provider": {"$ref": "#/$defs/id"},
+    "key_id": {"$ref": "#/$defs/id"},
+    "payload": {"type": "string", "minLength": 4, "maxLength": 24000, "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"},
+    "signature": {"type": "string", "minLength": 344, "maxLength": 2048, "pattern": "^(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?$"}
+  },
+  "$defs": {
+    "id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,95}$"},
+    "hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "timestamp": {"type": "string", "format": "date-time", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"},
+    "payload": {
+      "type": "object", "additionalProperties": false,
+      "required": ["format", "provider", "request_id", "request_hash", "profile_id", "profile_hash", "artifact_hash", "android_user_id", "timestamp", "decoded_at", "app_recognition", "app_licensing", "device_recognition"],
+      "properties": {
+        "format": {"const": 1}, "provider": {"$ref": "#/$defs/id"},
+        "request_id": {"$ref": "#/$defs/id"}, "request_hash": {"$ref": "#/$defs/hash"},
+        "profile_id": {"$ref": "#/$defs/id"}, "profile_hash": {"$ref": "#/$defs/hash"},
+        "artifact_hash": {"$ref": "#/$defs/hash"}, "android_user_id": {"type": "integer", "minimum": 0, "maximum": 21474},
+        "timestamp": {"$ref": "#/$defs/timestamp"}, "decoded_at": {"$ref": "#/$defs/timestamp"},
+        "app_recognition": {"enum": ["PLAY_RECOGNIZED", "UNRECOGNIZED_VERSION", "UNEVALUATED"]},
+        "app_licensing": {"enum": ["LICENSED", "UNLICENSED", "UNEVALUATED"]},
+        "device_recognition": {"type": "array", "maxItems": 4, "uniqueItems": true,
+          "items": {"enum": ["MEETS_BASIC_INTEGRITY", "MEETS_DEVICE_INTEGRITY", "MEETS_STRONG_INTEGRITY", "MEETS_VIRTUAL_INTEGRITY"]}}
+      }
+    }
+  }
+}

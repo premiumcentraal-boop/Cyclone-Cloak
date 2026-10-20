@@ -6,6 +6,12 @@ and artifact. It is **not a Play Integrity, Google, certification or platform
 verdict**. This layer performs no collection, account operations, Integrity API
 requests, networking, runtime changes or destructive reset.
 
+The additive [authenticated verdict bridge](PLAY-INTEGRITY-VERDICT-BRIDGE-V1.md)
+can separately display backend-decoded Integrity evidence. Its signature,
+request/profile/user/artifact binding and freshness are checked on every read.
+It only retains or downgrades this local readiness result; a passing Integrity
+verdict never fills missing local observations or certifies the device.
+
 ## Report format 1
 
 `PlayReadinessReport.parse` accepts strict JSON, at most 64 KiB UTF-8 and depth 32.

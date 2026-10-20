@@ -26,6 +26,22 @@ class PlayReadinessCardTest {
     @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
     private fun card() = PlayReadinessCardState(identityId = "device-a", identityLabel = "Local phone", timestamp = "2026-10-19T12:00:00Z",
         source = "Imported local report", details = linkedMapOf("Play Services" to "enabled", "Play Store" to "enabled", "Web provider" to "enabled", "Account association" to "unknown"), contextAvailable = true)
+    @Test fun integrityStatesAndReviewReasonsAreVisibleWithoutCertification() {
+        val state = mutableStateOf(card().copy(details = emptyMap()))
+        compose.setContent { CloakTheme { PlayReadinessCard(state.value, emptyList(), true, null, { it }, {}, {}) } }
+        for (value in IntegrityState.entries) {
+            compose.runOnIdle { state.value = state.value.copy(integrity = IntegrityResult(value, if (value == IntegrityState.NEEDS_REVIEW) "IV_STALE" else "IV_TOKEN_ONLY")) }
+            compose.onNodeWithText("Play Integrity: ${value.name.replace('_', ' ')}").assertIsDisplayed()
+        }
+        compose.onNodeWithText("The verdict or request receipt is outside the freshness window. (IV_STALE)").assertIsDisplayed()
+        compose.onNodeWithText("Evidence-bound local readiness. Authenticated verdicts are separate evidence, not platform certification.").assertIsDisplayed()
+    }
+    @Test fun authenticatedImportRequiresCurrentProfileContext() {
+        compose.setContent { CloakTheme { PlayReadinessCard(card().copy(contextAvailable = false, details = emptyMap()), emptyList(), true,
+            "The backend signature is invalid or its provider key is not configured. (IV_AUTHENTICATION)", { it }, {}, {}, {}) } }
+        compose.onNodeWithText("Import authenticated verdict").assertIsNotEnabled()
+        compose.onNodeWithText("The backend signature is invalid or its provider key is not configured. (IV_AUTHENTICATION)").assertIsDisplayed()
+    }
     private fun review(): PlayImportPreview {
         val envelope = JSONObject(javaClass.classLoader!!.getResource("play_evidence_report.json")!!.readText())
         val projection = envelope.getJSONObject("readiness_report").toString()

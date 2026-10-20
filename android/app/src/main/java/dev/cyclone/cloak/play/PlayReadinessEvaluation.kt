@@ -37,7 +37,7 @@ data class PlayReadinessFinding(val field: String, val code: String) {
         "PR_REPORTED_WARNING" -> "The report includes an explicit local warning."
         "PR_USER_REVIEW" -> "The user requested review; a new explicit review is required."
         "PR_STORE_UNREADABLE" -> "Stored local readiness evidence is unreadable."
-        else -> "Local readiness evidence requires review."
+        else -> if (code.startsWith("IV_")) IntegrityResult(IntegrityState.NEEDS_REVIEW, code).description else "Local readiness evidence requires review."
     }
 }
 data class PlayReadinessResult(

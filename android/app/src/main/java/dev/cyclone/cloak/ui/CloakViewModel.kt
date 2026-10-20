@@ -282,6 +282,9 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
                 is PlayEvidenceImport.Rejected -> error.reasons.joinToString(" ")
                 is GoogleSurfaceStore.ReviewRequired -> "Shared account-slot use needs explicit confirmation for the current profiles."
                 is PlayEvidenceRepository.PartialSave -> "Approved account-slot metadata was saved, but the readiness save did not complete. Review the saved state before retrying."
+                is PlayEvidenceRepository.IntegrityReceiptSaveFailed -> "Local readiness was saved, but its Integrity request receipt was not saved. Import the original diagnostics report again before a verdict."
+                is dev.cyclone.cloak.play.IntegrityVerdicts.Rejected -> dev.cyclone.cloak.play.IntegrityResult(
+                    dev.cyclone.cloak.play.IntegrityState.NEEDS_REVIEW, error.code).let { "${it.description} (${it.reason})" }
                 else -> "Local evidence could not be imported or saved. Check the selected profile, report and saved readiness state before retrying. No profile or binding changes were made."
             }
             _state.update { it.copy(playErrors = it.playErrors + (profileId to reason)) }
@@ -296,6 +299,15 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
             .decode(java.nio.ByteBuffer.wrap(bytes)).toString()
         val review = playEvidence.preview(text, playTarget(profileId))
         _state.update { it.copy(playImportReview = review) }
+    }
+
+    fun importIntegrityVerdict(profileId: String, uri: Uri) = playWork(profileId, "Verifying authenticated Integrity evidence…") {
+        val bytes = app.contentResolver.openInputStream(uri)?.use { it.readBounded(dev.cyclone.cloak.play.IntegrityVerdicts.MAX_BYTES) }
+            ?: throw dev.cyclone.cloak.play.IntegrityVerdicts.Rejected("IV_MALFORMED")
+        val text = Charsets.UTF_8.newDecoder().onMalformedInput(java.nio.charset.CodingErrorAction.REPORT)
+            .decode(java.nio.ByteBuffer.wrap(bytes)).toString()
+        playEvidence.saveIntegrity(text, playTarget(profileId))
+        say("Saved authenticated verdict evidence. Local readiness is evaluated separately; no platform certification is claimed.")
     }
 
     fun savePlayEvidence(confirmShared: Boolean) {

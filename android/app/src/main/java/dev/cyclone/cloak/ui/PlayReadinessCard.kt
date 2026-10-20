@@ -26,13 +26,14 @@ import dev.cyclone.cloak.play.PlayReadinessCardState
 
 @Composable
 internal fun PlayReadinessCard(state: PlayReadinessCardState, choices: List<Pair<String, String>>, enabled: Boolean,
-    error: String?, profileLabel: (String) -> String, onSelect: (String) -> Unit, onImport: () -> Unit) {
+    error: String?, profileLabel: (String) -> String, onSelect: (String) -> Unit, onImport: () -> Unit,
+    onImportIntegrity: (() -> Unit)? = null) {
     var choosing by remember { mutableStateOf(false) }
     var details by remember { mutableStateOf(false) }
     OutlinedCard(Modifier.fillMaxWidth().padding(horizontal = 12.dp, vertical = 6.dp)) {
         Column(Modifier.padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
             Text("Play/Google local readiness · ${state.verdict}", style = MaterialTheme.typography.titleSmall)
-            Text("Evidence-bound local readiness only. No platform verdict.", style = MaterialTheme.typography.bodySmall)
+            Text("Evidence-bound local readiness. Authenticated verdicts are separate evidence, not platform certification.", style = MaterialTheme.typography.bodySmall)
             Text("Device profile: ${state.identityLabel ?: "not selected"}")
             TextButton(enabled = enabled && choices.isNotEmpty(), onClick = { choosing = true }) { Text("Choose evidence device profile") }
             DropdownMenu(expanded = choosing, onDismissRequest = { choosing = false }) {
@@ -41,6 +42,13 @@ internal fun PlayReadinessCard(state: PlayReadinessCardState, choices: List<Pair
             Text("Checked: ${state.timestamp ?: "not recorded"}", style = MaterialTheme.typography.bodySmall)
             Text("Source: ${state.source}", style = MaterialTheme.typography.bodySmall)
             state.details.forEach { (label, value) -> Text("$label: $value", style = MaterialTheme.typography.bodySmall) }
+            Text("Play Integrity: ${state.integrity.state.name.replace('_', ' ')}", style = MaterialTheme.typography.bodySmall)
+            Text("${state.integrity.description} (${state.integrity.reason})", style = MaterialTheme.typography.bodySmall)
+            state.integrity.verdict?.let { verdict ->
+                Text("Provider: ${verdict.provider} · decoded ${verdict.decodedAt}", style = MaterialTheme.typography.bodySmall)
+                Text("App: ${verdict.appRecognition} · licensing: ${verdict.appLicensing}", style = MaterialTheme.typography.bodySmall)
+                Text("Device labels: ${verdict.deviceRecognition.sorted().joinToString().ifEmpty { "none returned" }}", style = MaterialTheme.typography.bodySmall)
+            }
             Text("Account visibility does not verify slot ownership or cross-user isolation.", style = MaterialTheme.typography.bodySmall)
             state.reasons.forEach { Text(it, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant) }
             if (state.sharedProfiles.isNotEmpty()) {
@@ -57,6 +65,7 @@ internal fun PlayReadinessCard(state: PlayReadinessCardState, choices: List<Pair
                 Text("This digest does not independently verify the installed runtime module.", style = MaterialTheme.typography.bodySmall)
             }
             TextButton(enabled = enabled && state.contextAvailable, onClick = onImport) { Text("Import diagnostics report") }
+            onImportIntegrity?.let { action -> TextButton(enabled = enabled && state.contextAvailable, onClick = action) { Text("Import authenticated verdict") } }
         }
     }
 }

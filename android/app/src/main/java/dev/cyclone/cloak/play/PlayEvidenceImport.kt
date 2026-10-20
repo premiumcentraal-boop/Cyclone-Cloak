@@ -25,7 +25,8 @@ data class PlayReadinessCardState(val identityId: String? = null, val identityLa
     val verdict: String = "UNKNOWN", val timestamp: String? = null, val source: String = "not recorded",
     val details: Map<String, String> = emptyMap(), val reasons: List<String> = emptyList(),
     val sharedProfiles: List<String> = emptyList(), val sharingConfirmed: Boolean = false,
-    val profileHash: String? = null, val artifactHash: String? = null, val contextAvailable: Boolean = false)
+    val profileHash: String? = null, val artifactHash: String? = null, val contextAvailable: Boolean = false,
+    val integrity: IntegrityResult = IntegrityResult(IntegrityState.NO_REQUEST, "IV_NO_REQUEST"))
 
 object PlayEvidenceImport {
     class Rejected(val reasons: List<String>) : IllegalArgumentException("PR_IMPORT_REJECTED")
@@ -42,6 +43,7 @@ object PlayEvidenceImport {
         val report = envelope.getJSONObject("readiness_report").toString()
         val result = LocalPlayReadinessProvider().evaluate(context, report)
         if (!result.accepted) throw Rejected(result.findings.map { it.message })
+        IntegrityRequest.fromEnvelope(context, text)
         return report to result
     }
 
@@ -74,8 +76,10 @@ class PlayEvidenceRepository(private val app: Context, private val clock: () -> 
     private val artifact: () -> String? = { PlayEvidenceArtifacts.current(app) }) {
     private val readiness = PlayReadinessStore(app)
     private val surfaces = GoogleSurfaceStore(app)
+    private val integrity = IntegrityVerdictStore(app)
     class ReviewChanged(val preview: PlayImportPreview) : IllegalStateException("PR_REVIEW_CHANGED")
     class PartialSave : IllegalStateException("PR_ASSIGNMENT_SAVED_READINESS_FAILED")
+    class IntegrityReceiptSaveFailed : IllegalStateException("PR_READINESS_SAVED_INTEGRITY_RECEIPT_FAILED")
     private fun assignment(target: PlayImportTarget): GoogleSurfaceRecord? {
         val proposed = PlayEvidenceImport.assignment(target) ?: return null
         val previous = surfaces.read(target.profileId)
@@ -114,15 +118,35 @@ class PlayEvidenceRepository(private val app: Context, private val clock: () -> 
         readiness.checkReadable(current.profileId)
         latest.assignment?.let { surfaces.save(it, latest.assignmentReview, confirmedShared) }
         // The explicit save is also the explicit review of the currently matching evidence.
-        return try { readiness.save(current.context(clock()), latest.projection, reviewConfirmed = true) }
+        val saved = try { readiness.save(current.context(clock()), latest.projection, reviewConfirmed = true) }
         catch (error: Exception) {
             if (latest.assignment != null) throw PartialSave()
             throw error
         }
+        try { integrity.recordRequest(current.context(clock()), latest.envelope) }
+        catch (_: Exception) { throw IntegrityReceiptSaveFailed() }
+        return saved
+    }
+    fun saveIntegrity(text: String, target: PlayImportTarget): IntegrityResult {
+        val context = target.context(clock())
+        val report = readiness.evidence(target.profileId) ?: throw IntegrityVerdicts.Rejected("IV_NO_RECEIPT")
+        val local = LocalPlayReadinessProvider().evaluate(context, report)
+        if (!local.accepted) throw IntegrityVerdicts.Rejected(when {
+            local.findings.any { it.code == "PR_STALE" } -> "IV_STALE"
+            local.findings.any { it.code == "PR_FUTURE_REPORT" } -> "IV_FUTURE"
+            else -> "IV_RECEIPT_MISMATCH"
+        })
+        if (integrity.read(context, report).reason == "IV_RECEIPT_MISMATCH") throw IntegrityVerdicts.Rejected("IV_RECEIPT_MISMATCH")
+        return integrity.save(context, text)
     }
     fun card(profileId: String, user: Int?, identityId: String?): PlayReadinessCardState = try {
         val target = target(profileId, user, identityId)
-        val result = readiness.read(target.context(clock()))
+        val localReport = readiness.evidence(profileId)
+        val integrityResult = integrity.read(target.context(clock()), localReport).let { evidence ->
+            if (evidence.state == IntegrityState.NO_REQUEST && localReport?.let { JSONObject(it).has("integrity_response") } == true)
+                IntegrityResult(IntegrityState.TOKEN_RECEIVED, "IV_TOKEN_ONLY") else evidence
+        }
+        val result = IntegrityVerdicts.readiness(readiness.read(target.context(clock())), integrityResult)
         val proposed = assignment(target)
         val previous = surfaces.read(profileId)
         val record = proposed ?: previous
@@ -130,7 +154,7 @@ class PlayEvidenceRepository(private val app: Context, private val clock: () -> 
         val review = record?.let(surfaces::review)
         val confirmed = record?.let(surfaces::sharingConfirmed) ?: false
         val conflict = !confirmed && !review?.sharedProfileIds.isNullOrEmpty()
-        PlayEvidenceImport.display(result, readiness.evidence(profileId)).copy(identityId = identityId,
+        PlayEvidenceImport.display(result, readiness.evidence(profileId)).copy(identityId = identityId, integrity = integrityResult,
             identityLabel = target.profile.optString("name", identityId ?: "Device profile"),
             verdict = if (conflict || assignmentChanged) "NEEDS REVIEW" else if (result.review == PlayReviewState.NEEDS_REVIEW) "NEEDS REVIEW" else result.state.name,
             reasons = PlayEvidenceImport.display(result, readiness.evidence(profileId)).reasons +

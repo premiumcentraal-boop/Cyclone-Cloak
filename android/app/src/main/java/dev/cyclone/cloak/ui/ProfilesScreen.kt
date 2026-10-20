@@ -43,6 +43,12 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
     var packageQuery by rememberSaveable { mutableStateOf("") }
     var historyProfile by rememberSaveable { mutableStateOf<String?>(null) }
     var playTarget by rememberSaveable { mutableStateOf<String?>(null) }
+    var integrityTarget by rememberSaveable { mutableStateOf<String?>(null) }
+    val integrityImporter = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
+        val target = integrityTarget
+        integrityTarget = null
+        if (uri != null && target != null) vm.importIntegrityVerdict(target, uri)
+    }
     val playImporter = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         val target = playTarget
         playTarget = null
@@ -139,7 +145,8 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
                 state.identities.map { (id, body) -> id to body.optString("name", id) },
                 state.busy == null && !managedElsewhere && profile.state == "ready",
                 state.playErrors[profile.id], { profiles[it]?.label ?: it },
-                { vm.selectPlayIdentity(profile.id, it) }, { playTarget = profile.id; playImporter.launch(arrayOf("application/json")) })
+                { vm.selectPlayIdentity(profile.id, it) }, { playTarget = profile.id; playImporter.launch(arrayOf("application/json")) },
+                { integrityTarget = profile.id; integrityImporter.launch(arrayOf("application/json")) })
         } } }
 
         historyProfile?.let { id -> item {
