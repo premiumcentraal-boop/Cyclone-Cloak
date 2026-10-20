@@ -1,5 +1,15 @@
 # Runtime coverage and device proof
 
+## Unreleased runtime envelope phase 2
+
+[Surface matrix and limits](RUNTIME-ENVELOPE-PHASE-2.md) records local callback
+tests and 15 digest-only probe rows. All new/changed surfaces remain physically
+**UNVERIFIED**: two-fixture cold starts, actual cross-user isolation, cold unbound
+restoration and permission/API evidence are pending. No row is silently verified
+by existing alpha.24 evidence. New contract counts: 10 APPLIED linked-base paths,
+17 PARTIAL, 3 PENDING, 27 DIAGNOSTIC_ONLY, 37 HOST_ONLY, 3 UNSUPPORTED. DRM is
+match-only; nominal RAM/storage and physical CPU counts are not fabricated.
+
 ## Current measured alpha.24 stabilization — 2026-10-18
 
 [Evidence](runtime-evidence/2026-10-18-222138-alpha24-integrated-stabilization/summary.md) measures code `49564ce` (app/module

@@ -48,6 +48,8 @@ final class ProbeReportPolicy {
         Throwable cause = error instanceof java.lang.reflect.InvocationTargetException && error.getCause() != null
             ? error.getCause() : error;
         if (cause instanceof ClassNotFoundException) return "SDK_OR_API_ABSENT";
+          if (cause.getClass().getName().equals("dev.cyclone.cloak.hook.RuntimeEnvelope$Unavailable"))
+              return "PROFILE_SURFACE_UNAVAILABLE";
         String reason = cause.getClass().getSimpleName();
         // Record only a permission name, never exception text or identifier data.
         if (cause instanceof SecurityException && cause.getMessage() != null) {

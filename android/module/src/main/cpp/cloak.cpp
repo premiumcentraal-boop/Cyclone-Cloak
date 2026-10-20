@@ -47,6 +47,9 @@ using json = nlohmann::json;
 using zygisk::Api;
 using zygisk::AppSpecializeArgs;
 
+// Per-fork read-only snapshot, delivered only after the existing user/package binding lookup.
+static std::string g_runtime_profile;
+
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO, "CloakModule", __VA_ARGS__)
 
 namespace {
@@ -420,6 +423,7 @@ void companion_handler(int socket) {
 
 bool load_profile_for(Api *api, const std::string &user, const std::string &pkg) {
     g_props.clear();
+    g_runtime_profile.clear();
     g_java_callbacks = true;
     int sim_slots = 1;
     if (!api || !valid_request(user, pkg)) {
@@ -454,6 +458,12 @@ bool load_profile_for(Api *api, const std::string &user, const std::string &pkg)
     if (device == profile.end() || !device->is_object()) {
         return false;
     }
+    // No new reader format or publication path. Only the saved profile supplies the envelope.
+    json envelope = json::object();
+    for (const char *key : {"schema_version", "reality", "display", "telephony", "ua"}) {
+        if (profile.contains(key)) envelope[key] = profile[key];
+    }
+    g_runtime_profile = envelope.dump(-1, ' ', true, json::error_handler_t::replace);
     for (const auto &[key, prop] : kDeviceProps) {
         auto value = device->find(key);
         if (value == device->end()) {
@@ -945,6 +955,16 @@ void init_java_hooks(JNIEnv *env, const std::string &app_data_dir) {
         env->DeleteLocalRef(bridge);
         env->DeleteLocalRef(loader);
         return;
+    }
+    jmethodID configure = env->GetStaticMethodID(bridge, "configureEnvelope", "(Ljava/lang/String;)V");
+    jstring snapshot = env->NewStringUTF(g_runtime_profile.c_str());
+    if (configure && snapshot && !env->ExceptionCheck()) {
+        env->CallStaticVoidMethod(bridge, configure, snapshot);
+    }
+    if (snapshot) env->DeleteLocalRef(snapshot);
+    if (env->ExceptionCheck()) {
+        env->ExceptionClear();
+        LOGI("envelope setup unavailable");
     }
     env->CallStaticVoidMethod(bridge, init, dataDir, pine, g_runtime_sdk, g_runtime_flags);
     if (env->ExceptionCheck()) {

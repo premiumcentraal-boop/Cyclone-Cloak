@@ -1,5 +1,13 @@
 # Current state
 
+Unreleased: Runtime envelope phase 2 adds scoped read-only callbacks and 15
+digest-only probe rows. Seventeen contract paths are PARTIAL; none is newly
+APPLIED. Local tests are not physical evidence. Two-profile cold-start, user
+isolation and cold unbound restoration remain UNVERIFIED for this module.
+Nominal capacity and physical cores remain descriptive where API meanings differ.
+No release, permission, binding or publication change. See
+[runtime envelope boundaries](RUNTIME-ENVELOPE-PHASE-2.md).
+
 Unreleased: Instance realism v1 adds opt-in deterministic, provenance-labelled
 generation from approved complete tuples in Python Device Factory and the
 Python/Kotlin identity engine. Reviewed SKU/configuration alternatives and matched

@@ -1,5 +1,16 @@
 # Cyclone Cloak Architecture
 
+## Runtime envelope phase 2 (unreleased)
+
+The existing native bound-user/package lookup supplies a profile projection to
+`RuntimeEnvelope` through the pinned Java loader. Callbacks capture immutable
+snapshots, preserve real API denials and reject missing declared facts. Visible
+package copies, real sensor objects, private-path free-space reads, WebView,
+display/SIM edges and DRM match-only checks do not change physical hardware or
+publication. New digest-only probe rows remain physically unverified. RAM/SKU
+capacity and physical cores stay descriptive where API meanings differ.
+See [surface boundaries and evidence requirements](RUNTIME-ENVELOPE-PHASE-2.md).
+
 ## Instance realism (unreleased, pure generation)
 
 `instance_realism.py` and `forge/InstanceRealism.kt` share the generated, checked-in

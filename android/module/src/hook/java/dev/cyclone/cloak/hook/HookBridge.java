@@ -73,9 +73,16 @@ public final class HookBridge {
 
     private HookBridge() { }
 
+    private static String envelopeSnapshot = "";
+    private static String scopedDataDirectory = "";
+    public static void configureEnvelope(String snapshot) {
+        envelopeSnapshot = snapshot == null ? "" : snapshot;
+    }
+
     /** Called from the native module right after the scoped process specializes. */
     public static void init(String appDataDir, byte[] pineLib, int runtimeSdk, int runtimeFlags) {
         try {
+            scopedDataDirectory = appDataDir;
             configureRuntime(runtimeSdk, runtimeFlags);
             log("ART runtime API " + runtimeSdk + ", debuggable=" + PineConfig.debuggable);
             File dir = new File(appDataDir, "code_cache/cloak_hooks");
@@ -109,6 +116,7 @@ public final class HookBridge {
     }
 
     private static void installHooks() {
+        RuntimeEnvelopeHooks.install(envelopeSnapshot, scopedDataDirectory);
         try {
             installTelephony();
         } catch (Throwable t) {
@@ -196,7 +204,12 @@ public final class HookBridge {
                     return;
                 }
                 try {
-                    Pine.hook(ua, new IdentityHook(KIND_UA));
+                    if (RuntimeEnvelopeHooks.current.active) {
+                        final RuntimeEnvelope envelope = RuntimeEnvelopeHooks.current;
+                        Pine.hook(ua, RuntimeEnvelopeHooks.guarded(frame2 -> RuntimeEnvelopeHooks.userAgent(envelope)));
+                    } else {
+                        Pine.hook(ua, new IdentityHook(KIND_UA));
+                    }
                     log("webview ua hooked on " + runtimeClass.getName());
                 } catch (Throwable t) {
                     log("webview ua hook failed", t);
@@ -761,12 +774,11 @@ public final class HookBridge {
      * hook never touches it), so the occurrence order stays host-stable.
      */
     private static final class CameraCharacteristicsHook extends MethodHook {
-        /** First-seen camera id -> occurrence index of its facing, in query order. */
-        private final Map<String, Integer> occurrences = new HashMap<>();
-        private final Map<Integer, Integer> seenPerFacing = new HashMap<>();
+        private final ThreadLocal<Boolean> inspecting = ThreadLocal.withInitial(() -> false);
 
 
         @Override public void afterCall(Pine.CallFrame frame) {
+            if (inspecting.get() || frame.hasThrowable()) return;
             Object result = frame.getResult();
             if (!(result instanceof CameraCharacteristics)
                     || frame.args == null || frame.args.length < 1
@@ -787,13 +799,22 @@ public final class HookBridge {
             if (realFacing == null) {
                 return;
             }
-            String id = (String) frame.args[0];
-            Integer occurrence = occurrences.get(id);
-            if (occurrence == null) {
-                occurrence = seenPerFacing.getOrDefault(realFacing, 0);
-                seenPerFacing.put(realFacing, occurrence + 1);
-                occurrences.put(id, occurrence);
-            }
+            // Use real visible IDs sorted by identity, never first query order. No invented camera IDs.
+            int occurrence = 0;
+            try {
+                inspecting.set(true);
+                android.hardware.camera2.CameraManager manager = (android.hardware.camera2.CameraManager) frame.thisObject;
+                String[] ids = manager.getCameraIdList();
+                if (ids.length > 128) return;
+                String wanted = (String) frame.args[0];
+                Map<String, Integer> visible = new java.util.HashMap<>();
+                for (String candidate : ids) {
+                    visible.put(candidate, candidate.equals(wanted) ? realFacing :
+                        manager.getCameraCharacteristics(candidate).get(CameraCharacteristics.LENS_FACING));
+                }
+                occurrence = cameraOccurrence(wanted, realFacing, visible);
+            } catch (Throwable implementationError) { return; }
+            finally { inspecting.set(false); }
             int[] spec = cameraSpec(realFacing, occurrence, count);
             if (spec == null) {
                 return;
@@ -824,18 +845,48 @@ public final class HookBridge {
         }
     }
 
+    static int cameraOccurrence(String wanted, int facing, Map<String, Integer> visible) {
+        if (!Integer.valueOf(facing).equals(visible.get(wanted))) throw new RuntimeEnvelope.Unavailable();
+        int ordinal = 0;
+        for (String id : new java.util.TreeSet<>(visible.keySet())) {
+            if (id.equals(wanted)) return ordinal;
+            if (Integer.valueOf(facing).equals(visible.get(id))) ordinal++;
+        }
+        throw new RuntimeEnvelope.Unavailable();
+    }
+
     /** Serves the profile's level and pixel array from mapped characteristics. */
     private static final class CameraMetadataGetHook extends MethodHook {
+        private final ThreadLocal<Boolean> readingHost = ThreadLocal.withInitial(() -> false);
         @Override public void beforeCall(Pine.CallFrame frame) {
+            if (readingHost.get()) return;
             if (frame.thisObject == null || frame.args == null || frame.args.length < 1
                     || !(frame.args[0] instanceof CameraCharacteristics.Key)) {
                 return;
             }
             int[] spec = CameraCharacteristicsHookLookups.specFor(frame.thisObject);
             if (spec == null) {
+                Object requested = frame.args[0];
+                if (RuntimeEnvelopeHooks.current.active &&
+                        (CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL.equals(requested)
+                        || CameraCharacteristics.SENSOR_INFO_PIXEL_ARRAY_SIZE.equals(requested)))
+                    frame.setThrowable(new RuntimeEnvelope.Unavailable());
                 return;
             }
             CameraCharacteristics.Key<?> key = (CameraCharacteristics.Key<?>) frame.args[0];
+            if (RuntimeEnvelopeHooks.current.active && (CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL.equals(key)
+                    || CameraCharacteristics.SENSOR_INFO_PIXEL_ARRAY_SIZE.equals(key))) {
+                try {
+                    readingHost.set(true);
+                    CameraCharacteristics host = (CameraCharacteristics) frame.thisObject;
+                    Integer level = host.get(CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL);
+                    Size size = host.get(CameraCharacteristics.SENSOR_INFO_PIXEL_ARRAY_SIZE);
+                    if (level == null || size == null || !cameraSpecSupported(spec, level, size.getWidth(), size.getHeight())) {
+                        frame.setThrowable(new RuntimeEnvelope.Unavailable()); return;
+                    }
+                } catch (Throwable implementationError) { return; }
+                finally { readingHost.set(false); }
+            }
             if (CameraCharacteristics.INFO_SUPPORTED_HARDWARE_LEVEL.equals(key)) {
                 frame.setResult((Integer) spec[0]);
             } else if (CameraCharacteristics.SENSOR_INFO_PIXEL_ARRAY_SIZE.equals(key)) {
@@ -844,19 +895,22 @@ public final class HookBridge {
         }
     }
 
+    static boolean cameraSpecSupported(int[] spec, int level, int width, int height) {
+        if (spec == null || spec.length != 3 || spec[1] <= 0 || spec[2] <= 0 || spec[1] > width || spec[2] > height) return false;
+        // LEVEL_3 includes FULL/LIMITED, FULL includes LIMITED. Never promote hardware capability.
+        return spec[0] == level || level == 3 && (spec[0] == 1 || spec[0] == 0) || level == 1 && spec[0] == 0;
+    }
+
     /** Indirection so the lookup map stays reachable from the static get hook. */
     private static final class CameraCharacteristicsHookLookups {
-        private static final Map<Integer, int[]> SPECS = new HashMap<>();
+        private static final Map<Object, int[]> SPECS = java.util.Collections.synchronizedMap(new java.util.WeakHashMap<>());
 
         static void put(Object characteristics, int[] spec) {
-            if (SPECS.size() > 128) {
-                SPECS.clear();
-            }
-            SPECS.put(System.identityHashCode(characteristics), spec);
+            SPECS.put(characteristics, spec);
         }
 
         static int[] specFor(Object characteristics) {
-            return SPECS.get(System.identityHashCode(characteristics));
+            return SPECS.get(characteristics);
         }
     }
 

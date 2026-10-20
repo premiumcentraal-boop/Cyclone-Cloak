@@ -1,5 +1,10 @@
 # Reality runtime backlog
 
+Unreleased phase 2 implements selected callbacks in groups 2, 3, 4, 5, 6 and a
+match-only DRM gate. See [the precise matrix](RUNTIME-ENVELOPE-PHASE-2.md).
+Physical verification remains pending; no new field is APPLIED. The planning
+rows below remain constraints for unsupported surfaces, not verification claims.
+
 This is a prioritized planning contract, not authorization to add hooks. Every
 native/runtime change below needs a separate authorized device run, a test app,
 an artifact-bound before/after result, and preservation/isolation audits. Current
@@ -16,8 +21,9 @@ Reality descriptions do not alter hardware. No platform verdict is implied.
 | 7: DRM metadata | `MediaDrm.getPropertyString("securityLevel")` is read-only. No key material, keybox, attestation or security-level elevation strategy is proposed. Actual hardware capability remains external evidence; metadata alone never proves it. | High / unacceptable for fabrication / high |
 
 The authoritative source table gives exact mappings and reasons for all 97 paths.
-Counts when all ten linked fields match: 10 applied, 0 partial, 5 pending, 42 diagnostic-only, 37 host-only,
-3 unsupported. Pending paths: CPU cores, GPU, advertised storage, WebView user
-agent and keyboard layout. Host-only provenance and unsupported fields are not
+Counts when all ten linked fields match: 10 applied, 17 partial, 3 pending, 27 diagnostic-only, 37 host-only,
+3 unsupported. Pending paths: CPU cores, advertised storage and keyboard layout.
+GPU and WebView UA now have partial, locally tested callbacks awaiting device
+evidence. Host-only provenance and unsupported fields are not
 targets for automatic enforcement. Counts include containers and wildcard leaves;
 they are contract coverage, not independent physical measurements.

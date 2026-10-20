@@ -1262,10 +1262,10 @@
                     "const": "android.telephony.TelephonyManager.getSimState()"
                   },
                   "status": {
-                    "const": "DIAGNOSTIC_ONLY"
+                    "const": "PARTIAL"
                   },
                   "safe_representation": {
-                    "const": false
+                    "const": true
                   },
                   "requires_future_runtime_work": {
                     "const": true
@@ -1274,7 +1274,7 @@
                     "const": false
                   },
                   "reason": {
-                    "const": "Read-only host observation; Reality is not consumed by the module."
+                    "const": "Scoped SIM state callbacks; invalid slot returns UNKNOWN and missing data fails closed. Phase 2 implementation is locally tested; physical isolation/cold/restoration evidence is pending."
                   },
                   "reader_key": {
                     "const": "carrier.sim_state"
@@ -1896,10 +1896,10 @@
                     "const": "android.opengl.GLES20.glGetString(GL_RENDERER)"
                   },
                   "status": {
-                    "const": "PENDING"
+                    "const": "PARTIAL"
                   },
                   "safe_representation": {
-                    "const": false
+                    "const": true
                   },
                   "requires_future_runtime_work": {
                     "const": true
@@ -1908,7 +1908,7 @@
                     "const": false
                   },
                   "reason": {
-                    "const": "No current reader or runtime mapping; separate authorized implementation required."
+                    "const": "Scoped GL_RENDERER metadata callback; requires a valid real GL context. No vendor, ABI or physical-core substitution. Phase 2 implementation is locally tested; physical isolation/cold/restoration evidence is pending."
                   },
                   "reader_key": {
                     "const": null
@@ -2243,7 +2243,7 @@
                     "const": true
                   },
                   "reason": {
-                    "const": "Read-only host capability or safety state; descriptive metadata only, never an enforcement target."
+                    "const": "Real securityLevel is match-only gated when declared; never substituted or elevated. Physical verification pending; no provisioning or verdict claim."
                   },
                   "reader_key": {
                     "const": "drm.security_level"
@@ -3463,10 +3463,10 @@
                     "const": "android.os.StatFs.getAvailableBytes()"
                   },
                   "status": {
-                    "const": "DIAGNOSTIC_ONLY"
+                    "const": "PARTIAL"
                   },
                   "safe_representation": {
-                    "const": false
+                    "const": true
                   },
                   "requires_future_runtime_work": {
                     "const": true
@@ -3475,7 +3475,7 @@
                     "const": false
                   },
                   "reason": {
-                    "const": "Read-only host observation; Reality is not consumed by the module."
+                    "const": "Scoped available-byte/block callbacks, bounded by the real filesystem total. No nominal storage or RAM substitution. Phase 2 implementation is locally tested; physical isolation/cold/restoration evidence is pending."
                   },
                   "reader_key": {
                     "const": "memory.free_storage_gib"
@@ -3865,10 +3865,10 @@
                     "const": "android.content.pm.PackageManager.getPackageInfo(allowlisted package)"
                   },
                   "status": {
-                    "const": "DIAGNOSTIC_ONLY"
+                    "const": "PARTIAL"
                   },
                   "safe_representation": {
-                    "const": false
+                    "const": true
                   },
                   "requires_future_runtime_work": {
                     "const": true
@@ -3877,7 +3877,7 @@
                     "const": false
                   },
                   "reason": {
-                    "const": "Read-only host observation; Reality is not consumed by the module."
+                    "const": "Copy only already caller-visible allowlisted PackageInfo results; preserve membership and denials. Phase 2 implementation is locally tested; physical isolation/cold/restoration evidence is pending."
                   },
                   "reader_key": {
                     "const": "packages.installed"
@@ -3932,10 +3932,10 @@
                     "const": "android.content.pm.PackageManager.getPackageInfo(allowlisted package):package"
                   },
                   "status": {
-                    "const": "DIAGNOSTIC_ONLY"
+                    "const": "PARTIAL"
                   },
                   "safe_representation": {
-                    "const": false
+                    "const": true
                   },
                   "requires_future_runtime_work": {
                     "const": true
@@ -3944,7 +3944,7 @@
                     "const": false
                   },
                   "reason": {
-                    "const": "Read-only host observation; Reality is not consumed by the module."
+                    "const": "Real package membership/name is preserved; no installation or visibility fabrication. Phase 2 implementation is locally tested; physical isolation/cold/restoration evidence is pending."
                   },
                   "reader_key": {
                     "const": "packages.installed"
@@ -3999,10 +3999,10 @@
                     "const": "android.content.pm.PackageManager.getPackageInfo(allowlisted package):version_code"
                   },
                   "status": {
-                    "const": "DIAGNOSTIC_ONLY"
+                    "const": "PARTIAL"
                   },
                   "safe_representation": {
-                    "const": false
+                    "const": true
                   },
                   "requires_future_runtime_work": {
                     "const": true
@@ -4011,7 +4011,7 @@
                     "const": false
                   },
                   "reason": {
-                    "const": "Read-only host observation; Reality is not consumed by the module."
+                    "const": "Scoped PackageInfo copy for the fixed package allowlist. Phase 2 implementation is locally tested; physical isolation/cold/restoration evidence is pending."
                   },
                   "reader_key": {
                     "const": "packages.installed"
@@ -4066,10 +4066,10 @@
                     "const": "android.content.pm.PackageManager.getPackageInfo(allowlisted package):version_name"
                   },
                   "status": {
-                    "const": "DIAGNOSTIC_ONLY"
+                    "const": "PARTIAL"
                   },
                   "safe_representation": {
-                    "const": false
+                    "const": true
                   },
                   "requires_future_runtime_work": {
                     "const": true
@@ -4078,7 +4078,7 @@
                     "const": false
                   },
                   "reason": {
-                    "const": "Read-only host observation; Reality is not consumed by the module."
+                    "const": "Scoped PackageInfo copy for the fixed package allowlist. Phase 2 implementation is locally tested; physical isolation/cold/restoration evidence is pending."
                   },
                   "reader_key": {
                     "const": "packages.installed"
@@ -6669,10 +6669,10 @@
                     "const": "android.hardware.SensorManager.getSensorList(TYPE_ALL)"
                   },
                   "status": {
-                    "const": "DIAGNOSTIC_ONLY"
+                    "const": "PARTIAL"
                   },
                   "safe_representation": {
-                    "const": false
+                    "const": true
                   },
                   "requires_future_runtime_work": {
                     "const": true
@@ -6681,7 +6681,7 @@
                     "const": false
                   },
                   "reason": {
-                    "const": "Read-only host observation; Reality is not consumed by the module."
+                    "const": "Scoped filtering of real visible sensor objects only; no sensor creation or event changes. Phase 2 implementation is locally tested; physical isolation/cold/restoration evidence is pending."
                   },
                   "reader_key": {
                     "const": "sensors.inventory"
@@ -6736,10 +6736,10 @@
                     "const": "android.hardware.SensorManager.getSensorList(TYPE_ALL):max_delay_us"
                   },
                   "status": {
-                    "const": "DIAGNOSTIC_ONLY"
+                    "const": "PARTIAL"
                   },
                   "safe_representation": {
-                    "const": false
+                    "const": true
                   },
                   "requires_future_runtime_work": {
                     "const": true
@@ -6748,7 +6748,7 @@
                     "const": false
                   },
                   "reason": {
-                    "const": "Read-only host observation; Reality is not consumed by the module."
+                    "const": "Scoped descriptor getter; does not change sampling or sensor events. Phase 2 implementation is locally tested; physical isolation/cold/restoration evidence is pending."
                   },
                   "reader_key": {
                     "const": "sensors.inventory"
@@ -6803,10 +6803,10 @@
                     "const": "android.hardware.SensorManager.getSensorList(TYPE_ALL):min_delay_us"
                   },
                   "status": {
-                    "const": "DIAGNOSTIC_ONLY"
+                    "const": "PARTIAL"
                   },
                   "safe_representation": {
-                    "const": false
+                    "const": true
                   },
                   "requires_future_runtime_work": {
                     "const": true
@@ -6815,7 +6815,7 @@
                     "const": false
                   },
                   "reason": {
-                    "const": "Read-only host observation; Reality is not consumed by the module."
+                    "const": "Scoped descriptor getter; does not change sampling or sensor events. Phase 2 implementation is locally tested; physical isolation/cold/restoration evidence is pending."
                   },
                   "reader_key": {
                     "const": "sensors.inventory"
@@ -6870,10 +6870,10 @@
                     "const": "android.hardware.SensorManager.getSensorList(TYPE_ALL):name"
                   },
                   "status": {
-                    "const": "DIAGNOSTIC_ONLY"
+                    "const": "PARTIAL"
                   },
                   "safe_representation": {
-                    "const": false
+                    "const": true
                   },
                   "requires_future_runtime_work": {
                     "const": true
@@ -6882,7 +6882,7 @@
                     "const": false
                   },
                   "reason": {
-                    "const": "Read-only host observation; Reality is not consumed by the module."
+                    "const": "Scoped descriptor getter for a uniquely declared real sensor type. Phase 2 implementation is locally tested; physical isolation/cold/restoration evidence is pending."
                   },
                   "reader_key": {
                     "const": "sensors.inventory"
@@ -6937,10 +6937,10 @@
                     "const": "android.hardware.SensorManager.getSensorList(TYPE_ALL):range"
                   },
                   "status": {
-                    "const": "DIAGNOSTIC_ONLY"
+                    "const": "PARTIAL"
                   },
                   "safe_representation": {
-                    "const": false
+                    "const": true
                   },
                   "requires_future_runtime_work": {
                     "const": true
@@ -6949,7 +6949,7 @@
                     "const": false
                   },
                   "reason": {
-                    "const": "Read-only host observation; Reality is not consumed by the module."
+                    "const": "Scoped descriptor getter; does not change measured events. Phase 2 implementation is locally tested; physical isolation/cold/restoration evidence is pending."
                   },
                   "reader_key": {
                     "const": "sensors.inventory"
@@ -7004,10 +7004,10 @@
                     "const": "android.hardware.SensorManager.getSensorList(TYPE_ALL):resolution"
                   },
                   "status": {
-                    "const": "DIAGNOSTIC_ONLY"
+                    "const": "PARTIAL"
                   },
                   "safe_representation": {
-                    "const": false
+                    "const": true
                   },
                   "requires_future_runtime_work": {
                     "const": true
@@ -7016,7 +7016,7 @@
                     "const": false
                   },
                   "reason": {
-                    "const": "Read-only host observation; Reality is not consumed by the module."
+                    "const": "Scoped descriptor getter; does not change measured events. Phase 2 implementation is locally tested; physical isolation/cold/restoration evidence is pending."
                   },
                   "reader_key": {
                     "const": "sensors.inventory"
@@ -7071,10 +7071,10 @@
                     "const": "android.hardware.SensorManager.getSensorList(TYPE_ALL):type"
                   },
                   "status": {
-                    "const": "DIAGNOSTIC_ONLY"
+                    "const": "PARTIAL"
                   },
                   "safe_representation": {
-                    "const": false
+                    "const": true
                   },
                   "requires_future_runtime_work": {
                     "const": true
@@ -7083,7 +7083,7 @@
                     "const": false
                   },
                   "reason": {
-                    "const": "Read-only host observation; Reality is not consumed by the module."
+                    "const": "Real sensor type is preserved; inventory filtering only, no type substitution. Phase 2 implementation is locally tested; physical isolation/cold/restoration evidence is pending."
                   },
                   "reader_key": {
                     "const": "sensors.inventory"
@@ -7339,10 +7339,10 @@
                     "const": "android.webkit.WebView.getCurrentWebViewPackage().packageName"
                   },
                   "status": {
-                    "const": "DIAGNOSTIC_ONLY"
+                    "const": "PARTIAL"
                   },
                   "safe_representation": {
-                    "const": false
+                    "const": true
                   },
                   "requires_future_runtime_work": {
                     "const": true
@@ -7351,7 +7351,7 @@
                     "const": false
                   },
                   "reason": {
-                    "const": "Read-only host observation; Reality is not consumed by the module."
+                    "const": "Real visible provider identity must match; no provider switch or fabricated installation. Phase 2 implementation is locally tested; physical isolation/cold/restoration evidence is pending."
                   },
                   "reader_key": {
                     "const": "webview.provider"
@@ -7406,10 +7406,10 @@
                     "const": "android.webkit.WebSettings.getUserAgentString()"
                   },
                   "status": {
-                    "const": "PENDING"
+                    "const": "PARTIAL"
                   },
                   "safe_representation": {
-                    "const": false
+                    "const": true
                   },
                   "requires_future_runtime_work": {
                     "const": true
@@ -7418,7 +7418,7 @@
                     "const": false
                   },
                   "reason": {
-                    "const": "No current reader or runtime mapping; separate authorized implementation required."
+                    "const": "Default and concrete-provider UA callbacks require exact agreement with the base UA. Phase 2 implementation is locally tested; physical isolation/cold/restoration evidence is pending."
                   },
                   "reader_key": {
                     "const": null
@@ -7473,10 +7473,10 @@
                     "const": "android.webkit.WebView.getCurrentWebViewPackage().versionName"
                   },
                   "status": {
-                    "const": "DIAGNOSTIC_ONLY"
+                    "const": "PARTIAL"
                   },
                   "safe_representation": {
-                    "const": false
+                    "const": true
                   },
                   "requires_future_runtime_work": {
                     "const": true
@@ -7485,7 +7485,7 @@
                     "const": false
                   },
                   "reason": {
-                    "const": "Read-only host observation; Reality is not consumed by the module."
+                    "const": "Visible provider and allowlisted package versions must agree before copying metadata. Phase 2 implementation is locally tested; physical isolation/cold/restoration evidence is pending."
                   },
                   "reader_key": {
                     "const": "webview.version"

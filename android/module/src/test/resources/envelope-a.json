@@ -1,0 +1,97 @@
+{
+  "schema_version": "0.4",
+  "display": {
+    "width": 1080,
+    "height": 2400
+  },
+  "telephony": {
+    "sim_slot_count": 1
+  },
+  "ua": {
+    "value": "Synthetic-UA-a"
+  },
+  "reality": {
+    "compute": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "Synthetic unit-test fixture, not hardware evidence.",
+      "values": {
+        "soc": "synthetic-soc-a",
+        "gpu": "Synthetic GPU a"
+      }
+    },
+    "memory": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "Synthetic unit-test fixture, not hardware evidence.",
+      "values": {
+        "ram_gib": 8,
+        "storage_gib": 128,
+        "free_storage_gib": 32
+      }
+    },
+    "sensors": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "Synthetic unit-test fixture, not hardware evidence.",
+      "values": {
+        "inventory": [
+          {
+            "type": 1,
+            "name": "Synthetic accelerometer a",
+            "min_delay_us": 1000,
+            "max_delay_us": 10000,
+            "range": 10,
+            "resolution": 0.01
+          }
+        ]
+      }
+    },
+    "packages": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "Synthetic unit-test fixture, not hardware evidence.",
+      "values": {
+        "installed": [
+          {
+            "package": "com.google.android.webview",
+            "version_name": "101.0.0.0",
+            "version_code": 101
+          },
+          {
+            "package": "com.android.chrome",
+            "version_name": "101.0.0.0",
+            "version_code": 101
+          }
+        ]
+      }
+    },
+    "webview": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "Synthetic unit-test fixture, not hardware evidence.",
+      "values": {
+        "provider": "com.google.android.webview",
+        "version": "101.0.0.0",
+        "user_agent": "Synthetic-UA-a"
+      }
+    },
+    "carrier": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "Synthetic unit-test fixture, not hardware evidence.",
+      "values": {
+        "slots": 1,
+        "sim_state": "ready"
+      }
+    },
+    "drm": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "Synthetic unit-test fixture, not hardware evidence.",
+      "values": {
+        "security_level": "L3"
+      }
+    }
+  }
+}

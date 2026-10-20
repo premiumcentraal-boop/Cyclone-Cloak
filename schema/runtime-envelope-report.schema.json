@@ -1,0 +1,129 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/premiumcentraal-boop/Cyclone-Cloak/schema/runtime-envelope-report.schema.json",
+  "title": "Runtime envelope diagnostics extension format 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "verification",
+    "rows",
+    "limitations"
+  ],
+  "properties": {
+    "format": {
+      "const": 1
+    },
+    "verification": {
+      "const": "NOT_VERIFIED"
+    },
+    "rows": {
+      "type": "array",
+      "maxItems": 15,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "id",
+          "source",
+          "expected_sha256",
+          "actual_sha256",
+          "status",
+          "reason",
+          "duration_ms"
+        ],
+        "properties": {
+          "id": {
+            "enum": [
+              "envelope.sensors.inventory",
+              "envelope.camera.characteristics",
+              "envelope.memory.totalMem",
+              "envelope.storage.totalBytes",
+              "envelope.storage.availableBytes",
+              "envelope.compute.schedulerProcessors",
+              "envelope.compute.gpuRenderer",
+              "envelope.packages.visibleVersions",
+              "envelope.webview.provider",
+              "envelope.webview.version",
+              "envelope.webview.defaultUa",
+              "envelope.display.realSize",
+              "envelope.telephony.simState",
+              "envelope.telephony.simStateSlot0",
+              "envelope.drm.securityLevel"
+            ]
+          },
+          "source": {
+            "const": "Android read-only API"
+          },
+          "expected_sha256": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "actual_sha256": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "status": {
+            "enum": [
+              "PASS",
+              "FAIL",
+              "OBSERVED",
+              "BLOCKED",
+              "MISSING",
+              "UNMAPPED"
+            ]
+          },
+          "reason": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9_:\\.]+$",
+            "maxLength": 160
+          },
+          "duration_ms": {
+            "type": "integer",
+            "minimum": 0
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "status": {
+                  "enum": [
+                    "PASS",
+                    "FAIL"
+                  ]
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "expected_sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                },
+                "actual_sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "limitations": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "pattern": "^[A-Z0-9_]+$"
+      },
+      "uniqueItems": true
+    }
+  }
+}
