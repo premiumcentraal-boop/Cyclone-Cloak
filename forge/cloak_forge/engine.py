@@ -5,7 +5,7 @@ from dataclasses import asdict
 import hashlib
 from typing import Any, Iterable, Mapping
 
-from .coverage import APPLIED, INTERNAL, PENDING
+from .coverage import APPLIED, INTERNAL
 from .forge import forge_profile
 from .templates import TEMPLATES
 from .pif import build_pif
@@ -22,13 +22,24 @@ def generate(request: Mapping[str, Any]) -> dict[str, Any]:
     version = request.get("schema_version", "0.3")
     if version not in ("0.2", "0.3", "0.4"):
         raise ValueError("schema_version must be 0.2, 0.3 or 0.4")
-    profile = forge_profile(request["name"], request["seed"], request["template"], version)
+    from . import instance_realism
+    realism = request.get('instance_realism', False)
+    if type(realism) is not bool or request.get('realism_tuple') is not None and not realism:
+        raise ValueError('REALISM_REQUEST_INVALID')
+    if realism and version != '0.4':
+        raise ValueError('REALISM_REQUIRES_SCHEMA_04')
+    selection = instance_realism.plan('phones.' + request['template'], request['seed'], request.get('realism_tuple')) if realism else None
+    profile = forge_profile(request["name"], selection['seed'] if selection else request["seed"], request["template"], version)
+    if selection:
+        profile = instance_realism.apply(profile, selection)
     profile["schema_version"] = version
     return {"profile": profile, "posture": derive_posture(profile),
             "findings": [asdict(f) for f in validate(profile)],
             "uniqueness": [asdict(f) for f in check_uniqueness(profile, [])],
             "metadata": {"engine_version": ENGINE_VERSION, "schema_version": version,
-                         "template": request["template"]}}
+                         "template": request["template"],
+                         **({'instance_realism': profile['meta']['instance_realism'],
+                             'realism_request_seed': request['seed']} if realism else {})}}
 
 
 def validate(profile: Mapping[str, Any]) -> list[Finding]:
@@ -53,10 +64,12 @@ def generate_unique(request: Mapping[str, Any], existingProfiles: Iterable[Mappi
             raise ValueError("Generated profile has coherence errors.")
         # Copy shells to prevent the edit-oriented own-ID exclusion, without touching saved data.
         index = [{**p, "id": f"saved-{i}"} for i, p in enumerate(library)]
-        if any(p.get("id") == profile["id"] for p in library) or check_uniqueness(profile, index):
+        from .instance_realism import conflicts
+        if any(p.get("id") == profile["id"] for p in library) or check_uniqueness(profile, index) or (
+            request.get('instance_realism', False) and conflicts(profile, library)):
             continue
         template = TEMPLATES[request["template"]]
-        bundle["metadata"].update(chosen_seed=seed, attempt_count=attempt,
+        bundle["metadata"].update(chosen_seed=profile['seed'], attempt_count=attempt,
             source_confidence=template.get("source_confidence", template.get("confidence", "needs verification")))
         return bundle
     raise ValueError("Could not generate a unique profile after 128 attempts. Nothing was saved.")

@@ -35,6 +35,14 @@ object ProfileBackup {
             out.put("reality", reality)
         }
         if (sensitive) {
+            profile.optJSONObject("meta")?.takeIf { it.has("instance_realism") }?.let { source ->
+                out.put("meta", JSONObject().also { meta ->
+                    listOf("source", "forge_version", "template", "instance_realism").filter(source::has).forEach { meta.put(it, source.get(it)) }
+                })
+                profile.optJSONObject("network")?.let { network ->
+                    out.put("network", JSONObject().also { if (network.has("egress_hint")) it.put("egress_hint", network.get("egress_hint")) })
+                }
+            }
             out.put("id", profile.opt("id")).put("seed", profile.opt("seed"))
             val identifiers = JSONObject(); val source = profile.optJSONObject("identifiers")
             ProfileUniqueness.fields.forEach { key -> if (source?.has(key) == true) identifiers.put(key, source.get(key)) }

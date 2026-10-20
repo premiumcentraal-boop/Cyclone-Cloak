@@ -91,6 +91,8 @@ class InstanceRequest:
     ordinal: int = 0
     revision: int = 0
     label: str = "Device"
+    instance_realism: bool = False
+    realism_tuple: str | None = None
 
     def validate(self):
         if (
@@ -106,6 +108,8 @@ class InstanceRequest:
             or not self.label.strip()
             or not 1 <= len(self.label) <= 64
             or any(ord(c) < 32 or ord(c) == 127 for c in self.label)
+            or type(self.instance_realism) is not bool
+            or self.realism_tuple is not None and (not self.instance_realism or not isinstance(self.realism_tuple, str))
         ):
             raise FactoryError([_error("REQUEST", "request")])
 
@@ -123,8 +127,8 @@ class InstanceRequest:
         )
 
 
-def _body(template, request):
-    seed = request.derived_seed()
+def _body(template, request, *, derived_seed=None):
+    seed = derived_seed if derived_seed is not None else request.derived_seed()
     identifiers = derive_identifier_bundle(seed)
     # ICCID: telecom MII + US issuer class + subscriber digits + Luhn.
     prefix = template["classes"]["carrier_region"]["iccid_prefix"]
@@ -375,8 +379,20 @@ class DeviceFactory:
     def validate(self, profile, template_id, existing: Iterable[Mapping] = ()):
         """Strict acceptance gate. Includes same-ID records and cross-slot collisions."""
         t = self._template(template_id)
+        existing = list(existing)
         findings = []
         try:
+            from . import instance_realism
+            realism = at(profile, 'meta.instance_realism')
+            if realism is not None:
+                if instance_realism.validate(profile):
+                    return instance_realism.validate(profile)
+                if realism['source_id'] != 'factory.' + template_id:
+                    return [_error('REALISM_SOURCE_MISMATCH', 'meta.instance_realism')]
+                t = copy.deepcopy(t)
+                _, _, selected = instance_realism._selected(realism['source_id'], realism['tuple_id'])
+                for path, fact in selected['changes'].items():
+                    instance_realism.set_path(t, path, fact['value'])
             expected_fields = {
                 "schema_version",
                 "id",
@@ -399,7 +415,7 @@ class DeviceFactory:
                 )
             ):
                 findings.append(_error("PROFILE_ID_DERIVATION", "id"))
-            if profile.get("meta") != {
+            if {k: v for k, v in profile.get('meta', {}).items() if k != 'instance_realism'} != {
                 "source": "forge",
                 "forge_version": "device-factory-v1",
                 "template": template_id,
@@ -461,6 +477,8 @@ class DeviceFactory:
                 inv = at(profile, "reality.inventory_id")
                 if inv and inv == at(other, "reality.inventory_id"):
                     findings.append(_error("LIBRARY_COLLISION", "reality.inventory_id"))
+            if realism is not None and instance_realism.conflicts(profile, list(existing)):
+                findings.append(_error('LIBRARY_COLLISION', 'identifiers'))
         except (KeyError, TypeError, ValueError, AttributeError, OverflowError):
             findings.append(_error("MALFORMED_PROFILE", "profile"))
         return sorted(set(findings), key=lambda f: (f.severity, f.field or "", f.code))
@@ -468,7 +486,7 @@ class DeviceFactory:
     def quality_report(self, profile, request, existing=(), created_at=None):
         request.validate()
         findings = self.validate(profile, request.template_id, existing)
-        expected = _body(self._template(request.template_id), request)
+        expected = self._prepared(request)
         if profile != expected:
             findings.append(_error("DERIVATION_MISMATCH", "profile"))
         paths = (
@@ -515,11 +533,19 @@ class DeviceFactory:
             "creation_timestamp": timestamp,
             "factory_version": VERSION,
             "template_digest": _hash(self._template(request.template_id)),
+            **({'instance_realism': copy.deepcopy(at(profile, 'meta.instance_realism'))} if request.instance_realism else {}),
         }
+
+    def _prepared(self, request):
+        if not request.instance_realism:
+            return _body(self._template(request.template_id), request)
+        from .instance_realism import plan, apply
+        selection = plan('factory.' + request.template_id, request.derived_seed(), request.realism_tuple)
+        return apply(_body(self._template(request.template_id), request, derived_seed=selection['seed']), selection)
 
     def generate(self, request: InstanceRequest, existing=(), *, created_at=None):
         request.validate()
-        profile = _body(self._template(request.template_id), request)
+        profile = self._prepared(request)
         report = self.quality_report(profile, request, existing, created_at)
         if report["validation_state"] != "valid":
             raise FactoryError([Finding(**f) for f in report["failed_checks"]])
@@ -538,6 +564,8 @@ class DeviceFactory:
         start_ordinal=0,
         existing=(),
         created_at=None,
+        instance_realism=False,
+        realism_tuple=None,
     ):
         """All-or-nothing in memory. Collision rejects the whole batch without reseeding."""
         if (
@@ -570,6 +598,8 @@ class DeviceFactory:
                 start_ordinal + i,
                 revision,
                 f"{label_prefix} {start_ordinal + i + 1:03d}",
+                instance_realism,
+                realism_tuple,
             )
             bundle = self.generate(request, library, created_at=timestamp)
             result.append(bundle)

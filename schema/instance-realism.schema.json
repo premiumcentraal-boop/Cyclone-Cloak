@@ -1,0 +1,231 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/premiumcentraal-boop/Cyclone-Cloak/schema/instance-realism.schema.json",
+  "title": "Optional instance realism provenance v1; descriptive only",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "catalog_digest",
+    "source_id",
+    "tuple_id",
+    "provenance",
+    "axes"
+  ],
+  "properties": {
+    "format": {
+      "type": "integer",
+      "const": 1
+    },
+    "catalog_digest": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "source_id": {
+      "type": "string",
+      "pattern": "^(factory|phones)\\.[a-z0-9_]+$"
+    },
+    "tuple_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160,
+      "pattern": "^[A-Za-z0-9._:-]+$"
+    },
+    "provenance": {
+      "type": "object",
+      "minProperties": 1,
+      "maxProperties": 128,
+      "propertyNames": {
+        "enum": [
+          "camera.cameras",
+          "device.baseband",
+          "device.bootloader",
+          "device.build_date_utc",
+          "device.build_id",
+          "device.fingerprint",
+          "device.sdk_int",
+          "device.security_patch",
+          "device.version_incremental",
+          "device.version_release",
+          "id",
+          "identifiers.advertising_id",
+          "identifiers.android_id",
+          "identifiers.app_set_id",
+          "identifiers.bt_mac",
+          "identifiers.gsf_id",
+          "identifiers.imei_primary",
+          "identifiers.imei_secondary",
+          "identifiers.mac",
+          "identifiers.serial",
+          "identifiers.sim_serial",
+          "identifiers.widevine_id",
+          "locale",
+          "network",
+          "reality.cameras.availability",
+          "reality.cameras.reason",
+          "reality.cameras.source",
+          "reality.cameras.values",
+          "reality.carrier.availability",
+          "reality.carrier.reason",
+          "reality.carrier.source",
+          "reality.carrier.values",
+          "reality.environment.availability",
+          "reality.environment.reason",
+          "reality.environment.source",
+          "reality.environment.values",
+          "reality.inventory_id",
+          "reality.memory.reason",
+          "reality.memory.source",
+          "reality.memory.values.ram_gib",
+          "reality.memory.values.storage_gib",
+          "reality.packages.availability",
+          "reality.packages.reason",
+          "reality.packages.source",
+          "reality.packages.values",
+          "reality.radio.values.bluetooth_name",
+          "reality.radio.values.wifi_name",
+          "reality.sensors.availability",
+          "reality.sensors.reason",
+          "reality.sensors.source",
+          "reality.sensors.values",
+          "reality.webview.availability",
+          "reality.webview.reason",
+          "reality.webview.source",
+          "reality.webview.values",
+          "reality.webview.values.user_agent",
+          "seed",
+          "telephony",
+          "ua.value"
+        ]
+      },
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source",
+          "confidence",
+          "availability"
+        ],
+        "properties": {
+          "source": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160,
+            "pattern": "^[A-Za-z0-9._:-]+$"
+          },
+          "confidence": {
+            "enum": [
+              "public reference",
+              "approximated",
+              "derived",
+              "needs verification"
+            ]
+          },
+          "availability": {
+            "enum": [
+              "known",
+              "unknown",
+              "unavailable"
+            ]
+          }
+        }
+      }
+    },
+    "axes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "memory",
+        "region_locale",
+        "firmware",
+        "modem",
+        "radio_labels",
+        "identifiers",
+        "camera_sensor",
+        "software_packages"
+      ],
+      "properties": {
+        "memory": {
+          "enum": [
+            "approved-skus",
+            "fixed-or-unknown",
+            "configured-preferences",
+            "fixed",
+            "derived",
+            "catalog-bound-alternatives"
+          ]
+        },
+        "region_locale": {
+          "enum": [
+            "approved-skus",
+            "fixed-or-unknown",
+            "configured-preferences",
+            "fixed",
+            "derived",
+            "catalog-bound-alternatives"
+          ]
+        },
+        "firmware": {
+          "enum": [
+            "approved-skus",
+            "fixed-or-unknown",
+            "configured-preferences",
+            "fixed",
+            "derived",
+            "catalog-bound-alternatives"
+          ]
+        },
+        "modem": {
+          "enum": [
+            "approved-skus",
+            "fixed-or-unknown",
+            "configured-preferences",
+            "fixed",
+            "derived",
+            "catalog-bound-alternatives"
+          ]
+        },
+        "radio_labels": {
+          "enum": [
+            "approved-skus",
+            "fixed-or-unknown",
+            "configured-preferences",
+            "fixed",
+            "derived",
+            "catalog-bound-alternatives"
+          ]
+        },
+        "identifiers": {
+          "enum": [
+            "approved-skus",
+            "fixed-or-unknown",
+            "configured-preferences",
+            "fixed",
+            "derived",
+            "catalog-bound-alternatives"
+          ]
+        },
+        "camera_sensor": {
+          "enum": [
+            "approved-skus",
+            "fixed-or-unknown",
+            "configured-preferences",
+            "fixed",
+            "derived",
+            "catalog-bound-alternatives"
+          ]
+        },
+        "software_packages": {
+          "enum": [
+            "approved-skus",
+            "fixed-or-unknown",
+            "configured-preferences",
+            "fixed",
+            "derived",
+            "catalog-bound-alternatives"
+          ]
+        }
+      }
+    }
+  }
+}

@@ -68,6 +68,13 @@
           "type": "integer",
           "minimum": 1,
           "maximum": 128
+        },
+        "instance_realism": {
+          "$ref": "instance-realism.schema.json"
+        },
+        "realism_request_seed": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
         }
       },
       "dependentRequired": {
@@ -76,6 +83,12 @@
         ],
         "attempt_count": [
           "chosen_seed"
+        ],
+        "instance_realism": [
+          "realism_request_seed"
+        ],
+        "realism_request_seed": [
+          "instance_realism"
         ]
       }
     }

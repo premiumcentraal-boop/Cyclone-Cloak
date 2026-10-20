@@ -1,5 +1,13 @@
 # Current state
 
+Unreleased: Instance realism v1 adds opt-in deterministic, provenance-labelled
+generation from approved complete tuples in Python Device Factory and the
+Python/Kotlin identity engine. Reviewed SKU/configuration alternatives and matched
+catalog firmware bundles vary together; unsupported hardware/carrier/package facts
+stay fixed or unknown. Existing generation and schema 0.2/0.3/0.4 imports remain
+compatible. No runtime or device changes; physical verification is UNVERIFIED.
+See [instance realism policies and limits](INSTANCE-REALISM-V1.md).
+
 Unreleased: Cohort separation v1 adds pure Python/Kotlin read-only analysis over
 saved profile bodies. Seven category scores, shared groups, duplicate/near-duplicate
 identifier flags, missing Reality facts and conservative recommendations contain

@@ -108,6 +108,7 @@ object ProfileValidator {
         if (findings.any { it.isError }) return summarize(findings).findings
 
         findings += DeviceReality.validate(profile)
+        findings += InstanceRealism.validate(profile)
         findings += PlaySurfaceContract.validateProfileSection(profile).map { Finding(ERROR, it.code, it.message, it.field) }
         // Summary ordering is independent of rule execution and JSON key order.
         fingerprint(findings, device)

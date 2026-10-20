@@ -7,7 +7,7 @@ import org.json.JSONTokener
 object EngineBundleCodec {
     data class Bundle(val profile: JSONObject, val metadata: JSONObject, val findings: List<ProfileValidator.Finding>, val extras: JSONObject = JSONObject())
     private val keys = setOf("profile", "metadata", "posture", "findings", "uniqueness")
-    private val metadataKeys = setOf("engine_version", "schema_version", "template", "source_confidence", "chosen_seed", "attempt_count")
+    private val metadataKeys = setOf("engine_version", "schema_version", "template", "source_confidence", "chosen_seed", "attempt_count", "instance_realism", "realism_request_seed")
 
     fun decode(text: String): Bundle {
         require(text.length <= 2_000_000) { "Engine bundle is too large." }
@@ -50,6 +50,15 @@ object EngineBundleCodec {
         require(metadata.opt("template") is String && metadata.getString("template").length in 1..128) { "Missing template ID." }
         val profileTemplate = profile.optJSONObject("meta")?.optString("template").orEmpty()
         require(profileTemplate.isEmpty() || metadata.getString("template") == profileTemplate) { "Engine/profile template IDs disagree." }
+        require(metadata.has("instance_realism") == metadata.has("realism_request_seed")) { "Incomplete instance realism metadata." }
+        if (metadata.has("instance_realism")) {
+            val provenance = metadata.getJSONObject("instance_realism")
+            require(InstanceRealism.same(provenance, profile.optJSONObject("meta")?.optJSONObject("instance_realism"))) { "Instance provenance disagrees with profile." }
+            val requestSeed = metadata.opt("realism_request_seed")
+            require(requestSeed is String && requestSeed.matches(Regex("[0-9a-f]{64}"))) { "Invalid instance request seed." }
+            val selected = InstanceRealism.plan("phones." + metadata.getString("template"), requestSeed, provenance.getString("tuple_id"))
+            require(selected.seed == profile.optString("seed") && InstanceRealism.validate(profile).isEmpty()) { "Instance derivation binding failed." }
+        }
         if (metadata.has("source_confidence")) require(metadata.opt("source_confidence") in setOf("public reference", "approximated", "needs verification")) { "Invalid source confidence." }
         require(metadata.has("chosen_seed") == metadata.has("attempt_count")) { "Incomplete generation metadata." }
         if (metadata.has("chosen_seed")) {

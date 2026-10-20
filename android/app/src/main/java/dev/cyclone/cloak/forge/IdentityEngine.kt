@@ -10,19 +10,28 @@ object IdentityEngine {
         val seed: String,
         val template: PhoneTemplate,
         val schema_version: String = "0.3",
+        val instance_realism: Boolean = false,
+        val realism_tuple: String? = null,
     )
 
     fun generate(request: GenerationRequest): JSONObject {
         require(request.schema_version in setOf("0.2", "0.3", "0.4")) { "schema_version must be 0.2, 0.3 or 0.4" }
         require(request.name.isNotBlank()) { "name must be a non-empty string" }
         require(Regex("[0-9a-f]{64}").matches(request.seed)) { "seed must be 64 lowercase hex characters" }
-        val profile = CloakForge.forgeProfile(request.name, request.seed, request.template, request.schema_version)
+        require(request.instance_realism || request.realism_tuple == null) { "REALISM_REQUEST_INVALID" }
+        require(!request.instance_realism || request.schema_version == "0.4") { "REALISM_REQUIRES_SCHEMA_04" }
+        val selection = if (request.instance_realism) InstanceRealism.plan("phones." + request.template.id, request.seed, request.realism_tuple) else null
+        val baseline = CloakForge.forgeProfile(request.name, selection?.seed ?: request.seed, request.template, request.schema_version)
             .put("schema_version", request.schema_version)
+        val profile = if (selection == null) baseline else InstanceRealism.apply(baseline, selection)
         return JSONObject().put("profile", profile).put("posture", derive_posture(profile))
             .put("findings", findingsJson(validate(profile)))
             .put("uniqueness", findingsJson(check_uniqueness(profile, emptyList())))
             .put("metadata", JSONObject().put("engine_version", "1")
-                .put("schema_version", request.schema_version).put("template", request.template.id))
+                .put("schema_version", request.schema_version).put("template", request.template.id).also { metadata ->
+                    if (selection != null) metadata.put("instance_realism", JSONObject(profile.getJSONObject("meta").getJSONObject("instance_realism").toString()))
+                        .put("realism_request_seed", request.seed)
+                })
     }
 
     fun validate(profile: JSONObject): List<ProfileValidator.Finding> = ProfileValidator.validateProfile(profile)

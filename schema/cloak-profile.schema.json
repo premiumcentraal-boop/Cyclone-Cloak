@@ -94,7 +94,12 @@
     },
     "meta": {
       "type": "object",
-      "additionalProperties": true
+      "additionalProperties": true,
+      "properties": {
+        "instance_realism": {
+          "$ref": "instance-realism.schema.json"
+        }
+      }
     },
     "reality": {
       "$ref": "device-reality.schema.json"

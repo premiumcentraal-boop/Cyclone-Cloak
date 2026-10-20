@@ -31,8 +31,9 @@ class DefaultDeviceProfileEngine : DeviceProfileEngine {
             val findings = validate(profile)
             if (findings.any { it.isError }) throw InvalidProfile(findings)
             if (existingProfiles.any { it.optString("id") == profile.optString("id") } ||
-                index.findings(profile, ownId = "new").isNotEmpty()) continue
-            bundle.getJSONObject("metadata").put("chosen_seed", seed).put("attempt_count", attempt)
+                index.findings(profile, ownId = "new").isNotEmpty() ||
+                request.instance_realism && InstanceRealism.conflicts(profile, existingProfiles)) continue
+            bundle.getJSONObject("metadata").put("chosen_seed", profile.getString("seed")).put("attempt_count", attempt)
                 .put("source_confidence", request.template.corpus.optString("source_confidence")
                     .ifBlank { request.template.confidence ?: "needs verification" })
             return bundle

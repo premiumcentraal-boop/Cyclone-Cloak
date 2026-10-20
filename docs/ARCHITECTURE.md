@@ -1,5 +1,17 @@
 # Cyclone Cloak Architecture
 
+## Instance realism (unreleased, pure generation)
+
+`instance_realism.py` and `forge/InstanceRealism.kt` share the generated, checked-in
+`catalog/instance-realism-v1.json` policy. They select complete reviewed tuples,
+derive a seed, apply only approved changes, and validate baseline/coherence and
+per-field provenance. Device Factory and identity-engine entry points opt in;
+legacy defaults are unchanged. Optional profile metadata uses the existing `meta`
+container; engine replay metadata remains separate. Full identity backups preserve
+the allowlisted provenance, while redacted exports omit its private derivation
+claim. No storage, runtime, binding or publication writer is introduced.
+See [determinism, approved variations and compatibility](INSTANCE-REALISM-V1.md).
+
 ## Cohort separation (unreleased, pure analysis)
 
 `forge/cloak_forge/cohort_separation.py` and the app's `forge/CohortSeparation.kt`
