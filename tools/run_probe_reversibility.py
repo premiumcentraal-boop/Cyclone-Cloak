@@ -20,6 +20,9 @@ import sys
 import time
 import uuid
 from zipfile import ZipFile, ZIP_DEFLATED
+from restoration_evidence import (comparable_values, value_difference, semantic_audit,
+    audit_comparison, package_permissions, appop_modes, confirmed_host_control,
+    attach_external_policies, confirmed_external_policy)
 
 TAG = 'v0.11.0-alpha.18'
 COMMIT = 'fb1e3c6ae2e4caca56778a54d8025dba696b53b8'
@@ -99,6 +102,10 @@ def restoration(before, after):
                 state, reason = 'BLOCKED', 'PERMISSION_OR_API_LIMITATION'
             elif 'MISSING' in (a['status'], b['status']):
                 state, reason = 'OBSERVED', 'VALUE_UNAVAILABLE'
+            elif any(r.get('restoration_policy', {}).get('status') == 'FAIL' for r in (a, b)):
+                state, reason = 'FAIL', 'INVALID_EXTERNAL_STATE_VALUE'
+            elif confirmed_external_policy(a) and confirmed_external_policy(b):
+                state, reason = 'OBSERVED', 'DYNAMIC_EXTERNAL_STATE_CHECKED_RULE'
             elif a.get('expectation_policy') == 'EXTERNAL_STATE' or b.get('expectation_policy') == 'EXTERNAL_STATE':
                 state, reason = 'OBSERVED', 'DYNAMIC_EXTERNAL_STATE'
             elif not a.get('actual_sha256') or not b.get('actual_sha256') or a.get('actual_available') is False or b.get('actual_available') is False:
@@ -107,13 +114,32 @@ def restoration(before, after):
                 state, reason = 'OBSERVED', 'NULL_VALUE_EVIDENCE'
             elif a['actual_sha256'] == b['actual_sha256']:
                 state, reason = 'PASS', 'BASELINE_RESTORED'
+            elif key == 'settings.unrelatedControl' and confirmed_host_control(before, after):
+                state, reason = 'OBSERVED', 'EXTERNAL_STATE_HOST_SETTING'
             elif a.get('expectation_policy') in {'TYPED', 'ENUM', 'RANGE'} and b.get('expectation_policy') == a.get('expectation_policy'):
                 state, reason = 'OBSERVED', 'LOCAL_DEVICE_STATE_CHANGED'
             else:
                 state, reason = 'FAIL', 'COLD_VALUE_NOT_RESTORED'
-        rows.append(dict(id=key, status=state, reason=reason,
-                         before_sha256=a.get('actual_sha256') if a else None,
-                         after_sha256=b.get('actual_sha256') if b else None))
+        rows.append(dict(id=key, status=state, reason=reason, **value_difference(a, b)))
+    for section in ('linked_parity', 'runtime_envelope'):
+        left_extra = {r['id']: r for r in before.get(section, {}).get('rows', [])}
+        right_extra = {r['id']: r for r in after.get(section, {}).get('rows', [])}
+        for key in sorted(left_extra.keys() | right_extra.keys()):
+            a, b = left_extra.get(key), right_extra.get(key)
+            state, reason = 'OBSERVED', 'INSUFFICIENT_VALUE_EVIDENCE'
+            if not a or not b:
+                state, reason = 'FAIL', 'ROW_SET_CHANGED'
+            elif 'BLOCKED' in (a['status'], b['status']):
+                state, reason = 'BLOCKED', 'PERMISSION_OR_API_LIMITATION'
+            elif 'MISSING' in (a['status'], b['status']):
+                state, reason = 'OBSERVED', 'VALUE_UNAVAILABLE'
+            elif key == 'envelope.storage.availableBytes':
+                state, reason = 'OBSERVED', 'DYNAMIC_EXTERNAL_STATE'
+            elif a.get('actual_sha256') and b.get('actual_sha256'):
+                state, reason = ('PASS', 'BASELINE_RESTORED') if a['actual_sha256'] == b['actual_sha256'] else ('FAIL', 'COLD_VALUE_NOT_RESTORED')
+            rows.append(dict(id=key, status=state, reason=reason,
+                before_sha256=a.get('actual_sha256') if a else None,
+                after_sha256=b.get('actual_sha256') if b else None))
     counts = dict(Counter(r['status'] for r in rows))
     return dict(android_user=before['android_user'], result='FAIL' if counts.get('FAIL') else 'RESTORED_WITH_LIMITATIONS',
                 counts=counts, rows=rows)
@@ -128,7 +154,7 @@ def cleanup_private(device, users):
 
 def effective_permission_state(before, after):
     """Allow only read-created diagnostics records; reject every other delta."""
-    if (set(before) != {PACKAGE, 'dev.cyclone.cloak'} or set(before.get(PACKAGE, {})) != set(after.get(PACKAGE, {}))
+    if (set(before) != {PACKAGE, 'dev.cyclone.cloak'} or set(after) != set(before) or set(before.get(PACKAGE, {})) != set(after.get(PACKAGE, {}))
             or set(before.get('dev.cyclone.cloak', {})) != set(after.get('dev.cyclone.cloak', {}))):
         return False
     production = before['dev.cyclone.cloak']
@@ -159,8 +185,7 @@ def _appop_entry(value):
     if not isinstance(value, (list, tuple)) or len(value) != 2:
         raise ValueError('INVALID_APPOP_ENTRY')
     name, mode = value
-    if isinstance(name, str) and name.startswith('Uid mode: '): name = name[len('Uid mode: '):]
-    if not isinstance(name, str) or not re.fullmatch(r'[A-Z_]+', name):
+    if not isinstance(name, str) or not re.fullmatch(r'(?:Uid mode: )?[A-Z_]+', name):
         raise ValueError('INVALID_APPOP_ENTRY')
     if not isinstance(mode, str) or not re.fullmatch(r'[a-z]+', mode):
         raise ValueError('INVALID_APPOP_ENTRY')
@@ -265,7 +290,7 @@ def run_cycles(args, executor=None):
         raise FileExistsError('OUTPUT_ALREADY_EXISTS')
     if args.cycles > 1:
         root.mkdir(parents=True)
-        (root/'.gitignore').write_text('*\n')
+        # Keep new evidence visible for review.
     records = []
     install_state = dict(install_attempts=0)
     initial_audit = initial_permissions = previous_audit = previous_permissions = None
@@ -288,8 +313,8 @@ def run_cycles(args, executor=None):
         perm_before, perm_after = load('permissions-before.json'), load('permissions-after.json')
         if not records:
             initial_audit, initial_permissions = before, perm_before
-        boundary_ok = not records or (before == previous_audit and perm_before == previous_permissions)
-        production_ok = before is not None and before == after == initial_audit
+        boundary_ok = not records or (semantic_audit(before) == semantic_audit(previous_audit) and perm_before == previous_permissions)
+        production_ok = before is not None and semantic_audit(before) == semantic_audit(after) == semantic_audit(initial_audit)
         permissions_ok = False
         try:
             permissions_ok = (perm_before is not None and perm_after is not None
@@ -318,10 +343,11 @@ def run_cycles(args, executor=None):
                       apk_install=apk_check, installed_apk_check_passed=apk_ok,
                       production_unchanged=production_ok, permissions_unchanged=permissions_ok,
                       permission_delta=snapshot_delta(perm_before, perm_after),
-                      production_delta=snapshot_delta(before, after),
+                      production_delta=snapshot_delta(semantic_audit(before), semantic_audit(after)),
+                      raw_audit_observation=audit_comparison(before, after),
                       boundary_unchanged=boundary_ok,
                       boundary_permission_delta=snapshot_delta(previous_permissions, perm_before) if records else [],
-                      boundary_production_delta=snapshot_delta(previous_audit, before) if records else [],
+                      boundary_production_delta=snapshot_delta(semantic_audit(previous_audit), semantic_audit(before)) if records else [],
                       duration_seconds=m.get('duration_seconds'),
                       failed_phase=m.get('failed_phase') if passed else m.get('failed_phase', 'cycle-audit'),
                       errors=m.get('errors', []) + ([] if passed else
@@ -360,7 +386,7 @@ def run_cycles(args, executor=None):
     (root/'runner-provenance.json').write_text(json.dumps(dict(
         base_commit=revision.stdout.strip() if revision.returncode == 0 else None,
         orchestration_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
-        source_tag=TAG, source_commit=COMMIT, cycles=args.cycles), indent=2)+'\n', encoding='utf-8')
+        source_tag=None if getattr(args, 'candidate_commit', None) else TAG, source_commit=getattr(args, 'candidate_commit', None) or COMMIT, cycles=args.cycles), indent=2)+'\n', encoding='utf-8')
     with ZipFile(root/'lifecycle-evidence-bundle.zip', 'w', ZIP_DEFLATED) as z:
         for path in sorted(root.rglob('*')):
             if path.is_file() and path.name not in {'.gitignore', 'lifecycle-evidence-bundle.zip'}:
@@ -378,6 +404,7 @@ def parse_args(argv=None):
     p.add_argument('--secondary', type=int, default=17)
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--cycles', type=int, default=1, help='Full lifecycle repetitions (default: 1)')
+    p.add_argument('--candidate-commit', help='Explicit source commit for installed candidate; metadata does not prove provenance')
     args = p.parse_args(argv)
     if args.cycles < 1:
         p.error('--cycles must be at least 1')
@@ -395,9 +422,16 @@ def run_cycle(args):
     source = args.source_checkout.resolve()
     def git(*cmd):
         return subprocess.check_output(['git', *cmd], cwd=source, text=True).strip()
-    if git('rev-parse', 'HEAD') != COMMIT or git('rev-parse', TAG+'^{}') != COMMIT or git('status', '--porcelain', '--untracked-files=no'):
+    candidate = getattr(args, 'candidate_commit', None)
+    if candidate and (not re.fullmatch('[0-9a-f]{40}', candidate) or git('rev-parse', 'HEAD') != candidate):
+        p.error('Candidate HEAD mismatch')
+    if candidate:
+        changed = git('diff', '--name-only', 'HEAD').splitlines()
+        if any(not path.startswith(('tools/', 'forge/tests/', 'docs/')) for path in changed):
+            p.error('Candidate product sources must be unchanged')
+    if not candidate and (git('rev-parse', 'HEAD') != COMMIT or git('rev-parse', TAG+'^{}') != COMMIT or git('status', '--porcelain', '--untracked-files=no')):
         p.error('Exact clean alpha.18 checkout required')
-    if subprocess.run(['git', 'symbolic-ref', '-q', 'HEAD'], cwd=source, capture_output=True).returncode == 0:
+    if not candidate and subprocess.run(['git', 'symbolic-ref', '-q', 'HEAD'], cwd=source, capture_output=True).returncode == 0:
         p.error('Detached checkout required')
     sys.path.insert(0, str(source/'tools'))
     pc = importlib.import_module('profile_check')
@@ -408,14 +442,34 @@ def run_cycle(args):
     ids = json.loads((source/'android/probe/src/main/assets/report-row-ids.json').read_text())
     out = args.output.resolve()
     out.mkdir(parents=True, exist_ok=False)
-    (out/'.gitignore').write_text('*\n')
-    d = pc.Device(args.adb, args.serial, 90)
+    # No blanket ignore: preserve evidence for review.
+    class ConnectedDevice(pc.Device):
+        disconnected = False
+        def run(self, *command, **kwargs):
+            if self.disconnected:
+                raise RuntimeError('DEVICE_DISCONNECTED')
+            state = super().run('get-state', check=False, timeout=10)
+            if state.returncode or state.stdout.strip() != 'device':
+                self.disconnected = True
+                raise RuntimeError('DEVICE_DISCONNECTED')
+            return super().run(*command, **kwargs)
+    d = ConnectedDevice(args.adb, args.serial, 90)
     m = dict(format=1, run_id=uuid.uuid4().hex, user=0, target_user=args.secondary,
              cycle=getattr(args, 'cycle', 1),
              apk_install_policy=APK_INSTALL_POLICY, apk_install={},
              full_profile=False, phases={}, started_at=pc.utc(), started_epoch=time.time(),
-             source_tag=TAG, source_commit=COMMIT, apk_sha256=apk_hash, overlay_active=False)
-    h = pc.Harness(out, m, d, apk)
+             source_tag=None if candidate else TAG, source_commit=candidate or COMMIT, apk_sha256=apk_hash, overlay_active=False)
+    class CandidateHarness(pc.Harness):
+        def body(self, item):
+            sys.path.insert(0, str(source/'forge'))
+            from cloak_forge.device_factory import DeviceFactory, InstanceRequest
+            template = 'pixel_8' if item['user'] == 0 else 'pixel_7'
+            profile = DeviceFactory().generate(InstanceRequest(template, 'candidate-' + template,
+                label='Temporary diagnostics ' + template), created_at='2026-10-20T00:00:00Z')['profile']
+            if item.get('sha256') and pc.digest(profile) != item['sha256']:
+                raise ValueError('EXPECTED_PROFILE_CHANGED')
+            return profile
+    h = (CandidateHarness if candidate else pc.Harness)(out, m, d, apk)
     selections, reports, errors = [], [], []
     before = permissions_before = original_user = None
     captures_started = False
@@ -424,15 +478,15 @@ def run_cycle(args):
         packages = {}
         for package in (PACKAGE, 'dev.cyclone.cloak'):
             text = d.shell('dumpsys package '+package).stdout
-            grants = {}
-            for match in re.finditer(r'^    User (\d+):.*?(?=^    User |^\S|\Z)', text, re.M | re.S):
-                grants[match[1]] = {name:dict(granted=value=='true', flags=flags.strip()) for name,value,flags in
-                    re.findall(r'(android\.permission\.[A-Z_]+): granted=(true|false), flags=\[([^\]]*)\]', match[0])}
+            grants, install = package_permissions(text)
             modes = {}
             for user in users:
-                text_modes = d.shell(f'cmd appops get --user {user} {package}', check=False).stdout
-                modes[str(user)] = sorted(re.findall(r'(?m)^\s*((?:Uid mode: )?[A-Z_]+): ([a-z]+)', text_modes))
-            install = dict(re.findall(r'(android\.permission\.[A-Z_]+): granted=(true|false)', text.split('    User ')[0]))
+                lookup = d.shell(f'pm list packages --user {user} -U {package}').stdout
+                match = re.search(r'^package:'+re.escape(package)+r' uid:(\d+)$', lookup, re.M)
+                if not match: raise ValueError('APPOP_UID_MISSING')
+                uid_response = d.shell('cmd appops get '+match[1])
+                response = d.shell(f'cmd appops get --user {user} {package}')
+                modes[str(user)] = appop_modes(response.stdout, uid_response.stdout)
             packages[package] = dict(grants=grants, appop_modes=modes, install_grants=install)
         return packages
 
@@ -441,13 +495,24 @@ def run_cycle(args):
         if any(f'{u}/{PACKAGE}' in index['entries'] for u in users):
             raise ValueError('EXISTING_DIAGNOSTICS_BINDING')
         def files(command):
-            entries = {}
+            entries, details = {}, {}
             for line in d.root(command).stdout.splitlines():
                 sha, path = line.split(None, 1)
                 if not re.fullmatch('[a-f0-9]{64}', sha): raise ValueError('INVALID_AUDIT_HASH')
-                entries[hashlib.sha256(path.strip().encode()).hexdigest()] = sha
-            return dict(count=len(entries), files=entries, sha256=pc.digest(entries))
+                path = path.strip()
+                key = hashlib.sha256(path.encode()).hexdigest()
+                entries[key] = sha
+                details[key] = dict(path=path, sha256=sha)
+            if details:
+                paths = [x['path'] for x in details.values()]
+                for start in range(0, len(paths), 24):
+                    sizes = d.root('stat -c '+shlex.quote('%s %n')+' '+ ' '.join(shlex.quote(x) for x in paths[start:start+24])).stdout
+                    for line in sizes.splitlines():
+                        size, path = line.split(None, 1)
+                        details[hashlib.sha256(path.encode()).hexdigest()]['bytes'] = int(size)
+            return dict(count=len(entries), files=entries, sha256=pc.digest(entries), file_details=details)
         return dict(production_entry_count=len(index['entries']), index_sha256=pc.digest(index),
+                    index_bytes_size=len(raw.encode()),
                     index_bytes_sha256=hashlib.sha256(raw.encode()).hexdigest(),
                     entry_hashes={hashlib.sha256(k.encode()).hexdigest():pc.digest(v) for k,v in index['entries'].items()},
                     published_bodies=files(f'find {pc.STATE} -type f ! -name index.json -exec sha256sum {{}} +'),
@@ -494,6 +559,9 @@ def run_cycle(args):
         prior_pid = prior['pid'] if prior else None
         if cold: d.shell(f'am force-stop --user {user} {PACKAGE}')
         request = uuid.uuid4().hex
+        if d.root('id -u').stdout.strip() != '0': raise ValueError('HOST_CONTROL_READER_NOT_ROOT')
+        host_before = d.root(f'settings --user {user} get secure accessibility_enabled').stdout.strip()
+        if host_before not in ('0', '1', 'null'): raise ValueError('HOST_CONTROL_MALFORMED')
         started_at = float(d.shell('date +%s').stdout.strip())
         utc_offset = d.shell('date +%z').stdout.strip()
         context = dict(phase=phase, request_id=request, android_user=user, fixture=item['fixture'], profile_sha256=item['sha256'], published_sha256=published)
@@ -517,14 +585,25 @@ def run_cycle(args):
                 value = json.loads(value)
                 if not isinstance(value, dict): raise ValueError('REPORT_NOT_OBJECT')
                 if value.get('request_id') != request: time.sleep(.3); continue
-                r = pc.redact_report(value)
+                r = comparable_values(value, pc.redact_report(value))
+                r = attach_external_policies(value, r)
+                host_after = d.root(f'settings --user {user} get secure accessibility_enabled').stdout.strip()
+                if host_after not in ('0', '1', 'null'): raise ValueError('HOST_CONTROL_MALFORMED')
+                r['host_control'] = dict(android_user=user, request_id=request, before=host_before, after=host_after,
+                    source='root_cli_settings_secure')
                 r.update(android_user=user, cold_restart_requested=cold, process_reused=(r.get('pid')==prior_pid),
                          captured_at=pc.utc(), artifact=artifact, apk_sha256=apk_hash, run=phase,
                          binding_present=mode=='bound-cold', published_sha256=published,
                          interpretation='fixture expectation results' if mode=='bound-cold' else 'unbound actual-value observation; fixture mismatches are expected')
                 check_metadata(r, item, cold, ids)
-                if mode=='bound-cold' and any(row['status'] in {'FAIL','MISSING'} for row in r['rows']):
+                pc.save(out/(phase+'.json'), r)
+                if mode=='bound-cold' and any(row['status'] == 'FAIL' or (not candidate and row['status'] == 'MISSING') for row in r['rows']):
                     raise ValueError('BOUND_CAPTURE_FAILED')
+                if candidate and mode == 'bound-cold':
+                    for section, count in (('linked_parity', 13), ('runtime_envelope', 15)):
+                        extra = r.get(section, {}).get('rows', [])
+                        if len(extra) != count or any(x['status'] == 'FAIL' for x in extra):
+                            raise ValueError('CANDIDATE_SECTION_FAILED_OR_INCOMPLETE')
                 pc.save(out/(phase+'.json'), r)
                 reports.append(r)
                 print(phase, json.dumps(dict(Counter(row['status'] for row in r['rows']))), 'reused='+str(r['process_reused']), flush=True)
@@ -548,7 +627,8 @@ def run_cycle(args):
         app = d.shell('dumpsys package dev.cyclone.cloak').stdout
         m['installed_versions'] = dict(module=props['version'], module_code=props['versionCode'],
             app_version=re.search(r'versionName=(\S+)',app).group(1), app_code=re.search(r'versionCode=(\d+)',app).group(1))
-        if m['installed_versions'] != dict(module=TAG,module_code='42',app_version='0.11.0-alpha.18',app_code='42'): raise ValueError('INSTALLED_VERSION_MISMATCH')
+        expected_versions = dict(module='v0.11.0-alpha.27',module_code='51',app_version='0.11.0-alpha.27',app_code='51') if candidate else dict(module=TAG,module_code='42',app_version='0.11.0-alpha.18',app_code='42')
+        if m['installed_versions'] != expected_versions: raise ValueError('INSTALLED_VERSION_MISMATCH')
         aapt = Path(args.adb).resolve().parents[1]/'build-tools/35.0.0/aapt.exe'
         badging = subprocess.check_output([str(aapt),'dump','badging',str(apk)], text=True)
         if not re.search(r"^package: name='dev\.cyclone\.cloak\.probe\.diag'",badging,re.M): raise ValueError('WRONG_APK')
@@ -556,7 +636,7 @@ def run_cycle(args):
             getattr(args, 'apk_install_state', dict(install_attempts=0)), m['apk_install'])
         if permission_state() != permissions_before: raise ValueError('INSTALL_CHANGED_PERMISSIONS')
         for u,f in [(0,'a'),(args.secondary,'b')]:
-            item = dict(user=u,fixture=f,kind='fixture',target_count=1)
+            item = dict(user=u,fixture='external' if candidate else f,scenario_fixture=f,kind='fixture',target_count=1)
             body = h.body(item); item.update(sha256=pc.digest(body),profile_id=body['id']); selections.append(item)
         m['selections'] = selections
         for mode,u,cold in sequence:
@@ -594,8 +674,9 @@ def run_cycle(args):
                 if not proof['scratch_removed'] or not all(all(proof[str(u)].values()) for u in users): errors.append('CLEANUP_PROOF_FAILED')
             if before is not None:
                 after = audit(); pc.save(out/'audit-after.json',after)
-                m['production_unchanged'] = before==after
-                if before != after: errors.append('PRODUCTION_AUDIT_CHANGED')
+                pc.save(out/'production-audit-comparison.json', dict(audit_comparison(before, after), semantic_delta=snapshot_delta(semantic_audit(before), semantic_audit(after)), raw_delta=snapshot_delta(before, after)))
+                m['production_unchanged'] = semantic_audit(before)==semantic_audit(after)
+                if not m['production_unchanged']: errors.append('PRODUCTION_AUDIT_CHANGED')
             if permissions_before is not None:
                 after = permission_state(); pc.save(out/'permissions-after.json',after)
                 m['diagnostic_appop_records_expected'] = sorted(EXPECTED_DIAGNOSTIC_APPOP_ADDITIONS.items())
@@ -607,7 +688,7 @@ def run_cycle(args):
                  result='FAIL' if errors else 'RESTORED_WITH_EXPECTED_LIMITATIONS',captures=len(reports))
         h.checkpoint()
         build_command=f'$env:JAVA_HOME="C:/Program Files/Eclipse Adoptium/jdk-17.0.20.101-hotspot"; $env:ANDROID_HOME="C:/Users/Agent/android-sdk"; & "$env:TEMP/cloak-build/gradle-8.11.1/bin/gradle.bat" -p "{source.as_posix()}/android" :probe:assembleDiagnosticsDebug :probe:testDiagnosticsDebugUnitTest --offline --no-daemon --console=plain'
-        pc.save(out/'build-provenance.json',dict(tag=TAG,commit=COMMIT,detached_checkout=str(source),build_command=build_command,
+        pc.save(out/'build-provenance.json',dict(tag=None if candidate else TAG,commit=candidate or COMMIT,source_checkout=str(source),build_command=build_command,
             apk_sha256=apk_hash,installed_apk_hashes=m.get('installed_apk_hashes'),orchestration_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()))
         lines=['# Diagnostics binding reversibility','',f'Result: {m["result"]}',f'Duration: {m["duration_seconds"]} seconds',
                'Errors: '+json.dumps(errors),'','| Phase | User | Fixture | PASS | FAIL | OBSERVED | BLOCKED | MISSING | Reused |',
@@ -622,6 +703,7 @@ def run_cycle(args):
                 '', 'Limitations: only existing users 0 and '+str(args.secondary)+'; normal Android switching, not Cyclone bootstrap. Warm in-memory effects are observations. Locked-user private stores are unaudited. Permission app-op modes exclude volatile access times/counters. Installed module file hash is not in-process binary proof. No platform verdict.']
         (out/'summary.md').write_text('\n'.join(lines)+'\n')
         shutil.copyfile(__file__,out/Path(__file__).name)
+        shutil.copyfile(Path(__file__).with_name('restoration_evidence.py'),out/'restoration_evidence.py')
         with ZipFile(out/'evidence-bundle.zip','w',ZIP_DEFLATED) as z:
             for f in sorted(out.iterdir()):
                 if f.is_file() and f.suffix in {'.json','.md','.py','.log'}: z.write(f,f.name)

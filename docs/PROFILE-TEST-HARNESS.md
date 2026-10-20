@@ -215,3 +215,74 @@ observations. This tests diagnostics reversibility rather than normal companion
 binding/reconciliation, Cyclone bootstrap, or any platform verdict. AppOps audits
 exclude volatile access timestamps/counters; only accessible private stores and
 on-disk module files can be audited.
+# Restoration follow-up (2026-10-21)
+
+`run_probe_reversibility.py` retains its default pinned alpha.18 workflow. For an
+explicitly installed development candidate, use `--candidate-commit <full HEAD>`.
+That mode checks the source commit, rejects product-source modifications, uses
+schema-0.4 Factory pixel_8/pixel_7 profiles labelled `external`, and checks the
+13 linked and 15 envelope rows. Current candidate metadata is alpha.27/code 51;
+that version string alone is not artifact provenance. Installed APK hashes are
+checked for each user before every cycle; matching installs are reused.
+
+```powershell
+uv run --offline -- python -X utf8 tools/run_probe_reversibility.py `
+  --source-checkout C:/Users/Agent/Cyclone/cloak-repo `
+  --candidate-commit 1c9ce900930b7c52d3d7130b8ca8a741e183b73a `
+  --adb C:/Users/Agent/android-sdk/platform-tools/adb.exe `
+  --serial 3B171FDJH0061G --secondary 17 --cycles 1 `
+  --output docs/runtime-evidence/<fresh-run>/cycle-1
+```
+
+Run `--cycles 3` in a different, fresh output directory only after the focused
+cycle passes. No production install, reboot, grant, reset or account action is
+performed. The device transport latches an unexpected disconnect and refuses
+further commands, including cleanup; an interrupted cleanup is reported, not
+claimed successful.
+
+Restoration now retains full comparable values for the two non-sensitive control
+rows: `packages.visible` (package names only) and `settings.unrelatedControl`
+(the accessibility-enabled `0`/`1` value). Package differences include sorted
+added/removed lists and unified line diffs, with hashes still bound to each value.
+Arbitrary identifiers, account contents and other private readings stay redacted;
+their comparisons explicitly state that raw values are unavailable. Old hash-only
+evidence cannot be retroactively expanded into observed package lists.
+
+Unexplained package or control changes **still fail**. They are not automatically
+declared external state or expected transitions. Blocked/missing readings remain
+limitations. Free filesystem capacity remains an explicit external-state
+observation rather than an invented exact expectation.
+
+The accessibility control has one narrowly evidenced exception: every capture
+reads `settings --user <user> get secure accessibility_enabled` before and after
+the probe read, through the root CLI (UID 0, outside app-process hooks). A changed control is
+`OBSERVED / EXTERNAL_STATE_HOST_SETTING` only when both captures' values match
+their independently observed host state and their user/request metadata agree.
+Missing, foreign or contradictory host evidence still fails. This does not turn
+an external setting change into a profile-backed PASS. Package-list changes have
+no such exception and retain their full sorted differences.
+
+Production gating compares canonical index fields and all entry/file hashes and
+sizes. Only the raw index serialization hash/size is non-gating; it remains in the
+audit and `production-audit-comparison.json`. File inventories include exact paths,
+byte sizes and hashes without file contents. Publisher shares, bindings, profile
+bodies and module changes still fail. The existing overlay cleanup preserves
+concurrent entries and is idempotent; no lock-file unlink or product publication
+change is introduced.
+
+Permission snapshots read only installed-package user blocks, so later visibility
+blocks cannot erase grants. Runtime grant flags are sorted; volatile access times,
+durations and counters are excluded. Numeric-UID AppOps are queried separately
+and matched against the package output prefix, preserving UID/package modes as
+distinct records. Duplicates, malformed entries, prefix races and unexpected
+mode changes fail closed. Only the two previously documented diagnostics-created
+AppOps additions remain allowed; removals or mode changes are never excused.
+
+External Factory profiles do not automatically load the built-in A/B expectation
+table. The restoration harness reuses only the identical checked-in EXTERNAL_STATE
+rules for Wi-Fi BSSID/link speed/SSID and Bluetooth name, and only when the probe
+has no profile-backed expectation. It records the rule fingerprint and validation
+result separately as `restoration_policy`. Valid readings remain OBSERVED;
+malformed readings fail, permission blocks remain BLOCKED, and private values
+remain hashed. The unrelated settings control retains the stronger independent
+host check above. Package inventory changes still fail.

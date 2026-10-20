@@ -198,6 +198,17 @@ def test_foreign_probe_binding_is_never_overwritten(tmp_path):
     assert d.value == original
 
 
+def test_repeated_overlay_cleanup_is_idempotent_and_preserves_concurrent_entries(tmp_path):
+    device = FakeDevice(conflicts=1)
+    h = pc.Harness(tmp_path, manifest(), device, Path('test.apk'))
+    h.overlay()
+    h.overlay(remove=True)
+    first = copy.deepcopy(device.value)
+    h.overlay(remove=True)
+    assert device.value == first
+    assert set(first['entries']) == {'17/com.keep', '12/com.concurrent'}
+
+
 class SimulatedHarness(pc.Harness):
     def environment(self):
         self.m.update(user=0,target_user=17,original_user=0,artifact='f'*64)
