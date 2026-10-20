@@ -1,5 +1,15 @@
 # Cyclone Cloak Architecture
 
+## Cohort separation (unreleased, pure analysis)
+
+`forge/cloak_forge/cohort_separation.py` and the app's `forge/CohortSeparation.kt`
+consume saved profile bodies and the shared `catalog/cohort-separation-v1.json`
+policy. They validate without mutation and return privacy-safe pair/category
+scores, shared membership groups and recommendations. Unknown Reality/Play facts
+reduce confidence. No storage, binding, connector, publication or runtime APIs are
+called, and this does not replace the existing FleetDiversity UI/planner behavior.
+See [format, scoring and safety limits](COHORT-SEPARATION-V1.md).
+
 ## Play/Google readiness integration (alpha.27)
 
 Profiles renders `PlayReadinessCard` over existing registry/identity metadata.

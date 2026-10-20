@@ -1,0 +1,101 @@
+{
+  "version": 1,
+  "categories": {
+    "stable_identifiers": [
+      "identifiers.android_id",
+      "identifiers.advertising_id",
+      "identifiers.app_set_id",
+      "identifiers.serial",
+      "identifiers.widevine_id",
+      "identifiers.mac",
+      "identifiers.bt_mac",
+      "identifiers.imei_primary",
+      "identifiers.imei_secondary",
+      "identifiers.sim_serial",
+      "identifiers.gsf_id",
+      "reality.inventory_id",
+      "reality.radio.values.wifi_name",
+      "reality.radio.values.bluetooth_name"
+    ],
+    "hardware_description": [
+      "device.manufacturer",
+      "device.model",
+      "device.hardware",
+      "reality.compute.values",
+      "reality.memory.values",
+      "reality.power.values",
+      "reality.drm.values"
+    ],
+    "carrier_region": [
+      "telephony.mcc",
+      "telephony.mnc",
+      "telephony.carrier_name",
+      "telephony.sim_slot_count",
+      "reality.carrier.values"
+    ],
+    "software_packages": [
+      "device.fingerprint",
+      "device.sdk_int",
+      "device.security_patch",
+      "reality.packages.values",
+      "reality.webview.values"
+    ],
+    "display_camera_sensor": [
+      "display",
+      "camera.cameras",
+      "reality.panel.values",
+      "reality.cameras.values",
+      "reality.sensors.values"
+    ],
+    "network_locale_timezone": [
+      "network.egress_hint",
+      "locale.language",
+      "locale.country",
+      "locale.timezone",
+      "reality.environment.values"
+    ],
+    "play_google": [
+      "play_surface.account.mode",
+      "play_surface.account.slot_id",
+      "play_surface.account.provisioning_state",
+      "play_surface.services.play_services.state",
+      "play_surface.services.play_store.state",
+      "play_surface.services.play_protect",
+      "play_surface.services.web_provider.state",
+      "play_surface.services.google_settings_access",
+      "play_surface.services.install_origin",
+      "play_surface.services.backup_sync"
+    ]
+  },
+  "combinations": [
+    [
+      "device.model",
+      "device.fingerprint",
+      "telephony.carrier_name",
+      "locale.language",
+      "locale.country",
+      "locale.timezone",
+      "display",
+      "camera.cameras",
+      "reality.sensors.values",
+      "reality.memory.values"
+    ],
+    [
+      "device.model",
+      "device.fingerprint"
+    ],
+    [
+      "telephony.carrier_name",
+      "locale.country",
+      "locale.timezone"
+    ],
+    [
+      "display",
+      "camera.cameras"
+    ],
+    [
+      "reality.memory.values",
+      "reality.compute.values"
+    ]
+  ]
+}

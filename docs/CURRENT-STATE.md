@@ -1,5 +1,12 @@
 # Current state
 
+Unreleased: Cohort separation v1 adds pure Python/Kotlin read-only analysis over
+saved profile bodies. Seven category scores, shared groups, duplicate/near-duplicate
+identifier flags, missing Reality facts and conservative recommendations contain
+only IDs/labels and structural metadata. Unknown facts reduce confidence. No UI,
+storage, binding, connector, publication or runtime changes; no platform verdict.
+See [cohort separation contract and limitations](COHORT-SEPARATION-V1.md).
+
 Alpha.27 integrates `codex/play-readiness-integration-v1` with explicit local
 Play/Google diagnostics import and per-profile readiness cards in Profiles.
 Envelope validation binds exact profile bytes, Android user, current APK/bundled
