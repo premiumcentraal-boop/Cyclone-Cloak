@@ -1,0 +1,14 @@
+CYCLE 1 OF 1
+warning: in the working copy of 'forge/tests/test_profile_check.py', LF will be replaced by CRLF the next time Git touches it
+user-0-baseline-cold {"PASS": 32, "FAIL": 37, "BLOCKED": 8, "OBSERVED": 12} reused=False
+user-17-baseline-cold {"PASS": 22, "FAIL": 46, "BLOCKED": 12, "OBSERVED": 9} reused=False
+user-0-bound-cold {"PASS": 76, "OBSERVED": 11, "BLOCKED": 2} reused=False
+user-17-bound-cold {"PASS": 75, "OBSERVED": 8, "BLOCKED": 6} reused=False
+user-0-post-removal-warm {"PASS": 76, "OBSERVED": 11, "BLOCKED": 2} reused=True
+user-17-post-removal-warm {"PASS": 75, "OBSERVED": 8, "BLOCKED": 6} reused=True
+user-0-post-removal-cold {"PASS": 32, "FAIL": 37, "BLOCKED": 8, "OBSERVED": 12} reused=False
+user-17-post-removal-cold {"PASS": 22, "FAIL": 46, "BLOCKED": 12, "OBSERVED": 9} reused=False
+EVIDENCE C:\Users\Agent\Cyclone\cloak-repo\docs\runtime-evidence\2026-10-20-235457-restoration-follow-up\complete-values-cycle1
+RESULT RESTORED_WITH_EXPECTED_LIMITATIONS
+LIFECYCLE_EVIDENCE C:\Users\Agent\Cyclone\cloak-repo\docs\runtime-evidence\2026-10-20-235457-restoration-follow-up\complete-values-cycle1
+LIFECYCLE_RESULT RESTORED_WITH_EXPECTED_LIMITATIONS

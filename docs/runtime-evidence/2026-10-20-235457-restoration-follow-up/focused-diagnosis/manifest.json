@@ -1,0 +1,27 @@
+{
+  "format": 1,
+  "run_id": "955fad0f006d4ef490b8653e8a5e92ca",
+  "user": 0,
+  "target_user": 17,
+  "cycle": 1,
+  "apk_install_policy": "reuse_matching_install_missing_once",
+  "apk_install": {},
+  "full_profile": false,
+  "phases": {},
+  "started_at": "2026-10-20T21:57:05.143376+00:00",
+  "started_epoch": 1792533425.1433976,
+  "source_tag": null,
+  "source_commit": "1c9ce900930b7c52d3d7130b8ca8a741e183b73a",
+  "apk_sha256": "e4f6d3d13a810f1e17ef4d3ae0317e01e78d9cdc37bbb8d483f1565bf1f4e9d8",
+  "overlay_active": false,
+  "original_user": 0,
+  "failed_phase": "preflight",
+  "production_unchanged": true,
+  "errors": [
+    "DUPLICATE_APPOP_RECORD"
+  ],
+  "finished_at": "2026-10-20T21:57:35.014634+00:00",
+  "duration_seconds": 29.87,
+  "result": "FAIL",
+  "captures": 0
+}
