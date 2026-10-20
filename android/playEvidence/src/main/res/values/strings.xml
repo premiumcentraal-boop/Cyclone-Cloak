@@ -9,7 +9,7 @@
     <string name="project_hint">Optional Google Cloud project number</string>
     <string name="collect_integrity">Collect + request Play Integrity</string>
     <string name="confirm_title">Request public Play Integrity API?</string>
-    <string name="confirm_message">This contacts Google through its public API using your project number. Only token receipt metadata is saved. Decoded verdicts require backend verification and remain NOT_RUN.</string>
+    <string name="confirm_message">This contacts Google through its public API using your project number. Ordinary reports save token receipt metadata only. A separate prompt offers optional private token retention for export. Decoded verdicts require backend verification and remain NOT_RUN.</string>
     <string name="cancel">Cancel</string>
     <string name="request_once">Request once</string>
     <string name="setup_hint">Choose a profile file and enter its Cyclone profile ID and measured artifact digest.</string>
@@ -22,4 +22,15 @@
     <string name="collecting">Collecting read-only evidence…</string>
     <string name="report_saved">Saved reports/%1$s.json\n%2$s\nLocal evidence only. Integrity verdict NOT_RUN.</string>
     <string name="write_failed">REPORT_WRITE_FAILED: Retry collection.</string>
+    <string name="retain_title">Retain encrypted token for export?</string>
+    <string name="retain_message">Optional. Keeps one encrypted token privately. Export expires after 24 hours. New collection or successful export removes it. Never include it in diagnostics or public evidence.</string>
+    <string name="no_retention">Do not retain</string>
+    <string name="request_retain">Request and retain</string>
+    <string name="export_verification">Export verification bundle</string>
+    <string name="export_title">Export encrypted verification token?</string>
+    <string name="export_message">This sensitive file is for your local backend only. It contains no decoded verdict. Do not publish or share it in diagnostics.</string>
+    <string name="choose_file">Choose file</string>
+    <string name="export_done">Verification bundle exported. Private retained token removed.</string>
+    <string name="export_failed">Verification export failed. No verdict was produced.</string>
+    <string name="no_retained_token">No valid retained token for this request. Request again with explicit retention.</string>
 </resources>

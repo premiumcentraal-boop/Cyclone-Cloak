@@ -29,7 +29,7 @@ jobs:
           python-version: '3.12'
       - name: All local suites
         run: |
-          uv run --with pytest --with jsonschema -- python -m pytest forge/tests -q
+          uv run --with pytest --with jsonschema --with cryptography -- python -m pytest forge/tests -q
           uv run --with pytest --with jsonschema -- python -m pytest forge/schema_tests -q
           uv run -- python -m unittest discover -s android/probe/tests -v
           gradle -p android :app:testDebugUnitTest :module:testDebugUnitTest :playEvidence:testDebugUnitTest :playEvidence:lintDebug :probe:testStandardDebugUnitTest :probe:testDiagnosticsDebugUnitTest :probe:assembleStandardDebug :probe:assembleDiagnosticsDebug --no-daemon

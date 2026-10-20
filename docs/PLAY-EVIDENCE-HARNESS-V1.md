@@ -41,12 +41,13 @@ preparation and request each have a 90-second timeout. A project number is publi
 configuration, not a credential. The request contacts Google through Play's
 service; local collection does not initiate that request.
 
-The public response is an encrypted token. This app hashes it immediately and
-does not persist, export, decode or log it. Only actual receipt metadata is kept;
-no verdict fields are invented. Google-documented backend verification is needed
-to obtain authenticated decoded verdicts. No backend or credential handling is
-included in v1. API/package availability and token receipt are never a platform
-verdict or permanent proof. Physical API success remains UNVERIFIED.
+The public response is an encrypted token. Default collection hashes it immediately
+and discards it; ordinary reports keep actual receipt metadata only. The separate
+[verification exchange](INTEGRITY-VERIFICATION-EXCHANGE-V1.md) adds explicit opt-in
+private retention and document-picker export, plus an owner-operated local backend.
+The diagnostics app never decodes, logs or automatically forwards tokens. No
+credentials are included. API/package availability and token receipt are never a
+platform verdict or permanent proof. Physical API success remains UNVERIFIED.
 
 References: [Standard Integrity API](https://developer.android.com/google/play/integrity/standard),
 [package visibility](https://developer.android.com/training/package-visibility/declaring),
@@ -79,7 +80,8 @@ import, preview and save of the original full envelope.
 Only the current capture generation may atomically write its private report;
 new intents invalidate old workers. The latest 20 reports are retained. No profile
 body, raw token, arbitrary log text, account name, credential or production store
-is exported. Package/version/installer metadata, opaque profile IDs and SHA-256
+is exported in normal evidence reports. The explicitly opted-in verification bundle
+is a separate sensitive transport file. Package/version/installer metadata, opaque profile IDs and SHA-256
 digests are intentionally retained for debugging.
 
 ## Build and run

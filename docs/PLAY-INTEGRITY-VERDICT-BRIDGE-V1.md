@@ -15,16 +15,17 @@ with service-account authorization. The server validates the actual decoded
 using returned [verdict fields](https://developer.android.com/google/play/integrity/verdicts).
 An ordinary unsigned JSON decode response is not an authenticated offline file.
 
-`IntegrityBackendAdapter.authenticatedVerdict(request): String?` is the backend
-adapter interface only. No concrete transport, credentials, project number,
-account files, server implementation, secret or private key is included. The
-existing diagnostics APK discards encrypted tokens after recording receipt;
-secure user-approved token delivery to a trusted server remains future wiring.
-Consequently this sprint cannot obtain a real verdict on its own.
+`IntegrityBackendAdapter.authenticatedVerdict(request): String?` remains the
+production-side adapter interface. The separate
+[Integrity verification exchange v1](INTEGRITY-VERIFICATION-EXCHANGE-V1.md) now
+provides opt-in private ciphertext retention, explicit document export, and an
+owner-operated Python backend. Default collection still discards ciphertext.
+Credentials, project configuration and private signing keys are never included;
+real decoding requires the owner's separately configured backend and trust pin.
 
 The trusted backend must receive the original token through that separately
-implemented secure path, call Google's decode endpoint, validate expected
-requesting package/certificate/version and request binding, then sign only the
+implemented secure path, call Google's decode endpoint, validate the expected
+requesting package and request binding, then sign only the
 safe allowlisted fields below. Do not derive a result from local device facts,
 copy historical results, accept client-supplied verdict labels, or invent fields
 Google did not evaluate. Device/account claims apply to the requesting app and

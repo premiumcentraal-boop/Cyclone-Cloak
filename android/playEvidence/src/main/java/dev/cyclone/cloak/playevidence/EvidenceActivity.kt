@@ -28,6 +28,7 @@ class EvidenceActivity : Activity() {
     private lateinit var status: TextView
     private lateinit var collect: Button
     private lateinit var integrity: Button
+    private var pendingExport: Pair<Long, ByteArray>? = null
     private var selectedHash: String? = null
     private var expectedHash: String? = null
     private var requestId = UUID.randomUUID().toString()
@@ -55,8 +56,17 @@ class EvidenceActivity : Activity() {
             setOnClickListener {
                 AlertDialog.Builder(this@EvidenceActivity).setTitle(R.string.confirm_title)
                     .setMessage(R.string.confirm_message)
-                    .setNegativeButton(R.string.cancel, null).setPositiveButton(R.string.request_once) { _, _ -> begin(true) }.show()
+                    .setNegativeButton(R.string.cancel, null).setPositiveButton(R.string.request_once) { _, _ ->
+                        AlertDialog.Builder(this@EvidenceActivity).setTitle(R.string.retain_title)
+                            .setMessage(R.string.retain_message)
+                            .setNegativeButton(R.string.no_retention) { _, _ -> begin(true, false) }
+                            .setPositiveButton(R.string.request_retain) { _, _ -> begin(true, true) }.show()
+                    }.show()
             }
+        }.also(layout::addView)
+        Button(this).apply {
+            setText(R.string.export_verification)
+            setOnClickListener { prepareExport() }
         }.also(layout::addView)
         status = text(R.string.setup_hint)
         setContentView(ScrollView(this).apply { addView(layout) })
@@ -69,6 +79,7 @@ class EvidenceActivity : Activity() {
         acceptIntent(intent)
     }
     private fun acceptIntent(input: Intent) {
+        pendingExport = null
         selectedHash = null
         expectedHash = null
         collect.isEnabled = true; integrity.isEnabled = true
@@ -105,12 +116,44 @@ class EvidenceActivity : Activity() {
     @Deprecated("Android activity result compatibility callback")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 11) {
+            val pending = pendingExport
+            pendingExport = null
+            if (resultCode == RESULT_OK && pending != null && pending.first == synchronized(lock) { generation }) {
+                try {
+                    val validated = VerificationBundle.parse(pending.second.toString(Charsets.UTF_8), expected = currentBinding()).export()
+                    contentResolver.openOutputStream(data!!.data!!, "wt")!!.use { it.write(validated) }
+                    AtomicFile(File(filesDir, "integrity-verification.json")).delete()
+                    status.setText(R.string.export_done)
+                } catch (_: Exception) { status.setText(R.string.export_failed) }
+            }
+            return
+        }
         if (requestCode == 10 && resultCode == RESULT_OK) try {
             selectedHash = contentResolver.openInputStream(data!!.data!!)!!.use { readProfile(readBounded(it)) }
             status.text = getString(R.string.selected_hash, selectedHash)
         } catch (_: Exception) { selectedHash = null; status.setText(R.string.invalid_profile) }
     }
-    private fun begin(withIntegrity: Boolean) {
+    private fun currentBinding(): EvidenceBinding = EvidenceBinding(requestId, profileId.text.toString(),
+        expectedHash ?: requireNotNull(selectedHash), artifact.text.toString(), expectedUser).also {
+            require(it.profileHash == selectedHash && it.androidUserId == android.os.Process.myUid() / 100000)
+        }
+    private fun prepareExport() {
+        try {
+            val file = AtomicFile(File(filesDir, "integrity-verification.json"))
+            val bytes = file.openRead().use { readBounded(it) }
+            val validated = VerificationBundle.parse(bytes.toString(Charsets.UTF_8), expected = currentBinding()).export()
+            AlertDialog.Builder(this).setTitle(R.string.export_title)
+                .setMessage(R.string.export_message)
+                .setNegativeButton(R.string.cancel, null).setPositiveButton(R.string.choose_file) { _, _ ->
+                    pendingExport = synchronized(lock) { generation to validated }
+                    @Suppress("DEPRECATION")
+                    startActivityForResult(Intent(Intent.ACTION_CREATE_DOCUMENT).setType("application/json")
+                        .addCategory(Intent.CATEGORY_OPENABLE).putExtra(Intent.EXTRA_TITLE, "integrity-verification.json"), 11)
+                }.show()
+        } catch (_: Exception) { status.setText(R.string.no_retained_token) }
+    }
+    private fun begin(withIntegrity: Boolean, retainToken: Boolean = false) {
         val binding: EvidenceBinding
         val actual = selectedHash
         val cloud = if (withIntegrity) project.text.toString().toLongOrNull() else null
@@ -118,14 +161,21 @@ class EvidenceActivity : Activity() {
             require(actual != null)
             binding = EvidenceBinding(requestId, profileId.text.toString(), expectedHash ?: actual,
                 artifact.text.toString(), expectedUser)
+            require(!withIntegrity || actual == binding.profileHash && expectedUser == android.os.Process.myUid() / 100000)
             require(!withIntegrity || cloud != null && cloud > 0)
         } catch (_: Exception) { status.setText(R.string.invalid_request); return }
-        val token = synchronized(lock) { ++generation }
+        val token = synchronized(lock) {
+            pendingExport = null
+            AtomicFile(File(filesDir, "integrity-verification.json")).delete()
+            ++generation
+        }
         collect.isEnabled = false; integrity.isEnabled = false
         status.setText(R.string.collecting)
         worker.execute {
+            var retained: VerificationBundle? = null
             val report = try {
-                val api = if (withIntegrity) IntegrityEvidence.request(this, cloud!!, binding)
+                val api = if (withIntegrity) IntegrityEvidence.request(this, cloud!!, binding,
+                    if (retainToken) { raw, at -> retained = VerificationBundle.retain(raw, binding, at, true) } else null)
                     else EvidenceRow("integrity.api", EvidenceStatus.NOT_RUN, "USER_NOT_REQUESTED")
                 SurfaceCollector.collect(binding, actual, AndroidSurfaceReader(this), api)
             } catch (_: Exception) {
@@ -137,6 +187,12 @@ class EvidenceActivity : Activity() {
             try {
                 synchronized(lock) {
                     if (token != generation) return@execute
+                    retained?.let { bundle ->
+                        val privateFile = AtomicFile(File(filesDir, "integrity-verification.json"))
+                        val output = privateFile.startWrite()
+                        try { output.write(bundle.export()); privateFile.finishWrite(output) }
+                        catch (error: Exception) { privateFile.failWrite(output); throw error }
+                    }
                     val directory = File(filesDir, "reports").apply { mkdirs() }
                     val target = AtomicFile(File(directory, "${binding.requestId}.json"))
                     val stream = target.startWrite()

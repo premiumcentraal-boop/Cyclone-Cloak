@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://cyclone.dev/schema/integrity-verification-bundle.schema.json",
+  "title": "Sensitive opt-in Integrity verification exchange v1",
+  "description": "Private ciphertext transport, never a diagnostics report. Verify token digest, recomputed request hash, current binding and freshness in code. No trust is conveyed by schema validity.",
+  "type": "object", "additionalProperties": false,
+  "required": ["format", "request_hash", "bundle"],
+  "properties": {
+    "format": {"const": 1},
+    "request_hash": {"$ref": "#/$defs/hash"},
+    "bundle": {
+      "type": "object", "additionalProperties": false,
+      "required": ["request_id", "profile_id", "profile_hash", "artifact_hash", "android_user_id", "received_at", "token_digest", "token"],
+      "properties": {
+        "request_id": {"type": "string", "pattern": "^[A-Za-z0-9_-]{1,80}$"},
+        "profile_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._:-]{0,95}$"},
+        "profile_hash": {"$ref": "#/$defs/hash"},
+        "artifact_hash": {"$ref": "#/$defs/hash"},
+        "android_user_id": {"type": "integer", "minimum": 0, "maximum": 21474},
+        "received_at": {"type": "string", "format": "date-time", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"},
+        "token_digest": {"$ref": "#/$defs/hash"},
+        "token": {"type": "string", "minLength": 1, "maxLength": 60000, "pattern": "^[A-Za-z0-9._~+/=-]+$"}
+      }
+    }
+  },
+  "$defs": {"hash": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+}
