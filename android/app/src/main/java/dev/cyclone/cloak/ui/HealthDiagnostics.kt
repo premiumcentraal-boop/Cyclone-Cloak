@@ -21,6 +21,7 @@ internal enum class DoctorReason(val message: String) {
     PUBLICATION_STALE_LOCK("A stale publication marker was detected after acquiring the kernel lock. The previous publisher no longer holds it."),
     PUBLICATION_UNKNOWN("Profile publication is not confirmed. Run Check & repair to refresh its status."),
     SYNC_READY("The last synchronization completed without binding issues."),
+    SYNC_CHECKING("Cyclone is connected. Binding reconciliation is still running."),
     SYNC_ISSUES("Some bindings were not saved or confirmed by Cyclone. Reconnect to retry existing reconciliation."),
     LOCAL_READY("No unreadable or conflicting local records were found in the current snapshot."),
     LOCAL_UNKNOWN("The local identity library has not finished loading."),
@@ -123,6 +124,7 @@ internal data class DoctorFacts(
     val conflictingIdentities: Boolean = false,
     val syncIssues: Boolean = false,
     val mismatchedIdentities: Boolean = false,
+    val reconciling: Boolean = false,
 )
 internal data class DoctorCheck(
     val kind: DoctorCheckKind,
@@ -224,6 +226,7 @@ internal data class HealthDiagnostics(
                 else -> DoctorReason.PUBLICATION_UNKNOWN
             })
             when {
+                facts.reconciling -> add(DoctorCheckKind.SYNC, DoctorStatus.WARN, DoctorReason.SYNC_CHECKING)
                 facts.syncing -> add(DoctorCheckKind.SYNC, DoctorStatus.WARN, DoctorReason.CONNECTING)
                 facts.connectorHeadline == null -> add(DoctorCheckKind.SYNC, DoctorStatus.WARN, DoctorReason.CONNECTION_UNKNOWN)
                 facts.connectorHeadline != "Connected" -> add(DoctorCheckKind.SYNC, DoctorStatus.FAIL, DoctorReason.CONNECTION_FAILED)

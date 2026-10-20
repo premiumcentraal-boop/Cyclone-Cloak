@@ -8,6 +8,17 @@ import org.junit.Assert.*
 import org.junit.Test
 
 class ReadinessDoctorFactsTest {
+    @Test fun liveConnectionDoesNotClaimPendingReconciliationHasPassed() {
+        val gate = dev.cyclone.cloak.cyclone.CycloneGate(true, 3,
+            setOf("profiles.read", "profiles.apps.read", "profiles.config", "profiles.startup"), emptySet())
+        val report = dev.cyclone.cloak.cyclone.SyncReport("Connected", "Checking bindings", gate = gate,
+            reconciliationPending = true)
+        val model = HealthDiagnostics.assess(ReadinessDoctorFacts.fromState(state().copy(report = report), null))
+        assertEquals(DoctorStatus.PASS, model.checks.single { it.kind == DoctorCheckKind.CONNECTOR }.status)
+        val sync = model.checks.single { it.kind == DoctorCheckKind.SYNC }
+        assertEquals(DoctorStatus.WARN, sync.status)
+        assertEquals(listOf(DoctorReason.SYNC_CHECKING), sync.reasons)
+    }
     private val profile = CloakForge.forgeProfile("PRIVATE USER CONTENT", "ab".repeat(32), TestPhones["pixel_7"])
     private val id = profile.getString("id")
     private val binding = CloakBinding("Cyclone_0123456789abcdef", 11, "com.private.app", id, 1, true, 1, "ready")

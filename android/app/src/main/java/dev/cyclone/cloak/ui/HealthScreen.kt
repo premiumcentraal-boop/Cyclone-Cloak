@@ -44,12 +44,6 @@ internal fun HealthScreen(state: CloakState, vm: CloakViewModel) {
     ) {
         CloakNotice("Local diagnostics. These checks run on this device and are kept apart from saved identities and bindings.")
         DeveloperDiagnosticsEntry(state.rootDoctor.moduleVersion)
-        BindingRunsSection(state, vm::retryRun)
-        CloakSectionHeader("Readiness")
-        HealthDoctorCard(diagnostics) { report ->
-            context.getSystemService(ClipboardManager::class.java).setPrimaryClip(ClipData.newPlainText("Cyclone Cloak diagnostics", report))
-            Toast.makeText(context, "Redacted diagnostics copied", Toast.LENGTH_SHORT).show()
-        }
         CloakSectionHeader("Check and repair")
         CloakGroup {
             Column(Modifier.fillMaxWidth().padding(CloakSpace.inner), verticalArrangement = Arrangement.spacedBy(CloakSpace.item)) {
@@ -67,6 +61,12 @@ internal fun HealthScreen(state: CloakState, vm: CloakViewModel) {
                 CloakRow("Get module ZIP", icon = Icons.Rounded.Download, onClick = { openModuleDownload(context) }, showChevron = false)
             }
         }
+        CloakSectionHeader("Readiness")
+        HealthDoctorCard(diagnostics) { report ->
+            context.getSystemService(ClipboardManager::class.java).setPrimaryClip(ClipData.newPlainText("Cyclone Cloak diagnostics", report))
+            Toast.makeText(context, "Redacted diagnostics copied", Toast.LENGTH_SHORT).show()
+        }
+        BindingRunsSection(state, vm::retryRun)
         CompanionPresenceCard(state.companionPresence, state.checkingCompanions, vm::checkCompanionPresence)
         CloakSectionHeader("Library review")
         UniquenessDiagnostics(state, vm::reviewIdentity)

@@ -38,6 +38,7 @@ data class SyncReport(
     val reconcile: BindingReconciler.Result? = null,
     val events: CycloneEvents.Batch? = null,
     val failureCode: String? = null,
+    val reconciliationPending: Boolean = false,
 ) {
     val approved: Boolean get() = gate?.approved == true
 
@@ -64,14 +65,14 @@ class CycloneSyncEngine(
     private val local: CloakLocal,
     private val reconciler: BindingReconciler = BindingReconciler(api),
 ) {
-    fun sync(): SyncReport = LogBus.trace("connector", "sync") {
-        syncDetailed().also { result ->
+    fun sync(onConnected: (SyncReport) -> Unit = {}): SyncReport = LogBus.trace("connector", "sync") {
+        syncDetailed(onConnected).also { result ->
             if (result.headline != "Connected" || result.issues.isNotEmpty())
                 LogBus.event("connector", "sync-result", Transition.DEGRADED, reason = "SYNC_NEEDS_ATTENTION")
         }
     }
 
-    private fun syncDetailed(): SyncReport {
+    private fun syncDetailed(onConnected: (SyncReport) -> Unit): SyncReport {
         var gate = try {
             CycloneGate.of(api.hello())
         } catch (error: CycloneConnectorException) {
@@ -97,6 +98,10 @@ class CycloneSyncEngine(
             return SyncReport.failed(error.code, error.message).copy(gate = gate, events = batch)
         }
         val placement = Placement.of(local.myUser, snapshot)
+        // A live handshake and registry establish the connection. Binding writes
+        // may take much longer and must not leave the connection chip spinning.
+        onConnected(SyncReport("Connected", "Cyclone connected. Checking existing bindings.",
+            gate = gate, snapshot = snapshot, placement = placement, events = batch, reconciliationPending = true))
         // Snapshot omissions and unknown users are not evidence that a publisher share may be pruned.
         val confirmedRemoved = batch?.removed.orEmpty().filter { snapshot.byId(it) == null }.toSet()
         val records = local.bindings()

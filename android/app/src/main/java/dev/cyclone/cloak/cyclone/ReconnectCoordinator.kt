@@ -88,6 +88,16 @@ class ReconnectCoordinator(
     private var attempts = 0
     private val settled = mutableListOf<() -> Unit>()
 
+    /** Live-session progress only; cached approval can never establish a connection. */
+    fun connectionEstablished(outcome: ReconnectOutcome) = synchronized(lock) {
+        if (!running || outcome.phase != ConnectionPhase.CONNECTED || !outcome.report.approved) return@synchronized
+        val cached = outcome.report.snapshot?.let { CachedRegistry(it, now()) }
+        if (cached != null) runCatching { save(cached) }
+        mutable.value = ConnectionStatus(ConnectionPhase.CONNECTED, attempts, "CONNECTED", outcome.detail,
+            cached ?: mutable.value.cached, outcome.report, outcome.provider)
+        log(cause, attempts, "CONNECTED")
+    }
+
     fun trigger(reason: ReconnectReason, onSettled: (() -> Unit)? = null) = synchronized(lock) {
         if (onSettled != null) {
             if (settled.size < 128) settled.add(onSettled) else onSettled()
@@ -99,10 +109,12 @@ class ReconnectCoordinator(
         enqueue(0)
     }
 
-    private fun enqueue(delay: Long) {
+    private fun enqueue(delay: Long, preserveLiveConnection: Boolean = false) {
         scheduled = true
-        mutable.value = mutable.value.copy(phase = ConnectionPhase.RECONNECTING, attempt = attempts + 1,
-            detail = "Reconnecting to Cyclone. Wait for this attempt to finish; no additional tap is needed.")
+        if (!preserveLiveConnection) {
+            mutable.value = mutable.value.copy(phase = ConnectionPhase.RECONNECTING, attempt = attempts + 1,
+                detail = "Reconnecting to Cyclone. Wait for this attempt to finish; no additional tap is needed.")
+        }
         scheduler.schedule(delay, ::attempt)
     }
 
@@ -132,7 +144,8 @@ class ReconnectCoordinator(
                 cached ?: mutable.value.cached, result.report, result.provider)
             log(reason, number, phase.name)
             if (retry) enqueue(ReconnectBackoff.delayMs(number, sample()))
-            else if (dirty && result.phase == ConnectionPhase.CONNECTED && attempts < maxAttempts) enqueue(0)
+            else if (dirty && result.phase == ConnectionPhase.CONNECTED && attempts < maxAttempts)
+                enqueue(0, preserveLiveConnection = true)
             callbacks = settled.toList()
             settled.clear()
         }

@@ -35,6 +35,7 @@ internal object ReadinessDoctorFacts {
             unreadableIdentities = state.unreadableIdentityIds.isNotEmpty(),
             conflictingIdentities = duplicateIdentities.isNotEmpty(),
             mismatchedIdentities = state.identities.any { (id, p) -> p.optString("id") != id },
-            syncIssues = state.report?.issues?.isNotEmpty() == true)
+            syncIssues = state.report?.issues?.isNotEmpty() == true,
+            reconciling = state.report?.reconciliationPending == true)
     }
 }

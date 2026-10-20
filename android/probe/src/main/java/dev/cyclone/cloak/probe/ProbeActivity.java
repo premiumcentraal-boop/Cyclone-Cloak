@@ -327,6 +327,9 @@ public class ProbeActivity extends Activity {
             } catch (Exception ignored) { /* Diagnostics must not change a probe result. */ }
         }
 
+        // These reads intentionally exercise denied APIs too. compare() checks
+        // declared grants and converts SecurityException into a precise BLOCKED row.
+        @android.annotation.SuppressLint("MissingPermission")
         private void collect() throws Exception {
             String[][] fields = {
                 {"MANUFACTURER", "manufacturer"}, {"BRAND", "brand"}, {"MODEL", "model"},
@@ -372,7 +375,10 @@ public class ProbeActivity extends Activity {
             read("telephony.deviceId", "identifiers.imei_primary", tm::getDeviceId);
             read("telephony.simSerial", "identifiers.sim_serial", tm::getSimSerialNumber);
             read("telephony.phoneCount", "telephony.sim_slot_count", tm::getPhoneCount);
-            read("telephony.activeModemCount", "telephony.sim_slot_count", tm::getActiveModemCount);
+            read("telephony.activeModemCount", "telephony.sim_slot_count", () -> {
+                if (Build.VERSION.SDK_INT < 30) throw new NoSuchMethodException("API_30_REQUIRED");
+                return tm.getActiveModemCount();
+            });
             int networkType;
             switch (expected("telephony.network_type").toString()) {
                 case "5G": networkType = TelephonyManager.NETWORK_TYPE_NR; break;
@@ -404,7 +410,10 @@ public class ProbeActivity extends Activity {
             compare("settings.unrelatedControl", null,
                 () -> Settings.Secure.getString(getContentResolver(), "accessibility_enabled"));
             // Builder isolates the getter hook from service permission requirements.
-            read("wifi.objectMac", "identifiers.mac", () -> new WifiInfo.Builder().build().getMacAddress());
+            read("wifi.objectMac", "identifiers.mac", () -> {
+                if (Build.VERSION.SDK_INT < 30) throw new NoSuchMethodException("API_30_REQUIRED");
+                return new WifiInfo.Builder().build().getMacAddress();
+            });
             read("wifi.serviceMac", "identifiers.mac", () -> getSystemService(WifiManager.class).getConnectionInfo().getMacAddress());
             compare("wifi.bssid", null, () -> {
                 WifiInfo info = getSystemService(WifiManager.class).getConnectionInfo();

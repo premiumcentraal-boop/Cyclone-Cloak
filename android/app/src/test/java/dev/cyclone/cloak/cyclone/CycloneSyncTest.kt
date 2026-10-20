@@ -304,7 +304,7 @@ class CycloneSyncTest {
             emptySet(), emptyList(),
         )
         assertEquals("profile isn't ready in Cyclone", result.issues[bindingKey(B, APP)])
-        assertEquals(ReconcilePlanner.NOT_LISTED, result.issues[bindingKey(C, "com.not.listed")])
+        assertTrue(result.issues.getValue(bindingKey(C, "com.not.listed")).contains("BAD_REQUEST"))
         assertEquals(setOf(tupleKey(C, 12, APP)), result.pushed)
     }
 

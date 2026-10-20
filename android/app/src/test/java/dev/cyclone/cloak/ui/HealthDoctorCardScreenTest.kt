@@ -29,6 +29,22 @@ import org.robolectric.annotation.GraphicsMode
 @GraphicsMode(GraphicsMode.Mode.NATIVE)
 @Config(sdk = [34], qualifiers = "w400dp-h900dp-mdpi")
 class HealthDoctorCardScreenTest {
+    @Test fun largeBindingInventoryPagesDetailsButCopiesEveryCheck() {
+        val model = HealthDiagnostics.assess(facts.copy(bindings = (1..327).map { n ->
+            facts.bindings.single().copy(displayContext = "Binding $n")
+        }))
+        var copied = ""
+        compose.setContent { CloakTheme { Column(Modifier.verticalScroll(rememberScrollState())) {
+            HealthDoctorCard(model) { copied = it }
+        } } }
+        compose.onNodeWithText("Binding 327").assertDoesNotExist()
+        compose.onNodeWithText("Copy diagnostics").performClick()
+        assertEquals(model.checks.size, JSONObject(copied).getJSONArray("checks").length())
+        compose.onNodeWithText("Next checks").performScrollTo().performClick()
+        compose.onNodeWithText("Checks 21–40 of ${model.checks.size}").assertIsDisplayed()
+        compose.onNodeWithText("Previous checks").performClick()
+        compose.onNodeWithText("Checks 1–20 of ${model.checks.size}").assertIsDisplayed()
+    }
     @get:Rule val compose = createAndroidComposeRule<ComponentActivity>()
     private val facts = DoctorFacts(RootDoctorResult(RootDoctorCode.READY, "v0.10.0-alpha.1"), "0.10.0-alpha.1",
         "Connected", false, CycloneGate(true, 3, setOf("profiles.read", "profiles.apps.read", "profiles.config", "profiles.startup"), emptySet()),

@@ -11,13 +11,22 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 
 @Composable
 internal fun HealthDoctorCard(diagnostics: HealthDiagnostics, onCopy: (String) -> Unit) {
+    var requestedPage by remember { mutableIntStateOf(0) }
+    val pageSize = 20
+    val lastPage = ((diagnostics.checks.size - 1) / pageSize).coerceAtLeast(0)
+    val page = requestedPage.coerceIn(0, lastPage)
     Card(modifier = Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.large,
         colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)) {
         Column(Modifier.padding(18.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
@@ -36,7 +45,15 @@ internal fun HealthDoctorCard(diagnostics: HealthDiagnostics, onCopy: (String) -
             }
             Text("The copied report includes check results, counts and release versions. Private data and raw errors are omitted.",
                 style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
-            diagnostics.checks.forEach { check ->
+            if (lastPage > 0) {
+                Text("Checks ${page * pageSize + 1}–${minOf((page + 1) * pageSize, diagnostics.checks.size)} of ${diagnostics.checks.size}",
+                    style = MaterialTheme.typography.bodySmall)
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                    TextButton(onClick = { requestedPage = page - 1 }, enabled = page > 0) { Text("Previous checks") }
+                    TextButton(onClick = { requestedPage = page + 1 }, enabled = page < lastPage) { Text("Next checks") }
+                }
+            }
+            diagnostics.checks.drop(page * pageSize).take(pageSize).forEach { check ->
                 HorizontalDivider()
                 Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     Text(check.kind.label, modifier = Modifier.weight(1f), style = MaterialTheme.typography.titleSmall)

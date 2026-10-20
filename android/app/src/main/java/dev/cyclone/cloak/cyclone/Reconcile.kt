@@ -169,7 +169,9 @@ class BindingReconciler(
                 } catch (error: CycloneConnectorException) {
                     failedKeys += key
                     issues[key] = when (error.code) {
-                        "BAD_REQUEST" -> ReconcilePlanner.NOT_LISTED
+                        // BAD_REQUEST also covers capacity and payload rejection.
+                        // It is not evidence that the package disappeared.
+                        "BAD_REQUEST" -> "Cyclone rejected this configuration request (BAD_REQUEST). Local binding retained; review Cyclone's configuration capacity and app assignment."
                         "NO_SUCH_PROFILE" -> "profile isn't ready in Cyclone"
                         else -> "Cyclone couldn't save it (${error.code}); it will be retried"
                     }

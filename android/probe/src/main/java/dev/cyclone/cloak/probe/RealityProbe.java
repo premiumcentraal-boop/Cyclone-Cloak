@@ -33,6 +33,8 @@ import org.json.JSONObject;
 @SuppressWarnings("deprecation")
 final class RealityProbe {
     private RealityProbe() { }
+    // RealityReport catches denied reads per row; no privileged permission is requested.
+    @android.annotation.SuppressLint("MissingPermission")
     static JSONObject collect(Activity activity, JSONObject profile, JSONObject contractTable) throws Exception {
         Map<String, RealityReport.Reader> readers = new HashMap<>();
         readers.put("compute.soc", () -> Build.VERSION.SDK_INT >= 31 ? Build.SOC_MODEL : null);

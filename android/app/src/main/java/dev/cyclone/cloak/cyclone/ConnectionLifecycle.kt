@@ -22,18 +22,24 @@ object ConnectionLifecycle {
         return ReconnectCoordinator(connect = { _ ->
             val installed = CycloneConnector.isCycloneInstalled(app)
             var provider = "not registered"
+            var registered = false
+            fun register(cyclone: CycloneConnector, result: SyncReport) {
+                registered = true
+                val gate = result.gate
+                provider = when {
+                    gate?.approved != true -> "not registered"
+                    gate.minor < 1 -> "Cyclone too old"
+                    !gate.startup -> "not approved"
+                    else -> runCatching { cyclone.registerProfileProvider(CloakStartupProvider(app)) }
+                        .fold({ "ready" }, { "failed" })
+                }
+            }
             var report = if (!installed) SyncReport.failed("CYCLONE_NOT_FOUND", "Install Cyclone in this Android profile.")
                 // Reconnection never reopens a root approval window, even on resume/manual retry.
-                else CycloneBridge.sync(app, foreground = false, allowRoot = false) { cyclone, result ->
-                    val gate = result.gate
-                    provider = when {
-                        gate?.approved != true -> "not registered"
-                        gate.minor < 1 -> "Cyclone too old"
-                        !gate.startup -> "not approved"
-                        else -> runCatching { cyclone.registerProfileProvider(CloakStartupProvider(app)) }
-                            .fold({ "ready" }, { "failed" })
-                    }
-                }
+                else CycloneBridge.sync(app, foreground = false, allowRoot = false, onConnected = { cyclone, result ->
+                    register(cyclone, result)
+                    coordinator?.connectionEstablished(ReconnectOutcome(result, provider, installed))
+                }, withConnection = { cyclone, result -> if (!registered) register(cyclone, result) })
             if (provider == "failed") report = report.copy(failureCode = "PROVIDER_REGISTRATION_FAILED",
                 message = "Cyclone answered, but the startup callback could not be registered. Reconnecting will retry registration.")
             ReconnectOutcome(report, provider, installed)

@@ -34,12 +34,14 @@ object CycloneBridge {
     /** Connects, syncs and closes. [foreground]: the owner is looking at Cloak, so a root prompt is acceptable. */
     fun sync(context: Context, foreground: Boolean, allowRoot: Boolean = true,
              onPublication: (RootDoctorResult) -> Unit = {},
+             onConnected: (CycloneConnector, SyncReport) -> Unit = { _, _ -> },
              withConnection: (CycloneConnector, SyncReport) -> Unit = { _, _ -> }): SyncReport =
         synchronized(lock) {
             val app = context.applicationContext
             try {
                 CycloneConnector.connect(app).use { cyclone ->
-                    val report = CycloneSyncEngine(ConnectorApi(cyclone), AndroidLocal(app, foreground, allowRoot, onPublication)).sync()
+                    val report = CycloneSyncEngine(ConnectorApi(cyclone), AndroidLocal(app, foreground, allowRoot, onPublication))
+                        .sync { onConnected(cyclone, it) }
                     withConnection(cyclone, report)
                     report
                 }

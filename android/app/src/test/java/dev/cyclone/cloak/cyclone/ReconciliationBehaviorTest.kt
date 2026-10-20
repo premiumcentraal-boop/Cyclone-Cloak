@@ -7,6 +7,44 @@ import org.junit.Test
 
 /** State transitions against the production planner/engine and Cyclone-shaped envelopes. No Android device needed. */
 class ReconciliationBehaviorTest {
+    @Test fun liveRegistryIsReportedBeforeAnyBindingOrPublicationMutation() {
+        val api = api(); val local = local()
+        val records = local.store
+        var callbacks = 0
+        val result = CycloneSyncEngine(api, local, BindingReconciler(api, sleep = {})).sync { progress ->
+            callbacks++
+            assertEquals("Connected", progress.headline)
+            assertTrue(progress.approved)
+            assertNotNull(progress.snapshot)
+            assertNull(progress.reconcile)
+            assertTrue(progress.reconciliationPending)
+            assertEquals(records, local.store)
+            assertEquals(0, local.republished)
+            assertFalse(api.calls.any { it.startsWith("config.") })
+        }
+        assertEquals(1, callbacks)
+        assertEquals(1, result.reconcile!!.written)
+        assertFalse(result.reconciliationPending)
+    }
+
+    @Test fun missingApprovalCannotEmitLiveConnectionProgress() {
+        val api = api().apply { approved = false }
+        var callbacks = 0
+        CycloneSyncEngine(api, local()).sync { callbacks++ }
+        assertEquals(0, callbacks)
+    }
+
+    @Test fun ambiguousBadRequestPreservesRecordsAndDoesNotInventMissingAppReason() {
+        val api = api(); val local = local(); seed(api, local)
+        val records = local.store; val remote = api.config.getValue(tuple).toString()
+        api.failNext["config.get.v1"] = ArrayDeque(listOf("BAD_REQUEST"))
+        val failed = sync(api, local)
+        assertEquals(records, local.store)
+        assertEquals(remote, api.config.getValue(tuple).toString())
+        assertEquals(setOf(tuple), local.pushed)
+        assertTrue(failed.issues.getValue(key).contains("BAD_REQUEST"))
+        assertFalse(failed.issues.getValue(key).contains("app not in"))
+    }
     private val profile = "Cyclone_bbbbbbbbbbbbbbbb"
     private val other = "Cyclone_cccccccccccccccc"
     private val app = "com.example.app"

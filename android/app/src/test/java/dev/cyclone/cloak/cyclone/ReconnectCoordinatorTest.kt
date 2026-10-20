@@ -8,6 +8,51 @@ import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 
 class ReconnectCoordinatorTest {
+    @Test fun liveRegistryEstablishesConnectionBeforeSlowBindingWorkFinishes() {
+        val scheduler = Scheduler()
+        lateinit var coordinator: ReconnectCoordinator
+        var saved: CachedRegistry? = null
+        val snapshot = ProfilesSnapshot(null, emptyList())
+        coordinator = ReconnectCoordinator({
+            coordinator.connectionEstablished(success(snapshot))
+            assertEquals(ConnectionPhase.CONNECTED, coordinator.state.value.phase)
+            assertNotNull(saved)
+            // A trigger while reconciliation is still active cannot open a second session.
+            coordinator.trigger(ReconnectReason.RESUME)
+            assertTrue(scheduler.jobs.isEmpty())
+            success(snapshot)
+        }, scheduler, save = { saved = it })
+        coordinator.trigger(ReconnectReason.PROCESS_START)
+        scheduler.runNext()
+        assertEquals(ConnectionPhase.CONNECTED, coordinator.state.value.phase)
+    }
+
+    @Test fun unapprovedOrOutOfFlightProgressCannotPromoteCachedConnection() {
+        val scheduler = Scheduler()
+        lateinit var coordinator: ReconnectCoordinator
+        coordinator = ReconnectCoordinator({
+            coordinator.connectionEstablished(ReconnectOutcome(SyncReport("Connected", "unapproved")))
+            assertEquals(ConnectionPhase.RECONNECTING, coordinator.state.value.phase)
+            transient()
+        }, scheduler)
+        coordinator.connectionEstablished(success())
+        assertEquals(ConnectionPhase.RECONNECTING, coordinator.state.value.phase)
+        coordinator.trigger(ReconnectReason.PROCESS_START)
+        scheduler.runNext()
+        assertEquals(ConnectionPhase.RECONNECTING, coordinator.state.value.phase)
+    }
+
+    @Test fun failureAfterLiveProgressIsNotHiddenByConnectedChip() {
+        val scheduler = Scheduler()
+        lateinit var coordinator: ReconnectCoordinator
+        coordinator = ReconnectCoordinator({
+            coordinator.connectionEstablished(success())
+            throw IllegalStateException("failed later")
+        }, scheduler, maxAttempts = 1)
+        coordinator.trigger(ReconnectReason.PROCESS_START)
+        scheduler.runNext()
+        assertEquals(ConnectionPhase.PAUSED, coordinator.state.value.phase)
+    }
     private class Scheduler : ReconnectScheduler {
         val jobs = ArrayDeque<Pair<Long, () -> Unit>>()
         override fun schedule(delayMs: Long, task: () -> Unit) { jobs.addLast(delayMs to task) }
