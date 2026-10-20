@@ -6,6 +6,7 @@ import argparse
 import hashlib
 import json
 import re
+import shlex
 import subprocess
 import time
 import uuid
@@ -290,6 +291,44 @@ class Adb:
     def __init__(self, executable, serial, user):
         self.prefix = [executable, "-s", serial]
         self.user = user
+        self.root_private = False
+
+    def root(self, command, data=None, check=True):
+        # exec-out preserves exact profile/report bytes. It does not reliably expose
+        # the remote exit status, so require our own terminal status marker.
+        marker = "CLOAK_EVIDENCE_EXIT_" + uuid.uuid4().hex
+        wrapped = command + f'\ncode=$?\nprintf "\\n{marker}=%s\\n" "$code"'
+        # Shell v2 forwards stdin EOF; exec-out can leave a remote `cat` waiting
+        # forever after local stdin closes. Disable PTY to retain exact bytes.
+        arguments = (("shell", "-T", "su", "--mount-master", "-c", shlex.quote(wrapped))
+                     if data is not None else ("exec-out", "su", "--mount-master", "-c", wrapped))
+        result = self.call(*arguments, data=data, check=False)
+        body, separator, status = result.stdout.rpartition(("\n" + marker + "=").encode())
+        if result.returncode or not separator or not re.fullmatch(rb"[0-9]+(?:\r?\n)?", status):
+            raise RuntimeError("DIAGNOSTICS_PRIVATE_ACCESS_FAILED")
+        result.stdout, result.returncode = body, int(status.strip())
+        if check and result.returncode:
+            raise RuntimeError("DIAGNOSTICS_PRIVATE_ACCESS_FAILED")
+        return result
+
+    def enable_root_private_access(self):
+        base = f"/data/user/{self.user}/{PACKAGE}"
+        uid = self.root(f"stat -c %u {base}").stdout.decode().strip()
+        if not uid.isdigit() or int(uid) // 100000 != self.user or not 10000 <= int(uid) % 100000 < 20000:
+            raise ValueError("DIAGNOSTICS_UID_MISMATCH")
+        # Create only diagnostics-private directories, with the actual app UID and
+        # its SELinux label, before the app attempts an atomic report write.
+        self.root(f"mkdir -p {base}/files/inputs && "
+                  f"chown {uid}:{uid} {base}/files {base}/files/inputs && "
+                  f"chmod 700 {base}/files {base}/files/inputs && "
+                  f"restorecon -F {base}/files && restorecon -RF {base}/files/inputs")
+        self.private_uid = uid
+        self.root_private = True
+
+    def saved_identity(self, identity):
+        if not self.root_private or not re.fullmatch(r"[A-Za-z0-9_-]{1,96}", identity):
+            raise ValueError("INVALID_SAVED_IDENTITY")
+        return self.root(f"cat /data/user/{self.user}/dev.cyclone.cloak/files/profiles/{identity}.json").stdout
 
     def call(self, *args, data=None, timeout=20, check=True):
         result = subprocess.run(
@@ -306,7 +345,18 @@ class Adb:
         return result
 
     def own(self, command, data=None, check=True):
-        return self.call(
+        if self.root_private:
+            allowed = (r"sha256sum /[A-Za-z0-9_./=+~-]+", r"mkdir -p files/inputs",
+                       r"(?:cat >|cat|rm -f|test ! -e) files/(?:inputs|reports)/[A-Za-z0-9_-]{1,80}\.json")
+            if not any(re.fullmatch(pattern, command) for pattern in allowed):
+                raise ValueError("DIAGNOSTICS_COMMAND_NOT_ALLOWED")
+            base = f"/data/user/{self.user}/{PACKAGE}"
+            if command.startswith("cat > "):
+                target = base + "/" + command.removeprefix("cat > ")
+                command += (f" && chown {self.private_uid}:{self.private_uid} {target}"
+                            f" && chmod 600 {target} && restorecon -F {target}")
+            return self.root(f"cd {shlex.quote(base)} && {command}", data=data, check=check)
+        result = self.call(
             "shell",
             "run-as",
             PACKAGE,
@@ -316,13 +366,19 @@ class Adb:
             "-c",
             "'" + command + "'",
             data=data,
-            check=check,
+            check=False,
         )
+        if result.returncode and b"not debuggable" in result.stderr:
+            raise ValueError("SIGNED_APK_REQUIRES_EXPLICIT_PRIVATE_ACCESS")
+        if check and result.returncode:
+            raise RuntimeError("ADB_COMMAND_FAILED")
+        return result
 
 
 def capture(args, output: Path):
+    saved_identity = getattr(args, "saved_identity", None)
     if (
-        not all((args.profile, args.profile_id, args.artifact_digest, args.serial))
+        not all((args.profile or saved_identity, args.profile_id, args.artifact_digest, args.serial))
         or args.user is None
     ):
         raise ValueError("DEVICE_BINDING_REQUIRED")
@@ -333,7 +389,13 @@ def capture(args, output: Path):
         or not 0 <= args.user <= 21474
     ):
         raise ValueError("INVALID_BINDING")
-    raw_profile = args.profile.read_bytes()
+    adb = Adb(args.adb, args.serial, args.user)
+    access = getattr(args, "private_access", "run-as")
+    if access == "root":
+        adb.enable_root_private_access()
+    if saved_identity and (access != "root" or args.profile):
+        raise ValueError("SAVED_IDENTITY_REQUIRES_ROOT_ACCESS")
+    raw_profile = adb.saved_identity(saved_identity) if saved_identity else args.profile.read_bytes()
     if load_json(raw_profile, 262144).get("schema_version") not in (
         "0.2",
         "0.3",
@@ -348,13 +410,14 @@ def capture(args, output: Path):
         "artifact_hash": args.artifact_digest,
         "android_user_id": args.user,
     }
-    adb = Adb(args.adb, args.serial, args.user)
     provenance = {
         "format": 1,
         "mode": "device_user_initiated",
         "binding": expected,
         "integrity_requested_by_runner": False,
         "wait_for_user_integrity_request": args.wait_integrity,
+        "private_access": access,
+        "profile_source": "saved_identity_read_only" if saved_identity else "local_file",
     }
     cleanup = {"input_removed": False, "report_removed": False}
     staged = False
@@ -380,6 +443,8 @@ def capture(args, output: Path):
             "shell",
             "am",
             "start",
+            "--activity-clear-top",
+            "--activity-single-top",
             "--user",
             str(args.user),
             "-n",
@@ -448,6 +513,9 @@ def main(argv=None):
     parser.add_argument("--serial")
     parser.add_argument("--user", type=int)
     parser.add_argument("--profile", type=Path)
+    parser.add_argument("--saved-identity", help="Read this saved identity in memory only; requires explicit root private access")
+    parser.add_argument("--private-access", choices=("run-as", "root"), default="run-as",
+                        help="Signed APKs disable run-as. Root is opt-in and scoped to diagnostics-private files and the selected identity read.")
     parser.add_argument("--profile-id")
     parser.add_argument("--artifact-digest")
     parser.add_argument(

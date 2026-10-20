@@ -233,6 +233,8 @@ def test_device_path_only_uses_own_storage_and_waits_for_user(tmp_path, monkeypa
     text = str(calls)
     assert "files/inputs/fixed-request.json" in text
     assert "am', 'start" in text
+    assert "--activity-clear-top" in text
+    assert "--activity-single-top" in text  # Deliver the new request to a reused screen.
     for forbidden in (
         "pm grant",
         "pm revoke",
@@ -258,3 +260,102 @@ def test_separate_manifest_has_no_permissions_or_services():
     ).read_text()
     assert "requestPermissions" not in text
     assert "No collection on launch" in text
+
+def test_root_transport_preserves_bytes_and_honors_remote_failure(monkeypatch):
+    adb = harness.Adb('adb', 'serial', 17)
+    def call(*args, **kwargs):
+        marker = __import__('re').search(r'CLOAK_EVIDENCE_EXIT_[a-f0-9]+', args[-1])[0]
+        return SimpleNamespace(returncode=0, stdout=b'{"exact":"bytes"}\n\n'+marker.encode()+b'=0\n')
+    monkeypatch.setattr(adb, 'call', call)
+    assert adb.root('cat safe').stdout == b'{"exact":"bytes"}\n'
+    def failed(*args, **kwargs):
+        marker = __import__('re').search(r'CLOAK_EVIDENCE_EXIT_[a-f0-9]+', args[-1])[0]
+        return SimpleNamespace(returncode=0, stdout=b'not a report\n'+marker.encode()+b'=1\n')
+    monkeypatch.setattr(adb, 'call', failed)
+    assert adb.root('cat missing', check=False).returncode == 1
+    with pytest.raises(RuntimeError, match='DIAGNOSTICS_PRIVATE_ACCESS_FAILED'):
+        adb.root('cat missing')
+
+
+def test_root_transport_rejects_missing_exit_marker(monkeypatch):
+    adb = harness.Adb('adb', 'serial', 17)
+    monkeypatch.setattr(adb, 'call', lambda *a, **k: SimpleNamespace(returncode=0, stdout=b'fake success'))
+    with pytest.raises(RuntimeError, match='DIAGNOSTICS_PRIVATE_ACCESS_FAILED'):
+        adb.root('id')
+
+
+def test_signed_apk_staging_has_app_ownership_and_selinux_label(monkeypatch):
+    adb = harness.Adb('adb', 'serial', 17)
+    commands = []
+    def root(command, **kwargs):
+        commands.append(command)
+        return SimpleNamespace(returncode=0, stdout=b'1710312\n' if command.startswith('stat') else b'')
+    monkeypatch.setattr(adb, 'root', root)
+    adb.enable_root_private_access()
+    adb.own('cat > files/inputs/request-1.json', data=b'private')
+    assert 'chown 1710312:1710312' in commands[1]
+    assert 'restorecon -F' in commands[1]  # Repair stale per-user MLS categories too.
+    assert 'restorecon -RF' in commands[1]  # Android needs recursive app-data relabeling.
+    assert 'chown 1710312:1710312' in commands[2]
+    assert 'restorecon -F' in commands[2]
+    assert all('private' not in command for command in commands)
+    for forbidden in ('rm -rf /', 'cat /data/user/17/dev.cyclone.cloak/files/profiles/private.json',
+                      'cat files/reports/request.json; id', 'cat files/reports/../../other.json'):
+        with pytest.raises(ValueError, match='DIAGNOSTICS_COMMAND_NOT_ALLOWED'):
+            adb.own(forbidden)
+
+
+def test_signed_apk_uid_mismatch_fails_before_any_write(monkeypatch):
+    adb = harness.Adb('adb', 'serial', 17)
+    commands = []
+    def root(command, **kwargs):
+        commands.append(command)
+        return SimpleNamespace(returncode=0, stdout=b'10312\n')
+    monkeypatch.setattr(adb, 'root', root)
+    with pytest.raises(ValueError, match='DIAGNOSTICS_UID_MISMATCH'):
+        adb.enable_root_private_access()
+    assert len(commands) == 1
+
+
+def test_saved_identity_is_read_only_and_rejects_paths(monkeypatch):
+    adb = harness.Adb('adb', 'serial', 17)
+    with pytest.raises(ValueError, match='INVALID_SAVED_IDENTITY'):
+        adb.saved_identity('id')
+    adb.root_private = True
+    commands = []
+    def root(command, **kwargs):
+        commands.append(command)
+        return SimpleNamespace(returncode=0, stdout=b'{"schema_version":"0.4"}')
+    monkeypatch.setattr(adb, 'root', root)
+    assert adb.saved_identity('safe-id') == b'{"schema_version":"0.4"}'
+    assert commands == ['cat /data/user/17/dev.cyclone.cloak/files/profiles/safe-id.json']
+    for name in ('../other', 'id;id', 'id/file'):
+        with pytest.raises(ValueError, match='INVALID_SAVED_IDENTITY'):
+            adb.saved_identity(name)
+
+def test_root_stdin_uses_eof_capable_non_pty_transport(monkeypatch):
+    adb = harness.Adb('adb', 'serial', 17)
+    calls = []
+    def call(*args, **kwargs):
+        calls.append((args, kwargs))
+        marker = __import__('re').search(r'CLOAK_EVIDENCE_EXIT_[a-f0-9]+', args[-1])[0]
+        return SimpleNamespace(returncode=0, stdout=b'\r\n'+marker.encode()+b'=0\r\n')
+    monkeypatch.setattr(adb, 'call', call)
+    adb.root('cat > diagnostics-private', data=b'{"private":"stdin only"}\n')
+    args, kwargs = calls[0]
+    assert args[:2] == ('shell', '-T')
+    assert kwargs['data'] == b'{"private":"stdin only"}\n'
+    assert 'stdin only' not in str(args)
+
+
+def test_signed_run_as_has_actionable_error_without_automatic_root(monkeypatch):
+    adb = harness.Adb('adb', 'serial', 17)
+    calls = []
+    def call(*args, **kwargs):
+        calls.append(args)
+        return SimpleNamespace(returncode=1, stdout=b'', stderr=b'run-as: package not debuggable')
+    monkeypatch.setattr(adb, 'call', call)
+    with pytest.raises(ValueError, match='SIGNED_APK_REQUIRES_EXPLICIT_PRIVATE_ACCESS'):
+        adb.own('mkdir -p files/inputs')
+    assert len(calls) == 1
+    assert 'su' not in calls[0]

@@ -108,10 +108,38 @@ uv run --with jsonschema -- python -X utf8 tools/run_play_evidence.py --adb C:/U
 The runner stages the supplied file **only in the diagnostics UID's private
 directory**, opens the app and waits for your tap. `--wait-integrity` waits for
 an explicit on-device API request; it does not initiate one. Default timeout 240s,
-configurable up to 900s. No root, production binding, package install/removal,
+configurable up to 900s. Default `--private-access run-as` uses no root. No production binding, package install/removal,
 permission/AppOps change, account write or reboot command is used. Input and
 report scratch files for that request are removed in `finally`; cleanup success
 is recorded. Failure or inability to clean up makes the run fail.
+
+### Signed APKs
+
+The published signed diagnostics APK is not debuggable, so Android correctly
+rejects `run-as`. On an already rooted development device, explicitly select
+`--private-access root`. This never falls back silently or installs a debug APK.
+It checks the diagnostics directory's per-user UID, repairs only that package's
+private staging ownership/SELinux label, preserves exact input bytes, and checks
+the remote exit status independently of ADB transport success. Root commands for
+staging/report access are allowlisted; cleanup remains request-specific.
+Android's per-user MLS categories require recursive forced relabeling of the
+diagnostics input directory (`restorecon -RF`); ownership alone is insufficient.
+The launch explicitly delivers a fresh intent to an existing collection screen,
+so a completed older request cannot be mistaken for the newly staged request.
+
+To avoid exporting a saved profile body to the PC, use `--saved-identity <id>`
+instead of `--profile`. This reads only that identity's file in the selected
+user's Cloak copy into memory; it never invokes a production writer. Neither
+profile bodies nor root command output are included in evidence. Provenance
+records the explicit transport and profile source.
+
+```powershell
+uv run --with jsonschema -- python -X utf8 tools/run_play_evidence.py --adb C:/Users/Agent/android-sdk/platform-tools/adb.exe --serial 3B171FDJH0061G --user 17 --private-access root --saved-identity <saved-id> --profile-id <Cyclone-profile-id> --artifact-digest <64-lowercase-hex>
+```
+
+The user must still initiate local collection. This option does not request
+Integrity, grant permissions, approve Magisk access for the companion, repair
+publication, or convert unknown readiness into READY.
 
 Offline validation/export, requiring no device:
 
