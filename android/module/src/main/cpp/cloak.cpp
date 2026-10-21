@@ -10,6 +10,7 @@
  */
 
 #include <sys/stat.h>
+#include <sys/utsname.h>
 #include <sys/socket.h>
 #include <unistd.h>
 #include <fcntl.h>
@@ -482,10 +483,18 @@ std::string render_proc_version() {
     std::string buildType = lookup_prop("ro.build.type");
     std::string buildTags = lookup_prop("ro.build.tags");
     std::string fingerprint = lookup_prop("ro.build.fingerprint");
-    int sdk = 33;
-    std::string sdkStr = lookup_prop("ro.build.version.sdk");
-    if (!sdkStr.empty()) sdk = std::atoi(sdkStr.c_str());
-    return "Linux version " + kernel_for_sdk(sdk) +
+    // Measured kernel release; the SDK-derived string is only a fallback.
+    std::string kernel;
+    struct utsname uts;
+    if (uname(&uts) == 0 && uts.release[0] != 0) {
+        kernel = uts.release;
+    } else {
+        int sdk = 33;
+        std::string sdkStr = lookup_prop("ro.build.version.sdk");
+        if (!sdkStr.empty()) sdk = std::atoi(sdkStr.c_str());
+        kernel = kernel_for_sdk(sdk);
+    }
+    return "Linux version " + kernel +
            " (build@android-build) (clang version 17.0.2) #1 SMP PREEMPT " +
            buildType + " " + buildTags + " " + fingerprint + "\n";
 }
@@ -493,8 +502,11 @@ std::string render_proc_version() {
 std::string render_cpuinfo() {
     std::string hardware = lookup_prop("ro.hardware");
     if (hardware.empty()) hardware = "qcom";
+    // Measured host core count; guard against absurd values before rendering.
+    long coreCount = sysconf(_SC_NPROCESSORS_ONLN);
+    if (coreCount <= 0 || coreCount > 64) coreCount = 8;
     std::string out;
-    for (int i = 0; i < 8; ++i) {
+    for (int i = 0; i < static_cast<int>(coreCount); ++i) {
         out += "processor\t: " + std::to_string(i) + "\n";
         out += "BogoMIPS\t: 38.40\n";
         out += "Features\t: fp asimd aes sha1 sha2 crc32\n";
