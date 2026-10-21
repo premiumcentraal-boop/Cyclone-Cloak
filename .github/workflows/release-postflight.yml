@@ -1,0 +1,99 @@
+name: release postflight
+
+on:
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Published tag to verify'
+        required: true
+      evidence_directory:
+        description: 'Checked-in evidence directory below docs/runtime-evidence'
+        required: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.tag }}
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: 'build-tools;35.0.0'
+      - name: Download and verify actual published artifacts
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-alpha\.[0-9]+$ ]]
+          export PUBLISHED="$RUNNER_TEMP/published"
+          mkdir -p "$PUBLISHED"
+          gh release download "$TAG" -p app-release.apk -p "cyclone-cloak-${TAG#v}.zip" -D "$PUBLISHED"
+          gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" > "$PUBLISHED/release.json"
+          "$ANDROID_HOME/build-tools/35.0.0/apksigner" verify --verbose --print-certs "$PUBLISHED/app-release.apk" > "$PUBLISHED/signature.txt"
+          grep -q 'Signer #1 certificate SHA-256 digest: 17ca3617b0cbaf250d2ef03e945b319e57695de6d977c652ded243ad5656f553' "$PUBLISHED/signature.txt"
+          "$ANDROID_HOME/build-tools/35.0.0/aapt" dump badging "$PUBLISHED/app-release.apk" > "$PUBLISHED/badging.txt"
+          python3 - <<'PY'
+          import hashlib,json,os,re,shutil
+          from pathlib import Path
+          root=Path(os.environ['PUBLISHED']); tag=os.environ['TAG']
+          release=json.loads((root/'release.json').read_text())
+          assert release['tag_name']==tag and release['prerelease'] and not release['draft']
+          assets={a['name']:a for a in release['assets']}
+          results=[]
+          for name in ('app-release.apk',f'cyclone-cloak-{tag[1:]}.zip'):
+              p=root/name; digest=hashlib.sha256(p.read_bytes()).hexdigest()
+              assert assets[name]['size']==p.stat().st_size
+              assert assets[name]['digest']=='sha256:'+digest
+              results.append(dict(name=name,size=p.stat().st_size,sha256=digest))
+          first=(root/'badging.txt').read_text().splitlines()[0]
+          package=re.search(r"name='([^']+)'",first)[1]
+          version=re.search(r"versionName='([^']+)'",first)[1]
+          code=int(re.search(r"versionCode='([0-9]+)'",first)[1])
+          assert package=='dev.cyclone.cloak' and 'v'+version==tag
+          apk=Path('android/app/build/outputs/apk/release');apk.mkdir(parents=True,exist_ok=True)
+          shutil.copyfile(root/'app-release.apk',apk/'app-release.apk')
+          (apk/'output-metadata.json').write_text(json.dumps(dict(applicationId=package,variantName='release',elements=[dict(versionName=version,versionCode=code,outputFile='app-release.apk')])))
+          module=Path('android/module/build/module');module.mkdir(parents=True,exist_ok=True)
+          shutil.copyfile(root/f'cyclone-cloak-{version}.zip',module/f'cyclone-cloak-{version}.zip')
+          (root/'published-verification.json').write_text(json.dumps(dict(tag=tag,version=version,version_code=code,signature_verified=True,signer_sha256='17ca3617b0cbaf250d2ef03e945b319e57695de6d977c652ded243ad5656f553',assets=results),indent=2)+'\n')
+          PY
+          python3 tools/verify_release.py --tag "$TAG" --artifacts
+      - name: Attach byte-verified evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ inputs.tag }}
+          EVIDENCE: ${{ inputs.evidence_directory }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$EVIDENCE" =~ ^docs/runtime-evidence/[A-Za-z0-9_-]+$ ]]
+          cd "$EVIDENCE"
+          sha256sum --check restoration-follow-up-evidence.sha256
+          gh release upload "$TAG" restoration-follow-up-evidence.zip restoration-follow-up-evidence.sha256 summary.md --clobber
+          gh api "repos/$GITHUB_REPOSITORY/releases/tags/$TAG" > "$RUNNER_TEMP/evidence-release.json"
+          python3 - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          assets={a['name']:a for a in json.loads((Path(os.environ['RUNNER_TEMP'])/'evidence-release.json').read_text())['assets']}
+          for name in ('restoration-follow-up-evidence.zip','restoration-follow-up-evidence.sha256','summary.md'):
+              p=Path(name)
+              assert assets[name]['size']==p.stat().st_size
+              assert assets[name]['digest']=='sha256:'+hashlib.sha256(p.read_bytes()).hexdigest()
+          PY
+          gh release upload "$TAG" "$RUNNER_TEMP/published/published-verification.json" --clobber
+      - uses: actions/upload-artifact@v4
+        with:
+          name: published-verification
+          path: |
+            ${{ runner.temp }}/published/published-verification.json
+            ${{ runner.temp }}/published/signature.txt
+          if-no-files-found: error
