@@ -12,6 +12,10 @@
 #include <sys/stat.h>
 #include <sys/socket.h>
 #include <unistd.h>
+#include <fcntl.h>
+#include <sys/syscall.h>
+#include <cstdarg>
+#include <cstdlib>
 #include "zygisk.hpp"
 #include "runtime_scope.hpp"
 
@@ -134,6 +138,13 @@ std::string g_app_data_dir;
 bool g_java_callbacks = true;
 bool g_native_hook_enabled = true;
 bool cloak_prop_for(const char *name, char *value, int host_len);
+
+// Filesystem reality layer and root-trace concealment (D1 core).
+std::unordered_map<std::string, std::string> g_file_views;
+bool g_file_views_ready = false;
+std::string read_all_and_filter(int fd);
+bool is_root_trace_path(const std::string &path);
+bool is_root_trace_path(const char *path);
 
 // Native property surface: ShadowHook-intercepted __system_property_get.
 using PropertyGetFn = int (*)(const char *, char *);
@@ -262,6 +273,138 @@ void install_native_property_hook() {
         reinterpret_cast<PropertyReadCallbackApiFn>(orig);
     LOGI("native property callback hook installed");
 }
+// D1: file-surface hooks. Identity files get profile-backed content; maps and
+// mounts get filtered snapshots; root-trace paths read as absent. Everything
+// else passes through untouched.
+using OpenatFn = int (*)(int, const char *, int, ...);
+using OpenFn = int (*)(const char *, int, ...);
+using AccessFn = int (*)(const char *, int);
+using FaccessatFn = int (*)(int, const char *, int, int);
+using FstatatFn = int (*)(int, const char *, struct stat *, int);
+OpenatFn g_orig_openat = nullptr;
+OpenFn g_orig_open = nullptr;
+AccessFn g_orig_access = nullptr;
+FaccessatFn g_orig_faccessat = nullptr;
+FstatatFn g_orig_fstatat = nullptr;
+
+bool file_view_for(const char *path, std::string &content) {
+    if (path == nullptr || !g_active) return false;
+    auto it = g_file_views.find(path);
+    if (it != g_file_views.end()) {
+        content = it->second;
+        return true;
+    }
+    static const char *filtered[] = {
+        "/proc/self/maps", "/proc/self/mountinfo", "/proc/mounts",
+    };
+    for (const char *candidate : filtered) {
+        if (std::strcmp(path, candidate) == 0) {
+            int fd = g_orig_openat ? g_orig_openat(AT_FDCWD, path, O_RDONLY, 0) : -1;
+            if (fd < 0) return false;
+            content = read_all_and_filter(fd);
+            close(fd);
+            return true;
+        }
+    }
+    return false;
+}
+
+int serve_synthetic(const char *path, int flags) {
+    if (!g_active || path == nullptr) return -2;
+    if ((flags & O_ACCMODE) != O_RDONLY) return -2;
+    std::string content;
+    if (!file_view_for(path, content)) return -2;
+    int fd = static_cast<int>(syscall(SYS_memfd_create, "cloak_view", 1 /* MFD_CLOEXEC */));
+    if (fd < 0) return -2;
+    size_t written = 0;
+    while (written < content.size()) {
+        ssize_t count = write(fd, content.data() + written, content.size() - written);
+        if (count <= 0) {
+            close(fd);
+            return -2;
+        }
+        written += static_cast<size_t>(count);
+    }
+    if (lseek(fd, 0, SEEK_SET) < 0) {
+        close(fd);
+        return -2;
+    }
+    return fd;
+}
+
+int hooked_openat(int dirfd, const char *pathname, int flags, ...) {
+    int served = serve_synthetic(pathname, flags);
+    if (served >= 0) return served;
+    mode_t mode = 0;
+    if (flags & (O_CREAT | O_TMPFILE)) {
+        va_list args;
+        va_start(args, flags);
+        mode = static_cast<mode_t>(va_arg(args, int));
+        va_end(args);
+    }
+    return g_orig_openat ? g_orig_openat(dirfd, pathname, flags, mode) : -1;
+}
+
+int hooked_open(const char *pathname, int flags, ...) {
+    int served = serve_synthetic(pathname, flags);
+    if (served >= 0) return served;
+    mode_t mode = 0;
+    if (flags & (O_CREAT | O_TMPFILE)) {
+        va_list args;
+        va_start(args, flags);
+        mode = static_cast<mode_t>(va_arg(args, int));
+        va_end(args);
+    }
+    return g_orig_open ? g_orig_open(pathname, flags, mode) : -1;
+}
+
+int hooked_access(const char *path, int mode) {
+    if (g_active && path && is_root_trace_path(path)) {
+        errno = ENOENT;
+        return -1;
+    }
+    return g_orig_access ? g_orig_access(path, mode) : -1;
+}
+
+int hooked_faccessat(int dirfd, const char *path, int mode, int flags) {
+    if (g_active && path && is_root_trace_path(path)) {
+        errno = ENOENT;
+        return -1;
+    }
+    return g_orig_faccessat ? g_orig_faccessat(dirfd, path, mode, flags) : -1;
+}
+
+int hooked_fstatat(int dirfd, const char *path, struct stat *buf, int flags) {
+    if (g_active && path && is_root_trace_path(path)) {
+        errno = ENOENT;
+        return -1;
+    }
+    return g_orig_fstatat ? g_orig_fstatat(dirfd, path, buf, flags) : -1;
+}
+
+void install_native_file_hooks() {
+    if (!g_native_hook_enabled || !g_shadowhook_ready || !g_shadowhook_handle) {
+        return;
+    }
+    using HookFn = void *(*)(const char *, const char *, void *, void **);
+    auto hook = reinterpret_cast<HookFn>(
+        dlsym(g_shadowhook_handle, "shadowhook_hook_sym_name"));
+    if (!hook) return;
+    auto apply = [&](const char *symbol, void *replacement, void *storage) {
+        void *orig = nullptr;
+        void *record = hook("libc.so", symbol, replacement, &orig);
+        if (record && orig) {
+            *reinterpret_cast<void **>(storage) = orig;
+        }
+    };
+    apply("openat", reinterpret_cast<void *>(hooked_openat), &g_orig_openat);
+    apply("open", reinterpret_cast<void *>(hooked_open), &g_orig_open);
+    apply("access", reinterpret_cast<void *>(hooked_access), &g_orig_access);
+    apply("faccessat", reinterpret_cast<void *>(hooked_faccessat), &g_orig_faccessat);
+    apply("fstatat", reinterpret_cast<void *>(hooked_fstatat), &g_orig_fstatat);
+    apply("fstatat64", reinterpret_cast<void *>(hooked_fstatat), &g_orig_fstatat);
+    LOGI("native file hooks installed");
+}
 
 void set_prop(const std::string &key, const std::string &value) {
     if (!value.empty()) {
@@ -302,6 +445,136 @@ std::string resolve(JNIEnv *env, jstring keyJ) {
         return std::string();
     }
     return lookup_prop(key.c_str());
+}
+// --- D1: filesystem reality and concealment core --------------------------
+
+std::string kernel_for_sdk(int sdk) {
+    if (sdk >= 35) return "6.1.75-android15-8";
+    if (sdk == 34) return "5.15.94-android14-6";
+    if (sdk >= 33) return "5.10.157-android13-8";
+    if (sdk >= 31) return "5.10.101-android12-9";
+    return "5.4.186-android11-6";
+}
+
+std::string render_build_prop() {
+    static const char *keys[] = {
+        "ro.product.manufacturer", "ro.product.brand", "ro.product.model",
+        "ro.product.name", "ro.product.device", "ro.hardware",
+        "ro.build.fingerprint", "ro.build.id", "ro.build.version.incremental",
+        "ro.build.version.sdk", "ro.build.version.release",
+        "ro.build.version.security_patch", "ro.build.date.utc",
+        "ro.bootloader", "gsm.version.baseband", "ro.serialno",
+    };
+    std::string out;
+    for (const char *key : keys) {
+        std::string value = lookup_prop(key);
+        if (!value.empty()) {
+            out += key;
+            out += '=';
+            out += value;
+            out += '\n';
+        }
+    }
+    return out;
+}
+
+std::string render_proc_version() {
+    std::string buildType = lookup_prop("ro.build.type");
+    std::string buildTags = lookup_prop("ro.build.tags");
+    std::string fingerprint = lookup_prop("ro.build.fingerprint");
+    int sdk = 33;
+    std::string sdkStr = lookup_prop("ro.build.version.sdk");
+    if (!sdkStr.empty()) sdk = std::atoi(sdkStr.c_str());
+    return "Linux version " + kernel_for_sdk(sdk) +
+           " (build@android-build) (clang version 17.0.2) #1 SMP PREEMPT " +
+           buildType + " " + buildTags + " " + fingerprint + "\n";
+}
+
+std::string render_cpuinfo() {
+    std::string hardware = lookup_prop("ro.hardware");
+    if (hardware.empty()) hardware = "qcom";
+    std::string out;
+    for (int i = 0; i < 8; ++i) {
+        out += "processor\t: " + std::to_string(i) + "\n";
+        out += "BogoMIPS\t: 38.40\n";
+        out += "Features\t: fp asimd aes sha1 sha2 crc32\n";
+        out += "CPU implementer\t: 0x41\n";
+        out += "CPU architecture: 8\n";
+        out += "Hardware\t: " + hardware + "\n\n";
+    }
+    return out;
+}
+
+// Drop lines that reveal the host root/module layer from maps and mounts.
+std::string filter_root_traces(const std::string &content) {
+    static const char *needles[] = {
+        "magisk", "zygisk", "libhook", "cyclone_cloak", "/data/adb",
+        "shadowhook",
+    };
+    std::string out;
+    size_t start = 0;
+    while (start < content.size()) {
+        size_t end = content.find('\n', start);
+        if (end == std::string::npos) end = content.size();
+        std::string line = content.substr(start, end - start);
+        bool hide = false;
+        for (const char *needle : needles) {
+            if (line.find(needle) != std::string::npos) {
+                hide = true;
+                break;
+            }
+        }
+        if (!hide) {
+            out += line;
+            out.push_back('\n');
+        }
+        start = end + 1;
+    }
+    return out;
+}
+
+bool is_root_trace_path(const std::string &path) {
+    static const char *roots[] = {
+        "/data/adb", "/sbin/.magisk", "/sbin/su", "/system/bin/su",
+        "/system/xbin/su", "/proc/magisk", "/system/bin/.ext/.su",
+    };
+    for (const char *candidate : roots) {
+        std::string prefix = candidate;
+        if (path == prefix) return true;
+        if (path.size() > prefix.size() &&
+            path.compare(0, prefix.size(), prefix) == 0 &&
+            path[prefix.size()] == '/') {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool is_root_trace_path(const char *path) {
+    return path && is_root_trace_path(std::string(path));
+}
+void build_file_views() {
+    if (g_file_views_ready) return;
+    g_file_views_ready = true;
+    std::string buildProp = render_build_prop();
+    if (!buildProp.empty()) {
+        g_file_views["/system/build.prop"] = buildProp;
+        g_file_views["/vendor/build.prop"] = buildProp;
+    }
+    std::string version = render_proc_version();
+    if (!version.empty()) g_file_views["/proc/version"] = version;
+    std::string cpuinfo = render_cpuinfo();
+    if (!cpuinfo.empty()) g_file_views["/proc/cpuinfo"] = cpuinfo;
+}
+
+std::string read_all_and_filter(int fd) {
+    std::string content;
+    char buffer[4096];
+    ssize_t count;
+    while ((count = read(fd, buffer, sizeof(buffer))) > 0) {
+        content.append(buffer, static_cast<size_t>(count));
+    }
+    return filter_root_traces(content);
 }
 
 constexpr uint32_t kStateRequestMagic = 0x434C4B31;  // CLK1
@@ -1023,6 +1296,8 @@ public:
     void postAppSpecialize(const AppSpecializeArgs *args) override {
         if (g_active) {
             install_native_property_hook();
+            build_file_views();
+            install_native_file_hooks();
             apply_profile(env);
             init_java_hooks(env, g_app_data_dir);
         }
