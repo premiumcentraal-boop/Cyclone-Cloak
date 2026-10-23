@@ -78,7 +78,6 @@ final class ProbeReportPolicy {
         if (cause.getClass().getName().equals("android.util.AndroidRuntimeException")) {
             // Keep the exact cause chain for the WebView readers' diagnostics;
             // the message often names the missing application context.
-            android.util.Log.i("ProbeReportPolicy", "reader failure", cause);
             return "RUNTIME_EXCEPTION:" + cause.getClass().getSimpleName();
         }
         String reason = cause.getClass().getSimpleName();
