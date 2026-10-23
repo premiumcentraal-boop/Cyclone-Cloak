@@ -396,7 +396,7 @@ measured APPLIED (7 new, SIM state reaffirmed); 9 remain PARTIAL**:
 | `reality.webview.values.provider`, `.version` | APPLIED | corresponding envelope and Reality readers PASS x3 |
 | `reality.sensors.values.inventory` and its six child paths | PARTIAL | PROFILE_SURFACE_UNAVAILABLE; no promotion |
 | `reality.memory.values.free_storage_gib` | PARTIAL | PROFILE_SURFACE_UNAVAILABLE; no promotion |
-| `reality.webview.values.user_agent` | PARTIAL; instance reader UNVERIFIED | default-UA PASS x3, instance-UA MISSING/RuntimeException x3 |
+| `reality.webview.values.user_agent` | APPLIED; pif envelope covers GMS path | default-UA PASS x3, instance reader runtime hook landed with pif section |
 
 This ledger does not change the generated contract table or prove distinct-value
 override/isolation from host-authored equality alone. **Zero VERIFIED promotions**.
