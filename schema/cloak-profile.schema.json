@@ -116,6 +116,36 @@
     },
     "play_surface": {
       "$ref": "play-surface.schema.json"
+    },
+    "pif": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "default": false
+        },
+        "fingerprint": {
+          "type": "string",
+          "maxLength": 256
+        },
+        "security_patch": {
+          "type": "string",
+          "maxLength": 32
+        },
+        "model": {
+          "type": "string",
+          "maxLength": 64
+        },
+        "first_api_level": {
+          "type": "integer",
+          "minimum": 21,
+          "maximum": 40
+        },
+        "verified_boot": {
+          "type": "boolean"
+        }
+      }
     }
   },
   "$defs": {

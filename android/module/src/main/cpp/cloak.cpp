@@ -55,6 +55,7 @@ using zygisk::AppSpecializeArgs;
 
 // Per-fork read-only snapshot, delivered only after the existing user/package binding lookup.
 static std::string g_runtime_profile;
+static bool g_pif_applied = false;
 
 #define LOGI(...) __android_log_print(ANDROID_LOG_INFO, "CloakModule", __VA_ARGS__)
 
@@ -842,7 +843,7 @@ bool load_profile_for(Api *api, const std::string &user, const std::string &pkg)
     }
     // No new reader format or publication path. Only the saved profile supplies the envelope.
     json envelope = json::object();
-    for (const char *key : {"schema_version", "reality", "display", "telephony", "ua"}) {
+for (const char *key : {"schema_version", "reality", "display", "telephony", "ua", "pif"}) {
         if (profile.contains(key)) envelope[key] = profile[key];
     }
     g_runtime_profile = envelope.dump(-1, ' ', true, json::error_handler_t::replace);
@@ -1151,6 +1152,39 @@ void apply_profile(JNIEnv *env) {
         env->ExceptionClear();
     }
 
+    // 1b. Per-profile PIF configuration. When the bound process is GMS and
+    // the profile carries a pif section, materialize its fields as extra
+    // prop overrides before the profile is applied so GMS-side verification
+    // sees them in the same pass as the general identity fields. This is
+    // the hook point that reuses PIF verdict mechanics inside our own
+    // per-process envelope instead of a device-global Magisk module.
+    if (!g_pif_applied && !g_runtime_profile.empty()) {
+        json runtimeEnvelope = json::parse(g_runtime_profile, nullptr, false);
+        if (!runtimeEnvelope.is_discarded() && runtimeEnvelope.is_object()) {
+            auto pif = runtimeEnvelope.find("pif");
+            if (pif != runtimeEnvelope.end() && pif->is_object() &&
+                pif->value("enabled", false) == true) {
+                auto applyString = [](const char *prop, const json &container, const char *key) {
+                    auto it = container.find(key);
+                    if (it != container.end() && it->is_string() && !it->get_ref<const std::string &>().empty()) {
+                        set_prop(prop, it->get<std::string>());
+                    }
+                };
+                applyString("ro.build.fingerprint.pif", *pif, "fingerprint");
+                applyString("ro.build.version.security_patch.pif", *pif, "security_patch");
+                applyString("ro.product.model.pif", *pif, "model");
+                if (auto level = pif->find("first_api_level"); level != pif->end() && level->is_number()) {
+                    set_prop("ro.product.first_api_level", std::to_string(level->get<int>()));
+                }
+                if (auto vb = pif->find("verified_boot"); vb != pif->end() && vb->is_boolean()) {
+                    set_prop("ro.boot.vbmeta.device_state",
+                             vb->get<bool>() ? "verified" : "unlocked");
+                }
+            }
+        }
+        g_pif_applied = true;
+    }
+
     // 2. Point the process Java-side defaults at the profile so
     // Locale.getDefault() and TimeZone.getDefault() agree with the props.
     const std::string language = lookup_prop("cloak.locale.language");
@@ -1397,6 +1431,7 @@ public:
         g_native_hook_enabled =
             access("/data/adb/modules/cyclone_cloak/disable_native_hook", F_OK) != 0;
         g_active = load_profile_for(api, userId, g_active_package);
+        g_pif_applied = false;
         if (g_active) {
             const int module_directory = api->getModuleDir();
             const auto payload = cloak_load_evidence::assemble(module_directory, g_active_package, userId, g_app_data_dir);
