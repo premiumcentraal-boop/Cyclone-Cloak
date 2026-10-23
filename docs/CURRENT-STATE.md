@@ -1,5 +1,45 @@
 # Current state
 
+Updated 2026-10-24. Current source **v1.0.0-rc.1 / versionCode 60**;
+release candidate only, not tagged or published.
+
+## RC local verification and remaining gates
+
+S5 checked source commit `c475c254be1d52ead39d64372cb1e72134a41816`:
+
+| Suite or build | Result |
+| --- | --- |
+| App debug unit tests | 784 passed; 0 failed, errors or skipped |
+| Module debug unit tests | 80 passed; 0 failed, errors or skipped |
+| Standard probe unit tests | 148 passed; 0 failed, errors or skipped |
+| Diagnostics probe unit tests | 148 passed; 0 failed, errors or skipped |
+| Schema tests | 192 passed |
+| Forge tests | Blocked: 4 collection errors; no tests executed |
+| Debug APK, release APK and module packaging | Passed |
+| `git diff --check` | Passed |
+
+The supplied forge command included pytest but omitted `cryptography` and
+`jsonschema`, required by four test modules. The complete local gate is therefore
+**not green**. No source fix was attempted. No compiler warnings were reported.
+Release signing/CI validation and RC device smoke testing have not been performed.
+
+Rung-2 filesystem parity and masking rows are **closed for the engineering
+handoff only**; physical confirmation is tracked separately in S8 and remains
+pending for this RC artifact. This closure does not promote historical PARTIAL,
+UNVERIFIED, OBSERVED or BLOCKED measurements. The archived R2 measurement table
+retains eight PARTIAL paths and one UNVERIFIED concrete instance user-agent path;
+the historical free-storage and sensor readers had no captured value.
+See [R2 measurements](r2-measurement.json) and the
+[artifact-specific coverage ledger](RUNTIME-COVERAGE.md).
+
+The optional denylist opt-in and per-profile `pif` configuration are implemented;
+the probe has `masked.package_list`, `masked.maps` and `masked.services` readers.
+Their presence is not proof of an observed NOT_PRESENT result. In particular,
+unavailable evidence or restricted caller visibility must not establish absence.
+No platform verdict, broader compatibility or physical masking claim is made.
+
+## Historical alpha baseline and evidence
+
 Alpha.28 restoration proof: focused cycle and all three lifecycle cycles completed
 for users 0/17, with zero restoration failures, unchanged production fields and
 permission/AppOps snapshots, and cleanup passing after every cycle. Full inventories
@@ -79,7 +119,7 @@ runtime enforcement or platform verdict. Existing profiles and bindings are
 unchanged; physical verification is UNVERIFIED. See
 [Google Surface Isolation v1](GOOGLE-SURFACE-ISOLATION-V1.md).
 
-Updated 2026-10-21. Current source **v0.11.0-alpha.28 / versionCode 52**
+Historical source, recorded 2026-10-21: **v0.11.0-alpha.28 / versionCode 52**
 adds local Play readiness integration over Play Surface Contract v1 and the existing Reality Studio, missing-only repair
 and Fleet Diversity workflows. Optional schema 0.4 sections describe compute, memory,
 panel, camera summaries, sensors, power, DRM level, radio labels, carrier, package

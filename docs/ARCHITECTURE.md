@@ -1,6 +1,36 @@
 # Cyclone Cloak Architecture
 
-Current release source: **0.11.0-alpha.28 / code 52**. The diagnostics restoration
+Current candidate source: **1.0.0-rc.1 / code 60** (unpublished). RC local
+verification is incomplete because the supplied forge test environment lacks
+required dependencies; physical confirmation remains a separate gate.
+See [current verification results](CURRENT-STATE.md).
+
+## RC configuration integration layers
+
+1. **Per-profile configuration envelope.** The resolved profile is selected by
+   Android user and bound package. Its existing fields feed scoped native and
+   Java configuration readers; absent facts do not create measured evidence.
+   Publication and binding storage remain the existing shared-tree mechanisms.
+2. **Optional denylist configuration.** `cloak.denylist_enabled` opts into the
+   existing root companion's Magisk denylist configuration request. This is a
+   configuration action, not a confirmed isolation or self-visibility result.
+   Its effect depends on the installed environment and requires device evidence.
+3. **Per-profile integrity configuration.** The optional `pif` section carries
+   enabled state, fingerprint, security patch, model, first API level and
+   verified-boot configuration. The runtime envelope consumes these as declared
+   configuration inputs. A configured boot-state value is not a measurement of
+   the real boot chain. This layer does not generate or authenticate a platform
+   response and is separate from signed verdict import and trust-pin validation.
+
+The diagnostics-only `masked.package_list`, `masked.maps` and `masked.services`
+readers observe caller-visible package, process-map and service surfaces. Restricted
+visibility and collection errors limit their meaning; a reader's implementation
+alone does not prove NOT_PRESENT. RC physical results are pending and no platform
+certification or verdict is implied by these integration layers.
+
+## Historical alpha.28 restoration baseline
+
+Historical release source: **0.11.0-alpha.28 / code 52**. The diagnostics restoration
 harness compares full package/control values, independently corroborates host
 control changes and gates semantic production fields plus all other file hashes.
 Only raw index JSON serialization is an observation. Shared checked-in external
@@ -65,7 +95,7 @@ runtime writer is called. Diagnostics remains a separate zero-permission APK;
 only its pure envelope validator is copied into production at build time. See
 [integration contract](PLAY-READINESS-INTEGRATION-V1.md).
 
-Current source: v0.11.0-alpha.27, app/module code 51. Physical Play/Google
+Historical alpha.27 source: v0.11.0-alpha.27, app/module code 51. Physical Play/Google
 capture/import remains UNVERIFIED; the documented evidence/lint limitations were
 explicitly accepted for this prerelease, subject to successful signed CI. Device Reality v1
 adds optional profile schema 0.4 descriptions and read-only probe observations.

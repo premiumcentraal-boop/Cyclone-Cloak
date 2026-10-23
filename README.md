@@ -2,16 +2,28 @@
 
 **One phone, twenty profiles.**
 
-Cyclone Cloak is the device-profile engine of the [Cyclone](https://github.com/premiumcentraal-boop/Cyclone)
-agent environment. It attaches as a phone connector (contract `cyclone.connector/1.3`)
-and stores coherent device configurations bound to apps in Cyclone profiles.
+Cyclone Cloak is a configuration-driven compatibility validation system for
+multi-profile device management in [Cyclone](https://github.com/premiumcentraal-boop/Cyclone).
+Its layered architecture combines per-profile configuration, scoped native
+configuration hooks, and evidence-bound integrity verification. It attaches as a
+phone connector (contract `cyclone.connector/1.3`) and stores coherent device
+configurations bound to apps in Cyclone profiles.
 Runtime inspection coverage is partial; the [evidence matrix](docs/RUNTIME-COVERAGE.md)
 records which reads were verified on the measured binary. Creating a profile does
 not prove that every inspection API sees it.
 
-The thin line that turns one playboy billionaire into twenty masked vigilantes.
+## Status: v1.0.0-rc.1 (release candidate; unpublished)
 
-## Status: 0.11.0-alpha.28 (prerelease)
+App/module metadata is `1.0.0-rc.1` / code `60`. The candidate adds an optional
+denylist configuration, a per-profile integrity configuration section and three
+diagnostics self-visibility readers. These are configuration and measurement
+capabilities, not evidence of platform certification or a successful verdict.
+
+The Android test/build and schema gates passed. The full local gate remains
+blocked by missing Python test dependencies; RC physical confirmation is pending.
+See [current state](docs/CURRENT-STATE.md) and [changelog](CHANGELOG.md).
+
+### Previous alpha.28 baseline
 
 Alpha.28 consolidates local Integrity verdict/exchange tooling, cohort separation,
 instance realism, the scoped runtime envelope and service-surface isolation review.
