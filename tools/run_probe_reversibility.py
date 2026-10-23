@@ -405,6 +405,7 @@ def parse_args(argv=None):
     p.add_argument('--output', type=Path, required=True)
     p.add_argument('--cycles', type=int, default=1, help='Full lifecycle repetitions (default: 1)')
     p.add_argument('--candidate-commit', help='Explicit source commit for installed candidate; metadata does not prove provenance')
+    p.add_argument('--expected-version', help='Explicit expected version for the installed candidate, overriding the built-in alpha.27 candidate expectations; still requires the RC tag/code pair to match exactly.')
     args = p.parse_args(argv)
     if args.cycles < 1:
         p.error('--cycles must be at least 1')
@@ -627,6 +628,96 @@ def run_cycle(args):
         app = d.shell('dumpsys package dev.cyclone.cloak').stdout
         m['installed_versions'] = dict(module=props['version'], module_code=props['versionCode'],
             app_version=re.search(r'versionName=(\S+)',app).group(1), app_code=re.search(r'versionCode=(\d+)',app).group(1))
+        if getattr(args, 'expected_version', None):
+        if not re.match(r'^v1\.0\.0-rc\.1
+        if m['installed_versions'] != expected_versions: raise ValueError('INSTALLED_VERSION_MISMATCH')
+        aapt = Path(args.adb).resolve().parents[1]/'build-tools/35.0.0/aapt.exe'
+        badging = subprocess.check_output([str(aapt),'dump','badging',str(apk)], text=True)
+        if not re.search(r"^package: name='dev\.cyclone\.cloak\.probe\.diag'",badging,re.M): raise ValueError('WRONG_APK')
+        m['installed_apk_hashes'] = ensure_diagnostics_apk(d, users, apk, apk_hash,
+            getattr(args, 'apk_install_state', dict(install_attempts=0)), m['apk_install'])
+        if permission_state() != permissions_before: raise ValueError('INSTALL_CHANGED_PERMISSIONS')
+        for u,f in [(0,'a'),(args.secondary,'b')]:
+            item = dict(user=u,fixture='external' if candidate else f,scenario_fixture=f,kind='fixture',target_count=1)
+            body = h.body(item); item.update(sha256=pc.digest(body),profile_id=body['id']); selections.append(item)
+        m['selections'] = selections
+        for mode,u,cold in sequence:
+            if mode=='bound-cold' and not m['overlay_active']:
+                m['overlay_active'] = True; h.checkpoint(); pc.save(out/'overlay-add.json',h.overlay())
+            if mode=='post-removal-warm' and m['overlay_active']:
+                pc.save(out/'overlay-remove.json',h.overlay(remove=True))
+            capture(mode,u,cold)
+        comparisons = []
+        for u in users:
+            base = next(r for r in reports if r['run']==f'user-{u}-baseline-cold')
+            post = next(r for r in reports if r['run']==f'user-{u}-post-removal-cold')
+            comparison = restoration(base,post); comparisons.append(comparison)
+            pc.save(out/f'user-{u}-cold-restoration.json',comparison)
+        m['restoration'] = {str(r['android_user']):r['result'] for r in comparisons}
+        if any(r['counts'].get('FAIL') for r in comparisons): errors.append('COLD_RESTORATION_FAILED')
+    except Exception as error:
+        errors.append(str(error) if re.fullmatch('[A-Z_]+',str(error)) else type(error).__name__)
+        m['failed_phase'] = m.get('active_capture','preflight')
+        print('STOP',errors[-1],flush=True)
+    finally:
+        try:
+            if m.get('overlay_active'): pc.save(out/'overlay-emergency-remove.json',h.overlay(remove=True))
+            if captures_started: cleanup_private(d,users)
+            if original_user is not None: activate(original_user)
+            if captures_started:
+                _, index = d.index(); proof = {}
+                for u in users:
+                    key = pc.digest([m['run_id'],u])
+                    proof[str(u)] = dict(binding_removed=f'{u}/{PACKAGE}' not in index['entries'],
+                        body_directory_removed=d.root(f'test ! -e {pc.STATE}/{key}',check=False).returncode==0,
+                        private_files_removed=d.shell(f'run-as {PACKAGE} --user {u} sh -c '+shlex.quote('test ! -e files/expected-profile.json && test ! -e files/report.json && test -z "$(find files -maxdepth 1 -name \'report.json.*.tmp\' -print)"'),check=False).returncode==0)
+                proof['scratch_removed'] = d.root(f'test ! -e /data/local/tmp/cloak-profile-check-{m["run_id"]} && test ! -e {pc.STATE}/index.harness-{m["run_id"]}',check=False).returncode==0
+                pc.save(out/'cleanup-proof.json',proof)
+                if not proof['scratch_removed'] or not all(all(proof[str(u)].values()) for u in users): errors.append('CLEANUP_PROOF_FAILED')
+            if before is not None:
+                after = audit(); pc.save(out/'audit-after.json',after)
+                pc.save(out/'production-audit-comparison.json', dict(audit_comparison(before, after), semantic_delta=snapshot_delta(semantic_audit(before), semantic_audit(after)), raw_delta=snapshot_delta(before, after)))
+                m['production_unchanged'] = semantic_audit(before)==semantic_audit(after)
+                if not m['production_unchanged']: errors.append('PRODUCTION_AUDIT_CHANGED')
+            if permissions_before is not None:
+                after = permission_state(); pc.save(out/'permissions-after.json',after)
+                m['diagnostic_appop_records_expected'] = sorted(EXPECTED_DIAGNOSTIC_APPOP_ADDITIONS.items())
+                m['permissions_unchanged'] = effective_permission_state(permissions_before, after)
+                if not m['permissions_unchanged']: errors.append('PERMISSION_STATE_CHANGED')
+        except Exception as error:
+            errors.append('CLEANUP_OR_AUDIT_FAILED:'+type(error).__name__)
+        m.update(errors=errors,finished_at=pc.utc(),duration_seconds=round(time.time()-m['started_epoch'],2),
+                 result='FAIL' if errors else 'RESTORED_WITH_EXPECTED_LIMITATIONS',captures=len(reports))
+        h.checkpoint()
+        build_command=f'$env:JAVA_HOME="C:/Program Files/Eclipse Adoptium/jdk-17.0.20.101-hotspot"; $env:ANDROID_HOME="C:/Users/Agent/android-sdk"; & "$env:TEMP/cloak-build/gradle-8.11.1/bin/gradle.bat" -p "{source.as_posix()}/android" :probe:assembleDiagnosticsDebug :probe:testDiagnosticsDebugUnitTest --offline --no-daemon --console=plain'
+        pc.save(out/'build-provenance.json',dict(tag=None if candidate else TAG,commit=candidate or COMMIT,source_checkout=str(source),build_command=build_command,
+            apk_sha256=apk_hash,installed_apk_hashes=m.get('installed_apk_hashes'),orchestration_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()))
+        lines=['# Diagnostics binding reversibility','',f'Result: {m["result"]}',f'Duration: {m["duration_seconds"]} seconds',
+               'Errors: '+json.dumps(errors),'','| Phase | User | Fixture | PASS | FAIL | OBSERVED | BLOCKED | MISSING | Reused |',
+               '|---|---:|---|---:|---:|---:|---:|---:|---|']
+        for r in reports:
+            counts=Counter(row['status'] for row in r['rows'])
+            lines.append('| '+r['run']+' | '+str(r['android_user'])+' | '+r['fixture']+' | '+' | '.join(str(counts[s]) for s in ['PASS','FAIL','OBSERVED','BLOCKED','MISSING'])+' | '+str(r['process_reused'])+' |')
+        lines+=['','Unbound/warm-removal fixture FAIL rows are expected mismatches against synthetic fixtures, not restoration failures. Cold restoration compares actual-value hashes with the same user baseline. Dynamic external-state rows remain observations and denied rows remain blocked.',
+                '', 'Restoration: '+json.dumps(m.get('restoration')), 'Production unchanged: '+str(m.get('production_unchanged')),
+                'Permissions/grant flags/app-op modes unchanged: '+str(m.get('permissions_unchanged'))+
+                ' (expected diagnostics read-record additions: '+json.dumps(m.get('diagnostic_appop_records_expected'))+')',
+                '', 'Limitations: only existing users 0 and '+str(args.secondary)+'; normal Android switching, not Cyclone bootstrap. Warm in-memory effects are observations. Locked-user private stores are unaudited. Permission app-op modes exclude volatile access times/counters. Installed module file hash is not in-process binary proof. No platform verdict.']
+        (out/'summary.md').write_text('\n'.join(lines)+'\n')
+        shutil.copyfile(__file__,out/Path(__file__).name)
+        shutil.copyfile(Path(__file__).with_name('restoration_evidence.py'),out/'restoration_evidence.py')
+        with ZipFile(out/'evidence-bundle.zip','w',ZIP_DEFLATED) as z:
+            for f in sorted(out.iterdir()):
+                if f.is_file() and f.suffix in {'.json','.md','.py','.log'}: z.write(f,f.name)
+        print('EVIDENCE',out,flush=True); print('RESULT',m['result'],flush=True)
+    return 1 if errors else 0
+
+
+if __name__=='__main__':
+    raise SystemExit(main())
+, args.expected_version): raise ValueError('UNSUPPORTED_EXPECTED_VERSION')
+        expected_versions = dict(module=args.expected_version, module_code='60', app_version='1.0.0-rc.1', app_code='60')
+    else:
         expected_versions = dict(module='v0.11.0-alpha.27',module_code='51',app_version='0.11.0-alpha.27',app_code='51') if candidate else dict(module=TAG,module_code='42',app_version='0.11.0-alpha.18',app_code='42')
         if m['installed_versions'] != expected_versions: raise ValueError('INSTALLED_VERSION_MISMATCH')
         aapt = Path(args.adb).resolve().parents[1]/'build-tools/35.0.0/aapt.exe'
