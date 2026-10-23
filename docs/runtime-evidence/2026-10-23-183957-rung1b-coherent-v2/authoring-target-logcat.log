@@ -1,0 +1,60 @@
+--------- beginning of main
+10-23 18:44:17.804 21053 21053 I Zygote  : Process 21053 created for dev.cyclone.cloak.probe.diag
+10-23 18:44:17.804 21053 21053 I loak.probe.diag: Late-enabling -Xcheck:jni
+10-23 18:44:17.832 21053 21053 I loak.probe.diag: Using generational CollectorTypeCMC GC.
+10-23 18:44:17.844 21053 21053 W libbinder.BackendUnifiedServiceManager: Thread Pool max thread count is 0. Cannot cache binder as linkToDeath cannot be implemented. serviceName: activity
+10-23 18:44:17.889 21053 21053 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+10-23 18:44:17.992 21053 21053 D nativeloader: Configuring clns-9 for other apk /data/app/~~0076K-biqPJMHuNas9YAyg==/dev.cyclone.cloak.probe.diag-K_RYHH18kS3XKAVJSP1Kug==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~0076K-biqPJMHuNas9YAyg==/dev.cyclone.cloak.probe.diag-K_RYHH18kS3XKAVJSP1Kug==/lib/arm64:/data/app/~~0076K-biqPJMHuNas9YAyg==/dev.cyclone.cloak.probe.diag-K_RYHH18kS3XKAVJSP1Kug==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/17/dev.cyclone.cloak.probe.diag
+10-23 18:44:18.004 21053 21053 V GraphicsEnvironment: Currently set values for:
+10-23 18:44:18.004 21053 21053 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[com.android.angle]
+10-23 18:44:18.004 21053 21053 V GraphicsEnvironment:   angle_gl_driver_selection_values=[angle]
+10-23 18:44:18.004 21053 21053 V GraphicsEnvironment: dev.cyclone.cloak.probe.diag is not listed in per-application setting
+10-23 18:44:18.004 21053 21053 V GraphicsEnvironment: No special selections for ANGLE, returning default driver choice
+10-23 18:44:18.004 21053 21053 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+--------- beginning of system
+10-23 18:44:18.043 21053 21083 I DisplayManager: Choreographer implicitly registered for the refresh rate.
+10-23 18:44:18.045 21053 21083 D vulkan  : searching for layers in '/data/app/~~0076K-biqPJMHuNas9YAyg==/dev.cyclone.cloak.probe.diag-K_RYHH18kS3XKAVJSP1Kug==/lib/arm64'
+10-23 18:44:18.045 21053 21083 D vulkan  : searching for layers in '/data/app/~~0076K-biqPJMHuNas9YAyg==/dev.cyclone.cloak.probe.diag-K_RYHH18kS3XKAVJSP1Kug==/base.apk!/lib/arm64-v8a'
+10-23 18:44:18.056 21053 21053 D nativeloader: Load /data/app/~~0076K-biqPJMHuNas9YAyg==/dev.cyclone.cloak.probe.diag-K_RYHH18kS3XKAVJSP1Kug==/base.apk!/lib/arm64-v8a/libprobe.so using class loader ns clns-9 (caller=/data/app/~~0076K-biqPJMHuNas9YAyg==/dev.cyclone.cloak.probe.diag-K_RYHH18kS3XKAVJSP1Kug==/base.apk): ok
+10-23 18:44:18.127 21053 21053 D CompatChangeReporter: Compat change id reported: 377864165; UID 1710318; state: ENABLED
+10-23 18:44:18.127 21053 21053 D DesktopExperienceFlags: Toggle override initialized to: false
+10-23 18:44:18.127 21053 21053 D DesktopModeFlags: Toggle override initialized to: OVERRIDE_UNSET
+--------- beginning of events
+10-23 18:44:18.135 21053 21053 I wm_on_create_called: [206532786,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,performCreate,45]
+10-23 18:44:18.136 21053 21053 I wm_on_start_called: [206532786,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,handleStartActivity,0]
+10-23 18:44:18.153 21053 21053 I wm_on_resume_called: [206532786,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,RESUME_ACTIVITY,15]
+10-23 18:44:18.165 21053 21093 I WebViewFactory: Loading com.google.android.webview version 155.0.8059.43 (code 805904303)
+10-23 18:44:18.176 21053 21093 V ResourcesManager: The following library key has been added: ResourcesKey{ mHash=4b9a73ec mResDir=null mSplitDirs=[] mOverlayDirs=[] mLibDirs=[/data/app/~~sYhpHzKiCIiM5zEJBJy4tA==/com.google.android.webview-xI1jK1gg4o0XHpPsJu55iQ==/base.apk,/system/framework/android.test.base.jar,/system_ext/framework/androidx.window.extensions.jar] mDisplayId=0 mOverrideConfig=v36 mCompatInfo={420dpi always-compat} mLoaders=[]}
+10-23 18:44:18.182 21053 21093 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar
+10-23 18:44:18.182 21053 21093 D ApplicationLoaders: Returning zygote-cached class loader: /system_ext/framework/androidx.window.extensions.jar
+10-23 18:44:18.191 21053 21053 I wm_on_top_resumed_gained_called: [206532786,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,topStateChangedWhenResumed]
+10-23 18:44:18.192 21053 21093 W loak.probe.diag: Loading /data/app/~~sYhpHzKiCIiM5zEJBJy4tA==/com.google.android.webview-xI1jK1gg4o0XHpPsJu55iQ==/oat/arm64/base.odex non-executable as it requires an image which we failed to load
+10-23 18:44:18.193 21053 21053 D WindowOnBackDispatcher: setTopOnBackInvokedCallback (unwrapped): android.app.Activity$$ExternalSyntheticLambda0@67d44fe
+10-23 18:44:18.195 21053 21053 D VRI[DiagnosticsProbeActivity]: WindowInsets changed: 1080x2400 statusBars:[0,132,0,0] navigationBars:[0,0,0,63] mandatorySystemGestures:[0,170,0,84] 
+10-23 18:44:18.196 21053 21053 I HWUI    : Using FreeType backend (prop=Auto)
+10-23 18:44:18.203 21053 21093 D nativeloader: Configuring clns-10 for other apk /data/app/~~sYhpHzKiCIiM5zEJBJy4tA==/com.google.android.webview-xI1jK1gg4o0XHpPsJu55iQ==/base.apk. target_sdk_version=37, uses_libraries=, library_path=/data/app/~~sYhpHzKiCIiM5zEJBJy4tA==/com.google.android.webview-xI1jK1gg4o0XHpPsJu55iQ==/lib/arm64:/data/app/~~sYhpHzKiCIiM5zEJBJy4tA==/com.google.android.webview-xI1jK1gg4o0XHpPsJu55iQ==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand
+10-23 18:44:18.330 21053 21093 I cr_WVCFactoryProvider: version=155.0.8059.43 (805904303) minSdkVersion=29 multiprocess=true packageId=2 splits=<none>
+10-23 18:44:18.332 21053 21053 I viewroot_draw_event: [VRI[DiagnosticsProbeActivity]2d96e9d,reportDrawFinished seqId=0]
+10-23 18:44:18.374 21053 21093 D nativeloader: Load /data/app/~~sYhpHzKiCIiM5zEJBJy4tA==/com.google.android.webview-xI1jK1gg4o0XHpPsJu55iQ==/base.apk!/lib/arm64-v8a/libwebviewchromium.so using class loader ns clns-10 (caller=/data/app/~~sYhpHzKiCIiM5zEJBJy4tA==/com.google.android.webview-xI1jK1gg4o0XHpPsJu55iQ==/base.apk): ok
+10-23 18:44:18.381 21053 21093 D nativeloader: Load /system/lib64/libwebviewchromium_plat_support.so using class loader ns clns-10 (caller=/data/app/~~sYhpHzKiCIiM5zEJBJy4tA==/com.google.android.webview-xI1jK1gg4o0XHpPsJu55iQ==/base.apk): ok
+10-23 18:44:18.390 21053 21122 I chromium: [1023/184418.387933:INFO:android_webview/browser/variations/variations_seed_loader.cc:63] Failed to open file for reading.: No such file or directory (2)
+10-23 18:44:18.391 21053 21122 I chromium: [1023/184418.391356:INFO:android_webview/browser/variations/variations_seed_loader.cc:63] Failed to open file for reading.: No such file or directory (2)
+10-23 18:44:18.418 21053 21053 I cr_LibraryLoader: Successfully loaded native library
+10-23 18:44:18.421 21053 21053 I cr_CachingUmaRecorder: Flushed 41 samples from 21 histograms, 0 samples were dropped.
+10-23 18:44:18.427 21053 21053 I cr_ChildProcLH: ScopedServiceBindingBatch.tryActivate: false
+10-23 18:44:18.429 21053 21053 I cr_CombinedPProvider: #registerProvider() provider:WV.fj@5b1b3f8 isPolicyCacheEnabled:false policyProvidersSize:0
+10-23 18:44:18.429 21053 21053 I cr_PolicyProvider: #setManagerAndSource() 0
+10-23 18:44:18.431 21053 21122 I cr_policy: registerReceiver succeeded after 2ms
+10-23 18:44:18.435 21053 21053 I cr_DisplayManager: Is Display Topology available: false
+10-23 18:44:18.462 21053 21053 I cr_CombinedPProvider: #linkNativeInternal() 1
+10-23 18:44:18.462 21053 21053 I cr_AppResProvider: #getApplicationRestrictionsFromUserManager() Bundle[EMPTY_PARCEL]
+10-23 18:44:18.463 21053 21053 I cr_PolicyProvider: #notifySettingsAvailable() 0
+10-23 18:44:18.463 21053 21053 I cr_CombinedPProvider: #onSettingsAvailable() 0
+10-23 18:44:18.463 21053 21053 I cr_CombinedPProvider: #flushPolicies()
+10-23 18:44:18.494 21053 21133 W chromium: [WARNING:net/dns/dns_config_service_android.cc:69] Failed to read DnsConfig.
+10-23 18:44:18.516 21053 21053 I cr_AppResProvider: #getApplicationRestrictionsFromUserManager() Bundle[EMPTY_PARCEL]
+10-23 18:44:18.516 21053 21053 I cr_PolicyProvider: #notifySettingsAvailable() 0
+10-23 18:44:18.516 21053 21053 I cr_CombinedPProvider: #onSettingsAvailable() 0
+10-23 18:44:18.516 21053 21053 I cr_CombinedPProvider: #flushPolicies()
+10-23 18:44:18.524 21053 21148 I CameraManagerGlobal: Connecting to camera service
+10-23 18:44:18.620 21053 21093 I CloakProbeAuthoring: authoring_export COMPLETE

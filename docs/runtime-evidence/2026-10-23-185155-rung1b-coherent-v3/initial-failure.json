@@ -1,0 +1,6 @@
+{
+  "reason": "PROBE_CAPTURE_FAILED:user-17-capture-0",
+  "error": "NullPointerException",
+  "path": "identifiers.sim_serial",
+  "last_completed_row": "operator.simCountry"
+}

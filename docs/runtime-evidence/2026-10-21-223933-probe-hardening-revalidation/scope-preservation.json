@@ -1,0 +1,17 @@
+{
+  "preexisting_tracked_changes_outside_probe_unchanged": true,
+  "FilesystemObservation.java_unchanged": true,
+  "FilesystemObservationTest.java_unchanged": true,
+  "new_or_modified_hardening_files": [
+    "android/probe/src/main/java/dev/cyclone/cloak/probe/ProbeActivity.java",
+    "android/probe/src/main/java/dev/cyclone/cloak/probe/RealityReport.java",
+    "android/probe/src/main/java/dev/cyclone/cloak/probe/LinkedParityReport.java",
+    "android/probe/src/main/java/dev/cyclone/cloak/probe/ProbeReportPolicy.java",
+    "android/probe/src/main/java/dev/cyclone/cloak/probe/FilesystemReadGuard.java",
+    "android/probe/src/main/java/dev/cyclone/cloak/probe/ProbeFailureEvidence.java",
+    "android/probe/src/main/java/dev/cyclone/cloak/probe/ProbeReadDeadline.java",
+    "android/probe/src/test/java/dev/cyclone/cloak/probe/FilesystemReadGuardTest.java",
+    "android/probe/src/test/java/dev/cyclone/cloak/probe/ProbeFailureEvidenceTest.java",
+    "android/probe/src/test/java/dev/cyclone/cloak/probe/ProbeReadDeadlineTest.java"
+  ]
+}

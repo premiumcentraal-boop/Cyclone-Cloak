@@ -1,0 +1,8 @@
+{
+  "base_commit": "1c9ce900930b7c52d3d7130b8ca8a741e183b73a",
+  "orchestration_sha256": "1c9566367da2376c701b6d79e8bc42eb65889ec146125d808d207a8400ef62da",
+  "source_tag": null,
+  "retained_version_metadata": "v0.11.0-alpha.27",
+  "source_commit": "1c9ce900930b7c52d3d7130b8ca8a741e183b73a",
+  "cycles": 3
+}

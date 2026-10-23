@@ -1,0 +1,10 @@
+{
+  "args": [
+    "pull",
+    "/data/app/~~oxxPf3k1Ggejx1aZFZie2A==/dev.cyclone.cloak-FKdzo6WgSOJ9SiRjvLslLQ==/base.apk",
+    "C:\\Users\\Agent\\Cyclone\\cloak-repo\\docs\\runtime-evidence\\2026-10-23-011407-module-boot-gate\\installed-companion.apk"
+  ],
+  "exit_code": 0,
+  "stdout": "",
+  "stderr": "/data/app/~~oxxPf3k1Ggejx1aZFZie2A==/dev.cyclone.cloak-FKdzo6WgSOJ9SiRjvLslLQ==/base.apk: 1 file pulled, 0 skipped. 33.8 MB/s (44455358 bytes in 1.254s)\r\n"
+}

@@ -1,0 +1,794 @@
+--------- beginning of crash
+10-16 01:25:08.678 F/libc    ( 3867): Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x77b1ce3528 in tid 3867 (v.cyclone.cloak), pid 3867 (v.cyclone.cloak)
+10-16 01:25:09.322 F/DEBUG   ( 5233): *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+10-16 01:25:09.322 F/DEBUG   ( 5233): Build fingerprint: 'google/shiba/shiba:16/CP1A.260505.005/15081906:user/release-keys'
+10-16 01:25:09.322 F/DEBUG   ( 5233): Kernel Release: '6.1.145-android14-11-gfa1d6308d1fe-ab14691759'
+10-16 01:25:09.322 F/DEBUG   ( 5233): Revision: 'MP1.0'
+10-16 01:25:09.322 F/DEBUG   ( 5233): ABI: 'arm64'
+10-16 01:25:09.322 F/DEBUG   ( 5233): Timestamp: 2026-10-16 01:25:08.877151184+0200
+10-16 01:25:09.322 F/DEBUG   ( 5233): Process uptime: 14s
+10-16 01:25:09.322 F/DEBUG   ( 5233): Executable: /system/bin/app_process64
+10-16 01:25:09.322 F/DEBUG   ( 5233): Cmdline: dev.cyclone.cloak
+10-16 01:25:09.322 F/DEBUG   ( 5233): pid: 3867, tid: 3867, name: v.cyclone.cloak  >>> dev.cyclone.cloak <<<
+10-16 01:25:09.322 F/DEBUG   ( 5233): uid: 1710377
+10-16 01:25:09.322 F/DEBUG   ( 5233): tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+10-16 01:25:09.322 F/DEBUG   ( 5233): pac_enabled_keys: 000000000000000f (PR_PAC_APIAKEY, PR_PAC_APIBKEY, PR_PAC_APDAKEY, PR_PAC_APDBKEY)
+10-16 01:25:09.322 F/DEBUG   ( 5233): esr: 0000000082000007 (Instruction Abort Exception 0x20)
+10-16 01:25:09.322 F/DEBUG   ( 5233): signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x00000077b1ce3528 (read)
+10-16 01:25:09.322 F/DEBUG   ( 5233):     x0  0000007700005080  x1  0000007fe936d580  x2  0000000000000004  x3  6c75657300000000
+10-16 01:25:09.322 F/DEBUG   ( 5233):     x4  6c75657300000000  x5  000000007365756c  x6  000000007365756c  x7  00000077b00af8e2
+10-16 01:25:09.322 F/DEBUG   ( 5233):     x8  0000000000000001  x9  0000000000000000  x10 0000000000000000  x11 00000077af96a680
+10-16 01:25:09.322 F/DEBUG   ( 5233):     x12 0000000000000000  x13 0000000000000000  x14 0000000000000000  x15 0000000000080100
+10-16 01:25:09.322 F/DEBUG   ( 5233):     x16 00000077e2d829f8  x17 00000077b1ce3528  x18 0000007abbfdc000  x19 00000077b0183c3d
+10-16 01:25:09.322 F/DEBUG   ( 5233):     x20 0000000000000020  x21 0000000000000000  x22 0000000000000000  x23 0000007700005080
+10-16 01:25:09.323 F/DEBUG   ( 5233):     x24 0000007700005080  x25 0000000001000400  x26 0000000000000000  x27 000000000001000a
+10-16 01:25:09.323 F/DEBUG   ( 5233):     x28 0000000000000020  x29 0000007fe936d500
+10-16 01:25:09.323 F/DEBUG   ( 5233):     lr  00000077e25611b8  sp  0000007fe936d4b0  pc  00000077b1ce3528  pst 0000000060001400
+10-16 01:25:09.323 F/DEBUG   ( 5233):     esr 0000000082000007  vg  0000000000000002
+10-16 01:25:09.323 F/DEBUG   ( 5233): 98 total frames
+10-16 01:25:09.323 F/DEBUG   ( 5233): backtrace:
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #00 pc 00000077b1ce3528  <unknown>
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #01 pc 000000000040e1b4  /apex/com.android.art/lib64/libart.so (art::ObjPtr<art::mirror::Method> art::mirror::Class::GetDeclaredMethodInternal<(art::PointerSize)8>(art::Thread*, art::ObjPtr<art::mirror::Class>, art::ObjPtr<art::mirror::String>, art::ObjPtr<art::mirror::ObjectArray<art::mirror::Class>>, std::__1::function<art::hiddenapi::AccessContext ()> const&)+960) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #02 pc 0000000000412bc0  /apex/com.android.art/lib64/libart.so (art::Class_getDeclaredMethodInternal(_JNIEnv*, _jobject*, _jstring*, _jobjectArray*) (.__uniq.181829539739573773940154555818377431209)+172) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #03 pc 0000000000d41da4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (art_jni_trampoline+116)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #04 pc 00000000003530e8  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (java.lang.Class.getMethod+232)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #05 pc 000000000030c664  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (java.lang.Enum.enumValues+164)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #06 pc 00000000003591b0  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (java.lang.Enum$1.computeValue+48)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #07 pc 000000000035915c  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat ([DEDUPED]+44)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #08 pc 000000000035856c  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (java.lang.ClassValue.getFromHashMap+300)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #09 pc 0000000000358ba8  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (java.lang.ClassValue.get+344)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #10 pc 000000000030c84c  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (java.lang.Enum.valueOf+140)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #11 pc 00000000002ab260  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #12 pc 000000000087a970  /apex/com.android.art/lib64/libart.so (bool art::interpreter::DoCall<false>(art::ArtMethod*, art::Thread*, art::ShadowFrame&, art::Instruction const*, unsigned short, bool, art::JValue*)+1884) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #13 pc 00000000006fce54  /apex/com.android.art/lib64/libart.so (void art::interpreter::ExecuteSwitchImplCpp<false>(art::interpreter::SwitchImplContext*)+284) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #14 pc 00000000002fde48  /apex/com.android.art/lib64/libart.so (ExecuteSwitchImplAsm+8) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #15 pc 00000000002a2cec  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x1e65000) (dev.cyclone.cloak.diagnostics.RunOperation.valueOf+0)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #16 pc 00000000002fda80  /apex/com.android.art/lib64/libart.so (art::interpreter::Execute(art::Thread*, art::CodeItemDataAccessor const&, art::ShadowFrame&, art::JValue, bool, bool) (.__uniq.112435418011751916792819755956732575238.llvm.8613519112829971472)+360) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #17 pc 00000000002fd404  /apex/com.android.art/lib64/libart.so (artQuickToInterpreterBridge+916) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #18 pc 00000000002c24d8  /apex/com.android.art/lib64/libart.so (art_quick_to_interpreter_bridge+88) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #19 pc 000000000072b104  /apex/com.android.art/lib64/libart.so (nterp_helper+116) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #20 pc 000000000029d86c  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x1e65000) (dev.cyclone.cloak.diagnostics.BindingRun$Companion.parse+220)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #21 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #22 pc 000000000029e9f6  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x1e65000) (dev.cyclone.cloak.diagnostics.BindingRunJournal.<init>+434)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #23 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #24 pc 000000000029ec14  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x1e65000) (dev.cyclone.cloak.diagnostics.BindingRunJournal.<init>+40)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #25 pc 000000000072bb98  /apex/com.android.art/lib64/libart.so (nterp_helper+2824) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #26 pc 000000000029fce6  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x1e65000) (dev.cyclone.cloak.diagnostics.BindingRuns.journal+66)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #27 pc 00000000002aaf94  /apex/com.android.art/lib64/libart.so (art_quick_invoke_stub+612) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #28 pc 000000000087a868  /apex/com.android.art/lib64/libart.so (bool art::interpreter::DoCall<false>(art::ArtMethod*, art::Thread*, art::ShadowFrame&, art::Instruction const*, unsigned short, bool, art::JValue*)+1620) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #29 pc 00000000006fcf7c  /apex/com.android.art/lib64/libart.so (void art::interpreter::ExecuteSwitchImplCpp<false>(art::interpreter::SwitchImplContext*)+580) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #30 pc 00000000002fde48  /apex/com.android.art/lib64/libart.so (ExecuteSwitchImplAsm+8) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #31 pc 00000000002c5ee8  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x1e65000) (dev.cyclone.cloak.ui.BindingRunsSectionKt.BindingRunsSection+0)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #32 pc 000000000087ab14  /apex/com.android.art/lib64/libart.so (bool art::interpreter::DoCall<false>(art::ArtMethod*, art::Thread*, art::ShadowFrame&, art::Instruction const*, unsigned short, bool, art::JValue*)+2304) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #33 pc 00000000006fce54  /apex/com.android.art/lib64/libart.so (void art::interpreter::ExecuteSwitchImplCpp<false>(art::interpreter::SwitchImplContext*)+284) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #34 pc 00000000002fde48  /apex/com.android.art/lib64/libart.so (ExecuteSwitchImplAsm+8) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #35 pc 00000000002fe618  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x1e65000) (dev.cyclone.cloak.ui.HealthScreenKt.HealthScreen+0)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #36 pc 00000000002fda80  /apex/com.android.art/lib64/libart.so (art::interpreter::Execute(art::Thread*, art::CodeItemDataAccessor const&, art::ShadowFrame&, art::JValue, bool, bool) (.__uniq.112435418011751916792819755956732575238.llvm.8613519112829971472)+360) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #37 pc 00000000002fd404  /apex/com.android.art/lib64/libart.so (artQuickToInterpreterBridge+916) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #38 pc 00000000002c24d8  /apex/com.android.art/lib64/libart.so (art_quick_to_interpreter_bridge+88) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #39 pc 000000000072b104  /apex/com.android.art/lib64/libart.so (nterp_helper+116) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #40 pc 00000000002cf2c6  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x1e65000) (dev.cyclone.cloak.ui.CloakAppKt$CloakApp$9.invoke+698)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #41 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #42 pc 00000000002cef3c  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x1e65000) (dev.cyclone.cloak.ui.CloakAppKt$CloakApp$9.invoke+20)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #43 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #44 pc 0000000000e2cfda  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.runtime.internal.ComposableLambdaImpl.invoke+90)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #45 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #46 pc 0000000000e2c954  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.runtime.internal.ComposableLambdaImpl$invoke$1.invoke+24)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #47 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #48 pc 0000000000e2c8f8  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.runtime.internal.ComposableLambdaImpl$invoke$1.invoke+16)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #49 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #50 pc 0000000000e0158c  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.runtime.RecomposeScopeImpl.compose+64)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #51 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #52 pc 0000000000df2892  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.runtime.ComposerImpl.recomposeToGroupEnd+222)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #53 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #54 pc 0000000000df2cbc  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.runtime.ComposerImpl.skipCurrentGroup+248)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #55 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #56 pc 0000000000df1530  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.runtime.ComposerImpl.doCompose+568)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #57 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #58 pc 0000000000df01ca  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.runtime.ComposerImpl.recompose$runtime_release+74)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #59 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #60 pc 0000000000df5c80  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.runtime.CompositionImpl.recompose+68)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #61 pc 000000000072bb3c  /apex/com.android.art/lib64/libart.so (nterp_helper+2732) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #62 pc 0000000000e04b0c  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.runtime.Recomposer.performRecompose+140)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #63 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #64 pc 0000000000e04a64  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.runtime.Recomposer.access$performRecompose+0)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #65 pc 0000000000722c6c  /apex/com.android.art/lib64/libart.so (nterp2_op_invoke_static+44) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #66 pc 0000000000e035f4  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.runtime.Recomposer$runRecomposeAndApplyChanges$2$1.invoke+1148)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #67 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #68 pc 0000000000e0311c  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.runtime.Recomposer$runRecomposeAndApplyChanges$2$1.invoke+12)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #69 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #70 pc 00000000001a7574  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x1e65000) (androidx.compose.ui.platform.AndroidUiFrameClock$withFrameNanos$2$callback$1.doFrame+20)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #71 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #72 pc 00000000001a7332  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x1e65000) (androidx.compose.ui.platform.AndroidUiDispatcher.performFrameDispatch+66)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #73 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #74 pc 00000000001a7230  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x1e65000) (androidx.compose.ui.platform.AndroidUiDispatcher.access$performFrameDispatch+0)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #75 pc 0000000000722c6c  /apex/com.android.art/lib64/libart.so (nterp2_op_invoke_static+44) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #76 pc 00000000001a6f8e  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x1e65000) (androidx.compose.ui.platform.AndroidUiDispatcher$dispatchCallback$1.doFrame+38)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #77 pc 0000000000a46e7c  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.Choreographer.doCallbacks+876)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #78 pc 0000000000a47af8  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.Choreographer.doFrame+2552)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #79 pc 0000000000a45788  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.Choreographer$FrameDisplayEventReceiver.run+72)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #80 pc 00000000008ce7f4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Handler.dispatchMessageImpl+68)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #81 pc 000000000053900c  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat ([DEDUPED]+44)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #82 pc 000000000090f660  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Looper.loopOnce+1824)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #83 pc 000000000090eec4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Looper.loop+244)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #84 pc 000000000062eab8  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.app.ActivityThread.main+1480)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #85 pc 00000000002ab260  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #86 pc 000000000029c070  /apex/com.android.art/lib64/libart.so (_jobject* art::InvokeMethod<(art::PointerSize)8>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, _jobject*, _jobject*, unsigned long)+552) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #87 pc 0000000000635ed4  /apex/com.android.art/lib64/libart.so (art::Method_invoke(_JNIEnv*, _jobject*, _jobject*, _jobjectArray*) (.__uniq.165753521025965369065708152063621506277)+36) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #88 pc 0000000000d41da4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (art_jni_trampoline+116)
+10-16 01:25:09.323 F/DEBUG   ( 5233):       #89 pc 0000000000c00d74  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run+116)
+10-16 01:25:09.324 F/DEBUG   ( 5233):       #90 pc 0000000000c08ba4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.os.ZygoteInit.main+3188)
+10-16 01:25:09.324 F/DEBUG   ( 5233):       #91 pc 00000000002ab260  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.324 F/DEBUG   ( 5233):       #92 pc 00000000002a8b8c  /apex/com.android.art/lib64/libart.so (art::JValue art::InvokeWithVarArgs<_jmethodID*>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, _jmethodID*, std::__va_list)+760) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.324 F/DEBUG   ( 5233):       #93 pc 00000000006a44b4  /apex/com.android.art/lib64/libart.so (art::JNI<true>::CallStaticVoidMethodV(_JNIEnv*, _jclass*, _jmethodID*, std::__va_list)+164) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:09.324 F/DEBUG   ( 5233):       #94 pc 0000000000115eec  /system/lib64/libandroid_runtime.so (_JNIEnv::CallStaticVoidMethod(_jclass*, _jmethodID*, ...)+108) (BuildId: 83302318da3878f15b1f609b3f2fe03a)
+10-16 01:25:09.324 F/DEBUG   ( 5233):       #95 pc 000000000013ba9c  /system/lib64/libandroid_runtime.so (android::AndroidRuntime::start(char const*, android::Vector<android::String8> const&, bool)+908) (BuildId: 83302318da3878f15b1f609b3f2fe03a)
+10-16 01:25:09.324 F/DEBUG   ( 5233):       #96 pc 00000000000045b8  /system/bin/app_process64 (main+1240) (BuildId: bf44ea70f221d41465c88629ddfe1e21)
+10-16 01:25:09.324 F/DEBUG   ( 5233):       #97 pc 000000000006b25c  /apex/com.android.runtime/lib64/bionic/libc.so (__libc_init+124) (BuildId: 43764f6fa9e16b18fa315be8700f5d9c)
+10-16 01:25:21.186 F/libc    ( 5480): Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0 in tid 5480 (v.cyclone.cloak), pid 5480 (v.cyclone.cloak)
+10-16 01:25:21.546 F/DEBUG   ( 5880): *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+10-16 01:25:21.546 F/DEBUG   ( 5880): Build fingerprint: 'google/shiba/shiba:16/CP1A.260505.005/15081906:user/release-keys'
+10-16 01:25:21.546 F/DEBUG   ( 5880): Kernel Release: '6.1.145-android14-11-gfa1d6308d1fe-ab14691759'
+10-16 01:25:21.546 F/DEBUG   ( 5880): Revision: 'MP1.0'
+10-16 01:25:21.546 F/DEBUG   ( 5880): ABI: 'arm64'
+10-16 01:25:21.546 F/DEBUG   ( 5880): Timestamp: 2026-10-16 01:25:21.306727362+0200
+10-16 01:25:21.546 F/DEBUG   ( 5880): Process uptime: 3s
+10-16 01:25:21.546 F/DEBUG   ( 5880): Executable: /system/bin/app_process64
+10-16 01:25:21.546 F/DEBUG   ( 5880): Cmdline: dev.cyclone.cloak
+10-16 01:25:21.546 F/DEBUG   ( 5880): pid: 5480, tid: 5480, name: v.cyclone.cloak  >>> dev.cyclone.cloak <<<
+10-16 01:25:21.546 F/DEBUG   ( 5880): uid: 1710377
+10-16 01:25:21.546 F/DEBUG   ( 5880): tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+10-16 01:25:21.546 F/DEBUG   ( 5880): pac_enabled_keys: 000000000000000f (PR_PAC_APIAKEY, PR_PAC_APIBKEY, PR_PAC_APDAKEY, PR_PAC_APDBKEY)
+10-16 01:25:21.546 F/DEBUG   ( 5880): esr: 0000000092000006 (Data Abort Exception 0x24)
+10-16 01:25:21.546 F/DEBUG   ( 5880): signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0000000000000000 (read)
+10-16 01:25:21.546 F/DEBUG   ( 5880): Cause: null pointer dereference
+10-16 01:25:21.546 F/DEBUG   ( 5880):     x0  0000007700008060  x1  0000000071b0a150  x2  b4000079156b21d0  x3  0000007fe9370180
+10-16 01:25:21.546 F/DEBUG   ( 5880):     x4  0000000000000960  x5  0000000000000438  x6  0000000000000960  x7  0000000000000000
+10-16 01:25:21.546 F/DEBUG   ( 5880):     x8  0000007aa737c020  x9  0000000000000000  x10 0000000000000001  x11 0000000000000000
+10-16 01:25:21.546 F/DEBUG   ( 5880):     x12 0000000000000000  x13 00000000001cdb7d  x14 0000000000000042  x15 0000000071fab390
+10-16 01:25:21.546 F/DEBUG   ( 5880):     x16 0000007fe936e180  x17 00000077e2869040  x18 0000007abbfdc000  x19 b4000079656a6380
+10-16 01:25:21.546 F/DEBUG   ( 5880):     x20 0000000000000000  x21 b4000079656a6440  x22 0000000000000000  x23 0000000040000438
+10-16 01:25:21.546 F/DEBUG   ( 5880):     x24 0000000040000960  x25 0000000002125d20  x26 0000000002137c80  x27 0000000040000960
+10-16 01:25:21.546 F/DEBUG   ( 5880):     x28 0000000002125d20  x29 0000000000000000
+10-16 01:25:21.546 F/DEBUG   ( 5880):     lr  0000000072fab578  sp  0000007fe93700e0  pc  00000077e2869078  pst 0000000060001000
+10-16 01:25:21.546 F/DEBUG   ( 5880):     esr 0000000092000006  vg  0000000000000002
+10-16 01:25:21.546 F/DEBUG   ( 5880): 28 total frames
+10-16 01:25:21.546 F/DEBUG   ( 5880): backtrace:
+10-16 01:25:21.546 F/DEBUG   ( 5880):       #00 pc 0000000000716078  /apex/com.android.art/lib64/libart.so (ExecuteNterpImpl+56) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:21.546 F/DEBUG   ( 5880):       #01 pc 0000000000c0f574  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.policy.DecorView.onMeasure+100)
+10-16 01:25:21.546 F/DEBUG   ( 5880):       #02 pc 0000000000a73ae8  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.View.measure+1192)
+10-16 01:25:21.546 F/DEBUG   ( 5880):       #03 pc 0000000000ae9234  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewRootImpl.performMeasure+148)
+10-16 01:25:21.546 F/DEBUG   ( 5880):       #04 pc 0000000000ae7434  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewRootImpl.measureHierarchy+596)
+10-16 01:25:21.546 F/DEBUG   ( 5880):       #05 pc 0000000000ae9b00  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewRootImpl.performTraversals+2080)
+10-16 01:25:21.546 F/DEBUG   ( 5880):       #06 pc 0000000000ad9f28  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewRootImpl$TraversalRunnable.run+136)
+10-16 01:25:21.546 F/DEBUG   ( 5880):       #07 pc 0000000000a46ed4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.Choreographer.doCallbacks+964)
+10-16 01:25:21.546 F/DEBUG   ( 5880):       #08 pc 0000000000a47b4c  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.Choreographer.doFrame+2636)
+10-16 01:25:21.546 F/DEBUG   ( 5880):       #09 pc 0000000000a45788  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.Choreographer$FrameDisplayEventReceiver.run+72)
+10-16 01:25:21.546 F/DEBUG   ( 5880):       #10 pc 00000000008ce7f4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Handler.dispatchMessageImpl+68)
+10-16 01:25:21.546 F/DEBUG   ( 5880):       #11 pc 000000000053900c  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat ([DEDUPED]+44)
+10-16 01:25:21.546 F/DEBUG   ( 5880):       #12 pc 000000000090f660  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Looper.loopOnce+1824)
+10-16 01:25:21.546 F/DEBUG   ( 5880):       #13 pc 000000000090eec4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Looper.loop+244)
+10-16 01:25:21.546 F/DEBUG   ( 5880):       #14 pc 000000000062eab8  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.app.ActivityThread.main+1480)
+10-16 01:25:21.546 F/DEBUG   ( 5880):       #15 pc 00000000002ab260  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:21.546 F/DEBUG   ( 5880):       #16 pc 000000000029c070  /apex/com.android.art/lib64/libart.so (_jobject* art::InvokeMethod<(art::PointerSize)8>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, _jobject*, _jobject*, unsigned long)+552) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:21.546 F/DEBUG   ( 5880):       #17 pc 0000000000635ed4  /apex/com.android.art/lib64/libart.so (art::Method_invoke(_JNIEnv*, _jobject*, _jobject*, _jobjectArray*) (.__uniq.165753521025965369065708152063621506277)+36) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:21.546 F/DEBUG   ( 5880):       #18 pc 0000000000d41da4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (art_jni_trampoline+116)
+10-16 01:25:21.546 F/DEBUG   ( 5880):       #19 pc 0000000000c00d74  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run+116)
+10-16 01:25:21.546 F/DEBUG   ( 5880):       #20 pc 0000000000c08ba4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.os.ZygoteInit.main+3188)
+10-16 01:25:21.546 F/DEBUG   ( 5880):       #21 pc 00000000002ab260  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:21.546 F/DEBUG   ( 5880):       #22 pc 00000000002a8b8c  /apex/com.android.art/lib64/libart.so (art::JValue art::InvokeWithVarArgs<_jmethodID*>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, _jmethodID*, std::__va_list)+760) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:21.546 F/DEBUG   ( 5880):       #23 pc 00000000006a44b4  /apex/com.android.art/lib64/libart.so (art::JNI<true>::CallStaticVoidMethodV(_JNIEnv*, _jclass*, _jmethodID*, std::__va_list)+164) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:21.546 F/DEBUG   ( 5880):       #24 pc 0000000000115eec  /system/lib64/libandroid_runtime.so (_JNIEnv::CallStaticVoidMethod(_jclass*, _jmethodID*, ...)+108) (BuildId: 83302318da3878f15b1f609b3f2fe03a)
+10-16 01:25:21.546 F/DEBUG   ( 5880):       #25 pc 000000000013ba9c  /system/lib64/libandroid_runtime.so (android::AndroidRuntime::start(char const*, android::Vector<android::String8> const&, bool)+908) (BuildId: 83302318da3878f15b1f609b3f2fe03a)
+10-16 01:25:21.546 F/DEBUG   ( 5880):       #26 pc 00000000000045b8  /system/bin/app_process64 (main+1240) (BuildId: bf44ea70f221d41465c88629ddfe1e21)
+10-16 01:25:21.546 F/DEBUG   ( 5880):       #27 pc 000000000006b25c  /apex/com.android.runtime/lib64/bionic/libc.so (__libc_init+124) (BuildId: 43764f6fa9e16b18fa315be8700f5d9c)
+10-16 01:25:40.658 F/libc    ( 6045): Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0 in tid 6045 (v.cyclone.cloak), pid 6045 (v.cyclone.cloak)
+10-16 01:25:41.084 F/DEBUG   ( 6341): *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+10-16 01:25:41.084 F/DEBUG   ( 6341): Build fingerprint: 'google/shiba/shiba:16/CP1A.260505.005/15081906:user/release-keys'
+10-16 01:25:41.084 F/DEBUG   ( 6341): Kernel Release: '6.1.145-android14-11-gfa1d6308d1fe-ab14691759'
+10-16 01:25:41.084 F/DEBUG   ( 6341): Revision: 'MP1.0'
+10-16 01:25:41.084 F/DEBUG   ( 6341): ABI: 'arm64'
+10-16 01:25:41.084 F/DEBUG   ( 6341): Timestamp: 2026-10-16 01:25:40.821719152+0200
+10-16 01:25:41.084 F/DEBUG   ( 6341): Process uptime: 4s
+10-16 01:25:41.084 F/DEBUG   ( 6341): Executable: /system/bin/app_process64
+10-16 01:25:41.084 F/DEBUG   ( 6341): Cmdline: dev.cyclone.cloak
+10-16 01:25:41.084 F/DEBUG   ( 6341): pid: 6045, tid: 6045, name: v.cyclone.cloak  >>> dev.cyclone.cloak <<<
+10-16 01:25:41.084 F/DEBUG   ( 6341): uid: 1710377
+10-16 01:25:41.084 F/DEBUG   ( 6341): tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+10-16 01:25:41.084 F/DEBUG   ( 6341): pac_enabled_keys: 000000000000000f (PR_PAC_APIAKEY, PR_PAC_APIBKEY, PR_PAC_APDAKEY, PR_PAC_APDBKEY)
+10-16 01:25:41.084 F/DEBUG   ( 6341): esr: 0000000092000006 (Data Abort Exception 0x24)
+10-16 01:25:41.084 F/DEBUG   ( 6341): signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0000000000000000 (read)
+10-16 01:25:41.084 F/DEBUG   ( 6341): Cause: null pointer dereference
+10-16 01:25:41.084 F/DEBUG   ( 6341):     x0  0000007700008060  x1  0000000071b0a150  x2  b4000079156b21d0  x3  0000007fe9370180
+10-16 01:25:41.084 F/DEBUG   ( 6341):     x4  0000000000000960  x5  0000000000000438  x6  0000000000000960  x7  0000000000000000
+10-16 01:25:41.084 F/DEBUG   ( 6341):     x8  0000007aa737c020  x9  0000000000000000  x10 0000000000000001  x11 0000000000000000
+10-16 01:25:41.084 F/DEBUG   ( 6341):     x12 0000000000000000  x13 00000000001d27e2  x14 0000000000000043  x15 0000000071fab390
+10-16 01:25:41.084 F/DEBUG   ( 6341):     x16 0000007fe936e180  x17 00000077e2869040  x18 0000007abbfdc000  x19 b4000079656a6380
+10-16 01:25:41.084 F/DEBUG   ( 6341):     x20 0000000000000000  x21 b4000079656a6440  x22 0000000000000000  x23 0000000040000438
+10-16 01:25:41.084 F/DEBUG   ( 6341):     x24 0000000040000960  x25 00000000020c6b68  x26 00000000020dad98  x27 0000000040000960
+10-16 01:25:41.084 F/DEBUG   ( 6341):     x28 00000000020c6b68  x29 0000000000000000
+10-16 01:25:41.084 F/DEBUG   ( 6341):     lr  0000000072fab578  sp  0000007fe93700e0  pc  00000077e2869078  pst 0000000060001000
+10-16 01:25:41.084 F/DEBUG   ( 6341):     esr 0000000092000006  vg  0000000000000002
+10-16 01:25:41.084 F/DEBUG   ( 6341): 28 total frames
+10-16 01:25:41.084 F/DEBUG   ( 6341): backtrace:
+10-16 01:25:41.084 F/DEBUG   ( 6341):       #00 pc 0000000000716078  /apex/com.android.art/lib64/libart.so (ExecuteNterpImpl+56) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:41.084 F/DEBUG   ( 6341):       #01 pc 0000000000c0f574  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.policy.DecorView.onMeasure+100)
+10-16 01:25:41.084 F/DEBUG   ( 6341):       #02 pc 0000000000a73ae8  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.View.measure+1192)
+10-16 01:25:41.084 F/DEBUG   ( 6341):       #03 pc 0000000000ae9234  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewRootImpl.performMeasure+148)
+10-16 01:25:41.084 F/DEBUG   ( 6341):       #04 pc 0000000000ae7434  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewRootImpl.measureHierarchy+596)
+10-16 01:25:41.084 F/DEBUG   ( 6341):       #05 pc 0000000000ae9b00  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewRootImpl.performTraversals+2080)
+10-16 01:25:41.084 F/DEBUG   ( 6341):       #06 pc 0000000000ad9f28  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewRootImpl$TraversalRunnable.run+136)
+10-16 01:25:41.084 F/DEBUG   ( 6341):       #07 pc 0000000000a46ed4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.Choreographer.doCallbacks+964)
+10-16 01:25:41.084 F/DEBUG   ( 6341):       #08 pc 0000000000a47b4c  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.Choreographer.doFrame+2636)
+10-16 01:25:41.084 F/DEBUG   ( 6341):       #09 pc 0000000000a45788  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.Choreographer$FrameDisplayEventReceiver.run+72)
+10-16 01:25:41.084 F/DEBUG   ( 6341):       #10 pc 00000000008ce7f4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Handler.dispatchMessageImpl+68)
+10-16 01:25:41.084 F/DEBUG   ( 6341):       #11 pc 000000000053900c  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat ([DEDUPED]+44)
+10-16 01:25:41.084 F/DEBUG   ( 6341):       #12 pc 000000000090f660  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Looper.loopOnce+1824)
+10-16 01:25:41.084 F/DEBUG   ( 6341):       #13 pc 000000000090eec4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Looper.loop+244)
+10-16 01:25:41.084 F/DEBUG   ( 6341):       #14 pc 000000000062eab8  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.app.ActivityThread.main+1480)
+10-16 01:25:41.084 F/DEBUG   ( 6341):       #15 pc 00000000002ab260  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:41.084 F/DEBUG   ( 6341):       #16 pc 000000000029c070  /apex/com.android.art/lib64/libart.so (_jobject* art::InvokeMethod<(art::PointerSize)8>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, _jobject*, _jobject*, unsigned long)+552) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:41.084 F/DEBUG   ( 6341):       #17 pc 0000000000635ed4  /apex/com.android.art/lib64/libart.so (art::Method_invoke(_JNIEnv*, _jobject*, _jobject*, _jobjectArray*) (.__uniq.165753521025965369065708152063621506277)+36) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:41.084 F/DEBUG   ( 6341):       #18 pc 0000000000d41da4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (art_jni_trampoline+116)
+10-16 01:25:41.084 F/DEBUG   ( 6341):       #19 pc 0000000000c00d74  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run+116)
+10-16 01:25:41.084 F/DEBUG   ( 6341):       #20 pc 0000000000c08ba4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.os.ZygoteInit.main+3188)
+10-16 01:25:41.084 F/DEBUG   ( 6341):       #21 pc 00000000002ab260  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:41.084 F/DEBUG   ( 6341):       #22 pc 00000000002a8b8c  /apex/com.android.art/lib64/libart.so (art::JValue art::InvokeWithVarArgs<_jmethodID*>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, _jmethodID*, std::__va_list)+760) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:41.084 F/DEBUG   ( 6341):       #23 pc 00000000006a44b4  /apex/com.android.art/lib64/libart.so (art::JNI<true>::CallStaticVoidMethodV(_JNIEnv*, _jclass*, _jmethodID*, std::__va_list)+164) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:25:41.084 F/DEBUG   ( 6341):       #24 pc 0000000000115eec  /system/lib64/libandroid_runtime.so (_JNIEnv::CallStaticVoidMethod(_jclass*, _jmethodID*, ...)+108) (BuildId: 83302318da3878f15b1f609b3f2fe03a)
+10-16 01:25:41.084 F/DEBUG   ( 6341):       #25 pc 000000000013ba9c  /system/lib64/libandroid_runtime.so (android::AndroidRuntime::start(char const*, android::Vector<android::String8> const&, bool)+908) (BuildId: 83302318da3878f15b1f609b3f2fe03a)
+10-16 01:25:41.084 F/DEBUG   ( 6341):       #26 pc 00000000000045b8  /system/bin/app_process64 (main+1240) (BuildId: bf44ea70f221d41465c88629ddfe1e21)
+10-16 01:25:41.084 F/DEBUG   ( 6341):       #27 pc 000000000006b25c  /apex/com.android.runtime/lib64/bionic/libc.so (__libc_init+124) (BuildId: 43764f6fa9e16b18fa315be8700f5d9c)
+10-16 01:26:02.387 F/libc    ( 6533): Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x7f20 in tid 6533 (v.cyclone.cloak), pid 6533 (v.cyclone.cloak)
+10-16 01:26:02.788 F/DEBUG   ( 8022): *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+10-16 01:26:02.788 F/DEBUG   ( 8022): Build fingerprint: 'google/shiba/shiba:16/CP1A.260505.005/15081906:user/release-keys'
+10-16 01:26:02.788 F/DEBUG   ( 8022): Kernel Release: '6.1.145-android14-11-gfa1d6308d1fe-ab14691759'
+10-16 01:26:02.788 F/DEBUG   ( 8022): Revision: 'MP1.0'
+10-16 01:26:02.788 F/DEBUG   ( 8022): ABI: 'arm64'
+10-16 01:26:02.788 F/DEBUG   ( 8022): Timestamp: 2026-10-16 01:26:02.523879726+0200
+10-16 01:26:02.788 F/DEBUG   ( 8022): Process uptime: 13s
+10-16 01:26:02.788 F/DEBUG   ( 8022): Executable: /system/bin/app_process64
+10-16 01:26:02.788 F/DEBUG   ( 8022): Cmdline: dev.cyclone.cloak
+10-16 01:26:02.788 F/DEBUG   ( 8022): pid: 6533, tid: 6533, name: v.cyclone.cloak  >>> dev.cyclone.cloak <<<
+10-16 01:26:02.788 F/DEBUG   ( 8022): uid: 1710377
+10-16 01:26:02.788 F/DEBUG   ( 8022): tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+10-16 01:26:02.788 F/DEBUG   ( 8022): pac_enabled_keys: 000000000000000f (PR_PAC_APIAKEY, PR_PAC_APIBKEY, PR_PAC_APDAKEY, PR_PAC_APDBKEY)
+10-16 01:26:02.788 F/DEBUG   ( 8022): esr: 0000000092000006 (Data Abort Exception 0x24)
+10-16 01:26:02.788 F/DEBUG   ( 8022): signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0000000000007f20 (read)
+10-16 01:26:02.788 F/DEBUG   ( 8022):     x0  0000007700008060  x1  0000000071b0a150  x2  b4000079156b21d0  x3  0000007fe9370180
+10-16 01:26:02.788 F/DEBUG   ( 8022):     x4  0000000000000960  x5  0000000000000438  x6  0000000000000960  x7  0000000000000000
+10-16 01:26:02.788 F/DEBUG   ( 8022):     x8  0000000000000077  x9  0000000000000000  x10 0000000000000001  x11 0000000000000000
+10-16 01:26:02.788 F/DEBUG   ( 8022):     x12 0000000000000000  x13 00000000001d7ccc  x14 0000000000000000  x15 0000000071fab390
+10-16 01:26:02.788 F/DEBUG   ( 8022):     x16 0000007fe93700e0  x17 0000000000000000  x18 0000007abbfdc000  x19 b4000079656a6380
+10-16 01:26:02.788 F/DEBUG   ( 8022):     x20 0000000000000000  x21 b4000079656a6440  x22 00000000722fe4a0  x23 0000000040000438
+10-16 01:26:02.788 F/DEBUG   ( 8022):     x24 0000000040000960  x25 0000000000000018  x26 000000000211e450  x27 0000000000007f10
+10-16 01:26:02.788 F/DEBUG   ( 8022):     x28 0000000002107b10  x29 0000000000000000
+10-16 01:26:02.788 F/DEBUG   ( 8022):     lr  0000000072fab578  sp  0000007fe93700e0  pc  00000077e2869090  pst 0000000060001000
+10-16 01:26:02.788 F/DEBUG   ( 8022):     esr 0000000092000006  vg  0000000000000002
+10-16 01:26:02.788 F/DEBUG   ( 8022): 28 total frames
+10-16 01:26:02.788 F/DEBUG   ( 8022): backtrace:
+10-16 01:26:02.788 F/DEBUG   ( 8022):       #00 pc 0000000000716090  /apex/com.android.art/lib64/libart.so (ExecuteNterpImpl+80) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:26:02.788 F/DEBUG   ( 8022):       #01 pc 0000000000c0f574  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.policy.DecorView.onMeasure+100)
+10-16 01:26:02.788 F/DEBUG   ( 8022):       #02 pc 0000000000a73ae8  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.View.measure+1192)
+10-16 01:26:02.788 F/DEBUG   ( 8022):       #03 pc 0000000000ae9234  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewRootImpl.performMeasure+148)
+10-16 01:26:02.788 F/DEBUG   ( 8022):       #04 pc 0000000000ae7434  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewRootImpl.measureHierarchy+596)
+10-16 01:26:02.788 F/DEBUG   ( 8022):       #05 pc 0000000000ae9b00  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewRootImpl.performTraversals+2080)
+10-16 01:26:02.788 F/DEBUG   ( 8022):       #06 pc 0000000000ad9f28  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewRootImpl$TraversalRunnable.run+136)
+10-16 01:26:02.788 F/DEBUG   ( 8022):       #07 pc 0000000000a46ed4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.Choreographer.doCallbacks+964)
+10-16 01:26:02.788 F/DEBUG   ( 8022):       #08 pc 0000000000a47b4c  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.Choreographer.doFrame+2636)
+10-16 01:26:02.788 F/DEBUG   ( 8022):       #09 pc 0000000000a45788  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.Choreographer$FrameDisplayEventReceiver.run+72)
+10-16 01:26:02.788 F/DEBUG   ( 8022):       #10 pc 00000000008ce7f4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Handler.dispatchMessageImpl+68)
+10-16 01:26:02.788 F/DEBUG   ( 8022):       #11 pc 000000000053900c  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat ([DEDUPED]+44)
+10-16 01:26:02.788 F/DEBUG   ( 8022):       #12 pc 000000000090f660  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Looper.loopOnce+1824)
+10-16 01:26:02.788 F/DEBUG   ( 8022):       #13 pc 000000000090eec4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Looper.loop+244)
+10-16 01:26:02.788 F/DEBUG   ( 8022):       #14 pc 000000000062eab8  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.app.ActivityThread.main+1480)
+10-16 01:26:02.788 F/DEBUG   ( 8022):       #15 pc 00000000002ab260  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:26:02.788 F/DEBUG   ( 8022):       #16 pc 000000000029c070  /apex/com.android.art/lib64/libart.so (_jobject* art::InvokeMethod<(art::PointerSize)8>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, _jobject*, _jobject*, unsigned long)+552) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:26:02.788 F/DEBUG   ( 8022):       #17 pc 0000000000635ed4  /apex/com.android.art/lib64/libart.so (art::Method_invoke(_JNIEnv*, _jobject*, _jobject*, _jobjectArray*) (.__uniq.165753521025965369065708152063621506277)+36) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:26:02.788 F/DEBUG   ( 8022):       #18 pc 0000000000d41da4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (art_jni_trampoline+116)
+10-16 01:26:02.788 F/DEBUG   ( 8022):       #19 pc 0000000000c00d74  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run+116)
+10-16 01:26:02.788 F/DEBUG   ( 8022):       #20 pc 0000000000c08ba4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.os.ZygoteInit.main+3188)
+10-16 01:26:02.788 F/DEBUG   ( 8022):       #21 pc 00000000002ab260  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:26:02.788 F/DEBUG   ( 8022):       #22 pc 00000000002a8b8c  /apex/com.android.art/lib64/libart.so (art::JValue art::InvokeWithVarArgs<_jmethodID*>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, _jmethodID*, std::__va_list)+760) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:26:02.788 F/DEBUG   ( 8022):       #23 pc 00000000006a44b4  /apex/com.android.art/lib64/libart.so (art::JNI<true>::CallStaticVoidMethodV(_JNIEnv*, _jclass*, _jmethodID*, std::__va_list)+164) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:26:02.788 F/DEBUG   ( 8022):       #24 pc 0000000000115eec  /system/lib64/libandroid_runtime.so (_JNIEnv::CallStaticVoidMethod(_jclass*, _jmethodID*, ...)+108) (BuildId: 83302318da3878f15b1f609b3f2fe03a)
+10-16 01:26:02.788 F/DEBUG   ( 8022):       #25 pc 000000000013ba9c  /system/lib64/libandroid_runtime.so (android::AndroidRuntime::start(char const*, android::Vector<android::String8> const&, bool)+908) (BuildId: 83302318da3878f15b1f609b3f2fe03a)
+10-16 01:26:02.788 F/DEBUG   ( 8022):       #26 pc 00000000000045b8  /system/bin/app_process64 (main+1240) (BuildId: bf44ea70f221d41465c88629ddfe1e21)
+10-16 01:26:02.788 F/DEBUG   ( 8022):       #27 pc 000000000006b25c  /apex/com.android.runtime/lib64/bionic/libc.so (__libc_init+124) (BuildId: 43764f6fa9e16b18fa315be8700f5d9c)
+10-16 01:26:27.586 F/libc    ( 8287): Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0 in tid 8287 (v.cyclone.cloak), pid 8287 (v.cyclone.cloak)
+10-16 01:26:27.928 F/DEBUG   ( 9164): *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+10-16 01:26:27.928 F/DEBUG   ( 9164): Build fingerprint: 'google/shiba/shiba:16/CP1A.260505.005/15081906:user/release-keys'
+10-16 01:26:27.928 F/DEBUG   ( 9164): Kernel Release: '6.1.145-android14-11-gfa1d6308d1fe-ab14691759'
+10-16 01:26:27.928 F/DEBUG   ( 9164): Revision: 'MP1.0'
+10-16 01:26:27.928 F/DEBUG   ( 9164): ABI: 'arm64'
+10-16 01:26:27.928 F/DEBUG   ( 9164): Timestamp: 2026-10-16 01:26:27.711697894+0200
+10-16 01:26:27.928 F/DEBUG   ( 9164): Process uptime: 7s
+10-16 01:26:27.928 F/DEBUG   ( 9164): Executable: /system/bin/app_process64
+10-16 01:26:27.928 F/DEBUG   ( 9164): Cmdline: dev.cyclone.cloak
+10-16 01:26:27.928 F/DEBUG   ( 9164): pid: 8287, tid: 8287, name: v.cyclone.cloak  >>> dev.cyclone.cloak <<<
+10-16 01:26:27.928 F/DEBUG   ( 9164): uid: 1710377
+10-16 01:26:27.928 F/DEBUG   ( 9164): tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+10-16 01:26:27.929 F/DEBUG   ( 9164): pac_enabled_keys: 000000000000000f (PR_PAC_APIAKEY, PR_PAC_APIBKEY, PR_PAC_APDAKEY, PR_PAC_APDBKEY)
+10-16 01:26:27.929 F/DEBUG   ( 9164): esr: 0000000092000006 (Data Abort Exception 0x24)
+10-16 01:26:27.929 F/DEBUG   ( 9164): signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0000000000000000 (read)
+10-16 01:26:27.929 F/DEBUG   ( 9164): Cause: null pointer dereference
+10-16 01:26:27.929 F/DEBUG   ( 9164):     x0  0000007700008060  x1  0000000071b0a150  x2  b4000079156b21d0  x3  0000007fe9370180
+10-16 01:26:27.929 F/DEBUG   ( 9164):     x4  0000000000000960  x5  0000000000000438  x6  0000000000000960  x7  0000000000000000
+10-16 01:26:27.929 F/DEBUG   ( 9164):     x8  0000007aa737c020  x9  0000000000000000  x10 0000000000000001  x11 0000000000000000
+10-16 01:26:27.929 F/DEBUG   ( 9164):     x12 0000000000000000  x13 00000000001dd3ed  x14 0000000000000065  x15 0000000071fab390
+10-16 01:26:27.929 F/DEBUG   ( 9164):     x16 0000007fe936e180  x17 00000077e2869040  x18 0000007abbfdc000  x19 b4000079656a6380
+10-16 01:26:27.929 F/DEBUG   ( 9164):     x20 0000000000000000  x21 b4000079656a6440  x22 0000000000000000  x23 0000000040000438
+10-16 01:26:27.929 F/DEBUG   ( 9164):     x24 0000000040000960  x25 00000000020eddc8  x26 0000000002104648  x27 0000000040000960
+10-16 01:26:27.929 F/DEBUG   ( 9164):     x28 00000000020eddc8  x29 0000000000000000
+10-16 01:26:27.929 F/DEBUG   ( 9164):     lr  0000000072fab578  sp  0000007fe93700e0  pc  00000077e2869078  pst 0000000060001000
+10-16 01:26:27.929 F/DEBUG   ( 9164):     esr 0000000092000006  vg  0000000000000002
+10-16 01:26:27.929 F/DEBUG   ( 9164): 28 total frames
+10-16 01:26:27.929 F/DEBUG   ( 9164): backtrace:
+10-16 01:26:27.929 F/DEBUG   ( 9164):       #00 pc 0000000000716078  /apex/com.android.art/lib64/libart.so (ExecuteNterpImpl+56) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:26:27.929 F/DEBUG   ( 9164):       #01 pc 0000000000c0f574  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.policy.DecorView.onMeasure+100)
+10-16 01:26:27.929 F/DEBUG   ( 9164):       #02 pc 0000000000a73ae8  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.View.measure+1192)
+10-16 01:26:27.929 F/DEBUG   ( 9164):       #03 pc 0000000000ae9234  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewRootImpl.performMeasure+148)
+10-16 01:26:27.929 F/DEBUG   ( 9164):       #04 pc 0000000000ae7434  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewRootImpl.measureHierarchy+596)
+10-16 01:26:27.929 F/DEBUG   ( 9164):       #05 pc 0000000000ae9b00  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewRootImpl.performTraversals+2080)
+10-16 01:26:27.929 F/DEBUG   ( 9164):       #06 pc 0000000000ad9f28  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewRootImpl$TraversalRunnable.run+136)
+10-16 01:26:27.929 F/DEBUG   ( 9164):       #07 pc 0000000000a46ed4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.Choreographer.doCallbacks+964)
+10-16 01:26:27.929 F/DEBUG   ( 9164):       #08 pc 0000000000a47b4c  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.Choreographer.doFrame+2636)
+10-16 01:26:27.929 F/DEBUG   ( 9164):       #09 pc 0000000000a45788  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.Choreographer$FrameDisplayEventReceiver.run+72)
+10-16 01:26:27.929 F/DEBUG   ( 9164):       #10 pc 00000000008ce7f4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Handler.dispatchMessageImpl+68)
+10-16 01:26:27.929 F/DEBUG   ( 9164):       #11 pc 000000000053900c  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat ([DEDUPED]+44)
+10-16 01:26:27.929 F/DEBUG   ( 9164):       #12 pc 000000000090f660  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Looper.loopOnce+1824)
+10-16 01:26:27.929 F/DEBUG   ( 9164):       #13 pc 000000000090eec4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Looper.loop+244)
+10-16 01:26:27.929 F/DEBUG   ( 9164):       #14 pc 000000000062eab8  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.app.ActivityThread.main+1480)
+10-16 01:26:27.929 F/DEBUG   ( 9164):       #15 pc 00000000002ab260  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:26:27.929 F/DEBUG   ( 9164):       #16 pc 000000000029c070  /apex/com.android.art/lib64/libart.so (_jobject* art::InvokeMethod<(art::PointerSize)8>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, _jobject*, _jobject*, unsigned long)+552) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:26:27.929 F/DEBUG   ( 9164):       #17 pc 0000000000635ed4  /apex/com.android.art/lib64/libart.so (art::Method_invoke(_JNIEnv*, _jobject*, _jobject*, _jobjectArray*) (.__uniq.165753521025965369065708152063621506277)+36) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:26:27.929 F/DEBUG   ( 9164):       #18 pc 0000000000d41da4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (art_jni_trampoline+116)
+10-16 01:26:27.929 F/DEBUG   ( 9164):       #19 pc 0000000000c00d74  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run+116)
+10-16 01:26:27.929 F/DEBUG   ( 9164):       #20 pc 0000000000c08ba4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.os.ZygoteInit.main+3188)
+10-16 01:26:27.929 F/DEBUG   ( 9164):       #21 pc 00000000002ab260  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:26:27.929 F/DEBUG   ( 9164):       #22 pc 00000000002a8b8c  /apex/com.android.art/lib64/libart.so (art::JValue art::InvokeWithVarArgs<_jmethodID*>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, _jmethodID*, std::__va_list)+760) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:26:27.929 F/DEBUG   ( 9164):       #23 pc 00000000006a44b4  /apex/com.android.art/lib64/libart.so (art::JNI<true>::CallStaticVoidMethodV(_JNIEnv*, _jclass*, _jmethodID*, std::__va_list)+164) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:26:27.929 F/DEBUG   ( 9164):       #24 pc 0000000000115eec  /system/lib64/libandroid_runtime.so (_JNIEnv::CallStaticVoidMethod(_jclass*, _jmethodID*, ...)+108) (BuildId: 83302318da3878f15b1f609b3f2fe03a)
+10-16 01:26:27.929 F/DEBUG   ( 9164):       #25 pc 000000000013ba9c  /system/lib64/libandroid_runtime.so (android::AndroidRuntime::start(char const*, android::Vector<android::String8> const&, bool)+908) (BuildId: 83302318da3878f15b1f609b3f2fe03a)
+10-16 01:26:27.929 F/DEBUG   ( 9164):       #26 pc 00000000000045b8  /system/bin/app_process64 (main+1240) (BuildId: bf44ea70f221d41465c88629ddfe1e21)
+10-16 01:26:27.929 F/DEBUG   ( 9164):       #27 pc 000000000006b25c  /apex/com.android.runtime/lib64/bionic/libc.so (__libc_init+124) (BuildId: 43764f6fa9e16b18fa315be8700f5d9c)
+10-16 01:28:19.646 F/libc    (10194): Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0 in tid 10194 (v.cyclone.cloak), pid 10194 (v.cyclone.cloak)
+10-16 01:28:20.040 F/DEBUG   (14092): *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+10-16 01:28:20.040 F/DEBUG   (14092): Build fingerprint: 'google/shiba/shiba:16/CP1A.260505.005/15081906:user/release-keys'
+10-16 01:28:20.040 F/DEBUG   (14092): Kernel Release: '6.1.145-android14-11-gfa1d6308d1fe-ab14691759'
+10-16 01:28:20.040 F/DEBUG   (14092): Revision: 'MP1.0'
+10-16 01:28:20.040 F/DEBUG   (14092): ABI: 'arm64'
+10-16 01:28:20.040 F/DEBUG   (14092): Timestamp: 2026-10-16 01:28:19.797738883+0200
+10-16 01:28:20.040 F/DEBUG   (14092): Process uptime: 25s
+10-16 01:28:20.040 F/DEBUG   (14092): Executable: /system/bin/app_process64
+10-16 01:28:20.040 F/DEBUG   (14092): Cmdline: dev.cyclone.cloak
+10-16 01:28:20.040 F/DEBUG   (14092): pid: 10194, tid: 10194, name: v.cyclone.cloak  >>> dev.cyclone.cloak <<<
+10-16 01:28:20.040 F/DEBUG   (14092): uid: 1710377
+10-16 01:28:20.040 F/DEBUG   (14092): tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+10-16 01:28:20.040 F/DEBUG   (14092): pac_enabled_keys: 000000000000000f (PR_PAC_APIAKEY, PR_PAC_APIBKEY, PR_PAC_APDAKEY, PR_PAC_APDBKEY)
+10-16 01:28:20.040 F/DEBUG   (14092): esr: 0000000092000006 (Data Abort Exception 0x24)
+10-16 01:28:20.040 F/DEBUG   (14092): signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0000000000000000 (read)
+10-16 01:28:20.040 F/DEBUG   (14092): Cause: null pointer dereference
+10-16 01:28:20.040 F/DEBUG   (14092):     x0  0000007700008060  x1  0000000071b0a150  x2  b4000079156b21d0  x3  0000007fe936f3b0
+10-16 01:28:20.040 F/DEBUG   (14092):     x4  0000000000000000  x5  0000000000000000  x6  3b747865746e6f43  x7  00000077539546a7
+10-16 01:28:20.040 F/DEBUG   (14092):     x8  0000000000000043  x9  f3e623d847633858  x10 f3e623d847633858  x11 0000000000000002
+10-16 01:28:20.040 F/DEBUG   (14092):     x12 0000000000000019  x13 0000000000000009  x14 0000007abba9b200  x15 0000000000080100
+10-16 01:28:20.040 F/DEBUG   (14092):     x16 0000007fe936d3b0  x17 00000077e2869040  x18 0000007abbfdc000  x19 b4000079656a6380
+10-16 01:28:20.040 F/DEBUG   (14092):     x20 0000000000000000  x21 b4000079656a6440  x22 0000000000000000  x23 0000000000000000
+10-16 01:28:20.040 F/DEBUG   (14092):     x24 0000000000000001  x25 0000000070fe9c98  x26 0000000071c96dd8  x27 000000000255b458
+10-16 01:28:20.040 F/DEBUG   (14092):     x28 00000000020db528  x29 0000000071588830
+10-16 01:28:20.040 F/DEBUG   (14092):     lr  0000000072df66d0  sp  0000007fe936f310  pc  00000077e2869078  pst 0000000060001000
+10-16 01:28:20.040 F/DEBUG   (14092):     esr 0000000092000006  vg  0000000000000002
+10-16 01:28:20.040 F/DEBUG   (14092): 57 total frames
+10-16 01:28:20.040 F/DEBUG   (14092): backtrace:
+10-16 01:28:20.040 F/DEBUG   (14092):       #00 pc 0000000000716078  /apex/com.android.art/lib64/libart.so (ExecuteNterpImpl+56) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:20.040 F/DEBUG   (14092):       #01 pc 0000000000a5a6cc  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.View.<init>+604)
+10-16 01:28:20.040 F/DEBUG   (14092):       #02 pc 0000000000a5ab90  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.View.<init>+112)
+10-16 01:28:20.040 F/DEBUG   (14092):       #03 pc 0000000000aa1f68  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewGroup.<init>+72)
+10-16 01:28:20.040 F/DEBUG   (14092):       #04 pc 0000000000aa1e68  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewGroup.<init>+56)
+10-16 01:28:20.040 F/DEBUG   (14092):       #05 pc 000000000072b8dc  /apex/com.android.art/lib64/libart.so (nterp_helper+2124) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:20.040 F/DEBUG   (14092):       #06 pc 0000000000ce6202  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.material.ripple.RippleContainer.<init>+6)
+10-16 01:28:20.040 F/DEBUG   (14092):       #07 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:20.040 F/DEBUG   (14092):       #08 pc 0000000000ce73da  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.material.ripple.Ripple_androidKt.createAndAttachRippleContainerIfNeeded+54)
+10-16 01:28:20.040 F/DEBUG   (14092):       #09 pc 0000000000722c6c  /apex/com.android.art/lib64/libart.so (nterp2_op_invoke_static+44) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:20.040 F/DEBUG   (14092):       #10 pc 0000000000ce7388  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.material.ripple.Ripple_androidKt.access$createAndAttachRippleContainerIfNeeded+0)
+10-16 01:28:20.040 F/DEBUG   (14092):       #11 pc 0000000000722c6c  /apex/com.android.art/lib64/libart.so (nterp2_op_invoke_static+44) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:20.040 F/DEBUG   (14092):       #12 pc 0000000000ce408a  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.material.ripple.AndroidRippleNode.getOrCreateRippleContainer+54)
+10-16 01:28:20.040 F/DEBUG   (14092):       #13 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:20.040 F/DEBUG   (14092):       #14 pc 0000000000ce4104  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.material.ripple.AndroidRippleNode.addRipple-12SF9DM+0)
+10-16 01:28:20.040 F/DEBUG   (14092):       #15 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:20.040 F/DEBUG   (14092):       #16 pc 0000000000ce6f5c  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.material.ripple.RippleNode.handlePressInteraction+20)
+10-16 01:28:20.040 F/DEBUG   (14092):       #17 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:20.040 F/DEBUG   (14092):       #18 pc 0000000000ce6ed4  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.material.ripple.RippleNode.access$handlePressInteraction+0)
+10-16 01:28:20.040 F/DEBUG   (14092):       #19 pc 0000000000722c6c  /apex/com.android.art/lib64/libart.so (nterp2_op_invoke_static+44) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:20.040 F/DEBUG   (14092):       #20 pc 0000000000ce6be4  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.material.ripple.RippleNode$onAttach$1$1.emit+32)
+10-16 01:28:20.040 F/DEBUG   (14092):       #21 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:20.040 F/DEBUG   (14092):       #22 pc 0000000000ce6c28  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.material.ripple.RippleNode$onAttach$1$1.emit+4)
+10-16 01:28:20.040 F/DEBUG   (14092):       #23 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:20.040 F/DEBUG   (14092):       #24 pc 0000000000dd267e  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.material3.internal.MappedInteractionSource$special$$inlined$map$1$2.emit+310)
+10-16 01:28:20.040 F/DEBUG   (14092):       #25 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:20.040 F/DEBUG   (14092):       #26 pc 00000000003f7800  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x1e65000) (kotlinx.coroutines.flow.SharedFlowImpl.collect$suspendImpl+412)
+10-16 01:28:20.040 F/DEBUG   (14092):       #27 pc 0000000000722c6c  /apex/com.android.art/lib64/libart.so (nterp2_op_invoke_static+44) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:20.040 F/DEBUG   (14092):       #28 pc 00000000003f72d8  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x1e65000) (kotlinx.coroutines.flow.SharedFlowImpl$collect$1.invokeSuspend+28)
+10-16 01:28:20.040 F/DEBUG   (14092):       #29 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:20.040 F/DEBUG   (14092):       #30 pc 000000000038436a  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x1e65000) (kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith+26)
+10-16 01:28:20.040 F/DEBUG   (14092):       #31 pc 000000000072b910  /apex/com.android.art/lib64/libart.so (nterp_helper+2176) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:20.040 F/DEBUG   (14092):       #32 pc 00000000003cbc6a  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x1e65000) (kotlinx.coroutines.DispatchedTask.run+338)
+10-16 01:28:20.040 F/DEBUG   (14092):       #33 pc 000000000072b910  /apex/com.android.art/lib64/libart.so (nterp_helper+2176) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:20.040 F/DEBUG   (14092):       #34 pc 00000000001a737c  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x1e65000) (androidx.compose.ui.platform.AndroidUiDispatcher.performTrampolineDispatch+12)
+10-16 01:28:20.040 F/DEBUG   (14092):       #35 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:20.040 F/DEBUG   (14092):       #36 pc 00000000001a7248  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x1e65000) (androidx.compose.ui.platform.AndroidUiDispatcher.access$performTrampolineDispatch+0)
+10-16 01:28:20.040 F/DEBUG   (14092):       #37 pc 0000000000722c6c  /apex/com.android.art/lib64/libart.so (nterp2_op_invoke_static+44) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:20.040 F/DEBUG   (14092):       #38 pc 00000000001a6fac  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x1e65000) (androidx.compose.ui.platform.AndroidUiDispatcher$dispatchCallback$1.run+4)
+10-16 01:28:20.040 F/DEBUG   (14092):       #39 pc 00000000008ce7f4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Handler.dispatchMessageImpl+68)
+10-16 01:28:20.040 F/DEBUG   (14092):       #40 pc 000000000053900c  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat ([DEDUPED]+44)
+10-16 01:28:20.040 F/DEBUG   (14092):       #41 pc 000000000090f660  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Looper.loopOnce+1824)
+10-16 01:28:20.040 F/DEBUG   (14092):       #42 pc 000000000090eec4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Looper.loop+244)
+10-16 01:28:20.040 F/DEBUG   (14092):       #43 pc 000000000062eab8  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.app.ActivityThread.main+1480)
+10-16 01:28:20.040 F/DEBUG   (14092):       #44 pc 00000000002ab260  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:20.040 F/DEBUG   (14092):       #45 pc 000000000029c070  /apex/com.android.art/lib64/libart.so (_jobject* art::InvokeMethod<(art::PointerSize)8>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, _jobject*, _jobject*, unsigned long)+552) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:20.040 F/DEBUG   (14092):       #46 pc 0000000000635ed4  /apex/com.android.art/lib64/libart.so (art::Method_invoke(_JNIEnv*, _jobject*, _jobject*, _jobjectArray*) (.__uniq.165753521025965369065708152063621506277)+36) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:20.040 F/DEBUG   (14092):       #47 pc 0000000000d41da4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (art_jni_trampoline+116)
+10-16 01:28:20.040 F/DEBUG   (14092):       #48 pc 0000000000c00d74  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run+116)
+10-16 01:28:20.040 F/DEBUG   (14092):       #49 pc 0000000000c08ba4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.os.ZygoteInit.main+3188)
+10-16 01:28:20.040 F/DEBUG   (14092):       #50 pc 00000000002ab260  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:20.040 F/DEBUG   (14092):       #51 pc 00000000002a8b8c  /apex/com.android.art/lib64/libart.so (art::JValue art::InvokeWithVarArgs<_jmethodID*>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, _jmethodID*, std::__va_list)+760) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:20.040 F/DEBUG   (14092):       #52 pc 00000000006a44b4  /apex/com.android.art/lib64/libart.so (art::JNI<true>::CallStaticVoidMethodV(_JNIEnv*, _jclass*, _jmethodID*, std::__va_list)+164) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:20.040 F/DEBUG   (14092):       #53 pc 0000000000115eec  /system/lib64/libandroid_runtime.so (_JNIEnv::CallStaticVoidMethod(_jclass*, _jmethodID*, ...)+108) (BuildId: 83302318da3878f15b1f609b3f2fe03a)
+10-16 01:28:20.040 F/DEBUG   (14092):       #54 pc 000000000013ba9c  /system/lib64/libandroid_runtime.so (android::AndroidRuntime::start(char const*, android::Vector<android::String8> const&, bool)+908) (BuildId: 83302318da3878f15b1f609b3f2fe03a)
+10-16 01:28:20.040 F/DEBUG   (14092):       #55 pc 00000000000045b8  /system/bin/app_process64 (main+1240) (BuildId: bf44ea70f221d41465c88629ddfe1e21)
+10-16 01:28:20.040 F/DEBUG   (14092):       #56 pc 000000000006b25c  /apex/com.android.runtime/lib64/bionic/libc.so (__libc_init+124) (BuildId: 43764f6fa9e16b18fa315be8700f5d9c)
+10-16 01:28:41.390 F/libc    (14349): Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0 in tid 14349 (v.cyclone.cloak), pid 14349 (v.cyclone.cloak)
+10-16 01:28:41.829 F/DEBUG   (17850): *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+10-16 01:28:41.829 F/DEBUG   (17850): Build fingerprint: 'google/shiba/shiba:16/CP1A.260505.005/15081906:user/release-keys'
+10-16 01:28:41.829 F/DEBUG   (17850): Kernel Release: '6.1.145-android14-11-gfa1d6308d1fe-ab14691759'
+10-16 01:28:41.829 F/DEBUG   (17850): Revision: 'MP1.0'
+10-16 01:28:41.829 F/DEBUG   (17850): ABI: 'arm64'
+10-16 01:28:41.829 F/DEBUG   (17850): Timestamp: 2026-10-16 01:28:41.532086753+0200
+10-16 01:28:41.829 F/DEBUG   (17850): Process uptime: 14s
+10-16 01:28:41.829 F/DEBUG   (17850): Executable: /system/bin/app_process64
+10-16 01:28:41.829 F/DEBUG   (17850): Cmdline: dev.cyclone.cloak
+10-16 01:28:41.829 F/DEBUG   (17850): pid: 14349, tid: 14349, name: v.cyclone.cloak  >>> dev.cyclone.cloak <<<
+10-16 01:28:41.829 F/DEBUG   (17850): uid: 1710377
+10-16 01:28:41.829 F/DEBUG   (17850): tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+10-16 01:28:41.829 F/DEBUG   (17850): pac_enabled_keys: 000000000000000f (PR_PAC_APIAKEY, PR_PAC_APIBKEY, PR_PAC_APDAKEY, PR_PAC_APDBKEY)
+10-16 01:28:41.829 F/DEBUG   (17850): esr: 0000000092000006 (Data Abort Exception 0x24)
+10-16 01:28:41.829 F/DEBUG   (17850): signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0000000000000000 (read)
+10-16 01:28:41.829 F/DEBUG   (17850): Cause: null pointer dereference
+10-16 01:28:41.829 F/DEBUG   (17850):     x0  0000007700008060  x1  0000000071b0a150  x2  b4000079156b21d0  x3  0000007fe936f780
+10-16 01:28:41.829 F/DEBUG   (17850):     x4  0000000000000000  x5  3b747865746e6f43  x6  3b747865746e6f43  x7  0000007751ce46a7
+10-16 01:28:41.829 F/DEBUG   (17850):     x8  0000000000000010  x9  bf77f02380c51e5c  x10 bf77f02380c51e5c  x11 0000000000000001
+10-16 01:28:41.829 F/DEBUG   (17850):     x12 0000000000000019  x13 0000000000000010  x14 0000007abba9b200  x15 0000000000080100
+10-16 01:28:41.829 F/DEBUG   (17850):     x16 0000007fe936d780  x17 00000077e2869040  x18 0000007abbfdc000  x19 b4000079656a6380
+10-16 01:28:41.829 F/DEBUG   (17850):     x20 0000000000000000  x21 b4000079656a6440  x22 0000000000000000  x23 0000000000000000
+10-16 01:28:41.829 F/DEBUG   (17850):     x24 0000000000000001  x25 0000000070fe9c98  x26 0000000071c96dd8  x27 0000000002572b30
+10-16 01:28:41.829 F/DEBUG   (17850):     x28 00000000020c10a8  x29 0000000071588830
+10-16 01:28:41.829 F/DEBUG   (17850):     lr  0000000072df66d0  sp  0000007fe936f6e0  pc  00000077e2869078  pst 0000000060001000
+10-16 01:28:41.829 F/DEBUG   (17850):     esr 0000000092000006  vg  0000000000000002
+10-16 01:28:41.829 F/DEBUG   (17850): 50 total frames
+10-16 01:28:41.829 F/DEBUG   (17850): backtrace:
+10-16 01:28:41.829 F/DEBUG   (17850):       #00 pc 0000000000716078  /apex/com.android.art/lib64/libart.so (ExecuteNterpImpl+56) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:41.829 F/DEBUG   (17850):       #01 pc 0000000000a5a6cc  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.View.<init>+604)
+10-16 01:28:41.830 F/DEBUG   (17850):       #02 pc 000000000072b8dc  /apex/com.android.art/lib64/libart.so (nterp_helper+2124) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:41.830 F/DEBUG   (17850):       #03 pc 0000000000ce64d6  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.material.ripple.RippleHostView.<init>+6)
+10-16 01:28:41.830 F/DEBUG   (17850):       #04 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:41.830 F/DEBUG   (17850):       #05 pc 0000000000ce614e  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.material.ripple.RippleContainer.getRippleHostView+70)
+10-16 01:28:41.830 F/DEBUG   (17850):       #06 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:41.830 F/DEBUG   (17850):       #07 pc 0000000000ce4112  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.material.ripple.AndroidRippleNode.addRipple-12SF9DM+14)
+10-16 01:28:41.830 F/DEBUG   (17850):       #08 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:41.830 F/DEBUG   (17850):       #09 pc 0000000000ce6f5c  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.material.ripple.RippleNode.handlePressInteraction+20)
+10-16 01:28:41.830 F/DEBUG   (17850):       #10 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:41.830 F/DEBUG   (17850):       #11 pc 0000000000ce6ed4  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.material.ripple.RippleNode.access$handlePressInteraction+0)
+10-16 01:28:41.830 F/DEBUG   (17850):       #12 pc 0000000000722c6c  /apex/com.android.art/lib64/libart.so (nterp2_op_invoke_static+44) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:41.830 F/DEBUG   (17850):       #13 pc 0000000000ce6be4  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.material.ripple.RippleNode$onAttach$1$1.emit+32)
+10-16 01:28:41.830 F/DEBUG   (17850):       #14 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:41.830 F/DEBUG   (17850):       #15 pc 0000000000ce6c28  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.material.ripple.RippleNode$onAttach$1$1.emit+4)
+10-16 01:28:41.830 F/DEBUG   (17850):       #16 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:41.830 F/DEBUG   (17850):       #17 pc 0000000000dd267e  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x2000) (androidx.compose.material3.internal.MappedInteractionSource$special$$inlined$map$1$2.emit+310)
+10-16 01:28:41.830 F/DEBUG   (17850):       #18 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:41.830 F/DEBUG   (17850):       #19 pc 00000000003f7800  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x1e65000) (kotlinx.coroutines.flow.SharedFlowImpl.collect$suspendImpl+412)
+10-16 01:28:41.830 F/DEBUG   (17850):       #20 pc 0000000000722c6c  /apex/com.android.art/lib64/libart.so (nterp2_op_invoke_static+44) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:41.830 F/DEBUG   (17850):       #21 pc 00000000003f72d8  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x1e65000) (kotlinx.coroutines.flow.SharedFlowImpl$collect$1.invokeSuspend+28)
+10-16 01:28:41.830 F/DEBUG   (17850):       #22 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:41.830 F/DEBUG   (17850):       #23 pc 000000000038436a  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x1e65000) (kotlin.coroutines.jvm.internal.BaseContinuationImpl.resumeWith+26)
+10-16 01:28:41.830 F/DEBUG   (17850):       #24 pc 000000000072b910  /apex/com.android.art/lib64/libart.so (nterp_helper+2176) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:41.830 F/DEBUG   (17850):       #25 pc 00000000003cbc6a  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x1e65000) (kotlinx.coroutines.DispatchedTask.run+338)
+10-16 01:28:41.830 F/DEBUG   (17850):       #26 pc 000000000072b910  /apex/com.android.art/lib64/libart.so (nterp_helper+2176) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:41.830 F/DEBUG   (17850):       #27 pc 00000000001a737c  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x1e65000) (androidx.compose.ui.platform.AndroidUiDispatcher.performTrampolineDispatch+12)
+10-16 01:28:41.830 F/DEBUG   (17850):       #28 pc 000000000072b884  /apex/com.android.art/lib64/libart.so (nterp_helper+2036) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:41.830 F/DEBUG   (17850):       #29 pc 00000000001a7248  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x1e65000) (androidx.compose.ui.platform.AndroidUiDispatcher.access$performTrampolineDispatch+0)
+10-16 01:28:41.830 F/DEBUG   (17850):       #30 pc 0000000000722c6c  /apex/com.android.art/lib64/libart.so (nterp2_op_invoke_static+44) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:41.830 F/DEBUG   (17850):       #31 pc 00000000001a6fac  /data/app/~~jTu9SN__LyAuds_J95GD3w==/dev.cyclone.cloak-fB875ehSD7msGx4Ci2N1dA==/base.apk (offset 0x1e65000) (androidx.compose.ui.platform.AndroidUiDispatcher$dispatchCallback$1.run+4)
+10-16 01:28:41.830 F/DEBUG   (17850):       #32 pc 00000000008ce7f4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Handler.dispatchMessageImpl+68)
+10-16 01:28:41.830 F/DEBUG   (17850):       #33 pc 000000000053900c  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat ([DEDUPED]+44)
+10-16 01:28:41.830 F/DEBUG   (17850):       #34 pc 000000000090f660  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Looper.loopOnce+1824)
+10-16 01:28:41.830 F/DEBUG   (17850):       #35 pc 000000000090eec4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Looper.loop+244)
+10-16 01:28:41.830 F/DEBUG   (17850):       #36 pc 000000000062eab8  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.app.ActivityThread.main+1480)
+10-16 01:28:41.830 F/DEBUG   (17850):       #37 pc 00000000002ab260  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:41.830 F/DEBUG   (17850):       #38 pc 000000000029c070  /apex/com.android.art/lib64/libart.so (_jobject* art::InvokeMethod<(art::PointerSize)8>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, _jobject*, _jobject*, unsigned long)+552) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:41.830 F/DEBUG   (17850):       #39 pc 0000000000635ed4  /apex/com.android.art/lib64/libart.so (art::Method_invoke(_JNIEnv*, _jobject*, _jobject*, _jobjectArray*) (.__uniq.165753521025965369065708152063621506277)+36) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:41.830 F/DEBUG   (17850):       #40 pc 0000000000d41da4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (art_jni_trampoline+116)
+10-16 01:28:41.830 F/DEBUG   (17850):       #41 pc 0000000000c00d74  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run+116)
+10-16 01:28:41.830 F/DEBUG   (17850):       #42 pc 0000000000c08ba4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.os.ZygoteInit.main+3188)
+10-16 01:28:41.830 F/DEBUG   (17850):       #43 pc 00000000002ab260  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:41.830 F/DEBUG   (17850):       #44 pc 00000000002a8b8c  /apex/com.android.art/lib64/libart.so (art::JValue art::InvokeWithVarArgs<_jmethodID*>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, _jmethodID*, std::__va_list)+760) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:41.830 F/DEBUG   (17850):       #45 pc 00000000006a44b4  /apex/com.android.art/lib64/libart.so (art::JNI<true>::CallStaticVoidMethodV(_JNIEnv*, _jclass*, _jmethodID*, std::__va_list)+164) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:41.830 F/DEBUG   (17850):       #46 pc 0000000000115eec  /system/lib64/libandroid_runtime.so (_JNIEnv::CallStaticVoidMethod(_jclass*, _jmethodID*, ...)+108) (BuildId: 83302318da3878f15b1f609b3f2fe03a)
+10-16 01:28:41.830 F/DEBUG   (17850):       #47 pc 000000000013ba9c  /system/lib64/libandroid_runtime.so (android::AndroidRuntime::start(char const*, android::Vector<android::String8> const&, bool)+908) (BuildId: 83302318da3878f15b1f609b3f2fe03a)
+10-16 01:28:41.830 F/DEBUG   (17850):       #48 pc 00000000000045b8  /system/bin/app_process64 (main+1240) (BuildId: bf44ea70f221d41465c88629ddfe1e21)
+10-16 01:28:41.830 F/DEBUG   (17850):       #49 pc 000000000006b25c  /apex/com.android.runtime/lib64/bionic/libc.so (__libc_init+124) (BuildId: 43764f6fa9e16b18fa315be8700f5d9c)
+10-16 01:28:58.332 F/libc    (18629): Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0 in tid 18629 (v.cyclone.cloak), pid 18629 (v.cyclone.cloak)
+10-16 01:28:58.700 F/DEBUG   (19474): *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+10-16 01:28:58.700 F/DEBUG   (19474): Build fingerprint: 'google/shiba/shiba:16/CP1A.260505.005/15081906:user/release-keys'
+10-16 01:28:58.700 F/DEBUG   (19474): Kernel Release: '6.1.145-android14-11-gfa1d6308d1fe-ab14691759'
+10-16 01:28:58.700 F/DEBUG   (19474): Revision: 'MP1.0'
+10-16 01:28:58.700 F/DEBUG   (19474): ABI: 'arm64'
+10-16 01:28:58.701 F/DEBUG   (19474): Timestamp: 2026-10-16 01:28:58.452051198+0200
+10-16 01:28:58.701 F/DEBUG   (19474): Process uptime: 3s
+10-16 01:28:58.701 F/DEBUG   (19474): Executable: /system/bin/app_process64
+10-16 01:28:58.701 F/DEBUG   (19474): Cmdline: dev.cyclone.cloak
+10-16 01:28:58.701 F/DEBUG   (19474): pid: 18629, tid: 18629, name: v.cyclone.cloak  >>> dev.cyclone.cloak <<<
+10-16 01:28:58.701 F/DEBUG   (19474): uid: 1710377
+10-16 01:28:58.701 F/DEBUG   (19474): tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+10-16 01:28:58.701 F/DEBUG   (19474): pac_enabled_keys: 000000000000000f (PR_PAC_APIAKEY, PR_PAC_APIBKEY, PR_PAC_APDAKEY, PR_PAC_APDBKEY)
+10-16 01:28:58.701 F/DEBUG   (19474): esr: 0000000092000006 (Data Abort Exception 0x24)
+10-16 01:28:58.701 F/DEBUG   (19474): signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0000000000000000 (read)
+10-16 01:28:58.701 F/DEBUG   (19474): Cause: null pointer dereference
+10-16 01:28:58.701 F/DEBUG   (19474):     x0  0000007700008060  x1  0000000071b0a150  x2  b4000079156b21d0  x3  0000007fe9370180
+10-16 01:28:58.701 F/DEBUG   (19474):     x4  0000000000000960  x5  0000000000000438  x6  0000000000000960  x7  0000000000000000
+10-16 01:28:58.701 F/DEBUG   (19474):     x8  0000007aa737c020  x9  0000000000000000  x10 0000000000000001  x11 0000000000000000
+10-16 01:28:58.701 F/DEBUG   (19474):     x12 0000000000000000  x13 00000000002021a3  x14 0000000000000041  x15 0000000071fab390
+10-16 01:28:58.701 F/DEBUG   (19474):     x16 0000007fe936e180  x17 00000077e2869040  x18 0000007abbfdc000  x19 b4000079656a6380
+10-16 01:28:58.701 F/DEBUG   (19474):     x20 0000000000000000  x21 b4000079656a6440  x22 0000000000000000  x23 0000000040000438
+10-16 01:28:58.701 F/DEBUG   (19474):     x24 0000000040000960  x25 000000000211be18  x26 000000000212de38  x27 0000000040000960
+10-16 01:28:58.701 F/DEBUG   (19474):     x28 000000000211be18  x29 0000000000000000
+10-16 01:28:58.701 F/DEBUG   (19474):     lr  0000000072fab578  sp  0000007fe93700e0  pc  00000077e2869078  pst 0000000060001000
+10-16 01:28:58.701 F/DEBUG   (19474):     esr 0000000092000006  vg  0000000000000002
+10-16 01:28:58.701 F/DEBUG   (19474): 28 total frames
+10-16 01:28:58.701 F/DEBUG   (19474): backtrace:
+10-16 01:28:58.701 F/DEBUG   (19474):       #00 pc 0000000000716078  /apex/com.android.art/lib64/libart.so (ExecuteNterpImpl+56) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:58.701 F/DEBUG   (19474):       #01 pc 0000000000c0f574  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.policy.DecorView.onMeasure+100)
+10-16 01:28:58.701 F/DEBUG   (19474):       #02 pc 0000000000a73ae8  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.View.measure+1192)
+10-16 01:28:58.701 F/DEBUG   (19474):       #03 pc 0000000000ae9234  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewRootImpl.performMeasure+148)
+10-16 01:28:58.701 F/DEBUG   (19474):       #04 pc 0000000000ae7434  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewRootImpl.measureHierarchy+596)
+10-16 01:28:58.701 F/DEBUG   (19474):       #05 pc 0000000000ae9b00  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewRootImpl.performTraversals+2080)
+10-16 01:28:58.701 F/DEBUG   (19474):       #06 pc 0000000000ad9f28  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewRootImpl$TraversalRunnable.run+136)
+10-16 01:28:58.701 F/DEBUG   (19474):       #07 pc 0000000000a46ed4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.Choreographer.doCallbacks+964)
+10-16 01:28:58.701 F/DEBUG   (19474):       #08 pc 0000000000a47b4c  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.Choreographer.doFrame+2636)
+10-16 01:28:58.701 F/DEBUG   (19474):       #09 pc 0000000000a45788  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.Choreographer$FrameDisplayEventReceiver.run+72)
+10-16 01:28:58.701 F/DEBUG   (19474):       #10 pc 00000000008ce7f4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Handler.dispatchMessageImpl+68)
+10-16 01:28:58.701 F/DEBUG   (19474):       #11 pc 000000000053900c  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat ([DEDUPED]+44)
+10-16 01:28:58.701 F/DEBUG   (19474):       #12 pc 000000000090f660  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Looper.loopOnce+1824)
+10-16 01:28:58.701 F/DEBUG   (19474):       #13 pc 000000000090eec4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Looper.loop+244)
+10-16 01:28:58.701 F/DEBUG   (19474):       #14 pc 000000000062eab8  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.app.ActivityThread.main+1480)
+10-16 01:28:58.701 F/DEBUG   (19474):       #15 pc 00000000002ab260  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:58.701 F/DEBUG   (19474):       #16 pc 000000000029c070  /apex/com.android.art/lib64/libart.so (_jobject* art::InvokeMethod<(art::PointerSize)8>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, _jobject*, _jobject*, unsigned long)+552) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:58.701 F/DEBUG   (19474):       #17 pc 0000000000635ed4  /apex/com.android.art/lib64/libart.so (art::Method_invoke(_JNIEnv*, _jobject*, _jobject*, _jobjectArray*) (.__uniq.165753521025965369065708152063621506277)+36) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:58.701 F/DEBUG   (19474):       #18 pc 0000000000d41da4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (art_jni_trampoline+116)
+10-16 01:28:58.701 F/DEBUG   (19474):       #19 pc 0000000000c00d74  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run+116)
+10-16 01:28:58.701 F/DEBUG   (19474):       #20 pc 0000000000c08ba4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.os.ZygoteInit.main+3188)
+10-16 01:28:58.701 F/DEBUG   (19474):       #21 pc 00000000002ab260  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:58.701 F/DEBUG   (19474):       #22 pc 00000000002a8b8c  /apex/com.android.art/lib64/libart.so (art::JValue art::InvokeWithVarArgs<_jmethodID*>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, _jmethodID*, std::__va_list)+760) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:58.701 F/DEBUG   (19474):       #23 pc 00000000006a44b4  /apex/com.android.art/lib64/libart.so (art::JNI<true>::CallStaticVoidMethodV(_JNIEnv*, _jclass*, _jmethodID*, std::__va_list)+164) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:28:58.701 F/DEBUG   (19474):       #24 pc 0000000000115eec  /system/lib64/libandroid_runtime.so (_JNIEnv::CallStaticVoidMethod(_jclass*, _jmethodID*, ...)+108) (BuildId: 83302318da3878f15b1f609b3f2fe03a)
+10-16 01:28:58.701 F/DEBUG   (19474):       #25 pc 000000000013ba9c  /system/lib64/libandroid_runtime.so (android::AndroidRuntime::start(char const*, android::Vector<android::String8> const&, bool)+908) (BuildId: 83302318da3878f15b1f609b3f2fe03a)
+10-16 01:28:58.701 F/DEBUG   (19474):       #26 pc 00000000000045b8  /system/bin/app_process64 (main+1240) (BuildId: bf44ea70f221d41465c88629ddfe1e21)
+10-16 01:28:58.701 F/DEBUG   (19474):       #27 pc 000000000006b25c  /apex/com.android.runtime/lib64/bionic/libc.so (__libc_init+124) (BuildId: 43764f6fa9e16b18fa315be8700f5d9c)
+10-16 01:30:37.152 F/libc    (19631): Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x77b1f6b528 in tid 21290 (binder:19631_4), pid 19631 (v.cyclone.cloak)
+10-16 01:30:37.432 F/DEBUG   (29547): *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+10-16 01:30:37.432 F/DEBUG   (29547): Build fingerprint: 'google/shiba/shiba:16/CP1A.260505.005/15081906:user/release-keys'
+10-16 01:30:37.432 F/DEBUG   (29547): Kernel Release: '6.1.145-android14-11-gfa1d6308d1fe-ab14691759'
+10-16 01:30:37.432 F/DEBUG   (29547): Revision: 'MP1.0'
+10-16 01:30:37.432 F/DEBUG   (29547): ABI: 'arm64'
+10-16 01:30:37.432 F/DEBUG   (29547): Timestamp: 2026-10-16 01:30:37.216424131+0200
+10-16 01:30:37.432 F/DEBUG   (29547): Process uptime: 91s
+10-16 01:30:37.432 F/DEBUG   (29547): Executable: /system/bin/app_process64
+10-16 01:30:37.432 F/DEBUG   (29547): Cmdline: dev.cyclone.cloak
+10-16 01:30:37.432 F/DEBUG   (29547): pid: 19631, tid: 21290, name: binder:19631_4  >>> dev.cyclone.cloak <<<
+10-16 01:30:37.432 F/DEBUG   (29547): uid: 1710377
+10-16 01:30:37.432 F/DEBUG   (29547): tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+10-16 01:30:37.432 F/DEBUG   (29547): pac_enabled_keys: 000000000000000f (PR_PAC_APIAKEY, PR_PAC_APIBKEY, PR_PAC_APDAKEY, PR_PAC_APDBKEY)
+10-16 01:30:37.432 F/DEBUG   (29547): esr: 0000000082000007 (Instruction Abort Exception 0x20)
+10-16 01:30:37.432 F/DEBUG   (29547): signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x00000077b1f6b528 (read)
+10-16 01:30:37.432 F/DEBUG   (29547):     x0  00000000717b0670  x1  0000007740b68f10  x2  0000000000000001  x3  0000000000000020
+10-16 01:30:37.432 F/DEBUG   (29547):     x4  41544f5200000000  x5  00000000524f5441  x6  00000000524f5441  x7  00000077e16281a3
+10-16 01:30:37.432 F/DEBUG   (29547):     x8  00000000717b066c  x9  00000000717b066c  x10 00000077e2d657a8  x11 0000000000000000
+10-16 01:30:37.432 F/DEBUG   (29547):     x12 0000000000000031  x13 b4000079c56af730  x14 000000000000002f  x15 0000000000000076
+10-16 01:30:37.432 F/DEBUG   (29547):     x16 00000077e2d821c0  x17 00000077b1f6b528  x18 00000076bdadc000  x19 b400007845835d30
+10-16 01:30:37.432 F/DEBUG   (29547):     x20 0000007740b68f10  x21 0000007740b6a200  x22 0000000000000000  x23 0000007740b68f00
+10-16 01:30:37.432 F/DEBUG   (29547):     x24 0000000000000000  x25 0000000071eb99d0  x26 0000000070eb64b8  x27 0000000070deea38
+10-16 01:30:37.432 F/DEBUG   (29547):     x28 0000000070df8f80  x29 0000007740b68f50
+10-16 01:30:37.432 F/DEBUG   (29547):     lr  00000077e27bbf50  sp  0000007740b68ee0  pc  00000077b1f6b528  pst 0000000080001400
+10-16 01:30:37.432 F/DEBUG   (29547):     esr 0000000082000007  vg  0000000000000002
+10-16 01:30:37.432 F/DEBUG   (29547): 26 total frames
+10-16 01:30:37.432 F/DEBUG   (29547): backtrace:
+10-16 01:30:37.432 F/DEBUG   (29547):       #00 pc 00000077b1f6b528  <unknown>
+10-16 01:30:37.432 F/DEBUG   (29547):       #01 pc 0000000000668f4c  /apex/com.android.art/lib64/libart.so (art::Class_getPublicFieldRecursive(_JNIEnv*, _jobject*, _jstring*) (.__uniq.181829539739573773940154555818377431209)+228) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:30:37.432 F/DEBUG   (29547):       #02 pc 0000000000d41c94  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (art_jni_trampoline+100)
+10-16 01:30:37.432 F/DEBUG   (29547):       #03 pc 0000000000924fa4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Parcel.readParcelableCreatorInternal+1668)
+10-16 01:30:37.432 F/DEBUG   (29547):       #04 pc 00000000009258e0  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Parcel.readParcelableListInternal+528)
+10-16 01:30:37.432 F/DEBUG   (29547):       #05 pc 00000000007138e8  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.app.servertransaction.ClientTransaction.<init>+264)
+10-16 01:30:37.432 F/DEBUG   (29547):       #06 pc 00000000007137bc  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.app.servertransaction.ClientTransaction$1.createFromParcel+76)
+10-16 01:30:37.432 F/DEBUG   (29547):       #07 pc 00000000005d076c  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat ([DEDUPED] ?.createFromParcel+44)
+10-16 01:30:37.432 F/DEBUG   (29547):       #08 pc 000000000092d2cc  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Parcel.readTypedObject+92)
+10-16 01:30:37.432 F/DEBUG   (29547):       #09 pc 0000000000615a34  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.app.IApplicationThread$Stub.onTransact+2756)
+10-16 01:30:37.432 F/DEBUG   (29547):       #10 pc 0000000000619cf0  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.app.ActivityThread$ApplicationThread.onTransact+1680)
+10-16 01:30:37.432 F/DEBUG   (29547):       #11 pc 00000000008c89dc  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Binder.execTransactInternal+812)
+10-16 01:30:37.432 F/DEBUG   (29547):       #12 pc 00000000008c8514  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Binder.execTransact+404)
+10-16 01:30:37.432 F/DEBUG   (29547):       #13 pc 00000000002aaf94  /apex/com.android.art/lib64/libart.so (art_quick_invoke_stub+612) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:30:37.432 F/DEBUG   (29547):       #14 pc 00000000002a7ca4  /apex/com.android.art/lib64/libart.so (art::JValue art::InvokeVirtualOrInterfaceWithVarArgs<_jmethodID*>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, _jmethodID*, std::__va_list)+888) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:30:37.432 F/DEBUG   (29547):       #15 pc 000000000067b5d4  /apex/com.android.art/lib64/libart.so (art::JNI<false>::CallBooleanMethodV(_JNIEnv*, _jobject*, _jmethodID*, std::__va_list)+204) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:30:37.432 F/DEBUG   (29547):       #16 pc 000000000012913c  /system/lib64/libandroid_runtime.so (_JNIEnv::CallBooleanMethod(_jobject*, _jmethodID*, ...)+108) (BuildId: 83302318da3878f15b1f609b3f2fe03a)
+10-16 01:30:37.432 F/DEBUG   (29547):       #17 pc 00000000001ccdc8  /system/lib64/libandroid_runtime.so (JavaBBinder::onTransact(unsigned int, android::Parcel const&, android::Parcel*, unsigned int)+152) (BuildId: 83302318da3878f15b1f609b3f2fe03a)
+10-16 01:30:37.432 F/DEBUG   (29547):       #18 pc 0000000000051cec  /system/lib64/libbinder.so (android::IPCThreadState::executeCommand(int)+1068) (BuildId: febea5b5afae161a436374f107587913)
+10-16 01:30:37.432 F/DEBUG   (29547):       #19 pc 0000000000099b4c  /system/lib64/libbinder.so (android::IPCThreadState::joinThreadPool(bool)+268) (BuildId: febea5b5afae161a436374f107587913)
+10-16 01:30:37.432 F/DEBUG   (29547):       #20 pc 0000000000099a2c  /system/lib64/libbinder.so (android::PoolThread::threadLoop()+28) (BuildId: febea5b5afae161a436374f107587913)
+10-16 01:30:37.432 F/DEBUG   (29547):       #21 pc 0000000000019654  /system/lib64/libutils.so (android::Thread::_threadLoop(void*)+196) (BuildId: 1df2ced4b0e58d9c06fdf86886397554)
+10-16 01:30:37.432 F/DEBUG   (29547):       #22 pc 000000000013be10  /system/lib64/libandroid_runtime.so (android::AndroidRuntime::javaThreadShell(void*)+128) (BuildId: 83302318da3878f15b1f609b3f2fe03a)
+10-16 01:30:37.432 F/DEBUG   (29547):       #23 pc 000000000001bb28  /system/lib64/libutils.so (libutil_thread_trampoline(void*) (.__uniq.226528677032898775202282855395389835431)+24) (BuildId: 1df2ced4b0e58d9c06fdf86886397554)
+10-16 01:30:37.432 F/DEBUG   (29547):       #24 pc 000000000008a714  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*) (.__uniq.67847048707805468364044055584648682506)+180) (BuildId: 43764f6fa9e16b18fa315be8700f5d9c)
+10-16 01:30:37.432 F/DEBUG   (29547):       #25 pc 000000000007b3b4  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68) (BuildId: 43764f6fa9e16b18fa315be8700f5d9c)
+10-16 01:31:56.004 F/libc    (30116): Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0 in tid 30116 (.android.chrome), pid 30116 (.android.chrome)
+10-16 01:31:56.398 F/DEBUG   (30390): *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+10-16 01:31:56.398 F/DEBUG   (30390): Build fingerprint: 'google/shiba/shiba:16/CP1A.260505.005/15081906:user/release-keys'
+10-16 01:31:56.398 F/DEBUG   (30390): Kernel Release: '6.1.145-android14-11-gfa1d6308d1fe-ab14691759'
+10-16 01:31:56.398 F/DEBUG   (30390): Revision: 'MP1.0'
+10-16 01:31:56.398 F/DEBUG   (30390): ABI: 'arm64'
+10-16 01:31:56.398 F/DEBUG   (30390): Timestamp: 2026-10-16 01:31:56.110801651+0200
+10-16 01:31:56.398 F/DEBUG   (30390): Process uptime: 23s
+10-16 01:31:56.398 F/DEBUG   (30390): Executable: /system/bin/app_process64
+10-16 01:31:56.398 F/DEBUG   (30390): Cmdline: com.android.chrome
+10-16 01:31:56.398 F/DEBUG   (30390): pid: 30116, tid: 30116, name: .android.chrome  >>> com.android.chrome <<<
+10-16 01:31:56.398 F/DEBUG   (30390): uid: 1710211
+10-16 01:31:56.398 F/DEBUG   (30390): tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+10-16 01:31:56.398 F/DEBUG   (30390): pac_enabled_keys: 000000000000000f (PR_PAC_APIAKEY, PR_PAC_APIBKEY, PR_PAC_APDAKEY, PR_PAC_APDBKEY)
+10-16 01:31:56.398 F/DEBUG   (30390): esr: 0000000092000006 (Data Abort Exception 0x24)
+10-16 01:31:56.398 F/DEBUG   (30390): signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0000000000000000 (read)
+10-16 01:31:56.398 F/DEBUG   (30390): Cause: null pointer dereference
+10-16 01:31:56.398 F/DEBUG   (30390):     x0  0000007700008060  x1  0000000071b0a0b0  x2  b4000079156aea40  x3  0000007fe93703b0
+10-16 01:31:56.398 F/DEBUG   (30390):     x4  0000000000000000  x5  0000000000000000  x6  0000000000000000  x7  0000000000000000
+10-16 01:31:56.398 F/DEBUG   (30390):     x8  cba5b5e5c1840926  x9  cba5b5e5c1840926  x10 0000000000000020  x11 0000000000010001
+10-16 01:31:56.398 F/DEBUG   (30390):     x12 0000000010000001  x13 0000000000000302  x14 0000000000000004  x15 0000000000000000
+10-16 01:31:56.398 F/DEBUG   (30390):     x16 0000007fe936e3b0  x17 00000077e2869040  x18 0000007abbfdc000  x19 b4000079656a6380
+10-16 01:31:56.398 F/DEBUG   (30390):     x20 0000000000000000  x21 b4000079656a6440  x22 0000000000000000  x23 000000000210a0c8
+10-16 01:31:56.398 F/DEBUG   (30390):     x24 000000000210cba8  x25 0000000000000000  x26 0000000002002860  x27 0000000070ee69c8
+10-16 01:31:56.398 F/DEBUG   (30390):     x28 0000000000000000  x29 0000000071486230
+10-16 01:31:56.398 F/DEBUG   (30390):     lr  0000000072faa12c  sp  0000007fe9370310  pc  00000077e2869078  pst 0000000060001000
+10-16 01:31:56.398 F/DEBUG   (30390):     esr 0000000092000006  vg  0000000000000002
+10-16 01:31:56.398 F/DEBUG   (30390): 26 total frames
+10-16 01:31:56.398 F/DEBUG   (30390): backtrace:
+10-16 01:31:56.398 F/DEBUG   (30390):       #00 pc 0000000000716078  /apex/com.android.art/lib64/libart.so (ExecuteNterpImpl+56) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:31:56.398 F/DEBUG   (30390):       #01 pc 0000000000c0e128  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.policy.DecorView.updateElevation+72)
+10-16 01:31:56.398 F/DEBUG   (30390):       #02 pc 0000000000c0fd04  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.policy.DecorView.onWindowFocusChanged+292)
+10-16 01:31:56.398 F/DEBUG   (30390):       #03 pc 0000000000aaa524  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewGroup.dispatchWindowFocusChanged+52)
+10-16 01:31:56.398 F/DEBUG   (30390):       #04 pc 0000000000ae27d8  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewRootImpl.dispatchFocusEvent+1112)
+10-16 01:31:56.398 F/DEBUG   (30390):       #05 pc 0000000000ae6044  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewRootImpl.handleWindowFocusChanged+228)
+10-16 01:31:56.398 F/DEBUG   (30390):       #06 pc 0000000000adcd7c  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewRootImpl$ViewRootHandler.handleMessageImpl+5932)
+10-16 01:31:56.398 F/DEBUG   (30390):       #07 pc 0000000000add480  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewRootImpl$ViewRootHandler.handleMessage+176)
+10-16 01:31:56.398 F/DEBUG   (30390):       #08 pc 00000000008ce848  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Handler.dispatchMessageImpl+152)
+10-16 01:31:56.398 F/DEBUG   (30390):       #09 pc 000000000053900c  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat ([DEDUPED]+44)
+10-16 01:31:56.398 F/DEBUG   (30390):       #10 pc 000000000090f660  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Looper.loopOnce+1824)
+10-16 01:31:56.398 F/DEBUG   (30390):       #11 pc 000000000090eec4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Looper.loop+244)
+10-16 01:31:56.398 F/DEBUG   (30390):       #12 pc 000000000062eab8  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.app.ActivityThread.main+1480)
+10-16 01:31:56.398 F/DEBUG   (30390):       #13 pc 00000000002ab260  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:31:56.398 F/DEBUG   (30390):       #14 pc 000000000029c070  /apex/com.android.art/lib64/libart.so (_jobject* art::InvokeMethod<(art::PointerSize)8>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, _jobject*, _jobject*, unsigned long)+552) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:31:56.398 F/DEBUG   (30390):       #15 pc 0000000000635ed4  /apex/com.android.art/lib64/libart.so (art::Method_invoke(_JNIEnv*, _jobject*, _jobject*, _jobjectArray*) (.__uniq.165753521025965369065708152063621506277)+36) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:31:56.398 F/DEBUG   (30390):       #16 pc 0000000000d41da4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (art_jni_trampoline+116)
+10-16 01:31:56.398 F/DEBUG   (30390):       #17 pc 0000000000c00d74  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run+116)
+10-16 01:31:56.398 F/DEBUG   (30390):       #18 pc 0000000000c08ba4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.os.ZygoteInit.main+3188)
+10-16 01:31:56.398 F/DEBUG   (30390):       #19 pc 00000000002ab260  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:31:56.398 F/DEBUG   (30390):       #20 pc 00000000002a8b8c  /apex/com.android.art/lib64/libart.so (art::JValue art::InvokeWithVarArgs<_jmethodID*>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, _jmethodID*, std::__va_list)+760) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:31:56.398 F/DEBUG   (30390):       #21 pc 00000000006a44b4  /apex/com.android.art/lib64/libart.so (art::JNI<true>::CallStaticVoidMethodV(_JNIEnv*, _jclass*, _jmethodID*, std::__va_list)+164) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:31:56.398 F/DEBUG   (30390):       #22 pc 0000000000115eec  /system/lib64/libandroid_runtime.so (_JNIEnv::CallStaticVoidMethod(_jclass*, _jmethodID*, ...)+108) (BuildId: 83302318da3878f15b1f609b3f2fe03a)
+10-16 01:31:56.398 F/DEBUG   (30390):       #23 pc 000000000013ba9c  /system/lib64/libandroid_runtime.so (android::AndroidRuntime::start(char const*, android::Vector<android::String8> const&, bool)+908) (BuildId: 83302318da3878f15b1f609b3f2fe03a)
+10-16 01:31:56.398 F/DEBUG   (30390):       #24 pc 00000000000045b8  /system/bin/app_process64 (main+1240) (BuildId: bf44ea70f221d41465c88629ddfe1e21)
+10-16 01:31:56.398 F/DEBUG   (30390):       #25 pc 000000000006b25c  /apex/com.android.runtime/lib64/bionic/libc.so (__libc_init+124) (BuildId: 43764f6fa9e16b18fa315be8700f5d9c)
+10-16 01:33:16.044 F/libc    (30545): Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0 in tid 30545 (.android.chrome), pid 30545 (.android.chrome)
+10-16 01:33:16.380 F/DEBUG   (31436): *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+10-16 01:33:16.380 F/DEBUG   (31436): Build fingerprint: 'google/shiba/shiba:16/CP1A.260505.005/15081906:user/release-keys'
+10-16 01:33:16.380 F/DEBUG   (31436): Kernel Release: '6.1.145-android14-11-gfa1d6308d1fe-ab14691759'
+10-16 01:33:16.380 F/DEBUG   (31436): Revision: 'MP1.0'
+10-16 01:33:16.380 F/DEBUG   (31436): ABI: 'arm64'
+10-16 01:33:16.380 F/DEBUG   (31436): Timestamp: 2026-10-16 01:33:16.130026544+0200
+10-16 01:33:16.380 F/DEBUG   (31436): Process uptime: 72s
+10-16 01:33:16.380 F/DEBUG   (31436): Executable: /system/bin/app_process64
+10-16 01:33:16.380 F/DEBUG   (31436): Cmdline: com.android.chrome
+10-16 01:33:16.380 F/DEBUG   (31436): pid: 30545, tid: 30545, name: .android.chrome  >>> com.android.chrome <<<
+10-16 01:33:16.380 F/DEBUG   (31436): uid: 1710211
+10-16 01:33:16.380 F/DEBUG   (31436): tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+10-16 01:33:16.380 F/DEBUG   (31436): pac_enabled_keys: 000000000000000f (PR_PAC_APIAKEY, PR_PAC_APIBKEY, PR_PAC_APDAKEY, PR_PAC_APDBKEY)
+10-16 01:33:16.380 F/DEBUG   (31436): esr: 0000000092000006 (Data Abort Exception 0x24)
+10-16 01:33:16.380 F/DEBUG   (31436): signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0000000000000000 (read)
+10-16 01:33:16.380 F/DEBUG   (31436): Cause: null pointer dereference
+10-16 01:33:16.380 F/DEBUG   (31436):     x0  0000007700008060  x1  0000000071b0a0b0  x2  b4000079156aea40  x3  0000007fe93703b0
+10-16 01:33:16.380 F/DEBUG   (31436):     x4  0000000000000000  x5  0000000000000000  x6  0000000000000000  x7  0000000000000000
+10-16 01:33:16.380 F/DEBUG   (31436):     x8  d79dcc304ae7f006  x9  d79dcc304ae7f006  x10 0000000000000020  x11 0000000000010001
+10-16 01:33:16.380 F/DEBUG   (31436):     x12 0000000010000001  x13 0000000000000302  x14 0000000000000004  x15 0000000000000000
+10-16 01:33:16.380 F/DEBUG   (31436):     x16 0000007fe936e3b0  x17 00000077e2869040  x18 0000007abbfdc000  x19 b4000079656a6380
+10-16 01:33:16.380 F/DEBUG   (31436):     x20 0000000000000000  x21 b4000079656a6440  x22 0000000000000000  x23 00000000020bda30
+10-16 01:33:16.380 F/DEBUG   (31436):     x24 00000000020c1900  x25 0000000000000000  x26 0000000002002860  x27 0000000070ee69c8
+10-16 01:33:16.380 F/DEBUG   (31436):     x28 0000000000000000  x29 0000000071486230
+10-16 01:33:16.380 F/DEBUG   (31436):     lr  0000000072faa12c  sp  0000007fe9370310  pc  00000077e2869078  pst 0000000060001000
+10-16 01:33:16.380 F/DEBUG   (31436):     esr 0000000092000006  vg  0000000000000002
+10-16 01:33:16.380 F/DEBUG   (31436): 26 total frames
+10-16 01:33:16.380 F/DEBUG   (31436): backtrace:
+10-16 01:33:16.380 F/DEBUG   (31436):       #00 pc 0000000000716078  /apex/com.android.art/lib64/libart.so (ExecuteNterpImpl+56) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:33:16.380 F/DEBUG   (31436):       #01 pc 0000000000c0e128  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.policy.DecorView.updateElevation+72)
+10-16 01:33:16.380 F/DEBUG   (31436):       #02 pc 0000000000c0fd04  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.policy.DecorView.onWindowFocusChanged+292)
+10-16 01:33:16.380 F/DEBUG   (31436):       #03 pc 0000000000aaa524  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewGroup.dispatchWindowFocusChanged+52)
+10-16 01:33:16.380 F/DEBUG   (31436):       #04 pc 0000000000ae27d8  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewRootImpl.dispatchFocusEvent+1112)
+10-16 01:33:16.380 F/DEBUG   (31436):       #05 pc 0000000000ae6044  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewRootImpl.handleWindowFocusChanged+228)
+10-16 01:33:16.380 F/DEBUG   (31436):       #06 pc 0000000000adcd7c  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewRootImpl$ViewRootHandler.handleMessageImpl+5932)
+10-16 01:33:16.380 F/DEBUG   (31436):       #07 pc 0000000000add480  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.view.ViewRootImpl$ViewRootHandler.handleMessage+176)
+10-16 01:33:16.380 F/DEBUG   (31436):       #08 pc 00000000008ce848  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Handler.dispatchMessageImpl+152)
+10-16 01:33:16.380 F/DEBUG   (31436):       #09 pc 000000000053900c  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat ([DEDUPED]+44)
+10-16 01:33:16.380 F/DEBUG   (31436):       #10 pc 000000000090f660  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Looper.loopOnce+1824)
+10-16 01:33:16.380 F/DEBUG   (31436):       #11 pc 000000000090eec4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Looper.loop+244)
+10-16 01:33:16.380 F/DEBUG   (31436):       #12 pc 000000000062eab8  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.app.ActivityThread.main+1480)
+10-16 01:33:16.380 F/DEBUG   (31436):       #13 pc 00000000002ab260  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:33:16.380 F/DEBUG   (31436):       #14 pc 000000000029c070  /apex/com.android.art/lib64/libart.so (_jobject* art::InvokeMethod<(art::PointerSize)8>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, _jobject*, _jobject*, unsigned long)+552) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:33:16.380 F/DEBUG   (31436):       #15 pc 0000000000635ed4  /apex/com.android.art/lib64/libart.so (art::Method_invoke(_JNIEnv*, _jobject*, _jobject*, _jobjectArray*) (.__uniq.165753521025965369065708152063621506277)+36) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:33:16.380 F/DEBUG   (31436):       #16 pc 0000000000d41da4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (art_jni_trampoline+116)
+10-16 01:33:16.380 F/DEBUG   (31436):       #17 pc 0000000000c00d74  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.os.RuntimeInit$MethodAndArgsCaller.run+116)
+10-16 01:33:16.380 F/DEBUG   (31436):       #18 pc 0000000000c08ba4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (com.android.internal.os.ZygoteInit.main+3188)
+10-16 01:33:16.380 F/DEBUG   (31436):       #19 pc 00000000002ab260  /apex/com.android.art/lib64/libart.so (art_quick_invoke_static_stub+640) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:33:16.380 F/DEBUG   (31436):       #20 pc 00000000002a8b8c  /apex/com.android.art/lib64/libart.so (art::JValue art::InvokeWithVarArgs<_jmethodID*>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, _jmethodID*, std::__va_list)+760) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:33:16.380 F/DEBUG   (31436):       #21 pc 00000000006a44b4  /apex/com.android.art/lib64/libart.so (art::JNI<true>::CallStaticVoidMethodV(_JNIEnv*, _jclass*, _jmethodID*, std::__va_list)+164) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:33:16.380 F/DEBUG   (31436):       #22 pc 0000000000115eec  /system/lib64/libandroid_runtime.so (_JNIEnv::CallStaticVoidMethod(_jclass*, _jmethodID*, ...)+108) (BuildId: 83302318da3878f15b1f609b3f2fe03a)
+10-16 01:33:16.380 F/DEBUG   (31436):       #23 pc 000000000013ba9c  /system/lib64/libandroid_runtime.so (android::AndroidRuntime::start(char const*, android::Vector<android::String8> const&, bool)+908) (BuildId: 83302318da3878f15b1f609b3f2fe03a)
+10-16 01:33:16.380 F/DEBUG   (31436):       #24 pc 00000000000045b8  /system/bin/app_process64 (main+1240) (BuildId: bf44ea70f221d41465c88629ddfe1e21)
+10-16 01:33:16.380 F/DEBUG   (31436):       #25 pc 000000000006b25c  /apex/com.android.runtime/lib64/bionic/libc.so (__libc_init+124) (BuildId: 43764f6fa9e16b18fa315be8700f5d9c)
+10-16 01:34:43.222 F/libc    (31777): Fatal signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x77b2726528 in tid 31786 (binder:31777_1), pid 31777 (v.cyclone.cloak)
+10-16 01:34:43.511 F/DEBUG   ( 4896): *** *** *** *** *** *** *** *** *** *** *** *** *** *** *** ***
+10-16 01:34:43.511 F/DEBUG   ( 4896): Build fingerprint: 'google/shiba/shiba:16/CP1A.260505.005/15081906:user/release-keys'
+10-16 01:34:43.511 F/DEBUG   ( 4896): Kernel Release: '6.1.145-android14-11-gfa1d6308d1fe-ab14691759'
+10-16 01:34:43.511 F/DEBUG   ( 4896): Revision: 'MP1.0'
+10-16 01:34:43.511 F/DEBUG   ( 4896): ABI: 'arm64'
+10-16 01:34:43.511 F/DEBUG   ( 4896): Timestamp: 2026-10-16 01:34:43.286722672+0200
+10-16 01:34:43.511 F/DEBUG   ( 4896): Process uptime: 40s
+10-16 01:34:43.511 F/DEBUG   ( 4896): Executable: /system/bin/app_process64
+10-16 01:34:43.511 F/DEBUG   ( 4896): Cmdline: dev.cyclone.cloak
+10-16 01:34:43.511 F/DEBUG   ( 4896): pid: 31777, tid: 31786, name: binder:31777_1  >>> dev.cyclone.cloak <<<
+10-16 01:34:43.511 F/DEBUG   ( 4896): uid: 1710377
+10-16 01:34:43.511 F/DEBUG   ( 4896): tagged_addr_ctrl: 0000000000000001 (PR_TAGGED_ADDR_ENABLE)
+10-16 01:34:43.511 F/DEBUG   ( 4896): pac_enabled_keys: 000000000000000f (PR_PAC_APIAKEY, PR_PAC_APIBKEY, PR_PAC_APDAKEY, PR_PAC_APDBKEY)
+10-16 01:34:43.511 F/DEBUG   ( 4896): esr: 0000000082000007 (Instruction Abort Exception 0x20)
+10-16 01:34:43.511 F/DEBUG   ( 4896): signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x00000077b2726528 (read)
+10-16 01:34:43.511 F/DEBUG   ( 4896):     x0  00000000717b0670  x1  00000077b3ceff10  x2  0000000000000001  x3  0000000000000020
+10-16 01:34:43.511 F/DEBUG   ( 4896):     x4  41544f5200000000  x5  00000000524f5441  x6  00000000524f5441  x7  00000077e16281a3
+10-16 01:34:43.511 F/DEBUG   ( 4896):     x8  00000000717b066c  x9  00000000717b066c  x10 00000077e2d657a8  x11 0000000000000000
+10-16 01:34:43.511 F/DEBUG   ( 4896):     x12 0000000000000031  x13 b4000079c56af730  x14 000000000000002f  x15 0000000000000076
+10-16 01:34:43.511 F/DEBUG   ( 4896):     x16 00000077e2d821c0  x17 00000077b2726528  x18 0000007757438000  x19 b4000078456c01d0
+10-16 01:34:43.511 F/DEBUG   ( 4896):     x20 00000077b3ceff10  x21 00000077b3cf1200  x22 0000000000000000  x23 00000077b3ceff00
+10-16 01:34:43.511 F/DEBUG   ( 4896):     x24 0000000000000000  x25 0000000071eb99d0  x26 0000000070eb64b8  x27 0000000070deea38
+10-16 01:34:43.511 F/DEBUG   ( 4896):     x28 0000000070df8f80  x29 00000077b3ceff50
+10-16 01:34:43.511 F/DEBUG   ( 4896):     lr  00000077e27bbf50  sp  00000077b3cefee0  pc  00000077b2726528  pst 0000000080001400
+10-16 01:34:43.511 F/DEBUG   ( 4896):     esr 0000000082000007  vg  0000000000000002
+10-16 01:34:43.511 F/DEBUG   ( 4896): 26 total frames
+10-16 01:34:43.511 F/DEBUG   ( 4896): backtrace:
+10-16 01:34:43.511 F/DEBUG   ( 4896):       #00 pc 00000077b2726528  <unknown>
+10-16 01:34:43.511 F/DEBUG   ( 4896):       #01 pc 0000000000668f4c  /apex/com.android.art/lib64/libart.so (art::Class_getPublicFieldRecursive(_JNIEnv*, _jobject*, _jstring*) (.__uniq.181829539739573773940154555818377431209)+228) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:34:43.511 F/DEBUG   ( 4896):       #02 pc 0000000000d41c94  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (art_jni_trampoline+100)
+10-16 01:34:43.511 F/DEBUG   ( 4896):       #03 pc 0000000000924fa4  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Parcel.readParcelableCreatorInternal+1668)
+10-16 01:34:43.511 F/DEBUG   ( 4896):       #04 pc 00000000009258e0  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Parcel.readParcelableListInternal+528)
+10-16 01:34:43.511 F/DEBUG   ( 4896):       #05 pc 00000000007138e8  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.app.servertransaction.ClientTransaction.<init>+264)
+10-16 01:34:43.511 F/DEBUG   ( 4896):       #06 pc 00000000007137bc  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.app.servertransaction.ClientTransaction$1.createFromParcel+76)
+10-16 01:34:43.511 F/DEBUG   ( 4896):       #07 pc 00000000005d076c  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat ([DEDUPED] ?.createFromParcel+44)
+10-16 01:34:43.511 F/DEBUG   ( 4896):       #08 pc 000000000092d2cc  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Parcel.readTypedObject+92)
+10-16 01:34:43.511 F/DEBUG   ( 4896):       #09 pc 0000000000615a34  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.app.IApplicationThread$Stub.onTransact+2756)
+10-16 01:34:43.511 F/DEBUG   ( 4896):       #10 pc 0000000000619cf0  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.app.ActivityThread$ApplicationThread.onTransact+1680)
+10-16 01:34:43.511 F/DEBUG   ( 4896):       #11 pc 00000000008c89dc  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Binder.execTransactInternal+812)
+10-16 01:34:43.511 F/DEBUG   ( 4896):       #12 pc 00000000008c8514  /data/misc/apexdata/com.android.art/dalvik-cache/arm64/boot.oat (android.os.Binder.execTransact+404)
+10-16 01:34:43.511 F/DEBUG   ( 4896):       #13 pc 00000000002aaf94  /apex/com.android.art/lib64/libart.so (art_quick_invoke_stub+612) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:34:43.511 F/DEBUG   ( 4896):       #14 pc 00000000002a7ca4  /apex/com.android.art/lib64/libart.so (art::JValue art::InvokeVirtualOrInterfaceWithVarArgs<_jmethodID*>(art::ScopedObjectAccessAlreadyRunnable const&, _jobject*, _jmethodID*, std::__va_list)+888) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:34:43.511 F/DEBUG   ( 4896):       #15 pc 000000000067b5d4  /apex/com.android.art/lib64/libart.so (art::JNI<false>::CallBooleanMethodV(_JNIEnv*, _jobject*, _jmethodID*, std::__va_list)+204) (BuildId: cecb684d19b4f44ee3cbd66142c315f4)
+10-16 01:34:43.511 F/DEBUG   ( 4896):       #16 pc 000000000012913c  /system/lib64/libandroid_runtime.so (_JNIEnv::CallBooleanMethod(_jobject*, _jmethodID*, ...)+108) (BuildId: 83302318da3878f15b1f609b3f2fe03a)
+10-16 01:34:43.511 F/DEBUG   ( 4896):       #17 pc 00000000001ccdc8  /system/lib64/libandroid_runtime.so (JavaBBinder::onTransact(unsigned int, android::Parcel const&, android::Parcel*, unsigned int)+152) (BuildId: 83302318da3878f15b1f609b3f2fe03a)
+10-16 01:34:43.511 F/DEBUG   ( 4896):       #18 pc 0000000000051cec  /system/lib64/libbinder.so (android::IPCThreadState::executeCommand(int)+1068) (BuildId: febea5b5afae161a436374f107587913)
+10-16 01:34:43.511 F/DEBUG   ( 4896):       #19 pc 0000000000099b4c  /system/lib64/libbinder.so (android::IPCThreadState::joinThreadPool(bool)+268) (BuildId: febea5b5afae161a436374f107587913)
+10-16 01:34:43.511 F/DEBUG   ( 4896):       #20 pc 0000000000099a2c  /system/lib64/libbinder.so (android::PoolThread::threadLoop()+28) (BuildId: febea5b5afae161a436374f107587913)
+10-16 01:34:43.511 F/DEBUG   ( 4896):       #21 pc 0000000000019654  /system/lib64/libutils.so (android::Thread::_threadLoop(void*)+196) (BuildId: 1df2ced4b0e58d9c06fdf86886397554)
+10-16 01:34:43.511 F/DEBUG   ( 4896):       #22 pc 000000000013be10  /system/lib64/libandroid_runtime.so (android::AndroidRuntime::javaThreadShell(void*)+128) (BuildId: 83302318da3878f15b1f609b3f2fe03a)
+10-16 01:34:43.511 F/DEBUG   ( 4896):       #23 pc 000000000001bb28  /system/lib64/libutils.so (libutil_thread_trampoline(void*) (.__uniq.226528677032898775202282855395389835431)+24) (BuildId: 1df2ced4b0e58d9c06fdf86886397554)
+10-16 01:34:43.511 F/DEBUG   ( 4896):       #24 pc 000000000008a714  /apex/com.android.runtime/lib64/bionic/libc.so (__pthread_start(void*) (.__uniq.67847048707805468364044055584648682506)+180) (BuildId: 43764f6fa9e16b18fa315be8700f5d9c)
+10-16 01:34:43.511 F/DEBUG   ( 4896):       #25 pc 000000000007b3b4  /apex/com.android.runtime/lib64/bionic/libc.so (__start_thread+68) (BuildId: 43764f6fa9e16b18fa315be8700f5d9c)

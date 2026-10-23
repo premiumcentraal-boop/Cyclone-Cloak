@@ -1,0 +1,16 @@
+{
+  "binding": {
+    "request_id": "d4757d6f-b976-4dbf-bc00-fb8b86f74dd2",
+    "profile_id": "Cyclone_2ca4cf9432e64fbd",
+    "profile_hash": "945be161ca131ba888c649059aac897986911861627efb83219a408ad376219d",
+    "artifact_hash": "7e8803535fcd011750a5c07c283bc83e10ed335860965ddecbb05883e88d2a62",
+    "android_user_id": 17
+  },
+  "diagnostics_apk_sha256": "5e58b57e7d394ecccb4d5bb589df3e8130022df5b5abd10537dabbfcd0c08868",
+  "transport": "root-scoped diagnostics-private input/report files; release run-as is disabled",
+  "integrity_requested": false,
+  "release_tag": "v0.11.0-alpha.27",
+  "release_commit": "79c2f86dba420cf46233a48d92889f6d6e8babfb",
+  "app_sha256": "2fd83e2cbaf031ea563990e8a6e54154067351f51f074d25d9f4592c013d282e",
+  "module_zip_sha256": "fc10038d69a1c4d23e7bc1ee1c9f3b47fc3a5c497c58804814840bd21a0a2b59"
+}

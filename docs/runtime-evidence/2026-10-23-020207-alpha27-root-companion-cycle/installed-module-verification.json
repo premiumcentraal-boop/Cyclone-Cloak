@@ -1,0 +1,18 @@
+{
+  "expected": {
+    "artifacts.sha256": "371e8a9cf03aaefca50c53e51cc1e51ff4fa0445f39b25e0a2d72a897a9a5962",
+    "module.prop": "bba8ec8eec482eb8d4e12ca9e5edd57e8bfe5ea042587059f6c319f03465c586",
+    "zygisk/arm64-v8a.so": "4425949ae374c0704721bae8b93278cd1b1476ab3918125a8ba870b0db03f002",
+    "zygisk/armeabi-v7a.so": "7f476f9b3c47367c9eac6985a21a49a7ed509adf67457e7f318f13277897254b"
+  },
+  "actual": {
+    "zygisk/arm64-v8a.so": "4425949ae374c0704721bae8b93278cd1b1476ab3918125a8ba870b0db03f002",
+    "zygisk/armeabi-v7a.so": "7f476f9b3c47367c9eac6985a21a49a7ed509adf67457e7f318f13277897254b",
+    "artifacts.sha256": "371e8a9cf03aaefca50c53e51cc1e51ff4fa0445f39b25e0a2d72a897a9a5962",
+    "module.prop": "bba8ec8eec482eb8d4e12ca9e5edd57e8bfe5ea042587059f6c319f03465c586"
+  },
+  "hashes_match": true,
+  "disable_remove_update_markers": "",
+  "log": "",
+  "loaded_state_marker": "Root-companion durable record keyed by PID/package/user/artifact is required"
+}

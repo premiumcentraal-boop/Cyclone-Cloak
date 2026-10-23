@@ -1,0 +1,1131 @@
+{
+  "legacy": [
+    {
+      "id": "build.MANUFACTURER",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "build.BRAND",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "build.MODEL",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "build.DEVICE",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "build.PRODUCT",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "build.HARDWARE",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "build.FINGERPRINT",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "build.ID",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "build.BOOTLOADER",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "build.SERIAL",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "build.getSerial",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "build.TIME",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "build.TYPE",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "build.TAGS",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "version.SDK_INT",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "version.RELEASE",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "version.INCREMENTAL",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "version.SECURITY_PATCH",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "build.getRadioVersion",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "properties.java.ro.product.model",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "properties.native.ro.product.model",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "properties.java.ro.product.manufacturer",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "properties.native.ro.product.manufacturer",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "properties.java.ro.product.brand",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "properties.native.ro.product.brand",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "properties.java.ro.product.device",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "properties.native.ro.product.device",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "properties.java.ro.product.name",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "properties.native.ro.product.name",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "properties.java.ro.build.version.sdk",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "properties.native.ro.build.version.sdk",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "properties.java.ro.build.fingerprint",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "properties.native.ro.build.fingerprint",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "properties.java.ro.serialno",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "properties.native.ro.serialno",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "properties.java.ro.sf.lcd_density",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "properties.native.ro.sf.lcd_density",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "properties.java.persist.sys.timezone",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "properties.native.persist.sys.timezone",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "properties.nativeCallback.ro.product.model",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "telephony.simState",
+      "result": "OBSERVED",
+      "reason": "NO_EXACT_EXPECTATION_OR_EXTERNAL_STATE",
+      "before_status": "OBSERVED",
+      "after_status": "OBSERVED",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "telephony.phoneType",
+      "result": "OBSERVED",
+      "reason": "NO_EXACT_EXPECTATION_OR_EXTERNAL_STATE",
+      "before_status": "OBSERVED",
+      "after_status": "OBSERVED",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "telephony.roaming",
+      "result": "OBSERVED",
+      "reason": "NO_EXACT_EXPECTATION_OR_EXTERNAL_STATE",
+      "before_status": "OBSERVED",
+      "after_status": "OBSERVED",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "telephony.imei0",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "telephony.imei1",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "telephony.deviceId",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "telephony.simSerial",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "telephony.phoneCount",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "telephony.activeModemCount",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "telephony.networkType",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "telephony.dataNetworkType",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "operator.networkNumeric",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "operator.simNumeric",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "operator.networkName",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "operator.simName",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "operator.networkCountry",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "operator.simCountry",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "telephony.subscriberId",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "settings.secure.androidId",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "settings.provider.androidId",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "settings.unrelatedControl",
+      "result": "OBSERVED",
+      "reason": "NO_EXACT_EXPECTATION_OR_EXTERNAL_STATE",
+      "before_status": "OBSERVED",
+      "after_status": "OBSERVED",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "wifi.objectMac",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "wifi.serviceMac",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "wifi.bssid",
+      "result": "NOT_COMPARABLE",
+      "reason": "PERMISSION_STATE_CHANGED_VIA_AUTHORIZED_UI",
+      "before_status": "BLOCKED",
+      "after_status": "OBSERVED",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "wifi.linkSpeed",
+      "result": "OBSERVED",
+      "reason": "NO_EXACT_EXPECTATION_OR_EXTERNAL_STATE",
+      "before_status": "OBSERVED",
+      "after_status": "OBSERVED",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "wifi.ssid",
+      "result": "NOT_COMPARABLE",
+      "reason": "PERMISSION_STATE_CHANGED_VIA_AUTHORIZED_UI",
+      "before_status": "BLOCKED",
+      "after_status": "OBSERVED",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "bluetooth.address",
+      "result": "NOT_COMPARABLE",
+      "reason": "PERMISSION_STATE_CHANGED_VIA_AUTHORIZED_UI",
+      "before_status": "BLOCKED",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "bluetooth.name",
+      "result": "NOT_COMPARABLE",
+      "reason": "PERMISSION_STATE_CHANGED_VIA_AUTHORIZED_UI",
+      "before_status": "BLOCKED",
+      "after_status": "OBSERVED",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "advertising.id",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "drm.deviceUniqueId",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "display.resources.width",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "display.resources.height",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "display.resources.density",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "display.real.width",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "display.real.height",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "display.real.density",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "display.refresh",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "camera.characteristics",
+      "result": "NOT_COMPARABLE",
+      "reason": "EXPLICIT_BLOCK",
+      "before_status": "BLOCKED",
+      "after_status": "BLOCKED",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "sensors.list",
+      "result": "NOT_COMPARABLE",
+      "reason": "EXPLICIT_BLOCK",
+      "before_status": "BLOCKED",
+      "after_status": "BLOCKED",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "locale.default.language",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "locale.default.country",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "locale.resources.language",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "locale.resources.country",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "timezone.default",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "process.uid",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "process.androidUser",
+      "result": "IDENTICAL",
+      "reason": "DIGEST_COMPARISON",
+      "before_status": "PASS",
+      "after_status": "PASS",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "packages.visible",
+      "result": "NOT_COMPARABLE",
+      "reason": "EXPLICIT_BLOCK",
+      "before_status": "BLOCKED",
+      "after_status": "BLOCKED",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "runtime.loadedLibraries",
+      "result": "OBSERVED",
+      "reason": "NO_EXACT_EXPECTATION_OR_EXTERNAL_STATE",
+      "before_status": "OBSERVED",
+      "after_status": "OBSERVED",
+      "before_sha256": null,
+      "after_sha256": null
+    },
+    {
+      "id": "runtime.javaBridgeVisible",
+      "result": "OBSERVED",
+      "reason": "NO_EXACT_EXPECTATION_OR_EXTERNAL_STATE",
+      "before_status": "OBSERVED",
+      "after_status": "OBSERVED",
+      "before_sha256": null,
+      "after_sha256": null
+    }
+  ],
+  "envelope": [
+    {
+      "id": "envelope.sensors.inventory",
+      "first": {
+        "id": "envelope.sensors.inventory",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 2
+      },
+      "second": {
+        "id": "envelope.sensors.inventory",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 0
+      },
+      "same_digest": true
+    },
+    {
+      "id": "envelope.camera.characteristics",
+      "first": {
+        "id": "envelope.camera.characteristics",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 4
+      },
+      "second": {
+        "id": "envelope.camera.characteristics",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 2
+      },
+      "same_digest": true
+    },
+    {
+      "id": "envelope.memory.totalMem",
+      "first": {
+        "id": "envelope.memory.totalMem",
+        "expected_sha256": null,
+        "actual_sha256": "ccd1e77da0a9c4d25ca3c438285b9592fa2f6fcef4f30689df39faf42d1d763c",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 2
+      },
+      "second": {
+        "id": "envelope.memory.totalMem",
+        "expected_sha256": null,
+        "actual_sha256": "ccd1e77da0a9c4d25ca3c438285b9592fa2f6fcef4f30689df39faf42d1d763c",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 1
+      },
+      "same_digest": true
+    },
+    {
+      "id": "envelope.storage.totalBytes",
+      "first": {
+        "id": "envelope.storage.totalBytes",
+        "expected_sha256": null,
+        "actual_sha256": "c5e3f7826a3dee48a50d87353ad1e295aa0970ace32c8dfa7f1fb4c3adab670b",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 3
+      },
+      "second": {
+        "id": "envelope.storage.totalBytes",
+        "expected_sha256": null,
+        "actual_sha256": "c5e3f7826a3dee48a50d87353ad1e295aa0970ace32c8dfa7f1fb4c3adab670b",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 0
+      },
+      "same_digest": true
+    },
+    {
+      "id": "envelope.storage.availableBytes",
+      "first": {
+        "id": "envelope.storage.availableBytes",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 0
+      },
+      "second": {
+        "id": "envelope.storage.availableBytes",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 0
+      },
+      "same_digest": true
+    },
+    {
+      "id": "envelope.compute.schedulerProcessors",
+      "first": {
+        "id": "envelope.compute.schedulerProcessors",
+        "expected_sha256": null,
+        "actual_sha256": "19581e27de7ced00ff1ce50b2047e7a567c76b1cbaebabe5ef03f7c3017bb5b7",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 0
+      },
+      "second": {
+        "id": "envelope.compute.schedulerProcessors",
+        "expected_sha256": null,
+        "actual_sha256": "19581e27de7ced00ff1ce50b2047e7a567c76b1cbaebabe5ef03f7c3017bb5b7",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 0
+      },
+      "same_digest": true
+    },
+    {
+      "id": "envelope.compute.gpuRenderer",
+      "first": {
+        "id": "envelope.compute.gpuRenderer",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 39
+      },
+      "second": {
+        "id": "envelope.compute.gpuRenderer",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 16
+      },
+      "same_digest": true
+    },
+    {
+      "id": "envelope.packages.visibleVersions",
+      "first": {
+        "id": "envelope.packages.visibleVersions",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 1
+      },
+      "second": {
+        "id": "envelope.packages.visibleVersions",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 0
+      },
+      "same_digest": true
+    },
+    {
+      "id": "envelope.webview.provider",
+      "first": {
+        "id": "envelope.webview.provider",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 5
+      },
+      "second": {
+        "id": "envelope.webview.provider",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 0
+      },
+      "same_digest": true
+    },
+    {
+      "id": "envelope.webview.version",
+      "first": {
+        "id": "envelope.webview.version",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 2
+      },
+      "second": {
+        "id": "envelope.webview.version",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 0
+      },
+      "same_digest": true
+    },
+    {
+      "id": "envelope.webview.defaultUa",
+      "first": {
+        "id": "envelope.webview.defaultUa",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "AndroidRuntimeException",
+        "duration_ms": 68
+      },
+      "second": {
+        "id": "envelope.webview.defaultUa",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "AndroidRuntimeException",
+        "duration_ms": 2
+      },
+      "same_digest": true
+    },
+    {
+      "id": "envelope.webview.instanceUa",
+      "first": {
+        "id": "envelope.webview.instanceUa",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "AndroidRuntimeException",
+        "duration_ms": 7
+      },
+      "second": {
+        "id": "envelope.webview.instanceUa",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "AndroidRuntimeException",
+        "duration_ms": 2
+      },
+      "same_digest": true
+    },
+    {
+      "id": "envelope.display.realSize",
+      "first": {
+        "id": "envelope.display.realSize",
+        "expected_sha256": "0515ad262fd5d7f0e4e966790693a35412119cc21fc58b904b365add87a59735",
+        "actual_sha256": "0515ad262fd5d7f0e4e966790693a35412119cc21fc58b904b365add87a59735",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 2
+      },
+      "second": {
+        "id": "envelope.display.realSize",
+        "expected_sha256": "0515ad262fd5d7f0e4e966790693a35412119cc21fc58b904b365add87a59735",
+        "actual_sha256": "0515ad262fd5d7f0e4e966790693a35412119cc21fc58b904b365add87a59735",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 2
+      },
+      "same_digest": true
+    },
+    {
+      "id": "envelope.telephony.simState",
+      "first": {
+        "id": "envelope.telephony.simState",
+        "expected_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+        "actual_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 38
+      },
+      "second": {
+        "id": "envelope.telephony.simState",
+        "expected_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+        "actual_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 2
+      },
+      "same_digest": true
+    },
+    {
+      "id": "envelope.telephony.simStateSlot0",
+      "first": {
+        "id": "envelope.telephony.simStateSlot0",
+        "expected_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+        "actual_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 27
+      },
+      "second": {
+        "id": "envelope.telephony.simStateSlot0",
+        "expected_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+        "actual_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 4
+      },
+      "same_digest": true
+    },
+    {
+      "id": "envelope.drm.securityLevel",
+      "first": {
+        "id": "envelope.drm.securityLevel",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 126
+      },
+      "second": {
+        "id": "envelope.drm.securityLevel",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 8
+      },
+      "same_digest": true
+    }
+  ],
+  "distinct_pids": [
+    26528,
+    31219
+  ]
+}

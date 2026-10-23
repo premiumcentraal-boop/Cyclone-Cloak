@@ -1,0 +1,33 @@
+{
+  "production_delta": [
+    {
+      "path": [
+        "binding_stores",
+        "count"
+      ],
+      "change": "changed",
+      "before": 1,
+      "after": 2
+    },
+    {
+      "path": [
+        "binding_stores",
+        "files",
+        "4c489272062feb8619282bd0a565fb756cc6ffcbc711bcd7c4933e318d1cfb44"
+      ],
+      "change": "added",
+      "after": "49cd6eb8faf3d0360158deec052360749e106df4f3ad4078dc0700d846994f7b"
+    },
+    {
+      "path": [
+        "binding_stores",
+        "sha256"
+      ],
+      "change": "changed",
+      "before": "986dd5865f772575a9780df5a3ab75171887530ec0c2e40fade8d25608d71d88",
+      "after": "8d97707ca5269f849bff1ada4c9de13a4d282ce4b6fcf846716bef13bc76bcf2"
+    }
+  ],
+  "permission_delta": [],
+  "permission_policy_passed": true
+}

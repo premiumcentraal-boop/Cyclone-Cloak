@@ -1,0 +1,39 @@
+{
+  "result": "DEVICE_UNAVAILABLE",
+  "commit": "d4f0a5cb5f4d70bacaeb0b8ecdff184eff154150",
+  "apks": [
+    {
+      "flavor": "standard",
+      "path": "C:\\Users\\Agent\\Cyclone\\cloak-repo\\android\\probe\\build\\outputs\\apk\\standard\\debug\\probe-standard-debug.apk",
+      "sha256": "bf995c0bc490c7551fe7bb6d64beb724973e2ba408154fc8f92e6999eada1844",
+      "bytes": 1878833,
+      "tests": {
+        "tests": 144,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    },
+    {
+      "flavor": "diagnostics",
+      "path": "C:\\Users\\Agent\\Cyclone\\cloak-repo\\android\\probe\\build\\outputs\\apk\\diagnostics\\debug\\probe-diagnostics-debug.apk",
+      "sha256": "3f3a611307024ba2fa3bbe301df4e2358a876182616f71a23f0326fc4abfbabf",
+      "bytes": 3644336,
+      "tests": {
+        "tests": 144,
+        "failures": 0,
+        "errors": 0,
+        "skipped": 0
+      }
+    }
+  ],
+  "host_tests": 34,
+  "device_inventory": {
+    "stdout": "List of devices attached\n\n",
+    "stderr": "",
+    "exit_code": 0
+  },
+  "device_actions": [],
+  "index_empty": true,
+  "tracked_prerequisites_unchanged": true
+}

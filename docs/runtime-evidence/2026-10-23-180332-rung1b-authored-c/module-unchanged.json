@@ -1,0 +1,12 @@
+{
+  "immutable_files_unchanged": true,
+  "all_file_hash_lines_equal": false,
+  "changed_files": [
+    {
+      "path": "/data/adb/modules/cyclone_cloak/load-records.jsonl",
+      "before": "12f8b375b72c95351b0be96143b755977bc55a2bb3e9766998a16b2a2c072816",
+      "after": "e7406d58c0ba3fa71cae3f4ce5ff3ad2285deed891c16b06220b3408610eb3eb"
+    }
+  ],
+  "note": "Only the durable runtime load log changed during ordinary user activation; no module code or packaging file changed."
+}

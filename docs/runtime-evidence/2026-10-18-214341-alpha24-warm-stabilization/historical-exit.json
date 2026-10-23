@@ -1,0 +1,7 @@
+{
+  "pid": 12996,
+  "matching_records": [
+    "timestamp=2026-10-18 21:31:38.745 pid=12996 realUid=10273 packageUid=10273 definingUid=10273 user=0\n          process=dev.cyclone.cloak.probe.diag reason=5 (APP CRASH(NATIVE)) subreason=0 (UNKNOWN) status=11\n          importance=100 pss=0,00 rss=0,00 description=crash state=empty trace=null\n anrInfo=null"
+  ],
+  "limitation": "Process no longer exists; original maps and matching tombstone unavailable after rotation. Fresh reproduction PID 8984 is documented separately."
+}

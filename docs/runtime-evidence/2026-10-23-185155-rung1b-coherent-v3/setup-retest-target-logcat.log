@@ -1,0 +1,57 @@
+--------- beginning of events
+10-23 19:08:52.452  6969  6969 I auditd  : type=1400 audit(0.0:9263): avc:  denied  { search } for  comm="main" name="adb" dev="dm-64" ino=400 scontext=u:r:zygote:s0 tcontext=u:object_r:adb_data_file:s0 tclass=dir permissive=0
+--------- beginning of main
+10-23 19:08:52.452  6969  6969 W main    : type=1400 audit(0.0:9263): avc:  denied  { search } for  name="adb" dev="dm-64" ino=400 scontext=u:r:zygote:s0 tcontext=u:object_r:adb_data_file:s0 tclass=dir permissive=0
+10-23 19:08:52.498  6969  6969 I CloakModule: cloaking 17:dev.cyclone.cloak.probe.diag (37 props)
+10-23 19:08:52.506  6969  6969 I Zygote  : Process 6969 created for dev.cyclone.cloak.probe.diag
+10-23 19:08:52.506  6969  6969 I loak.probe.diag: Late-enabling -Xcheck:jni
+10-23 19:08:52.519  6969  6969 I loak.probe.diag: Using generational CollectorTypeCMC GC.
+10-23 19:08:52.520  6969  6969 I auditd  : type=1400 audit(0.0:9264): avc:  granted  { execute } for  comm="loak.probe.diag" path="/data/user/17/dev.cyclone.cloak.probe.diag/libshadowhook.so" dev="dm-64" ino=320874 scontext=u:r:untrusted_app:s0:c63,c257,c529,c768 tcontext=u:object_r:app_data_file:s0:c63,c257,c529,c768 tclass=file
+10-23 19:08:52.520  6969  6969 W loak.probe.diag: type=1400 audit(0.0:9264): avc:  granted  { execute } for  path="/data/user/17/dev.cyclone.cloak.probe.diag/libshadowhook.so" dev="dm-64" ino=320874 scontext=u:r:untrusted_app:s0:c63,c257,c529,c768 tcontext=u:object_r:app_data_file:s0:c63,c257,c529,c768 tclass=file
+10-23 19:08:52.522  6969  6969 E shadowhook_tag: shadowhook version 1.0.10: shadowhook init(mode: UNIQUE, debuggable: false), return: 0, real-init: yes
+10-23 19:08:52.522  6969  6969 I CloakModule: native property hook installed
+10-23 19:08:52.522  6969  6969 I CloakModule: native property callback hook installed
+10-23 19:08:52.522  6969  6969 W libc    : Access denied finding property "ro.serialno"
+10-23 19:08:52.520  6969  6969 I auditd  : type=1400 audit(0.0:9265): avc:  denied  { read } for  comm="loak.probe.diag" name="u:object_r:serialno_prop:s0" dev="tmpfs" ino=366 scontext=u:r:untrusted_app:s0:c63,c257,c529,c768 tcontext=u:object_r:serialno_prop:s0 tclass=file permissive=0
+10-23 19:08:52.520  6969  6969 W loak.probe.diag: type=1400 audit(0.0:9265): avc:  denied  { read } for  name="u:object_r:serialno_prop:s0" dev="tmpfs" ino=366 scontext=u:r:untrusted_app:s0:c63,c257,c529,c768 tcontext=u:object_r:serialno_prop:s0 tclass=file permissive=0
+10-23 19:08:52.523  6969  6969 I CloakModule: native file hooks installed
+10-23 19:08:52.523  6969  6969 E System  : Ignoring attempt to set property "user.language" to value "en".
+10-23 19:08:52.525  6969  6969 I CloakModule: [cloak-hook] ART runtime API 36, debuggable=true
+10-23 19:08:52.548  6969  6969 W System  : Attempt to load writable file: /data/user/17/dev.cyclone.cloak.probe.diag/code_cache/cloak_hooks/libpine.so. This will throw on a future Android version. Current sdk version: 36
+10-23 19:08:52.549  6969  6969 D nativeloader: Configuring clns-9 for other apk . target_sdk_version=0, uses_libraries=ALL, library_path=, permitted_path=/data:/mnt/expand
+10-23 19:08:52.544  6969  6969 I auditd  : type=1400 audit(0.0:9266): avc:  granted  { execute } for  comm="loak.probe.diag" path="/data/user/17/dev.cyclone.cloak.probe.diag/code_cache/cloak_hooks/libpine.so" dev="dm-64" ino=318071 scontext=u:r:untrusted_app:s0:c63,c257,c529,c768 tcontext=u:object_r:app_data_file:s0:c63,c257,c529,c768 tclass=file
+10-23 19:08:52.544  6969  6969 W loak.probe.diag: type=1400 audit(0.0:9266): avc:  granted  { execute } for  path="/data/user/17/dev.cyclone.cloak.probe.diag/code_cache/cloak_hooks/libpine.so" dev="dm-64" ino=318071 scontext=u:r:untrusted_app:s0:c63,c257,c529,c768 tcontext=u:object_r:app_data_file:s0:c63,c257,c529,c768 tclass=file
+10-23 19:08:52.582  6969  6969 I loak.probe.diag: hiddenapi: Accessing hidden field Ljava/lang/reflect/Executable;->artMethod:J (runtime_flags=0, domain=core-platform, api=unsupported) from Ltop/canyie/pine/Pine; (domain=app, TargetSdkVersion=0) using JNI: allowed
+10-23 19:08:52.585  6969  6969 I CloakModule: [cloak-hook] mediadrm hook installed
+10-23 19:08:52.585  6969  6969 I CloakModule: [cloak-hook] camera hooks installed
+10-23 19:08:52.585  6969  6969 I CloakModule: [cloak-hook] display hooks installed
+10-23 19:08:52.585  6969  6969 I CloakModule: [cloak-hook] java callbacks installed
+10-23 19:08:52.587  6969  6969 W libbinder.BackendUnifiedServiceManager: Thread Pool max thread count is 0. Cannot cache binder as linkToDeath cannot be implemented. serviceName: activity
+10-23 19:08:52.602  6969  6969 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+10-23 19:08:52.623  6969  6969 D nativeloader: Configuring clns-10 for other apk /data/app/~~rvZeAwdEV0R6sErEbhs40A==/dev.cyclone.cloak.probe.diag-fRGezTbjf3umcwKP3A9Rgw==/base.apk. target_sdk_version=36, uses_libraries=, library_path=/data/app/~~rvZeAwdEV0R6sErEbhs40A==/dev.cyclone.cloak.probe.diag-fRGezTbjf3umcwKP3A9Rgw==/lib/arm64:/data/app/~~rvZeAwdEV0R6sErEbhs40A==/dev.cyclone.cloak.probe.diag-fRGezTbjf3umcwKP3A9Rgw==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/17/dev.cyclone.cloak.probe.diag
+10-23 19:08:52.628  6969  6969 V GraphicsEnvironment: Currently set values for:
+10-23 19:08:52.628  6969  6969 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[com.android.angle]
+10-23 19:08:52.628  6969  6969 V GraphicsEnvironment:   angle_gl_driver_selection_values=[angle]
+10-23 19:08:52.628  6969  6969 V GraphicsEnvironment: dev.cyclone.cloak.probe.diag is not listed in per-application setting
+10-23 19:08:52.628  6969  6969 V GraphicsEnvironment: No special selections for ANGLE, returning default driver choice
+10-23 19:08:52.628  6969  6969 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+--------- beginning of system
+10-23 19:08:52.636  6969  7012 I DisplayManager: Choreographer implicitly registered for the refresh rate.
+10-23 19:08:52.637  6969  7012 D vulkan  : searching for layers in '/data/app/~~rvZeAwdEV0R6sErEbhs40A==/dev.cyclone.cloak.probe.diag-fRGezTbjf3umcwKP3A9Rgw==/lib/arm64'
+10-23 19:08:52.637  6969  7012 D vulkan  : searching for layers in '/data/app/~~rvZeAwdEV0R6sErEbhs40A==/dev.cyclone.cloak.probe.diag-fRGezTbjf3umcwKP3A9Rgw==/base.apk!/lib/arm64-v8a'
+10-23 19:08:52.648  6969  6969 D nativeloader: Load /data/app/~~rvZeAwdEV0R6sErEbhs40A==/dev.cyclone.cloak.probe.diag-fRGezTbjf3umcwKP3A9Rgw==/base.apk!/lib/arm64-v8a/libprobe.so using class loader ns clns-10 (caller=/data/app/~~rvZeAwdEV0R6sErEbhs40A==/dev.cyclone.cloak.probe.diag-fRGezTbjf3umcwKP3A9Rgw==/base.apk): ok
+10-23 19:08:52.667  6969  6969 D CompatChangeReporter: Compat change id reported: 377864165; UID 1710319; state: ENABLED
+10-23 19:08:52.667  6969  6969 D DesktopExperienceFlags: Toggle override initialized to: false
+10-23 19:08:52.667  6969  6969 D DesktopModeFlags: Toggle override initialized to: OVERRIDE_UNSET
+10-23 19:08:52.679  6969  6969 I wm_on_create_called: [238107692,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,performCreate,25]
+10-23 19:08:52.680  6969  6969 I wm_on_start_called: [238107692,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,handleStartActivity,0]
+10-23 19:08:52.684  6969  6969 I wm_on_resume_called: [238107692,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,RESUME_ACTIVITY,3]
+10-23 19:08:52.698  6969  6969 I wm_on_top_resumed_gained_called: [238107692,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,topStateChangedWhenResumed]
+10-23 19:08:52.698  6969  6969 I wm_on_top_resumed_lost_called: [238107692,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,topStateChangedWhenResumed]
+10-23 19:08:52.698  6969  6969 I wm_on_paused_called: [238107692,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,performPause,0]
+10-23 19:08:52.709  6969  6969 D WindowOnBackDispatcher: setTopOnBackInvokedCallback (unwrapped): android.app.Activity$$ExternalSyntheticLambda0@fe0973b
+10-23 19:08:52.710  6969  6969 D VRI[DiagnosticsProbeActivity]: WindowInsets changed: 1080x2400 statusBars:[0,132,0,0] navigationBars:[0,0,0,63] mandatorySystemGestures:[0,170,0,84] 
+10-23 19:08:52.711  6969  6969 I HWUI    : Using FreeType backend (prop=Auto)
+10-23 19:08:52.735  6969  6969 I viewroot_draw_event: [VRI[DiagnosticsProbeActivity]52f2346,reportDrawFinished seqId=0]
+10-23 19:08:53.412  6969  6993 I loak.probe.diag: Compiler allocated 5116KB to compile void android.view.ViewRootImpl.performTraversals()
+10-23 19:09:14.794  6969  6994 I loak.probe.diag: Background concurrent mark compact GC freed 992KB AllocSpace bytes, 1(72KB) LOS objects, 99% free, 1920KB/256MB, paused 595us,6.706ms total 50.751ms

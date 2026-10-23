@@ -1,0 +1,4 @@
+DEBUG(15131): Cmdline: dev.cyclone.cloak.probe.diag
+DEBUG(15131): pid: 12996, tid: 15108, name: cloak-probe-6  >>> dev.cyclone.cloak.probe.diag <<<
+DEBUG(15131): signal 11 (SIGSEGV), code 1 (SEGV_MAPERR), fault addr 0x0000000000000038 (read)
+DEBUG(15131): Cause: null pointer dereference

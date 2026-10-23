@@ -1,0 +1,6 @@
+{
+  "command": "stat /data/adb/modules/cyclone_cloak/load-records.jsonl; ls -ldZ /data/adb/modules/cyclone_cloak; ls -lZ /data/adb/modules/cyclone_cloak/artifacts.sha256; cat /data/adb/modules/cyclone_cloak/artifacts.sha256",
+  "exit_code": 0,
+  "stdout": "drwxr-xr-x 3 root root u:object_r:system_file:s0  3452 2026-10-23 01:44 /data/adb/modules/cyclone_cloak\n-rw-r--r-- 1 root root u:object_r:system_file:s0  174 2026-10-23 01:43 /data/adb/modules/cyclone_cloak/artifacts.sha256\n0b2e9884b3f75adc5d2038f1684c928d17092bfe0e4fdf979ce812bb30ba57c1  zygisk/arm64-v8a.so\ndd175d53738cb053c2782edb990f9b7531a514f1d50179618b656ae367bd4c33  zygisk/armeabi-v7a.so\n",
+  "stderr": "stat: '/data/adb/modules/cyclone_cloak/load-records.jsonl': No such file or directory\n"
+}

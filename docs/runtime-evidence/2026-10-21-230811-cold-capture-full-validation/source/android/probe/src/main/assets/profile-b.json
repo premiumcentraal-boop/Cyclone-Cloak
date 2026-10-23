@@ -1,0 +1,79 @@
+{
+  "schema_version": "0.3",
+  "id": "7bf62497-5c67-57db-924e-c9d80e482ab7",
+  "name": "Runtime probe b",
+  "seed": "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
+  "device": {
+    "manufacturer": "samsung",
+    "brand": "samsung",
+    "model": "SM-S911B",
+    "product": "beyond1q",
+    "device": "beyond1q",
+    "hardware": "exynos2200",
+    "fingerprint": "samsung/beyond1q/beyond1q:13/TP1A.220624.014/S911BXXU2AWA1:user/release-keys",
+    "version_release": "13",
+    "sdk_int": 33,
+    "security_patch": "2023-08-01",
+    "build_id": "TP1A.220624.014",
+    "version_incremental": "S911BXXU2AWA1",
+    "build_date_utc": 1691952000,
+    "first_api_level": 33,
+    "bootloader": "beyond1q-1.0-24551412",
+    "baseband": "S911BXXU2AWA1"
+  },
+  "identifiers": {
+    "android_id": "e97329c771b85167",
+    "advertising_id": "c75b6a1f-fc22-4adb-a537-dfda5d7a7464",
+    "app_set_id": "39080410-fd7d-4591-b49d-821f874d83e7",
+    "mac": "02:77:E6:F2:E2:6F",
+    "bt_mac": "F2:EA:B4:FD:A1:DD",
+    "imei_primary": "985798299849446",
+    "imei_secondary": "365410833928005",
+    "sim_serial": "5023565510623140458",
+    "gsf_id": "7f8eb0365b17dbba",
+    "widevine_id": "0fef82465dd83eeea45459a50ed0ec00fc865d7421868df7d2a39de8b37cf16c",
+    "serial": "REVD99EFRLFS"
+  },
+  "telephony": {
+    "sim_slot_count": 1,
+    "carrier_name": "Vodafone",
+    "mcc": "262",
+    "mnc": "02",
+    "network_type": "LTE"
+  },
+  "network": {
+    "egress_hint": "eu-central"
+  },
+  "display": {
+    "width": 1080,
+    "height": 2340,
+    "density": 420,
+    "refresh_rate_hz": 120,
+    "screen_size_class": "large"
+  },
+  "camera": {
+    "cameras": [{"facing":1,"hardware_level":1,"pixel_width":8160,"pixel_height":6144},{"facing":1,"hardware_level":0,"pixel_width":4032,"pixel_height":3024},{"facing":1,"hardware_level":0,"pixel_width":3648,"pixel_height":2736},{"facing":0,"hardware_level":0,"pixel_width":4032,"pixel_height":3024}]
+  },
+  "locale": {
+    "language": "de",
+    "country": "DE",
+    "timezone": "Europe/Berlin"
+  },
+  "ua": {
+    "value": "Mozilla/5.0 (Linux; Android 13; SM-S911B) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.1218.75 Safari/537.36"
+  },
+  "integrity": {
+    "verdict": "unknown",
+    "checked_at": null,
+    "keybox_tag": null
+  },
+  "health": {
+    "state": "new",
+    "last_seen": null
+  },
+  "meta": {
+    "source": "forge",
+    "forge_version": "0.2.0",
+    "template": "galaxy_s23"
+  }
+}

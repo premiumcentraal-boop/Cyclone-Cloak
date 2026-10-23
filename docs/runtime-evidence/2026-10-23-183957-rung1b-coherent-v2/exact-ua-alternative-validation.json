@@ -1,0 +1,14 @@
+[
+  {
+    "severity": "error",
+    "code": "UA_FORMAT",
+    "message": "ua.value must be a Chrome-on-Android user agent string",
+    "field": "ua.value"
+  },
+  {
+    "severity": "warning",
+    "code": "PATCH_AFTER_BUILD",
+    "message": "device.security_patch: security patch is newer than the build date",
+    "field": "device.security_patch"
+  }
+]

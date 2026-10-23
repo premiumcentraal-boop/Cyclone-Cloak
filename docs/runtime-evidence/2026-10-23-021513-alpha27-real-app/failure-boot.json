@@ -1,0 +1,5 @@
+{
+  "error": "RuntimeError",
+  "reason": "ADB_COMMAND_FAILED:('shell', 'getprop sys.boot_completed')",
+  "at": 1792714535.8632472
+}

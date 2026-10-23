@@ -1,0 +1,20 @@
+{
+  "non_module_production_delta": [],
+  "permission_delta": [
+    "PERMISSION_STATE_CHANGED"
+  ],
+  "libraries": {
+    "arm64-v8a": {
+      "expected": "44edb907e87fcd9ea14c927903b17a3ec1682555eeb39ba8c686d9b62f8735b7",
+      "installed": "44edb907e87fcd9ea14c927903b17a3ec1682555eeb39ba8c686d9b62f8735b7"
+    },
+    "armeabi-v7a": {
+      "expected": "cd330c1cdb7115530fb063f5c28bbefcca10dfc98d44ea4cbbfbdb801459b36f",
+      "installed": "cd330c1cdb7115530fb063f5c28bbefcca10dfc98d44ea4cbbfbdb801459b36f"
+    }
+  },
+  "users": {
+    "0": "RUNNING_UNLOCKED",
+    "17": "RUNNING_UNLOCKED"
+  }
+}

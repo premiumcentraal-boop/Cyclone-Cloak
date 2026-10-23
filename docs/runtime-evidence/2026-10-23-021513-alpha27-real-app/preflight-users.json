@@ -1,0 +1,8 @@
+{
+  "states": {
+    "0": "RUNNING_UNLOCKED",
+    "17": "RUNNING_UNLOCKED"
+  },
+  "current": "0",
+  "devices": "List of devices attached\n3B171FDJH0061G         device product:shiba model:Pixel_8 device:shiba transport_id:6\n\n"
+}

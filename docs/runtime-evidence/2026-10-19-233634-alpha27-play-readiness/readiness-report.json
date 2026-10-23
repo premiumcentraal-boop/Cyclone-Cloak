@@ -1,0 +1,26 @@
+{
+  "format": 1,
+  "profile_id": "Cyclone_2ca4cf9432e64fbd",
+  "profile_hash": "945be161ca131ba888c649059aac897986911861627efb83219a408ad376219d",
+  "artifact_hash": "7e8803535fcd011750a5c07c283bc83e10ed335860965ddecbb05883e88d2a62",
+  "android_user_id": 17,
+  "timestamp": "2026-10-19T23:40:03Z",
+  "play_services": {
+    "package_name": "com.google.android.gms",
+    "state": "enabled"
+  },
+  "play_store": {
+    "package_name": "com.android.vending",
+    "state": "enabled"
+  },
+  "web_provider": {
+    "package_name": "com.google.android.webview",
+    "state": "enabled"
+  },
+  "play_protect": "unknown",
+  "google_settings_access": "unknown",
+  "google_account": "unknown",
+  "integrity_api": "unknown",
+  "warnings": [],
+  "failures": []
+}

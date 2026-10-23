@@ -1,0 +1,76 @@
+{
+  "scope": "Measured artifact/profile C only; no generated contract status changed; not verified runtime enforcement or independence.",
+  "APPLIED": [
+    {
+      "path": "reality.carrier.values.sim_state",
+      "rows": [
+        "envelope.telephony.simState",
+        "envelope.telephony.simStateSlot0"
+      ],
+      "new": false
+    },
+    {
+      "path": "reality.compute.values.gpu",
+      "rows": [
+        "envelope.compute.gpuRenderer"
+      ],
+      "new": true
+    },
+    {
+      "path": "reality.packages.values.installed",
+      "rows": [
+        "envelope.packages.visibleVersions"
+      ],
+      "new": true
+    },
+    {
+      "path": "reality.packages.values.installed[].package",
+      "rows": [
+        "envelope.packages.visibleVersions"
+      ],
+      "new": true
+    },
+    {
+      "path": "reality.packages.values.installed[].version_code",
+      "rows": [
+        "envelope.packages.visibleVersions"
+      ],
+      "new": true
+    },
+    {
+      "path": "reality.packages.values.installed[].version_name",
+      "rows": [
+        "envelope.packages.visibleVersions"
+      ],
+      "new": true
+    },
+    {
+      "path": "reality.webview.values.provider",
+      "rows": [
+        "envelope.webview.provider"
+      ],
+      "new": true
+    },
+    {
+      "path": "reality.webview.values.version",
+      "rows": [
+        "envelope.webview.version"
+      ],
+      "new": true
+    }
+  ],
+  "remaining_PARTIAL": [
+    "reality.memory.values.free_storage_gib",
+    "reality.sensors.values.inventory",
+    "reality.sensors.values.inventory[].max_delay_us",
+    "reality.sensors.values.inventory[].min_delay_us",
+    "reality.sensors.values.inventory[].name",
+    "reality.sensors.values.inventory[].range",
+    "reality.sensors.values.inventory[].resolution",
+    "reality.sensors.values.inventory[].type",
+    "reality.webview.values.user_agent"
+  ],
+  "instance_UA_ledger": "UNVERIFIED",
+  "VERIFIED": [],
+  "note": "Package aggregate contains package names/version_code/version_name; full canonical aggregate hash passed. GPU maps to the separate concrete EGL/GLES envelope reader; original generic Reality row remains UNMAPPED. Host-authored equality alone does not establish distinct-value override or isolation."
+}

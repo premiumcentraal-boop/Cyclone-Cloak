@@ -1,0 +1,176 @@
+[
+  {
+    "user": 0,
+    "capture": 1,
+    "request_id": "filesystem-2026-10-23-004710-0-1",
+    "pid": 12128,
+    "counts": {
+      "BLOCKED": 2,
+      "OBSERVED": 2
+    },
+    "rows": [
+      {
+        "id": "diagnostics.filesystem.build_prop",
+        "source": "/system/build.prop",
+        "status": "BLOCKED",
+        "reason": "PERMISSION_DENIED",
+        "sha256": null,
+        "byte_count": null,
+        "line_count": null,
+        "duration_ms": 2
+      },
+      {
+        "id": "diagnostics.filesystem.proc_version",
+        "source": "/proc/version",
+        "status": "BLOCKED",
+        "reason": "PERMISSION_DENIED",
+        "sha256": null,
+        "byte_count": null,
+        "line_count": null,
+        "duration_ms": 0
+      },
+      {
+        "id": "diagnostics.filesystem.proc_cpuinfo",
+        "source": "/proc/cpuinfo",
+        "status": "OBSERVED",
+        "reason": "OBSERVATION_ONLY_NO_EXPECTATION",
+        "sha256": "e29c2b53aec8cdcf40deeb7849d318ee4984daf5474b93a2302318a30905c4f3",
+        "byte_count": 3681,
+        "line_count": 81,
+        "duration_ms": 2
+      },
+      {
+        "id": "diagnostics.filesystem.maps_snapshot",
+        "source": "/proc/self/maps",
+        "status": "OBSERVED",
+        "reason": "OBSERVATION_ONLY_NO_EXPECTATION",
+        "sha256": "9211ec1df3aea64cd1ece0b84de820e58b1c59734275c0ba87c66c01a9b96a23",
+        "byte_count": 324746,
+        "line_count": 3335,
+        "duration_ms": 57
+      }
+    ],
+    "legacy_counts": {
+      "PASS": 25,
+      "FAIL": 48,
+      "BLOCKED": 12,
+      "OBSERVED": 4
+    }
+  },
+  {
+    "user": 17,
+    "capture": 1,
+    "request_id": "filesystem-2026-10-23-004710-17-1",
+    "pid": 13608,
+    "counts": {
+      "BLOCKED": 2,
+      "OBSERVED": 2
+    },
+    "rows": [
+      {
+        "id": "diagnostics.filesystem.build_prop",
+        "source": "/system/build.prop",
+        "status": "BLOCKED",
+        "reason": "PERMISSION_DENIED",
+        "sha256": null,
+        "byte_count": null,
+        "line_count": null,
+        "duration_ms": 0
+      },
+      {
+        "id": "diagnostics.filesystem.proc_version",
+        "source": "/proc/version",
+        "status": "BLOCKED",
+        "reason": "PERMISSION_DENIED",
+        "sha256": null,
+        "byte_count": null,
+        "line_count": null,
+        "duration_ms": 0
+      },
+      {
+        "id": "diagnostics.filesystem.proc_cpuinfo",
+        "source": "/proc/cpuinfo",
+        "status": "OBSERVED",
+        "reason": "OBSERVATION_ONLY_NO_EXPECTATION",
+        "sha256": "e29c2b53aec8cdcf40deeb7849d318ee4984daf5474b93a2302318a30905c4f3",
+        "byte_count": 3681,
+        "line_count": 81,
+        "duration_ms": 0
+      },
+      {
+        "id": "diagnostics.filesystem.maps_snapshot",
+        "source": "/proc/self/maps",
+        "status": "OBSERVED",
+        "reason": "OBSERVATION_ONLY_NO_EXPECTATION",
+        "sha256": "25219a71546426f6a703fd7e120a67941242b7c409f352008f3d09f8ead35d01",
+        "byte_count": 357353,
+        "line_count": 3742,
+        "duration_ms": 4
+      }
+    ],
+    "legacy_counts": {
+      "FAIL": 58,
+      "BLOCKED": 12,
+      "PASS": 15,
+      "OBSERVED": 4
+    }
+  },
+  {
+    "user": 17,
+    "capture": 2,
+    "request_id": "filesystem-2026-10-23-004710-17-2",
+    "pid": 15796,
+    "counts": {
+      "BLOCKED": 2,
+      "OBSERVED": 2
+    },
+    "rows": [
+      {
+        "id": "diagnostics.filesystem.build_prop",
+        "source": "/system/build.prop",
+        "status": "BLOCKED",
+        "reason": "PERMISSION_DENIED",
+        "sha256": null,
+        "byte_count": null,
+        "line_count": null,
+        "duration_ms": 2
+      },
+      {
+        "id": "diagnostics.filesystem.proc_version",
+        "source": "/proc/version",
+        "status": "BLOCKED",
+        "reason": "PERMISSION_DENIED",
+        "sha256": null,
+        "byte_count": null,
+        "line_count": null,
+        "duration_ms": 5
+      },
+      {
+        "id": "diagnostics.filesystem.proc_cpuinfo",
+        "source": "/proc/cpuinfo",
+        "status": "OBSERVED",
+        "reason": "OBSERVATION_ONLY_NO_EXPECTATION",
+        "sha256": "e29c2b53aec8cdcf40deeb7849d318ee4984daf5474b93a2302318a30905c4f3",
+        "byte_count": 3681,
+        "line_count": 81,
+        "duration_ms": 2
+      },
+      {
+        "id": "diagnostics.filesystem.maps_snapshot",
+        "source": "/proc/self/maps",
+        "status": "OBSERVED",
+        "reason": "OBSERVATION_ONLY_NO_EXPECTATION",
+        "sha256": "bb33b34d0abb8ca4780b058c957e5610766ff70a75f82b0597f7997032e5a2da",
+        "byte_count": 324574,
+        "line_count": 3330,
+        "duration_ms": 61
+      }
+    ],
+    "legacy_counts": {
+      "FAIL": 58,
+      "BLOCKED": 12,
+      "PASS": 15,
+      "OBSERVED": 4
+    }
+  }
+]

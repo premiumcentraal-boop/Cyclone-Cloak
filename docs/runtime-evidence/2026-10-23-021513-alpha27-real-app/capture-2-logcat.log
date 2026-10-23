@@ -1,0 +1,112 @@
+--------- beginning of main
+10-23 02:16:47.616 14586 14586 W cetrust.scanner: type=1400 audit(0.0:912): avc:  granted  { execute } for  path="/data/user/17/com.devicetrust.scanner/libshadowhook.so" dev="dm-64" ino=317351 scontext=u:r:untrusted_app:s0:c55,c257,c529,c768 tcontext=u:object_r:app_data_file:s0:c55,c257,c529,c768 tclass=file
+10-23 02:16:47.624 14586 14586 W cetrust.scanner: type=1400 audit(0.0:913): avc:  granted  { execute } for  path="/data/user/17/com.devicetrust.scanner/code_cache/cloak_hooks/libpine.so" dev="dm-64" ino=311698 scontext=u:r:untrusted_app:s0:c55,c257,c529,c768 tcontext=u:object_r:app_data_file:s0:c55,c257,c529,c768 tclass=file
+10-23 02:16:47.601 14586 14586 I CloakModule: cloaking 17:com.devicetrust.scanner (64 props)
+10-23 02:16:47.610 14586 14586 I Zygote  : Process 14586 created for com.devicetrust.scanner
+10-23 02:16:47.610 14586 14586 I cetrust.scanner: Using generational CollectorTypeCMC GC.
+10-23 02:16:47.621 14586 14586 E shadowhook_tag: shadowhook version 1.0.10: shadowhook init(mode: UNIQUE, debuggable: false), return: 0, real-init: yes
+10-23 02:16:47.622 14586 14586 I CloakModule: native property hook installed
+10-23 02:16:47.622 14586 14586 I CloakModule: native property callback hook installed
+10-23 02:16:47.622 14586 14586 E System  : Ignoring attempt to set property "user.language" to value "de".
+10-23 02:16:47.624 14586 14586 I CloakModule: [cloak-hook] ART runtime API 36, debuggable=false
+10-23 02:16:47.627 14586 14586 W System  : Attempt to load writable file: /data/user/17/com.devicetrust.scanner/code_cache/cloak_hooks/libpine.so. This will throw on a future Android version. Current sdk version: 36
+10-23 02:16:47.628 14586 14586 D nativeloader: Configuring clns-9 for other apk . target_sdk_version=0, uses_libraries=ALL, library_path=, permitted_path=/data:/mnt/expand
+10-23 02:16:47.629 14586 14586 D nativeloader: Load /data/user/17/com.devicetrust.scanner/code_cache/cloak_hooks/libpine.so using isolated ns clns-9 (caller=Anonymous-DexFile@290290320): ok
+10-23 02:16:47.679 14586 14586 I CloakModule: [cloak-hook] mediadrm hook installed
+10-23 02:16:47.679 14586 14586 I CloakModule: [cloak-hook] camera hooks installed
+10-23 02:16:47.680 14586 14586 I CloakModule: [cloak-hook] display hooks installed
+10-23 02:16:47.681 14586 14586 I CloakModule: [cloak-hook] java callbacks installed
+10-23 02:16:47.682 14586 14586 W libbinder.BackendUnifiedServiceManager: Thread Pool max thread count is 0. Cannot cache binder as linkToDeath cannot be implemented. serviceName: activity
+10-23 02:16:47.694 14586 14586 D nativeloader: Load libframework-connectivity-tiramisu-jni.so using APEX ns com_android_tethering for caller /apex/com.android.tethering/javalib/framework-connectivity-t.jar: ok
+--------- beginning of system
+10-23 02:16:47.702 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.715 14586 14586 D nativeloader: Configuring clns-10 for other apk /data/app/~~AT6pawum7al2U4TxDsJKWA==/com.devicetrust.scanner-XNR3T-DJJicGsMad7xPMNg==/base.apk. target_sdk_version=35, uses_libraries=, library_path=/data/app/~~AT6pawum7al2U4TxDsJKWA==/com.devicetrust.scanner-XNR3T-DJJicGsMad7xPMNg==/lib/arm64:/data/app/~~AT6pawum7al2U4TxDsJKWA==/com.devicetrust.scanner-XNR3T-DJJicGsMad7xPMNg==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand:/data/user/17/com.devicetrust.scanner
+10-23 02:16:47.716 14586 14586 D CompatChangeReporter: Compat change id reported: 202956589; UID 1710311; state: ENABLED
+10-23 02:16:47.717 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.718 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.719 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.720 14586 14586 V GraphicsEnvironment: Currently set values for:
+10-23 02:16:47.720 14586 14586 V GraphicsEnvironment:   angle_gl_driver_selection_pkgs=[com.android.angle]
+10-23 02:16:47.720 14586 14586 V GraphicsEnvironment:   angle_gl_driver_selection_values=[angle]
+10-23 02:16:47.720 14586 14586 V GraphicsEnvironment: com.devicetrust.scanner is not listed in per-application setting
+10-23 02:16:47.720 14586 14586 V GraphicsEnvironment: No special selections for ANGLE, returning default driver choice
+10-23 02:16:47.720 14586 14586 V GraphicsEnvironment: Neither updatable production driver nor prerelease driver is supported.
+10-23 02:16:47.721 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.729 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.730 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.733 14586 14624 I DisplayManager: Choreographer implicitly registered for the refresh rate.
+10-23 02:16:47.736 14586 14624 D vulkan  : searching for layers in '/data/app/~~AT6pawum7al2U4TxDsJKWA==/com.devicetrust.scanner-XNR3T-DJJicGsMad7xPMNg==/lib/arm64'
+10-23 02:16:47.736 14586 14624 D vulkan  : searching for layers in '/data/app/~~AT6pawum7al2U4TxDsJKWA==/com.devicetrust.scanner-XNR3T-DJJicGsMad7xPMNg==/base.apk!/lib/arm64-v8a'
+10-23 02:16:47.742 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.743 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.752 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.752 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.753 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.753 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.753 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.753 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.756 14586 14586 D CompatChangeReporter: Compat change id reported: 309578419; UID 1710311; state: ENABLED
+10-23 02:16:47.756 14586 14586 D DesktopExperienceFlags: Toggle override initialized to: false
+10-23 02:16:47.756 14586 14586 D DesktopModeFlags: Toggle override initialized to: OVERRIDE_UNSET
+10-23 02:16:47.757 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.757 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.758 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.758 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.760 14586 14586 I ContentCaptureHelper: Setting logging level to OFF
+10-23 02:16:47.776 14586 14586 D CompatChangeReporter: Compat change id reported: 349153669; UID 1710311; state: ENABLED
+10-23 02:16:47.776 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.777 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.779 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.780 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.783 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.785 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.785 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.792 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.792 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.795 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.798 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.798 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.798 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.800 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.804 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.804 14586 14586 D VRI[MainActivity]: WindowInsets changed: 1080x2400 statusBars:[0,132,0,0] navigationBars:[0,0,0,63] mandatorySystemGestures:[0,170,0,84] 
+10-23 02:16:47.804 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.804 14586 14586 D WindowOnBackDispatcher: setTopOnBackInvokedCallback (unwrapped): android.view.ViewRootImpl$$ExternalSyntheticLambda25@4ca0436
+10-23 02:16:47.804 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.808 14586 14586 I HWUI    : Using FreeType backend (prop=Auto)
+10-23 02:16:47.837 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.838 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.844 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.847 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.847 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.848 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.848 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.849 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.851 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.851 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.851 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.868 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.868 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.868 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.868 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.868 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.868 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.925 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.935 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.935 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.935 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.935 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.935 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.935 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.935 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.935 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.966 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:47.970 14586 14586 D InsetsController: hide(ime())
+10-23 02:16:47.970 14586 14586 I ImeTracker: com.devicetrust.scanner:39086184: onCancelled at PHASE_CLIENT_ALREADY_HIDDEN
+10-23 02:16:48.682 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:48.685 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:48.685 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:48.685 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:48.685 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:48.685 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:48.685 14586 14586 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]

@@ -1,0 +1,14 @@
+{
+  "run_id": "13b9623eb1e44e399d866ba42e4bcbe0",
+  "selections": [
+    {
+      "kind": "fixture",
+      "fixture": "b",
+      "user": 17,
+      "profile_id": "7bf62497-5c67-57db-924e-c9d80e482ab7",
+      "sha256": "2bb5d74138d14251f316038be1a679fb53b1aad0796e190a8d03e7bb8494482e"
+    }
+  ],
+  "target_package": "com.devicetrust.scanner",
+  "overlay_active": false
+}

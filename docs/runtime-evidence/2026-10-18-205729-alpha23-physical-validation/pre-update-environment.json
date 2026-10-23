@@ -1,0 +1,17 @@
+{
+  "app_version": "0.11.0-alpha.23",
+  "app_code": "47",
+  "module": "id=cyclone_cloak\nname=Cyclone Cloak\nversion=v0.11.0-alpha.23\nversionCode=47\nauthor=Cyclone Cloak contributors\ndescription=Device-profile engine for Cyclone (platform). Manage per-app profiles from the Cyclone Cloak companion app. Requires platform.\n",
+  "users": "9 users:\n\n0: id=0, name=Owner, type=full.SYSTEM, flags=ADMIN|FULL|INITIALIZED|MAIN|PRIMARY|SYSTEM (running) (current) (visible)\n1: id=10, name=RootDeck-Clone, type=full.SECONDARY, flags=FULL|INITIALIZED\n2: id=11, name=Cyclone_7f0771bb6cbe48d7, type=profile.MANAGED, flags=INITIALIZED|MANAGED_PROFILE|PROFILE (parentId=0) (running) (visible)\n3: id=12, name=Cyclone_ffaf7fcbd72e4e0d, type=full.SECONDARY, flags=FULL|INITIALIZED\n4: id=13, name=Cyclone_65c6bc11c4f247a9, type=full.SECONDARY, flags=FULL|INITIALIZED\n5: id=14, name=Cyclone_90bfb9a6c92b4165, type=full.SECONDARY, flags=FULL|INITIALIZED\n6: id=15, name=Cyclone_19a8b9db13c24028, type=full.SECONDARY, flags=FULL|INITIALIZED\n7: id=16, name=Cyclone_01959c078e944eab, type=full.SECONDARY, flags=FULL|INITIALIZED\n8: id=17, name=Cyclone_2ca4cf9432e64fbd, type=full.SECONDARY, flags=FULL|INITIALIZED\n",
+  "user_states": {
+    "0": "RUNNING_UNLOCKED",
+    "17": "User is not started: 17"
+  },
+  "active_user": "0",
+  "boot_id": "566cf247-a1ad-4289-b14d-b7095878f759",
+  "installed_app_sha256": "8b605d985e97e31af32cce6263fc7cb4a94bb936f83b8b077d88be714d61c3cd",
+  "installed_module_matches_release": {
+    "zygisk/arm64-v8a.so": true,
+    "zygisk/armeabi-v7a.so": true
+  }
+}

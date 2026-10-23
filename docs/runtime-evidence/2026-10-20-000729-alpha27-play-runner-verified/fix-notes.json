@@ -1,0 +1,16 @@
+{
+  "runner_base_commit": "a51c6d1b4e6144b754ec5fda2bdad6cdfc6813d1",
+  "runner_worktree_sha256": "0a3e155c0da873c755a3f6749f027d886ba35f99621df22e60516765edeb24d8",
+  "fixes": [
+    "Explicit signed-APK root transport, never automatic fallback",
+    "Unique checked remote exit marker",
+    "Non-PTY shell-v2 stdin with EOF forwarding",
+    "App UID ownership and forced recursive per-user SELinux label repair of diagnostics inputs",
+    "Explicit fresh-intent delivery to reused activity"
+  ],
+  "operator_clicked_local_collection": true,
+  "integrity_requested": false,
+  "final_run_manual_staging_or_relaunch": false,
+  "private_profile_body_saved_to_pc": false,
+  "release_or_version_changes": false
+}

@@ -1,0 +1,30 @@
+{
+  "request_id": "filesystem-2026-10-21-230811-0-1",
+  "markers": {
+    "start": {
+      "format": 1,
+      "request_id": "filesystem-2026-10-21-230811-0-1",
+      "session_generation": 1,
+      "uid": 10321,
+      "pid": 13083,
+      "phase": "start",
+      "outcome": "STARTED",
+      "timestamp_ms": 1792616901632
+    },
+    "end": {
+      "format": 1,
+      "request_id": "filesystem-2026-10-21-230811-0-1",
+      "session_generation": 1,
+      "uid": 10321,
+      "pid": 13083,
+      "phase": "end",
+      "outcome": "COMPLETED",
+      "timestamp_ms": 1792616902572
+    }
+  },
+  "diagnosis": {
+    "start_seen": true,
+    "end_seen": true,
+    "reason": "CAPTURE_ENDED_COMPLETED"
+  }
+}

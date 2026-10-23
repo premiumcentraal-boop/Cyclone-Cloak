@@ -1,0 +1,32 @@
+[
+  {
+    "user": 0,
+    "id": "diagnostics.filesystem.proc_cpuinfo",
+    "result": "IDENTICAL_OBSERVATION",
+    "digests": [
+      "e29c2b53aec8cdcf40deeb7849d318ee4984daf5474b93a2302318a30905c4f3",
+      "e29c2b53aec8cdcf40deeb7849d318ee4984daf5474b93a2302318a30905c4f3"
+    ]
+  },
+  {
+    "user": 0,
+    "id": "diagnostics.filesystem.maps_snapshot",
+    "result": "SKIPPED_VOLATILE",
+    "digests": [
+      "7c5c77de9ca85a90cf7443dcf3156eac574d91ffacadb2d98737042ad9aa4d43",
+      "2f507a852563c53989b88fc0394993bee007d6dac0e5c8cec80f637db3a2a7b0"
+    ]
+  },
+  {
+    "user": 17,
+    "id": "diagnostics.filesystem.proc_cpuinfo",
+    "result": "NOT_REACHED",
+    "digests": []
+  },
+  {
+    "user": 17,
+    "id": "diagnostics.filesystem.maps_snapshot",
+    "result": "NOT_REACHED",
+    "digests": []
+  }
+]

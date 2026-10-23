@@ -1,0 +1,26 @@
+[
+  {
+    "user": 0,
+    "capture": 1,
+    "schema": "filesystem-observations.schema.json",
+    "schema_valid": true,
+    "unique_legacy_rows": 89,
+    "request_fixture_hash_marker_binding": true
+  },
+  {
+    "user": 17,
+    "capture": 1,
+    "schema": "filesystem-observations.schema.json",
+    "schema_valid": true,
+    "unique_legacy_rows": 89,
+    "request_fixture_hash_marker_binding": true
+  },
+  {
+    "user": 17,
+    "capture": 2,
+    "schema": "filesystem-observations.schema.json",
+    "schema_valid": true,
+    "unique_legacy_rows": 89,
+    "request_fixture_hash_marker_binding": true
+  }
+]

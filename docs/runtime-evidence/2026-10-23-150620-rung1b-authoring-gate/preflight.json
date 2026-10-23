@@ -1,0 +1,41 @@
+{
+  "recorded_at": "2026-10-23T13:07:14.270227+00:00",
+  "commit": "d4f0a5cb5f4d70bacaeb0b8ecdff184eff154150",
+  "source_sha256": {
+    "RuntimeEnvelopeReport.java": "527ea997092b8512f1805e96db0dd7400a1c2a47489db98a588f943a7c1f4294",
+    "RealityReport.java": "6800ba803e7e5fadb9f9faa87edddbbcbe1238c3f503c7cc642d162c062747d4",
+    "ProbeReportPolicy.java": "6d9606f2f69f8949da1887ff98c5525f01b4f69ed122c76544b84ff430272304",
+    "ProbeActivity.java": "7a6866db93e872c8d7800a5daa6b23725a2818aac2bc9521bc4028898025c5ef"
+  },
+  "fixture_c_sha256": "2f7b201e99d58322efbf34663a91d30323f160e939b10882d133c2d3a441831a",
+  "fixture_unchanged": true,
+  "apk_sha256": "64307da13a805c77cafb820ed830505eb209019eed18ee9ecc40305784f876b7",
+  "module_zip_sha256": "0a69abcfb7943cd2d43b5e6e4ececc8b8c356e99768dda431b83d9bcf1a43d18",
+  "module_readonly": {
+    "exit_code": 0,
+    "stdout": "d7dd105446a229f981e5cdd1aed862a13e3c7d04220f04fb08eadde175bb15c1  /data/adb/modules/cyclone_cloak/zygisk/arm64-v8a.so\r\nid=cyclone_cloak\r\r\nname=Cyclone Cloak\r\r\nversion=v0.11.0-alpha.28\r\r\nversionCode=52\r\r\nauthor=Cyclone Cloak contributors\r\r\ndescription=Device-profile engine for Cyclone (platform). Manage per-app profiles from the Cyclone Cloak companion app. Requires platform.\r\r\n",
+    "stderr": ""
+  },
+  "device": {
+    "exit_code": 0,
+    "stdout": "device\r\n",
+    "stderr": ""
+  },
+  "users": {
+    "exit_code": 0,
+    "stdout": "0\r\nRUNNING_UNLOCKED\r\nRUNNING_UNLOCKED\r\n",
+    "stderr": ""
+  },
+  "diagnostics_presence": {
+    "0": {
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": ""
+    },
+    "17": {
+      "exit_code": 1,
+      "stdout": "",
+      "stderr": ""
+    }
+  }
+}

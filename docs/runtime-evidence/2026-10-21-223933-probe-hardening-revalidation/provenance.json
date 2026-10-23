@@ -1,0 +1,10 @@
+{
+  "commit": "d4f0a5cb5f4d70bacaeb0b8ecdff184eff154150",
+  "dirty_worktree": true,
+  "tracked_diff_sha256": "1377da94eaeb182207b2c9f819ffade914ec07168efe6a738a2b7508c67fcfa6",
+  "apk_sha256": "f742a9f212f2b61c3f17ae4eeb08a959433aa938ac319237b5daf88dde191147",
+  "apk_bytes": 3644336,
+  "source": "locally built diagnostics APK with probe hardening; no module build or release change",
+  "module_provenance": "Not inspected or changed; installed binary identity not established",
+  "permissions": "No grants, revokes, AppOps changes or runtime permission prompts requested"
+}

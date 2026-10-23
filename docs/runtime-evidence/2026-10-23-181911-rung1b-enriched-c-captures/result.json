@@ -1,0 +1,15 @@
+{
+  "result": "NOT_VALIDATED",
+  "capture_sequence_complete": true,
+  "captures": 4,
+  "fixture_schema_valid": true,
+  "fixture_coherence_errors": 2,
+  "first_unresolved_gate": "FIXTURE_COHERENCE",
+  "promotions": 0,
+  "legacy_determinism_post_grants": true,
+  "production_audit_equal": true,
+  "module_immutable_equal": true,
+  "no_module_action": true,
+  "no_reboot": true,
+  "no_release": true
+}

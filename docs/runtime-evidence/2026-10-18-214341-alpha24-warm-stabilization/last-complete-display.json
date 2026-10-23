@@ -1,0 +1,48 @@
+{
+  "phase": "user-0-post-removal-warm-repeat-6",
+  "pid": 8984,
+  "request_id": "2d5526b4ea634a0ca6f865c84edd72ac",
+  "profile_sha256": "e476b02fd308c62cf207f4fe60e97085bbd14ca6293b405c2cedb996c9555f53",
+  "legacy_counts": {
+    "PASS": 82,
+    "FAIL": 0,
+    "OBSERVED": 7,
+    "BLOCKED": 0,
+    "MISSING": 0
+  },
+  "linked_counts": {
+    "PASS": 13,
+    "FAIL": 0,
+    "MISSING": 0
+  },
+  "display_diagnostics": {
+    "active_mode": {
+      "value": {
+        "width": 1080,
+        "height": 2400,
+        "refresh_hz": 90
+      },
+      "status": "OBSERVED"
+    },
+    "supported_modes": {
+      "value": [
+        {
+          "width": 1080,
+          "height": 2400,
+          "refresh_hz": 90
+        },
+        {
+          "width": 1080,
+          "height": 2400,
+          "refresh_hz": 120.00000762939453
+        }
+      ],
+      "status": "OBSERVED"
+    },
+    "refresh_rate_hz": {
+      "value": 90,
+      "status": "OBSERVED"
+    }
+  },
+  "limitation": "Last completed capture before crash. The failed repeat-7 produced no completed display report; do not attribute this tuple to the failed capture."
+}

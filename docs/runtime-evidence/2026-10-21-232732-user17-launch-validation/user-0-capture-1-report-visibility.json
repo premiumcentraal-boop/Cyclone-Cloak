@@ -1,0 +1,23 @@
+[
+  {
+    "transport": "external_shell",
+    "path": "/storage/emulated/0/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json",
+    "state": "READABLE",
+    "exit_code": 0,
+    "stderr": ""
+  },
+  {
+    "transport": "external_run_as",
+    "path": "/storage/emulated/0/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json",
+    "state": "ACCESS_DENIED_EXISTENCE_UNKNOWN",
+    "exit_code": 1,
+    "stderr": "cat: /storage/emulated/0/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json: Permission denied\n"
+  },
+  {
+    "transport": "private_run_as",
+    "path": "/data/user/0/dev.cyclone.cloak.probe.diag/files/report.json",
+    "state": "READABLE",
+    "exit_code": 0,
+    "stderr": ""
+  }
+]

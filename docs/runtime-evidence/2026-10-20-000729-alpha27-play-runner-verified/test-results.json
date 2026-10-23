@@ -1,0 +1,40 @@
+{
+  "android": {
+    "app:testDebugUnitTest": {
+      "tests": 692,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "module:testDebugUnitTest": {
+      "tests": 40,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "playEvidence:testDebugUnitTest": {
+      "tests": 20,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "probe:testStandardDebugUnitTest": {
+      "tests": 109,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "probe:testDiagnosticsDebugUnitTest": {
+      "tests": 109,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    }
+  },
+  "forge_and_schema": 1045,
+  "probe_host_unittest": 7,
+  "focused_runner_tests_included_in_forge": 38,
+  "debug_build": "SUCCESS",
+  "compiler_warnings": [],
+  "diff_check": "PASS"
+}

@@ -1,0 +1,13 @@
+{
+  "runtime_permissions": [
+    "ACCESS_FINE_LOCATION",
+    "ACCESS_COARSE_LOCATION",
+    "NEARBY_WIFI_DEVICES",
+    "BLUETOOTH_CONNECT"
+  ],
+  "normal_permission": "ACCESS_WIFI_STATE",
+  "read_phone_state_declared": false,
+  "sim_expectation_source": "reality.carrier.values.sim_state with known availability",
+  "fixture_b_has_reality": false,
+  "permanent_block_claimed": false
+}

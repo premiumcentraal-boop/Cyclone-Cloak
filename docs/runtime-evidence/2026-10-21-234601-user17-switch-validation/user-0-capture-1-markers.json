@@ -1,0 +1,120 @@
+{
+  "request_id": "filesystem-2026-10-21-234601-0-1",
+  "markers": {
+    "start": {
+      "format": 1,
+      "request_id": "filesystem-2026-10-21-234601-0-1",
+      "session_generation": 1,
+      "uid": 10324,
+      "pid": 7142,
+      "phase": "start",
+      "outcome": "STARTED",
+      "timestamp_ms": 1792619170844
+    },
+    "start_visibility": [
+      {
+        "transport": "lifecycle_run_as",
+        "path": "/data/user/0/dev.cyclone.cloak.probe.diag/files/capture-start.json",
+        "state": "READABLE",
+        "exit_code": 0,
+        "stderr": ""
+      },
+      {
+        "transport": "external_shell",
+        "path": "/storage/emulated/0/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-start.json",
+        "state": "READABLE",
+        "exit_code": 0,
+        "stderr": ""
+      },
+      {
+        "transport": "external_run_as",
+        "path": "/storage/emulated/0/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-start.json",
+        "state": "ACCESS_DENIED_EXISTENCE_UNKNOWN",
+        "exit_code": 1,
+        "stderr": "cat: /storage/emulated/0/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-start.json: Permission denied\n"
+      },
+      {
+        "transport": "private_run_as",
+        "path": "/data/user/0/dev.cyclone.cloak.probe.diag/files/capture-start.json",
+        "state": "READABLE",
+        "exit_code": 0,
+        "stderr": ""
+      }
+    ],
+    "end": {
+      "format": 1,
+      "request_id": "filesystem-2026-10-21-234601-0-1",
+      "session_generation": 1,
+      "uid": 10324,
+      "pid": 7142,
+      "phase": "end",
+      "outcome": "COMPLETED",
+      "timestamp_ms": 1792619171852
+    },
+    "end_visibility": [
+      {
+        "transport": "lifecycle_run_as",
+        "path": "/data/user/0/dev.cyclone.cloak.probe.diag/files/capture-end.json",
+        "state": "READABLE",
+        "exit_code": 0,
+        "stderr": ""
+      },
+      {
+        "transport": "external_shell",
+        "path": "/storage/emulated/0/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-end.json",
+        "state": "READABLE",
+        "exit_code": 0,
+        "stderr": ""
+      },
+      {
+        "transport": "external_run_as",
+        "path": "/storage/emulated/0/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-end.json",
+        "state": "ACCESS_DENIED_EXISTENCE_UNKNOWN",
+        "exit_code": 1,
+        "stderr": "cat: /storage/emulated/0/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-end.json: Permission denied\n"
+      },
+      {
+        "transport": "private_run_as",
+        "path": "/data/user/0/dev.cyclone.cloak.probe.diag/files/capture-end.json",
+        "state": "READABLE",
+        "exit_code": 0,
+        "stderr": ""
+      }
+    ]
+  },
+  "diagnosis": {
+    "start_seen": true,
+    "end_seen": true,
+    "reason": "CAPTURE_ENDED_COMPLETED",
+    "visibility": [
+      {
+        "transport": "lifecycle_run_as",
+        "path": "/data/user/0/dev.cyclone.cloak.probe.diag/files/capture-start.json",
+        "state": "READABLE",
+        "exit_code": 0,
+        "stderr": ""
+      },
+      {
+        "transport": "external_shell",
+        "path": "/storage/emulated/0/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-start.json",
+        "state": "READABLE",
+        "exit_code": 0,
+        "stderr": ""
+      },
+      {
+        "transport": "external_run_as",
+        "path": "/storage/emulated/0/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-start.json",
+        "state": "ACCESS_DENIED_EXISTENCE_UNKNOWN",
+        "exit_code": 1,
+        "stderr": "cat: /storage/emulated/0/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-start.json: Permission denied\n"
+      },
+      {
+        "transport": "private_run_as",
+        "path": "/data/user/0/dev.cyclone.cloak.probe.diag/files/capture-start.json",
+        "state": "READABLE",
+        "exit_code": 0,
+        "stderr": ""
+      }
+    ]
+  }
+}

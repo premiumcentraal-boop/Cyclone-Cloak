@@ -1,0 +1,13 @@
+{
+  "app": 692,
+  "module": 40,
+  "playEvidence": 20,
+  "probeStandard": 109,
+  "probeDiagnostics": 109,
+  "forge_and_schema": 1038,
+  "host_probe": 7,
+  "total": 2015,
+  "failures": 0,
+  "android_build_result": "BUILD SUCCESSFUL; test targets only",
+  "git_diff_check": "passed"
+}

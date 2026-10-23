@@ -1,0 +1,69 @@
+{
+  "compute": [
+    "soc",
+    "gpu",
+    "cpu_cores",
+    "abis"
+  ],
+  "memory": [
+    "ram_gib",
+    "storage_gib",
+    "free_storage_gib"
+  ],
+  "panel": [
+    "width",
+    "height",
+    "density_dpi",
+    "refresh_hz",
+    "technology",
+    "modes"
+  ],
+  "cameras": [
+    "count",
+    "inventory"
+  ],
+  "sensors": [
+    "inventory"
+  ],
+  "power": [
+    "design_capacity_mah",
+    "battery_percent",
+    "battery_state",
+    "charging_source",
+    "temperature_c",
+    "thermal_status",
+    "power_save"
+  ],
+  "drm": [
+    "security_level"
+  ],
+  "radio": [
+    "wifi_name",
+    "bluetooth_name",
+    "wifi_state",
+    "bluetooth_state"
+  ],
+  "carrier": [
+    "slots",
+    "mcc",
+    "mnc",
+    "country",
+    "sim_state"
+  ],
+  "packages": [
+    "installed"
+  ],
+  "webview": [
+    "provider",
+    "version",
+    "user_agent"
+  ],
+  "environment": [
+    "language",
+    "country",
+    "timezone",
+    "keyboard_layout",
+    "input_method",
+    "accessibility_enabled"
+  ]
+}

@@ -1,0 +1,71 @@
+--- a/android/probe/src/main/java/dev/cyclone/cloak/probe/RuntimeEnvelopeReport.java
++++ b/android/probe/src/main/java/dev/cyclone/cloak/probe/RuntimeEnvelopeReport.java
+@@ -139,7 +139,7 @@
+         }));
+         TelephonyManager telephony = activity.getSystemService(TelephonyManager.class);
+         Object state = expected(profile, "carrier", "sim_state");
+-        Integer expectedState = "absent".equals(state) ? 1 : "pin_required".equals(state) ? 2 : "puk_required".equals(state) ? 3 : "ready".equals(state) ? 5 : null;
++        Integer expectedState = simStateExpectation(state);
+         rows.put(row("envelope.telephony.simState", expectedState, telephony::getSimState));
+         rows.put(row("envelope.telephony.simStateSlot0", expectedState, () -> telephony.getSimState(0)));
+         rows.put(row("envelope.drm.securityLevel", expected(profile, "drm", "security_level"), () -> {
+@@ -148,6 +148,14 @@
+             }
+         }));
+         return report(rows);
++    }
++
++    static Integer simStateExpectation(Object state) {
++        if ("absent".equals(state)) return Integer.valueOf(1);
++        if ("pin_required".equals(state)) return Integer.valueOf(2);
++        if ("puk_required".equals(state)) return Integer.valueOf(3);
++        if ("ready".equals(state)) return Integer.valueOf(5);
++        return null;
+     }
+ 
+     private static Object baseSize(JSONObject profile) {
+--- /dev/null
++++ b/android/probe/src/test/java/dev/cyclone/cloak/probe/SimStateExpectationTest.java
+@@ -0,0 +1,42 @@
++package dev.cyclone.cloak.probe;
++
++import org.json.JSONArray;
++import org.json.JSONObject;
++import org.junit.Test;
++import static org.junit.Assert.*;
++
++public class SimStateExpectationTest {
++    private JSONObject envelope(Object expectation) throws Exception {
++        Integer state = RuntimeEnvelopeReport.simStateExpectation(expectation);
++        return RuntimeEnvelopeReport.report(new JSONArray()
++            .put(RuntimeEnvelopeReport.row("envelope.telephony.simState", state, () -> 5))
++            .put(RuntimeEnvelopeReport.row("envelope.telephony.simStateSlot0", state, () -> 5)));
++    }
++    @Test public void nullExpectationProducesObservationWithoutUnboxing() throws Exception {
++        JSONObject report = envelope(null);
++        for (int i = 0; i < 2; i++) {
++            JSONObject row = report.getJSONArray("rows").getJSONObject(i);
++            assertEquals("OBSERVED", row.getString("status"));
++            assertTrue(row.isNull("expected_sha256"));
++        }
++    }
++    @Test public void absentUnavailableAndMalformedExpectationsRemainUnknown() throws Exception {
++        for (JSONObject profile : new JSONObject[]{new JSONObject(),
++                new JSONObject("{\"reality\":{\"carrier\":{\"availability\":\"known\",\"values\":{}}}}"),
++                new JSONObject("{\"reality\":{\"carrier\":{\"availability\":\"unknown\"}}}")}) {
++            Object state = RuntimeEnvelopeReport.expected(profile, "carrier", "sim_state");
++            assertNull(RuntimeEnvelopeReport.simStateExpectation(state));
++            envelope(state);
++        }
++        for (Object value : new Object[]{JSONObject.NULL, "unknown", "", 5, new JSONObject()})
++            assertNull(RuntimeEnvelopeReport.simStateExpectation(value));
++    }
++    @Test public void knownMappingsRetainTheirExactValues() throws Exception {
++        String[] labels = {"absent", "pin_required", "puk_required", "ready"};
++        int[] values = {1, 2, 3, 5};
++        for (int i = 0; i < labels.length; i++)
++            assertEquals(Integer.valueOf(values[i]), RuntimeEnvelopeReport.simStateExpectation(labels[i]));
++        assertEquals("PASS", envelope("ready").getJSONArray("rows").getJSONObject(0).getString("status"));
++        assertEquals("FAIL", envelope("absent").getJSONArray("rows").getJSONObject(0).getString("status"));
++    }
++}

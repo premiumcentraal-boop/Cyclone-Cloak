@@ -1,0 +1,81 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.11.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :probe:preBuild UP-TO-DATE
+> Task :probe:preStandardDebugBuild UP-TO-DATE
+> Task :probe:javaPreCompileStandardDebug UP-TO-DATE
+> Task :probe:checkStandardDebugAarMetadata UP-TO-DATE
+> Task :probe:generateStandardDebugResValues UP-TO-DATE
+> Task :probe:mapStandardDebugSourceSetPaths UP-TO-DATE
+> Task :probe:generateStandardDebugResources UP-TO-DATE
+> Task :probe:mergeStandardDebugResources UP-TO-DATE
+> Task :probe:packageStandardDebugResources UP-TO-DATE
+> Task :probe:parseStandardDebugLocalResources UP-TO-DATE
+> Task :probe:createStandardDebugCompatibleScreenManifests UP-TO-DATE
+> Task :probe:extractDeepLinksStandardDebug UP-TO-DATE
+> Task :probe:processStandardDebugMainManifest UP-TO-DATE
+> Task :probe:processStandardDebugManifest UP-TO-DATE
+> Task :probe:processStandardDebugManifestForPackage UP-TO-DATE
+> Task :probe:processStandardDebugResources UP-TO-DATE
+> Task :probe:compileStandardDebugJavaWithJavac
+> Task :probe:preStandardDebugUnitTestBuild UP-TO-DATE
+> Task :probe:javaPreCompileStandardDebugUnitTest UP-TO-DATE
+> Task :probe:processStandardDebugJavaRes NO-SOURCE
+> Task :probe:processStandardDebugUnitTestJavaRes UP-TO-DATE
+> Task :probe:preDiagnosticsDebugBuild UP-TO-DATE
+> Task :probe:javaPreCompileDiagnosticsDebug UP-TO-DATE
+> Task :probe:bundleStandardDebugClassesToCompileJar
+> Task :probe:bundleStandardDebugClassesToRuntimeJar
+> Task :probe:checkDiagnosticsDebugAarMetadata UP-TO-DATE
+> Task :probe:compileStandardDebugUnitTestJavaWithJavac
+> Task :probe:testStandardDebugUnitTest
+> Task :probe:generateDiagnosticsDebugResValues UP-TO-DATE
+> Task :probe:mapDiagnosticsDebugSourceSetPaths UP-TO-DATE
+> Task :probe:generateDiagnosticsDebugResources UP-TO-DATE
+> Task :probe:mergeDiagnosticsDebugResources UP-TO-DATE
+> Task :probe:packageDiagnosticsDebugResources UP-TO-DATE
+> Task :probe:parseDiagnosticsDebugLocalResources UP-TO-DATE
+> Task :probe:createDiagnosticsDebugCompatibleScreenManifests UP-TO-DATE
+> Task :probe:extractDeepLinksDiagnosticsDebug UP-TO-DATE
+> Task :probe:processDiagnosticsDebugMainManifest UP-TO-DATE
+> Task :probe:processDiagnosticsDebugManifest UP-TO-DATE
+> Task :probe:processDiagnosticsDebugManifestForPackage UP-TO-DATE
+> Task :probe:processDiagnosticsDebugResources UP-TO-DATE
+> Task :probe:compileDiagnosticsDebugJavaWithJavac
+> Task :probe:preDiagnosticsDebugUnitTestBuild UP-TO-DATE
+> Task :probe:javaPreCompileDiagnosticsDebugUnitTest UP-TO-DATE
+> Task :probe:processDiagnosticsDebugJavaRes NO-SOURCE
+> Task :probe:processDiagnosticsDebugUnitTestJavaRes UP-TO-DATE
+> Task :probe:mergeDiagnosticsDebugNativeDebugMetadata NO-SOURCE
+> Task :probe:mergeDiagnosticsDebugShaders UP-TO-DATE
+> Task :probe:compileDiagnosticsDebugShaders NO-SOURCE
+> Task :probe:generateDiagnosticsDebugAssets UP-TO-DATE
+> Task :probe:bundleDiagnosticsDebugClassesToRuntimeJar
+> Task :probe:bundleDiagnosticsDebugClassesToCompileJar
+> Task :probe:mergeDiagnosticsDebugAssets UP-TO-DATE
+> Task :probe:compileDiagnosticsDebugUnitTestJavaWithJavac
+> Task :probe:testDiagnosticsDebugUnitTest
+> Task :probe:compressDiagnosticsDebugAssets UP-TO-DATE
+> Task :probe:desugarDiagnosticsDebugFileDependencies UP-TO-DATE
+> Task :probe:dexBuilderDiagnosticsDebug
+> Task :probe:mergeDiagnosticsDebugGlobalSynthetics UP-TO-DATE
+> Task :probe:mergeDiagnosticsDebugJavaResource UP-TO-DATE
+> Task :probe:checkDiagnosticsDebugDuplicateClasses UP-TO-DATE
+> Task :probe:mergeExtDexDiagnosticsDebug UP-TO-DATE
+> Task :probe:mergeLibDexDiagnosticsDebug UP-TO-DATE
+> Task :probe:mergeProjectDexDiagnosticsDebug
+> Task :probe:configureCMakeDebug[arm64-v8a]
+> Task :probe:buildCMakeDebug[arm64-v8a]
+> Task :probe:configureCMakeDebug[armeabi-v7a]
+> Task :probe:buildCMakeDebug[armeabi-v7a]
+> Task :probe:mergeDiagnosticsDebugJniLibFolders UP-TO-DATE
+> Task :probe:mergeDiagnosticsDebugNativeLibs UP-TO-DATE
+> Task :probe:stripDiagnosticsDebugDebugSymbols UP-TO-DATE
+> Task :probe:validateSigningDiagnosticsDebug UP-TO-DATE
+> Task :probe:writeDiagnosticsDebugAppMetadata UP-TO-DATE
+> Task :probe:writeDiagnosticsDebugSigningConfigVersions UP-TO-DATE
+> Task :probe:packageDiagnosticsDebug
+> Task :probe:createDiagnosticsDebugApkListingFileRedirect UP-TO-DATE
+> Task :probe:assembleDiagnosticsDebug
+
+BUILD SUCCESSFUL in 27s
+65 actionable tasks: 17 executed, 48 up-to-date

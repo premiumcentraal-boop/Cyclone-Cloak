@@ -1,0 +1,25 @@
+{
+  "pid": 12668,
+  "mapped_libraries": [
+    "739d27f000-739d42d000 r--p 001c9000 fe:40 305097                         /data/app/~~w4K0ihcmg8DC_L3ea29A0Q==/dev.cyclone.cloak.probe.diag-3BXHakCaqY51hPxUyXICQQ==/base.apk",
+    "73ff067000-73ff078000 r-xp 00000000 fe:40 299135                         /data/data/dev.cyclone.cloak.probe.diag/code_cache/cloak_hooks/libpine.so",
+    "73ff078000-73ff079000 r--p 00010000 fe:40 299135                         /data/data/dev.cyclone.cloak.probe.diag/code_cache/cloak_hooks/libpine.so",
+    "73ff079000-73ff07b000 rw-p 00010000 fe:40 299135                         /data/data/dev.cyclone.cloak.probe.diag/code_cache/cloak_hooks/libpine.so",
+    "73ff081000-73ff093000 r-xp 00000000 fe:40 304168                         /data/data/dev.cyclone.cloak.probe.diag/libshadowhook.so",
+    "73ff096000-73ff097000 r--p 00011000 fe:40 304168                         /data/data/dev.cyclone.cloak.probe.diag/libshadowhook.so",
+    "73ff09a000-73ff09b000 rw-p 00011000 fe:40 304168                         /data/data/dev.cyclone.cloak.probe.diag/libshadowhook.so",
+    "7425c06000-7425c60000 r-xp 0000c000 fe:40 305097                         /data/app/~~w4K0ihcmg8DC_L3ea29A0Q==/dev.cyclone.cloak.probe.diag-3BXHakCaqY51hPxUyXICQQ==/base.apk",
+    "7425c60000-7425c65000 r--p 00065000 fe:40 305097                         /data/app/~~w4K0ihcmg8DC_L3ea29A0Q==/dev.cyclone.cloak.probe.diag-3BXHakCaqY51hPxUyXICQQ==/base.apk",
+    "7425c65000-7425c66000 rw-p 00069000 fe:40 305097                         /data/app/~~w4K0ihcmg8DC_L3ea29A0Q==/dev.cyclone.cloak.probe.diag-3BXHakCaqY51hPxUyXICQQ==/base.apk",
+    "76d8e74000-76d8e80000 r--s 00000000 fe:40 299242                         /data/data/dev.cyclone.cloak.probe.diag/app_webview/Default/Shared Dictionary/db",
+    "76de62d000-76de654000 r--s 000bb000 fe:40 305097                         /data/app/~~w4K0ihcmg8DC_L3ea29A0Q==/dev.cyclone.cloak.probe.diag-3BXHakCaqY51hPxUyXICQQ==/base.apk",
+    "76de80b000-76de82d000 r--p 000e1000 fe:40 305097                         /data/app/~~w4K0ihcmg8DC_L3ea29A0Q==/dev.cyclone.cloak.probe.diag-3BXHakCaqY51hPxUyXICQQ==/base.apk",
+    "76f1fe6000-76f1fef000 r--s 00000000 fe:40 305556                         /data/data/dev.cyclone.cloak.probe.diag/app_webview/Default/declarative_performance_observer.db",
+    "76fb842000-76fb845000 r--s 00377000 fe:40 305097                         /data/app/~~w4K0ihcmg8DC_L3ea29A0Q==/dev.cyclone.cloak.probe.diag-3BXHakCaqY51hPxUyXICQQ==/base.apk",
+    "76fb8a2000-76fb8ac000 r--p 00000000 fe:40 305097                         /data/app/~~w4K0ihcmg8DC_L3ea29A0Q==/dev.cyclone.cloak.probe.diag-3BXHakCaqY51hPxUyXICQQ==/base.apk",
+    "76fba92000-76fba95000 r--s 00377000 fe:40 305097                         /data/app/~~w4K0ihcmg8DC_L3ea29A0Q==/dev.cyclone.cloak.probe.diag-3BXHakCaqY51hPxUyXICQQ==/base.apk",
+    "76fbb66000-76fbb68000 rwxp 00000000 00:00 0                              [anon:pine codes]",
+    "76fbb69000-76fbb6a000 rwxp 00000000 00:00 0                              [anon:shadowhook-enter]"
+  ],
+  "module_log": ""
+}

@@ -1,0 +1,20 @@
+{
+  "apk_sha256": "6c9fc8f36045a760c53f1711e8cdaff4777bf52766f930b31eafa25d4abab2b5",
+  "apk_path": "C:\\Users\\Agent\\Cyclone\\cloak-repo\\android\\probe\\build\\outputs\\apk\\diagnostics\\debug\\probe-diagnostics-debug.apk",
+  "assets": {
+    "assets/profile-b.json": {
+      "sha256": "db4f661468d72dfd9f766c6a2b761a2fb9cd9141bc1ff61124a05d93c8b1a631",
+      "schema": "0.3",
+      "has_reality": false
+    },
+    "assets/profile-a.json": {
+      "sha256": "da878a8a5c51ef62324fd977d85c06fd830fa9c3896a1060621dbfc4e02efa98",
+      "schema": "0.3",
+      "has_reality": false
+    }
+  },
+  "profile_c_files": [],
+  "expected_file": "android/probe/src/main/assets/profile-c.json",
+  "runtime_table_type": "format-2 field/surface contract table, not profile-body expectations",
+  "code_fixture_support": "Standalone fixture_for_user currently returns a for0 and b for17; Profile label recognises a/b/external, not c"
+}

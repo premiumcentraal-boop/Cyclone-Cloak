@@ -1,0 +1,23 @@
+[
+  {
+    "transport": "external_shell",
+    "path": "/storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json",
+    "state": "ACCESS_DENIED_EXISTENCE_UNKNOWN",
+    "exit_code": 1,
+    "stderr": "cat: /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json: Permission denied\n"
+  },
+  {
+    "transport": "external_run_as",
+    "path": "/storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json",
+    "state": "ACCESS_DENIED_EXISTENCE_UNKNOWN",
+    "exit_code": 1,
+    "stderr": "cat: /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json: Permission denied\n"
+  },
+  {
+    "transport": "private_run_as",
+    "path": "/data/user/17/dev.cyclone.cloak.probe.diag/files/report.json",
+    "state": "ABSENT",
+    "exit_code": 1,
+    "stderr": "cat: /data/user/17/dev.cyclone.cloak.probe.diag/files/report.json: No such file or directory\n"
+  }
+]

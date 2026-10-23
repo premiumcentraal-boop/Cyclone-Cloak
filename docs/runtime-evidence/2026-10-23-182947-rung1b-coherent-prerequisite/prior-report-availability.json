@@ -1,0 +1,44 @@
+{
+  "user-0-capture-1-report.json": {
+    "default_ua_rows": [
+      {
+        "id": "envelope.webview.defaultUa",
+        "expected_sha256": null,
+        "actual_sha256": "eddc7054d711a56d34f362068209b0223ed8ed925ba9f893d56107fd873ada32",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 119
+      }
+    ],
+    "legacy_first_row": {
+      "id": "build.MANUFACTURER",
+      "source": "android.os.Build",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 2
+    },
+    "fixture": "a",
+    "profile_sha256": "da878a8a5c51ef62324fd977d85c06fd830fa9c3896a1060621dbfc4e02efa98"
+  },
+  "user-17-capture-2-report.json": {
+    "default_ua_rows": [
+      {
+        "id": "envelope.webview.defaultUa",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 116
+      }
+    ],
+    "legacy_first_row": {
+      "id": "build.MANUFACTURER",
+      "source": "android.os.Build",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    "fixture": "external",
+    "profile_sha256": "5de89420c21c195defe179a14603c8655d0a2bcc79e4047ca7b39cba795aaeb6"
+  }
+}

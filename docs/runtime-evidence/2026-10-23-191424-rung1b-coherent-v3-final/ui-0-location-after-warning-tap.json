@@ -1,0 +1,10 @@
+{
+  "resource": "com.android.permissioncontroller:id/permission_allow_foreground_only_button",
+  "x": 539,
+  "y": 1648,
+  "result": {
+    "stdout": "",
+    "stderr": "",
+    "exit_code": 0
+  }
+}

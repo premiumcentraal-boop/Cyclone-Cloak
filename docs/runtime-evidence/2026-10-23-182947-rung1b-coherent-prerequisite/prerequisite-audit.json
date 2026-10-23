@@ -1,0 +1,26 @@
+{
+  "captured_at_ms": 1792771610372,
+  "captured_sdk_int": 36,
+  "present_reader_ids": [
+    "compute.gpu",
+    "memory.free_storage_gib",
+    "packages.installed",
+    "sensors.inventory",
+    "webview.provider",
+    "webview.user_agent",
+    "webview.version"
+  ],
+  "concrete_ua_result": {
+    "error": "NullPointerException"
+  },
+  "default_ua_retained": false,
+  "build_fields_retained": false,
+  "identifiers_retained": false,
+  "telephony_fields_retained": false,
+  "display_fields_retained": false,
+  "locale_fields_retained": false,
+  "authoring_sha256": "80a9604e5ed878609f801d2a481f72d0694c3c150636745357f3e93aba6289a4",
+  "fixture_sha256": "5de89420c21c195defe179a14603c8655d0a2bcc79e4047ca7b39cba795aaeb6",
+  "source_sha256": "aa4adb2b09058fee8a1af64bf8d15af52e1fa503cc6c9f7bf0e179a5748ac007",
+  "commit": "d4f0a5cb5f4d70bacaeb0b8ecdff184eff154150"
+}

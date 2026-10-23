@@ -1,0 +1,24 @@
+{"at": 1792714477.1605814, "args": ["shell", "am get-started-user-state 0"], "exit_code": 0}
+{"at": 1792714477.3414907, "args": ["shell", "am get-started-user-state 17"], "exit_code": 0}
+{"at": 1792714477.4818668, "args": ["shell", "am get-current-user"], "exit_code": 0}
+{"at": 1792714477.506987, "args": ["devices", "-l"], "exit_code": 0}
+{"at": 1792714477.7025924, "args": ["shell", "dumpsys package dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792714477.8449552, "args": ["shell", "pm list packages --user 0 -U dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792714477.9641132, "args": ["shell", "cmd appops get --user 0 dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792714478.0824802, "args": ["shell", "cmd appops get 10377"], "exit_code": 0}
+{"at": 1792714478.2458985, "args": ["shell", "pm list packages --user 17 -U dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792714478.3482463, "args": ["shell", "cmd appops get --user 17 dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792714478.405614, "args": ["shell", "cmd appops get 1710377"], "exit_code": 0}
+{"at": 1792714478.4848502, "args": ["shell", "pm path dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792714480.1107373, "args": ["shell", "su --mount-master -c 'set -eu; find /data/adb/cyclone_cloak/state-v1 /data/adb/cyclone_cloak/publishers -type f -exec sha256sum {} +; for u in /data/user/[0-9]*; do if [ -d \"$u/dev.cyclone.cloak\" ]; then find \"$u/dev.cyclone.cloak\" -type f \\( -name \"*binding*\" -o -name \"*index*\" \\) -exec sha256sum {} +; fi; done'"], "exit_code": 0}
+{"at": 1792714480.393853, "args": ["shell", "su --mount-master -c 'set -eu; sha256sum '\"'\"'/data/app/~~oxxPf3k1Ggejx1aZFZie2A==/dev.cyclone.cloak-FKdzo6WgSOJ9SiRjvLslLQ==/base.apk'\"'\"''"], "exit_code": 0}
+{"at": 1792714480.5318522, "args": ["shell", "dumpsys package com.android.settings"], "exit_code": 0}
+{"at": 1792714480.698195, "args": ["shell", "pm list packages --user 0 -U com.android.settings"], "exit_code": 0}
+{"at": 1792714480.8204284, "args": ["shell", "cmd appops get --user 0 com.android.settings"], "exit_code": 0}
+{"at": 1792714480.9282749, "args": ["shell", "cmd appops get 1000"], "exit_code": 0}
+{"at": 1792714481.0964878, "args": ["shell", "pm list packages --user 17 -U com.android.settings"], "exit_code": 0}
+{"at": 1792714481.208747, "args": ["shell", "cmd appops get --user 17 com.android.settings"], "exit_code": 0}
+{"at": 1792714481.300263, "args": ["shell", "cmd appops get 1701000"], "exit_code": 0}
+{"at": 1792714481.4293613, "args": ["shell", "pm path --user 17 com.android.settings"], "exit_code": 0}
+{"at": 1792714482.5907195, "args": ["shell", "su --mount-master -c 'set -eu; sha256sum /system_ext/priv-app/SettingsGoogle/SettingsGoogle.apk'"], "exit_code": 0}
+{"at": 1792714482.8032167, "args": ["shell", "su --mount-master -c 'set -eu; cat /data/adb/cyclone_cloak/state-v1/index.json'"], "exit_code": 0, "stdout_sha256": "409d6d5386be07a6b14b888872cb8467feeb1bf5c21647e716c90bd8a57ba99c"}

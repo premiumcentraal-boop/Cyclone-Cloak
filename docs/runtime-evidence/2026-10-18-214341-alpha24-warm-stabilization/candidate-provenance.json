@@ -1,0 +1,13 @@
+{
+  "commit": "a93d8643c51463dff1d4fb3258a383432012f989",
+  "version": "0.11.0-alpha.24",
+  "code": 48,
+  "diagnostics_apk_sha256": "2e43ed4ea4129ceb60e0abd5146d9ea33ec4688958a3fc500ef7d4926fe1a9b7",
+  "installed_module_arm64_sha256": "8a529beae4f1e164405a8956581806cd85878b30a2c1b1336639acbb6178bfcc",
+  "prior_signed_validation": {
+    "url": "https://github.com/premiumcentraal-boop/Cyclone-Cloak/actions/runs/39158498518",
+    "commit": "a93d8643c51463dff1d4fb3258a383432012f989",
+    "conclusion": "success"
+  },
+  "limitation": "Prior signed validation covers unchanged candidate product sources, not current uncommitted runner/tests. No new signed validation or release on failed device gate."
+}

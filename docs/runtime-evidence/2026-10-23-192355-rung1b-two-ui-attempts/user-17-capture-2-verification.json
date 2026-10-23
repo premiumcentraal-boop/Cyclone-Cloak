@@ -1,0 +1,15 @@
+{
+  "user": 17,
+  "fixture": "external",
+  "pid": 28760,
+  "profile_sha256": "c78353910306cda7b0897f3310d2637a7568ec4925de8d63822645cf8a9e8f66",
+  "filesystem_schema": true,
+  "marker_diagnosis": {
+    "start_seen": true,
+    "end_seen": true,
+    "reason": "CAPTURE_ENDED_COMPLETED"
+  },
+  "counts": {
+    "OBSERVED": 4
+  }
+}

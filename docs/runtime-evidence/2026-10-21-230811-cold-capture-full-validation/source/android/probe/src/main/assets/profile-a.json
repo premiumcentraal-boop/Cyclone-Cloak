@@ -1,0 +1,79 @@
+{
+  "schema_version": "0.3",
+  "id": "0dcfc6e3-2f40-52dd-8b76-46d58e124ded",
+  "name": "Runtime probe a",
+  "seed": "abababababababababababababababababababababababababababababababab",
+  "device": {
+    "manufacturer": "Google",
+    "brand": "google",
+    "model": "Pixel 6",
+    "product": "oriole",
+    "device": "oriole",
+    "hardware": "gs101",
+    "fingerprint": "google/oriole/oriole:14/UP1A.231005.007/catalog.20231005:user/release-keys",
+    "version_release": "14",
+    "sdk_int": 34,
+    "security_patch": "2023-10-05",
+    "build_id": "UP1A.231005.007",
+    "version_incremental": "catalog.20231005",
+    "build_date_utc": 1697068800,
+    "first_api_level": 31,
+    "bootloader": "oriole-1.0-8769422",
+    "baseband": "g7900-230928-AA"
+  },
+  "identifiers": {
+    "android_id": "3a4cf3a7fcd4e8cb",
+    "advertising_id": "d3500169-d39a-40b1-bcfa-f9d9d1739be7",
+    "app_set_id": "3d2eb31f-1124-489c-bcd6-61b985491917",
+    "mac": "1A:35:32:1E:77:25",
+    "bt_mac": "3A:B4:66:9A:D8:54",
+    "imei_primary": "472186978248637",
+    "imei_secondary": "710989943352422",
+    "sim_serial": "2622829857001513606",
+    "gsf_id": "f043b6a655d7a57a",
+    "widevine_id": "f2b9c7904bec4ec0755b7aec3eca856e1deb43ab9cbd564f038af27837d568d3",
+    "serial": "U6UV1SJBJET5"
+  },
+  "telephony": {
+    "sim_slot_count": 2,
+    "carrier_name": "T-Mobile",
+    "mcc": "310",
+    "mnc": "260",
+    "network_type": "5G"
+  },
+  "network": {
+    "egress_hint": "us-east"
+  },
+  "display": {
+    "width": 1080,
+    "height": 2400,
+    "density": 420,
+    "refresh_rate_hz": 90,
+    "screen_size_class": "normal"
+  },
+  "camera": {
+    "cameras": [{"facing":1,"hardware_level":1,"pixel_width":8160,"pixel_height":6144},{"facing":1,"hardware_level":0,"pixel_width":4032,"pixel_height":3024},{"facing":0,"hardware_level":0,"pixel_width":3264,"pixel_height":2448}]
+  },
+  "locale": {
+    "language": "en",
+    "country": "US",
+    "timezone": "America/New_York"
+  },
+  "ua": {
+    "value": "Mozilla/5.0 (Linux; Android 14; Pixel 6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Mobile Safari/537.36"
+  },
+  "integrity": {
+    "verdict": "unknown",
+    "checked_at": null,
+    "keybox_tag": null
+  },
+  "health": {
+    "state": "new",
+    "last_seen": null
+  },
+  "meta": {
+    "source": "forge",
+    "forge_version": "0.2.0",
+    "template": "pixel_6"
+  }
+}

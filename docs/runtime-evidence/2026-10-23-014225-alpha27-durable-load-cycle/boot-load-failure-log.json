@@ -1,0 +1,13 @@
+{
+  "lines": [
+    "10-23 01:45:00.264 14097 14097 I auditd  : type=1400 audit(0.0:1009): avc:  denied  { write } for  comm=\"main\" name=\"cyclone_cloak\" dev=\"dm-64\" ino=292404 scontext=u:r:zygote:s0 tcontext=u:object_r:system_file:s0 tclass=dir permissive=0",
+    "10-23 01:45:02.800 14617 14617 I auditd  : type=1400 audit(0.0:1029): avc:  denied  { write } for  comm=\"main\" name=\"cyclone_cloak\" dev=\"dm-64\" ino=292404 scontext=u:r:zygote:s0 tcontext=u:object_r:system_file:s0 tclass=dir permissive=0",
+    "10-23 01:45:03.092 14686 14686 I auditd  : type=1400 audit(0.0:1032): avc:  denied  { write } for  comm=\"main\" name=\"cyclone_cloak\" dev=\"dm-64\" ino=292404 scontext=u:r:zygote:s0 tcontext=u:object_r:system_file:s0 tclass=dir permissive=0",
+    "10-23 01:45:06.048 15180 15180 I auditd  : type=1400 audit(0.0:1050): avc:  denied  { write } for  comm=\"main\" name=\"cyclone_cloak\" dev=\"dm-64\" ino=292404 scontext=u:r:zygote:s0 tcontext=u:object_r:system_file:s0 tclass=dir permissive=0",
+    "10-23 01:45:11.040 15436 15436 I auditd  : type=1400 audit(0.0:1068): avc:  denied  { write } for  comm=\"main\" name=\"cyclone_cloak\" dev=\"dm-64\" ino=292404 scontext=u:r:zygote:s0 tcontext=u:object_r:system_file:s0 tclass=dir permissive=0",
+    "10-23 01:45:14.904 15807 15807 I auditd  : type=1400 audit(0.0:1077): avc:  denied  { write } for  comm=\"main\" name=\"cyclone_cloak\" dev=\"dm-64\" ino=292404 scontext=u:r:zygote:s0 tcontext=u:object_r:system_file:s0 tclass=dir permissive=0",
+    "10-23 01:45:18.126 16285 16285 I CloakModule: load record unavailable",
+    "10-23 01:45:23.295 17009 17009 I CloakModule: load record unavailable"
+  ],
+  "policy": "bounded module-record/AVC lines only; no log clearing"
+}

@@ -1,0 +1,37 @@
+{
+  "result": "COMPLETE_WITH_LIMITATIONS",
+  "displayed_fields_match": true,
+  "field_counts": {
+    "MATCH": 4,
+    "NOT_DISPLAYED": 22
+  },
+  "distinct_cold_pids": [
+    "8496",
+    "14586"
+  ],
+  "distinct_pid_check": true,
+  "durable_load_records_match": true,
+  "production_audit": {
+    "exact_equal": true,
+    "changed_fields": [],
+    "target_permissions_appops_equal": true,
+    "target_changed_fields": [],
+    "comparison": "persisted JSON; user17 RUNNING_UNLOCKED"
+  },
+  "cleanup": {
+    "binding_absent": true,
+    "body_absent": true,
+    "scratch_absent": true,
+    "module_paths": "ABSENT:/data/adb/modules/cyclone_cloak\nABSENT:/data/adb/modules_update/cyclone_cloak\n",
+    "current_user": "0",
+    "production_entries": 327
+  },
+  "limitations": [
+    "Telephony and display density not displayed on initial screen",
+    "UIAutomator emitted no XML; screenshots are authoritative UI evidence",
+    "Inert private code-cache libpine.so remains; no app-data deletion authorized or performed",
+    "Post-removal mappings measured fresh SystemUI processes; target deliberately not relaunched",
+    "Snapshot comparison covers production companion and selected app grants/AppOps, published state/shares and accessible binding/index files, not all device data"
+  ],
+  "no_platform_or_coverage_claim": true
+}

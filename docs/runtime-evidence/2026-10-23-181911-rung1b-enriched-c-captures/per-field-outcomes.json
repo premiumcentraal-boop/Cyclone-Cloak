@@ -1,0 +1,82 @@
+[
+  {
+    "field_path": "reality.compute.values.gpu",
+    "row_id": "envelope.compute.gpuRenderer",
+    "status": "PASS",
+    "reason": "HASH_MATCH_ONLY",
+    "expected_sha256": "ded55a25c23881a1b4c9e0bc5203067692e33838163b200c3f77685806a004b9",
+    "actual_sha256": "ded55a25c23881a1b4c9e0bc5203067692e33838163b200c3f77685806a004b9",
+    "promoted": false,
+    "promotion_reason": "No promotion from a profile with coherence validation errors."
+  },
+  {
+    "field_path": "reality.memory.values.free_storage_gib",
+    "row_id": "envelope.storage.availableBytes",
+    "status": "MISSING",
+    "reason": "PROFILE_SURFACE_UNAVAILABLE",
+    "expected_sha256": null,
+    "actual_sha256": null,
+    "promoted": false,
+    "promotion_reason": "No promotion from a profile with coherence validation errors."
+  },
+  {
+    "field_path": "reality.packages.values.installed",
+    "row_id": "envelope.packages.visibleVersions",
+    "status": "PASS",
+    "reason": "HASH_MATCH_ONLY",
+    "expected_sha256": "9954142c78a9bdb4bd8a81b4d380e2c66d0e265e53ec37da1832b5f4ec277b01",
+    "actual_sha256": "9954142c78a9bdb4bd8a81b4d380e2c66d0e265e53ec37da1832b5f4ec277b01",
+    "promoted": false,
+    "promotion_reason": "No promotion from a profile with coherence validation errors."
+  },
+  {
+    "field_path": "reality.sensors.values.inventory",
+    "row_id": "envelope.sensors.inventory",
+    "status": "MISSING",
+    "reason": "PROFILE_SURFACE_UNAVAILABLE",
+    "expected_sha256": null,
+    "actual_sha256": null,
+    "promoted": false,
+    "promotion_reason": "No promotion from a profile with coherence validation errors."
+  },
+  {
+    "field_path": "reality.webview.values.provider",
+    "row_id": "envelope.webview.provider",
+    "status": "PASS",
+    "reason": "HASH_MATCH_ONLY",
+    "expected_sha256": "bbb0c5c713129f2c4805468d156a950987047eac9f07952c19cea3d8a06cbd8c",
+    "actual_sha256": "bbb0c5c713129f2c4805468d156a950987047eac9f07952c19cea3d8a06cbd8c",
+    "promoted": false,
+    "promotion_reason": "No promotion from a profile with coherence validation errors."
+  },
+  {
+    "field_path": "reality.webview.values.version",
+    "row_id": "envelope.webview.version",
+    "status": "PASS",
+    "reason": "HASH_MATCH_ONLY",
+    "expected_sha256": "33ff2ba2567e046adb5ab0f96ec3302f117d717e609b366ae2c5c45f084dfa07",
+    "actual_sha256": "33ff2ba2567e046adb5ab0f96ec3302f117d717e609b366ae2c5c45f084dfa07",
+    "promoted": false,
+    "promotion_reason": "No promotion from a profile with coherence validation errors."
+  },
+  {
+    "field_path": "reality.webview.values.user_agent",
+    "row_id": "envelope.webview.instanceUa",
+    "status": "MISSING",
+    "reason": "RuntimeException",
+    "expected_sha256": null,
+    "actual_sha256": null,
+    "promoted": false,
+    "promotion_reason": "No promotion from a profile with coherence validation errors."
+  },
+  {
+    "field_path": "reality.carrier.values.sim_state",
+    "row_id": "envelope.telephony.simState",
+    "status": "PASS",
+    "reason": "HASH_MATCH_ONLY",
+    "expected_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+    "actual_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+    "promoted": false,
+    "promotion_reason": "No promotion from a profile with coherence validation errors."
+  }
+]

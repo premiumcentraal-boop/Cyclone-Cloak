@@ -1,0 +1,237 @@
+{
+  "request_id": "bootgate-96c9514ca9784c09bb77739746a6ee52",
+  "cold_start": true,
+  "user_activation": null,
+  "expected_profile": {
+    "fixture": "a",
+    "fixture_source": "A",
+    "profile_sha256": "da878a8a5c51ef62324fd977d85c06fd830fa9c3896a1060621dbfc4e02efa98",
+    "bytes": 2352,
+    "source": "exact packaged synthetic asset bytes"
+  },
+  "before": {
+    "pidof": {
+      "stdout": "",
+      "stderr": "",
+      "exit_code": 1
+    },
+    "processes": [],
+    "package_path": {
+      "stdout": "package:/data/app/~~h8uPivim3H-aWU7kXHLJBw==/dev.cyclone.cloak.probe.diag-EYO-Hku5tmlx0yxPiGIQbA==/base.apk\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "target_user_state": [
+      "User 0: ceDataInode=316524 deDataInode=316239 installed=true hidden=false suspended=false appLockEnabled=false distractionFlags=0 stopped=true notLaunched=true enabled=0 instant=false virtual=false quarantined=false",
+      "User 0:"
+    ],
+    "target_uid": 10273,
+    "run_as_identity": {
+      "stdout": "uid=10273(u0_a273) gid=10273(u0_a273) groups=10273(u0_a273),1004(input),1007(log),1011(adb),1015(sdcard_rw),1028(sdcard_r),1078(ext_data_rw),1079(ext_obb_rw),3001(net_bt_admin),3002(net_bt),3003(inet),3006(net_bw_stats),3009(readproc),3011(uhid),3012(readtracefs),50273(all_a273) context=u:r:runas_app:s0:c17,c257,c512,c768\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "run_as_directory": {
+      "stdout": "/data/user/0/dev.cyclone.cloak.probe.diag\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "device_clock": "10-23 08:06:20.000"
+  },
+  "force_stop": {
+    "stdout": "",
+    "stderr": "",
+    "exit_code": 0
+  },
+  "am_start": {
+    "stdout": "Starting: Intent { flg=0x24000000 cmp=dev.cyclone.cloak.probe.diag/dev.cyclone.cloak.probe.DiagnosticsProbeActivity (has extras) }\n",
+    "stderr": "",
+    "exit_code": 0
+  },
+  "immediately_after": {
+    "pidof": {
+      "stdout": "",
+      "stderr": "",
+      "exit_code": 1
+    },
+    "processes": [
+      "10273 25968 dev.cyclone.cloak.probe.diag"
+    ],
+    "package_path": {
+      "stdout": "package:/data/app/~~h8uPivim3H-aWU7kXHLJBw==/dev.cyclone.cloak.probe.diag-EYO-Hku5tmlx0yxPiGIQbA==/base.apk\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "target_user_state": [
+      "User 0: ceDataInode=316524 deDataInode=316239 installed=true hidden=false suspended=false appLockEnabled=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false",
+      "User 0:"
+    ],
+    "target_uid": 10273,
+    "run_as_identity": {
+      "stdout": "uid=10273(u0_a273) gid=10273(u0_a273) groups=10273(u0_a273),1004(input),1007(log),1011(adb),1015(sdcard_rw),1028(sdcard_r),1078(ext_data_rw),1079(ext_obb_rw),3001(net_bt_admin),3002(net_bt),3003(inet),3006(net_bw_stats),3009(readproc),3011(uhid),3012(readtracefs),50273(all_a273) context=u:r:runas_app:s0:c17,c257,c512,c768\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "run_as_directory": {
+      "stdout": "/data/user/0/dev.cyclone.cloak.probe.diag\n",
+      "stderr": "",
+      "exit_code": 0
+    }
+  },
+  "after_capture_wait": {
+    "pidof": {
+      "stdout": "25968\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "processes": [
+      "10273 25968 dev.cyclone.cloak.probe.diag"
+    ],
+    "package_path": {
+      "stdout": "package:/data/app/~~h8uPivim3H-aWU7kXHLJBw==/dev.cyclone.cloak.probe.diag-EYO-Hku5tmlx0yxPiGIQbA==/base.apk\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "target_user_state": [
+      "User 0: ceDataInode=316524 deDataInode=316239 installed=true hidden=false suspended=false appLockEnabled=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false",
+      "User 0:"
+    ],
+    "target_uid": 10273,
+    "run_as_identity": {
+      "stdout": "uid=10273(u0_a273) gid=10273(u0_a273) groups=10273(u0_a273),1004(input),1007(log),1011(adb),1015(sdcard_rw),1028(sdcard_r),1078(ext_data_rw),1079(ext_obb_rw),3001(net_bt_admin),3002(net_bt),3003(inet),3006(net_bw_stats),3009(readproc),3011(uhid),3012(readtracefs),50273(all_a273) context=u:r:runas_app:s0:c17,c257,c512,c768\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "run_as_directory": {
+      "stdout": "/data/user/0/dev.cyclone.cloak.probe.diag\n",
+      "stderr": "",
+      "exit_code": 0
+    }
+  },
+  "logcat": {
+    "exit_code": 0,
+    "stderr": "",
+    "lines": [
+      "10-23 08:06:21.965 25968 26020 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:21.965 25968 26020 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:21.988 25968 25987 I loak.probe.diag: Compiler allocated 5116KB to compile void android.view.ViewRootImpl.performTraversals()",
+      "10-23 08:06:22.001 25968 26020 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.002 25968 26020 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.036 25968 26020 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.036 25968 26020 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.037 25968 26020 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.037 25968 26020 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.038 25968 26020 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.038 25968 26020 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.039 25968 26020 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.039 25968 26020 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.069 25968 26020 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.069 25968 26020 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.074 25968 26020 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.074 25968 26020 I WebViewFactory: Loading com.google.android.webview version 155.0.8059.43 (code 805904303)",
+      "10-23 08:06:22.076 25968 26020 V ResourcesManager: The following library key has been added: ResourcesKey{ mHash=4b9a73ec mResDir=null mSplitDirs=[] mOverlayDirs=[] mLibDirs=[/data/app/~~sYhpHzKiCIiM5zEJBJy4tA==/com.google.android.webview-xI1jK1gg4o0XHpPsJu55iQ==/base.apk,/system/framework/android.test.base.jar,/system_ext/framework/androidx.window.extensions.jar] mDisplayId=0 mOverrideConfig=v36 mCompatInfo={420dpi always-compat} mLoaders=[]}",
+      "10-23 08:06:22.077 25968 26020 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar",
+      "10-23 08:06:22.077 25968 26020 D ApplicationLoaders: Returning zygote-cached class loader: /system_ext/framework/androidx.window.extensions.jar",
+      "10-23 08:06:22.081 25968 26020 W loak.probe.diag: Loading /data/app/~~sYhpHzKiCIiM5zEJBJy4tA==/com.google.android.webview-xI1jK1gg4o0XHpPsJu55iQ==/oat/arm64/base.odex non-executable as it requires an image which we failed to load",
+      "10-23 08:06:22.083 25968 26020 D nativeloader: Configuring clns-11 for other apk /data/app/~~sYhpHzKiCIiM5zEJBJy4tA==/com.google.android.webview-xI1jK1gg4o0XHpPsJu55iQ==/base.apk. target_sdk_version=37, uses_libraries=, library_path=/data/app/~~sYhpHzKiCIiM5zEJBJy4tA==/com.google.android.webview-xI1jK1gg4o0XHpPsJu55iQ==/lib/arm64:/data/app/~~sYhpHzKiCIiM5zEJBJy4tA==/com.google.android.webview-xI1jK1gg4o0XHpPsJu55iQ==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand",
+      "10-23 08:06:22.123 25968 26020 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.123 25968 26020 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.124 25968 26020 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.125 25968 26020 I cr_WVCFactoryProvider: version=155.0.8059.43 (805904303) minSdkVersion=29 multiprocess=true packageId=127 splits=<none>",
+      "10-23 08:06:22.131 25968 26020 D nativeloader: Load /data/app/~~sYhpHzKiCIiM5zEJBJy4tA==/com.google.android.webview-xI1jK1gg4o0XHpPsJu55iQ==/base.apk!/lib/arm64-v8a/libwebviewchromium.so using class loader ns clns-11 (caller=/data/app/~~sYhpHzKiCIiM5zEJBJy4tA==/com.google.android.webview-xI1jK1gg4o0XHpPsJu55iQ==/base.apk): ok",
+      "10-23 08:06:22.136 25968 26020 D nativeloader: Load /system/lib64/libwebviewchromium_plat_support.so using class loader ns clns-11 (caller=/data/app/~~sYhpHzKiCIiM5zEJBJy4tA==/com.google.android.webview-xI1jK1gg4o0XHpPsJu55iQ==/base.apk): ok",
+      "10-23 08:06:22.149 25968 26069 I chromium: [1023/020622.143028:INFO:android_webview/browser/variations/variations_seed_loader.cc:63] Failed to open file for reading.: No such file or directory (2)",
+      "10-23 08:06:22.149 25968 26069 I chromium: [1023/020622.149180:INFO:android_webview/browser/variations/variations_seed_loader.cc:63] Failed to open file for reading.: No such file or directory (2)",
+      "10-23 08:06:22.164 25968 25968 I cr_LibraryLoader: Successfully loaded native library",
+      "10-23 08:06:22.167 25968 25968 I cr_CachingUmaRecorder: Flushed 41 samples from 21 histograms, 0 samples were dropped.",
+      "10-23 08:06:22.168 25968 25968 I cr_ChildProcLH: ScopedServiceBindingBatch.tryActivate: false",
+      "10-23 08:06:22.171 25968 25968 I cr_CombinedPProvider: #registerProvider() provider:WV.fj@1da1b65 isPolicyCacheEnabled:false policyProvidersSize:0",
+      "10-23 08:06:22.172 25968 25968 I cr_PolicyProvider: #setManagerAndSource() 0",
+      "10-23 08:06:22.172 25968 25968 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.172 25968 25968 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.173 25968 26067 I cr_policy: registerReceiver succeeded after 1ms",
+      "10-23 08:06:22.173 25968 25968 I cr_DisplayManager: Is Display Topology available: false",
+      "10-23 08:06:22.174 25968 25968 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.174 25968 25968 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.175 25968 25968 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.175 25968 25968 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.177 25968 25968 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.178 25968 25968 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.179 25968 25968 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.180 25968 25968 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.203 25968 25968 I cr_CombinedPProvider: #linkNativeInternal() 1",
+      "10-23 08:06:22.204 25968 25968 I cr_AppResProvider: #getApplicationRestrictionsFromUserManager() Bundle[EMPTY_PARCEL]",
+      "10-23 08:06:22.204 25968 25968 I cr_PolicyProvider: #notifySettingsAvailable() 0",
+      "10-23 08:06:22.204 25968 25968 I cr_CombinedPProvider: #onSettingsAvailable() 0",
+      "10-23 08:06:22.205 25968 25968 I cr_CombinedPProvider: #flushPolicies()",
+      "10-23 08:06:22.237 25968 26075 W chromium: [WARNING:net/dns/dns_config_service_android.cc:69] Failed to read DnsConfig.",
+      "10-23 08:06:22.246 25968 26020 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.246 25968 26020 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.249 25968 26020 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.249 25968 26020 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:22.253 25968 26020 I DrmHalHidl: No hidl drm factories found",
+      "10-23 08:06:22.254 25968 26020 W DrmHalHidl: Failed to find passthrough drm factories",
+      "10-23 08:06:22.255 25968 26020 I DrmUtils: found IDrmFactory. Instance name:[android.hardware.drm.IDrmFactory/clearkey]",
+      "10-23 08:06:22.255 25968 26020 I DrmUtils: found IDrmFactory. Instance name:[android.hardware.drm.IDrmFactory/widevine]",
+      "10-23 08:06:22.260 25968 25968 I cr_AppResProvider: #getApplicationRestrictionsFromUserManager() Bundle[EMPTY_PARCEL]",
+      "10-23 08:06:22.260 25968 25968 I cr_PolicyProvider: #notifySettingsAvailable() 0",
+      "10-23 08:06:22.260 25968 25968 I cr_CombinedPProvider: #onSettingsAvailable() 0",
+      "10-23 08:06:22.260 25968 25968 I cr_CombinedPProvider: #flushPolicies()",
+      "10-23 08:06:23.037 25968 25968 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:23.037 25968 25968 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:23.037 25968 25968 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:23.037 25968 25968 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:23.037 25968 25968 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:23.038 25968 25968 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:06:23.038 25968 25968 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]"
+    ],
+    "policy": "bounded target-UID logcat since launch, no unrelated UID output"
+  },
+  "launch_system_logcat": {
+    "exit_code": 0,
+    "stderr": "",
+    "lines": [
+      "10-23 08:06:21.696  1539  3506 I AppsFilter: interaction: PackageSetting{3f9430d dev.cyclone.cloak.probe.diag/10273} -> PackageSetting{e032295 com.android.omadm.service.auto_generated_rro_vendor__/10081} BLOCKED",
+      "10-23 08:06:21.696  1539  3506 I AppsFilter: interaction: PackageSetting{3f9430d dev.cyclone.cloak.probe.diag/10273} -> PackageSetting{1d4faa com.google.android.retaildemo/10139} BLOCKED",
+      "10-23 08:06:21.696  1539  3506 I AppsFilter: interaction: PackageSetting{3f9430d dev.cyclone.cloak.probe.diag/10273} -> PackageSetting{23ce79b android.auto_generated_rro_product__/10036} BLOCKED",
+      "10-23 08:06:21.696  1539  3506 I AppsFilter: interaction: PackageSetting{3f9430d dev.cyclone.cloak.probe.diag/10273} -> PackageSetting{f620738 com.rootdeck.app/10307} BLOCKED",
+      "10-23 08:06:21.696  1539  3506 I AppsFilter: interaction: PackageSetting{3f9430d dev.cyclone.cloak.probe.diag/10273} -> PackageSetting{8405311 com.google.android.rilextension/10236} BLOCKED",
+      "10-23 08:06:21.696  1539  3506 I AppsFilter: interaction: PackageSetting{3f9430d dev.cyclone.cloak.probe.diag/10273} -> PackageSetting{cd8bc76 com.google.android.GoogleCamera/10152} BLOCKED",
+      "10-23 08:06:21.696  1539  3506 I AppsFilter: interaction: PackageSetting{3f9430d dev.cyclone.cloak.probe.diag/10273} -> PackageSetting{af86277 com.google.android.apps.pixel.dcservice/10230} BLOCKED",
+      "10-23 08:06:21.696  1539  3506 I AppsFilter: interaction: PackageSetting{3f9430d dev.cyclone.cloak.probe.diag/10273} -> PackageSetting{8cc5ee4 com.google.android.photopicker/10288} BLOCKED",
+      "10-23 08:06:21.696  1539  3506 I AppsFilter: interaction: PackageSetting{3f9430d dev.cyclone.cloak.probe.diag/10273} -> PackageSetting{c460f4d com.snapchat.android/10364} BLOCKED",
+      "10-23 08:06:21.696  1539  3506 I AppsFilter: interaction: PackageSetting{3f9430d dev.cyclone.cloak.probe.diag/10273} -> PackageSetting{50c2a02 com.google.android.inputmethod.latin/10210} BLOCKED",
+      "10-23 08:06:21.696  1539  3506 I AppsFilter: interaction: PackageSetting{3f9430d dev.cyclone.cloak.probe.diag/10273} -> PackageSetting{a86af13 com.deviceinfo.upfile/10372} BLOCKED",
+      "10-23 08:06:21.696  1539  3506 I AppsFilter: interaction: PackageSetting{3f9430d dev.cyclone.cloak.probe.diag/10273} -> PackageSetting{628550 com.google.android.storagemanager/10254} BLOCKED",
+      "10-23 08:06:21.696  1539  3506 I AppsFilter: interaction: PackageSetting{3f9430d dev.cyclone.cloak.probe.diag/10273} -> PackageSetting{a715349 android.auto_generated_rro_vendor__/10079} BLOCKED",
+      "10-23 08:06:21.696  1539  3506 I AppsFilter: interaction: PackageSetting{3f9430d dev.cyclone.cloak.probe.diag/10273} -> PackageSetting{d16e44e com.google.android.apps.restore/10158} BLOCKED",
+      "10-23 08:06:21.738  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:cat /storage/emulated/0/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json'",
+      "10-23 08:06:21.795  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 0 cat /storage/emulated/0/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json'",
+      "10-23 08:06:21.851  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 0 cat /data/user/0/dev.cyclone.cloak.probe.diag/files/report.json'",
+      "10-23 08:06:21.945  1030  1030 I WVCdm-DrmFactory: [app][dev.cyclone.cloak.probe.diag] calling virtual ::ndk::ScopedAStatus wvdrm::hardware::drm::widevine::WVDrmFactory::createDrmPlugin(const Uuid &, const string &, std::shared_ptr< ::aidl::android::hardware::drm::IDrmPlugin> *)",
+      "10-23 08:06:21.959  1539  3457 I AppsFilter: interaction: PackageSetting{3f9430d dev.cyclone.cloak.probe.diag/10273} -> PackageSetting{3a5c794 com.google.android.webview/10203} BLOCKED",
+      "10-23 08:06:21.960  1539  3457 I AppsFilter: interaction: PackageSetting{3f9430d dev.cyclone.cloak.probe.diag/10273} -> PackageSetting{7414ffb com.android.chrome/10211} BLOCKED",
+      "10-23 08:06:22.064  1539  3510 I AppsFilter: interaction: PackageSetting{3f9430d dev.cyclone.cloak.probe.diag/10273} -> PackageSetting{7414ffb com.android.chrome/10211} BLOCKED",
+      "10-23 08:06:22.231  1539  1770 I ActivityManager: Start proc 26073:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u0i3 for  {dev.cyclone.cloak.probe.diag/org.chromium.content.app.SandboxedProcessService0:0}",
+      "10-23 08:06:22.932  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 0 cat files/report.json'",
+      "10-23 08:06:22.995  1030  1030 I WVCdm-DrmFactory: [app][dev.cyclone.cloak.probe.diag] calling virtual ::ndk::ScopedAStatus wvdrm::hardware::drm::widevine::WVDrmFactory::createDrmPlugin(const Uuid &, const string &, std::shared_ptr< ::aidl::android::hardware::drm::IDrmPlugin> *)",
+      "10-23 08:06:23.101  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:cat /storage/emulated/0/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json'",
+      "10-23 08:06:23.178  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 0 cat /storage/emulated/0/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json'",
+      "10-23 08:06:23.284  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 0 cat /data/user/0/dev.cyclone.cloak.probe.diag/files/report.json'",
+      "10-23 08:06:23.409  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 0 cat files/capture-start.json'",
+      "10-23 08:06:23.546  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:cat /storage/emulated/0/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-start.json'",
+      "10-23 08:06:23.664  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 0 cat /storage/emulated/0/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-start.json'",
+      "10-23 08:06:23.808  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 0 cat /data/user/0/dev.cyclone.cloak.probe.diag/files/capture-start.json'",
+      "10-23 08:06:23.921  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 0 cat files/capture-end.json'",
+      "10-23 08:06:24.033  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:cat /storage/emulated/0/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-end.json'",
+      "10-23 08:06:24.152  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 0 cat /storage/emulated/0/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-end.json'",
+      "10-23 08:06:24.304  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 0 cat /data/user/0/dev.cyclone.cloak.probe.diag/files/capture-end.json'",
+      "10-23 08:06:24.447  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys package dev.cyclone.cloak.probe.diag'",
+      "10-23 08:06:24.581 24867 24868 I artd    : GetBestInfo: /data/app/~~h8uPivim3H-aWU7kXHLJBw==/dev.cyclone.cloak.probe.diag-EYO-Hku5tmlx0yxPiGIQbA==/base.apk has no usable artifacts",
+      "10-23 08:06:24.626  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:pidof dev.cyclone.cloak.probe.diag'",
+      "10-23 08:06:24.920  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:pm path --user 0 dev.cyclone.cloak.probe.diag'",
+      "10-23 08:06:25.093  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 0 id'",
+      "10-23 08:06:25.203  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 0 pwd'"
+    ]
+  }
+}

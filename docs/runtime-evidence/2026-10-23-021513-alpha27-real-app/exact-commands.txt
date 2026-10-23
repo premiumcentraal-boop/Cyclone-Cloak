@@ -1,0 +1,18 @@
+All device argv/exit codes are in commands.jsonl. Raw stdout for launches and bounded PID logs is retained separately. No builds performed: exact prior instrumented artifact reused.
+Host invocation (PowerShell; run directory = this directory):
+uv run --offline -- python -X utf8 <run>/real_app_ops.py install
+uv run --offline -- python -X utf8 <run>/real_app_ops.py boot (first probe during reboot unavailable; second after boot succeeded)
+uv run --offline -- python -X utf8 <run>/real_app_ops.py bind
+uv run --offline -- python -X utf8 <run>/real_app_ops.py capture 1
+uv run --offline -- python -X utf8 <run>/real_app_ops.py capture 2
+uv run --offline -- python -X utf8 <run>/real_app_ops.py remove
+uv run --offline -- python -X utf8 <run>/real_app_ops.py final (user17 stopped; preliminary audit retained)
+Final audit resumed through original ensure_user(17), snapshot and target_state helpers; compared persisted JSON shapes, then ensure_user(0). See commands.jsonl for exact per-device commands.
+git diff --check
+git diff --cached --name-only
+Module install: adb -s 3B171FDJH0061G shell su --mount-master -c 'set -eu; magisk --install-module <recorded staging ZIP>'
+Module removal: standard /data/adb/modules/cyclone_cloak/remove marker then adb reboot.
+Target launches (twice):
+adb -s 3B171FDJH0061G shell 'am force-stop --user 17 com.devicetrust.scanner'
+adb -s 3B171FDJH0061G shell 'am start --user 17 -n com.devicetrust.scanner/.MainActivity --activity-clear-top --activity-single-top'
+UI evidence: adb exec-out screencap -p; uiautomator dump /dev/tty yielded empty stdout (no XML claim).

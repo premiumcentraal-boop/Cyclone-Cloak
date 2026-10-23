@@ -1,0 +1,16 @@
+{
+  "user": 17,
+  "fixture": "b",
+  "pid": 15592,
+  "profile_sha256": "db4f661468d72dfd9f766c6a2b761a2fb9cd9141bc1ff61124a05d93c8b1a631",
+  "filesystem_schema": true,
+  "marker_diagnosis": {
+    "start_seen": true,
+    "end_seen": true,
+    "reason": "CAPTURE_ENDED_COMPLETED"
+  },
+  "counts": {
+    "BLOCKED": 2,
+    "OBSERVED": 2
+  }
+}

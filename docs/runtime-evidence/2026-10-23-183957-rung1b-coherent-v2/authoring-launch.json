@@ -1,0 +1,5 @@
+{
+  "stdout": "Starting: Intent { flg=0x24000000 cmp=dev.cyclone.cloak.probe.diag/dev.cyclone.cloak.probe.DiagnosticsProbeActivity (has extras) }\n",
+  "stderr": "",
+  "exit_code": 0
+}

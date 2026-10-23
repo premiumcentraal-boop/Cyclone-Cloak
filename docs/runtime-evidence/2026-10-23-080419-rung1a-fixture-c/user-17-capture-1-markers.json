@@ -1,0 +1,82 @@
+{
+  "start": {
+    "format": 1,
+    "request_id": "bootgate-cf010045e417472abaf48bfe5007d052",
+    "session_generation": 3,
+    "uid": 1710273,
+    "pid": 26528,
+    "phase": "start",
+    "outcome": "STARTED",
+    "timestamp_ms": 1792735621013
+  },
+  "start_visibility": [
+    {
+      "transport": "lifecycle_run_as",
+      "path": "/data/user/17/dev.cyclone.cloak.probe.diag/files/capture-start.json",
+      "state": "READABLE",
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "transport": "external_shell",
+      "path": "/storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-start.json",
+      "state": "ACCESS_DENIED_EXISTENCE_UNKNOWN",
+      "exit_code": 1,
+      "stderr": "cat: /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-start.json: Permission denied\n"
+    },
+    {
+      "transport": "external_run_as",
+      "path": "/storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-start.json",
+      "state": "ACCESS_DENIED_EXISTENCE_UNKNOWN",
+      "exit_code": 1,
+      "stderr": "cat: /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-start.json: Permission denied\n"
+    },
+    {
+      "transport": "private_run_as",
+      "path": "/data/user/17/dev.cyclone.cloak.probe.diag/files/capture-start.json",
+      "state": "READABLE",
+      "exit_code": 0,
+      "stderr": ""
+    }
+  ],
+  "end": {
+    "format": 1,
+    "request_id": "bootgate-cf010045e417472abaf48bfe5007d052",
+    "session_generation": 3,
+    "uid": 1710273,
+    "pid": 26528,
+    "phase": "end",
+    "outcome": "COMPLETED",
+    "timestamp_ms": 1792735623320
+  },
+  "end_visibility": [
+    {
+      "transport": "lifecycle_run_as",
+      "path": "/data/user/17/dev.cyclone.cloak.probe.diag/files/capture-end.json",
+      "state": "READABLE",
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "transport": "external_shell",
+      "path": "/storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-end.json",
+      "state": "ACCESS_DENIED_EXISTENCE_UNKNOWN",
+      "exit_code": 1,
+      "stderr": "cat: /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-end.json: Permission denied\n"
+    },
+    {
+      "transport": "external_run_as",
+      "path": "/storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-end.json",
+      "state": "ACCESS_DENIED_EXISTENCE_UNKNOWN",
+      "exit_code": 1,
+      "stderr": "cat: /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-end.json: Permission denied\n"
+    },
+    {
+      "transport": "private_run_as",
+      "path": "/data/user/17/dev.cyclone.cloak.probe.diag/files/capture-end.json",
+      "state": "READABLE",
+      "exit_code": 0,
+      "stderr": ""
+    }
+  ]
+}

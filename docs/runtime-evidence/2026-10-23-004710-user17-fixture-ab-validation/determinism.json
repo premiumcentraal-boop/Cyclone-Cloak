@@ -1,0 +1,70 @@
+[
+  {
+    "user": 0,
+    "id": "diagnostics.filesystem.build_prop",
+    "result": "NOT_COMPARABLE",
+    "digests": [
+      null
+    ]
+  },
+  {
+    "user": 0,
+    "id": "diagnostics.filesystem.proc_version",
+    "result": "NOT_COMPARABLE",
+    "digests": [
+      null
+    ]
+  },
+  {
+    "user": 0,
+    "id": "diagnostics.filesystem.proc_cpuinfo",
+    "result": "NOT_COMPARABLE",
+    "digests": [
+      "e29c2b53aec8cdcf40deeb7849d318ee4984daf5474b93a2302318a30905c4f3"
+    ]
+  },
+  {
+    "user": 0,
+    "id": "diagnostics.filesystem.maps_snapshot",
+    "result": "SKIPPED_VOLATILE",
+    "digests": [
+      "9211ec1df3aea64cd1ece0b84de820e58b1c59734275c0ba87c66c01a9b96a23"
+    ]
+  },
+  {
+    "user": 17,
+    "id": "diagnostics.filesystem.build_prop",
+    "result": "NOT_COMPARABLE",
+    "digests": [
+      null,
+      null
+    ]
+  },
+  {
+    "user": 17,
+    "id": "diagnostics.filesystem.proc_version",
+    "result": "NOT_COMPARABLE",
+    "digests": [
+      null,
+      null
+    ]
+  },
+  {
+    "user": 17,
+    "id": "diagnostics.filesystem.proc_cpuinfo",
+    "result": "IDENTICAL",
+    "digests": [
+      "e29c2b53aec8cdcf40deeb7849d318ee4984daf5474b93a2302318a30905c4f3",
+      "e29c2b53aec8cdcf40deeb7849d318ee4984daf5474b93a2302318a30905c4f3"
+    ]
+  },
+  {
+    "user": 17,
+    "id": "diagnostics.filesystem.maps_snapshot",
+    "result": "SKIPPED_VOLATILE",
+    "digests": [
+      "25219a71546426f6a703fd7e120a67941242b7c409f352008f3d09f8ead35d01",
+      "bb33b34d0abb8ca4780b058c957e5610766ff70a75f82b0597f7997032e5a2da"
+    ]
+  }
+]

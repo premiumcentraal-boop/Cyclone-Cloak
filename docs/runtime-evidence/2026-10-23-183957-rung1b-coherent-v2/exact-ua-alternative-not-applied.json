@@ -1,0 +1,890 @@
+{
+  "schema_version": "0.4",
+  "reality": {
+    "compute": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "Read by explicit diagnostics authoring export from the unbound host; see meta.authoring_provenance.",
+      "values": {
+        "gpu": "Mali-G715"
+      }
+    },
+    "memory": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "Read by explicit diagnostics authoring export from the unbound host; see meta.authoring_provenance.",
+      "values": {
+        "free_storage_gib": 66.9
+      }
+    },
+    "panel": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "Linked to captured unbound host base fields; prior sim_state expectation retained where present.",
+      "values": {
+        "width": 1080,
+        "height": 2400,
+        "density_dpi": 420,
+        "refresh_hz": 60
+      }
+    },
+    "cameras": {
+      "availability": "unknown",
+      "source": "needs verification",
+      "reason": "No verified template value; collect read-only evidence for this field.",
+      "values": {}
+    },
+    "sensors": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "Read by explicit diagnostics authoring export from the unbound host; see meta.authoring_provenance.",
+      "values": {
+        "inventory": [
+          {
+            "type": 32,
+            "name": "Dynamic Sensor Manager",
+            "min_delay_us": 1000,
+            "max_delay_us": 1000,
+            "range": 1,
+            "resolution": 1
+          },
+          {
+            "type": 1,
+            "name": "ICM45631 Accelerometer",
+            "min_delay_us": 5000,
+            "max_delay_us": 666667,
+            "range": 156.90640258789062,
+            "resolution": 0.0005985504249110818
+          },
+          {
+            "type": 2,
+            "name": "MMC56X3X Magnetometer",
+            "min_delay_us": 10000,
+            "max_delay_us": 800000,
+            "range": 3198.15673828125,
+            "resolution": 0.09759999811649323
+          },
+          {
+            "type": 3,
+            "name": "Orientation Sensor",
+            "min_delay_us": 5000,
+            "max_delay_us": 200000,
+            "range": 360,
+            "resolution": 9.999999747378752e-06
+          },
+          {
+            "type": 4,
+            "name": "ICM45631 Gyroscope",
+            "min_delay_us": 5000,
+            "max_delay_us": 666667,
+            "range": 34.906585693359375,
+            "resolution": 0.0001332312385784462
+          },
+          {
+            "type": 5,
+            "name": "TMD3719 Ambient Light",
+            "min_delay_us": 0,
+            "max_delay_us": 1000000,
+            "range": 1000000,
+            "resolution": 0.009999999776482582
+          },
+          {
+            "type": 6,
+            "name": "ICP20100 Pressure Sensor",
+            "min_delay_us": 25000,
+            "max_delay_us": 1000000,
+            "range": 1100,
+            "resolution": 9.999999747378752e-05
+          },
+          {
+            "type": 8,
+            "name": "TMD3719 Proximity (wake-up)",
+            "min_delay_us": 0,
+            "max_delay_us": 1000000,
+            "range": 5,
+            "resolution": 1
+          },
+          {
+            "type": 9,
+            "name": "Gravity Sensor",
+            "min_delay_us": 5000,
+            "max_delay_us": 200000,
+            "range": 9.8100004196167,
+            "resolution": 9.999999747378752e-06
+          },
+          {
+            "type": 10,
+            "name": "Linear Acceleration Sensor",
+            "min_delay_us": 20000,
+            "max_delay_us": 200000,
+            "range": 156.9600067138672,
+            "resolution": 9.999999747378752e-06
+          },
+          {
+            "type": 11,
+            "name": "Rotation Vector Sensor",
+            "min_delay_us": 5000,
+            "max_delay_us": 200000,
+            "range": 1,
+            "resolution": 9.999999747378752e-06
+          },
+          {
+            "type": 14,
+            "name": "MMC56X3X Magnetometer-Uncalibrated",
+            "min_delay_us": 10000,
+            "max_delay_us": 800000,
+            "range": 3198.15673828125,
+            "resolution": 0.09759999811649323
+          },
+          {
+            "type": 15,
+            "name": "Game Rotation Vector Sensor",
+            "min_delay_us": 5000,
+            "max_delay_us": 200000,
+            "range": 1,
+            "resolution": 9.999999747378752e-06
+          },
+          {
+            "type": 16,
+            "name": "ICM45631 Gyroscope-Uncalibrated",
+            "min_delay_us": 5000,
+            "max_delay_us": 666667,
+            "range": 34.906585693359375,
+            "resolution": 0.0001332312385784462
+          },
+          {
+            "type": 17,
+            "name": "Significant Motion (wake-up)",
+            "min_delay_us": -1,
+            "max_delay_us": 0,
+            "range": 1,
+            "resolution": 1
+          },
+          {
+            "type": 18,
+            "name": "Step Detector",
+            "min_delay_us": 0,
+            "max_delay_us": 0,
+            "range": 1,
+            "resolution": 1
+          },
+          {
+            "type": 19,
+            "name": "Step Counter",
+            "min_delay_us": 0,
+            "max_delay_us": 1000000,
+            "range": 3.4028234663852886e+38,
+            "resolution": 1
+          },
+          {
+            "type": 20,
+            "name": "Geomagnetic Rotation Vector Sensor",
+            "min_delay_us": 5000,
+            "max_delay_us": 200000,
+            "range": 1,
+            "resolution": 9.999999747378752e-06
+          },
+          {
+            "type": 22,
+            "name": "Tilt Sensor (wake-up)",
+            "min_delay_us": 0,
+            "max_delay_us": 0,
+            "range": 1,
+            "resolution": 1
+          },
+          {
+            "type": 25,
+            "name": "Lift to Wake Sensor (wake-up)",
+            "min_delay_us": -1,
+            "max_delay_us": 0,
+            "range": 1,
+            "resolution": 1
+          },
+          {
+            "type": 27,
+            "name": "Device Orientation",
+            "min_delay_us": 0,
+            "max_delay_us": 1000000,
+            "range": 3,
+            "resolution": 1
+          },
+          {
+            "type": 35,
+            "name": "ICM45631 Accelerometer-Uncalibrated",
+            "min_delay_us": 5000,
+            "max_delay_us": 666667,
+            "range": 156.90640258789062,
+            "resolution": 0.0005985504249110818
+          },
+          {
+            "type": 65538,
+            "name": "ICM45631 Temperature",
+            "min_delay_us": 20000,
+            "max_delay_us": 666667,
+            "range": 85,
+            "resolution": 0.0078125
+          },
+          {
+            "type": 65539,
+            "name": "ICP20100 Temperature",
+            "min_delay_us": 25000,
+            "max_delay_us": 1000000,
+            "range": 85,
+            "resolution": 0.009999999776482582
+          },
+          {
+            "type": 65541,
+            "name": "Camera V-Sync 0",
+            "min_delay_us": 0,
+            "max_delay_us": 1000000,
+            "range": 3.4028234663852886e+38,
+            "resolution": 0
+          },
+          {
+            "type": 65541,
+            "name": "Camera V-Sync 1",
+            "min_delay_us": 0,
+            "max_delay_us": 1000000,
+            "range": 3.4028234663852886e+38,
+            "resolution": 0
+          },
+          {
+            "type": 65541,
+            "name": "Camera V-Sync 2",
+            "min_delay_us": 0,
+            "max_delay_us": 1000000,
+            "range": 3.4028234663852886e+38,
+            "resolution": 0
+          },
+          {
+            "type": 65545,
+            "name": "VD6282 Rear Light Sensor",
+            "min_delay_us": 16000,
+            "max_delay_us": 409600,
+            "range": 1000000,
+            "resolution": 0
+          },
+          {
+            "type": 65554,
+            "name": "ICM45631 Motion Detect",
+            "min_delay_us": -1,
+            "max_delay_us": 0,
+            "range": 1,
+            "resolution": 0
+          },
+          {
+            "type": 65555,
+            "name": "ICM45631 Stationary Detect",
+            "min_delay_us": -1,
+            "max_delay_us": 0,
+            "range": 1,
+            "resolution": 0
+          },
+          {
+            "type": 131073,
+            "name": "Double Twist (wake-up)",
+            "min_delay_us": 0,
+            "max_delay_us": 0,
+            "range": 1,
+            "resolution": 1
+          },
+          {
+            "type": 131077,
+            "name": "Binned Brightness (wake-up)",
+            "min_delay_us": 0,
+            "max_delay_us": 1000000,
+            "range": 255,
+            "resolution": 1
+          },
+          {
+            "type": 131083,
+            "name": "Proximity Gated Single Tap Gesture (wake-up)",
+            "min_delay_us": -1,
+            "max_delay_us": 0,
+            "range": 1,
+            "resolution": 1
+          },
+          {
+            "type": 131085,
+            "name": "Proximity Gated Long Press Gesture (wake-up)",
+            "min_delay_us": -1,
+            "max_delay_us": 0,
+            "range": 1,
+            "resolution": 1
+          },
+          {
+            "type": 131087,
+            "name": "Quick Pickup Sensor (wake-up)",
+            "min_delay_us": -1,
+            "max_delay_us": 0,
+            "range": 1,
+            "resolution": 1
+          },
+          {
+            "type": 131088,
+            "name": "Auto Brightness",
+            "min_delay_us": 0,
+            "max_delay_us": 1000000,
+            "range": 1000000,
+            "resolution": 0.0010000000474974513
+          },
+          {
+            "type": 131091,
+            "name": "AAD Proximity Sensor (wake-up)",
+            "min_delay_us": 0,
+            "max_delay_us": 1000000,
+            "range": 1000000,
+            "resolution": 1
+          },
+          {
+            "type": 131092,
+            "name": "Proximity(Voice Calls) Sensor (wake-up)",
+            "min_delay_us": 0,
+            "max_delay_us": 1000000,
+            "range": 1000000,
+            "resolution": 1
+          }
+        ]
+      }
+    },
+    "power": {
+      "availability": "unknown",
+      "source": "needs verification",
+      "reason": "Not captured by the scoped host authoring readers; previous template facts removed.",
+      "values": {}
+    },
+    "drm": {
+      "availability": "unknown",
+      "source": "needs verification",
+      "reason": "No verified template value; collect read-only evidence for this field.",
+      "values": {}
+    },
+    "radio": {
+      "availability": "unknown",
+      "source": "needs verification",
+      "reason": "Not captured by the scoped host authoring readers; previous template facts removed.",
+      "values": {}
+    },
+    "carrier": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "Linked to captured unbound host base fields; prior sim_state expectation retained where present.",
+      "values": {
+        "slots": 2,
+        "mcc": "204",
+        "mnc": "08",
+        "sim_state": "ready"
+      }
+    },
+    "packages": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "Read by explicit diagnostics authoring export from the unbound host; see meta.authoring_provenance.",
+      "values": {
+        "installed": [
+          {
+            "package": "android",
+            "version_name": "16",
+            "version_code": 36
+          },
+          {
+            "package": "com.android.vending",
+            "version_name": "53.6.15-34 [0] [PR] 996698724",
+            "version_code": 85361540
+          },
+          {
+            "package": "com.google.android.gms",
+            "version_name": "26.37.37 (260400-994713346)",
+            "version_code": 263737035
+          },
+          {
+            "package": "com.google.android.gsf",
+            "version_name": "16",
+            "version_code": 36
+          },
+          {
+            "package": "com.google.android.webview",
+            "version_name": "155.0.8059.43",
+            "version_code": 805904303
+          }
+        ]
+      }
+    },
+    "webview": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "Read by explicit diagnostics authoring export from the unbound host; see meta.authoring_provenance.",
+      "values": {
+        "provider": "com.google.android.webview",
+        "version": "155.0.8059.43",
+        "user_agent": "Mozilla/5.0 (Linux; Android 16; Pixel 8 Build/CP1A.260505.005; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/155.0.8059.43 Mobile Safari/537.36"
+      }
+    },
+    "environment": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "Linked to captured unbound host base fields; prior sim_state expectation retained where present.",
+      "values": {
+        "language": "en",
+        "country": "NL",
+        "timezone": "Europe/Amsterdam"
+      }
+    }
+  },
+  "id": "2b1cec3d-b89b-5652-a17f-870079bf9666",
+  "name": "Host observation fixture C",
+  "seed": "abababababababababababababababababababababababababababababababab",
+  "device": {
+    "manufacturer": "Google",
+    "brand": "google",
+    "model": "Pixel 8",
+    "product": "shiba",
+    "device": "shiba",
+    "hardware": "shiba",
+    "fingerprint": "google/shiba/shiba:16/CP1A.260505.005/15081906:user/release-keys",
+    "version_release": "16",
+    "sdk_int": 36,
+    "security_patch": "2026-05-05",
+    "build_id": "CP1A.260505.005",
+    "version_incremental": "15081906",
+    "build_date_utc": 1774395360,
+    "first_api_level": 34,
+    "bootloader": "ripcurrent-16.4-14540574",
+    "baseband": "g5300i-251202-260127-B-14784800,g5300i-251202-260127-B-14784800"
+  },
+  "identifiers": {
+    "android_id": "e45616d2ba835022"
+  },
+  "telephony": {
+    "sim_slot_count": 2,
+    "carrier_name": "Lebara",
+    "mcc": "204",
+    "mnc": "08",
+    "network_type": "LTE"
+  },
+  "display": {
+    "width": 1080,
+    "height": 2400,
+    "density": 420,
+    "refresh_rate_hz": 60,
+    "screen_size_class": "large"
+  },
+  "locale": {
+    "language": "en",
+    "country": "NL",
+    "timezone": "Europe/Amsterdam"
+  },
+  "integrity": {
+    "verdict": "unknown",
+    "checked_at": null,
+    "keybox_tag": null
+  },
+  "health": {
+    "state": "new",
+    "last_seen": null
+  },
+  "meta": {
+    "source": "diagnostics_host_authoring",
+    "forge_version": "0.2.0",
+    "template": "host_observation",
+    "authoring_provenance": {
+      "reality.compute.values.gpu": {
+        "reader_id": "compute.gpu",
+        "captured_at_ms": 1792771610372,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound diagnostics; unchanged alpha28 candidate loaded",
+        "authoring_sha256": "80a9604e5ed878609f801d2a481f72d0694c3c150636745357f3e93aba6289a4"
+      },
+      "reality.memory.values.free_storage_gib": {
+        "reader_id": "memory.free_storage_gib",
+        "captured_at_ms": 1792771610372,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound diagnostics; unchanged alpha28 candidate loaded",
+        "authoring_sha256": "80a9604e5ed878609f801d2a481f72d0694c3c150636745357f3e93aba6289a4"
+      },
+      "reality.sensors.values.inventory": {
+        "reader_id": "sensors.inventory",
+        "captured_at_ms": 1792771610372,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound diagnostics; unchanged alpha28 candidate loaded",
+        "authoring_sha256": "80a9604e5ed878609f801d2a481f72d0694c3c150636745357f3e93aba6289a4"
+      },
+      "reality.packages.values.installed": {
+        "reader_id": "packages.installed",
+        "captured_at_ms": 1792771610372,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound diagnostics; unchanged alpha28 candidate loaded",
+        "authoring_sha256": "80a9604e5ed878609f801d2a481f72d0694c3c150636745357f3e93aba6289a4"
+      },
+      "reality.webview.values.provider": {
+        "reader_id": "webview.provider",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "reality.webview.values.version": {
+        "reader_id": "webview.version",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "reality.webview.values.user_agent": {
+        "reader_id": "webview.default_ua",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0",
+        "derivation": "WebSettings.getDefaultUserAgent, not a concrete-instance UA; concrete reader remains unverified."
+      },
+      "device.manufacturer": {
+        "reader_id": "device.manufacturer",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "device.brand": {
+        "reader_id": "device.brand",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "device.model": {
+        "reader_id": "device.model",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "device.product": {
+        "reader_id": "device.product",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "device.device": {
+        "reader_id": "device.device",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "device.hardware": {
+        "reader_id": "device.hardware",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "device.fingerprint": {
+        "reader_id": "device.fingerprint",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "device.version_release": {
+        "reader_id": "device.version_release",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "device.sdk_int": {
+        "reader_id": "device.sdk_int",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "device.security_patch": {
+        "reader_id": "device.security_patch",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "device.build_id": {
+        "reader_id": "device.build_id",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "device.version_incremental": {
+        "reader_id": "device.version_incremental",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "device.build_date_utc": {
+        "reader_id": "device.build_date_utc",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "device.first_api_level": {
+        "reader_id": "device.first_api_level",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "device.bootloader": {
+        "reader_id": "device.bootloader",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "device.baseband": {
+        "reader_id": "device.baseband",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "identifiers.android_id": {
+        "reader_id": "identifiers.android_id",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "telephony.sim_slot_count": {
+        "reader_id": "telephony.sim_slot_count",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "telephony.carrier_name": {
+        "reader_id": "telephony.carrier_name",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "telephony.mcc": {
+        "reader_id": "telephony.mcc",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "telephony.mnc": {
+        "reader_id": "telephony.mnc",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "telephony.network_type": {
+        "reader_id": "telephony.network_type_property",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0",
+        "derivation": "gsm.network.type primary slot (index 0); full raw multi-slot string retained in authoring evidence."
+      },
+      "display.width": {
+        "reader_id": "display.width",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "display.height": {
+        "reader_id": "display.height",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "display.density": {
+        "reader_id": "display.density",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "display.refresh_rate_hz": {
+        "reader_id": "display.refresh_rate_hz",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "locale.language": {
+        "reader_id": "locale.language",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "locale.country": {
+        "reader_id": "locale.country",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "locale.timezone": {
+        "reader_id": "locale.timezone",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "reality.panel.values.width": {
+        "reader_id": "display.width",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0",
+        "derivation": "Exact link to the observed base display field."
+      },
+      "reality.panel.values.height": {
+        "reader_id": "display.height",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0",
+        "derivation": "Exact link to the observed base display field."
+      },
+      "reality.panel.values.density_dpi": {
+        "reader_id": "display.density",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0",
+        "derivation": "Exact link to the observed base display field."
+      },
+      "reality.panel.values.refresh_hz": {
+        "reader_id": "display.refresh_rate_hz",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0",
+        "derivation": "Exact link to the observed base display field."
+      },
+      "reality.carrier.values.slots": {
+        "reader_id": "telephony.sim_slot_count",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "reality.carrier.values.mcc": {
+        "reader_id": "telephony.mcc",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "reality.carrier.values.mnc": {
+        "reader_id": "telephony.mnc",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "reality.environment.values.language": {
+        "reader_id": "locale.language",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "reality.environment.values.country": {
+        "reader_id": "locale.country",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      },
+      "reality.environment.values.timezone": {
+        "reader_id": "locale.timezone",
+        "captured_at_ms": 1792773858598,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound authoring; unchanged alpha28 candidate",
+        "authoring_sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0"
+      }
+    },
+    "unavailable_host_readers": {
+      "webview.user_agent": {
+        "error": "RuntimeException"
+      },
+      "identifiers.serial": {
+        "error": "SecurityException"
+      }
+    },
+    "removed_unmeasured_blocks": [
+      "camera",
+      "ua",
+      "network",
+      "reality.compute.soc",
+      "reality.memory.ram_gib",
+      "reality.memory.storage_gib",
+      "reality.power.values",
+      "reality.radio.values",
+      "reality.inventory_id"
+    ],
+    "diagnostic_alternative_only": "Not applied: retain old size-class metadata solely to isolate strict base-UA validation; no measured size-class claim."
+  },
+  "ua": {
+    "value": "Mozilla/5.0 (Linux; Android 16; Pixel 8 Build/CP1A.260505.005; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/155.0.8059.43 Mobile Safari/537.36"
+  }
+}

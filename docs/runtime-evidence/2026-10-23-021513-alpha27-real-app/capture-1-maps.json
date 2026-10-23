@@ -1,0 +1,13 @@
+{
+  "pid": "8496",
+  "mappings": [
+    "7439813000-7439824000 r-xp 00000000 fe:40 273931                         /data/user/17/com.devicetrust.scanner/code_cache/cloak_hooks/libpine.so",
+    "7439824000-7439825000 r--p 00010000 fe:40 273931                         /data/user/17/com.devicetrust.scanner/code_cache/cloak_hooks/libpine.so",
+    "7439825000-7439827000 rw-p 00010000 fe:40 273931                         /data/user/17/com.devicetrust.scanner/code_cache/cloak_hooks/libpine.so",
+    "743d054000-743d066000 r-xp 00000000 fe:40 317351                         /data/user/17/com.devicetrust.scanner/libshadowhook.so",
+    "743d069000-743d06a000 r--p 00011000 fe:40 317351                         /data/user/17/com.devicetrust.scanner/libshadowhook.so",
+    "743d06d000-743d06e000 rw-p 00011000 fe:40 317351                         /data/user/17/com.devicetrust.scanner/libshadowhook.so",
+    "7741393000-7741395000 rwxp 00000000 00:00 0                              [anon:pine codes]",
+    "7741396000-7741397000 rwxp 00000000 00:00 0                              [anon:shadowhook-enter]"
+  ]
+}

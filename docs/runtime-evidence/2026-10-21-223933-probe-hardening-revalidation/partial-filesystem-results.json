@@ -1,0 +1,10 @@
+{
+  "user": 0,
+  "capture": 1,
+  "counts": {
+    "BLOCKED": 2,
+    "OBSERVED": 2
+  },
+  "schema_valid": true,
+  "full_capture_completed": false
+}

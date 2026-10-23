@@ -1,0 +1,23 @@
+{
+  "user0": {
+    "pid": 15193,
+    "legacy": {
+      "PASS": 82,
+      "OBSERVED": 7
+    },
+    "linked": {
+      "PASS": 13
+    },
+    "runtime_envelope": {
+      "OBSERVED": 14,
+      "MISSING": 1,
+      "PASS": 1
+    }
+  },
+  "user17": {
+    "measured_captures": 0,
+    "reason": "PERMISSION_UI_NOT_INTERACTIVE"
+  },
+  "APPLIED_promotions": [],
+  "VERIFIED_promotions": []
+}

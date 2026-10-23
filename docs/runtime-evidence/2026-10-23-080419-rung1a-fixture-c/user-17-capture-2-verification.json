@@ -1,0 +1,15 @@
+{
+  "user": 17,
+  "fixture": "external",
+  "pid": 31219,
+  "profile_sha256": "2f7b201e99d58322efbf34663a91d30323f160e939b10882d133c2d3a441831a",
+  "filesystem_schema": true,
+  "marker_diagnosis": {
+    "start_seen": true,
+    "end_seen": true,
+    "reason": "CAPTURE_ENDED_COMPLETED"
+  },
+  "counts": {
+    "OBSERVED": 4
+  }
+}

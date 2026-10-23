@@ -1,0 +1,151 @@
+{
+  "result": "FAIL",
+  "failed_cycle": 1,
+  "failed_phase": "user-0-post-removal-warm",
+  "reason": "PROBE_REPORT_TIMEOUT",
+  "source_commit": "a93d8643c51463dff1d4fb3258a383432012f989",
+  "installed_version": "0.11.0-alpha.24",
+  "installed_code": 48,
+  "bound_results": [
+    {
+      "android_user": 0,
+      "fixture": "a",
+      "pid": 12996,
+      "profile_sha256": "e476b02fd308c62cf207f4fe60e97085bbd14ca6293b405c2cedb996c9555f53",
+      "published_sha256": "e476b02fd308c62cf207f4fe60e97085bbd14ca6293b405c2cedb996c9555f53",
+      "profile_hashes_match": true,
+      "legacy_counts": {
+        "PASS": 82,
+        "OBSERVED": 7
+      },
+      "linked_counts": {
+        "PASS": 13
+      },
+      "display_diagnostics": {
+        "active_mode": {
+          "value": {
+            "width": 1080,
+            "height": 2400,
+            "refresh_hz": 90
+          },
+          "status": "OBSERVED"
+        },
+        "supported_modes": {
+          "value": [
+            {
+              "width": 1080,
+              "height": 2400,
+              "refresh_hz": 90
+            },
+            {
+              "width": 1080,
+              "height": 2400,
+              "refresh_hz": 120.00000762939453
+            }
+          ],
+          "status": "OBSERVED"
+        },
+        "refresh_rate_hz": {
+          "value": 90,
+          "status": "OBSERVED"
+        }
+      }
+    },
+    {
+      "android_user": 17,
+      "fixture": "b",
+      "pid": 14078,
+      "profile_sha256": "2bb5d74138d14251f316038be1a679fb53b1aad0796e190a8d03e7bb8494482e",
+      "published_sha256": "2bb5d74138d14251f316038be1a679fb53b1aad0796e190a8d03e7bb8494482e",
+      "profile_hashes_match": true,
+      "legacy_counts": {
+        "PASS": 81,
+        "OBSERVED": 4,
+        "BLOCKED": 4
+      },
+      "linked_counts": {
+        "PASS": 13
+      },
+      "display_diagnostics": {
+        "active_mode": {
+          "value": {
+            "width": 1080,
+            "height": 2340,
+            "refresh_hz": 120
+          },
+          "status": "OBSERVED"
+        },
+        "supported_modes": {
+          "value": [
+            {
+              "width": 1080,
+              "height": 2340,
+              "refresh_hz": 120
+            },
+            {
+              "width": 1080,
+              "height": 2400,
+              "refresh_hz": 120.00000762939453
+            }
+          ],
+          "status": "OBSERVED"
+        },
+        "refresh_rate_hz": {
+          "value": 120,
+          "status": "OBSERVED"
+        }
+      }
+    }
+  ],
+  "permission_delta": [],
+  "production_delta": [],
+  "cleanup": {
+    "0": {
+      "binding_removed": true,
+      "body_directory_removed": true,
+      "private_files_removed": true
+    },
+    "17": {
+      "binding_removed": true,
+      "body_directory_removed": true,
+      "private_files_removed": true
+    },
+    "scratch_removed": true
+  },
+  "cold_restoration": "NOT_COMPLETED",
+  "cycles_2_and_3": "NOT_RUN",
+  "probe_crash": {
+    "pid": 12996,
+    "thread": "cloak-probe-6",
+    "signal": "SIGSEGV",
+    "fault_address": "0x38",
+    "reason": "null pointer dereference",
+    "evidence": "probe-crash-redacted.log",
+    "root_cause": "NOT_DETERMINED"
+  },
+  "failed_warm_report": "No completed report was produced before timeout; raw display values available only in the preceding bound reports.",
+  "release_published": false,
+  "next_wave_started": false,
+  "temporary_diagnostic_removed_from_candidate_source": true,
+  "installation_provenance": {
+    "signed_validation_run": 39158498518,
+    "apk_sha256": "4e45c9801d54df51ec09995f08173398a06310ee44dc81d9df98daa1c477dfb2",
+    "module_sha256": "7cf926409869b3d065f62b52cf70cc6e2fe5a309f70c8457bf6291f3be029507",
+    "module_libraries": {
+      "zygisk/arm64-v8a.so": "8a529beae4f1e164405a8956581806cd85878b30a2c1b1336639acbb6178bfcc",
+      "zygisk/armeabi-v7a.so": "e208e2093a31f2cd082f3c76b7a88307007cf44c7cff83e224dc89f85768207c"
+    },
+    "diagnostics_apk_sha256": "2e43ed4ea4129ceb60e0abd5146d9ea33ec4688958a3fc500ef7d4926fe1a9b7",
+    "embedded_module_exact_match": true,
+    "diagnostics_install_attempts": 1,
+    "companion_install_attempts": 1,
+    "diagnostics_hashes_before_install": {
+      "0": "184012b2d9fc7280a490a8295c81787df72b281f8efc619adbd87b454dff72e3",
+      "17": "184012b2d9fc7280a490a8295c81787df72b281f8efc619adbd87b454dff72e3"
+    },
+    "diagnostics_hashes_after_install": {
+      "0": "2e43ed4ea4129ceb60e0abd5146d9ea33ec4688958a3fc500ef7d4926fe1a9b7",
+      "17": "2e43ed4ea4129ceb60e0abd5146d9ea33ec4688958a3fc500ef7d4926fe1a9b7"
+    }
+  }
+}

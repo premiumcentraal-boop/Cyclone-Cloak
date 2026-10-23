@@ -1,0 +1,8 @@
+{
+  "binding_absent": true,
+  "body_absent": true,
+  "scratch_absent": true,
+  "module_paths": "ABSENT:/data/adb/modules/cyclone_cloak\nABSENT:/data/adb/modules_update/cyclone_cloak\n",
+  "current_user": "0",
+  "production_entries": 327
+}

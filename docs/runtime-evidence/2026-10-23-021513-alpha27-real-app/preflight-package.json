@@ -1,0 +1,5 @@
+{
+  "component": "priority=0 preferredOrder=0 match=0x108000 specificIndex=-1 isDefault=false\ncom.devicetrust.scanner/.MainActivity\n",
+  "version": "51 minSdk=29 targetSdk=36",
+  "selected_app": "com.devicetrust.scanner"
+}

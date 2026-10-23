@@ -1,0 +1,9 @@
+{
+  "args": [
+    "shell",
+    "cmd appops get --user 0 dev.cyclone.cloak"
+  ],
+  "exit_code": 0,
+  "stdout": "Uid mode: COARSE_LOCATION: ignore\r\nFINE_LOCATION: ignore\r\nREAD_CONTACTS: ignore\r\nWRITE_CONTACTS: ignore\r\nREAD_CALL_LOG: ignore\r\nWRITE_CALL_LOG: ignore\r\nREAD_CALENDAR: ignore\r\nWRITE_CALENDAR: ignore\r\nPOST_NOTIFICATION: ignore\r\nCALL_PHONE: ignore\r\nREAD_SMS: ignore\r\nRECEIVE_SMS: ignore\r\nRECEIVE_MMS: ignore\r\nRECEIVE_WAP_PUSH: ignore\r\nSEND_SMS: ignore\r\nCAMERA: ignore\r\nRECORD_AUDIO: ignore\r\nREAD_PHONE_STATE: ignore\r\nADD_VOICEMAIL: ignore\r\nUSE_SIP: ignore\r\nPROCESS_OUTGOING_CALLS: ignore\r\nBODY_SENSORS: ignore\r\nREAD_CELL_BROADCASTS: ignore\r\nREAD_EXTERNAL_STORAGE: ignore\r\nWRITE_EXTERNAL_STORAGE: ignore\r\nGET_ACCOUNTS: ignore\r\nREAD_PHONE_NUMBERS: ignore\r\nANSWER_PHONE_CALLS: ignore\r\nACCEPT_HANDOVER: ignore\r\nBLUETOOTH_SCAN: ignore\r\nACTIVITY_RECOGNITION: ignore\r\nREAD_MEDIA_AUDIO: ignore\r\nREAD_MEDIA_VIDEO: ignore\r\nREAD_MEDIA_IMAGES: ignore\r\nACCESS_MEDIA_LOCATION: ignore\r\nBLUETOOTH_CONNECT: ignore\r\nUWB_RANGING: ignore\r\nBLUETOOTH_ADVERTISE: ignore\r\nNEARBY_WIFI_DEVICES: ignore\r\nREAD_MEDIA_VISUAL_USER_SELECTED: ignore\r\nREAD_HEART_RATE: ignore\r\nREAD_SKIN_TEMPERATURE: ignore\r\nRANGING: ignore\r\nREAD_OXYGEN_SATURATION: ignore\r\nSYSTEM_ALERT_WINDOW: default; rejectTime=+26m26s729ms ago\r\nWRITE_CLIPBOARD: allow; time=+6d12h17m59s531ms ago\r\nACCESS_RESTRICTED_SETTINGS: deny\r\n",
+  "stderr": ""
+}

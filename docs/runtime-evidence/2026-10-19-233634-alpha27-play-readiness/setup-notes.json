@@ -1,0 +1,7 @@
+{
+  "release_runner_limitation": "Signed APK is not debuggable; stock runner run-as is unavailable.",
+  "first_attempt": "REPORT_WRITE_FAILED",
+  "cause": "Manual staging created diagnostics files parent as root rather than diagnostics UID.",
+  "correction": "Restore ownership and app-private SELinux label of diagnostics-only files parent; no production paths changed.",
+  "collection_authorization": "User requested setup and full test; local collection tap executed via observed UI. Optional Integrity was not requested."
+}

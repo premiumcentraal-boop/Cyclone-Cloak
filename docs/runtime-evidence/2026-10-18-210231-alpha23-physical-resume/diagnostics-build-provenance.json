@@ -1,0 +1,18 @@
+{
+  "tag": "v0.11.0-alpha.23",
+  "commit": "0d028a947b37013e0ad89a98d1455a79c33bfd3d",
+  "checkout": "C:\\Users\\Agent\\AppData\\Local\\Temp\\cloak-alpha23-physical-clean",
+  "checkout_clean": true,
+  "build_command": "JAVA_HOME=JDK17 ANDROID_HOME=C:/Users/Agent/android-sdk gradle-8.11.1 -p C:\\Users\\Agent\\AppData\\Local\\Temp\\cloak-alpha23-physical-clean\\android :probe:assembleDiagnosticsDebug :probe:testDiagnosticsDebugUnitTest --offline --no-daemon --console=plain",
+  "apk_sha256": "184012b2d9fc7280a490a8295c81787df72b281f8efc619adbd87b454dff72e3",
+  "apk_size": 2745758,
+  "base_runner_sha256": "767d6ee2537f52b95825a0cbb548f1c58f2671868ec3e59528b7b0623223d168",
+  "evidence_adapter_sha256": "957ae49943f44fd9b44549f0d2e066da2e30abebb77229209ff32da6439882da",
+  "adapter_scope": [
+    "Pin existing lifecycle runner to alpha23/code47",
+    "Require 13 linked_parity rows and stop on bound FAIL/MISSING",
+    "No changes to device commands, redaction, cleanup, permissions, audits or restoration classification"
+  ],
+  "diagnostics_unit_tests": 107,
+  "build_result": "PASS"
+}

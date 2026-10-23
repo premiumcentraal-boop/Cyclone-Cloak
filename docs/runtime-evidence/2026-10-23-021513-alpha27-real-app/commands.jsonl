@@ -1,0 +1,177 @@
+{"at": 1792714513.5983586, "args": ["shell", "am get-started-user-state 0"], "exit_code": 0}
+{"at": 1792714513.7229655, "args": ["shell", "am get-started-user-state 17"], "exit_code": 0}
+{"at": 1792714513.8675215, "args": ["shell", "am get-current-user"], "exit_code": 0}
+{"at": 1792714513.891074, "args": ["devices", "-l"], "exit_code": 0}
+{"at": 1792714514.052222, "args": ["shell", "dumpsys package dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792714514.2165158, "args": ["shell", "pm list packages --user 0 -U dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792714514.3226538, "args": ["shell", "cmd appops get --user 0 dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792714514.4444609, "args": ["shell", "cmd appops get 10377"], "exit_code": 0}
+{"at": 1792714514.6075523, "args": ["shell", "pm list packages --user 17 -U dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792714514.725518, "args": ["shell", "cmd appops get --user 17 dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792714514.8393111, "args": ["shell", "cmd appops get 1710377"], "exit_code": 0}
+{"at": 1792714514.9867663, "args": ["shell", "pm path dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792714515.4116437, "args": ["shell", "su --mount-master -c 'set -eu; find /data/adb/cyclone_cloak/state-v1 /data/adb/cyclone_cloak/publishers -type f -exec sha256sum {} +; for u in /data/user/[0-9]*; do if [ -d \"$u/dev.cyclone.cloak\" ]; then find \"$u/dev.cyclone.cloak\" -type f \\( -name \"*binding*\" -o -name \"*index*\" \\) -exec sha256sum {} +; fi; done'"], "exit_code": 0}
+{"at": 1792714515.5617845, "args": ["shell", "su --mount-master -c 'set -eu; sha256sum '\"'\"'/data/app/~~oxxPf3k1Ggejx1aZFZie2A==/dev.cyclone.cloak-FKdzo6WgSOJ9SiRjvLslLQ==/base.apk'\"'\"''"], "exit_code": 0}
+{"at": 1792714515.6556826, "args": ["shell", "dumpsys package com.devicetrust.scanner"], "exit_code": 0}
+{"at": 1792714515.816644, "args": ["shell", "pm list packages --user 0 -U com.devicetrust.scanner"], "exit_code": 0}
+{"at": 1792714515.9481936, "args": ["shell", "cmd appops get --user 0 com.devicetrust.scanner"], "exit_code": 0}
+{"at": 1792714516.0743592, "args": ["shell", "cmd appops get 10311"], "exit_code": 0}
+{"at": 1792714516.206609, "args": ["shell", "pm list packages --user 17 -U com.devicetrust.scanner"], "exit_code": 0}
+{"at": 1792714516.3380198, "args": ["shell", "cmd appops get --user 17 com.devicetrust.scanner"], "exit_code": 0}
+{"at": 1792714516.4273088, "args": ["shell", "cmd appops get 1710311"], "exit_code": 0}
+{"at": 1792714516.5743256, "args": ["shell", "pm path --user 17 com.devicetrust.scanner"], "exit_code": 0}
+{"at": 1792714516.8130245, "args": ["shell", "su --mount-master -c 'set -eu; sha256sum '\"'\"'/data/app/~~AT6pawum7al2U4TxDsJKWA==/com.devicetrust.scanner-XNR3T-DJJicGsMad7xPMNg==/base.apk'\"'\"''"], "exit_code": 0}
+{"at": 1792714516.976978, "args": ["shell", "su --mount-master -c 'set -eu; cat /data/adb/cyclone_cloak/state-v1/index.json'"], "exit_code": 0, "stdout_sha256": "409d6d5386be07a6b14b888872cb8467feeb1bf5c21647e716c90bd8a57ba99c"}
+{"at": 1792714517.0733323, "args": ["shell", "cmd package resolve-activity --brief --user 17 com.devicetrust.scanner"], "exit_code": 0}
+{"at": 1792714517.1757998, "args": ["shell", "dumpsys package dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792714517.2946, "args": ["shell", "su --mount-master -c 'set -eu; for p in /data/adb/modules/cyclone_cloak /data/adb/modules_update/cyclone_cloak; do if [ -e \"$p\" ]; then echo PRESENT:$p; else echo ABSENT:$p; fi; done'"], "exit_code": 0}
+{"at": 1792714517.4318187, "args": ["push", "C:\\Users\\Agent\\Cyclone\\cloak-repo\\docs\\runtime-evidence\\2026-10-23-020207-alpha27-root-companion-cycle\\instrumented-module.zip", "/data/local/tmp/cloak-realapp-2026-10-23-021513-alpha27-real-app.zip"], "exit_code": 0}
+{"at": 1792714517.572029, "args": ["shell", "su --mount-master -c 'set -eu; sha256sum /data/local/tmp/cloak-realapp-2026-10-23-021513-alpha27-real-app.zip'"], "exit_code": 0}
+{"at": 1792714520.2984624, "args": ["shell", "su --mount-master -c 'set -eu; magisk --install-module /data/local/tmp/cloak-realapp-2026-10-23-021513-alpha27-real-app.zip'"], "exit_code": 0}
+{"at": 1792714520.490715, "args": ["shell", "su --mount-master -c 'set -eu; rm -f /data/local/tmp/cloak-realapp-2026-10-23-021513-alpha27-real-app.zip'"], "exit_code": 0}
+{"at": 1792714520.5513122, "args": ["shell", "cat /proc/sys/kernel/random/boot_id"], "exit_code": 0}
+{"at": 1792714529.3422406, "args": ["reboot"], "exit_code": 0}
+{"at": 1792714535.863025, "args": ["shell", "getprop sys.boot_completed"], "exit_code": 1}
+{"at": 1792714565.8122413, "args": ["shell", "getprop sys.boot_completed"], "exit_code": 0}
+{"at": 1792714565.8957682, "args": ["shell", "am get-started-user-state 0"], "exit_code": 0}
+{"at": 1792714565.9730258, "args": ["shell", "am get-started-user-state 17"], "exit_code": 0}
+{"at": 1792714566.0498974, "args": ["shell", "am get-current-user"], "exit_code": 0}
+{"at": 1792714566.1101356, "args": ["shell", "cat /proc/sys/kernel/random/boot_id"], "exit_code": 0}
+{"at": 1792714566.352245, "args": ["shell", "su --mount-master -c 'set -eu; find /data/adb/modules/cyclone_cloak -type f -exec sha256sum {} +'"], "exit_code": 0}
+{"at": 1792714566.579312, "args": ["shell", "logcat -d -t 500 -s CloakModule:I *:S"], "exit_code": 0}
+{"at": 1792714566.6281521, "args": ["shell", "su --mount-master -c 'set -eu; for f in disable remove update; do if [ -e /data/adb/modules/cyclone_cloak/$f ]; then echo \"$f\"; fi; done'"], "exit_code": 0}
+{"at": 1792714572.954092, "args": ["shell", "mkdir -p /data/local/tmp/cloak-profile-check-13b9623eb1e44e399d866ba42e4bcbe0; chmod 700 /data/local/tmp/cloak-profile-check-13b9623eb1e44e399d866ba42e4bcbe0"], "exit_code": 0, "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+{"at": 1792714573.0354133, "args": ["shell", "su --mount-master -c 'set -eu; cat /data/adb/cyclone_cloak/state-v1/index.json'"], "exit_code": 0, "stdout_sha256": "409d6d5386be07a6b14b888872cb8467feeb1bf5c21647e716c90bd8a57ba99c"}
+{"at": 1792714573.1151059, "args": ["push", "C:\\Users\\Agent\\AppData\\Local\\Temp\\cloak-profile-check-f_llt9j8\\899ed79ab059b07101af8a4e8d2c3cf12340d459bc33b2b428a168e9faedd00b.json", "/data/local/tmp/cloak-profile-check-13b9623eb1e44e399d866ba42e4bcbe0/899ed79ab059b07101af8a4e8d2c3cf12340d459bc33b2b428a168e9faedd00b.json"], "exit_code": 0, "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+{"at": 1792714573.1620388, "args": ["push", "C:\\Users\\Agent\\AppData\\Local\\Temp\\cloak-profile-check-f_llt9j8\\index.json", "/data/local/tmp/cloak-profile-check-13b9623eb1e44e399d866ba42e4bcbe0/index.json"], "exit_code": 0, "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+{"at": 1792714573.3890789, "args": ["shell", "su --mount-master -c 'set -eu; (exec 0>> /data/adb/cyclone_cloak/publication.lock; flock -n 0 || exit 73; current=$(sha256sum /data/adb/cyclone_cloak/state-v1/index.json); [ \"${current%% *}\" = 409d6d5386be07a6b14b888872cb8467feeb1bf5c21647e716c90bd8a57ba99c ] || exit 74; mkdir -p /data/adb/cyclone_cloak/state-v1/899ed79ab059b07101af8a4e8d2c3cf12340d459bc33b2b428a168e9faedd00b; cp /data/local/tmp/cloak-profile-check-13b9623eb1e44e399d866ba42e4bcbe0/899ed79ab059b07101af8a4e8d2c3cf12340d459bc33b2b428a168e9faedd00b.json /data/adb/cyclone_cloak/state-v1/899ed79ab059b07101af8a4e8d2c3cf12340d459bc33b2b428a168e9faedd00b/profile.json; chmod 700 /data/adb/cyclone_cloak/state-v1/899ed79ab059b07101af8a4e8d2c3cf12340d459bc33b2b428a168e9faedd00b; chmod 600 /data/adb/cyclone_cloak/state-v1/899ed79ab059b07101af8a4e8d2c3cf12340d459bc33b2b428a168e9faedd00b/profile.json; cp /data/local/tmp/cloak-profile-check-13b9623eb1e44e399d866ba42e4bcbe0/index.json /data/adb/cyclone_cloak/state-v1/index.harness-13b9623eb1e44e399d866ba42e4bcbe0; chmod 600 /data/adb/cyclone_cloak/state-v1/index.harness-13b9623eb1e44e399d866ba42e4bcbe0; mv /data/adb/cyclone_cloak/state-v1/index.harness-13b9623eb1e44e399d866ba42e4bcbe0 /data/adb/cyclone_cloak/state-v1/index.json; )'"], "exit_code": 0, "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+{"at": 1792714573.4641182, "args": ["shell", "rm -f /data/local/tmp/cloak-profile-check-13b9623eb1e44e399d866ba42e4bcbe0/index.json /data/local/tmp/cloak-profile-check-13b9623eb1e44e399d866ba42e4bcbe0/899ed79ab059b07101af8a4e8d2c3cf12340d459bc33b2b428a168e9faedd00b.json; rmdir /data/local/tmp/cloak-profile-check-13b9623eb1e44e399d866ba42e4bcbe0"], "exit_code": 0, "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+{"at": 1792714573.5614727, "args": ["shell", "su --mount-master -c 'set -eu; cat /data/adb/cyclone_cloak/state-v1/index.json'"], "exit_code": 0, "stdout_sha256": "9e77d41649f3f31f6876d63e21bc7fb8b8fd5329f65f797f03de3c9b18802583"}
+{"at": 1792714573.701525, "args": ["shell", "su --mount-master -c 'set -eu; cat /data/adb/cyclone_cloak/state-v1/899ed79ab059b07101af8a4e8d2c3cf12340d459bc33b2b428a168e9faedd00b/profile.json'"], "exit_code": 0}
+{"at": 1792714573.9902751, "args": ["shell", "am switch-user 17"], "exit_code": 0}
+{"at": 1792714574.0903878, "args": ["shell", "am get-current-user"], "exit_code": 0}
+{"at": 1792714574.1496692, "args": ["shell", "am get-started-user-state 17"], "exit_code": 0}
+{"at": 1792714574.7225285, "args": ["shell", "am get-current-user"], "exit_code": 0}
+{"at": 1792714574.8013632, "args": ["shell", "am get-started-user-state 17"], "exit_code": 0}
+{"at": 1792714575.398262, "args": ["shell", "am get-current-user"], "exit_code": 0}
+{"at": 1792714575.4869468, "args": ["shell", "am get-started-user-state 17"], "exit_code": 0}
+{"at": 1792714576.082391, "args": ["shell", "am get-current-user"], "exit_code": 0}
+{"at": 1792714576.2192252, "args": ["shell", "am get-started-user-state 17"], "exit_code": 0}
+{"at": 1792714576.7864525, "args": ["shell", "am get-current-user"], "exit_code": 0}
+{"at": 1792714576.9192805, "args": ["shell", "am get-started-user-state 17"], "exit_code": 0}
+{"at": 1792714577.4914353, "args": ["shell", "am get-current-user"], "exit_code": 0}
+{"at": 1792714577.6929812, "args": ["shell", "am get-started-user-state 17"], "exit_code": 0}
+{"at": 1792714578.292147, "args": ["shell", "am get-current-user"], "exit_code": 0}
+{"at": 1792714578.3761115, "args": ["shell", "am get-started-user-state 17"], "exit_code": 0}
+{"at": 1792714578.7913015, "args": ["shell", "pidof com.devicetrust.scanner"], "exit_code": 1}
+{"at": 1792714578.9597812, "args": ["shell", "am force-stop --user 17 com.devicetrust.scanner"], "exit_code": 0}
+{"at": 1792714579.0297437, "args": ["shell", "am start --user 17 -n com.devicetrust.scanner/.MainActivity --activity-clear-top --activity-single-top"], "exit_code": 0}
+{"at": 1792714582.184123, "args": ["shell", "pidof com.devicetrust.scanner"], "exit_code": 0}
+{"at": 1792714582.4928489, "args": ["shell", "logcat -d --pid=8496 -t 1000 -v threadtime"], "exit_code": 0}
+{"at": 1792714585.2961612, "args": ["shell", "uiautomator dump /dev/tty"], "exit_code": 0}
+{"at": 1792714585.7453113, "args": ["exec-out", "screencap", "-p"], "exit_code": 0}
+{"at": 1792714585.8749294, "args": ["shell", "su --mount-master -c 'set -eu; cat /data/adb/modules/cyclone_cloak/load-records.jsonl'"], "exit_code": 0}
+{"at": 1792714586.0799336, "args": ["shell", "su --mount-master -c 'set -eu; cat /proc/8496/maps'"], "exit_code": 0}
+{"at": 1792714607.72102, "args": ["shell", "am switch-user 17"], "exit_code": 0}
+{"at": 1792714607.8077676, "args": ["shell", "am get-current-user"], "exit_code": 0}
+{"at": 1792714607.891556, "args": ["shell", "am get-started-user-state 17"], "exit_code": 0}
+{"at": 1792714607.9806976, "args": ["shell", "pidof com.devicetrust.scanner"], "exit_code": 0}
+{"at": 1792714608.1216877, "args": ["shell", "am force-stop --user 17 com.devicetrust.scanner"], "exit_code": 0}
+{"at": 1792714608.2347877, "args": ["shell", "am start --user 17 -n com.devicetrust.scanner/.MainActivity --activity-clear-top --activity-single-top"], "exit_code": 0}
+{"at": 1792714611.3309822, "args": ["shell", "pidof com.devicetrust.scanner"], "exit_code": 0}
+{"at": 1792714611.6741304, "args": ["shell", "logcat -d --pid=14586 -t 1000 -v threadtime"], "exit_code": 0}
+{"at": 1792714614.4020326, "args": ["shell", "uiautomator dump /dev/tty"], "exit_code": 0}
+{"at": 1792714614.8185298, "args": ["exec-out", "screencap", "-p"], "exit_code": 0}
+{"at": 1792714614.9542155, "args": ["shell", "su --mount-master -c 'set -eu; cat /data/adb/modules/cyclone_cloak/load-records.jsonl'"], "exit_code": 0}
+{"at": 1792714615.136142, "args": ["shell", "su --mount-master -c 'set -eu; cat /proc/14586/maps'"], "exit_code": 0}
+{"at": 1792714622.210358, "args": ["shell", "mkdir -p /data/local/tmp/cloak-profile-check-13b9623eb1e44e399d866ba42e4bcbe0; chmod 700 /data/local/tmp/cloak-profile-check-13b9623eb1e44e399d866ba42e4bcbe0"], "exit_code": 0, "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+{"at": 1792714622.326852, "args": ["shell", "su --mount-master -c 'set -eu; cat /data/adb/cyclone_cloak/state-v1/index.json'"], "exit_code": 0, "stdout_sha256": "9e77d41649f3f31f6876d63e21bc7fb8b8fd5329f65f797f03de3c9b18802583"}
+{"at": 1792714622.4036407, "args": ["push", "C:\\Users\\Agent\\AppData\\Local\\Temp\\cloak-profile-check-ohxsyo29\\index.json", "/data/local/tmp/cloak-profile-check-13b9623eb1e44e399d866ba42e4bcbe0/index.json"], "exit_code": 0, "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+{"at": 1792714622.5980544, "args": ["shell", "su --mount-master -c 'set -eu; (exec 0>> /data/adb/cyclone_cloak/publication.lock; flock -n 0 || exit 73; current=$(sha256sum /data/adb/cyclone_cloak/state-v1/index.json); [ \"${current%% *}\" = 9e77d41649f3f31f6876d63e21bc7fb8b8fd5329f65f797f03de3c9b18802583 ] || exit 74; cp /data/local/tmp/cloak-profile-check-13b9623eb1e44e399d866ba42e4bcbe0/index.json /data/adb/cyclone_cloak/state-v1/index.harness-13b9623eb1e44e399d866ba42e4bcbe0; chmod 600 /data/adb/cyclone_cloak/state-v1/index.harness-13b9623eb1e44e399d866ba42e4bcbe0; mv /data/adb/cyclone_cloak/state-v1/index.harness-13b9623eb1e44e399d866ba42e4bcbe0 /data/adb/cyclone_cloak/state-v1/index.json; rm -f /data/adb/cyclone_cloak/state-v1/899ed79ab059b07101af8a4e8d2c3cf12340d459bc33b2b428a168e9faedd00b/profile.json; if [ -d /data/adb/cyclone_cloak/state-v1/899ed79ab059b07101af8a4e8d2c3cf12340d459bc33b2b428a168e9faedd00b ]; then rmdir /data/adb/cyclone_cloak/state-v1/899ed79ab059b07101af8a4e8d2c3cf12340d459bc33b2b428a168e9faedd00b; fi; )'"], "exit_code": 0, "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+{"at": 1792714622.7020257, "args": ["shell", "rm -f /data/local/tmp/cloak-profile-check-13b9623eb1e44e399d866ba42e4bcbe0/index.json /data/local/tmp/cloak-profile-check-13b9623eb1e44e399d866ba42e4bcbe0/899ed79ab059b07101af8a4e8d2c3cf12340d459bc33b2b428a168e9faedd00b.json; rmdir /data/local/tmp/cloak-profile-check-13b9623eb1e44e399d866ba42e4bcbe0"], "exit_code": 0, "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+{"at": 1792714622.841413, "args": ["shell", "am force-stop --user 17 com.devicetrust.scanner"], "exit_code": 0}
+{"at": 1792714622.9605336, "args": ["shell", "am switch-user 0"], "exit_code": 0}
+{"at": 1792714623.0324888, "args": ["shell", "am get-current-user"], "exit_code": 0}
+{"at": 1792714623.0967882, "args": ["shell", "am get-started-user-state 0"], "exit_code": 0}
+{"at": 1792714623.1734009, "args": ["shell", "su --mount-master -c 'set -eu; test -d /data/adb/modules/cyclone_cloak; touch /data/adb/modules/cyclone_cloak/remove'"], "exit_code": 0}
+{"at": 1792714631.1538484, "args": ["reboot"], "exit_code": 0}
+{"at": 1792714672.0909781, "args": ["shell", "getprop sys.boot_completed"], "exit_code": 0}
+{"at": 1792714672.1592941, "args": ["shell", "am get-started-user-state 0"], "exit_code": 0}
+{"at": 1792714672.2478848, "args": ["shell", "am get-started-user-state 17"], "exit_code": 0}
+{"at": 1792714672.3289988, "args": ["shell", "am get-current-user"], "exit_code": 0}
+{"at": 1792714672.4061074, "args": ["shell", "cat /proc/sys/kernel/random/boot_id"], "exit_code": 0}
+{"at": 1792714672.483467, "args": ["shell", "am switch-user 0"], "exit_code": 0}
+{"at": 1792714672.5675817, "args": ["shell", "am get-current-user"], "exit_code": 0}
+{"at": 1792714672.7095652, "args": ["shell", "am get-started-user-state 0"], "exit_code": 0}
+{"at": 1792714672.8090904, "args": ["shell", "su --mount-master -c 'set -eu; for p in /data/adb/modules/cyclone_cloak /data/adb/modules_update/cyclone_cloak; do if [ -e \"$p\" ]; then echo PRESENT:$p; else echo ABSENT:$p; fi; done'"], "exit_code": 0}
+{"at": 1792714673.1416233, "args": ["shell", "dumpsys package dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792714673.2193487, "args": ["shell", "pm list packages --user 0 -U dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792714673.2861931, "args": ["shell", "cmd appops get --user 0 dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792714673.3722591, "args": ["shell", "cmd appops get 10377"], "exit_code": 0}
+{"at": 1792714673.5465384, "args": ["shell", "pm list packages --user 17 -U dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792714673.6593485, "args": ["shell", "cmd appops get --user 17 dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792714673.779921, "args": ["shell", "cmd appops get 1710377"], "exit_code": 0}
+{"at": 1792714673.9089708, "args": ["shell", "pm path dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792714674.6153271, "args": ["shell", "su --mount-master -c 'set -eu; find /data/adb/cyclone_cloak/state-v1 /data/adb/cyclone_cloak/publishers -type f -exec sha256sum {} +; for u in /data/user/[0-9]*; do if [ -d \"$u/dev.cyclone.cloak\" ]; then find \"$u/dev.cyclone.cloak\" -type f \\( -name \"*binding*\" -o -name \"*index*\" \\) -exec sha256sum {} +; fi; done'"], "exit_code": 0}
+{"at": 1792714675.0142345, "args": ["shell", "su --mount-master -c 'set -eu; sha256sum '\"'\"'/data/app/~~oxxPf3k1Ggejx1aZFZie2A==/dev.cyclone.cloak-FKdzo6WgSOJ9SiRjvLslLQ==/base.apk'\"'\"''"], "exit_code": 0}
+{"at": 1792714675.2026412, "args": ["shell", "dumpsys package com.devicetrust.scanner"], "exit_code": 0}
+{"at": 1792714675.3674026, "args": ["shell", "pm list packages --user 0 -U com.devicetrust.scanner"], "exit_code": 0}
+{"at": 1792714675.5015433, "args": ["shell", "cmd appops get --user 0 com.devicetrust.scanner"], "exit_code": 0}
+{"at": 1792714675.7183964, "args": ["shell", "cmd appops get 10311"], "exit_code": 0}
+{"at": 1792714675.8498793, "args": ["shell", "pm list packages --user 17 -U com.devicetrust.scanner"], "exit_code": 0}
+{"at": 1792714675.9408681, "args": ["shell", "cmd appops get --user 17 com.devicetrust.scanner"], "exit_code": 0}
+{"at": 1792714676.0229018, "args": ["shell", "cmd appops get 1710311"], "exit_code": 0}
+{"at": 1792714676.1197696, "args": ["shell", "pm path --user 17 com.devicetrust.scanner"], "exit_code": 0}
+{"at": 1792714676.2535396, "args": ["shell", "su --mount-master -c 'set -eu; sha256sum '\"'\"'/data/app/~~AT6pawum7al2U4TxDsJKWA==/com.devicetrust.scanner-XNR3T-DJJicGsMad7xPMNg==/base.apk'\"'\"''"], "exit_code": 0}
+{"at": 1792714676.4356313, "args": ["shell", "su --mount-master -c 'set -eu; cat /data/adb/cyclone_cloak/state-v1/index.json'"], "exit_code": 0, "stdout_sha256": "409d6d5386be07a6b14b888872cb8467feeb1bf5c21647e716c90bd8a57ba99c"}
+{"at": 1792714676.573664, "args": ["shell", "su --mount-master -c 'set -eu; if [ ! -e /data/adb/cyclone_cloak/state-v1/899ed79ab059b07101af8a4e8d2c3cf12340d459bc33b2b428a168e9faedd00b ]; then echo ABSENT; fi'"], "exit_code": 0}
+{"at": 1792714676.6712089, "args": ["shell", "if [ ! -e /data/local/tmp/cloak-profile-check-13b9623eb1e44e399d866ba42e4bcbe0 ]; then echo ABSENT; fi"], "exit_code": 0}
+{"at": 1792714676.772111, "args": ["shell", "am get-current-user"], "exit_code": 0}
+{"at": 1792714742.4695408, "args": ["shell", "am switch-user 17"], "exit_code": 0}
+{"at": 1792714742.571253, "args": ["shell", "am get-current-user"], "exit_code": 0}
+{"at": 1792714742.6946027, "args": ["shell", "am get-started-user-state 17"], "exit_code": 0}
+{"at": 1792714743.291784, "args": ["shell", "am get-current-user"], "exit_code": 0}
+{"at": 1792714743.3814573, "args": ["shell", "am get-started-user-state 17"], "exit_code": 0}
+{"at": 1792714743.995436, "args": ["shell", "am get-current-user"], "exit_code": 0}
+{"at": 1792714744.134544, "args": ["shell", "am get-started-user-state 17"], "exit_code": 0}
+{"at": 1792714744.716403, "args": ["shell", "am get-current-user"], "exit_code": 0}
+{"at": 1792714744.79205, "args": ["shell", "am get-started-user-state 17"], "exit_code": 0}
+{"at": 1792714745.4004247, "args": ["shell", "am get-current-user"], "exit_code": 0}
+{"at": 1792714745.4874837, "args": ["shell", "am get-started-user-state 17"], "exit_code": 0}
+{"at": 1792714746.1930163, "args": ["shell", "am get-current-user"], "exit_code": 0}
+{"at": 1792714746.2466125, "args": ["shell", "am get-started-user-state 17"], "exit_code": 0}
+{"at": 1792714746.8153496, "args": ["shell", "am get-current-user"], "exit_code": 0}
+{"at": 1792714746.8720303, "args": ["shell", "am get-started-user-state 17"], "exit_code": 0}
+{"at": 1792714746.9901638, "args": ["shell", "dumpsys package dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792714747.0695906, "args": ["shell", "pm list packages --user 0 -U dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792714747.133159, "args": ["shell", "cmd appops get --user 0 dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792714747.1924524, "args": ["shell", "cmd appops get 10377"], "exit_code": 0}
+{"at": 1792714747.2599194, "args": ["shell", "pm list packages --user 17 -U dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792714747.4127872, "args": ["shell", "cmd appops get --user 17 dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792714747.4931114, "args": ["shell", "cmd appops get 1710377"], "exit_code": 0}
+{"at": 1792714747.6081767, "args": ["shell", "pm path dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792714748.4079614, "args": ["shell", "su --mount-master -c 'set -eu; find /data/adb/cyclone_cloak/state-v1 /data/adb/cyclone_cloak/publishers -type f -exec sha256sum {} +; for u in /data/user/[0-9]*; do if [ -d \"$u/dev.cyclone.cloak\" ]; then find \"$u/dev.cyclone.cloak\" -type f \\( -name \"*binding*\" -o -name \"*index*\" \\) -exec sha256sum {} +; fi; done'"], "exit_code": 0}
+{"at": 1792714748.6409767, "args": ["shell", "su --mount-master -c 'set -eu; sha256sum '\"'\"'/data/app/~~oxxPf3k1Ggejx1aZFZie2A==/dev.cyclone.cloak-FKdzo6WgSOJ9SiRjvLslLQ==/base.apk'\"'\"''"], "exit_code": 0}
+{"at": 1792714748.7828603, "args": ["shell", "dumpsys package com.devicetrust.scanner"], "exit_code": 0}
+{"at": 1792714748.9243927, "args": ["shell", "pm list packages --user 0 -U com.devicetrust.scanner"], "exit_code": 0}
+{"at": 1792714749.2512333, "args": ["shell", "cmd appops get --user 0 com.devicetrust.scanner"], "exit_code": 0}
+{"at": 1792714749.3395987, "args": ["shell", "cmd appops get 10311"], "exit_code": 0}
+{"at": 1792714749.448586, "args": ["shell", "pm list packages --user 17 -U com.devicetrust.scanner"], "exit_code": 0}
+{"at": 1792714749.5208285, "args": ["shell", "cmd appops get --user 17 com.devicetrust.scanner"], "exit_code": 0}
+{"at": 1792714749.5741208, "args": ["shell", "cmd appops get 1710311"], "exit_code": 0}
+{"at": 1792714749.6317558, "args": ["shell", "pm path --user 17 com.devicetrust.scanner"], "exit_code": 0}
+{"at": 1792714749.8140612, "args": ["shell", "su --mount-master -c 'set -eu; sha256sum '\"'\"'/data/app/~~AT6pawum7al2U4TxDsJKWA==/com.devicetrust.scanner-XNR3T-DJJicGsMad7xPMNg==/base.apk'\"'\"''"], "exit_code": 0}
+{"at": 1792714749.9213583, "args": ["shell", "am get-started-user-state 17"], "exit_code": 0}
+{"at": 1792714749.9970222, "args": ["shell", "pidof com.devicetrust.scanner"], "exit_code": 1}
+{"at": 1792714750.22102, "args": ["shell", "su --mount-master -c 'set -eu; pidof com.android.systemui'"], "exit_code": 0}
+{"at": 1792714750.3514369, "args": ["shell", "su --mount-master -c 'set -eu; cat /proc/2280/maps'"], "exit_code": 0}
+{"at": 1792714750.454071, "args": ["shell", "su --mount-master -c 'set -eu; cat /proc/14661/maps'"], "exit_code": 0}
+{"at": 1792714750.6535635, "args": ["shell", "su --mount-master -c 'set -eu; if [ -d /data/user/17/com.devicetrust.scanner/code_cache/cloak_hooks ]; then find /data/user/17/com.devicetrust.scanner/code_cache/cloak_hooks -type f -exec sha256sum {} +; else echo ABSENT; fi'"], "exit_code": 0}
+{"at": 1792714750.8002214, "args": ["shell", "am switch-user 0"], "exit_code": 0}
+{"at": 1792714750.9454026, "args": ["shell", "am get-current-user"], "exit_code": 0}
+{"at": 1792714751.1049495, "args": ["shell", "am get-started-user-state 0"], "exit_code": 0}
+{"at": 1792714751.2109866, "args": ["shell", "su --mount-master -c 'set -eu; cat /data/adb/cyclone_cloak/state-v1/index.json'"], "exit_code": 0, "stdout_sha256": "409d6d5386be07a6b14b888872cb8467feeb1bf5c21647e716c90bd8a57ba99c"}
+{"at": 1792714751.3604987, "args": ["shell", "su --mount-master -c 'set -eu; if [ ! -e /data/adb/cyclone_cloak/state-v1/899ed79ab059b07101af8a4e8d2c3cf12340d459bc33b2b428a168e9faedd00b ]; then echo ABSENT; fi'"], "exit_code": 0}
+{"at": 1792714751.4263043, "args": ["shell", "if [ ! -e /data/local/tmp/cloak-profile-check-13b9623eb1e44e399d866ba42e4bcbe0 ]; then echo ABSENT; fi"], "exit_code": 0}
+{"at": 1792714751.5507667, "args": ["shell", "su --mount-master -c 'set -eu; for p in /data/adb/modules/cyclone_cloak /data/adb/modules_update/cyclone_cloak; do if [ -e \"$p\" ]; then echo PRESENT:$p; else echo ABSENT:$p; fi; done'"], "exit_code": 0}
+{"at": 1792714751.6727707, "args": ["shell", "am get-current-user"], "exit_code": 0}

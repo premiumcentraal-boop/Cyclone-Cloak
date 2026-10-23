@@ -1,0 +1,26 @@
+{
+  "app": {
+    "tests": 784,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "module": {
+    "tests": 80,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "probe_standard": {
+    "tests": 148,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "probe_diagnostics": {
+    "tests": 148,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  }
+}

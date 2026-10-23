@@ -1,0 +1,106 @@
+[
+  {
+    "user": 0,
+    "capture": 1,
+    "pid": 2376,
+    "fixture": "a",
+    "source_fixture": "A",
+    "profile_sha256": "da878a8a5c51ef62324fd977d85c06fd830fa9c3896a1060621dbfc4e02efa98",
+    "legacy": {
+      "PASS": 81,
+      "OBSERVED": 4,
+      "BLOCKED": 4
+    },
+    "runtime_envelope": {
+      "OBSERVED": 14,
+      "MISSING": 1,
+      "PASS": 1
+    },
+    "publication": {
+      "published_sha256": "e476b02fd308c62cf207f4fe60e97085bbd14ca6293b405c2cedb996c9555f53",
+      "canonical_expected_sha256": "e476b02fd308c62cf207f4fe60e97085bbd14ca6293b405c2cedb996c9555f53",
+      "canonical_match": true,
+      "report_raw_profile_sha256": "da878a8a5c51ef62324fd977d85c06fd830fa9c3896a1060621dbfc4e02efa98",
+      "fixture_source": "A",
+      "report_label": "a"
+    }
+  },
+  {
+    "user": 17,
+    "capture": 1,
+    "pid": 4123,
+    "fixture": "external",
+    "source_fixture": "C",
+    "profile_sha256": "5de89420c21c195defe179a14603c8655d0a2bcc79e4047ca7b39cba795aaeb6",
+    "legacy": {
+      "PASS": 75,
+      "OBSERVED": 8,
+      "BLOCKED": 6
+    },
+    "runtime_envelope": {
+      "MISSING": 6,
+      "OBSERVED": 3,
+      "PASS": 7
+    },
+    "publication": {
+      "published_sha256": "dcab867f2a35c2d4729fb70ddc1c9ea97b3bf96ffb557a904b4f63fbbf91c9dd",
+      "canonical_expected_sha256": "dcab867f2a35c2d4729fb70ddc1c9ea97b3bf96ffb557a904b4f63fbbf91c9dd",
+      "canonical_match": true,
+      "report_raw_profile_sha256": "5de89420c21c195defe179a14603c8655d0a2bcc79e4047ca7b39cba795aaeb6",
+      "fixture_source": "C",
+      "report_label": "external"
+    }
+  },
+  {
+    "user": 17,
+    "capture": 2,
+    "pid": 7420,
+    "fixture": "external",
+    "source_fixture": "C",
+    "profile_sha256": "5de89420c21c195defe179a14603c8655d0a2bcc79e4047ca7b39cba795aaeb6",
+    "legacy": {
+      "PASS": 76,
+      "OBSERVED": 11,
+      "BLOCKED": 2
+    },
+    "runtime_envelope": {
+      "MISSING": 6,
+      "OBSERVED": 3,
+      "PASS": 7
+    },
+    "publication": {
+      "published_sha256": "dcab867f2a35c2d4729fb70ddc1c9ea97b3bf96ffb557a904b4f63fbbf91c9dd",
+      "canonical_expected_sha256": "dcab867f2a35c2d4729fb70ddc1c9ea97b3bf96ffb557a904b4f63fbbf91c9dd",
+      "canonical_match": true,
+      "report_raw_profile_sha256": "5de89420c21c195defe179a14603c8655d0a2bcc79e4047ca7b39cba795aaeb6",
+      "fixture_source": "C",
+      "report_label": "external"
+    }
+  },
+  {
+    "user": 17,
+    "capture": 3,
+    "pid": 7978,
+    "fixture": "external",
+    "source_fixture": "C",
+    "profile_sha256": "5de89420c21c195defe179a14603c8655d0a2bcc79e4047ca7b39cba795aaeb6",
+    "legacy": {
+      "PASS": 76,
+      "OBSERVED": 11,
+      "BLOCKED": 2
+    },
+    "runtime_envelope": {
+      "MISSING": 6,
+      "OBSERVED": 3,
+      "PASS": 7
+    },
+    "publication": {
+      "published_sha256": "dcab867f2a35c2d4729fb70ddc1c9ea97b3bf96ffb557a904b4f63fbbf91c9dd",
+      "canonical_expected_sha256": "dcab867f2a35c2d4729fb70ddc1c9ea97b3bf96ffb557a904b4f63fbbf91c9dd",
+      "canonical_match": true,
+      "report_raw_profile_sha256": "5de89420c21c195defe179a14603c8655d0a2bcc79e4047ca7b39cba795aaeb6",
+      "fixture_source": "C",
+      "report_label": "external"
+    }
+  }
+]

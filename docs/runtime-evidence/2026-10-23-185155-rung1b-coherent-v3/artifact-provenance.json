@@ -1,0 +1,20 @@
+{
+  "zip_sha256": "51f2d2ec9b6d905e6aaabe88316c3d487fb6d6b35ad4ad74fd31609aa4635a3d",
+  "installed_files": {
+    "zygisk/arm64-v8a.so": "d7dd105446a229f981e5cdd1aed862a13e3c7d04220f04fb08eadde175bb15c1",
+    "zygisk/armeabi-v7a.so": "6e9943f1033582eb90f9a765b80f52243b4da90a9d577e5c4e43203b2278647e",
+    "artifacts.sha256": "200fa6efd9cde6a16f7e6e98296244a6501480b952586dfcb5b122f92f033e81",
+    "module.prop": "73fa376f4711523d72a49490f1157776ec1c53b309052b783ca0ed04fd20a78d",
+    "load-records.jsonl": "7373044f27f239e7c6e5508a87e3e1b50f850b8f3ac9e404a4b57305287cd57a"
+  },
+  "packaged_files": {
+    "artifacts.sha256": "200fa6efd9cde6a16f7e6e98296244a6501480b952586dfcb5b122f92f033e81",
+    "module.prop": "73fa376f4711523d72a49490f1157776ec1c53b309052b783ca0ed04fd20a78d",
+    "zygisk/arm64-v8a.so": "d7dd105446a229f981e5cdd1aed862a13e3c7d04220f04fb08eadde175bb15c1",
+    "zygisk/armeabi-v7a.so": "6e9943f1033582eb90f9a765b80f52243b4da90a9d577e5c4e43203b2278647e"
+  },
+  "all_packaged_files_match": true,
+  "apk_sha256": "d9ef3bb5d00b62a09435e3bd53a1060bec4a610aee4a8335105ab9745b475844",
+  "fixture_c_sha256": "c78353910306cda7b0897f3310d2637a7568ec4925de8d63822645cf8a9e8f66",
+  "zip_note": "Current local ZIP differs; not installed or used. Installed immutable files compared to prior validated candidate manifest."
+}

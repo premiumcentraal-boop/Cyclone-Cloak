@@ -1,0 +1,8 @@
+{
+  "no_device_mutations": true,
+  "diagnostics_installed": false,
+  "temporary_bindings_created": false,
+  "module_changes": false,
+  "permissions_or_appops_writes": false,
+  "active_user_unchanged": true
+}

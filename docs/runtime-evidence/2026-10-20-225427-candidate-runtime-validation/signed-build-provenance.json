@@ -1,0 +1,23 @@
+{
+  "commit": "1c9ce900930b7c52d3d7130b8ca8a741e183b73a",
+  "signed_ci_run": 39497618039,
+  "released": false,
+  "embedded_module_exact_match": true,
+  "artifacts": [
+    {
+      "name": "playEvidence-release.apk",
+      "sha256": "b129bd72c88a38817a29abf9c400e83416fc1605955b9b5a4e8af0896d368ef0",
+      "bytes": 3451657
+    },
+    {
+      "name": "cyclone-cloak-0.11.0-alpha.27.zip",
+      "sha256": "53649be46759c3b8ba461d122a20d214727f310ceb34ee9fa296a4a2e7454b3f",
+      "bytes": 1809335
+    },
+    {
+      "name": "app-release.apk",
+      "sha256": "df37f86da7ea617fcd1aad65504b23c95aaad56a1f9726ca3270846f8165cffc",
+      "bytes": 44455358
+    }
+  ]
+}

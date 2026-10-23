@@ -1,0 +1,8 @@
+{
+  "at": 1792714578.9599636,
+  "component": "com.devicetrust.scanner/.MainActivity",
+  "user": 17,
+  "pid_before": "",
+  "pid_after": "8496",
+  "stdout": "Starting: Intent { flg=0x24000000 cmp=com.devicetrust.scanner/.MainActivity }\n"
+}

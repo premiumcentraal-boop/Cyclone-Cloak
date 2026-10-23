@@ -1,0 +1,29 @@
+{
+  "schema_errors": [],
+  "findings": [
+    {
+      "severity": "error",
+      "code": "DISPLAY_CLASS",
+      "message": "display.screen_size_class must be small, normal, or large",
+      "field": "display.screen_size_class"
+    },
+    {
+      "severity": "error",
+      "code": "REALITY_LINK",
+      "message": "reality.webview.values.user_agent: disagrees with the corresponding base profile field.",
+      "field": "reality.webview.values.user_agent"
+    },
+    {
+      "severity": "warning",
+      "code": "PATCH_AFTER_BUILD",
+      "message": "device.security_patch: security patch is newer than the build date",
+      "field": "device.security_patch"
+    },
+    {
+      "severity": "warning",
+      "code": "UA_MISSING",
+      "message": "ua: profile carries no user agent block",
+      "field": "ua"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+uv run --with pytest -- python -X utf8 -m pytest forge/tests/test_probe_reversibility.py -q
+$env:JAVA_HOME="C:/Program Files/Eclipse Adoptium/jdk-17.0.20.101-hotspot"; $env:ANDROID_HOME="C:/Users/Agent/android-sdk"; $env:CLOAK_TEST_WSL="1"
+& "$env:TEMP/cloak-build/gradle-8.11.1/bin/gradle.bat" -p android :app:testDebugUnitTest :module:testDebugUnitTest :probe:testStandardDebugUnitTest :probe:testDiagnosticsDebugUnitTest :app:assembleDebug :app:assembleRelease :module:packageModule :probe:assembleStandardDebug :probe:assembleDiagnosticsDebug --offline --no-daemon --console=plain
+uv run --with pytest -- python -X utf8 -m pytest forge/tests -q
+uv run --with pytest --with jsonschema -- python -X utf8 -m pytest forge/schema_tests -q
+uv run -- python -X utf8 -m unittest discover -s android/probe/tests -v
+git diff --check
+git diff --cached --check
+$env:PYTHONPATH="$PWD/tools"
+uv run -- python -X utf8 "C:\Users\Agent\Cyclone\cloak-repo\docs\runtime-evidence\2026-10-18-214341-alpha24-warm-stabilization/focused_runner.py" --source-checkout "$env:TEMP/cloak-alpha24-physical-clean" --adb C:/Users/Agent/android-sdk/platform-tools/adb.exe --serial 3B171FDJH0061G --secondary 17 --output "C:\Users\Agent\Cyclone\cloak-repo\docs\runtime-evidence\2026-10-18-214341-alpha24-warm-stabilization/focused"
+uv run -- python -X utf8 "C:\Users\Agent\Cyclone\cloak-repo\docs\runtime-evidence\2026-10-18-214341-alpha24-warm-stabilization/repeated_warm_runner.py" --source-checkout "$env:TEMP/cloak-alpha24-physical-clean" --adb C:/Users/Agent/android-sdk/platform-tools/adb.exe --serial 3B171FDJH0061G --secondary 17 --output "C:\Users\Agent\Cyclone\cloak-repo\docs\runtime-evidence\2026-10-18-214341-alpha24-warm-stabilization/repeated-warm"
+gh run view 39158498518 --json url,conclusion,headSha,workflowName,status
+uv run -- python -X utf8 tools/verify_release.py --tag v0.11.0-alpha.24 --artifacts

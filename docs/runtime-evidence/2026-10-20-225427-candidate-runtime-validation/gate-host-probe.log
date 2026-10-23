@@ -1,0 +1,12 @@
+test_default_and_subset_order (test_runner.RunnerTest.test_default_and_subset_order) ... ok
+test_diagnostics_binding_leaves_default_binding_alone (test_runner.RunnerTest.test_diagnostics_binding_leaves_default_binding_alone) ... ok
+test_diagnostics_permissions_and_sdk_are_isolated (test_runner.RunnerTest.test_diagnostics_permissions_and_sdk_are_isolated) ... ok
+test_existing_diagnostics_binding_is_refused (test_runner.RunnerTest.test_existing_diagnostics_binding_is_refused) ... ok
+test_full_proof_unchanged (test_runner.RunnerTest.test_full_proof_unchanged) ... ok
+test_invalid_subsets (test_runner.RunnerTest.test_invalid_subsets) ... ok
+test_partial_pass_never_becomes_verified (test_runner.RunnerTest.test_partial_pass_never_becomes_verified) ... ok
+
+----------------------------------------------------------------------
+Ran 7 tests in 0.003s
+
+OK

@@ -1,0 +1,89 @@
+{
+  "dev.cyclone.cloak.probe.diag": {
+    "0": {
+      "android.permission.ACCESS_FINE_LOCATION": {
+        "granted": true,
+        "flags": "USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED"
+      },
+      "android.permission.NEARBY_WIFI_DEVICES": {
+        "granted": true,
+        "flags": "USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED"
+      },
+      "android.permission.BLUETOOTH_CONNECT": {
+        "granted": true,
+        "flags": "USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED"
+      },
+      "android.permission.ACCESS_COARSE_LOCATION": {
+        "granted": true,
+        "flags": "USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED"
+      }
+    },
+    "10": {},
+    "11": {
+      "android.permission.ACCESS_FINE_LOCATION": {
+        "granted": false,
+        "flags": "USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED"
+      },
+      "android.permission.NEARBY_WIFI_DEVICES": {
+        "granted": false,
+        "flags": "USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED"
+      },
+      "android.permission.BLUETOOTH_CONNECT": {
+        "granted": false,
+        "flags": "USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED"
+      },
+      "android.permission.ACCESS_COARSE_LOCATION": {
+        "granted": false,
+        "flags": "USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED"
+      }
+    },
+    "12": {},
+    "13": {},
+    "14": {},
+    "15": {},
+    "16": {},
+    "17": {
+      "android.permission.ACCESS_FINE_LOCATION": {
+        "granted": false,
+        "flags": "USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED"
+      },
+      "android.permission.NEARBY_WIFI_DEVICES": {
+        "granted": false,
+        "flags": "USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED"
+      },
+      "android.permission.BLUETOOTH_CONNECT": {
+        "granted": false,
+        "flags": "USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED"
+      },
+      "android.permission.ACCESS_COARSE_LOCATION": {
+        "granted": false,
+        "flags": "USER_SENSITIVE_WHEN_GRANTED|USER_SENSITIVE_WHEN_DENIED"
+      }
+    },
+    "18": {}
+  },
+  "dev.cyclone.cloak": {
+    "0": {},
+    "10": {},
+    "11": {},
+    "12": {},
+    "13": {},
+    "14": {},
+    "15": {},
+    "16": {},
+    "17": {},
+    "18": {}
+  },
+  "dev.cyclone.cloak.playevidence": {
+    "0": {},
+    "10": {},
+    "11": {},
+    "12": {},
+    "13": {},
+    "14": {},
+    "15": {},
+    "16": {},
+    "17": {},
+    "18": {}
+  }
+}

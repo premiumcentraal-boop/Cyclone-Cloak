@@ -1,0 +1,11 @@
+{
+  "result": "STOPPED",
+  "phase": "COHERENT_FIXTURE_AUTHORING_PREREQUISITE",
+  "reason": "REQUESTED_HOST_BASE_FIELDS_AND_DEFAULT_UA_WERE_NOT_RETAINED",
+  "fixture_unchanged": true,
+  "device_actions": [],
+  "builds": 0,
+  "captures": 0,
+  "promotions": 0,
+  "no_release": true
+}

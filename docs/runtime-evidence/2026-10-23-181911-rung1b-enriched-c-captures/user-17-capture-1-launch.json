@@ -1,0 +1,232 @@
+{
+  "request_id": "bootgate-20674fe675584309be04b2c69a80a1d5",
+  "cold_start": true,
+  "user_activation": {
+    "target_user": 17,
+    "completed": true,
+    "started_state": "RUNNING_UNLOCKED",
+    "before_user": 17,
+    "after_user": 17
+  },
+  "expected_profile": {
+    "fixture": "external",
+    "fixture_source": "C",
+    "profile_sha256": "5de89420c21c195defe179a14603c8655d0a2bcc79e4047ca7b39cba795aaeb6",
+    "bytes": 18830,
+    "source": "exact packaged synthetic asset bytes"
+  },
+  "before": {
+    "pidof": {
+      "stdout": "2376\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "processes": [
+      "10317  2376 dev.cyclone.cloak.probe.diag"
+    ],
+    "package_path": {
+      "stdout": "package:/data/app/~~XoB2J-jUpvOuQc5Hxpu_PQ==/dev.cyclone.cloak.probe.diag-aDh9lRq-lfMAp9wo53dmpA==/base.apk\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "target_user_state": [
+      "User 17: ceDataInode=255148 deDataInode=233412 installed=true hidden=false suspended=false appLockEnabled=false distractionFlags=0 stopped=true notLaunched=true enabled=0 instant=false virtual=false quarantined=false",
+      "User 17:"
+    ],
+    "target_uid": 1710317,
+    "run_as_identity": {
+      "stdout": "uid=1710317(u17_a317) gid=1710317(u17_a317) groups=1710317(u17_a317),1004(input),1007(log),1011(adb),1015(sdcard_rw),1028(sdcard_r),1078(ext_data_rw),1079(ext_obb_rw),3001(net_bt_admin),3002(net_bt),3003(inet),3006(net_bw_stats),3009(readproc),3011(uhid),3012(readtracefs),50317(all_a317) context=u:r:runas_app:s0:c61,c257,c529,c768\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "run_as_directory": {
+      "stdout": "/data/user/17/dev.cyclone.cloak.probe.diag\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "device_clock": "10-23 18:20:48.000"
+  },
+  "force_stop": {
+    "stdout": "",
+    "stderr": "",
+    "exit_code": 0
+  },
+  "am_start": {
+    "stdout": "Starting: Intent { flg=0x24000000 cmp=dev.cyclone.cloak.probe.diag/dev.cyclone.cloak.probe.DiagnosticsProbeActivity (has extras) }\n",
+    "stderr": "",
+    "exit_code": 0
+  },
+  "immediately_after": {
+    "pidof": {
+      "stdout": "2376\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "processes": [
+      "10317  2376 dev.cyclone.cloak.probe.diag",
+      "1710317 4123 dev.cyclone.cloak.probe.diag"
+    ],
+    "package_path": {
+      "stdout": "package:/data/app/~~XoB2J-jUpvOuQc5Hxpu_PQ==/dev.cyclone.cloak.probe.diag-aDh9lRq-lfMAp9wo53dmpA==/base.apk\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "target_user_state": [
+      "User 17: ceDataInode=255148 deDataInode=233412 installed=true hidden=false suspended=false appLockEnabled=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false",
+      "User 17:"
+    ],
+    "target_uid": 1710317,
+    "run_as_identity": {
+      "stdout": "uid=1710317(u17_a317) gid=1710317(u17_a317) groups=1710317(u17_a317),1004(input),1007(log),1011(adb),1015(sdcard_rw),1028(sdcard_r),1078(ext_data_rw),1079(ext_obb_rw),3001(net_bt_admin),3002(net_bt),3003(inet),3006(net_bw_stats),3009(readproc),3011(uhid),3012(readtracefs),50317(all_a317) context=u:r:runas_app:s0:c61,c257,c529,c768\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "run_as_directory": {
+      "stdout": "/data/user/17/dev.cyclone.cloak.probe.diag\n",
+      "stderr": "",
+      "exit_code": 0
+    }
+  },
+  "after_capture_wait": {
+    "pidof": {
+      "stdout": "2376 4123\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "processes": [
+      "10317  2376 dev.cyclone.cloak.probe.diag",
+      "1710317 4123 dev.cyclone.cloak.probe.diag"
+    ],
+    "package_path": {
+      "stdout": "package:/data/app/~~XoB2J-jUpvOuQc5Hxpu_PQ==/dev.cyclone.cloak.probe.diag-aDh9lRq-lfMAp9wo53dmpA==/base.apk\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "target_user_state": [
+      "User 17: ceDataInode=255148 deDataInode=233412 installed=true hidden=false suspended=false appLockEnabled=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false",
+      "User 17:"
+    ],
+    "target_uid": 1710317,
+    "run_as_identity": {
+      "stdout": "uid=1710317(u17_a317) gid=1710317(u17_a317) groups=1710317(u17_a317),1004(input),1007(log),1011(adb),1015(sdcard_rw),1028(sdcard_r),1078(ext_data_rw),1079(ext_obb_rw),3001(net_bt_admin),3002(net_bt),3003(inet),3006(net_bw_stats),3009(readproc),3011(uhid),3012(readtracefs),50317(all_a317) context=u:r:runas_app:s0:c61,c257,c529,c768\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "run_as_directory": {
+      "stdout": "/data/user/17/dev.cyclone.cloak.probe.diag\n",
+      "stderr": "",
+      "exit_code": 0
+    }
+  },
+  "logcat": {
+    "exit_code": 0,
+    "stderr": "",
+    "lines": [
+      "10-23 18:20:55.326  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.327  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.327  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.329  4123  4123 D WindowOnBackDispatcher: setTopOnBackInvokedCallback (unwrapped): null",
+      "10-23 18:20:55.330  4123  4123 D ViewRootImpl: Skipping stats log for color mode",
+      "10-23 18:20:55.341  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.341  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.342  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.342  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.343  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.344  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.344  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.344  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.345  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.345  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.346  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.346  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.348  4123  4123 W Activity: Can request only one set of permissions at a time",
+      "10-23 18:20:55.349  4123  4123 D AutofillManager: Fill dialog is enabled:false, hints=[]",
+      "10-23 18:20:55.351  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.352  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.362  4123  5147 I CloakProbeDiagnostics: {\"timestamp\":1792772455362,\"process\":4123,\"thread\":5147,\"field\":\"build.MANUFACTURER\",\"status\":\"PASS\"}",
+      "10-23 18:20:55.364  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.366  4123  5147 I CloakProbeDiagnostics: {\"timestamp\":1792772455366,\"process\":4123,\"thread\":5147,\"field\":\"build.BRAND\",\"status\":\"PASS\"}",
+      "10-23 18:20:55.366  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.366  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.366  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.366  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.366  4123  4123 D WindowOnBackDispatcher: setTopOnBackInvokedCallback (unwrapped): android.app.Activity$$ExternalSyntheticLambda0@32ba973",
+      "10-23 18:20:55.367  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.367  4123  4123 D VRI[DiagnosticsProbeActivity]: WindowInsets changed: 1080x2400 statusBars:[0,132,0,0] navigationBars:[0,0,0,63] mandatorySystemGestures:[0,170,0,84] ",
+      "10-23 18:20:55.367  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.367  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.368  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.368  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.370  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.371  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.371  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.372  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.373  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.373  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.373  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.373  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.374  4123  5147 I CloakProbeDiagnostics: {\"timestamp\":1792772455374,\"process\":4123,\"thread\":5147,\"field\":\"build.MODEL\",\"status\":\"PASS\"}",
+      "10-23 18:20:55.374  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.374  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.374  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.374  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.374  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.374  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.375  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.375  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.375  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.375  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.375  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.375  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.375  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.375  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.376  4123  5147 I CloakProbeDiagnostics: {\"timestamp\":1792772455376,\"process\":4123,\"thread\":5147,\"field\":\"build.DEVICE\",\"status\":\"PASS\"}",
+      "10-23 18:20:55.378  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.378  4123  5147 I CloakProbeDiagnostics: {\"timestamp\":1792772455378,\"process\":4123,\"thread\":5147,\"field\":\"build.PRODUCT\",\"status\":\"PASS\"}",
+      "10-23 18:20:55.379  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.379  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.379  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.380  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.380  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.381  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.381  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.381  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.381  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.381  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.381  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.382  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.382  4123  4123 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 18:20:55.383  4123  5147 I CloakProbeDiagnostics: {\"timestamp\":1792772455383,\"process\":4123,\"thread\":5147,\"field\":\"build.HARDWARE\",\"status\":\"PASS\"}",
+      "10-23 18:20:55.390  4123  5147 I CloakProbeDiagnostics: {\"timestamp\":1792772455390,\"process\":4123,\"thread\":5147,\"field\":\"build.FINGERPRINT\",\"status\":\"PASS\"}",
+      "10-23 18:20:55.391  4123  5147 I CloakProbeDiagnostics: {\"timestamp\":1792772455390,\"process\":4123,\"thread\":5147,\"field\":\"build.ID\",\"status\":\"PASS\"}",
+      "10-23 18:20:55.394  4123  5147 I CloakProbeDiagnostics: {\"timestamp\":1792772455394,\"process\":4123,\"thread\":5147,\"field\":\"build.BOOTLOADER\",\"status\":\"PASS\"}",
+      "10-23 18:20:55.394  4123  5147 I CloakProbeDiagnostics: {\"timestamp\":1792772455394,\"process\":4123,\"thread\":5147,\"field\":\"build.SERIAL\",\"status\":\"PASS\"}",
+      "10-23 18:20:55.395  4123  5147 I CloakProbeDiagnostics: {\"timestamp\":1792772455395,\"process\":4123,\"thread\":5147,\"field\":\"build.getSerial\",\"status\":\"PASS\"}",
+      "10-23 18:20:55.397  4123  5147 I CloakProbeDiagnostics: {\"timestamp\":1792772455397,\"process\":4123,\"thread\":5147,\"field\":\"build.TIME\",\"status\":\"PASS\"}",
+      "10-23 18:20:55.398  4123  5147 I CloakProbeDiagnostics: {\"timestamp\":1792772455398,\"process\":4123,\"thread\":5147,\"field\":\"build.TYPE\",\"status\":\"PASS\"}",
+      "10-23 18:20:55.398  4123  5147 I CloakProbeDiagnostics: {\"timestamp\":1792772455398,\"process\":4123,\"thread\":5147,\"field\":\"build.TAGS\",\"status\":\"PASS\"}",
+      "10-23 18:20:55.398  4123  5147 I CloakProbeDiagnostics: {\"timestamp\":1792772455398,\"process\":4123,\"thread\":5147,\"field\":\"version.SDK_INT\",\"status\":\"PASS\"}",
+      "10-23 18:20:55.398  4123  5147 I CloakProbeDiagnostics: {\"timestamp\":1792772455398,\"process\":4123,\"thread\":5147,\"field\":\"version.RELEASE\",\"status\":\"PASS\"}",
+      "10-23 18:20:55.398  4123  5147 I CloakProbeDiagnostics: {\"timestamp\":1792772455398,\"process\":4123,\"thread\":5147,\"field\":\"version.INCREMENTAL\",\"status\":\"PASS\"}",
+      "10-23 18:20:55.399  4123  5147 I CloakProbeDiagnostics: {\"timestamp\":1792772455399,\"process\":4123,\"thread\":5147,\"field\":\"version.SECURITY_PATCH\",\"status\":\"PASS\"}",
+      "10-23 18:20:55.399  4123  5147 I CloakProbeDiagnostics: {\"timestamp\":1792772455399,\"process\":4123,\"thread\":5147,\"field\":\"build.getRadioVersion\",\"status\":\"PASS\"}",
+      "10-23 18:20:55.399  4123  5147 I CloakProbeDiagnostics: {\"timestamp\":1792772455399,\"process\":4123,\"thread\":5147,\"field\":\"properties.java.ro.product.model\",\"status\":\"PASS\"}",
+      "10-23 18:20:55.399  4123  5147 I CloakProbeDiagnostics: {\"timestamp\":1792772455399,\"process\":4123,\"thread\":5147,\"field\":\"properties.native.ro.product.model\",\"status\":\"PASS\"}",
+      "10-23 18:20:55.399  4123  5147 I CloakProbeDiagnostics: {\"timestamp\":1792772455399,\"process\":4123,\"thread\":5147,\"field\":\"properties.java.ro.product.manufacturer\",\"status\":\"PASS\"}",
+      "10-23 18:20:55.400  4123  5147 I CloakProbeDiagnostics: {\"timestamp\":1792772455400,\"process\":4123,\"thread\":5147,\"field\":\"properties.native.ro.product.manufacturer\",\"status\":\"PASS\"}",
+      "10-23 18:20:55.400  4123  5147 I CloakProbeDiagnostics: {\"timestamp\":1792772455400,\"process\":4123,\"thread\":5147,\"field\":\"properties.java.ro.product.brand\",\"status\":\"PASS\"}",
+      "10-23 18:20:55.400  4123  5147 I CloakProbeDiagnostics: {\"timestamp\":1792772455400,\"process\":4123,\"thread\":5147,\"field\":\"properties.native.ro.product.brand\",\"status\":\"PASS\"}",
+      "10-23 18:20:55.400  4123  5147 I CloakProbeDiagnostics: {\"timestamp\":1792772455400,\"process\":4123,\"thread\":5147,\"field\":\"properties.java.ro.product.device\",\"status\":\"PASS\"}"
+    ],
+    "policy": "bounded target-UID logcat since launch, no unrelated UID output"
+  },
+  "launch_system_logcat": {
+    "exit_code": 0,
+    "stderr": "",
+    "lines": [
+      "10-23 18:20:55.750  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:pm path --user 17 dev.cyclone.cloak.probe.diag'",
+      "10-23 18:20:55.853  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 id'",
+      "10-23 18:20:55.926  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 pwd'"
+    ]
+  }
+}

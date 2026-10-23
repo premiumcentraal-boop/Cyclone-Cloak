@@ -1,0 +1,11 @@
+{
+  "exact_equal": false,
+  "changed_fields": [
+    "appops",
+    "files"
+  ],
+  "target_permissions_appops_equal": false,
+  "target_changed_fields": [
+    "appops"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "screenshot_black": true,
+  "xml_permission": "location",
+  "precise_default": true,
+  "observed_button_bounds": "[133,1483][947,1609]",
+  "tap_attempt": {
+    "x": 540,
+    "y": 1545
+  },
+  "following_xml_still_location": true,
+  "no_shell_grant_or_appop_write": true
+}

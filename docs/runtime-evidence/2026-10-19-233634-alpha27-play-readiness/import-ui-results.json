@@ -1,0 +1,12 @@
+{
+  "valid_import": "accepted; preview UNKNOWN; explicitly saved through UI",
+  "profile_hash_mismatch": "rejected: The report belongs to a different profile or saved profile body.",
+  "artifact_hash_mismatch": "rejected: The report was measured against a different app/module artifact.",
+  "stale": "rejected: The report is outside the configured freshness window.",
+  "incomplete": "rejected: The diagnostics report is malformed or incomplete. Choose the original report.json.",
+  "saved_readiness_unchanged_after_negative_tests": true,
+  "saved_readiness_sha256": "d2af292f32250151062dea6224374ae19bf5499028021f52665856e54beaba69",
+  "unknown_not_promoted_to_ready": true,
+  "ui_profile_hash_matches_capture": true,
+  "ui_artifact_hash_matches_capture": true
+}

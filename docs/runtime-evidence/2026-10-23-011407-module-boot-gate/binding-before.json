@@ -1,0 +1,9 @@
+{
+  "args": [
+    "shell",
+    "su --mount-master -c 'sha256sum /data/adb/cyclone_cloak/state-v1/index.json; for u in 0 17; do f=/data/user/$u/dev.cyclone.cloak/no_backup/cloak-bindings-v1.json; if [ -f \"$f\" ]; then sha256sum \"$f\"; fi; done'"
+  ],
+  "exit_code": 0,
+  "stdout": "409d6d5386be07a6b14b888872cb8467feeb1bf5c21647e716c90bd8a57ba99c  /data/adb/cyclone_cloak/state-v1/index.json\r\n5429ae9cda9723b41ba6f0f8e6c058edb6eafc9c04997518356602cb94070c20  /data/user/0/dev.cyclone.cloak/no_backup/cloak-bindings-v1.json\r\ne53571f1d85a250c78f49ba4fcb50d4cd1e88734ce3252b72e592727f2aace54  /data/user/17/dev.cyclone.cloak/no_backup/cloak-bindings-v1.json\r\n",
+  "stderr": ""
+}

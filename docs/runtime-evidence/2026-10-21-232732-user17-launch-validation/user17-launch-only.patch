@@ -1,0 +1,403 @@
+--- a/android/probe/src/main/java/dev/cyclone/cloak/probe/ProbeActivity.java
++++ b/android/probe/src/main/java/dev/cyclone/cloak/probe/ProbeActivity.java
+@@ -138,8 +138,9 @@
+                     Files.write(partial.toPath(), report.toString(2).getBytes(StandardCharsets.UTF_8));
+                     Files.move(partial.toPath(), new File(getFilesDir(), "report.json").toPath(),
+                         java.nio.file.StandardCopyOption.ATOMIC_MOVE, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+-                    CaptureMarkers.write(getFilesDir(), requestId, generation, android.os.Process.myUid(),
+-                        android.os.Process.myPid(), "end", "FAIL".equals(report.optString("status")) ? "FAILED" : "COMPLETED");
++                    if (getPackageName().endsWith(".diag"))
++                        ProbeEvidenceExport.write(ProbeEvidenceExport.directory(getExternalFilesDir(null)), "report.json", report);
++                    marker("end", "FAIL".equals(report.optString("status")) ? "FAILED" : "COMPLETED");
+                 } finally { Files.deleteIfExists(partial.toPath()); }
+             });
+             runOnUiThread(() -> {
+@@ -148,10 +149,17 @@
+             });
+         }
+ 
++        private void marker(String phase, String outcome) throws Exception {
++            JSONObject marker = CaptureMarkers.write(getFilesDir(), requestId, generation,
++                android.os.Process.myUid(), android.os.Process.myPid(), phase, outcome);
++            if (getPackageName().endsWith(".diag"))
++                ProbeEvidenceExport.write(ProbeEvidenceExport.directory(getExternalFilesDir(null)),
++                    "capture-" + phase + ".json", marker);
++        }
++
+         void run() {
+             try {
+-                CAPTURES.commit(generation, () -> CaptureMarkers.write(getFilesDir(), requestId, generation,
+-                    android.os.Process.myUid(), android.os.Process.myPid(), "start", "STARTED"));
++                CAPTURES.commit(generation, () -> marker("start", "STARTED"));
+                 try (java.io.InputStream stream = external
+                         ? Files.newInputStream(new File(getFilesDir(), "expected-profile.json").toPath())
+                         : getAssets().open("profile-" + fixture + ".json")) {
+--- a/android/probe/src/main/java/dev/cyclone/cloak/probe/CaptureMarkers.java
++++ b/android/probe/src/main/java/dev/cyclone/cloak/probe/CaptureMarkers.java
+@@ -8,7 +8,7 @@
+ 
+ /** Private, fixed-shape lifecycle evidence; contains no readings or exception text. */
+ final class CaptureMarkers {
+-    static void write(File directory, String requestId, long generation, int uid, int pid,
++    static JSONObject write(File directory, String requestId, long generation, int uid, int pid,
+             String phase, String outcome) throws Exception {
+         if (!("start".equals(phase) && "STARTED".equals(outcome))
+                 && !("end".equals(phase) && ("COMPLETED".equals(outcome) || "FAILED".equals(outcome))))
+@@ -23,5 +23,6 @@
+             Files.move(partial.toPath(), target.toPath(),
+                 StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
+         } finally { Files.deleteIfExists(partial.toPath()); }
++        return marker;
+     }
+ }
+--- a/tools/run_standalone_probe_validation.py
++++ b/tools/run_standalone_probe_validation.py
+@@ -3,6 +3,7 @@
+ Run: uv run --offline --with jsonschema -- python -X utf8 tools/run_standalone_probe_validation.py
+ Installs only the diagnostics APK, suppresses permission prompts, force-stops only
+ that package before each read, and uninstalls it in finally. No root or overlays.
++User 0 receives one smoke capture; user 17 receives two captures.
+ Every invocation uses a fresh dated evidence directory. Missing reports retain
+ request-bound marker diagnosis before cleanup. Stop on the first failed capture.
+ """
+@@ -22,19 +23,24 @@
+ PACKAGE = 'dev.cyclone.cloak.probe.diag'
+ APK = ROOT/'android/probe/build/outputs/apk/diagnostics/debug/probe-diagnostics-debug.apk'
+ STAMP = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=2))).strftime('%Y-%m-%d-%H%M%S')
+-OUT = ROOT/'docs/runtime-evidence'/f'{STAMP}-cold-capture-full-validation'
++OUT = ROOT/'docs/runtime-evidence'/f'{STAMP}-user17-launch-validation'
+ COMMANDS = []
+ 
+ def save(name, value):
+     (OUT/name).write_text(json.dumps(value, indent=2)+'\n', encoding='utf8')
+ 
+-def adb(*args, timeout=30, check=True):
++def adb_result(*args, timeout=30):
+     completed = subprocess.run([ADB, '-s', SERIAL, *args], capture_output=True, text=True,
+                                encoding='utf8', errors='replace', timeout=timeout)
+     COMMANDS.append(dict(args=list(args), exit_code=completed.returncode))
+-    if check and completed.returncode:
++    return dict(stdout=completed.stdout, stderr=completed.stderr, exit_code=completed.returncode)
++
++
++def adb(*args, timeout=30, check=True):
++    result = adb_result(*args, timeout=timeout)
++    if check and result['exit_code']:
+         raise RuntimeError('ADB_COMMAND_FAILED: '+ ' '.join(args[:4]))
+-    return completed.stdout.strip()
++    return result['stdout'].strip()
+ 
+ def shell(command, **kwargs):
+     return adb('shell', command, **kwargs)
+@@ -73,6 +79,94 @@
+     shell_command(f'am force-stop --user {user} {PACKAGE}')
+     return shell_command(f'am start --user {user} -n {PACKAGE}/dev.cyclone.cloak.probe.DiagnosticsProbeActivity '
+         f'--es request_id {request} --es fixture a --ei expected_user {user} --ez no_permission_prompt true')
++
++
++def evidence_paths(user, name):
++    if type(user) is not int or user < 0 or name not in ('report.json','capture-start.json','capture-end.json'):
++        raise ValueError('INVALID_EVIDENCE_PATH')
++    return (f'/storage/emulated/{user}/Android/data/{PACKAGE}/files/standalone-evidence/{name}',
++            f'/data/user/{user}/{PACKAGE}/files/{name}')
++
++
++def read_state(result):
++    text = result['stderr'] + result['stdout']
++    if result['exit_code'] == 0:
++        return 'READABLE'
++    if 'Permission denied' in text or 'not allowed' in text:
++        return 'ACCESS_DENIED_EXISTENCE_UNKNOWN'
++    if 'No such file or directory' in text:
++        return 'ABSENT'
++    return 'READ_ERROR'
++
++
++def read_evidence(user, name):
++    external, private = evidence_paths(user, name)
++    visibility = []
++    selected = None
++    # Explicit per-user absolute paths; never rely on run-as's initial directory.
++    for transport, command in (
++        ('external_shell', f'cat {external}'),
++        ('external_run_as', f'run-as {PACKAGE} --user {user} cat {external}'),
++        ('private_run_as', f'run-as {PACKAGE} --user {user} cat {private}')):
++        result = adb_result('shell', command)
++        state = read_state(result)
++        visibility.append(dict(transport=transport, path=external if transport.startswith('external') else private,
++                               state=state, exit_code=result['exit_code'], stderr=result['stderr'][:2048]))
++        if state == 'READABLE':
++            try: candidate = json.loads(result['stdout'])
++            except (ValueError,TypeError):
++                visibility[-1]['state'] = 'MALFORMED'
++                continue
++            if isinstance(candidate, dict) and selected is None: selected = candidate
++    return selected, visibility
++
++
++def visibility_diagnosis(diagnosis, visibility):
++    result = dict(diagnosis)
++    if not result['start_seen'] and any(v['state'] in ('ACCESS_DENIED_EXISTENCE_UNKNOWN','READ_ERROR') for v in visibility):
++        result['reason'] = 'CAPTURE_START_UNOBSERVABLE'
++    result['visibility'] = visibility
++    return result
++
++
++def launch_snapshot(user):
++    package = shell('dumpsys package '+PACKAGE)
++    match = re.search(r'(?:userId|appId)=(\d+)', package)
++    return dict(pidof=adb_result('shell','pidof '+PACKAGE),
++        processes=[line for line in shell('ps -A -o UID,PID,NAME').splitlines() if PACKAGE in line][:20],
++        package_path=adb_result('shell',f'pm path --user {user} {PACKAGE}'),
++        target_user_state=[line.strip() for line in package.splitlines() if re.match(rf'\s*User {user}:',line)],
++        target_uid=user*100000+int(match[1]) if match else None,
++        run_as_identity=adb_result('shell',f'run-as {PACKAGE} --user {user} id'),
++        run_as_directory=adb_result('shell',f'run-as {PACKAGE} --user {user} pwd'))
++
++
++def launch_with_evidence(user, request):
++    before = launch_snapshot(user)
++    before['device_clock'] = shell("date '+%m-%d %H:%M:%S.000'")
++    stopped = adb_result('shell', f'am force-stop --user {user} {PACKAGE}')
++    if stopped['exit_code']: raise RuntimeError('DIAGNOSTICS_FORCE_STOP_FAILED')
++    launch = adb_result('shell',f'am start --user {user} -n {PACKAGE}/dev.cyclone.cloak.probe.DiagnosticsProbeActivity '
++        f'--es request_id {request} --es fixture a --ei expected_user {user} --ez no_permission_prompt true')
++    return dict(request_id=request, cold_start=True, before=before, force_stop=stopped, am_start=launch,
++                immediately_after=launch_snapshot(user))
++
++
++def finish_launch_evidence(user, launch):
++    launch['after_capture_wait'] = launch_snapshot(user)
++    uid = launch['before']['target_uid']
++    result = adb_result('shell',f'logcat -d -t 300 -v threadtime --uid={uid}') if uid else dict(stdout='',stderr='UID_UNAVAILABLE',exit_code=1)
++    pids=set()
++    for snapshot in ('before','immediately_after','after_capture_wait'):
++        pids.update(launch[snapshot]['pidof']['stdout'].split())
++    since = launch['before']['device_clock']
++    lines=[line for line in result['stdout'].splitlines() if line[:18] >= since]
++    launch['logcat'] = dict(exit_code=result['exit_code'], stderr=result['stderr'], lines=lines[-300:],
++                            policy='bounded target-UID logcat since launch, no unrelated UID output')
++    system = adb_result('shell','logcat -d -t 500 -v threadtime')
++    launch['launch_system_logcat'] = dict(exit_code=system['exit_code'], stderr=system['stderr'],
++        lines=[line for line in system['stdout'].splitlines() if line[:18] >= since and PACKAGE in line][-100:])
++    return launch
+ 
+ 
+ def safe_marker(marker):
+@@ -148,27 +242,27 @@
+             raise RuntimeError('INSTALLED_APK_HASH_MISMATCH')
+         save('diagnostics-installed.json', info)
+         for user in (0, 17):
+-            for repeat in (1, 2):
++            for repeat in ((1,) if user == 0 else (1, 2)):
+                 request = f'filesystem-{STAMP}-{user}-{repeat}'
+-                launch = cold_launch(shell, user, request)
+-                save(f'user-{user}-capture-{repeat}-launch.json', dict(output=launch, request_id=request, cold_start=True))
++                launch = launch_with_evidence(user, request)
++                save(f'user-{user}-capture-{repeat}-launch.json', launch)
+                 report = None
+                 deadline = time.monotonic()+60
+                 while time.monotonic() < deadline:
+-                    output = shell(f'run-as {PACKAGE} --user {user} cat files/report.json', check=False)
+-                    try: candidate = json.loads(output)
+-                    except (ValueError, TypeError): candidate = {}
++                    candidate, report_visibility = read_evidence(user, 'report.json')
++                    candidate = candidate or {}
+                     if candidate.get('request_id') == request:
+                         report = candidate
+                         break
+                     time.sleep(1)
+                 markers = {}
+                 for phase in ('start', 'end'):
+-                    raw = shell(f'run-as {PACKAGE} --user {user} cat files/capture-{phase}.json', check=False)
+-                    try: marker = json.loads(raw)
+-                    except (ValueError, TypeError): marker = None
++                    marker, visibility = read_evidence(user, f'capture-{phase}.json')
+                     markers[phase] = safe_marker(marker)
+-                diagnosis = marker_diagnosis(request, markers['start'], markers['end'])
++                    markers[phase + '_visibility'] = visibility
++                diagnosis = visibility_diagnosis(marker_diagnosis(request, markers['start'], markers['end']), markers['start_visibility'])
++                save(f'user-{user}-capture-{repeat}-report-visibility.json', report_visibility)
++                save(f'user-{user}-capture-{repeat}-launch.json', finish_launch_evidence(user, launch))
+                 save(f'user-{user}-capture-{repeat}-markers.json', dict(request_id=request, markers=markers, diagnosis=diagnosis))
+                 if report is None:
+                     save('timeout-diagnosis.json', dict(user=user, capture=repeat, request_id=request, **diagnosis))
+@@ -222,9 +316,9 @@
+                 stability.append(dict(user=user,id=id,result=('IDENTICAL' if rows[0]['sha256']==rows[1]['sha256'] else 'CHANGED') if measured else 'NOT_COMPARABLE'))
+         save('determinism.json', stability)
+         save('commands.json', COMMANDS)
+-        completed = not failure and len(results)==4 and cleanup.get('removed') and unchanged
++        completed = not failure and len(results)==3 and cleanup.get('removed') and unchanged
+         completed = completed and not any(r['result']=='CHANGED' for r in stability)
+-        summary = ['# Cold-capture standalone validation', '', 'Result: '+('COMPLETE' if completed else 'INCOMPLETE'),
++        summary = ['# User-17 launch standalone validation', '', 'Result: '+('COMPLETE' if completed else 'INCOMPLETE'),
+             'Failure: '+str(failure), 'APK SHA-256: '+hashlib.sha256(APK.read_bytes()).hexdigest(),
+             'Production APK/version/permission snapshot unchanged: '+str(unchanged),
+             'Diagnostics uninstall confirmed: '+str(cleanup.get('removed',False)), '',
+--- /dev/null
++++ b/android/probe/src/main/java/dev/cyclone/cloak/probe/ProbeEvidenceExport.java
+@@ -0,0 +1,62 @@
++package dev.cyclone.cloak.probe;
++
++import java.io.File;
++import java.nio.charset.StandardCharsets;
++import java.nio.file.Files;
++import java.nio.file.StandardCopyOption;
++import java.util.Arrays;
++import java.util.HashSet;
++import java.util.Iterator;
++import java.util.Set;
++import org.json.JSONArray;
++import org.json.JSONObject;
++
++/** Diagnostics-only external evidence, stripped of raw readings and exception messages. */
++final class ProbeEvidenceExport {
++    private static final Set<String> KEYS = new HashSet<>(Arrays.asList(
++        "format", "fixture", "package", "uid", "pid", "request_id", "session_generation", "profile_sha256",
++        "phase", "outcome", "timestamp_ms", "status", "reason", "error", "failed_row_id", "rows",
++        "id", "source", "field_path", "surface", "expected_sha256", "actual_sha256", "sha256",
++        "duration_ms", "byte_count", "line_count", "filesystem_observations", "filesystem_reader_failures",
++        "device_reality", "runtime_envelope", "reality_runtime", "linked_parity", "failure_details",
++        "exception_class", "message_redacted", "stack_trace", "stack_truncated", "class", "method", "line"));
++
++    static File directory(File userExternalFiles) {
++        if (userExternalFiles == null) throw new IllegalStateException("EXTERNAL_EVIDENCE_UNAVAILABLE");
++        return new File(userExternalFiles, "standalone-evidence");
++    }
++
++    static JSONObject redact(JSONObject input) throws Exception {
++        JSONObject output = new JSONObject();
++        Iterator<String> keys = input.keys();
++        while (keys.hasNext()) {
++            String key = keys.next();
++            if (!KEYS.contains(key)) continue;
++            Object value = input.get(key);
++            if (value instanceof JSONObject) value = redact((JSONObject) value);
++            else if (value instanceof JSONArray) {
++                JSONArray filtered = new JSONArray();
++                JSONArray array = (JSONArray) value;
++                for (int i = 0; i < array.length(); i++) {
++                    Object item = array.get(i);
++                    if (item instanceof JSONObject) filtered.put(redact((JSONObject) item));
++                }
++                value = filtered;
++            }
++            output.put(key, value);
++        }
++        return output;
++    }
++
++    static void write(File directory, String name, JSONObject input) throws Exception {
++        if (!Arrays.asList("report.json", "capture-start.json", "capture-end.json").contains(name))
++            throw new IllegalArgumentException("INVALID_EVIDENCE_FILE");
++        Files.createDirectories(directory.toPath());
++        File target = new File(directory, name);
++        File partial = new File(directory, name + ".tmp");
++        try {
++            Files.write(partial.toPath(), redact(input).toString().getBytes(StandardCharsets.UTF_8));
++            Files.move(partial.toPath(), target.toPath(), StandardCopyOption.ATOMIC_MOVE, StandardCopyOption.REPLACE_EXISTING);
++        } finally { Files.deleteIfExists(partial.toPath()); }
++    }
++}
+--- /dev/null
++++ b/android/probe/src/test/java/dev/cyclone/cloak/probe/ProbeEvidenceExportTest.java
+@@ -0,0 +1,45 @@
++package dev.cyclone.cloak.probe;
++
++import java.io.File;
++import java.nio.file.Files;
++import org.json.JSONArray;
++import org.json.JSONObject;
++import org.junit.Rule;
++import org.junit.Test;
++import org.junit.rules.TemporaryFolder;
++import static org.junit.Assert.*;
++
++public class ProbeEvidenceExportTest {
++    @Rule public TemporaryFolder temporary = new TemporaryFolder();
++
++    @Test public void directoryUsesProvidedUserScopedExternalRoot() {
++        for (int user : new int[]{0, 17}) {
++            File root = new File("/storage/emulated/" + user + "/Android/data/probe/files");
++            assertEquals(new File(root, "standalone-evidence"), ProbeEvidenceExport.directory(root));
++        }
++    }
++
++    @Test public void unavailableStorageDoesNotFallBackToUserZero() {
++        try { ProbeEvidenceExport.directory(null); fail("missing root accepted"); }
++        catch (IllegalStateException expected) { assertEquals("EXTERNAL_EVIDENCE_UNAVAILABLE", expected.getMessage()); }
++    }
++
++    @Test public void exportRemovesRawValuesButPreservesDigestsMarkersAndDenials() throws Exception {
++        JSONObject report = new JSONObject().put("request_id", "user17-capture1").put("uid", 1712345)
++            .put("token", "secret").put("rows", new JSONArray().put(new JSONObject()
++                .put("id", "sample").put("actual", "private").put("expected", "private")
++                .put("actual_sha256", "digest").put("status", "BLOCKED").put("reason", "PERMISSION_DENIED")));
++        File directory = temporary.newFolder();
++        ProbeEvidenceExport.write(directory, "report.json", report);
++        String text = new String(Files.readAllBytes(new File(directory, "report.json").toPath()), java.nio.charset.StandardCharsets.UTF_8);
++        assertFalse(text.contains("private")); assertFalse(text.contains("secret"));
++        assertTrue(text.contains("digest")); assertTrue(text.contains("PERMISSION_DENIED"));
++        assertEquals(1712345, new JSONObject(text).getInt("uid"));
++        assertFalse(new File(directory, "report.json.tmp").exists());
++    }
++
++    @Test public void filenamesCannotEscapeEvidenceDirectory() throws Exception {
++        try { ProbeEvidenceExport.write(temporary.newFolder(), "../raw.json", new JSONObject()); fail("path accepted"); }
++        catch (IllegalArgumentException expected) { assertEquals("INVALID_EVIDENCE_FILE", expected.getMessage()); }
++    }
++}
+--- /dev/null
++++ b/android/probe/tests/test_user_visibility.py
+@@ -0,0 +1,51 @@
++import sys
++import unittest
++from unittest.mock import patch
++from pathlib import Path
++sys.path.insert(0, str(Path(__file__).resolve().parents[3] / 'tools'))
++from run_standalone_probe_validation import evidence_paths, read_state, visibility_diagnosis, marker_diagnosis
++import run_standalone_probe_validation as runner
++
++
++class UserVisibilityTest(unittest.TestCase):
++    def test_paths_are_absolute_and_user_scoped(self):
++        for user in (0,17):
++            external, private = evidence_paths(user, 'report.json')
++            self.assertIn(f'/emulated/{user}/Android/data/', external)
++            self.assertIn(f'/data/user/{user}/', private)
++            self.assertTrue(external.endswith('/standalone-evidence/report.json'))
++
++    def test_invalid_paths_are_rejected(self):
++        for user, name in ((-1,'report.json'),(True,'report.json'),(17,'../secret')):
++            with self.assertRaises(ValueError): evidence_paths(user, name)
++
++    def test_absent_and_unreadable_are_distinct(self):
++        self.assertEqual(read_state(dict(exit_code=1,stdout='',stderr='No such file or directory')), 'ABSENT')
++        self.assertEqual(read_state(dict(exit_code=1,stdout='',stderr='Permission denied')), 'ACCESS_DENIED_EXISTENCE_UNKNOWN')
++
++    def test_access_denial_does_not_claim_capture_never_started(self):
++        diagnosis=marker_diagnosis('new',None,None)
++        self.assertEqual(visibility_diagnosis(diagnosis,[dict(state='ACCESS_DENIED_EXISTENCE_UNKNOWN')])['reason'], 'CAPTURE_START_UNOBSERVABLE')
++        self.assertEqual(visibility_diagnosis(diagnosis,[dict(state='ABSENT')])['reason'], 'CAPTURE_NEVER_STARTED')
++
++    def test_readable_marker_is_not_hidden_by_another_denied_transport(self):
++        diagnosis=dict(start_seen=True,end_seen=False,reason='CAPTURE_STARTED_NO_END')
++        self.assertEqual(visibility_diagnosis(diagnosis,[dict(state='ACCESS_DENIED_EXISTENCE_UNKNOWN')])['reason'], 'CAPTURE_STARTED_NO_END')
++
++    def test_launch_preserves_verbatim_streams_exit_and_user(self):
++        start=dict(stdout='Starting: Intent\n',stderr='Warning: example\n',exit_code=0)
++        with patch.object(runner,'launch_snapshot',return_value={}), patch.object(runner,'shell',return_value='10-21 12:00:00.000'), patch.object(runner,'adb_result',side_effect=[dict(stdout='',stderr='',exit_code=0),start]) as adb:
++            evidence=runner.launch_with_evidence(17,'request')
++        self.assertEqual(evidence['am_start'],start)
++        self.assertIn('am start --user 17 -n '+runner.PACKAGE,adb.call_args.args[1])
++
++    def test_report_read_tries_explicit_per_user_paths_and_preserves_denial(self):
++        responses=[dict(stdout='',stderr='Permission denied',exit_code=1),dict(stdout='',stderr='Permission denied',exit_code=1),dict(stdout='{"request_id":"r"}',stderr='',exit_code=0)]
++        with patch.object(runner,'adb_result',side_effect=responses) as adb:
++            report,visibility=runner.read_evidence(17,'report.json')
++        self.assertEqual(report['request_id'],'r')
++        self.assertEqual(visibility[0]['state'],'ACCESS_DENIED_EXISTENCE_UNKNOWN')
++        self.assertIn('/data/user/17/',adb.call_args.args[1])
++
++
++if __name__ == '__main__': unittest.main()

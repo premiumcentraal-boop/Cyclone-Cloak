@@ -1,0 +1,45 @@
+{
+  "serial": "3B171FDJH0061G",
+  "api": "36",
+  "current_user": "0",
+  "users": {
+    "0": "RUNNING_UNLOCKED",
+    "17": "RUNNING_UNLOCKED"
+  },
+  "installed_packages": {
+    "dev.cyclone.cloak.probe.diag": {
+      "version": [
+        "1.0-diag"
+      ],
+      "code": [
+        "1"
+      ]
+    },
+    "dev.cyclone.cloak": {
+      "version": [
+        "0.11.0-alpha.27"
+      ],
+      "code": [
+        "51"
+      ]
+    },
+    "dev.cyclone.cloak.playevidence": {
+      "version": [
+        "1.0-diagnostics"
+      ],
+      "code": [
+        "1"
+      ]
+    }
+  },
+  "module": {
+    "id": "cyclone_cloak",
+    "name": "Cyclone Cloak",
+    "version": "v0.11.0-alpha.27",
+    "versionCode": "51",
+    "author": "Cyclone Cloak contributors",
+    "description": "Device-profile engine for Cyclone (platform). Manage per-app profiles from the Cyclone Cloak companion app. Requires platform."
+  },
+  "started_at": "2026-10-20T21:06:55.273177+00:00",
+  "device_mutations": false
+}

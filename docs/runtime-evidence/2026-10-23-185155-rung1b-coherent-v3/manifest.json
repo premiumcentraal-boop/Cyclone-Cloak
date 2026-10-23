@@ -1,0 +1,13 @@
+{
+  "run_id": "d1f60f1f52bc4f7d9476f575d3de0004",
+  "selections": [
+    {
+      "kind": "fixture",
+      "fixture": "c",
+      "user": 17,
+      "profile_id": "2b1cec3d-b89b-5652-a17f-870079bf9666",
+      "sha256": "855173c34604f097fa41411c24084f557d65c524bb42233701863618680dddea"
+    }
+  ],
+  "overlay_active": false
+}

@@ -1,0 +1,87 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.11.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :module:preBuild UP-TO-DATE
+> Task :module:preDebugBuild UP-TO-DATE
+> Task :module:generateDebugResValues
+> Task :module:generateDebugResources
+> Task :module:packageDebugResources
+> Task :module:preDebugUnitTestBuild UP-TO-DATE
+> Task :module:javaPreCompileDebug
+> Task :module:javaPreCompileDebugUnitTest
+> Task :module:writeDebugAarMetadata
+> Task :module:compileDebugLibraryResources
+> Task :module:parseDebugLocalResources
+> Task :module:checkDebugUnitTestAarMetadata
+> Task :module:generateDebugUnitTestResValues
+> Task :module:mapDebugUnitTestSourceSetPaths
+> Task :module:generateDebugUnitTestResources
+> Task :module:generateDebugRFile
+> Task :module:mergeDebugUnitTestResources
+> Task :module:compileDebugJavaWithJavac NO-SOURCE
+> Task :module:bundleLibRuntimeToJarDebug
+> Task :module:extractDeepLinksDebug
+> Task :module:bundleLibCompileToJarDebug
+> Task :module:processDebugManifest
+> Task :module:copyRobolectricRuntime
+> Task :module:processDebugUnitTestManifest
+> Task :module:generateDebugUnitTestAssets UP-TO-DATE
+> Task :module:mergeDebugShaders
+> Task :module:compileDebugShaders NO-SOURCE
+> Task :module:generateDebugAssets UP-TO-DATE
+> Task :module:mergeDebugAssets
+> Task :module:mergeDebugUnitTestAssets
+> Task :module:processDebugJavaRes NO-SOURCE
+> Task :module:processDebugUnitTestJavaRes NO-SOURCE
+> Task :module:preReleaseBuild UP-TO-DATE
+> Task :module:prepareHookPine
+> Task :module:processDebugUnitTestResources
+> Task :module:compileHookBridge
+> Task :module:compileDebugUnitTestJavaWithJavac
+> Task :module:packageDebugUnitTestForUnitTest
+> Task :module:generateDebugUnitTestConfig
+> Task :module:jarHookBridge
+> Task :module:testDebugUnitTest
+> Task :module:dexHookBridge
+> Task :module:prepareHookShadow
+> Task :module:embedHookAssets
+> Task :module:configureCMakeRelWithDebInfo[arm64-v8a]
+> Task :module:buildCMakeRelWithDebInfo[arm64-v8a]
+> Task :module:configureCMakeRelWithDebInfo[armeabi-v7a]
+> Task :module:buildCMakeRelWithDebInfo[armeabi-v7a]
+> Task :module:mergeReleaseJniLibFolders
+> Task :module:generateReleaseResValues
+> Task :module:extractDeepLinksForAarRelease
+> Task :module:generateReleaseResources
+> Task :module:packageReleaseResources
+> Task :module:mergeReleaseNativeLibs
+> Task :module:mergeReleaseShaders
+> Task :module:parseReleaseLocalResources
+> Task :module:compileReleaseShaders NO-SOURCE
+> Task :module:generateReleaseAssets UP-TO-DATE
+> Task :module:mergeReleaseAssets
+> Task :module:generateReleaseRFile
+> Task :module:javaPreCompileRelease
+> Task :module:extractReleaseAnnotations
+> Task :module:compileReleaseJavaWithJavac NO-SOURCE
+> Task :module:mergeReleaseGeneratedProguardFiles
+> Task :module:stripReleaseDebugSymbols
+> Task :module:mergeReleaseConsumerProguardFiles
+> Task :module:prepareLintJarForPublish
+> Task :module:prepareReleaseArtProfile
+> Task :module:copyReleaseJniLibsProjectAndLocalJars
+> Task :module:processReleaseJavaRes NO-SOURCE
+> Task :module:processReleaseManifest
+> Task :module:writeReleaseAarMetadata
+> Task :module:mapReleaseSourceSetPaths
+> Task :module:mergeReleaseResources
+> Task :module:mergeReleaseJavaResource
+> Task :module:syncReleaseLibJars
+> Task :module:bundleReleaseAar
+> Task :module:verifyReleaseResources
+> Task :module:assembleRelease
+
+> Task :module:packageModule
+module zip: C:\Users\Agent\AppData\Local\Temp\cloak-alpha27-load-record-20261023-014115\android\module\build\module/cyclone-cloak-0.11.0-alpha.27.zip
+
+BUILD SUCCESSFUL in 53s
+65 actionable tasks: 65 executed

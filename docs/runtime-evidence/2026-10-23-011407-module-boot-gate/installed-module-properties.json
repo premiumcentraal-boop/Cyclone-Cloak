@@ -1,0 +1,9 @@
+{
+  "args": [
+    "shell",
+    "su --mount-master -c 'cat /data/adb/modules/cyclone_cloak/module.prop'"
+  ],
+  "exit_code": 0,
+  "stdout": "id=cyclone_cloak\r\nname=Cyclone Cloak\r\nversion=v0.11.0-alpha.27\r\nversionCode=51\r\nauthor=Cyclone Cloak contributors\r\ndescription=Device-profile engine for Cyclone (platform). Manage per-app profiles from the Cyclone Cloak companion app. Requires platform.\r\n",
+  "stderr": ""
+}

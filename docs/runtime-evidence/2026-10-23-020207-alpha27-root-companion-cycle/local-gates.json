@@ -1,0 +1,17 @@
+{
+  "isolated_module": {
+    "tests": 40,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "main_module": {
+    "tests": 80,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "host_integration_guards": 3,
+  "abi_manifest_verified": true,
+  "elf_verified": true
+}

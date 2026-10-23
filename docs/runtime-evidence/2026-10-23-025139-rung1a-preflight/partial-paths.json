@@ -1,0 +1,138 @@
+[
+  {
+    "field_path": "reality.carrier.values.sim_state",
+    "surface": "android.telephony.TelephonyManager.getSimState()",
+    "probe_row": "envelope.telephony.simState + envelope.telephony.simStateSlot0",
+    "scope": "Exact calls present; fixture must declare known carrier.sim_state. No missing expected state can be inferred from host.",
+    "status": "PARTIAL",
+    "physical_result": "NOT_RUN_MODULE_ABSENT"
+  },
+  {
+    "field_path": "reality.compute.values.gpu",
+    "surface": "android.opengl.GLES20.glGetString(GL_RENDERER)",
+    "probe_row": "envelope.compute.gpuRenderer",
+    "scope": "GL_RENDERER reader present; requires source-supported expected GPU and loaded candidate.",
+    "status": "PARTIAL",
+    "physical_result": "NOT_RUN_MODULE_ABSENT"
+  },
+  {
+    "field_path": "reality.memory.values.free_storage_gib",
+    "surface": "android.os.StatFs.getAvailableBytes()",
+    "probe_row": "envelope.storage.availableBytes",
+    "scope": "Private-path available-byte reader present; requires declared free_storage_gib; not nominal capacity.",
+    "status": "PARTIAL",
+    "physical_result": "NOT_RUN_MODULE_ABSENT"
+  },
+  {
+    "field_path": "reality.packages.values.installed",
+    "surface": "android.content.pm.PackageManager.getPackageInfo(allowlisted package)",
+    "probe_row": "envelope.packages.visibleVersions",
+    "scope": "Aggregate visible allowlisted getPackageInfo results only; no visibility expansion or independent leaf proof.",
+    "status": "PARTIAL",
+    "physical_result": "NOT_RUN_MODULE_ABSENT"
+  },
+  {
+    "field_path": "reality.packages.values.installed[].package",
+    "surface": "android.content.pm.PackageManager.getPackageInfo(allowlisted package):package",
+    "probe_row": "envelope.packages.visibleVersions",
+    "scope": "Aggregate visible allowlisted getPackageInfo results only; no visibility expansion or independent leaf proof.",
+    "status": "PARTIAL",
+    "physical_result": "NOT_RUN_MODULE_ABSENT"
+  },
+  {
+    "field_path": "reality.packages.values.installed[].version_code",
+    "surface": "android.content.pm.PackageManager.getPackageInfo(allowlisted package):version_code",
+    "probe_row": "envelope.packages.visibleVersions",
+    "scope": "Aggregate visible allowlisted getPackageInfo results only; no visibility expansion or independent leaf proof.",
+    "status": "PARTIAL",
+    "physical_result": "NOT_RUN_MODULE_ABSENT"
+  },
+  {
+    "field_path": "reality.packages.values.installed[].version_name",
+    "surface": "android.content.pm.PackageManager.getPackageInfo(allowlisted package):version_name",
+    "probe_row": "envelope.packages.visibleVersions",
+    "scope": "Aggregate visible allowlisted getPackageInfo results only; no visibility expansion or independent leaf proof.",
+    "status": "PARTIAL",
+    "physical_result": "NOT_RUN_MODULE_ABSENT"
+  },
+  {
+    "field_path": "reality.sensors.values.inventory",
+    "surface": "android.hardware.SensorManager.getSensorList(TYPE_ALL)",
+    "probe_row": "envelope.sensors.inventory",
+    "scope": "Aggregate covers type/name/delay/range/resolution; no independent per-leaf measurement claim.",
+    "status": "PARTIAL",
+    "physical_result": "NOT_RUN_MODULE_ABSENT"
+  },
+  {
+    "field_path": "reality.sensors.values.inventory[].max_delay_us",
+    "surface": "android.hardware.SensorManager.getSensorList(TYPE_ALL):max_delay_us",
+    "probe_row": "envelope.sensors.inventory",
+    "scope": "Aggregate covers type/name/delay/range/resolution; no independent per-leaf measurement claim.",
+    "status": "PARTIAL",
+    "physical_result": "NOT_RUN_MODULE_ABSENT"
+  },
+  {
+    "field_path": "reality.sensors.values.inventory[].min_delay_us",
+    "surface": "android.hardware.SensorManager.getSensorList(TYPE_ALL):min_delay_us",
+    "probe_row": "envelope.sensors.inventory",
+    "scope": "Aggregate covers type/name/delay/range/resolution; no independent per-leaf measurement claim.",
+    "status": "PARTIAL",
+    "physical_result": "NOT_RUN_MODULE_ABSENT"
+  },
+  {
+    "field_path": "reality.sensors.values.inventory[].name",
+    "surface": "android.hardware.SensorManager.getSensorList(TYPE_ALL):name",
+    "probe_row": "envelope.sensors.inventory",
+    "scope": "Aggregate covers type/name/delay/range/resolution; no independent per-leaf measurement claim.",
+    "status": "PARTIAL",
+    "physical_result": "NOT_RUN_MODULE_ABSENT"
+  },
+  {
+    "field_path": "reality.sensors.values.inventory[].range",
+    "surface": "android.hardware.SensorManager.getSensorList(TYPE_ALL):range",
+    "probe_row": "envelope.sensors.inventory",
+    "scope": "Aggregate covers type/name/delay/range/resolution; no independent per-leaf measurement claim.",
+    "status": "PARTIAL",
+    "physical_result": "NOT_RUN_MODULE_ABSENT"
+  },
+  {
+    "field_path": "reality.sensors.values.inventory[].resolution",
+    "surface": "android.hardware.SensorManager.getSensorList(TYPE_ALL):resolution",
+    "probe_row": "envelope.sensors.inventory",
+    "scope": "Aggregate covers type/name/delay/range/resolution; no independent per-leaf measurement claim.",
+    "status": "PARTIAL",
+    "physical_result": "NOT_RUN_MODULE_ABSENT"
+  },
+  {
+    "field_path": "reality.sensors.values.inventory[].type",
+    "surface": "android.hardware.SensorManager.getSensorList(TYPE_ALL):type",
+    "probe_row": "envelope.sensors.inventory",
+    "scope": "Aggregate covers type/name/delay/range/resolution; no independent per-leaf measurement claim.",
+    "status": "PARTIAL",
+    "physical_result": "NOT_RUN_MODULE_ABSENT"
+  },
+  {
+    "field_path": "reality.webview.values.provider",
+    "surface": "android.webkit.WebView.getCurrentWebViewPackage().packageName",
+    "probe_row": "envelope.webview.provider",
+    "scope": "Current-provider package reader present.",
+    "status": "PARTIAL",
+    "physical_result": "NOT_RUN_MODULE_ABSENT"
+  },
+  {
+    "field_path": "reality.webview.values.user_agent",
+    "surface": "android.webkit.WebSettings.getUserAgentString()",
+    "probe_row": "envelope.webview.defaultUa (related only)",
+    "scope": "Exact concrete WebSettings.getUserAgentString reader is absent; default-UA read cannot close instance getter path.",
+    "status": "PARTIAL",
+    "physical_result": "NOT_RUN_MODULE_ABSENT"
+  },
+  {
+    "field_path": "reality.webview.values.version",
+    "surface": "android.webkit.WebView.getCurrentWebViewPackage().versionName",
+    "probe_row": "envelope.webview.version",
+    "scope": "Current-provider version reader present.",
+    "status": "PARTIAL",
+    "physical_result": "NOT_RUN_MODULE_ABSENT"
+  }
+]

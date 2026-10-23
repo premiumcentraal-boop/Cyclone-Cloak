@@ -1,0 +1,10 @@
+{
+  "result": "NOT_VALIDATED",
+  "phase": "user-17-bound-cold-durable-record",
+  "reason": "MODULE_DURABLE_LOAD_RECORD_ABSENT_OR_INVALID",
+  "records": [],
+  "module_left_installed": true,
+  "removal_reboot_not_run": true,
+  "reboots": 1,
+  "second_fix_attempt": false
+}

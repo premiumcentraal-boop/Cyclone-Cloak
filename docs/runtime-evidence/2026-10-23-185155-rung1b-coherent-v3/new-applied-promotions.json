@@ -1,0 +1,7 @@
+{
+  "APPLIED": [],
+  "VERIFIED": [],
+  "instance_ua_ledger_state": "UNVERIFIED",
+  "raw_instance_ua_status_not_reclassified": true,
+  "reason": "No completed coherent-v3 measurement; prior evidence remains historical."
+}

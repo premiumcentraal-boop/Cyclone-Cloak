@@ -1,0 +1,6 @@
+{
+  "pid": 15592,
+  "lines": [],
+  "policy": "read-only bounded root logcat matching existing capture PID",
+  "load_line_found": false
+}

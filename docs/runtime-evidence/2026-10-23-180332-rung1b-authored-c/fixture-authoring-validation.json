@@ -1,0 +1,204 @@
+{
+  "valid": false,
+  "errors": [
+    {
+      "path": "sensors.values.inventory.14.min_delay_us",
+      "validator": "minimum",
+      "message": "-1 is less than the minimum of 0",
+      "actual": -1
+    },
+    {
+      "path": "sensors.values.inventory.16.range",
+      "validator": "maximum",
+      "message": "3.4028234663852886e+38 is greater than the maximum of 1000000",
+      "actual": 3.4028234663852886e+38
+    },
+    {
+      "path": "sensors.values.inventory.19.min_delay_us",
+      "validator": "minimum",
+      "message": "-1 is less than the minimum of 0",
+      "actual": -1
+    },
+    {
+      "path": "sensors.values.inventory.22.type",
+      "validator": "maximum",
+      "message": "65538 is greater than the maximum of 65535",
+      "actual": 65538
+    },
+    {
+      "path": "sensors.values.inventory.23.type",
+      "validator": "maximum",
+      "message": "65539 is greater than the maximum of 65535",
+      "actual": 65539
+    },
+    {
+      "path": "sensors.values.inventory.24.type",
+      "validator": "maximum",
+      "message": "65541 is greater than the maximum of 65535",
+      "actual": 65541
+    },
+    {
+      "path": "sensors.values.inventory.24.range",
+      "validator": "maximum",
+      "message": "3.4028234663852886e+38 is greater than the maximum of 1000000",
+      "actual": 3.4028234663852886e+38
+    },
+    {
+      "path": "sensors.values.inventory.24.resolution",
+      "validator": "minimum",
+      "message": "0 is less than the minimum of 1e-06",
+      "actual": 0
+    },
+    {
+      "path": "sensors.values.inventory.25.type",
+      "validator": "maximum",
+      "message": "65541 is greater than the maximum of 65535",
+      "actual": 65541
+    },
+    {
+      "path": "sensors.values.inventory.25.range",
+      "validator": "maximum",
+      "message": "3.4028234663852886e+38 is greater than the maximum of 1000000",
+      "actual": 3.4028234663852886e+38
+    },
+    {
+      "path": "sensors.values.inventory.25.resolution",
+      "validator": "minimum",
+      "message": "0 is less than the minimum of 1e-06",
+      "actual": 0
+    },
+    {
+      "path": "sensors.values.inventory.26.type",
+      "validator": "maximum",
+      "message": "65541 is greater than the maximum of 65535",
+      "actual": 65541
+    },
+    {
+      "path": "sensors.values.inventory.26.range",
+      "validator": "maximum",
+      "message": "3.4028234663852886e+38 is greater than the maximum of 1000000",
+      "actual": 3.4028234663852886e+38
+    },
+    {
+      "path": "sensors.values.inventory.26.resolution",
+      "validator": "minimum",
+      "message": "0 is less than the minimum of 1e-06",
+      "actual": 0
+    },
+    {
+      "path": "sensors.values.inventory.27.type",
+      "validator": "maximum",
+      "message": "65545 is greater than the maximum of 65535",
+      "actual": 65545
+    },
+    {
+      "path": "sensors.values.inventory.27.resolution",
+      "validator": "minimum",
+      "message": "0 is less than the minimum of 1e-06",
+      "actual": 0
+    },
+    {
+      "path": "sensors.values.inventory.28.type",
+      "validator": "maximum",
+      "message": "65554 is greater than the maximum of 65535",
+      "actual": 65554
+    },
+    {
+      "path": "sensors.values.inventory.28.min_delay_us",
+      "validator": "minimum",
+      "message": "-1 is less than the minimum of 0",
+      "actual": -1
+    },
+    {
+      "path": "sensors.values.inventory.28.resolution",
+      "validator": "minimum",
+      "message": "0 is less than the minimum of 1e-06",
+      "actual": 0
+    },
+    {
+      "path": "sensors.values.inventory.29.type",
+      "validator": "maximum",
+      "message": "65555 is greater than the maximum of 65535",
+      "actual": 65555
+    },
+    {
+      "path": "sensors.values.inventory.29.min_delay_us",
+      "validator": "minimum",
+      "message": "-1 is less than the minimum of 0",
+      "actual": -1
+    },
+    {
+      "path": "sensors.values.inventory.29.resolution",
+      "validator": "minimum",
+      "message": "0 is less than the minimum of 1e-06",
+      "actual": 0
+    },
+    {
+      "path": "sensors.values.inventory.30.type",
+      "validator": "maximum",
+      "message": "131073 is greater than the maximum of 65535",
+      "actual": 131073
+    },
+    {
+      "path": "sensors.values.inventory.31.type",
+      "validator": "maximum",
+      "message": "131077 is greater than the maximum of 65535",
+      "actual": 131077
+    },
+    {
+      "path": "sensors.values.inventory.32.type",
+      "validator": "maximum",
+      "message": "131083 is greater than the maximum of 65535",
+      "actual": 131083
+    },
+    {
+      "path": "sensors.values.inventory.32.min_delay_us",
+      "validator": "minimum",
+      "message": "-1 is less than the minimum of 0",
+      "actual": -1
+    },
+    {
+      "path": "sensors.values.inventory.33.type",
+      "validator": "maximum",
+      "message": "131085 is greater than the maximum of 65535",
+      "actual": 131085
+    },
+    {
+      "path": "sensors.values.inventory.33.min_delay_us",
+      "validator": "minimum",
+      "message": "-1 is less than the minimum of 0",
+      "actual": -1
+    },
+    {
+      "path": "sensors.values.inventory.34.type",
+      "validator": "maximum",
+      "message": "131087 is greater than the maximum of 65535",
+      "actual": 131087
+    },
+    {
+      "path": "sensors.values.inventory.34.min_delay_us",
+      "validator": "minimum",
+      "message": "-1 is less than the minimum of 0",
+      "actual": -1
+    },
+    {
+      "path": "sensors.values.inventory.35.type",
+      "validator": "maximum",
+      "message": "131088 is greater than the maximum of 65535",
+      "actual": 131088
+    },
+    {
+      "path": "sensors.values.inventory.36.type",
+      "validator": "maximum",
+      "message": "131091 is greater than the maximum of 65535",
+      "actual": 131091
+    },
+    {
+      "path": "sensors.values.inventory.37.type",
+      "validator": "maximum",
+      "message": "131092 is greater than the maximum of 65535",
+      "actual": 131092
+    }
+  ],
+  "applied_to_source": false
+}

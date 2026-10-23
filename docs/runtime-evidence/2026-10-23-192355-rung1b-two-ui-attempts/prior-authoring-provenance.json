@@ -1,0 +1,13 @@
+{
+  "captured_at_ms": 1792773858598,
+  "sha256": "57c6fa87e5c2ada239117f6457f0545eb0050726c4a3967199662da9ccd4c3f0",
+  "user": 17,
+  "bound": false,
+  "request_id": "rung1b-author-c0d2fbcdb8f5453daf7ed2cc00abf7c0",
+  "apk_sha256": "4dca724b770407a8b7ae081f94128f18696c076affabbbd326d64b7f37d4c980",
+  "pid": "21053",
+  "transport": "read-only root recovery",
+  "completion_log_observed": true,
+  "completion_atomic_file_present": true,
+  "run_as_stderr": "cat: /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/authoring.json: Permission denied\n"
+}

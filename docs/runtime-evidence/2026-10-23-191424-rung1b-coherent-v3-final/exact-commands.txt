@@ -1,0 +1,13 @@
+# Executed from C:/Users/Agent/Cyclone/cloak-repo
+uv run --offline -- python docs/runtime-evidence/2026-10-23-191424-rung1b-coherent-v3-final/prepare.py
+uv run --offline --with jsonschema -- python -X utf8 docs/runtime-evidence/2026-10-23-191424-rung1b-coherent-v3-final/run_ops.py install
+uv run --offline --with jsonschema -- python docs/runtime-evidence/2026-10-23-191424-rung1b-coherent-v3-final/ui_setup.py start 0
+# UI inspect/tap/finish commands and current hierarchy tags are retained in scripts, XML and commands.jsonl. One compatibility-warning OK tap at x439,y1865.
+uv run --offline --with jsonschema -- python -X utf8 docs/runtime-evidence/2026-10-23-191424-rung1b-coherent-v3-final/run_ops.py capture 0 1
+uv run --offline --with jsonschema -- python docs/runtime-evidence/2026-10-23-191424-rung1b-coherent-v3-final/ui_setup.py start 17
+# User17 location-ready hierarchy, one observed While-using-app tap, nearby/settle-check/final-wait hierarchy reads; no alternate taps.
+uv run --offline -- python docs/runtime-evidence/2026-10-23-191424-rung1b-coherent-v3-final/preserve_stop.py
+uv run --offline --with jsonschema -- python docs/runtime-evidence/2026-10-23-191424-rung1b-coherent-v3-final/run_ops.py cleanup
+git diff --check
+git diff --cached --check
+# Prior local build/test commands unchanged: ../2026-10-23-185155-rung1b-coherent-v3/exact-commands.txt

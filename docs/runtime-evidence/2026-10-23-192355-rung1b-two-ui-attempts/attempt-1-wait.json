@@ -1,0 +1,15 @@
+{
+  "location_cleared": true,
+  "elapsed_seconds": 2.71,
+  "observations": [
+    {
+      "elapsed_seconds": 2.57,
+      "hierarchy": "attempt-1-hierarchy-00.xml",
+      "location_pending": false
+    }
+  ],
+  "focus_lines": [
+    "  mCurrentFocus=Window{7ee5a81 u17 com.google.android.permissioncontroller/com.android.permissioncontroller.permission.ui.GrantPermissionsActivity}",
+    "  mFocusedApp=ActivityRecord{252056427 u17 com.google.android.permissioncontroller/com.android.permissioncontroller.permission.ui.GrantPermissionsActivity t1700379}"
+  ]
+}

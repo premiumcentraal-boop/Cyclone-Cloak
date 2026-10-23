@@ -1,0 +1,10 @@
+{
+  "module": "id=cyclone_cloak\n\nname=Cyclone Cloak\n\nversion=v0.11.0-alpha.23\n\nversionCode=47\n\nauthor=Cyclone Cloak contributors\n\ndescription=Device-profile engine for Cyclone (platform). Manage per-app profiles from the Cyclone Cloak companion app. Requires platform.\n\n",
+  "app_version": "0.11.0-alpha.23",
+  "app_code": "47",
+  "boot_id": "090c032a-6af5-48bf-abef-b8a5ae85fe58",
+  "users": {
+    "0": "RUNNING_UNLOCKED",
+    "17": "RUNNING_UNLOCKED"
+  }
+}

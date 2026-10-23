@@ -1,0 +1,16 @@
+{
+  "non_module_production_delta": [],
+  "permission_delta": [],
+  "module_update_authorized": true,
+  "installed_module_libraries": {
+    "zygisk/arm64-v8a.so": {
+      "sha256": "8a529beae4f1e164405a8956581806cd85878b30a2c1b1336639acbb6178bfcc",
+      "matches_signed_candidate": true
+    },
+    "zygisk/armeabi-v7a.so": {
+      "sha256": "e208e2093a31f2cd082f3c76b7a88307007cf44c7cff83e224dc89f85768207c",
+      "matches_signed_candidate": true
+    }
+  },
+  "both_users_unlocked": true
+}

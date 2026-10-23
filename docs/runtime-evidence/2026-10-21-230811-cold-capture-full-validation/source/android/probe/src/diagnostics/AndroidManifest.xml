@@ -1,0 +1,19 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.NEARBY_WIFI_DEVICES" />
+    <uses-permission android:name="android.permission.BLUETOOTH_CONNECT" />
+    <!-- Override the standard probe's removal: target 33+ needs AD_ID to read it. -->
+    <uses-permission android:name="com.google.android.gms.permission.AD_ID" tools:node="replace" />
+    <application android:label="Cloak Diagnostics Probe" tools:replace="android:label">
+        <activity android:name="dev.cyclone.cloak.probe.ProbeActivity" tools:node="remove" />
+        <activity android:name="dev.cyclone.cloak.probe.DiagnosticsProbeActivity" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

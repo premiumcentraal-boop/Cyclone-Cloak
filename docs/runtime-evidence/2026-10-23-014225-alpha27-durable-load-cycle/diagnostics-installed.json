@@ -1,0 +1,30 @@
+{
+  "version": "1.0-diag",
+  "version_code": 1,
+  "0": {
+    "paths": [
+      "/data/app/~~uqXd6gX0JKHIUvg42hVS0w==/dev.cyclone.cloak.probe.diag-Tz2DxNDD5QH0P-YJCRaXyw==/base.apk"
+    ],
+    "apk_hashes": [
+      "3f3a611307024ba2fa3bbe301df4e2358a876182616f71a23f0326fc4abfbabf"
+    ]
+  },
+  "17": {
+    "paths": [
+      "/data/app/~~uqXd6gX0JKHIUvg42hVS0w==/dev.cyclone.cloak.probe.diag-Tz2DxNDD5QH0P-YJCRaXyw==/base.apk"
+    ],
+    "apk_hashes": [
+      "3f3a611307024ba2fa3bbe301df4e2358a876182616f71a23f0326fc4abfbabf"
+    ]
+  },
+  "permissions": [
+    [
+      "android.permission.ACCESS_WIFI_STATE",
+      "true"
+    ],
+    [
+      "com.google.android.gms.permission.AD_ID",
+      "true"
+    ]
+  ]
+}

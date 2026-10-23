@@ -1,0 +1,5 @@
+{
+  "boot_observed_completed_seconds_after_request": 45.882,
+  "timing": "upper bound from polling, not precise boot duration",
+  "reboots": 1
+}

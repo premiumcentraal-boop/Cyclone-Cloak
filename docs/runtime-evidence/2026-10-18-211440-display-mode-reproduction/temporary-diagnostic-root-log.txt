@@ -1,0 +1,342 @@
+--------- beginning of main
+I/CloakModule(19736): cloaking 17:com.google.android.apps.dreamliner (63 props)
+I/CloakModule(19736): native property hook installed
+I/CloakModule(19736): native property callback hook installed
+I/CloakModule(19736): [cloak-hook] mediadrm hook installed
+I/CloakModule(19736): [cloak-hook] camera hooks installed
+I/CloakModule(19736): [cloak-hook] display hooks installed
+I/CloakModule(19736): [cloak-hook] java callbacks installed
+I/CloakModule(19803): cloaking 17:com.google.android.as (63 props)
+I/CloakModule(19804): cloaking 17:com.google.android.apps.pixel.customizationbundle (63 props)
+I/CloakModule(19803): native property hook installed
+I/CloakModule(19803): native property callback hook installed
+I/CloakModule(19804): native property hook installed
+I/CloakModule(19804): native property callback hook installed
+I/CloakModule(19817): cloaking 17:com.google.android.apps.messaging (63 props)
+I/CloakModule(19803): [cloak-hook] mediadrm hook installed
+I/CloakModule(19803): [cloak-hook] camera hooks installed
+I/CloakModule(19803): [cloak-hook] display hooks installed
+I/CloakModule(19803): [cloak-hook] java callbacks installed
+I/CloakModule(19817): native property hook installed
+I/CloakModule(19817): native property callback hook installed
+I/CloakModule(19804): [cloak-hook] mediadrm hook installed
+I/CloakModule(19804): [cloak-hook] camera hooks installed
+I/CloakModule(19804): [cloak-hook] display hooks installed
+I/CloakModule(19804): [cloak-hook] java callbacks installed
+I/CloakModule(19817): [cloak-hook] mediadrm hook installed
+I/CloakModule(19817): [cloak-hook] camera hooks installed
+I/CloakModule(19817): [cloak-hook] display hooks installed
+I/CloakModule(19817): [cloak-hook] java callbacks installed
+I/CloakModule(20211): cloaking 17:com.google.android.gms (63 props)
+I/CloakModule(20211): native property hook installed
+I/CloakModule(20211): native property callback hook installed
+I/CloakModule(20211): [cloak-hook] mediadrm hook installed
+I/CloakModule(20211): [cloak-hook] camera hooks installed
+I/CloakModule(20211): [cloak-hook] display hooks installed
+I/CloakModule(20211): [cloak-hook] java callbacks installed
+I/CloakModule(20455): cloaking 17:com.google.android.repairmode (63 props)
+I/CloakModule(20455): native hook: dlopen failed
+I/CloakModule(20455): [cloak-hook] hook android.telephony.TelephonyManager.getImei failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.telephony.TelephonyManager.getImei failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.telephony.TelephonyManager.getMeid failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.telephony.TelephonyManager.getMeid failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.telephony.TelephonyManager.getDeviceId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.telephony.TelephonyManager.getDeviceId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.telephony.TelephonyManager.getSimSerialNumber failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.telephony.TelephonyManager.getSimSerialNumber failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.telephony.TelephonyManager.getSubscriberId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.telephony.TelephonyManager.getSubscriberId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkOperatorName failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkOperatorName failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkOperator failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkOperator failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.telephony.TelephonyManager.getSimOperatorName failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.telephony.TelephonyManager.getSimOperatorName failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.telephony.TelephonyManager.getSimOperator failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.telephony.TelephonyManager.getSimOperator failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.telephony.TelephonyManager.getSimCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.telephony.TelephonyManager.getSimCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.telephony.TelephonyManager.getPhoneCount failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.telephony.TelephonyManager.getActiveModemCount failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkType failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkType failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.telephony.TelephonyManager.getDataNetworkType failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.telephony.TelephonyManager.getDataNetworkType failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.provider.Settings$Secure.getString failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.provider.Settings$Secure.getStringForUser failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.content.res.Resources.getConfiguration failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook java.util.TimeZone.getDefault failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.net.wifi.WifiInfo.getMacAddress failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.bluetooth.BluetoothAdapter.getAddress failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.os.Build.getSerial failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.webkit.WebView.getSettings failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.media.MediaDrm.getPropertyByteArray failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] mediadrm hook installed
+I/CloakModule(20455): [cloak-hook] hook android.hardware.camera2.CameraManager.getCameraCharacteristics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.hardware.camera2.CameraCharacteristics.get failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] camera hooks installed
+I/CloakModule(20455): [cloak-hook] hook android.content.res.Resources.getDisplayMetrics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.view.Display.getMetrics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.view.Display.getRealMetrics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.view.Display.getRefreshRate failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.view.Display.getMode failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.view.Display.getSupportedModes failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] display hooks installed
+I/CloakModule(20455): [cloak-hook] hook android.app.Instrumentation.callApplicationOnCreate failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.repairmode/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20455): [cloak-hook] java callbacks installed
+I/CloakModule(20474): cloaking 17:com.android.pixeldisplayservice (63 props)
+I/CloakModule(20474): native hook: dlopen failed
+I/CloakModule(20474): [cloak-hook] hook android.telephony.TelephonyManager.getImei failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.telephony.TelephonyManager.getImei failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.telephony.TelephonyManager.getMeid failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.telephony.TelephonyManager.getMeid failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.telephony.TelephonyManager.getDeviceId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.telephony.TelephonyManager.getDeviceId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.telephony.TelephonyManager.getSimSerialNumber failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.telephony.TelephonyManager.getSimSerialNumber failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.telephony.TelephonyManager.getSubscriberId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.telephony.TelephonyManager.getSubscriberId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkOperatorName failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkOperatorName failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkOperator failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkOperator failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.telephony.TelephonyManager.getSimOperatorName failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.telephony.TelephonyManager.getSimOperatorName failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.telephony.TelephonyManager.getSimOperator failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.telephony.TelephonyManager.getSimOperator failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.telephony.TelephonyManager.getSimCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.telephony.TelephonyManager.getSimCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.telephony.TelephonyManager.getPhoneCount failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.telephony.TelephonyManager.getActiveModemCount failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkType failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkType failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.telephony.TelephonyManager.getDataNetworkType failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.telephony.TelephonyManager.getDataNetworkType failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.provider.Settings$Secure.getString failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.provider.Settings$Secure.getStringForUser failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.content.res.Resources.getConfiguration failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook java.util.TimeZone.getDefault failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.net.wifi.WifiInfo.getMacAddress failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.bluetooth.BluetoothAdapter.getAddress failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.os.Build.getSerial failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.webkit.WebView.getSettings failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.media.MediaDrm.getPropertyByteArray failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] mediadrm hook installed
+I/CloakModule(20474): [cloak-hook] hook android.hardware.camera2.CameraManager.getCameraCharacteristics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.hardware.camera2.CameraCharacteristics.get failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] camera hooks installed
+I/CloakModule(20474): [cloak-hook] hook android.content.res.Resources.getDisplayMetrics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.view.Display.getMetrics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.view.Display.getRealMetrics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.view.Display.getRefreshRate failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.view.Display.getMode failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.view.Display.getSupportedModes failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] display hooks installed
+I/CloakModule(20474): [cloak-hook] hook android.app.Instrumentation.callApplicationOnCreate failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.pixeldisplayservice/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20474): [cloak-hook] java callbacks installed
+I/CloakModule(20503): cloaking 17:com.google.android.apps.work.clouddpc (63 props)
+I/CloakModule(20503): native property hook installed
+I/CloakModule(20503): native property callback hook installed
+I/CloakModule(20503): [cloak-hook] mediadrm hook installed
+I/CloakModule(20503): [cloak-hook] camera hooks installed
+I/CloakModule(20503): [cloak-hook] display hooks installed
+I/CloakModule(20503): [cloak-hook] java callbacks installed
+I/CloakModule(20545): cloaking 17:com.google.android.euicc (63 props)
+I/CloakModule(20545): native property hook installed
+I/CloakModule(20545): native property callback hook installed
+I/CloakModule(20545): [cloak-hook] mediadrm hook installed
+I/CloakModule(20545): [cloak-hook] camera hooks installed
+I/CloakModule(20545): [cloak-hook] display hooks installed
+I/CloakModule(20545): [cloak-hook] java callbacks installed
+I/CloakModule(20582): cloaking 17:com.google.euiccpixel (63 props)
+I/CloakModule(20582): native hook: dlopen failed
+I/CloakModule(20582): [cloak-hook] hook android.telephony.TelephonyManager.getImei failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.telephony.TelephonyManager.getImei failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.telephony.TelephonyManager.getMeid failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.telephony.TelephonyManager.getMeid failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.telephony.TelephonyManager.getDeviceId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.telephony.TelephonyManager.getDeviceId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.telephony.TelephonyManager.getSimSerialNumber failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.telephony.TelephonyManager.getSimSerialNumber failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.telephony.TelephonyManager.getSubscriberId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkOperatorName failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkOperator failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.telephony.TelephonyManager.getSimOperatorName failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.telephony.TelephonyManager.getSimOperator failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.telephony.TelephonyManager.getSimCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.telephony.TelephonyManager.getPhoneCount failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.telephony.TelephonyManager.getActiveModemCount failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkType failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.telephony.TelephonyManager.getDataNetworkType failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.provider.Settings$Secure.getString failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.provider.Settings$Secure.getStringForUser failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.content.res.Resources.getConfiguration failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook java.util.TimeZone.getDefault failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.net.wifi.WifiInfo.getMacAddress failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.bluetooth.BluetoothAdapter.getAddress failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.os.Build.getSerial failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.webkit.WebView.getSettings failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.media.MediaDrm.getPropertyByteArray failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] mediadrm hook installed
+I/CloakModule(20582): [cloak-hook] hook android.hardware.camera2.CameraManager.getCameraCharacteristics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.hardware.camera2.CameraCharacteristics.get failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] camera hooks installed
+I/CloakModule(20582): [cloak-hook] hook android.content.res.Resources.getDisplayMetrics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.view.Display.getMetrics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.view.Display.getRealMetrics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.view.Display.getRefreshRate failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.view.Display.getMode failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.view.Display.getSupportedModes failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] display hooks installed
+I/CloakModule(20582): [cloak-hook] hook android.app.Instrumentation.callApplicationOnCreate failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.euiccpixel/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20582): [cloak-hook] java callbacks installed
+I/CloakModule(20602): cloaking 17:moe.shizuku.privileged.api (63 props)
+I/CloakModule(20602): native property hook installed
+I/CloakModule(20602): native property callback hook installed
+I/CloakModule(20602): [cloak-hook] mediadrm hook installed
+I/CloakModule(20602): [cloak-hook] camera hooks installed
+I/CloakModule(20602): [cloak-hook] display hooks installed
+I/CloakModule(20602): [cloak-hook] java callbacks installed
+I/CloakModule(20626): cloaking 17:com.android.traceur (63 props)
+I/CloakModule(20626): native hook: dlopen failed
+I/CloakModule(20626): [cloak-hook] hook android.telephony.TelephonyManager.getImei failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.telephony.TelephonyManager.getImei failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.telephony.TelephonyManager.getMeid failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.telephony.TelephonyManager.getMeid failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.telephony.TelephonyManager.getDeviceId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.telephony.TelephonyManager.getDeviceId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.telephony.TelephonyManager.getSimSerialNumber failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.telephony.TelephonyManager.getSimSerialNumber failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.telephony.TelephonyManager.getSubscriberId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.telephony.TelephonyManager.getSubscriberId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkOperatorName failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkOperatorName failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkOperator failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkOperator failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.telephony.TelephonyManager.getSimOperatorName failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.telephony.TelephonyManager.getSimOperatorName failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.telephony.TelephonyManager.getSimOperator failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.telephony.TelephonyManager.getSimOperator failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.telephony.TelephonyManager.getSimCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.telephony.TelephonyManager.getSimCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.telephony.TelephonyManager.getPhoneCount failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.telephony.TelephonyManager.getActiveModemCount failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkType failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkType failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.telephony.TelephonyManager.getDataNetworkType failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.telephony.TelephonyManager.getDataNetworkType failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.provider.Settings$Secure.getString failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.provider.Settings$Secure.getStringForUser failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.content.res.Resources.getConfiguration failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook java.util.TimeZone.getDefault failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.net.wifi.WifiInfo.getMacAddress failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.bluetooth.BluetoothAdapter.getAddress failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.os.Build.getSerial failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.webkit.WebView.getSettings failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.media.MediaDrm.getPropertyByteArray failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] mediadrm hook installed
+I/CloakModule(20626): [cloak-hook] hook android.hardware.camera2.CameraManager.getCameraCharacteristics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.hardware.camera2.CameraCharacteristics.get failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] camera hooks installed
+I/CloakModule(20626): [cloak-hook] hook android.content.res.Resources.getDisplayMetrics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.view.Display.getMetrics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.view.Display.getRealMetrics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.view.Display.getRefreshRate failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.view.Display.getMode failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.view.Display.getSupportedModes failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] display hooks installed
+I/CloakModule(20626): [cloak-hook] hook android.app.Instrumentation.callApplicationOnCreate failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.traceur/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20626): [cloak-hook] java callbacks installed
+I/CloakModule(20647): cloaking 17:com.google.android.GoogleCamera (63 props)
+I/CloakModule(20647): native hook: dlopen failed
+I/CloakModule(20647): [cloak-hook] hook android.telephony.TelephonyManager.getImei failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.telephony.TelephonyManager.getImei failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.telephony.TelephonyManager.getMeid failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.telephony.TelephonyManager.getMeid failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.telephony.TelephonyManager.getDeviceId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.telephony.TelephonyManager.getDeviceId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.telephony.TelephonyManager.getSimSerialNumber failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.telephony.TelephonyManager.getSimSerialNumber failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.telephony.TelephonyManager.getSubscriberId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkOperatorName failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkOperator failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.telephony.TelephonyManager.getSimOperatorName failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.telephony.TelephonyManager.getSimOperator failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.telephony.TelephonyManager.getSimCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.telephony.TelephonyManager.getPhoneCount failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.telephony.TelephonyManager.getActiveModemCount failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.telephony.TelephonyManager.getNetworkType failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.telephony.TelephonyManager.getDataNetworkType failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.provider.Settings$Secure.getString failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.provider.Settings$Secure.getStringForUser failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.content.res.Resources.getConfiguration failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook java.util.TimeZone.getDefault failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.net.wifi.WifiInfo.getMacAddress failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.bluetooth.BluetoothAdapter.getAddress failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.os.Build.getSerial failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.webkit.WebView.getSettings failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.media.MediaDrm.getPropertyByteArray failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] mediadrm hook installed
+I/CloakModule(20647): [cloak-hook] hook android.hardware.camera2.CameraManager.getCameraCharacteristics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.hardware.camera2.CameraCharacteristics.get failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] camera hooks installed
+I/CloakModule(20647): [cloak-hook] hook android.content.res.Resources.getDisplayMetrics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.view.Display.getMetrics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.view.Display.getRealMetrics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.view.Display.getRefreshRate failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.view.Display.getMode failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.view.Display.getSupportedModes failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] display hooks installed
+I/CloakModule(20647): [cloak-hook] hook android.app.Instrumentation.callApplicationOnCreate failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.android.GoogleCamera/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+I/CloakModule(20647): [cloak-hook] java callbacks installed
+I/CloakModule(20709): cloaking 17:com.google.android.apps.diagnosticstool (63 props)
+I/CloakModule(20709): native property hook installed
+I/CloakModule(20709): native property callback hook installed
+I/CloakModule(20709): [cloak-hook] mediadrm hook installed
+I/CloakModule(20709): [cloak-hook] camera hooks installed
+I/CloakModule(20709): [cloak-hook] display hooks installed
+I/CloakModule(20709): [cloak-hook] java callbacks installed
+I/CloakModule(20730): cloaking 17:com.google.android.projection.gearhead (63 props)
+I/CloakModule(20730): native property hook installed
+I/CloakModule(20730): native property callback hook installed
+I/CloakModule(20730): [cloak-hook] mediadrm hook installed
+I/CloakModule(20730): [cloak-hook] camera hooks installed
+I/CloakModule(20730): [cloak-hook] display hooks installed
+I/CloakModule(20730): [cloak-hook] java callbacks installed
+I/CloakModule(20775): cloaking 17:com.android.angle (63 props)
+I/CloakModule(20775): native property hook installed
+I/CloakModule(20775): native property callback hook installed
+I/CloakModule(20775): [cloak-hook] mediadrm hook installed
+I/CloakModule(20775): [cloak-hook] camera hooks installed
+I/CloakModule(20775): [cloak-hook] display hooks installed
+I/CloakModule(20775): [cloak-hook] java callbacks installed

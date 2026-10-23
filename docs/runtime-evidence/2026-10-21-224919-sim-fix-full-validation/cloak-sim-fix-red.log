@@ -1,0 +1,48 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.11.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :probe:preBuild UP-TO-DATE
+> Task :probe:preDiagnosticsDebugBuild UP-TO-DATE
+> Task :probe:javaPreCompileDiagnosticsDebug UP-TO-DATE
+> Task :probe:checkDiagnosticsDebugAarMetadata UP-TO-DATE
+> Task :probe:generateDiagnosticsDebugResValues UP-TO-DATE
+> Task :probe:mapDiagnosticsDebugSourceSetPaths UP-TO-DATE
+> Task :probe:generateDiagnosticsDebugResources UP-TO-DATE
+> Task :probe:mergeDiagnosticsDebugResources UP-TO-DATE
+> Task :probe:packageDiagnosticsDebugResources UP-TO-DATE
+> Task :probe:parseDiagnosticsDebugLocalResources UP-TO-DATE
+> Task :probe:createDiagnosticsDebugCompatibleScreenManifests UP-TO-DATE
+> Task :probe:extractDeepLinksDiagnosticsDebug UP-TO-DATE
+> Task :probe:processDiagnosticsDebugMainManifest UP-TO-DATE
+> Task :probe:processDiagnosticsDebugManifest UP-TO-DATE
+> Task :probe:processDiagnosticsDebugManifestForPackage UP-TO-DATE
+> Task :probe:processDiagnosticsDebugResources UP-TO-DATE
+> Task :probe:compileDiagnosticsDebugJavaWithJavac
+> Task :probe:preDiagnosticsDebugUnitTestBuild UP-TO-DATE
+> Task :probe:javaPreCompileDiagnosticsDebugUnitTest UP-TO-DATE
+> Task :probe:processDiagnosticsDebugJavaRes NO-SOURCE
+> Task :probe:processDiagnosticsDebugUnitTestJavaRes UP-TO-DATE
+> Task :probe:bundleDiagnosticsDebugClassesToCompileJar
+> Task :probe:bundleDiagnosticsDebugClassesToRuntimeJar
+> Task :probe:compileDiagnosticsDebugUnitTestJavaWithJavac
+
+> Task :probe:testDiagnosticsDebugUnitTest FAILED
+
+SimStateExpectationTest > absentUnavailableAndMalformedExpectationsRemainUnknown FAILED
+    java.lang.NullPointerException at SimStateExpectationTest.java:28
+
+SimStateExpectationTest > nullExpectationProducesObservationWithoutUnboxing FAILED
+    java.lang.NullPointerException at SimStateExpectationTest.java:10
+
+3 tests completed, 2 failed
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':probe:testDiagnosticsDebugUnitTest'.
+> There were failing tests. See the report at: file:///C:/Users/Agent/Cyclone/cloak-repo/android/probe/build/reports/tests/testDiagnosticsDebugUnitTest/index.html
+
+* Try:
+> Run with --scan to get full insights.
+
+BUILD FAILED in 19s
+21 actionable tasks: 5 executed, 16 up-to-date

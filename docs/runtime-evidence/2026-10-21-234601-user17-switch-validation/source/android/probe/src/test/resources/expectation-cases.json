@@ -1,0 +1,733 @@
+[
+  {
+    "name": "exact-match",
+    "rule": {
+      "policy": "EXACT",
+      "value": "fixed"
+    },
+    "actual": "fixed",
+    "status": "PASS",
+    "reason": "EXACT_MATCH"
+  },
+  {
+    "name": "exact-mismatch",
+    "rule": {
+      "policy": "EXACT",
+      "value": "fixed"
+    },
+    "actual": "other",
+    "status": "FAIL",
+    "reason": "EXACT_MISMATCH"
+  },
+  {
+    "name": "exact-unavailable",
+    "rule": {
+      "policy": "EXACT",
+      "value": "fixed"
+    },
+    "actual": null,
+    "status": "FAIL",
+    "reason": "EXACT_MISMATCH"
+  },
+  {
+    "name": "exact-null",
+    "rule": {
+      "policy": "EXACT",
+      "value": null
+    },
+    "actual": null,
+    "status": "PASS",
+    "reason": "EXACT_MATCH"
+  },
+  {
+    "name": "exact-malformed",
+    "rule": {
+      "policy": "EXACT"
+    },
+    "actual": "fixed",
+    "status": "FAIL",
+    "reason": "MALFORMED_EXPECTATION"
+  },
+  {
+    "name": "present",
+    "rule": {
+      "policy": "PRESENT"
+    },
+    "actual": false,
+    "status": "PASS",
+    "reason": "VALUE_PRESENT"
+  },
+  {
+    "name": "present-unavailable",
+    "rule": {
+      "policy": "PRESENT"
+    },
+    "actual": null,
+    "status": "MISSING",
+    "reason": "EXPECTATION_VALUE_UNAVAILABLE"
+  },
+  {
+    "name": "present-empty",
+    "rule": {
+      "policy": "PRESENT"
+    },
+    "actual": "",
+    "status": "MISSING",
+    "reason": "EXPECTATION_VALUE_UNAVAILABLE"
+  },
+  {
+    "name": "present-malformed",
+    "rule": {
+      "policy": "PRESENT",
+      "value": 1
+    },
+    "actual": 1,
+    "status": "FAIL",
+    "reason": "MALFORMED_EXPECTATION"
+  },
+  {
+    "name": "TYPED-valid",
+    "rule": {
+      "policy": "TYPED",
+      "type": "boolean"
+    },
+    "actual": false,
+    "status": "PASS",
+    "reason": "TYPE_VALID"
+  },
+  {
+    "name": "TYPED-type-fail",
+    "rule": {
+      "policy": "TYPED",
+      "type": "boolean"
+    },
+    "actual": 0,
+    "status": "FAIL",
+    "reason": "EXPECTATION_TYPE_MISMATCH"
+  },
+  {
+    "name": "TYPED-unavailable",
+    "rule": {
+      "policy": "TYPED",
+      "type": "boolean"
+    },
+    "actual": null,
+    "status": "MISSING",
+    "reason": "EXPECTATION_VALUE_UNAVAILABLE"
+  },
+  {
+    "name": "TYPED-malformed",
+    "rule": {
+      "policy": "TYPED",
+      "type": "secret"
+    },
+    "actual": false,
+    "status": "FAIL",
+    "reason": "MALFORMED_EXPECTATION"
+  },
+  {
+    "name": "STABLE_ACROSS_SWITCH-valid",
+    "rule": {
+      "policy": "STABLE_ACROSS_SWITCH",
+      "type": "boolean"
+    },
+    "actual": false,
+    "status": "OBSERVED",
+    "reason": "STABILITY_BASELINE_REQUIRED"
+  },
+  {
+    "name": "STABLE_ACROSS_SWITCH-type-fail",
+    "rule": {
+      "policy": "STABLE_ACROSS_SWITCH",
+      "type": "boolean"
+    },
+    "actual": 0,
+    "status": "FAIL",
+    "reason": "EXPECTATION_TYPE_MISMATCH"
+  },
+  {
+    "name": "STABLE_ACROSS_SWITCH-unavailable",
+    "rule": {
+      "policy": "STABLE_ACROSS_SWITCH",
+      "type": "boolean"
+    },
+    "actual": null,
+    "status": "MISSING",
+    "reason": "EXPECTATION_VALUE_UNAVAILABLE"
+  },
+  {
+    "name": "STABLE_ACROSS_SWITCH-malformed",
+    "rule": {
+      "policy": "STABLE_ACROSS_SWITCH",
+      "type": "secret"
+    },
+    "actual": false,
+    "status": "FAIL",
+    "reason": "MALFORMED_EXPECTATION"
+  },
+  {
+    "name": "stable-malformed-change",
+    "rule": {
+      "policy": "STABLE_ACROSS_SWITCH",
+      "type": "boolean",
+      "expected_change": "true"
+    },
+    "actual": false,
+    "status": "FAIL",
+    "reason": "MALFORMED_EXPECTATION"
+  },
+  {
+    "name": "range-0",
+    "rule": {
+      "policy": "RANGE",
+      "min": 0,
+      "max": 10
+    },
+    "actual": 0,
+    "status": "PASS",
+    "reason": "RANGE_VALID"
+  },
+  {
+    "name": "range-10",
+    "rule": {
+      "policy": "RANGE",
+      "min": 0,
+      "max": 10
+    },
+    "actual": 10,
+    "status": "PASS",
+    "reason": "RANGE_VALID"
+  },
+  {
+    "name": "range--1",
+    "rule": {
+      "policy": "RANGE",
+      "min": 0,
+      "max": 10
+    },
+    "actual": -1,
+    "status": "FAIL",
+    "reason": "EXPECTATION_OUT_OF_RANGE"
+  },
+  {
+    "name": "range-11",
+    "rule": {
+      "policy": "RANGE",
+      "min": 0,
+      "max": 10
+    },
+    "actual": 11,
+    "status": "FAIL",
+    "reason": "EXPECTATION_OUT_OF_RANGE"
+  },
+  {
+    "name": "range-True",
+    "rule": {
+      "policy": "RANGE",
+      "min": 0,
+      "max": 10
+    },
+    "actual": true,
+    "status": "FAIL",
+    "reason": "EXPECTATION_TYPE_MISMATCH"
+  },
+  {
+    "name": "range-1.5",
+    "rule": {
+      "policy": "RANGE",
+      "min": 0,
+      "max": 10
+    },
+    "actual": 1.5,
+    "status": "FAIL",
+    "reason": "EXPECTATION_TYPE_MISMATCH"
+  },
+  {
+    "name": "range-None",
+    "rule": {
+      "policy": "RANGE",
+      "min": 0,
+      "max": 10
+    },
+    "actual": null,
+    "status": "MISSING",
+    "reason": "EXPECTATION_VALUE_UNAVAILABLE"
+  },
+  {
+    "name": "range-malformed",
+    "rule": {
+      "policy": "RANGE",
+      "min": 2,
+      "max": 1
+    },
+    "actual": 1,
+    "status": "FAIL",
+    "reason": "MALFORMED_EXPECTATION"
+  },
+  {
+    "name": "range-malformed-type",
+    "rule": {
+      "policy": "RANGE",
+      "min": false,
+      "max": 1
+    },
+    "actual": 1,
+    "status": "FAIL",
+    "reason": "MALFORMED_EXPECTATION"
+  },
+  {
+    "name": "enum-0",
+    "rule": {
+      "policy": "ENUM",
+      "values": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    "actual": 0,
+    "status": "PASS",
+    "reason": "ENUM_VALID"
+  },
+  {
+    "name": "enum-3",
+    "rule": {
+      "policy": "ENUM",
+      "values": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    "actual": 3,
+    "status": "PASS",
+    "reason": "ENUM_VALID"
+  },
+  {
+    "name": "enum-4",
+    "rule": {
+      "policy": "ENUM",
+      "values": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    "actual": 4,
+    "status": "FAIL",
+    "reason": "EXPECTATION_NOT_IN_ENUM"
+  },
+  {
+    "name": "enum-False",
+    "rule": {
+      "policy": "ENUM",
+      "values": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    "actual": false,
+    "status": "FAIL",
+    "reason": "EXPECTATION_NOT_IN_ENUM"
+  },
+  {
+    "name": "enum-1",
+    "rule": {
+      "policy": "ENUM",
+      "values": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    "actual": "1",
+    "status": "FAIL",
+    "reason": "EXPECTATION_NOT_IN_ENUM"
+  },
+  {
+    "name": "enum-None",
+    "rule": {
+      "policy": "ENUM",
+      "values": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    "actual": null,
+    "status": "MISSING",
+    "reason": "EXPECTATION_VALUE_UNAVAILABLE"
+  },
+  {
+    "name": "enum-malformed",
+    "rule": {
+      "policy": "ENUM",
+      "values": []
+    },
+    "actual": 0,
+    "status": "FAIL",
+    "reason": "MALFORMED_EXPECTATION"
+  },
+  {
+    "name": "external-54",
+    "rule": {
+      "policy": "EXTERNAL_STATE",
+      "type": "integer",
+      "min": 0,
+      "max": 100,
+      "unavailable": [
+        {
+          "value": -1,
+          "reason": "UNKNOWN"
+        }
+      ]
+    },
+    "actual": 54,
+    "status": "OBSERVED",
+    "reason": "EXTERNAL_STATE_AVAILABLE"
+  },
+  {
+    "name": "external--1",
+    "rule": {
+      "policy": "EXTERNAL_STATE",
+      "type": "integer",
+      "min": 0,
+      "max": 100,
+      "unavailable": [
+        {
+          "value": -1,
+          "reason": "UNKNOWN"
+        }
+      ]
+    },
+    "actual": -1,
+    "status": "OBSERVED",
+    "reason": "EXTERNAL_STATE_UNAVAILABLE:UNKNOWN"
+  },
+  {
+    "name": "external-None",
+    "rule": {
+      "policy": "EXTERNAL_STATE",
+      "type": "integer",
+      "min": 0,
+      "max": 100,
+      "unavailable": [
+        {
+          "value": -1,
+          "reason": "UNKNOWN"
+        }
+      ]
+    },
+    "actual": null,
+    "status": "OBSERVED",
+    "reason": "EXTERNAL_STATE_UNAVAILABLE:NO_VALUE"
+  },
+  {
+    "name": "external--2",
+    "rule": {
+      "policy": "EXTERNAL_STATE",
+      "type": "integer",
+      "min": 0,
+      "max": 100,
+      "unavailable": [
+        {
+          "value": -1,
+          "reason": "UNKNOWN"
+        }
+      ]
+    },
+    "actual": -2,
+    "status": "FAIL",
+    "reason": "EXPECTATION_OUT_OF_RANGE"
+  },
+  {
+    "name": "external-54",
+    "rule": {
+      "policy": "EXTERNAL_STATE",
+      "type": "integer",
+      "min": 0,
+      "max": 100,
+      "unavailable": [
+        {
+          "value": -1,
+          "reason": "UNKNOWN"
+        }
+      ]
+    },
+    "actual": "54",
+    "status": "FAIL",
+    "reason": "EXPECTATION_TYPE_MISMATCH"
+  },
+  {
+    "name": "external-malformed",
+    "rule": {
+      "policy": "EXTERNAL_STATE",
+      "type": "integer",
+      "unavailable": [
+        {
+          "value": -1,
+          "reason": "raw private text"
+        }
+      ]
+    },
+    "actual": 1,
+    "status": "FAIL",
+    "reason": "MALFORMED_EXPECTATION"
+  },
+  {
+    "name": "external-missing-unavailable",
+    "rule": {
+      "policy": "EXTERNAL_STATE",
+      "type": "string"
+    },
+    "actual": null,
+    "status": "FAIL",
+    "reason": "MALFORMED_EXPECTATION"
+  },
+  {
+    "name": "mac-valid",
+    "rule": {
+      "policy": "TYPED",
+      "type": "mac"
+    },
+    "actual": "AB:CD:EF:00:01:02",
+    "status": "PASS",
+    "reason": "TYPE_VALID"
+  },
+  {
+    "name": "mac-invalid",
+    "rule": {
+      "policy": "TYPED",
+      "type": "mac"
+    },
+    "actual": "bad",
+    "status": "FAIL",
+    "reason": "EXPECTATION_TYPE_MISMATCH"
+  },
+  {
+    "name": "mac-unavailable",
+    "rule": {
+      "policy": "TYPED",
+      "type": "mac"
+    },
+    "actual": null,
+    "status": "MISSING",
+    "reason": "EXPECTATION_VALUE_UNAVAILABLE"
+  },
+  {
+    "name": "packages-valid",
+    "rule": {
+      "policy": "TYPED",
+      "type": "packages"
+    },
+    "actual": [
+      "android",
+      "dev.cyclone.probe"
+    ],
+    "status": "PASS",
+    "reason": "TYPE_VALID"
+  },
+  {
+    "name": "packages-invalid",
+    "rule": {
+      "policy": "TYPED",
+      "type": "packages"
+    },
+    "actual": [
+      "bad package"
+    ],
+    "status": "FAIL",
+    "reason": "EXPECTATION_TYPE_MISMATCH"
+  },
+  {
+    "name": "packages-unavailable",
+    "rule": {
+      "policy": "TYPED",
+      "type": "packages"
+    },
+    "actual": null,
+    "status": "MISSING",
+    "reason": "EXPECTATION_VALUE_UNAVAILABLE"
+  },
+  {
+    "name": "libraries-valid",
+    "rule": {
+      "policy": "TYPED",
+      "type": "libraries"
+    },
+    "actual": [
+      "libcloak.so",
+      "libpine.so"
+    ],
+    "status": "PASS",
+    "reason": "TYPE_VALID"
+  },
+  {
+    "name": "libraries-invalid",
+    "rule": {
+      "policy": "TYPED",
+      "type": "libraries"
+    },
+    "actual": [
+      "/private/path/lib.so"
+    ],
+    "status": "FAIL",
+    "reason": "EXPECTATION_TYPE_MISMATCH"
+  },
+  {
+    "name": "libraries-unavailable",
+    "rule": {
+      "policy": "TYPED",
+      "type": "libraries"
+    },
+    "actual": null,
+    "status": "MISSING",
+    "reason": "EXPECTATION_VALUE_UNAVAILABLE"
+  },
+  {
+    "name": "sensors-valid",
+    "rule": {
+      "policy": "TYPED",
+      "type": "sensors"
+    },
+    "actual": [
+      {
+        "type": 65536,
+        "name": "Vendor sensor",
+        "vendor": ""
+      }
+    ],
+    "status": "PASS",
+    "reason": "TYPE_VALID"
+  },
+  {
+    "name": "sensors-invalid",
+    "rule": {
+      "policy": "TYPED",
+      "type": "sensors"
+    },
+    "actual": [
+      {
+        "type": true,
+        "name": "x",
+        "vendor": "y"
+      }
+    ],
+    "status": "FAIL",
+    "reason": "EXPECTATION_TYPE_MISMATCH"
+  },
+  {
+    "name": "sensors-unavailable",
+    "rule": {
+      "policy": "TYPED",
+      "type": "sensors"
+    },
+    "actual": null,
+    "status": "MISSING",
+    "reason": "EXPECTATION_VALUE_UNAVAILABLE"
+  },
+  {
+    "name": "packages-empty-is-valid-shape",
+    "rule": {
+      "policy": "TYPED",
+      "type": "packages"
+    },
+    "actual": [],
+    "status": "PASS",
+    "reason": "TYPE_VALID"
+  },
+  {
+    "name": "libraries-empty-is-valid-shape",
+    "rule": {
+      "policy": "TYPED",
+      "type": "libraries"
+    },
+    "actual": [],
+    "status": "PASS",
+    "reason": "TYPE_VALID"
+  },
+  {
+    "name": "sensors-empty-is-valid-shape",
+    "rule": {
+      "policy": "TYPED",
+      "type": "sensors"
+    },
+    "actual": [],
+    "status": "PASS",
+    "reason": "TYPE_VALID"
+  },
+  {
+    "name": "unknown-policy",
+    "rule": {
+      "policy": "VERIFY"
+    },
+    "actual": true,
+    "status": "FAIL",
+    "reason": "MALFORMED_EXPECTATION"
+  },
+  {
+    "name": "typed-extra-keys",
+    "rule": {
+      "policy": "TYPED",
+      "type": "boolean",
+      "surprise": true
+    },
+    "actual": true,
+    "status": "FAIL",
+    "reason": "MALFORMED_EXPECTATION"
+  },
+  {
+    "name": "unknown-policy-type",
+    "rule": {
+      "policy": []
+    },
+    "actual": null,
+    "status": "FAIL",
+    "reason": "MALFORMED_EXPECTATION"
+  },
+  {
+    "name": "unknown-type-array",
+    "rule": {
+      "policy": "TYPED",
+      "type": []
+    },
+    "actual": null,
+    "status": "FAIL",
+    "reason": "MALFORMED_EXPECTATION"
+  },
+  {
+    "name": "enum-complex-members",
+    "rule": {
+      "policy": "ENUM",
+      "values": [
+        {}
+      ]
+    },
+    "actual": null,
+    "status": "FAIL",
+    "reason": "MALFORMED_EXPECTATION"
+  },
+  {
+    "name": "external-complex-unavailable",
+    "rule": {
+      "policy": "EXTERNAL_STATE",
+      "type": "string",
+      "unavailable": [
+        {
+          "value": [],
+          "reason": "EMPTY"
+        }
+      ]
+    },
+    "actual": null,
+    "status": "FAIL",
+    "reason": "MALFORMED_EXPECTATION"
+  }
+]

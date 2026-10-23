@@ -1,0 +1,4 @@
+{
+  "approved": "One instrumented alpha.27/code 51 retest with separate ZIP/ABI hashes; published original untouched",
+  "limits": "One reinstall/reboot; stop if record absent; no second fix"
+}

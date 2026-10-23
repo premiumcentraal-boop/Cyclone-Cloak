@@ -1,0 +1,8 @@
+{
+  "published_sha256": "80e6b347fcff34794a377247569a0fc369c6e1d4c560e128b396ce9c12c7fc42",
+  "canonical_expected_sha256": "80e6b347fcff34794a377247569a0fc369c6e1d4c560e128b396ce9c12c7fc42",
+  "canonical_match": true,
+  "report_raw_profile_sha256": "2f7b201e99d58322efbf34663a91d30323f160e939b10882d133c2d3a441831a",
+  "fixture_source": "C",
+  "report_label": "external"
+}

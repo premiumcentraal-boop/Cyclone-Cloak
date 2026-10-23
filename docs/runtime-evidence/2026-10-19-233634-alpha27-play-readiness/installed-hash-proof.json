@@ -1,0 +1,14 @@
+{
+  "installed": {
+    "dev.cyclone.cloak": {
+      "android_user": 17,
+      "apk_sha256": "2fd83e2cbaf031ea563990e8a6e54154067351f51f074d25d9f4592c013d282e"
+    },
+    "dev.cyclone.cloak.playevidence": {
+      "android_user": 17,
+      "apk_sha256": "5e58b57e7d394ecccb4d5bb589df3e8130022df5b5abd10537dabbfcd0c08868"
+    }
+  },
+  "module_prop": "id=cyclone_cloak\nname=Cyclone Cloak\nversion=v0.11.0-alpha.27\nversionCode=51\nauthor=Cyclone Cloak contributors\ndescription=Device-profile engine for Cyclone (platform). Manage per-app profiles from the Cyclone Cloak companion app. Requires platform.\n",
+  "original_report_sha256": "1392e889c78ad779698be6a7d428e2bc95bfc9c19377d2416c4fcaaa8832c72b"
+}

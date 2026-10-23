@@ -1,0 +1,1429 @@
+{
+  "format": 1,
+  "fixture": "a",
+  "package": "dev.cyclone.cloak.probe.diag",
+  "uid": 10321,
+  "pid": 13276,
+  "request_id": "filesystem-2026-10-21-230811-0-2",
+  "session_generation": 1,
+  "profile_sha256": "da878a8a5c51ef62324fd977d85c06fd830fa9c3896a1060621dbfc4e02efa98",
+  "filesystem_reader_failures": [
+    {
+      "exception_class": "java.nio.file.AccessDeniedException",
+      "exception_message": "REDACTED_EXCEPTION_MESSAGE",
+      "message_redacted": true,
+      "failed_row_id": "diagnostics.filesystem.build_prop",
+      "stack_trace": [
+        {
+          "class": "sun.nio.fs.UnixFileSystemProvider",
+          "method": "newByteChannel",
+          "line": 220
+        },
+        {
+          "class": "java.nio.file.Files",
+          "method": "newByteChannel",
+          "line": 371
+        },
+        {
+          "class": "java.nio.file.Files",
+          "method": "newByteChannel",
+          "line": 422
+        },
+        {
+          "class": "java.nio.file.spi.FileSystemProvider",
+          "method": "newInputStream",
+          "line": 420
+        },
+        {
+          "class": "java.nio.file.Files",
+          "method": "newInputStream",
+          "line": 156
+        },
+        {
+          "class": "dev.cyclone.cloak.probe.FilesystemReadGuard",
+          "method": "lambda$collect$1",
+          "line": 25
+        },
+        {
+          "class": "dev.cyclone.cloak.probe.FilesystemReadGuard$$ExternalSyntheticLambda3",
+          "method": "open",
+          "line": 0
+        },
+        {
+          "class": "dev.cyclone.cloak.probe.FilesystemReadGuard",
+          "method": "snapshot",
+          "line": 60
+        },
+        {
+          "class": "dev.cyclone.cloak.probe.FilesystemReadGuard",
+          "method": "lambda$collect$2",
+          "line": 33
+        },
+        {
+          "class": "dev.cyclone.cloak.probe.FilesystemReadGuard$$ExternalSyntheticLambda2",
+          "method": "call",
+          "line": 0
+        },
+        {
+          "class": "java.util.concurrent.FutureTask",
+          "method": "run",
+          "line": 328
+        },
+        {
+          "class": "java.util.concurrent.ThreadPoolExecutor",
+          "method": "runWorker",
+          "line": 1100
+        },
+        {
+          "class": "java.util.concurrent.ThreadPoolExecutor$Worker",
+          "method": "run",
+          "line": 624
+        },
+        {
+          "class": "java.lang.Thread",
+          "method": "run",
+          "line": 1572
+        }
+      ],
+      "stack_truncated": false,
+      "reason": "PERMISSION_DENIED"
+    },
+    {
+      "exception_class": "java.nio.file.AccessDeniedException",
+      "exception_message": "REDACTED_EXCEPTION_MESSAGE",
+      "message_redacted": true,
+      "failed_row_id": "diagnostics.filesystem.proc_version",
+      "stack_trace": [
+        {
+          "class": "sun.nio.fs.UnixFileSystemProvider",
+          "method": "newByteChannel",
+          "line": 220
+        },
+        {
+          "class": "java.nio.file.Files",
+          "method": "newByteChannel",
+          "line": 371
+        },
+        {
+          "class": "java.nio.file.Files",
+          "method": "newByteChannel",
+          "line": 422
+        },
+        {
+          "class": "java.nio.file.spi.FileSystemProvider",
+          "method": "newInputStream",
+          "line": 420
+        },
+        {
+          "class": "java.nio.file.Files",
+          "method": "newInputStream",
+          "line": 156
+        },
+        {
+          "class": "dev.cyclone.cloak.probe.FilesystemReadGuard",
+          "method": "lambda$collect$1",
+          "line": 25
+        },
+        {
+          "class": "dev.cyclone.cloak.probe.FilesystemReadGuard$$ExternalSyntheticLambda3",
+          "method": "open",
+          "line": 0
+        },
+        {
+          "class": "dev.cyclone.cloak.probe.FilesystemReadGuard",
+          "method": "snapshot",
+          "line": 60
+        },
+        {
+          "class": "dev.cyclone.cloak.probe.FilesystemReadGuard",
+          "method": "lambda$collect$2",
+          "line": 33
+        },
+        {
+          "class": "dev.cyclone.cloak.probe.FilesystemReadGuard$$ExternalSyntheticLambda2",
+          "method": "call",
+          "line": 0
+        },
+        {
+          "class": "java.util.concurrent.FutureTask",
+          "method": "run",
+          "line": 328
+        },
+        {
+          "class": "java.util.concurrent.ThreadPoolExecutor",
+          "method": "runWorker",
+          "line": 1100
+        },
+        {
+          "class": "java.util.concurrent.ThreadPoolExecutor$Worker",
+          "method": "run",
+          "line": 624
+        },
+        {
+          "class": "java.lang.Thread",
+          "method": "run",
+          "line": 1572
+        }
+      ],
+      "stack_truncated": false,
+      "reason": "PERMISSION_DENIED"
+    }
+  ],
+  "rows": [
+    {
+      "id": "build.MANUFACTURER",
+      "source": "android.os.Build",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 1
+    },
+    {
+      "id": "build.BRAND",
+      "source": "android.os.Build",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "build.MODEL",
+      "source": "android.os.Build",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "build.DEVICE",
+      "source": "android.os.Build",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "build.PRODUCT",
+      "source": "android.os.Build",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "build.HARDWARE",
+      "source": "android.os.Build",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "build.FINGERPRINT",
+      "source": "android.os.Build",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "build.ID",
+      "source": "android.os.Build",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "build.BOOTLOADER",
+      "source": "android.os.Build",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "build.SERIAL",
+      "source": "android.os.Build",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "build.getSerial",
+      "source": "android.os.Build",
+      "status": "BLOCKED",
+      "reason": "SecurityException",
+      "duration_ms": 2
+    },
+    {
+      "id": "build.TIME",
+      "source": "android.os.Build",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "build.TYPE",
+      "source": "android.os.Build",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "build.TAGS",
+      "source": "android.os.Build",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "version.SDK_INT",
+      "source": "android.os.Build.VERSION",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "version.RELEASE",
+      "source": "android.os.Build.VERSION",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "version.INCREMENTAL",
+      "source": "android.os.Build.VERSION",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "version.SECURITY_PATCH",
+      "source": "android.os.Build.VERSION",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "build.getRadioVersion",
+      "source": "android.os.Build",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.java.ro.product.model",
+      "source": "android.os.SystemProperties",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.native.ro.product.model",
+      "source": "libc.__system_property_get",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.java.ro.product.manufacturer",
+      "source": "android.os.SystemProperties",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.native.ro.product.manufacturer",
+      "source": "libc.__system_property_get",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.java.ro.product.brand",
+      "source": "android.os.SystemProperties",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.native.ro.product.brand",
+      "source": "libc.__system_property_get",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.java.ro.product.device",
+      "source": "android.os.SystemProperties",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.native.ro.product.device",
+      "source": "libc.__system_property_get",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.java.ro.product.name",
+      "source": "android.os.SystemProperties",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.native.ro.product.name",
+      "source": "libc.__system_property_get",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.java.ro.build.version.sdk",
+      "source": "android.os.SystemProperties",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.native.ro.build.version.sdk",
+      "source": "libc.__system_property_get",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.java.ro.build.fingerprint",
+      "source": "android.os.SystemProperties",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.native.ro.build.fingerprint",
+      "source": "libc.__system_property_get",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.java.ro.serialno",
+      "source": "android.os.SystemProperties",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.native.ro.serialno",
+      "source": "libc.__system_property_get",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.java.ro.sf.lcd_density",
+      "source": "android.os.SystemProperties",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 1
+    },
+    {
+      "id": "properties.native.ro.sf.lcd_density",
+      "source": "libc.__system_property_get",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.java.persist.sys.timezone",
+      "source": "android.os.SystemProperties",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.native.persist.sys.timezone",
+      "source": "libc.__system_property_get",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.nativeCallback.ro.product.model",
+      "source": "libc.__system_property_read_callback",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "telephony.simState",
+      "source": "android.telephony.TelephonyManager",
+      "status": "OBSERVED",
+      "reason": "EXTERNAL_STATE_AVAILABLE",
+      "duration_ms": 9
+    },
+    {
+      "id": "telephony.phoneType",
+      "source": "android.telephony.TelephonyManager",
+      "status": "PASS",
+      "reason": "ENUM_VALID",
+      "duration_ms": 4
+    },
+    {
+      "id": "telephony.roaming",
+      "source": "android.telephony.TelephonyManager",
+      "status": "PASS",
+      "reason": "TYPE_VALID",
+      "duration_ms": 2
+    },
+    {
+      "id": "telephony.imei0",
+      "source": "android.telephony.TelephonyManager",
+      "status": "BLOCKED",
+      "reason": "SecurityException",
+      "duration_ms": 4
+    },
+    {
+      "id": "telephony.imei1",
+      "source": "android.telephony.TelephonyManager",
+      "status": "BLOCKED",
+      "reason": "SecurityException",
+      "duration_ms": 1
+    },
+    {
+      "id": "telephony.deviceId",
+      "source": "android.telephony.TelephonyManager",
+      "status": "BLOCKED",
+      "reason": "SecurityException",
+      "duration_ms": 1
+    },
+    {
+      "id": "telephony.simSerial",
+      "source": "android.telephony.TelephonyManager",
+      "status": "BLOCKED",
+      "reason": "SecurityException",
+      "duration_ms": 1
+    },
+    {
+      "id": "telephony.phoneCount",
+      "source": "android.telephony.TelephonyManager",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "telephony.activeModemCount",
+      "source": "android.telephony.TelephonyManager",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "telephony.networkType",
+      "source": "android.telephony.TelephonyManager",
+      "status": "BLOCKED",
+      "reason": "SecurityException",
+      "duration_ms": 1
+    },
+    {
+      "id": "telephony.dataNetworkType",
+      "source": "android.telephony.TelephonyManager",
+      "status": "BLOCKED",
+      "reason": "SecurityException",
+      "duration_ms": 0
+    },
+    {
+      "id": "operator.networkNumeric",
+      "source": "android.telephony.TelephonyManager",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "operator.simNumeric",
+      "source": "android.telephony.TelephonyManager",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "operator.networkName",
+      "source": "android.telephony.TelephonyManager",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "operator.simName",
+      "source": "android.telephony.TelephonyManager",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "operator.networkCountry",
+      "source": "android.telephony.TelephonyManager",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "operator.simCountry",
+      "source": "android.telephony.TelephonyManager",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "telephony.subscriberId",
+      "source": "android.telephony.TelephonyManager",
+      "status": "BLOCKED",
+      "reason": "SecurityException",
+      "duration_ms": 1
+    },
+    {
+      "id": "settings.secure.androidId",
+      "source": "android.provider.Settings.Secure",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 4
+    },
+    {
+      "id": "settings.provider.androidId",
+      "source": "android.provider.Settings.Secure",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 1
+    },
+    {
+      "id": "settings.unrelatedControl",
+      "source": "android.provider.Settings.Secure",
+      "status": "OBSERVED",
+      "reason": "EXTERNAL_STATE_AVAILABLE",
+      "duration_ms": 3
+    },
+    {
+      "id": "wifi.objectMac",
+      "source": "android.net.wifi.WifiInfo",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "wifi.serviceMac",
+      "source": "android.net.wifi.WifiInfo",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 2
+    },
+    {
+      "id": "wifi.bssid",
+      "source": "android.net.wifi.WifiInfo",
+      "status": "BLOCKED",
+      "reason": "PERMISSION_DENIED:android.permission.ACCESS_FINE_LOCATION",
+      "duration_ms": 2
+    },
+    {
+      "id": "wifi.linkSpeed",
+      "source": "android.net.wifi.WifiInfo",
+      "status": "OBSERVED",
+      "reason": "EXTERNAL_STATE_AVAILABLE",
+      "duration_ms": 4
+    },
+    {
+      "id": "wifi.ssid",
+      "source": "android.net.wifi.WifiInfo",
+      "status": "BLOCKED",
+      "reason": "PERMISSION_DENIED:android.permission.ACCESS_FINE_LOCATION",
+      "duration_ms": 2
+    },
+    {
+      "id": "bluetooth.address",
+      "source": "android.bluetooth.BluetoothAdapter",
+      "status": "BLOCKED",
+      "reason": "PERMISSION_DENIED:android.permission.BLUETOOTH_CONNECT",
+      "duration_ms": 0
+    },
+    {
+      "id": "bluetooth.name",
+      "source": "android.bluetooth.BluetoothAdapter",
+      "status": "BLOCKED",
+      "reason": "PERMISSION_DENIED:android.permission.BLUETOOTH_CONNECT",
+      "duration_ms": 2
+    },
+    {
+      "id": "advertising.id",
+      "source": "Android API",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 27
+    },
+    {
+      "id": "drm.deviceUniqueId",
+      "source": "android.media.MediaDrm",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 29
+    },
+    {
+      "id": "display.resources.width",
+      "source": "android.util.DisplayMetrics/Display",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "display.resources.height",
+      "source": "android.util.DisplayMetrics/Display",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "display.resources.density",
+      "source": "android.util.DisplayMetrics/Display",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "display.real.width",
+      "source": "android.util.DisplayMetrics/Display",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "display.real.height",
+      "source": "android.util.DisplayMetrics/Display",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "display.real.density",
+      "source": "android.util.DisplayMetrics/Display",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "display.refresh",
+      "source": "android.util.DisplayMetrics/Display",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "camera.characteristics",
+      "source": "android.hardware.camera2.CameraCharacteristics",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 2
+    },
+    {
+      "id": "sensors.list",
+      "source": "Android API",
+      "status": "PASS",
+      "reason": "TYPE_VALID",
+      "duration_ms": 5
+    },
+    {
+      "id": "locale.default.language",
+      "source": "java.util.Locale/Configuration",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "locale.default.country",
+      "source": "java.util.Locale/Configuration",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "locale.resources.language",
+      "source": "java.util.Locale/Configuration",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "locale.resources.country",
+      "source": "java.util.Locale/Configuration",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "timezone.default",
+      "source": "java.util.TimeZone",
+      "status": "FAIL",
+      "reason": "VALUE_MISMATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "process.uid",
+      "source": "android.os.Process",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "process.androidUser",
+      "source": "android.os.Process",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "packages.visible",
+      "source": "android.content.pm.PackageManager (caller-visible only)",
+      "status": "PASS",
+      "reason": "TYPE_VALID",
+      "duration_ms": 17
+    },
+    {
+      "id": "runtime.loadedLibraries",
+      "source": "/proc/self/maps/ClassLoader (observation only)",
+      "status": "PASS",
+      "reason": "TYPE_VALID",
+      "duration_ms": 114
+    },
+    {
+      "id": "runtime.javaBridgeVisible",
+      "source": "/proc/self/maps/ClassLoader (observation only)",
+      "status": "OBSERVED",
+      "reason": "STABILITY_BASELINE_REQUIRED",
+      "duration_ms": 2
+    }
+  ],
+  "filesystem_observations": {
+    "format": 1,
+    "rows": [
+      {
+        "id": "diagnostics.filesystem.build_prop",
+        "source": "/system/build.prop",
+        "status": "BLOCKED",
+        "reason": "PERMISSION_DENIED",
+        "sha256": null,
+        "byte_count": null,
+        "line_count": null,
+        "duration_ms": 0
+      },
+      {
+        "id": "diagnostics.filesystem.proc_version",
+        "source": "/proc/version",
+        "status": "BLOCKED",
+        "reason": "PERMISSION_DENIED",
+        "sha256": null,
+        "byte_count": null,
+        "line_count": null,
+        "duration_ms": 1
+      },
+      {
+        "id": "diagnostics.filesystem.proc_cpuinfo",
+        "source": "/proc/cpuinfo",
+        "status": "OBSERVED",
+        "reason": "OBSERVATION_ONLY_NO_EXPECTATION",
+        "sha256": "e29c2b53aec8cdcf40deeb7849d318ee4984daf5474b93a2302318a30905c4f3",
+        "byte_count": 3681,
+        "line_count": 81,
+        "duration_ms": 2
+      },
+      {
+        "id": "diagnostics.filesystem.maps_snapshot",
+        "source": "/proc/self/maps",
+        "status": "OBSERVED",
+        "reason": "OBSERVATION_ONLY_NO_EXPECTATION",
+        "sha256": "2f507a852563c53989b88fc0394993bee007d6dac0e5c8cec80f637db3a2a7b0",
+        "byte_count": 323041,
+        "line_count": 3302,
+        "duration_ms": 43
+      }
+    ]
+  },
+  "runtime_envelope": {
+    "format": 1,
+    "rows": [
+      {
+        "id": "envelope.sensors.inventory",
+        "expected_sha256": null,
+        "actual_sha256": "9b9727b752cdcda9eb971ab81470e447bbdcdbdc9793ba87a4914a5438a51d4f",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 29
+      },
+      {
+        "id": "envelope.camera.characteristics",
+        "expected_sha256": null,
+        "actual_sha256": "42c79db4c58ad7d815510c7e2e940c3d985d1a038995634f28d90f978697f24c",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 3
+      },
+      {
+        "id": "envelope.memory.totalMem",
+        "expected_sha256": null,
+        "actual_sha256": "ccd1e77da0a9c4d25ca3c438285b9592fa2f6fcef4f30689df39faf42d1d763c",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 0
+      },
+      {
+        "id": "envelope.storage.totalBytes",
+        "expected_sha256": null,
+        "actual_sha256": "c5e3f7826a3dee48a50d87353ad1e295aa0970ace32c8dfa7f1fb4c3adab670b",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 0
+      },
+      {
+        "id": "envelope.storage.availableBytes",
+        "expected_sha256": null,
+        "actual_sha256": "b10235db7e2caf256733d676e5eddc64df19fe97d295b8abc0293b845160c70b",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 0
+      },
+      {
+        "id": "envelope.compute.schedulerProcessors",
+        "expected_sha256": null,
+        "actual_sha256": "19581e27de7ced00ff1ce50b2047e7a567c76b1cbaebabe5ef03f7c3017bb5b7",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 0
+      },
+      {
+        "id": "envelope.compute.gpuRenderer",
+        "expected_sha256": null,
+        "actual_sha256": "ded55a25c23881a1b4c9e0bc5203067692e33838163b200c3f77685806a004b9",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 15
+      },
+      {
+        "id": "envelope.packages.visibleVersions",
+        "expected_sha256": null,
+        "actual_sha256": "9954142c78a9bdb4bd8a81b4d380e2c66d0e265e53ec37da1832b5f4ec277b01",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 1
+      },
+      {
+        "id": "envelope.webview.provider",
+        "expected_sha256": null,
+        "actual_sha256": "bbb0c5c713129f2c4805468d156a950987047eac9f07952c19cea3d8a06cbd8c",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 1
+      },
+      {
+        "id": "envelope.webview.version",
+        "expected_sha256": null,
+        "actual_sha256": "33ff2ba2567e046adb5ab0f96ec3302f117d717e609b366ae2c5c45f084dfa07",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 0
+      },
+      {
+        "id": "envelope.webview.defaultUa",
+        "expected_sha256": null,
+        "actual_sha256": "b86f30c1803bbb68c7c0307cbfb07f2d3153d02abc69ece939ca2974c86ebdcf",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 80
+      },
+      {
+        "id": "envelope.display.realSize",
+        "expected_sha256": "0515ad262fd5d7f0e4e966790693a35412119cc21fc58b904b365add87a59735",
+        "actual_sha256": "0515ad262fd5d7f0e4e966790693a35412119cc21fc58b904b365add87a59735",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 3
+      },
+      {
+        "id": "envelope.telephony.simState",
+        "expected_sha256": null,
+        "actual_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 1
+      },
+      {
+        "id": "envelope.telephony.simStateSlot0",
+        "expected_sha256": null,
+        "actual_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 3
+      },
+      {
+        "id": "envelope.drm.securityLevel",
+        "expected_sha256": null,
+        "actual_sha256": "56a4a45b24adf0f9a77ee6c4bc98e0268579c63a3adba9bd3ec86c73e2510c3b",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 23
+      }
+    ]
+  },
+  "linked_parity": {
+    "format": 1,
+    "rows": [
+      {
+        "id": "reality.carrier.values.mcc",
+        "expected_sha256": "0f258d53ef47ee58bc29369573d168921a5b5e389ef253c96671b2b3568e62bd",
+        "actual_sha256": "739f6e65ce92f92a9fbe890fb7edf3fab5a24f1cb63636db5ce9f99874af6acd",
+        "status": "FAIL",
+        "reason": "HASH_MISMATCH",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.carrier.values.mnc",
+        "expected_sha256": "cf2aeeb62e548283233c2be134d1082e3afbb7d5110ebcdb1016e82156aa8358",
+        "actual_sha256": "9ad1e3a3e713b870dc24da1fbeebe78ee5efde040950d055ea4ac248731fb8a1",
+        "status": "FAIL",
+        "reason": "HASH_MISMATCH",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.carrier.values.slots",
+        "expected_sha256": "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
+        "actual_sha256": "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.environment.values.country",
+        "expected_sha256": "b5e86cefc9cfb8c972b2ede02131e8a270e7fbc4216e7be80bf800aea5de029b",
+        "actual_sha256": "e46213b4be2e7b54d39176cdb74a645c972a1c8531831035e6181135432644ba",
+        "status": "FAIL",
+        "reason": "HASH_MISMATCH",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.environment.values.language",
+        "expected_sha256": "50eac10e7966a04e139902940a2a8e129a4597574c709cb8d01939ace56ff9c3",
+        "actual_sha256": "50eac10e7966a04e139902940a2a8e129a4597574c709cb8d01939ace56ff9c3",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.environment.values.timezone",
+        "expected_sha256": "8d0e66752630c8b3461ef19761895616dfc5461e7949e8d730af61ab35ab928a",
+        "actual_sha256": "dafd75a59e7c821675e895e1c2209254946a0aa3211dfd55963deee42532a9e0",
+        "status": "FAIL",
+        "reason": "HASH_MISMATCH",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.panel.values.density_dpi",
+        "expected_sha256": "db55da3fc3098e9c42311c6013304ff36b19ef73d12ea932054b5ad51df4f49d",
+        "actual_sha256": "0604cd3138feed202ef293e062da2f4720f77a05d25ee036a7a01c9cfcdd1f0a",
+        "status": "FAIL",
+        "reason": "HASH_MISMATCH",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.panel.values.height",
+        "expected_sha256": "8350242b2df439d296a664c7c59b117507d0b3c537fa293304c84d84eb85cc43",
+        "actual_sha256": "8350242b2df439d296a664c7c59b117507d0b3c537fa293304c84d84eb85cc43",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.panel.values.refresh_hz",
+        "expected_sha256": "69f59c273b6e669ac32a6dd5e1b2cb63333d8b004f9696447aee2d422ce63763",
+        "actual_sha256": "39fa9ec190eee7b6f4dff1100d6343e10918d044c75eac8f9e9a2596173f80c9",
+        "status": "FAIL",
+        "reason": "HASH_MISMATCH",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.panel.values.width",
+        "expected_sha256": "32eb1a8dafeb0873c8d00b0e9058c8c77ff6c6d9235b3236989c50ef63d8f9ba",
+        "actual_sha256": "32eb1a8dafeb0873c8d00b0e9058c8c77ff6c6d9235b3236989c50ef63d8f9ba",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 1
+      },
+      {
+        "id": "linked.simOperator",
+        "expected_sha256": "4a5f91886e5dd41b8fac7c58354ab547cf71697625f252812940c8bd68a44550",
+        "actual_sha256": "cbc530c5a6a1ef233d62b44974951e8b30ed5b2ffa2323a74fb07448a6eb1bdc",
+        "status": "FAIL",
+        "reason": "HASH_MISMATCH",
+        "duration_ms": 1
+      },
+      {
+        "id": "linked.activeModemCount",
+        "expected_sha256": "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
+        "actual_sha256": "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 1
+      },
+      {
+        "id": "linked.supportedModes",
+        "expected_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+        "actual_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+        "status": "FAIL",
+        "reason": "HASH_MISMATCH",
+        "duration_ms": 6
+      }
+    ]
+  },
+  "device_reality": {
+    "format": 1,
+    "rows": [
+      {
+        "id": "reality.cameras.count",
+        "expected_sha256": null,
+        "actual_sha256": "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 2
+      },
+      {
+        "id": "reality.cameras.inventory",
+        "expected_sha256": null,
+        "actual_sha256": "ccb883ba0cfc532011897ea7a92f19bde55d8811171780000b9f2227d3295ce8",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 3
+      },
+      {
+        "id": "reality.carrier.slots",
+        "expected_sha256": "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
+        "actual_sha256": "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 4
+      },
+      {
+        "id": "reality.carrier.mcc",
+        "expected_sha256": "0f258d53ef47ee58bc29369573d168921a5b5e389ef253c96671b2b3568e62bd",
+        "actual_sha256": "739f6e65ce92f92a9fbe890fb7edf3fab5a24f1cb63636db5ce9f99874af6acd",
+        "status": "FAIL",
+        "reason": "HASH_MISMATCH",
+        "duration_ms": 5
+      },
+      {
+        "id": "reality.carrier.mnc",
+        "expected_sha256": "cf2aeeb62e548283233c2be134d1082e3afbb7d5110ebcdb1016e82156aa8358",
+        "actual_sha256": "9ad1e3a3e713b870dc24da1fbeebe78ee5efde040950d055ea4ac248731fb8a1",
+        "status": "FAIL",
+        "reason": "HASH_MISMATCH",
+        "duration_ms": 4
+      },
+      {
+        "id": "reality.carrier.country",
+        "expected_sha256": null,
+        "actual_sha256": "e46213b4be2e7b54d39176cdb74a645c972a1c8531831035e6181135432644ba",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.carrier.sim_state",
+        "expected_sha256": null,
+        "actual_sha256": "40ec7f71ea684c8b976e79e8e425f87779e6de57f4821dcfc8066dbcad2defe0",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.compute.soc",
+        "expected_sha256": null,
+        "actual_sha256": "4312c06445981a48aa10e56b24dd467cf2ee1a35483c370c524e5fda6432dec3",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.compute.gpu",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "UNMAPPED",
+        "reason": "UNMAPPED",
+        "duration_ms": 0
+      },
+      {
+        "id": "reality.compute.cpu_cores",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "UNMAPPED",
+        "reason": "UNMAPPED",
+        "duration_ms": 0
+      },
+      {
+        "id": "reality.compute.abis",
+        "expected_sha256": null,
+        "actual_sha256": "7cbed823db88eff40f9a70d266dde4300b339fcd397183b3ac6064e8971c82db",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.drm.security_level",
+        "expected_sha256": null,
+        "actual_sha256": "56a4a45b24adf0f9a77ee6c4bc98e0268579c63a3adba9bd3ec86c73e2510c3b",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 9
+      },
+      {
+        "id": "reality.environment.language",
+        "expected_sha256": "50eac10e7966a04e139902940a2a8e129a4597574c709cb8d01939ace56ff9c3",
+        "actual_sha256": "50eac10e7966a04e139902940a2a8e129a4597574c709cb8d01939ace56ff9c3",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.environment.country",
+        "expected_sha256": "b5e86cefc9cfb8c972b2ede02131e8a270e7fbc4216e7be80bf800aea5de029b",
+        "actual_sha256": "e46213b4be2e7b54d39176cdb74a645c972a1c8531831035e6181135432644ba",
+        "status": "FAIL",
+        "reason": "HASH_MISMATCH",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.environment.timezone",
+        "expected_sha256": "8d0e66752630c8b3461ef19761895616dfc5461e7949e8d730af61ab35ab928a",
+        "actual_sha256": "dafd75a59e7c821675e895e1c2209254946a0aa3211dfd55963deee42532a9e0",
+        "status": "FAIL",
+        "reason": "HASH_MISMATCH",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.environment.keyboard_layout",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "UNMAPPED",
+        "reason": "UNMAPPED",
+        "duration_ms": 0
+      },
+      {
+        "id": "reality.environment.input_method",
+        "expected_sha256": null,
+        "actual_sha256": "61bd0a1934a0912e9294abd26bfe5af5987caf65582cbc682afc910b7c75da1a",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.environment.accessibility_enabled",
+        "expected_sha256": null,
+        "actual_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 0
+      },
+      {
+        "id": "reality.memory.ram_gib",
+        "expected_sha256": null,
+        "actual_sha256": "caabd0cb6d923d31a54bc37bb31bb0811ec01e7c2b6e588e4c6b0a7ce31f927a",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.memory.storage_gib",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "UNMAPPED",
+        "reason": "UNMAPPED",
+        "duration_ms": 0
+      },
+      {
+        "id": "reality.memory.free_storage_gib",
+        "expected_sha256": null,
+        "actual_sha256": "bba4f5e627d8a8a77b42e05c34f5d242fddb9f77cc49cb88f889567fac651d29",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.packages.installed",
+        "expected_sha256": null,
+        "actual_sha256": "022899acaba32ede3114d98e0eb650caadbf197979d5fee317e372f906c86700",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 2
+      },
+      {
+        "id": "reality.panel.width",
+        "expected_sha256": "32eb1a8dafeb0873c8d00b0e9058c8c77ff6c6d9235b3236989c50ef63d8f9ba",
+        "actual_sha256": "32eb1a8dafeb0873c8d00b0e9058c8c77ff6c6d9235b3236989c50ef63d8f9ba",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.panel.height",
+        "expected_sha256": "8350242b2df439d296a664c7c59b117507d0b3c537fa293304c84d84eb85cc43",
+        "actual_sha256": "8350242b2df439d296a664c7c59b117507d0b3c537fa293304c84d84eb85cc43",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.panel.density_dpi",
+        "expected_sha256": "db55da3fc3098e9c42311c6013304ff36b19ef73d12ea932054b5ad51df4f49d",
+        "actual_sha256": "0604cd3138feed202ef293e062da2f4720f77a05d25ee036a7a01c9cfcdd1f0a",
+        "status": "FAIL",
+        "reason": "HASH_MISMATCH",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.panel.refresh_hz",
+        "expected_sha256": "69f59c273b6e669ac32a6dd5e1b2cb63333d8b004f9696447aee2d422ce63763",
+        "actual_sha256": "39fa9ec190eee7b6f4dff1100d6343e10918d044c75eac8f9e9a2596173f80c9",
+        "status": "FAIL",
+        "reason": "HASH_MISMATCH",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.panel.technology",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "UNMAPPED",
+        "reason": "UNMAPPED",
+        "duration_ms": 0
+      },
+      {
+        "id": "reality.panel.modes",
+        "expected_sha256": null,
+        "actual_sha256": "c598012990455f0b91fa95165467502b205e0f8b07e800cdaadb5ce961bcf853",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 0
+      },
+      {
+        "id": "reality.power.design_capacity_mah",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "UNMAPPED",
+        "reason": "UNMAPPED",
+        "duration_ms": 0
+      },
+      {
+        "id": "reality.power.battery_percent",
+        "expected_sha256": null,
+        "actual_sha256": "ad57366865126e55649ecb23ae1d48887544976efea46a48eb5d85a6eeb4d306",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 0
+      },
+      {
+        "id": "reality.power.battery_state",
+        "expected_sha256": null,
+        "actual_sha256": "1e5941238a72b1f89a5d4cfad9164d5d37f08fab209161841ebf39bf057083d4",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 0
+      },
+      {
+        "id": "reality.power.charging_source",
+        "expected_sha256": null,
+        "actual_sha256": "bcbf802cde612a17d6ce01c2a2a5d8eb736c53e79b099651823ce55b1cb3f3d2",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 0
+      },
+      {
+        "id": "reality.power.temperature_c",
+        "expected_sha256": null,
+        "actual_sha256": "f7a4c1e4a149646cdad0cdaa308727e0831f71bb39bbe363f6de950407f2264b",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 0
+      },
+      {
+        "id": "reality.power.thermal_status",
+        "expected_sha256": null,
+        "actual_sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 0
+      },
+      {
+        "id": "reality.power.power_save",
+        "expected_sha256": null,
+        "actual_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 0
+      },
+      {
+        "id": "reality.radio.wifi_name",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "UNMAPPED",
+        "reason": "UNMAPPED",
+        "duration_ms": 0
+      },
+      {
+        "id": "reality.radio.bluetooth_name",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "BLOCKED",
+        "reason": "SecurityException:android.permission.BLUETOOTH_CONNECT",
+        "duration_ms": 2
+      },
+      {
+        "id": "reality.radio.wifi_state",
+        "expected_sha256": null,
+        "actual_sha256": "6e30bc5c1535567991cb179e5c19469e0c91016ca7e917f8afe2161acd506591",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 0
+      },
+      {
+        "id": "reality.radio.bluetooth_state",
+        "expected_sha256": null,
+        "actual_sha256": "6e30bc5c1535567991cb179e5c19469e0c91016ca7e917f8afe2161acd506591",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 0
+      },
+      {
+        "id": "reality.sensors.inventory",
+        "expected_sha256": null,
+        "actual_sha256": "2ba9e89f0d60b7766f8bdef4e5da2d50156f09c722dc188170127efb547244a8",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 4
+      },
+      {
+        "id": "reality.webview.provider",
+        "expected_sha256": null,
+        "actual_sha256": "bbb0c5c713129f2c4805468d156a950987047eac9f07952c19cea3d8a06cbd8c",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.webview.version",
+        "expected_sha256": null,
+        "actual_sha256": "33ff2ba2567e046adb5ab0f96ec3302f117d717e609b366ae2c5c45f084dfa07",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.webview.user_agent",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "UNMAPPED",
+        "reason": "UNMAPPED",
+        "duration_ms": 0
+      }
+    ]
+  },
+  "reality_runtime": {
+    "format": 1,
+    "rows": []
+  }
+}

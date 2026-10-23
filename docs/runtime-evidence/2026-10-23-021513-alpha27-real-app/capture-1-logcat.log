@@ -1,0 +1,29 @@
+--------- beginning of main
+10-23 02:16:18.485  8496  8496 I CloakModule: cloaking 17:com.devicetrust.scanner (64 props)
+10-23 02:16:18.501  8496  8496 E shadowhook_tag: shadowhook version 1.0.10: shadowhook init(mode: UNIQUE, debuggable: false), return: 0, real-init: yes
+10-23 02:16:18.502  8496  8496 I CloakModule: native property hook installed
+10-23 02:16:18.502  8496  8496 I CloakModule: native property callback hook installed
+10-23 02:16:18.502  8496  8496 E System  : Ignoring attempt to set property "user.language" to value "de".
+10-23 02:16:18.504  8496  8496 I CloakModule: [cloak-hook] ART runtime API 36, debuggable=false
+10-23 02:16:18.516  8496  8496 W System  : Attempt to load writable file: /data/user/17/com.devicetrust.scanner/code_cache/cloak_hooks/libpine.so. This will throw on a future Android version. Current sdk version: 36
+10-23 02:16:18.517  8496  8496 D nativeloader: Configuring clns-9 for other apk . target_sdk_version=0, uses_libraries=ALL, library_path=, permitted_path=/data:/mnt/expand
+10-23 02:16:18.519  8496  8496 D nativeloader: Load /data/user/17/com.devicetrust.scanner/code_cache/cloak_hooks/libpine.so using isolated ns clns-9 (caller=Anonymous-DexFile@290290320): ok
+10-23 02:16:18.628  8496  8496 I CloakModule: [cloak-hook] mediadrm hook installed
+10-23 02:16:18.629  8496  8496 I CloakModule: [cloak-hook] camera hooks installed
+10-23 02:16:18.629  8496  8496 I CloakModule: [cloak-hook] display hooks installed
+10-23 02:16:18.630  8496  8496 I CloakModule: [cloak-hook] java callbacks installed
+10-23 02:16:18.633  8496  8496 W libbinder.BackendUnifiedServiceManager: Thread Pool max thread count is 0. Cannot cache binder as linkToDeath cannot be implemented. serviceName: activity
+--------- beginning of system
+10-23 02:16:18.879  8496  8496 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:18.879  8496  8496 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:18.879  8496  8496 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:18.879  8496  8496 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:18.879  8496  8496 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:18.879  8496  8496 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:18.927  8496  8496 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:18.928  8496  8496 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:18.928  8496  8496 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:18.928  8496  8496 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:18.928  8496  8496 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:18.928  8496  8496 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]
+10-23 02:16:18.928  8496  8496 V Configuration: Updating configuration, locales updated from [en_NL] to [de_DE]

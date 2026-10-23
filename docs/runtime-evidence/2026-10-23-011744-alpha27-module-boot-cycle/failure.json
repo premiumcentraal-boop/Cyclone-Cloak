@@ -1,0 +1,5 @@
+{
+  "phase": "install",
+  "error_type": "TypeError",
+  "reason": "'NoneType' object is not subscriptable"
+}

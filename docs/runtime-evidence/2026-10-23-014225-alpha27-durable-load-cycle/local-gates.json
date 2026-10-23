@@ -1,0 +1,14 @@
+{
+  "module_tests": {
+    "tests": 40,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "abi_hashes": {
+    "zygisk/arm64-v8a.so": "0b2e9884b3f75adc5d2038f1684c928d17092bfe0e4fdf979ce812bb30ba57c1",
+    "zygisk/armeabi-v7a.so": "dd175d53738cb053c2782edb990f9b7531a514f1d50179618b656ae367bd4c33"
+  },
+  "manifest_match": true,
+  "elf_check": true
+}

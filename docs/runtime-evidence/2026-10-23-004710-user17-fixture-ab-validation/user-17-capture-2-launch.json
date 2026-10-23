@@ -1,0 +1,135 @@
+{
+  "request_id": "filesystem-2026-10-23-004710-17-2",
+  "cold_start": true,
+  "user_activation": {
+    "target_user": 17,
+    "completed": true,
+    "started_state": "RUNNING_UNLOCKED",
+    "before_user": 17,
+    "after_user": 17
+  },
+  "expected_profile": {
+    "fixture": "b",
+    "profile_sha256": "db4f661468d72dfd9f766c6a2b761a2fb9cd9141bc1ff61124a05d93c8b1a631",
+    "bytes": 2432,
+    "source": "built APK synthetic asset"
+  },
+  "before": {
+    "pidof": {
+      "stdout": "12128 13608\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "processes": [
+      "10325 12128 dev.cyclone.cloak.probe.diag",
+      "1710325 13608 dev.cyclone.cloak.probe.diag"
+    ],
+    "package_path": {
+      "stdout": "package:/data/app/~~OPz47d1C3OzApA5otU9vFw==/dev.cyclone.cloak.probe.diag-CqcBG9Ciq--sOQHm26tCiA==/base.apk\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "target_user_state": [
+      "User 17: ceDataInode=148079 deDataInode=134223 installed=true hidden=false suspended=false appLockEnabled=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false",
+      "User 17:"
+    ],
+    "target_uid": 1710325,
+    "run_as_identity": {
+      "stdout": "uid=1710325(u17_a325) gid=1710325(u17_a325) groups=1710325(u17_a325),1004(input),1007(log),1011(adb),1015(sdcard_rw),1028(sdcard_r),1078(ext_data_rw),1079(ext_obb_rw),3001(net_bt_admin),3002(net_bt),3003(inet),3006(net_bw_stats),3009(readproc),3011(uhid),3012(readtracefs),50325(all_a325) context=u:r:runas_app:s0:c69,c257,c529,c768\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "run_as_directory": {
+      "stdout": "/data/user/17/dev.cyclone.cloak.probe.diag\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "device_clock": "10-23 00:47:48.000"
+  },
+  "force_stop": {
+    "stdout": "",
+    "stderr": "",
+    "exit_code": 0
+  },
+  "am_start": {
+    "stdout": "Starting: Intent { flg=0x24000000 cmp=dev.cyclone.cloak.probe.diag/dev.cyclone.cloak.probe.DiagnosticsProbeActivity (has extras) }\n",
+    "stderr": "",
+    "exit_code": 0
+  },
+  "immediately_after": {
+    "pidof": {
+      "stdout": "12128 15796\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "processes": [
+      "10325 12128 dev.cyclone.cloak.probe.diag",
+      "1710325 15796 dev.cyclone.cloak.probe.diag"
+    ],
+    "package_path": {
+      "stdout": "package:/data/app/~~OPz47d1C3OzApA5otU9vFw==/dev.cyclone.cloak.probe.diag-CqcBG9Ciq--sOQHm26tCiA==/base.apk\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "target_user_state": [
+      "User 17: ceDataInode=148079 deDataInode=134223 installed=true hidden=false suspended=false appLockEnabled=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false",
+      "User 17:"
+    ],
+    "target_uid": 1710325,
+    "run_as_identity": {
+      "stdout": "uid=1710325(u17_a325) gid=1710325(u17_a325) groups=1710325(u17_a325),1004(input),1007(log),1011(adb),1015(sdcard_rw),1028(sdcard_r),1078(ext_data_rw),1079(ext_obb_rw),3001(net_bt_admin),3002(net_bt),3003(inet),3006(net_bw_stats),3009(readproc),3011(uhid),3012(readtracefs),50325(all_a325) context=u:r:runas_app:s0:c69,c257,c529,c768\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "run_as_directory": {
+      "stdout": "/data/user/17/dev.cyclone.cloak.probe.diag\n",
+      "stderr": "",
+      "exit_code": 0
+    }
+  },
+  "after_capture_wait": {
+    "pidof": {
+      "stdout": "12128 15796\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "processes": [
+      "10325 12128 dev.cyclone.cloak.probe.diag",
+      "1710325 15796 dev.cyclone.cloak.probe.diag"
+    ],
+    "package_path": {
+      "stdout": "package:/data/app/~~OPz47d1C3OzApA5otU9vFw==/dev.cyclone.cloak.probe.diag-CqcBG9Ciq--sOQHm26tCiA==/base.apk\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "target_user_state": [
+      "User 17: ceDataInode=148079 deDataInode=134223 installed=true hidden=false suspended=false appLockEnabled=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false",
+      "User 17:"
+    ],
+    "target_uid": 1710325,
+    "run_as_identity": {
+      "stdout": "uid=1710325(u17_a325) gid=1710325(u17_a325) groups=1710325(u17_a325),1004(input),1007(log),1011(adb),1015(sdcard_rw),1028(sdcard_r),1078(ext_data_rw),1079(ext_obb_rw),3001(net_bt_admin),3002(net_bt),3003(inet),3006(net_bw_stats),3009(readproc),3011(uhid),3012(readtracefs),50325(all_a325) context=u:r:runas_app:s0:c69,c257,c529,c768\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "run_as_directory": {
+      "stdout": "/data/user/17/dev.cyclone.cloak.probe.diag\n",
+      "stderr": "",
+      "exit_code": 0
+    }
+  },
+  "logcat": {
+    "exit_code": 0,
+    "stderr": "",
+    "lines": [],
+    "policy": "bounded target-UID logcat since launch, no unrelated UID output"
+  },
+  "launch_system_logcat": {
+    "exit_code": 0,
+    "stderr": "",
+    "lines": [
+      "10-23 00:47:52.226  1534  1788 I AppsFilter: interaction: PackageSetting{a2e546c dev.cyclone.cloak.probe.diag/10325} -> PackageSetting{128ea68 com.google.android.apps.docs/10193} BLOCKED",
+      "10-23 00:47:52.226  1534  1788 I AppsFilter: interaction: PackageSetting{a2e546c dev.cyclone.cloak.probe.diag/10325} -> PackageSetting{a47ae81 com.google.android.apps.dreamliner/10167} BLOCKED"
+    ]
+  }
+}

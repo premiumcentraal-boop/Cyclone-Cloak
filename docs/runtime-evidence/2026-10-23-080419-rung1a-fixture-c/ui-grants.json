@@ -1,0 +1,23 @@
+{
+  "user": 17,
+  "method": "normal Android runtime dialogs via observed UI taps",
+  "actions": [
+    {
+      "screenshot": "permission-prompt-1.png",
+      "action": "Precise + While using the app",
+      "tap": [
+        540,
+        1545
+      ]
+    },
+    {
+      "screenshot": "permission-prompt-2.png",
+      "action": "Allow nearby devices",
+      "tap": [
+        540,
+        1420
+      ]
+    }
+  ],
+  "shell_permission_or_appops_writes": false
+}

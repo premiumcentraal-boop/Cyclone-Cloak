@@ -1,0 +1,261 @@
+plugins {
+    id "com.android.library"
+}
+
+def abis = ["arm64-v8a", "armeabi-v7a"]
+def moduleProperties = new Properties()
+file("module.prop").withInputStream { moduleProperties.load(it) }
+def moduleVersion = moduleProperties.getProperty("version").replaceFirst(/^v/, "")
+
+android {
+    namespace "dev.cyclone.cloak.module"
+    compileSdk 36
+    ndkVersion "27.0.12077973"
+
+    defaultConfig {
+        minSdk 26
+        externalNativeBuild {
+            ndk {
+                abiFilters "arm64-v8a", "armeabi-v7a"
+            }
+        }
+    }
+
+    testOptions {
+        unitTests.returnDefaultValues = true
+        unitTests.includeAndroidResources = true
+        unitTests.all {
+            dependsOn("copyRobolectricRuntime")
+            systemProperty "robolectric.offline", "true"
+            systemProperty "robolectric.dependency.dir", layout.buildDirectory.dir("robolectric").get().asFile.absolutePath
+        }
+    }
+    sourceSets.test.java.srcDir("src/hook/java")
+
+    externalNativeBuild {
+        cmake {
+            path "src/main/cpp/CMakeLists.txt"
+            version "3.22.1"
+        }
+    }
+}
+
+// Packages the Zygisk module the way Magisk expects:
+//   module.prop
+//   zygisk/<abi>.so
+tasks.register("packageModule") {
+    group = "cyclone"
+    description = "Assembles the Cyclone Cloak Magisk module zip."
+    dependsOn "assembleRelease"
+    doLast {
+        def outDir = layout.buildDirectory.dir("module").get().asFile
+        outDir.deleteDir()
+        outDir.mkdirs()
+        def stage = new File(outDir, "stage")
+        stage.mkdirs()
+        copy {
+            from("module.prop")
+            into stage
+        }
+        abis.each { abi ->
+            fileTree("build/intermediates/cxx").matching {
+                include "**/RelWithDebInfo/*/obj/${abi}/libcloak.so"
+            }.each { file ->
+                copy {
+                    from file
+                    into new File(stage, "zygisk")
+                    rename { "${abi}.so" }
+                }
+            }
+        }
+        // Hash the completed ABI libraries, avoiding a circular embedded ZIP hash.
+        def manifest = abis.collect { abi ->
+            def library = new File(stage, "zygisk/${abi}.so")
+            if (!library.isFile()) throw new GradleException("Missing packaged ABI: ${abi}")
+            def digest = java.security.MessageDigest.getInstance("SHA-256").digest(library.bytes)
+                    .collect { String.format("%02x", it & 0xff) }.join()
+            "${digest}  zygisk/${abi}.so\n"
+        }.join()
+        new File(stage, "artifacts.sha256").setText(manifest, "UTF-8")
+        def zipName = "cyclone-cloak-${moduleVersion}.zip"
+        ant.zip(destfile: new File(outDir, zipName), basedir: stage)
+        println "module zip: ${outDir}/${zipName}"
+    }
+}
+
+// Hook bridge pipeline: extract Pine from its AAR, compile the bridge, dex it
+// with d8, and stage the assets that CMake embeds into libcloak.so (see
+// src/main/cpp/CMakeLists.txt). Everything is embedded: the scoped app never
+// needs to read anything from /data/adb.
+configurations {
+    hookEmbed
+    hookD8
+}
+
+dependencies {
+    hookEmbed "top.canyie.pine:core:0.3.0"
+    hookEmbed "com.bytedance.android:shadowhook:1.0.10"
+    hookD8 "com.android.tools:r8:8.13.25"
+    testImplementation "top.canyie.pine:core:0.3.0"
+    testImplementation "junit:junit:4.13.2"
+    testImplementation "org.robolectric:robolectric:4.14.1"
+}
+
+configurations { robolectricSdk34; robolectricSdk35 }
+dependencies {
+    robolectricSdk34 "org.robolectric:android-all-instrumented:14-robolectric-10818077-i7"
+    robolectricSdk35 "org.robolectric:android-all-instrumented:15-robolectric-12650502-i7"
+}
+tasks.register("copyRobolectricRuntime", Copy) {
+    from configurations.robolectricSdk34
+    from configurations.robolectricSdk35
+    into layout.buildDirectory.dir("robolectric")
+}
+
+def hookWork = layout.buildDirectory.dir("hook")
+def embeddedDir = file("src/main/cpp/embedded")
+
+tasks.register("prepareHookPine") {
+    dependsOn configurations.hookEmbed
+    doLast {
+        def aar = configurations.hookEmbed.files.find { it.name.endsWith(".aar") }
+        if (aar == null) throw new GradleException("Pine core AAR not found in hookEmbed")
+        def out = hookWork.get().asFile
+        out.mkdirs()
+        copy {
+            from zipTree(aar)
+            into out
+        }
+    }
+}
+tasks.register("prepareHookShadow") {
+    dependsOn configurations.hookEmbed
+    doLast {
+        def aar = configurations.hookEmbed.files.find { it.name.startsWith("shadowhook") && it.name.endsWith(".aar") }
+        if (aar == null) throw new GradleException("ShadowHook AAR not found in hookEmbed")
+        def out = hookWork.get().asFile
+        out.mkdirs()
+        copy {
+            from zipTree(aar)
+            into out
+        }
+    }
+}
+
+// The hook bridge now touches framework types (Uri, Cursor, Context) directly,
+// so javac needs the platform jar on its classpath. Resolve it from the local
+// SDK layout instead of an AGP accessor so CI and local builds behave the same.
+// Extension-level platform dirs (android-36-ext18) only expose their leading
+// API level to a digit parse, so match on the number, never the whole suffix.
+def platformLevel = { name ->
+    def m = (name.replaceFirst(/^android-/, "") =~ /^(\d+)/)
+    return m.find() ? m.group(1).toInteger() : -1
+}
+
+def androidPlatformJar = {
+    def candidates = []
+    for (prop in ["sdk.dir", "ANDROID_SDK_ROOT", "ANDROID_HOME"]) {
+        if (prop == "sdk.dir") {
+            for (lp in [rootProject.file("local.properties"), file("local.properties")]) {
+                if (!lp.exists()) continue
+                def props = new Properties()
+                lp.withInputStream { props.load(it) }
+                def dir = props.getProperty("sdk.dir")
+                if (dir != null && !dir.isBlank()) { candidates << dir; break }
+            }
+        } else {
+            def dir = System.getenv(prop)
+            if (dir != null && !dir.isBlank()) candidates << dir
+        }
+    }
+    for (dir in candidates) {
+        def platforms = new File(dir, "platforms")
+        def installed = platforms.listFiles()
+        if (installed == null) continue
+        def exact = new File(platforms, "android-36/android.jar")
+        if (exact.exists()) return exact
+        def latest = installed.findAll { platformLevel(it.name) >= 26 }
+                .max { platformLevel(it.name) }
+        if (latest == null) continue
+        def jar = new File(latest, "android.jar")
+        if (jar.exists()) return jar
+    }
+    throw new GradleException("android.jar not found; set ANDROID_HOME or sdk.dir")
+}.call()
+
+tasks.register("compileHookBridge", JavaCompile) {
+    dependsOn "prepareHookPine"
+    source "src/hook/java"
+    classpath = files(hookWork.map { it.dir("classes.jar") }, androidPlatformJar)
+    destinationDirectory = hookWork.map { it.dir("classes") }
+    options.release.set(11)
+}
+
+tasks.register("jarHookBridge", Jar) {
+    dependsOn "compileHookBridge"
+    archiveFileName = "hook-bridge.jar"
+    destinationDirectory = hookWork
+    from hookWork.map { it.dir("classes") }
+}
+
+tasks.register("dexHookBridge", JavaExec) {
+    dependsOn "jarHookBridge"
+    classpath = files(configurations.hookD8)
+    mainClass.set("com.android.tools.r8.D8")
+    doFirst {
+        def out = hookWork.get().asFile
+        args("--release", "--min-api", "26", "--output", out.absolutePath,
+                new File(out, "hook-bridge.jar").absolutePath,
+                new File(out, "classes.jar").absolutePath)
+    }
+}
+
+tasks.register("embedHookAssets") {
+    dependsOn "dexHookBridge"
+    dependsOn "prepareHookShadow"
+    doLast {
+        def work = hookWork.get().asFile
+        embeddedDir.mkdirs()
+        copy {
+            from new File(work, "classes.dex")
+            into embeddedDir
+            rename { "hooks.dex" }
+        }
+        abis.each { abi ->
+            def out = new File(embeddedDir, abi)
+            out.mkdirs()
+            copy { from new File(work, "jni/${abi}/libpine.so"); into out }
+            copy { from new File(work, "jni/${abi}/libshadowhook.so"); into out }
+            def gen = new File(out, "embedded_assets.cpp")
+            gen.text = emitEmbeddedAssets(
+                new File(work, "classes.dex").bytes,
+                new File(out, "libpine.so").bytes,
+                new File(out, "libshadowhook.so").bytes)
+        }
+    }
+}
+
+def emitEmbeddedAssets(byte[] dex, byte[] pine, byte[] shadowhook) {
+    def sb = new StringBuilder()
+    sb.append("// Generated by the Gradle embedHookAssets task; do not edit.\n")
+    sb.append("#include <cstddef>\n\n")
+    emitByteArray(sb, "CLOAK_HOOKS_DEX", dex)
+    emitByteArray(sb, "CLOAK_PINE_LIB", pine)
+    emitByteArray(sb, "CLOAK_SHADOWHOOK_LIB", shadowhook)
+    return sb.toString()
+}
+
+def emitByteArray(StringBuilder sb, String name, byte[] data) {
+    sb.append("extern const unsigned char ${name}[] = {\n")
+    for (int start = 0; start < data.length; start += 24) {
+        def end = Math.min(start + 24, data.length)
+        def row = (start..<end).collect { i -> String.valueOf(data[i] & 0xFF) }.join(",")
+        sb.append("    ${row},\n")
+    }
+    sb.append("};\n")
+    sb.append("extern const size_t ${name}_SIZE = sizeof(${name});\n\n")
+}
+
+tasks.matching { it.name.startsWith("configureCMake") || it.name.startsWith("buildCMake") }.configureEach {
+    dependsOn "embedHookAssets"
+}

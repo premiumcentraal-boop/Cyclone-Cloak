@@ -1,0 +1,596 @@
+{
+  "schema_version": "0.4",
+  "reality": {
+    "compute": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "Read by explicit diagnostics authoring export from the unbound host; see meta.authoring_provenance.",
+      "values": {
+        "soc": "Google Tensor G2",
+        "gpu": "Mali-G715"
+      }
+    },
+    "memory": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "Read by explicit diagnostics authoring export from the unbound host; see meta.authoring_provenance.",
+      "values": {
+        "ram_gib": 8,
+        "storage_gib": 128,
+        "free_storage_gib": 66.9
+      }
+    },
+    "panel": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "Copied from the base template configuration; not a physical measurement.",
+      "values": {
+        "width": 1080,
+        "height": 2400,
+        "density_dpi": 420,
+        "refresh_hz": 90
+      }
+    },
+    "cameras": {
+      "availability": "unknown",
+      "source": "needs verification",
+      "reason": "No verified template value; collect read-only evidence for this field.",
+      "values": {}
+    },
+    "sensors": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "Read by explicit diagnostics authoring export from the unbound host; see meta.authoring_provenance.",
+      "values": {
+        "inventory": [
+          {
+            "type": 32,
+            "name": "Dynamic Sensor Manager",
+            "min_delay_us": 1000,
+            "max_delay_us": 1000,
+            "range": 1,
+            "resolution": 1
+          },
+          {
+            "type": 1,
+            "name": "ICM45631 Accelerometer",
+            "min_delay_us": 5000,
+            "max_delay_us": 666667,
+            "range": 156.90640258789062,
+            "resolution": 0.0005985504249110818
+          },
+          {
+            "type": 2,
+            "name": "MMC56X3X Magnetometer",
+            "min_delay_us": 10000,
+            "max_delay_us": 800000,
+            "range": 3198.15673828125,
+            "resolution": 0.09759999811649323
+          },
+          {
+            "type": 3,
+            "name": "Orientation Sensor",
+            "min_delay_us": 5000,
+            "max_delay_us": 200000,
+            "range": 360,
+            "resolution": 9.999999747378752e-06
+          },
+          {
+            "type": 4,
+            "name": "ICM45631 Gyroscope",
+            "min_delay_us": 5000,
+            "max_delay_us": 666667,
+            "range": 34.906585693359375,
+            "resolution": 0.0001332312385784462
+          },
+          {
+            "type": 5,
+            "name": "TMD3719 Ambient Light",
+            "min_delay_us": 0,
+            "max_delay_us": 1000000,
+            "range": 1000000,
+            "resolution": 0.009999999776482582
+          },
+          {
+            "type": 6,
+            "name": "ICP20100 Pressure Sensor",
+            "min_delay_us": 25000,
+            "max_delay_us": 1000000,
+            "range": 1100,
+            "resolution": 9.999999747378752e-05
+          },
+          {
+            "type": 8,
+            "name": "TMD3719 Proximity (wake-up)",
+            "min_delay_us": 0,
+            "max_delay_us": 1000000,
+            "range": 5,
+            "resolution": 1
+          },
+          {
+            "type": 9,
+            "name": "Gravity Sensor",
+            "min_delay_us": 5000,
+            "max_delay_us": 200000,
+            "range": 9.8100004196167,
+            "resolution": 9.999999747378752e-06
+          },
+          {
+            "type": 10,
+            "name": "Linear Acceleration Sensor",
+            "min_delay_us": 20000,
+            "max_delay_us": 200000,
+            "range": 156.9600067138672,
+            "resolution": 9.999999747378752e-06
+          },
+          {
+            "type": 11,
+            "name": "Rotation Vector Sensor",
+            "min_delay_us": 5000,
+            "max_delay_us": 200000,
+            "range": 1,
+            "resolution": 9.999999747378752e-06
+          },
+          {
+            "type": 14,
+            "name": "MMC56X3X Magnetometer-Uncalibrated",
+            "min_delay_us": 10000,
+            "max_delay_us": 800000,
+            "range": 3198.15673828125,
+            "resolution": 0.09759999811649323
+          },
+          {
+            "type": 15,
+            "name": "Game Rotation Vector Sensor",
+            "min_delay_us": 5000,
+            "max_delay_us": 200000,
+            "range": 1,
+            "resolution": 9.999999747378752e-06
+          },
+          {
+            "type": 16,
+            "name": "ICM45631 Gyroscope-Uncalibrated",
+            "min_delay_us": 5000,
+            "max_delay_us": 666667,
+            "range": 34.906585693359375,
+            "resolution": 0.0001332312385784462
+          },
+          {
+            "type": 17,
+            "name": "Significant Motion (wake-up)",
+            "min_delay_us": -1,
+            "max_delay_us": 0,
+            "range": 1,
+            "resolution": 1
+          },
+          {
+            "type": 18,
+            "name": "Step Detector",
+            "min_delay_us": 0,
+            "max_delay_us": 0,
+            "range": 1,
+            "resolution": 1
+          },
+          {
+            "type": 19,
+            "name": "Step Counter",
+            "min_delay_us": 0,
+            "max_delay_us": 1000000,
+            "range": 3.4028234663852886e+38,
+            "resolution": 1
+          },
+          {
+            "type": 20,
+            "name": "Geomagnetic Rotation Vector Sensor",
+            "min_delay_us": 5000,
+            "max_delay_us": 200000,
+            "range": 1,
+            "resolution": 9.999999747378752e-06
+          },
+          {
+            "type": 22,
+            "name": "Tilt Sensor (wake-up)",
+            "min_delay_us": 0,
+            "max_delay_us": 0,
+            "range": 1,
+            "resolution": 1
+          },
+          {
+            "type": 25,
+            "name": "Lift to Wake Sensor (wake-up)",
+            "min_delay_us": -1,
+            "max_delay_us": 0,
+            "range": 1,
+            "resolution": 1
+          },
+          {
+            "type": 27,
+            "name": "Device Orientation",
+            "min_delay_us": 0,
+            "max_delay_us": 1000000,
+            "range": 3,
+            "resolution": 1
+          },
+          {
+            "type": 35,
+            "name": "ICM45631 Accelerometer-Uncalibrated",
+            "min_delay_us": 5000,
+            "max_delay_us": 666667,
+            "range": 156.90640258789062,
+            "resolution": 0.0005985504249110818
+          },
+          {
+            "type": 65538,
+            "name": "ICM45631 Temperature",
+            "min_delay_us": 20000,
+            "max_delay_us": 666667,
+            "range": 85,
+            "resolution": 0.0078125
+          },
+          {
+            "type": 65539,
+            "name": "ICP20100 Temperature",
+            "min_delay_us": 25000,
+            "max_delay_us": 1000000,
+            "range": 85,
+            "resolution": 0.009999999776482582
+          },
+          {
+            "type": 65541,
+            "name": "Camera V-Sync 0",
+            "min_delay_us": 0,
+            "max_delay_us": 1000000,
+            "range": 3.4028234663852886e+38,
+            "resolution": 0
+          },
+          {
+            "type": 65541,
+            "name": "Camera V-Sync 1",
+            "min_delay_us": 0,
+            "max_delay_us": 1000000,
+            "range": 3.4028234663852886e+38,
+            "resolution": 0
+          },
+          {
+            "type": 65541,
+            "name": "Camera V-Sync 2",
+            "min_delay_us": 0,
+            "max_delay_us": 1000000,
+            "range": 3.4028234663852886e+38,
+            "resolution": 0
+          },
+          {
+            "type": 65545,
+            "name": "VD6282 Rear Light Sensor",
+            "min_delay_us": 16000,
+            "max_delay_us": 409600,
+            "range": 1000000,
+            "resolution": 0
+          },
+          {
+            "type": 65554,
+            "name": "ICM45631 Motion Detect",
+            "min_delay_us": -1,
+            "max_delay_us": 0,
+            "range": 1,
+            "resolution": 0
+          },
+          {
+            "type": 65555,
+            "name": "ICM45631 Stationary Detect",
+            "min_delay_us": -1,
+            "max_delay_us": 0,
+            "range": 1,
+            "resolution": 0
+          },
+          {
+            "type": 131073,
+            "name": "Double Twist (wake-up)",
+            "min_delay_us": 0,
+            "max_delay_us": 0,
+            "range": 1,
+            "resolution": 1
+          },
+          {
+            "type": 131077,
+            "name": "Binned Brightness (wake-up)",
+            "min_delay_us": 0,
+            "max_delay_us": 1000000,
+            "range": 255,
+            "resolution": 1
+          },
+          {
+            "type": 131083,
+            "name": "Proximity Gated Single Tap Gesture (wake-up)",
+            "min_delay_us": -1,
+            "max_delay_us": 0,
+            "range": 1,
+            "resolution": 1
+          },
+          {
+            "type": 131085,
+            "name": "Proximity Gated Long Press Gesture (wake-up)",
+            "min_delay_us": -1,
+            "max_delay_us": 0,
+            "range": 1,
+            "resolution": 1
+          },
+          {
+            "type": 131087,
+            "name": "Quick Pickup Sensor (wake-up)",
+            "min_delay_us": -1,
+            "max_delay_us": 0,
+            "range": 1,
+            "resolution": 1
+          },
+          {
+            "type": 131088,
+            "name": "Auto Brightness",
+            "min_delay_us": 0,
+            "max_delay_us": 1000000,
+            "range": 1000000,
+            "resolution": 0.0010000000474974513
+          },
+          {
+            "type": 131091,
+            "name": "AAD Proximity Sensor (wake-up)",
+            "min_delay_us": 0,
+            "max_delay_us": 1000000,
+            "range": 1000000,
+            "resolution": 1
+          },
+          {
+            "type": 131092,
+            "name": "Proximity(Voice Calls) Sensor (wake-up)",
+            "min_delay_us": 0,
+            "max_delay_us": 1000000,
+            "range": 1000000,
+            "resolution": 1
+          }
+        ]
+      }
+    },
+    "power": {
+      "availability": "known",
+      "source": "public reference",
+      "reason": "Typical capacity for Pixel 7; Google Pixel hardware specifications. Live power/thermal state is unknown.",
+      "values": {
+        "design_capacity_mah": 4355
+      }
+    },
+    "drm": {
+      "availability": "unknown",
+      "source": "needs verification",
+      "reason": "No verified template value; collect read-only evidence for this field.",
+      "values": {}
+    },
+    "radio": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "Local configured names only; no radio state or broadcast is changed.",
+      "values": {
+        "wifi_name": "Cloak-6b5265dd17f8",
+        "bluetooth_name": "Cloak-5750560f4104"
+      }
+    },
+    "carrier": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "Copied from the base template configuration; not a physical measurement.",
+      "values": {
+        "slots": 1,
+        "mcc": "310",
+        "mnc": "260",
+        "sim_state": "ready"
+      }
+    },
+    "packages": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "Read by explicit diagnostics authoring export from the unbound host; see meta.authoring_provenance.",
+      "values": {
+        "installed": [
+          {
+            "package": "android",
+            "version_name": "16",
+            "version_code": 36
+          },
+          {
+            "package": "com.android.vending",
+            "version_name": "53.6.15-34 [0] [PR] 996698724",
+            "version_code": 85361540
+          },
+          {
+            "package": "com.google.android.gms",
+            "version_name": "26.37.37 (260400-994713346)",
+            "version_code": 263737035
+          },
+          {
+            "package": "com.google.android.gsf",
+            "version_name": "16",
+            "version_code": 36
+          },
+          {
+            "package": "com.google.android.webview",
+            "version_name": "155.0.8059.43",
+            "version_code": 805904303
+          }
+        ]
+      }
+    },
+    "webview": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "Read by explicit diagnostics authoring export from the unbound host; see meta.authoring_provenance.",
+      "values": {
+        "provider": "com.google.android.webview",
+        "version": "155.0.8059.43"
+      }
+    },
+    "environment": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "Copied from the base template configuration; not a physical measurement.",
+      "values": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      }
+    },
+    "inventory_id": "9deef0e27201dd9550b5357470d39ba0194986eb6e51035f75e683e86b73c772"
+  },
+  "id": "2b1cec3d-b89b-5652-a17f-870079bf9666",
+  "name": "Reality",
+  "seed": "abababababababababababababababababababababababababababababababab",
+  "device": {
+    "manufacturer": "Google",
+    "brand": "google",
+    "model": "Pixel 7",
+    "product": "panther",
+    "device": "panther",
+    "hardware": "gs201",
+    "fingerprint": "google/panther/panther:13/TQ3A.230805.001/10193186:user/release-keys",
+    "version_release": "13",
+    "sdk_int": 33,
+    "security_patch": "2023-08-05",
+    "build_id": "TQ3A.230805.001",
+    "version_incremental": "10193186",
+    "build_date_utc": 1691712000,
+    "first_api_level": 33,
+    "bootloader": "panther-1.0-8769422",
+    "baseband": "g5123-230712-230712-B10046521"
+  },
+  "identifiers": {
+    "android_id": "3a4cf3a7fcd4e8cb",
+    "advertising_id": "d3500169-d39a-40b1-bcfa-f9d9d1739be7",
+    "app_set_id": "3d2eb31f-1124-489c-bcd6-61b985491917",
+    "mac": "1A:35:32:1E:77:25",
+    "bt_mac": "3A:B4:66:9A:D8:54",
+    "imei_primary": "472186978248637",
+    "imei_secondary": "710989943352422",
+    "sim_serial": "2622829857001513606",
+    "gsf_id": "f043b6a655d7a57a",
+    "widevine_id": "f2b9c7904bec4ec0755b7aec3eca856e1deb43ab9cbd564f038af27837d568d3",
+    "serial": "U6UV1SJBJET5"
+  },
+  "telephony": {
+    "sim_slot_count": 1,
+    "carrier_name": "T-Mobile",
+    "mcc": "310",
+    "mnc": "260",
+    "network_type": "5G"
+  },
+  "network": {
+    "egress_hint": "us-east"
+  },
+  "display": {
+    "width": 1080,
+    "height": 2400,
+    "density": 420,
+    "refresh_rate_hz": 90,
+    "screen_size_class": "large"
+  },
+  "locale": {
+    "language": "en",
+    "country": "US",
+    "timezone": "America/New_York"
+  },
+  "camera": {
+    "cameras": [
+      {
+        "facing": 1,
+        "hardware_level": 1,
+        "pixel_width": 8160,
+        "pixel_height": 6144
+      },
+      {
+        "facing": 1,
+        "hardware_level": 0,
+        "pixel_width": 4032,
+        "pixel_height": 3024
+      },
+      {
+        "facing": 0,
+        "hardware_level": 0,
+        "pixel_width": 4000,
+        "pixel_height": 3000
+      }
+    ]
+  },
+  "ua": {
+    "value": "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
+  },
+  "integrity": {
+    "verdict": "unknown",
+    "checked_at": null,
+    "keybox_tag": null
+  },
+  "health": {
+    "state": "new",
+    "last_seen": null
+  },
+  "meta": {
+    "source": "forge",
+    "forge_version": "0.2.0",
+    "template": "pixel_7",
+    "authoring_provenance": {
+      "reality.compute.values.gpu": {
+        "reader_id": "compute.gpu",
+        "captured_at_ms": 1792771610372,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound diagnostics; unchanged alpha28 candidate loaded",
+        "authoring_sha256": "80a9604e5ed878609f801d2a481f72d0694c3c150636745357f3e93aba6289a4"
+      },
+      "reality.memory.values.free_storage_gib": {
+        "reader_id": "memory.free_storage_gib",
+        "captured_at_ms": 1792771610372,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound diagnostics; unchanged alpha28 candidate loaded",
+        "authoring_sha256": "80a9604e5ed878609f801d2a481f72d0694c3c150636745357f3e93aba6289a4"
+      },
+      "reality.sensors.values.inventory": {
+        "reader_id": "sensors.inventory",
+        "captured_at_ms": 1792771610372,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound diagnostics; unchanged alpha28 candidate loaded",
+        "authoring_sha256": "80a9604e5ed878609f801d2a481f72d0694c3c150636745357f3e93aba6289a4"
+      },
+      "reality.packages.values.installed": {
+        "reader_id": "packages.installed",
+        "captured_at_ms": 1792771610372,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound diagnostics; unchanged alpha28 candidate loaded",
+        "authoring_sha256": "80a9604e5ed878609f801d2a481f72d0694c3c150636745357f3e93aba6289a4"
+      },
+      "reality.webview.values.provider": {
+        "reader_id": "webview.provider",
+        "captured_at_ms": 1792771610372,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound diagnostics; unchanged alpha28 candidate loaded",
+        "authoring_sha256": "80a9604e5ed878609f801d2a481f72d0694c3c150636745357f3e93aba6289a4"
+      },
+      "reality.webview.values.version": {
+        "reader_id": "webview.version",
+        "captured_at_ms": 1792771610372,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound diagnostics; unchanged alpha28 candidate loaded",
+        "authoring_sha256": "80a9604e5ed878609f801d2a481f72d0694c3c150636745357f3e93aba6289a4"
+      },
+      "reality.webview.values.user_agent": {
+        "reader_id": "webview.user_agent",
+        "captured_at_ms": 1792771610372,
+        "captured_sdk_int": 36,
+        "android_user_id": 17,
+        "host_state": "unbound diagnostics; unchanged alpha28 candidate loaded",
+        "authoring_sha256": "80a9604e5ed878609f801d2a481f72d0694c3c150636745357f3e93aba6289a4",
+        "unavailable_reason": "NullPointerException"
+      }
+    }
+  }
+}

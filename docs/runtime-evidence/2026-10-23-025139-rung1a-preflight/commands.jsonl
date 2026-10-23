@@ -1,0 +1,27 @@
+{"at": 1792716699.2413526, "args": ["shell", "dumpsys package dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792716699.3833659, "args": ["shell", "pm list packages --user 0 -U dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792716699.4989035, "args": ["shell", "cmd appops get --user 0 dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792716699.6065474, "args": ["shell", "cmd appops get 10377"], "exit_code": 0}
+{"at": 1792716699.7504785, "args": ["shell", "pm list packages --user 17 -U dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792716699.8927314, "args": ["shell", "cmd appops get --user 17 dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792716700.0039852, "args": ["shell", "cmd appops get 1710377"], "exit_code": 0}
+{"at": 1792716700.1571434, "args": ["shell", "pm path dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792716702.0559614, "args": ["shell", "su --mount-master -c 'set -eu; find /data/adb/cyclone_cloak/state-v1 /data/adb/cyclone_cloak/publishers -type f -exec sha256sum {} +; for u in /data/user/[0-9]*; do if [ -d \"$u/dev.cyclone.cloak\" ]; then find \"$u/dev.cyclone.cloak\" -type f \\( -name \"*binding*\" -o -name \"*index*\" \\) -exec sha256sum {} +; fi; done'"], "exit_code": 0}
+{"at": 1792716702.5842657, "args": ["shell", "su --mount-master -c 'set -eu; sha256sum '\"'\"'/data/app/~~oxxPf3k1Ggejx1aZFZie2A==/dev.cyclone.cloak-FKdzo6WgSOJ9SiRjvLslLQ==/base.apk'\"'\"''"], "exit_code": 0}
+{"at": 1792716702.6746435, "args": ["shell", "su --mount-master -c 'set -eu; for p in /data/adb/modules/cyclone_cloak /data/adb/modules_update/cyclone_cloak; do if [ -d \"$p\" ]; then echo PRESENT:$p; cat \"$p/module.prop\"; else echo ABSENT:$p; fi; done'"], "exit_code": 0}
+{"at": 1792716702.7106564, "args": ["get-state"], "exit_code": 0}
+{"at": 1792716702.8152385, "args": ["shell", "am get-current-user"], "exit_code": 0}
+{"at": 1792716702.9228427, "args": ["shell", "am get-started-user-state 0"], "exit_code": 0}
+{"at": 1792716703.0728524, "args": ["shell", "am get-started-user-state 17"], "exit_code": 0}
+{"at": 1792716703.2248154, "args": ["shell", "pm path --user 0 dev.cyclone.cloak.probe.diag"], "exit_code": 1}
+{"at": 1792716703.364271, "args": ["shell", "pm path --user 17 dev.cyclone.cloak.probe.diag"], "exit_code": 1}
+{"at": 1792716703.5622027, "args": ["shell", "dumpsys package dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792716703.720709, "args": ["shell", "pm list packages --user 0 -U dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792716703.8363433, "args": ["shell", "cmd appops get --user 0 dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792716703.9812562, "args": ["shell", "cmd appops get 10377"], "exit_code": 0}
+{"at": 1792716704.1920755, "args": ["shell", "pm list packages --user 17 -U dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792716704.3028297, "args": ["shell", "cmd appops get --user 17 dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792716704.3990295, "args": ["shell", "cmd appops get 1710377"], "exit_code": 0}
+{"at": 1792716704.5416248, "args": ["shell", "pm path dev.cyclone.cloak"], "exit_code": 0}
+{"at": 1792716704.9643946, "args": ["shell", "su --mount-master -c 'set -eu; find /data/adb/cyclone_cloak/state-v1 /data/adb/cyclone_cloak/publishers -type f -exec sha256sum {} +; for u in /data/user/[0-9]*; do if [ -d \"$u/dev.cyclone.cloak\" ]; then find \"$u/dev.cyclone.cloak\" -type f \\( -name \"*binding*\" -o -name \"*index*\" \\) -exec sha256sum {} +; fi; done'"], "exit_code": 0}
+{"at": 1792716705.176628, "args": ["shell", "su --mount-master -c 'set -eu; sha256sum '\"'\"'/data/app/~~oxxPf3k1Ggejx1aZFZie2A==/dev.cyclone.cloak-FKdzo6WgSOJ9SiRjvLslLQ==/base.apk'\"'\"''"], "exit_code": 0}

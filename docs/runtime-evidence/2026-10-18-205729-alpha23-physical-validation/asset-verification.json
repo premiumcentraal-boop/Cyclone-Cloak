@@ -1,0 +1,33 @@
+{
+  "tag": "v0.11.0-alpha.23",
+  "commit": "0d028a947b37013e0ad89a98d1455a79c33bfd3d",
+  "assets": [
+    {
+      "name": "app-release.apk",
+      "sha256": "8b605d985e97e31af32cce6263fc7cb4a94bb936f83b8b077d88be714d61c3cd",
+      "size": 43697715
+    },
+    {
+      "name": "build-provenance.json",
+      "sha256": "02ac49a712f05c32d2f2a832a2bf1aee6c56964607388d1753d4d98e6c9621b5",
+      "size": 961
+    },
+    {
+      "name": "cyclone-cloak-0.11.0-alpha.23.zip",
+      "sha256": "7bde12d4780c7398175a9c57819ed0831ae25ca0d4e9b1c17a26e6f067ac5ba0",
+      "size": 1680565
+    },
+    {
+      "name": "evidence-bundle.zip",
+      "sha256": "e0bf5b6bd0d6eedccf60c4fbe5fd69a7e39663b5021e768ad178028870969ce2",
+      "size": 275957
+    },
+    {
+      "name": "summary.md",
+      "sha256": "e229acae8ece3cc2882cd4fa7165b854f61935dba45279739e0d930a1307f5a0",
+      "size": 2512
+    }
+  ],
+  "embedded_module_exact_match": true,
+  "published_provenance_scope": "Historical alpha18 evidence attachment; not alpha23 physical proof"
+}

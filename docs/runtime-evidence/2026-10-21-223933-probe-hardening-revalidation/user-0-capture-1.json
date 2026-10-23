@@ -1,0 +1,519 @@
+{
+  "format": 1,
+  "fixture": "a",
+  "package": "dev.cyclone.cloak.probe.diag",
+  "uid": 10318,
+  "pid": 29285,
+  "request_id": "filesystem-2026-10-21-223933-0-1",
+  "session_generation": 1,
+  "profile_sha256": "da878a8a5c51ef62324fd977d85c06fd830fa9c3896a1060621dbfc4e02efa98",
+  "status": "FAIL",
+  "reason": "CAPTURE_FAILED",
+  "error": "NullPointerException",
+  "failed_row_id": "capture.runtime_envelope",
+  "failure_details": {
+    "exception_class": "java.lang.NullPointerException",
+    "exception_message": "REDACTED_EXCEPTION_MESSAGE",
+    "message_redacted": true,
+    "failed_row_id": "capture.runtime_envelope",
+    "stack_trace": [
+      {
+        "class": "dev.cyclone.cloak.probe.RuntimeEnvelopeReport",
+        "method": "collect",
+        "line": 142
+      },
+      {
+        "class": "dev.cyclone.cloak.probe.ProbeActivity$Capture",
+        "method": "run",
+        "line": 183
+      },
+      {
+        "class": "dev.cyclone.cloak.probe.ProbeActivity$$ExternalSyntheticLambda0",
+        "method": "run",
+        "line": 0
+      },
+      {
+        "class": "java.lang.Thread",
+        "method": "run",
+        "line": 1572
+      }
+    ],
+    "stack_truncated": false
+  },
+  "filesystem_reader_failures": [
+    {
+      "exception_class": "java.nio.file.AccessDeniedException",
+      "exception_message": "REDACTED_EXCEPTION_MESSAGE",
+      "message_redacted": true,
+      "failed_row_id": "diagnostics.filesystem.build_prop",
+      "stack_trace": [
+        {
+          "class": "sun.nio.fs.UnixFileSystemProvider",
+          "method": "newByteChannel",
+          "line": 220
+        },
+        {
+          "class": "java.nio.file.Files",
+          "method": "newByteChannel",
+          "line": 371
+        },
+        {
+          "class": "java.nio.file.Files",
+          "method": "newByteChannel",
+          "line": 422
+        },
+        {
+          "class": "java.nio.file.spi.FileSystemProvider",
+          "method": "newInputStream",
+          "line": 420
+        },
+        {
+          "class": "java.nio.file.Files",
+          "method": "newInputStream",
+          "line": 156
+        },
+        {
+          "class": "dev.cyclone.cloak.probe.FilesystemReadGuard",
+          "method": "lambda$collect$1",
+          "line": 25
+        },
+        {
+          "class": "dev.cyclone.cloak.probe.FilesystemReadGuard$$ExternalSyntheticLambda3",
+          "method": "open",
+          "line": 0
+        },
+        {
+          "class": "dev.cyclone.cloak.probe.FilesystemReadGuard",
+          "method": "snapshot",
+          "line": 60
+        },
+        {
+          "class": "dev.cyclone.cloak.probe.FilesystemReadGuard",
+          "method": "lambda$collect$2",
+          "line": 33
+        },
+        {
+          "class": "dev.cyclone.cloak.probe.FilesystemReadGuard$$ExternalSyntheticLambda2",
+          "method": "call",
+          "line": 0
+        },
+        {
+          "class": "java.util.concurrent.FutureTask",
+          "method": "run",
+          "line": 328
+        },
+        {
+          "class": "java.util.concurrent.ThreadPoolExecutor",
+          "method": "runWorker",
+          "line": 1100
+        },
+        {
+          "class": "java.util.concurrent.ThreadPoolExecutor$Worker",
+          "method": "run",
+          "line": 624
+        },
+        {
+          "class": "java.lang.Thread",
+          "method": "run",
+          "line": 1572
+        }
+      ],
+      "stack_truncated": false,
+      "reason": "PERMISSION_DENIED"
+    },
+    {
+      "exception_class": "java.nio.file.AccessDeniedException",
+      "exception_message": "REDACTED_EXCEPTION_MESSAGE",
+      "message_redacted": true,
+      "failed_row_id": "diagnostics.filesystem.proc_version",
+      "stack_trace": [
+        {
+          "class": "sun.nio.fs.UnixFileSystemProvider",
+          "method": "newByteChannel",
+          "line": 220
+        },
+        {
+          "class": "java.nio.file.Files",
+          "method": "newByteChannel",
+          "line": 371
+        },
+        {
+          "class": "java.nio.file.Files",
+          "method": "newByteChannel",
+          "line": 422
+        },
+        {
+          "class": "java.nio.file.spi.FileSystemProvider",
+          "method": "newInputStream",
+          "line": 420
+        },
+        {
+          "class": "java.nio.file.Files",
+          "method": "newInputStream",
+          "line": 156
+        },
+        {
+          "class": "dev.cyclone.cloak.probe.FilesystemReadGuard",
+          "method": "lambda$collect$1",
+          "line": 25
+        },
+        {
+          "class": "dev.cyclone.cloak.probe.FilesystemReadGuard$$ExternalSyntheticLambda3",
+          "method": "open",
+          "line": 0
+        },
+        {
+          "class": "dev.cyclone.cloak.probe.FilesystemReadGuard",
+          "method": "snapshot",
+          "line": 60
+        },
+        {
+          "class": "dev.cyclone.cloak.probe.FilesystemReadGuard",
+          "method": "lambda$collect$2",
+          "line": 33
+        },
+        {
+          "class": "dev.cyclone.cloak.probe.FilesystemReadGuard$$ExternalSyntheticLambda2",
+          "method": "call",
+          "line": 0
+        },
+        {
+          "class": "java.util.concurrent.FutureTask",
+          "method": "run",
+          "line": 328
+        },
+        {
+          "class": "java.util.concurrent.ThreadPoolExecutor",
+          "method": "runWorker",
+          "line": 1100
+        },
+        {
+          "class": "java.util.concurrent.ThreadPoolExecutor$Worker",
+          "method": "run",
+          "line": 624
+        },
+        {
+          "class": "java.lang.Thread",
+          "method": "run",
+          "line": 1572
+        }
+      ],
+      "stack_truncated": false,
+      "reason": "PERMISSION_DENIED"
+    }
+  ],
+  "rows": [
+    {
+      "id": "build.MANUFACTURER"
+    },
+    {
+      "id": "build.BRAND"
+    },
+    {
+      "id": "build.MODEL"
+    },
+    {
+      "id": "build.DEVICE"
+    },
+    {
+      "id": "build.PRODUCT"
+    },
+    {
+      "id": "build.HARDWARE"
+    },
+    {
+      "id": "build.FINGERPRINT"
+    },
+    {
+      "id": "build.ID"
+    },
+    {
+      "id": "build.BOOTLOADER"
+    },
+    {
+      "id": "build.SERIAL"
+    },
+    {
+      "id": "build.getSerial"
+    },
+    {
+      "id": "build.TIME"
+    },
+    {
+      "id": "build.TYPE"
+    },
+    {
+      "id": "build.TAGS"
+    },
+    {
+      "id": "version.SDK_INT"
+    },
+    {
+      "id": "version.RELEASE"
+    },
+    {
+      "id": "version.INCREMENTAL"
+    },
+    {
+      "id": "version.SECURITY_PATCH"
+    },
+    {
+      "id": "build.getRadioVersion"
+    },
+    {
+      "id": "properties.java.ro.product.model"
+    },
+    {
+      "id": "properties.native.ro.product.model"
+    },
+    {
+      "id": "properties.java.ro.product.manufacturer"
+    },
+    {
+      "id": "properties.native.ro.product.manufacturer"
+    },
+    {
+      "id": "properties.java.ro.product.brand"
+    },
+    {
+      "id": "properties.native.ro.product.brand"
+    },
+    {
+      "id": "properties.java.ro.product.device"
+    },
+    {
+      "id": "properties.native.ro.product.device"
+    },
+    {
+      "id": "properties.java.ro.product.name"
+    },
+    {
+      "id": "properties.native.ro.product.name"
+    },
+    {
+      "id": "properties.java.ro.build.version.sdk"
+    },
+    {
+      "id": "properties.native.ro.build.version.sdk"
+    },
+    {
+      "id": "properties.java.ro.build.fingerprint"
+    },
+    {
+      "id": "properties.native.ro.build.fingerprint"
+    },
+    {
+      "id": "properties.java.ro.serialno"
+    },
+    {
+      "id": "properties.native.ro.serialno"
+    },
+    {
+      "id": "properties.java.ro.sf.lcd_density"
+    },
+    {
+      "id": "properties.native.ro.sf.lcd_density"
+    },
+    {
+      "id": "properties.java.persist.sys.timezone"
+    },
+    {
+      "id": "properties.native.persist.sys.timezone"
+    },
+    {
+      "id": "properties.nativeCallback.ro.product.model"
+    },
+    {
+      "id": "telephony.simState"
+    },
+    {
+      "id": "telephony.phoneType"
+    },
+    {
+      "id": "telephony.roaming"
+    },
+    {
+      "id": "telephony.imei0"
+    },
+    {
+      "id": "telephony.imei1"
+    },
+    {
+      "id": "telephony.deviceId"
+    },
+    {
+      "id": "telephony.simSerial"
+    },
+    {
+      "id": "telephony.phoneCount"
+    },
+    {
+      "id": "telephony.activeModemCount"
+    },
+    {
+      "id": "telephony.networkType"
+    },
+    {
+      "id": "telephony.dataNetworkType"
+    },
+    {
+      "id": "operator.networkNumeric"
+    },
+    {
+      "id": "operator.simNumeric"
+    },
+    {
+      "id": "operator.networkName"
+    },
+    {
+      "id": "operator.simName"
+    },
+    {
+      "id": "operator.networkCountry"
+    },
+    {
+      "id": "operator.simCountry"
+    },
+    {
+      "id": "telephony.subscriberId"
+    },
+    {
+      "id": "settings.secure.androidId"
+    },
+    {
+      "id": "settings.provider.androidId"
+    },
+    {
+      "id": "settings.unrelatedControl"
+    },
+    {
+      "id": "wifi.objectMac"
+    },
+    {
+      "id": "wifi.serviceMac"
+    },
+    {
+      "id": "wifi.bssid"
+    },
+    {
+      "id": "wifi.linkSpeed"
+    },
+    {
+      "id": "wifi.ssid"
+    },
+    {
+      "id": "bluetooth.address"
+    },
+    {
+      "id": "bluetooth.name"
+    },
+    {
+      "id": "advertising.id"
+    },
+    {
+      "id": "drm.deviceUniqueId"
+    },
+    {
+      "id": "display.resources.width"
+    },
+    {
+      "id": "display.resources.height"
+    },
+    {
+      "id": "display.resources.density"
+    },
+    {
+      "id": "display.real.width"
+    },
+    {
+      "id": "display.real.height"
+    },
+    {
+      "id": "display.real.density"
+    },
+    {
+      "id": "display.refresh"
+    },
+    {
+      "id": "camera.characteristics"
+    },
+    {
+      "id": "sensors.list"
+    },
+    {
+      "id": "locale.default.language"
+    },
+    {
+      "id": "locale.default.country"
+    },
+    {
+      "id": "locale.resources.language"
+    },
+    {
+      "id": "locale.resources.country"
+    },
+    {
+      "id": "timezone.default"
+    },
+    {
+      "id": "process.uid"
+    },
+    {
+      "id": "process.androidUser"
+    },
+    {
+      "id": "packages.visible"
+    },
+    {
+      "id": "runtime.loadedLibraries"
+    },
+    {
+      "id": "runtime.javaBridgeVisible"
+    }
+  ],
+  "filesystem_observations": {
+    "format": 1,
+    "rows": [
+      {
+        "id": "diagnostics.filesystem.build_prop",
+        "source": "/system/build.prop",
+        "status": "BLOCKED",
+        "reason": "PERMISSION_DENIED",
+        "sha256": null,
+        "byte_count": null,
+        "line_count": null,
+        "duration_ms": 1
+      },
+      {
+        "id": "diagnostics.filesystem.proc_version",
+        "source": "/proc/version",
+        "status": "BLOCKED",
+        "reason": "PERMISSION_DENIED",
+        "sha256": null,
+        "byte_count": null,
+        "line_count": null,
+        "duration_ms": 0
+      },
+      {
+        "id": "diagnostics.filesystem.proc_cpuinfo",
+        "source": "/proc/cpuinfo",
+        "status": "OBSERVED",
+        "reason": "OBSERVATION_ONLY_NO_EXPECTATION",
+        "sha256": "e29c2b53aec8cdcf40deeb7849d318ee4984daf5474b93a2302318a30905c4f3",
+        "byte_count": 3681,
+        "line_count": 81,
+        "duration_ms": 2
+      },
+      {
+        "id": "diagnostics.filesystem.maps_snapshot",
+        "source": "/proc/self/maps",
+        "status": "OBSERVED",
+        "reason": "OBSERVATION_ONLY_NO_EXPECTATION",
+        "sha256": "b88741b48d65b23e2da09782bfc598081a63b3affce744b50a1d3b76b6859026",
+        "byte_count": 322988,
+        "line_count": 3301,
+        "duration_ms": 34
+      }
+    ]
+  }
+}

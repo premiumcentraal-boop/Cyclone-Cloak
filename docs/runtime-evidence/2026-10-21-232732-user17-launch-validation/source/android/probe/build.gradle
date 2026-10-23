@@ -1,0 +1,53 @@
+plugins {
+    id "com.android.application"
+}
+
+android {
+    namespace "dev.cyclone.cloak.probe"
+    compileSdk 36
+    ndkVersion "27.0.12077973"
+    defaultConfig {
+        applicationId "dev.cyclone.cloak.probe"
+        minSdk 29
+        targetSdk 36
+        versionCode 1
+        versionName "1.0"
+        externalNativeBuild {
+            ndk { abiFilters "arm64-v8a", "armeabi-v7a" }
+        }
+    }
+    flavorDimensions "permissions"
+    productFlavors {
+        standard { dimension "permissions" }
+        diagnostics {
+            dimension "permissions"
+            applicationIdSuffix ".diag"
+            versionNameSuffix "-diag"
+        }
+    }
+    externalNativeBuild {
+        cmake { path "src/main/cpp/CMakeLists.txt"; version "3.22.1" }
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}
+
+// Preserve the historical permission-free APK location after adding flavors.
+def preserveDefaultProbePath = tasks.register("preserveDefaultProbePath", Copy) {
+    from(layout.buildDirectory.dir("outputs/apk/standard/debug")) { include "*.apk" }
+    into(layout.buildDirectory.dir("outputs/apk/debug"))
+    rename { "probe-debug.apk" }
+}
+tasks.configureEach {
+    if (name == "assembleStandardDebug") { finalizedBy(preserveDefaultProbePath) }
+}
+
+// Only the diagnostics APK carries the real client. The standard APK remains
+// permission-free and can honestly record SDK_OR_API_ABSENT.
+dependencies {
+    diagnosticsImplementation "com.google.android.gms:play-services-ads-identifier:18.3.0"
+    testImplementation "junit:junit:4.13.2"
+    testImplementation "org.json:json:20240303"
+}

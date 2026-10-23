@@ -1,0 +1,43 @@
+--------- beginning of events
+10-23 19:16:18.852 15666 15666 I auditd  : type=1400 audit(0.0:9716): avc:  denied  { search } for  comm="main" name="adb" dev="dm-64" ino=400 scontext=u:r:zygote:s0 tcontext=u:object_r:adb_data_file:s0 tclass=dir permissive=0
+10-23 19:16:18.924 15666 15666 I auditd  : type=1400 audit(0.0:9717): avc:  granted  { execute } for  comm="loak.probe.diag" path="/data/user/17/dev.cyclone.cloak.probe.diag/libshadowhook.so" dev="dm-64" ino=320451 scontext=u:r:untrusted_app:s0:c65,c257,c529,c768 tcontext=u:object_r:app_data_file:s0:c65,c257,c529,c768 tclass=file
+10-23 19:16:18.924 15666 15666 I auditd  : type=1400 audit(0.0:9718): avc:  denied  { read } for  comm="loak.probe.diag" name="u:object_r:serialno_prop:s0" dev="tmpfs" ino=366 scontext=u:r:untrusted_app:s0:c65,c257,c529,c768 tcontext=u:object_r:serialno_prop:s0 tclass=file permissive=0
+10-23 19:16:18.968 15666 15666 I auditd  : type=1400 audit(0.0:9719): avc:  granted  { execute } for  comm="loak.probe.diag" path="/data/user/17/dev.cyclone.cloak.probe.diag/code_cache/cloak_hooks/libpine.so" dev="dm-64" ino=314213 scontext=u:r:untrusted_app:s0:c65,c257,c529,c768 tcontext=u:object_r:app_data_file:s0:c65,c257,c529,c768 tclass=file
+--------- beginning of system
+10-23 19:16:19.063 15666 15693 I DisplayManager: Choreographer implicitly registered for the refresh rate.
+10-23 19:16:19.110 15666 15666 I wm_on_create_called: [115336909,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,performCreate,31]
+10-23 19:16:19.112 15666 15666 I wm_on_start_called: [115336909,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,handleStartActivity,0]
+10-23 19:16:19.116 15666 15666 I wm_on_resume_called: [115336909,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,RESUME_ACTIVITY,4]
+10-23 19:16:19.128 15666 15666 I wm_on_top_resumed_gained_called: [115336909,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,topStateChangedWhenResumed]
+10-23 19:16:19.129 15666 15666 I wm_on_top_resumed_lost_called: [115336909,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,topStateChangedWhenResumed]
+10-23 19:16:19.129 15666 15666 I wm_on_paused_called: [115336909,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,performPause,0]
+10-23 19:16:19.169 15666 15666 I viewroot_draw_event: [VRI[DiagnosticsProbeActivity]52f2346,reportDrawFinished seqId=0]
+10-23 19:16:21.326 15666 15666 I wm_on_stop_called: [115336909,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,handleRelaunchActivity,0]
+10-23 19:16:21.329 15666 15666 I wm_on_destroy_called: [115336909,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,performDestroy,1]
+10-23 19:16:21.636 15666 15666 I auditd  : type=1400 audit(0.0:9723): avc:  denied  { read } for  comm="cloak-api-reade" name="u:object_r:serialno_prop:s0" dev="tmpfs" ino=366 scontext=u:r:untrusted_app:s0:c65,c257,c529,c768 tcontext=u:object_r:serialno_prop:s0 tclass=file permissive=0
+10-23 19:16:21.744 15666 15666 I auditd  : type=1400 audit(0.0:9724): avc:  denied  { read } for  comm="cloak-api-reade" name="u:object_r:serialno_prop:s0" dev="tmpfs" ino=366 scontext=u:r:untrusted_app:s0:c65,c257,c529,c768 tcontext=u:object_r:serialno_prop:s0 tclass=file permissive=0
+10-23 19:16:21.748 15666 15666 I auditd  : type=1400 audit(0.0:9725): avc:  denied  { read } for  comm="cloak-api-reade" name="u:object_r:serialno_prop:s0" dev="tmpfs" ino=366 scontext=u:r:untrusted_app:s0:c65,c257,c529,c768 tcontext=u:object_r:serialno_prop:s0 tclass=file permissive=0
+10-23 19:16:21.457 15666 15666 I wm_on_create_called: [115336909,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,performCreate,61]
+10-23 19:16:21.460 15666 15666 I wm_on_start_called: [115336909,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,handleStartActivity,0]
+10-23 19:16:21.462 15666 15666 I wm_on_resume_called: [115336909,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,LIFECYCLER_RESUME_ACTIVITY,2]
+10-23 19:16:21.529 15666 15666 I wm_on_paused_called: [115336909,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,performPause,0]
+10-23 19:16:21.557 15666 15666 I viewroot_draw_event: [VRI[DiagnosticsProbeActivity]a0af685,reportDrawFinished seqId=0]
+10-23 19:16:23.843 15666 15801 V ResourcesManager: The following library key has been added: ResourcesKey{ mHash=4b9a73ec mResDir=null mSplitDirs=[] mOverlayDirs=[] mLibDirs=[/data/app/~~sYhpHzKiCIiM5zEJBJy4tA==/com.google.android.webview-xI1jK1gg4o0XHpPsJu55iQ==/base.apk,/system/framework/android.test.base.jar,/system_ext/framework/androidx.window.extensions.jar] mDisplayId=0 mOverrideConfig=v36 mCompatInfo={420dpi always-compat} mLoaders=[]}
+10-23 19:16:25.008 15666 15666 I viewroot_draw_event: [VRI[DiagnosticsProbeActivity]a0af685,reportDrawFinished seqId=0]
+10-23 19:16:25.516 15666 15666 I auditd  : type=1400 audit(0.0:9783): avc:  denied  { read } for  comm="cloak-api-reade" name="u:object_r:serialno_prop:s0" dev="tmpfs" ino=366 scontext=u:r:untrusted_app:s0:c65,c257,c529,c768 tcontext=u:object_r:serialno_prop:s0 tclass=file permissive=0
+10-23 19:16:25.516 15666 15666 I auditd  : type=1400 audit(0.0:9784): avc:  denied  { read } for  comm="cloak-api-reade" name="u:object_r:serialno_prop:s0" dev="tmpfs" ino=366 scontext=u:r:untrusted_app:s0:c65,c257,c529,c768 tcontext=u:object_r:serialno_prop:s0 tclass=file permissive=0
+10-23 19:16:25.125 15666 15666 I viewroot_draw_event: [VRI[DiagnosticsProbeActivity]a0af685,reportDrawFinished seqId=0]
+10-23 19:16:25.224 15666 15666 I viewroot_draw_event: [VRI[DiagnosticsProbeActivity]a0af685,reportDrawFinished seqId=0]
+10-23 19:16:25.288 15666 15666 I ActivityThread: ApplicationInfo updating for dev.cyclone.cloak.probe.diag, new timestamp: 43489752
+10-23 19:16:25.288 15666 15666 I ActivityThread: assets removed: [/data/resource-cache/com.android.systemui-neutral-VEXu.frro, /data/resource-cache/com.android.systemui-accent-OZcc.frro, /data/resource-cache/com.android.systemui-dynamic-eOnV.frro]
+10-23 19:16:25.288 15666 15666 I ActivityThread: assets added: [/data/resource-cache/com.android.systemui-neutral-5ldJ.frro, /data/resource-cache/com.android.systemui-accent-i1uL.frro, /data/resource-cache/com.android.systemui-dynamic-BhZm.frro]
+10-23 19:16:25.355 15666 15666 I wm_on_stop_called: [115336909,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,handleRelaunchActivity,0]
+10-23 19:16:25.356 15666 15666 I wm_on_destroy_called: [115336909,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,performDestroy,1]
+10-23 19:16:25.422 15666 15666 I wm_on_create_called: [115336909,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,performCreate,6]
+10-23 19:16:25.423 15666 15666 I wm_on_start_called: [115336909,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,handleStartActivity,0]
+10-23 19:16:25.423 15666 15666 I wm_on_resume_called: [115336909,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,LIFECYCLER_RESUME_ACTIVITY,0]
+10-23 19:16:25.430 15666 15666 I wm_on_paused_called: [115336909,dev.cyclone.cloak.probe.DiagnosticsProbeActivity,performPause,0]
+10-23 19:16:25.443 15666 15666 I viewroot_draw_event: [VRI[DiagnosticsProbeActivity]404838d,reportDrawFinished seqId=0]
+10-23 19:16:25.484 15666 15666 I viewroot_draw_event: [VRI[DiagnosticsProbeActivity]404838d,reportDrawFinished seqId=0]
+--------- beginning of main
+10-23 19:16:30.305 15666 15680 W loak.probe.diag: Cleared Reference was only reachable from finalizer (only reported once)

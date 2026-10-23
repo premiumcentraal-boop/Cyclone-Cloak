@@ -1,0 +1,9 @@
+{
+  "result": "COMPLETE_WITH_LIMITATIONS",
+  "captures": 3,
+  "measured_applied_paths": 1,
+  "remaining_partial_paths": 16,
+  "verified_promotions": 0,
+  "production_unchanged": true,
+  "probe_removed": true
+}

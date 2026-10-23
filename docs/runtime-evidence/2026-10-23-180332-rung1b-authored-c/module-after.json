@@ -1,0 +1,3 @@
+{
+  "files": "d7dd105446a229f981e5cdd1aed862a13e3c7d04220f04fb08eadde175bb15c1  /data/adb/modules/cyclone_cloak/zygisk/arm64-v8a.so\n6e9943f1033582eb90f9a765b80f52243b4da90a9d577e5c4e43203b2278647e  /data/adb/modules/cyclone_cloak/zygisk/armeabi-v7a.so\n200fa6efd9cde6a16f7e6e98296244a6501480b952586dfcb5b122f92f033e81  /data/adb/modules/cyclone_cloak/artifacts.sha256\n73fa376f4711523d72a49490f1157776ec1c53b309052b783ca0ed04fd20a78d  /data/adb/modules/cyclone_cloak/module.prop\ne7406d58c0ba3fa71cae3f4ce5ff3ad2285deed891c16b06220b3408610eb3eb  /data/adb/modules/cyclone_cloak/load-records.jsonl\n"
+}

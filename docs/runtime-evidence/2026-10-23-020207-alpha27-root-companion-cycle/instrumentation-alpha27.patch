@@ -1,0 +1,243 @@
+--- a/android/module/src/main/cpp/cloak.cpp
++++ b/android/module/src/main/cpp/cloak.cpp
+@@ -13,6 +13,7 @@
+ #include <sys/socket.h>
+ #include <unistd.h>
+ #include "zygisk.hpp"
++#include "module_load_record.hpp"
+ #include "runtime_scope.hpp"
+ 
+ #include <android/log.h>
+@@ -302,6 +303,7 @@
+ }
+ 
+ constexpr uint32_t kStateRequestMagic = 0x434C4B31;  // CLK1
++constexpr uint32_t kLoadRecordRequestMagic = 0x434C4B32;  // CLK2; private companion IPC only
+ constexpr size_t kMaxProfileBytes = 1024 * 1024;
+ 
+ struct StateRequest {
+@@ -400,6 +402,29 @@
+ void companion_handler(int socket) {
+     StateRequest request{};
+     if (!read_exact(socket, &request, sizeof(request))) return;
++    if (request.magic == kLoadRecordRequestMagic) {
++        // Existing root companion owns the write; zygote never opens the log.
++        struct timeval timeout{3, 0};
++        setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
++        const auto user = bounded_string(request.user, sizeof(request.user));
++        const auto pkg = bounded_string(request.packageName, sizeof(request.packageName));
++        uint32_t size = 0;
++        auto result = cloak_load_evidence::Result::INVALID;
++        if (valid_request(user, pkg) && read_exact(socket, &size, sizeof(size)) &&
++            size > 0 && size <= cloak_load_evidence::kMaxRecord) {
++            std::string payload(size, '\0');
++            if (read_exact(socket, payload.data(), payload.size()) && !read_profile_state(user, pkg).empty()) {
++                const int directory = open("/data/adb/modules/cyclone_cloak",
++                                           O_RDONLY | O_DIRECTORY | O_CLOEXEC | O_NOFOLLOW);
++                result = cloak_load_evidence::persist(directory, payload, pkg, user);
++                if (directory >= 0) close(directory);
++            }
++        }
++        const uint32_t reply = static_cast<uint32_t>(result);
++        if (result != cloak_load_evidence::Result::OK) LOGI("companion load record status=%u", reply);
++        write_exact(socket, &reply, sizeof(reply));  // ack only after fdatasync
++        return;
++    }
+     if (request.magic != kStateRequestMagic) {
+         const uint32_t empty = 0;
+         write_exact(socket, &empty, sizeof(empty));
+@@ -416,6 +441,30 @@
+         : 0;
+     if (!write_exact(socket, &size, sizeof(size))) return;
+     if (size > 0) write_exact(socket, profileJson.data(), size);
++}
++
++cloak_load_evidence::Result send_load_record(Api *api, const std::string &user,
++                                           const std::string &pkg, const std::string &payload) {
++    if (!api || !valid_request(user, pkg) || payload.empty() ||
++        payload.size() > cloak_load_evidence::kMaxRecord) return cloak_load_evidence::Result::INVALID;
++    const int socket = api->connectCompanion();
++    if (socket < 0) return cloak_load_evidence::Result::TRANSPORT;
++    struct timeval timeout{3, 0};
++    setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
++    setsockopt(socket, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(timeout));
++    StateRequest request{};
++    request.magic = kLoadRecordRequestMagic;
++    memcpy(request.user, user.c_str(), user.size() + 1);
++    memcpy(request.packageName, pkg.c_str(), pkg.size() + 1);
++    const uint32_t size = payload.size();
++    uint32_t reply = static_cast<uint32_t>(cloak_load_evidence::Result::TRANSPORT);
++    const bool received = write_exact(socket, &request, sizeof(request)) &&
++        write_exact(socket, &size, sizeof(size)) && write_exact(socket, payload.data(), payload.size()) &&
++        read_exact(socket, &reply, sizeof(reply));
++    close(socket);
++    if (!received || reply > static_cast<uint32_t>(cloak_load_evidence::Result::TRANSPORT))
++        return cloak_load_evidence::Result::TRANSPORT;
++    return static_cast<cloak_load_evidence::Result>(reply);
+ }
+ 
+ bool load_profile_for(Api *api, const std::string &user, const std::string &pkg) {
+@@ -996,6 +1045,12 @@
+             access("/data/adb/modules/cyclone_cloak/disable_native_hook", F_OK) != 0;
+         g_active = load_profile_for(api, userId, g_active_package);
+         if (g_active) {
++            const int module_directory = api->getModuleDir();
++            const auto payload = cloak_load_evidence::assemble(module_directory, g_active_package, userId, g_app_data_dir);
++            if (module_directory >= 0) close(module_directory);
++            const auto result = send_load_record(api, userId, g_active_package, payload);
++            if (result != cloak_load_evidence::Result::OK)
++                LOGI("load record status=%u", static_cast<uint32_t>(result));
+             LOGI("cloaking %s (%zu props)", g_active_key.c_str(), g_props.size());
+         }
+     }
+--- a/android/module/build.gradle
++++ b/android/module/build.gradle
+@@ -68,6 +68,15 @@
+                 }
+             }
+         }
++        // Hash the completed ABI libraries, avoiding a circular embedded ZIP hash.
++        def manifest = abis.collect { abi ->
++            def library = new File(stage, "zygisk/${abi}.so")
++            if (!library.isFile()) throw new GradleException("Missing packaged ABI: ${abi}")
++            def digest = java.security.MessageDigest.getInstance("SHA-256").digest(library.bytes)
++                    .collect { String.format("%02x", it & 0xff) }.join()
++            "${digest}  zygisk/${abi}.so\n"
++        }.join()
++        new File(stage, "artifacts.sha256").setText(manifest, "UTF-8")
+         def zipName = "cyclone-cloak-${moduleVersion}.zip"
+         ant.zip(destfile: new File(outDir, zipName), basedir: stage)
+         println "module zip: ${outDir}/${zipName}"
+--- /dev/null
++++ b/android/module/src/main/cpp/module_load_record.hpp
+@@ -0,0 +1,130 @@
++#pragma once
++
++#include <cerrno>
++#include <fcntl.h>
++#include <string>
++#include <sys/file.h>
++#include <sys/stat.h>
++#include <time.h>
++#include <unistd.h>
++#include "json.hpp"
++
++namespace cloak_load_evidence {
++constexpr off_t kLimit = 64 * 1024;
++constexpr size_t kMaxRecord = 1024;
++enum class Result : uint32_t { OK = 0, INVALID = 1, DIRECTORY = 2, DIGEST = 3, WRITE = 4, TRANSPORT = 5 };
++
++// The digest is packaging metadata, independently checked against the ZIP's ABI
++// library by the evidence runner. It is not an in-memory attestation or ZIP hash.
++inline std::string packaged_digest(int directory) {
++    const int fd = openat(directory, "artifacts.sha256", O_RDONLY | O_CLOEXEC | O_NOFOLLOW);
++    if (fd < 0) return {};
++    char bytes[512];
++    const ssize_t count = read(fd, bytes, sizeof(bytes));
++    close(fd);
++    if (count <= 0 || count == sizeof(bytes)) return {};
++#if defined(__aarch64__)
++    const std::string name = "zygisk/arm64-v8a.so";
++#elif defined(__arm__)
++    const std::string name = "zygisk/armeabi-v7a.so";
++#else
++    return {};
++#endif
++#if defined(__aarch64__) || defined(__arm__)
++    const std::string manifest(bytes, static_cast<size_t>(count));
++    std::string digest;
++    for (size_t start = 0; start < manifest.size();) {
++        const size_t end = manifest.find('\n', start);
++        const std::string line = manifest.substr(start, end == std::string::npos ? end : end - start);
++        if (line.size() == 66 + name.size() && line.substr(64) == "  " + name) {
++            if (!digest.empty()) return {};  // ambiguous manifests never yield evidence
++            digest = line.substr(0, 64);
++            if (digest.find_first_not_of("0123456789abcdef") != std::string::npos) return {};
++        }
++        if (end == std::string::npos) break;
++        start = end + 1;
++    }
++    return digest;
++#endif
++}
++
++inline bool append(int directory, const std::string &record) {
++    if (record.empty() || record.size() > kMaxRecord || record.back() != '\n') return false;
++    const int fd = openat(directory, "load-records.jsonl",
++                          O_WRONLY | O_CREAT | O_APPEND | O_CLOEXEC | O_NOFOLLOW, 0600);
++    if (fd < 0) return false;
++    int locked;
++    do { locked = flock(fd, LOCK_EX); } while (locked < 0 && errno == EINTR);
++    bool ok = false;
++    struct stat state{};
++    if (locked == 0 && fstat(fd, &state) == 0 && S_ISREG(state.st_mode) && state.st_nlink == 1) {
++        bool ready = true;
++        if (state.st_size > kLimit - static_cast<off_t>(record.size())) {
++            ready = ftruncate(fd, 0) == 0;
++            state.st_size = 0;
++        }
++        if (ready) {
++            // One write under the inode lock: concurrent forked processes cannot
++            // interleave JSON lines or race the size cap/truncation. Never unlink.
++            const ssize_t written = write(fd, record.data(), record.size());
++            if (written == static_cast<ssize_t>(record.size())) {
++                ok = fdatasync(fd) == 0;
++            } else {
++                if (ftruncate(fd, state.st_size) != 0) ok = false;
++            }
++        }
++    }
++    close(fd);  // releases flock on all paths
++    return ok;
++}
++
++// Runs pre-specialization: assemble only; never try to write in zygote context.
++inline std::string assemble(int directory, const std::string &package, const std::string &user,
++                            const std::string &app_directory) noexcept {
++    if (directory < 0) return {};
++    try {
++        const auto digest = packaged_digest(directory);
++        struct timespec now{};
++        if (digest.empty() || clock_gettime(CLOCK_REALTIME, &now) != 0) return {};
++        const auto line = nlohmann::json{
++            {"format", 1}, {"stage", "preAppSpecialize_bound"},
++            {"timestamp_ms", static_cast<int64_t>(now.tv_sec) * 1000 + now.tv_nsec / 1000000},
++            {"target_package", package}, {"android_user_id", std::stoi(user)},
++            {"pid", getpid()}, {"module_artifact_sha256", digest},
++            {"digest_source", "packaged_abi_manifest"},
++            {"hook_library_path", app_directory + "/code_cache/cloak_hooks/libpine.so"},
++            {"hook_path_state", "planned_before_postAppSpecialize"}
++        }.dump() + "\n";
++        return line.size() <= kMaxRecord ? line : std::string{};
++    } catch (...) {
++        return {};
++    }
++}
++
++// Called only by the existing root companion. Validate before persisting; the
++// payload never selects a destination file and cannot add arbitrary fields.
++inline Result persist(int directory, const std::string &payload, const std::string &package,
++                      const std::string &user) noexcept {
++    if (directory < 0) return Result::DIRECTORY;
++    try {
++        if (payload.empty() || payload.size() > kMaxRecord) return Result::INVALID;
++        const auto value = nlohmann::json::parse(payload, nullptr, false);
++        const auto path = "/data/user/" + user + "/" + package + "/code_cache/cloak_hooks/libpine.so";
++        if (!value.is_object() || value.size() != 10 || value.value("format", 0) != 1 ||
++            value.value("stage", "") != "preAppSpecialize_bound" ||
++            value.value("target_package", "") != package ||
++            value.value("android_user_id", -1) != std::stoi(user) ||
++            !value.contains("pid") || !value["pid"].is_number_integer() || value["pid"].get<int64_t>() <= 0 ||
++            !value.contains("timestamp_ms") || !value["timestamp_ms"].is_number_integer() ||
++            value["timestamp_ms"].get<int64_t>() <= 0 ||
++            value.value("digest_source", "") != "packaged_abi_manifest" ||
++            value.value("hook_library_path", "") != path ||
++            value.value("hook_path_state", "") != "planned_before_postAppSpecialize") return Result::INVALID;
++        const auto digest = packaged_digest(directory);
++        if (digest.empty() || value.value("module_artifact_sha256", "") != digest) return Result::DIGEST;
++        return append(directory, value.dump() + "\n") ? Result::OK : Result::WRITE;
++    } catch (...) {
++        return Result::INVALID;  // evidence errors never affect state replies/hooks
++    }
++}
++}  // namespace cloak_load_evidence

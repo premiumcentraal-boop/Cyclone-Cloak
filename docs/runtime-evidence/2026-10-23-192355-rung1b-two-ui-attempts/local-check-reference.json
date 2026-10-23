@@ -1,0 +1,11 @@
+{
+  "full_gate_source": "C:\\Users\\Agent\\Cyclone\\cloak-repo\\docs\\runtime-evidence\\2026-10-23-185155-rung1b-coherent-v3",
+  "app": 784,
+  "module": 80,
+  "probe_standard": 148,
+  "probe_diagnostics": 148,
+  "forge_schema": 1303,
+  "probe_host": 34,
+  "current_ua_recheck": "8 passed in 0.26s",
+  "new_product_code_in_this_resume": false
+}

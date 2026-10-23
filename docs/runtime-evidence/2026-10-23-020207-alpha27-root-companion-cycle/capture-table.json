@@ -1,0 +1,106 @@
+[
+  {
+    "user": 17,
+    "fixture": "b",
+    "pid": 10610,
+    "profile_sha256": "2bb5d74138d14251f316038be1a679fb53b1aad0796e190a8d03e7bb8494482e",
+    "filesystem_schema": true,
+    "marker_diagnosis": {
+      "start_seen": true,
+      "end_seen": true,
+      "reason": "CAPTURE_ENDED_COMPLETED"
+    },
+    "counts": {
+      "BLOCKED": 2,
+      "OBSERVED": 2
+    },
+    "phase": "bound-cold",
+    "legacy_counts": {
+      "PASS": 81,
+      "FAIL": 0,
+      "BLOCKED": 4,
+      "OBSERVED": 4,
+      "MISSING": 0
+    },
+    "record_present": true,
+    "record_artifact": "4425949ae374c0704721bae8b93278cd1b1476ab3918125a8ba870b0db03f002",
+    "record_pid": 10610,
+    "record_before_capture_end": true
+  },
+  {
+    "user": 17,
+    "fixture": "b",
+    "pid": 6123,
+    "profile_sha256": "2bb5d74138d14251f316038be1a679fb53b1aad0796e190a8d03e7bb8494482e",
+    "filesystem_schema": true,
+    "marker_diagnosis": {
+      "start_seen": true,
+      "end_seen": true,
+      "reason": "CAPTURE_ENDED_COMPLETED"
+    },
+    "counts": {
+      "BLOCKED": 2,
+      "OBSERVED": 2
+    },
+    "phase": "post-removal-cold",
+    "legacy_counts": {
+      "PASS": 15,
+      "FAIL": 58,
+      "BLOCKED": 12,
+      "OBSERVED": 4,
+      "MISSING": 0
+    }
+  },
+  {
+    "user": 0,
+    "fixture": "a",
+    "pid": 12668,
+    "profile_sha256": "e476b02fd308c62cf207f4fe60e97085bbd14ca6293b405c2cedb996c9555f53",
+    "filesystem_schema": true,
+    "marker_diagnosis": {
+      "start_seen": true,
+      "end_seen": true,
+      "reason": "CAPTURE_ENDED_COMPLETED"
+    },
+    "counts": {
+      "BLOCKED": 2,
+      "OBSERVED": 2
+    },
+    "phase": "bound-cold",
+    "legacy_counts": {
+      "PASS": 81,
+      "FAIL": 0,
+      "BLOCKED": 4,
+      "OBSERVED": 4,
+      "MISSING": 0
+    },
+    "record_present": true,
+    "record_artifact": "4425949ae374c0704721bae8b93278cd1b1476ab3918125a8ba870b0db03f002",
+    "record_pid": 12668,
+    "record_before_capture_end": true
+  },
+  {
+    "user": 0,
+    "fixture": "a",
+    "pid": 8269,
+    "profile_sha256": "e476b02fd308c62cf207f4fe60e97085bbd14ca6293b405c2cedb996c9555f53",
+    "filesystem_schema": true,
+    "marker_diagnosis": {
+      "start_seen": true,
+      "end_seen": true,
+      "reason": "CAPTURE_ENDED_COMPLETED"
+    },
+    "counts": {
+      "BLOCKED": 2,
+      "OBSERVED": 2
+    },
+    "phase": "post-removal-cold",
+    "legacy_counts": {
+      "PASS": 25,
+      "FAIL": 48,
+      "BLOCKED": 12,
+      "OBSERVED": 4,
+      "MISSING": 0
+    }
+  }
+]

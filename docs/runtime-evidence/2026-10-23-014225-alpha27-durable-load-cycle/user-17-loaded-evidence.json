@@ -1,0 +1,26 @@
+{
+  "pid": 9073,
+  "mapped_libraries": [
+    "77e8a69000-77e8a7a000 r-xp 00000000 fe:40 300604                         /data/user/17/dev.cyclone.cloak.probe.diag/code_cache/cloak_hooks/libpine.so",
+    "77e8a7a000-77e8a7b000 r--p 00010000 fe:40 300604                         /data/user/17/dev.cyclone.cloak.probe.diag/code_cache/cloak_hooks/libpine.so",
+    "77e8a7b000-77e8a7d000 rw-p 00010000 fe:40 300604                         /data/user/17/dev.cyclone.cloak.probe.diag/code_cache/cloak_hooks/libpine.so",
+    "77e8a97000-77e8aa9000 r-xp 00000000 fe:40 204730                         /data/user/17/dev.cyclone.cloak.probe.diag/libshadowhook.so",
+    "77e8aac000-77e8aad000 r--p 00011000 fe:40 204730                         /data/user/17/dev.cyclone.cloak.probe.diag/libshadowhook.so",
+    "77e8ab0000-77e8ab1000 rw-p 00011000 fe:40 204730                         /data/user/17/dev.cyclone.cloak.probe.diag/libshadowhook.so",
+    "77eb9ad000-77ebb5b000 r--p 001c9000 fe:40 301482                         /data/app/~~uqXd6gX0JKHIUvg42hVS0w==/dev.cyclone.cloak.probe.diag-Tz2DxNDD5QH0P-YJCRaXyw==/base.apk",
+    "780f693000-780f6ed000 r-xp 0000c000 fe:40 301482                         /data/app/~~uqXd6gX0JKHIUvg42hVS0w==/dev.cyclone.cloak.probe.diag-Tz2DxNDD5QH0P-YJCRaXyw==/base.apk",
+    "780f6ed000-780f6f2000 r--p 00065000 fe:40 301482                         /data/app/~~uqXd6gX0JKHIUvg42hVS0w==/dev.cyclone.cloak.probe.diag-Tz2DxNDD5QH0P-YJCRaXyw==/base.apk",
+    "780f6f2000-780f6f3000 rw-p 00069000 fe:40 301482                         /data/app/~~uqXd6gX0JKHIUvg42hVS0w==/dev.cyclone.cloak.probe.diag-Tz2DxNDD5QH0P-YJCRaXyw==/base.apk",
+    "7acbcc7000-7acbcd3000 r--s 00000000 fe:40 302281                         /data/user/17/dev.cyclone.cloak.probe.diag/app_webview/Default/Shared Dictionary/db",
+    "7acf762000-7acf789000 r--s 000bb000 fe:40 301482                         /data/app/~~uqXd6gX0JKHIUvg42hVS0w==/dev.cyclone.cloak.probe.diag-Tz2DxNDD5QH0P-YJCRaXyw==/base.apk",
+    "7acf7e5000-7acf807000 r--p 000e1000 fe:40 301482                         /data/app/~~uqXd6gX0JKHIUvg42hVS0w==/dev.cyclone.cloak.probe.diag-Tz2DxNDD5QH0P-YJCRaXyw==/base.apk",
+    "7adf601000-7adf60a000 r--s 00000000 fe:40 302257                         /data/user/17/dev.cyclone.cloak.probe.diag/app_webview/Default/declarative_performance_observer.db",
+    "7aebaac000-7aebaaf000 r--s 00377000 fe:40 301482                         /data/app/~~uqXd6gX0JKHIUvg42hVS0w==/dev.cyclone.cloak.probe.diag-Tz2DxNDD5QH0P-YJCRaXyw==/base.apk",
+    "7aec272000-7aec27c000 r--p 00000000 fe:40 301482                         /data/app/~~uqXd6gX0JKHIUvg42hVS0w==/dev.cyclone.cloak.probe.diag-Tz2DxNDD5QH0P-YJCRaXyw==/base.apk",
+    "7aec3ba000-7aec3bd000 r--s 00377000 fe:40 301482                         /data/app/~~uqXd6gX0JKHIUvg42hVS0w==/dev.cyclone.cloak.probe.diag-Tz2DxNDD5QH0P-YJCRaXyw==/base.apk",
+    "7aec6c2000-7aec6c4000 rwxp 00000000 00:00 0                              [anon:pine codes]",
+    "7aec6c5000-7aec6c6000 rwxp 00000000 00:00 0                              [anon:shadowhook-exit]",
+    "7aec6c6000-7aec6c7000 rwxp 00000000 00:00 0                              [anon:shadowhook-enter]"
+  ],
+  "module_log": "--------- beginning of main\n10-23 01:44:41.621 10198 10198 I CloakModule: load record unavailable\n10-23 01:44:41.621 10198 10198 I CloakModule: cloaking 17:com.google.android.as (63 props)\n10-23 01:44:41.709 10209 10209 I CloakModule: load record unavailable\n10-23 01:44:41.709 10209 10209 I CloakModule: cloaking 17:com.google.android.googlequicksearchbox (63 props)\n"
+}

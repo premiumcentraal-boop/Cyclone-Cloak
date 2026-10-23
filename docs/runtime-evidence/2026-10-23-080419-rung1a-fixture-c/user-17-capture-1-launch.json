@@ -1,0 +1,147 @@
+{
+  "request_id": "bootgate-cf010045e417472abaf48bfe5007d052",
+  "cold_start": true,
+  "user_activation": {
+    "target_user": 17,
+    "completed": true,
+    "started_state": "RUNNING_UNLOCKED",
+    "before_user": 17,
+    "after_user": 17
+  },
+  "expected_profile": {
+    "fixture": "external",
+    "fixture_source": "C",
+    "profile_sha256": "2f7b201e99d58322efbf34663a91d30323f160e939b10882d133c2d3a441831a",
+    "bytes": 5974,
+    "source": "exact packaged synthetic asset bytes"
+  },
+  "before": {
+    "pidof": {
+      "stdout": "25968\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "processes": [
+      "10273 25968 dev.cyclone.cloak.probe.diag"
+    ],
+    "package_path": {
+      "stdout": "package:/data/app/~~h8uPivim3H-aWU7kXHLJBw==/dev.cyclone.cloak.probe.diag-EYO-Hku5tmlx0yxPiGIQbA==/base.apk\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "target_user_state": [
+      "User 17: ceDataInode=315347 deDataInode=315687 installed=true hidden=false suspended=false appLockEnabled=false distractionFlags=0 stopped=true notLaunched=true enabled=0 instant=false virtual=false quarantined=false",
+      "User 17:"
+    ],
+    "target_uid": 1710273,
+    "run_as_identity": {
+      "stdout": "uid=1710273(u17_a273) gid=1710273(u17_a273) groups=1710273(u17_a273),1004(input),1007(log),1011(adb),1015(sdcard_rw),1028(sdcard_r),1078(ext_data_rw),1079(ext_obb_rw),3001(net_bt_admin),3002(net_bt),3003(inet),3006(net_bw_stats),3009(readproc),3011(uhid),3012(readtracefs),50273(all_a273) context=u:r:runas_app:s0:c17,c257,c529,c768\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "run_as_directory": {
+      "stdout": "/data/user/17/dev.cyclone.cloak.probe.diag\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "device_clock": "10-23 08:06:58.000"
+  },
+  "force_stop": {
+    "stdout": "",
+    "stderr": "",
+    "exit_code": 0
+  },
+  "am_start": {
+    "stdout": "Starting: Intent { flg=0x24000000 cmp=dev.cyclone.cloak.probe.diag/dev.cyclone.cloak.probe.DiagnosticsProbeActivity (has extras) }\n",
+    "stderr": "",
+    "exit_code": 0
+  },
+  "immediately_after": {
+    "pidof": {
+      "stdout": "25968\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "processes": [
+      "10273 25968 dev.cyclone.cloak.probe.diag"
+    ],
+    "package_path": {
+      "stdout": "package:/data/app/~~h8uPivim3H-aWU7kXHLJBw==/dev.cyclone.cloak.probe.diag-EYO-Hku5tmlx0yxPiGIQbA==/base.apk\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "target_user_state": [
+      "User 17: ceDataInode=315347 deDataInode=315687 installed=true hidden=false suspended=false appLockEnabled=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false",
+      "User 17:"
+    ],
+    "target_uid": 1710273,
+    "run_as_identity": {
+      "stdout": "uid=1710273(u17_a273) gid=1710273(u17_a273) groups=1710273(u17_a273),1004(input),1007(log),1011(adb),1015(sdcard_rw),1028(sdcard_r),1078(ext_data_rw),1079(ext_obb_rw),3001(net_bt_admin),3002(net_bt),3003(inet),3006(net_bw_stats),3009(readproc),3011(uhid),3012(readtracefs),50273(all_a273) context=u:r:runas_app:s0:c17,c257,c529,c768\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "run_as_directory": {
+      "stdout": "/data/user/17/dev.cyclone.cloak.probe.diag\n",
+      "stderr": "",
+      "exit_code": 0
+    }
+  },
+  "after_capture_wait": {
+    "pidof": {
+      "stdout": "25968 26528\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "processes": [
+      "10273 25968 dev.cyclone.cloak.probe.diag",
+      "1710273 26528 dev.cyclone.cloak.probe.diag"
+    ],
+    "package_path": {
+      "stdout": "package:/data/app/~~h8uPivim3H-aWU7kXHLJBw==/dev.cyclone.cloak.probe.diag-EYO-Hku5tmlx0yxPiGIQbA==/base.apk\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "target_user_state": [
+      "User 17: ceDataInode=315347 deDataInode=315687 installed=true hidden=false suspended=false appLockEnabled=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false",
+      "User 17:"
+    ],
+    "target_uid": 1710273,
+    "run_as_identity": {
+      "stdout": "uid=1710273(u17_a273) gid=1710273(u17_a273) groups=1710273(u17_a273),1004(input),1007(log),1011(adb),1015(sdcard_rw),1028(sdcard_r),1078(ext_data_rw),1079(ext_obb_rw),3001(net_bt_admin),3002(net_bt),3003(inet),3006(net_bw_stats),3009(readproc),3011(uhid),3012(readtracefs),50273(all_a273) context=u:r:runas_app:s0:c17,c257,c529,c768\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "run_as_directory": {
+      "stdout": "/data/user/17/dev.cyclone.cloak.probe.diag\n",
+      "stderr": "",
+      "exit_code": 0
+    }
+  },
+  "logcat": {
+    "exit_code": 0,
+    "stderr": "",
+    "lines": [
+      "10-23 08:07:04.949 26528 26528 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:07:04.950 26528 26528 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:07:04.950 26528 26528 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:07:04.950 26528 26528 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:07:04.952 26528 26528 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:07:04.953 26528 26528 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:07:04.953 26528 26528 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:07:04.954 26528 26528 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:07:04.957 26528 26528 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:07:04.957 26528 26528 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]",
+      "10-23 08:07:04.958 26528 26528 V Configuration: Updating configuration, locales updated from [en_NL] to [en_US]"
+    ],
+    "policy": "bounded target-UID logcat since launch, no unrelated UID output"
+  },
+  "launch_system_logcat": {
+    "exit_code": 0,
+    "stderr": "",
+    "lines": [
+      "10-23 08:07:05.016  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 cat /data/user/17/dev.cyclone.cloak.probe.diag/files/capture-end.json'",
+      "10-23 08:07:05.044 25968 25968 I ActivityThread: ApplicationInfo updating for dev.cyclone.cloak.probe.diag, new timestamp: 3329321",
+      "10-23 08:07:05.104  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys package dev.cyclone.cloak.probe.diag'"
+    ]
+  }
+}

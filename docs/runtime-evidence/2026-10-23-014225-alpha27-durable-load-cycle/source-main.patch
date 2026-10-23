@@ -1,0 +1,44 @@
+diff --git a/android/module/build.gradle b/android/module/build.gradle
+index ddbea16..793cff6 100644
+--- a/android/module/build.gradle
++++ b/android/module/build.gradle
+@@ -74,6 +74,15 @@ tasks.register("packageModule") {
+                 }
+             }
+         }
++        // Hash the completed ABI libraries, avoiding a circular embedded ZIP hash.
++        def manifest = abis.collect { abi ->
++            def library = new File(stage, "zygisk/${abi}.so")
++            if (!library.isFile()) throw new GradleException("Missing packaged ABI: ${abi}")
++            def digest = java.security.MessageDigest.getInstance("SHA-256").digest(library.bytes)
++                    .collect { String.format("%02x", it & 0xff) }.join()
++            "${digest}  zygisk/${abi}.so\n"
++        }.join()
++        new File(stage, "artifacts.sha256").setText(manifest, "UTF-8")
+         def zipName = "cyclone-cloak-${moduleVersion}.zip"
+         ant.zip(destfile: new File(outDir, zipName), basedir: stage)
+         println "module zip: ${outDir}/${zipName}"
+diff --git a/android/module/src/main/cpp/cloak.cpp b/android/module/src/main/cpp/cloak.cpp
+index b2ceee0..8b3fb61 100644
+--- a/android/module/src/main/cpp/cloak.cpp
++++ b/android/module/src/main/cpp/cloak.cpp
+@@ -19,6 +19,7 @@
+ #include <cstdlib>
+ #include "zygisk.hpp"
+ #include "runtime_scope.hpp"
++#include "module_load_record.hpp"
+ 
+ #include <android/log.h>
+ #include <android/api-level.h>
+@@ -1301,6 +1302,11 @@ public:
+             access("/data/adb/modules/cyclone_cloak/disable_native_hook", F_OK) != 0;
+         g_active = load_profile_for(api, userId, g_active_package);
+         if (g_active) {
++            const int module_directory = api->getModuleDir();
++            if (!cloak_load_evidence::record(module_directory, g_active_package, userId, g_app_data_dir)) {
++                LOGI("load record unavailable");
++            }
++            if (module_directory >= 0) close(module_directory);
+             LOGI("cloaking %s (%zu props)", g_active_key.c_str(), g_props.size());
+         }
+     }

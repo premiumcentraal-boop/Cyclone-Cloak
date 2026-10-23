@@ -1,0 +1,101 @@
+ M android/app/src/main/java/dev/cyclone/cloak/forge/RealityRuntimeTable.kt
+ M android/module/build.gradle
+ M android/module/src/main/cpp/cloak.cpp
+ M android/probe/src/main/assets/reality-runtime-fields.json
+ M android/probe/src/main/java/dev/cyclone/cloak/probe/LinkedParityReport.java
+ M android/probe/src/main/java/dev/cyclone/cloak/probe/ProbeActivity.java
+ M android/probe/src/main/java/dev/cyclone/cloak/probe/ProbeReportPolicy.java
+ M android/probe/src/main/java/dev/cyclone/cloak/probe/RealityReport.java
+ M android/probe/src/main/java/dev/cyclone/cloak/probe/RuntimeEnvelopeReport.java
+ M android/probe/tests/test_runner.py
+ M catalog/reality-runtime-fields.json
+ M forge/tests/test_runtime_contract.py
+ M tools/generate_runtime_contract.py
+?? android/module/src/main/cpp/module_load_record.hpp
+?? android/probe/src/main/java/dev/cyclone/cloak/probe/CaptureMarkers.java
+?? android/probe/src/main/java/dev/cyclone/cloak/probe/FilesystemObservation.java
+?? android/probe/src/main/java/dev/cyclone/cloak/probe/FilesystemReadGuard.java
+?? android/probe/src/main/java/dev/cyclone/cloak/probe/ProbeEvidenceExport.java
+?? android/probe/src/main/java/dev/cyclone/cloak/probe/ProbeFailureEvidence.java
+?? android/probe/src/main/java/dev/cyclone/cloak/probe/ProbeReadDeadline.java
+?? android/probe/src/test/java/dev/cyclone/cloak/probe/CaptureMarkersTest.java
+?? android/probe/src/test/java/dev/cyclone/cloak/probe/FilesystemObservationTest.java
+?? android/probe/src/test/java/dev/cyclone/cloak/probe/FilesystemReadGuardTest.java
+?? android/probe/src/test/java/dev/cyclone/cloak/probe/ProbeEvidenceExportTest.java
+?? android/probe/src/test/java/dev/cyclone/cloak/probe/ProbeFailureEvidenceTest.java
+?? android/probe/src/test/java/dev/cyclone/cloak/probe/ProbeReadDeadlineTest.java
+?? android/probe/src/test/java/dev/cyclone/cloak/probe/SimStateExpectationTest.java
+?? android/probe/tests/test_standalone_capture.py
+?? android/probe/tests/test_user_switch_capture.py
+?? android/probe/tests/test_user_visibility.py
+?? docs/BRIDGE-AGENT.md
+?? docs/BRIDGE-LEDGER.md
+?? docs/FILESYSTEM-OBSERVATIONS.md
+?? docs/HANDOFF-2026-10-14-COMPANION-UI-REDESIGN.md
+?? docs/HANDOFF-2026-10-14-CYCLONE-PROFILE-APPS.md
+?? docs/HANDOFF-2026-10-15-CONNECTOR-RESILIENCE-RUN-HISTORY.md
+?? docs/HANDOFF-2026-10-15-USER17-SETUP-VERIFICATION.md
+?? docs/HANDOFF-2026-10-16-CYCLE-FIX-BRIEF.md
+?? docs/HANDOFF-2026-10-16-PROFILE-HARNESS-FOLLOWUP.md
+?? docs/HANDOFF-2026-10-16-PROFILE-TEST-HARNESS.md
+?? docs/HANDOFF-2026-10-17-ALPHA17-CROSS-USER.md
+?? docs/HANDOFF-2026-10-18-REVERSIBILITY-CLASSIFIER.md
+?? docs/HANDOFF-2026-10-19-PLAY-GOOGLE-COMBINED.md
+?? docs/HANDOFF-2026-10-20-ALPHA27-ONWARD-CONSOLIDATED.md
+?? docs/HANDOFF-2026-10-20-CANDIDATE-DEVICE-VALIDATION.md
+?? docs/HANDOFF-2026-10-20-CONSOLIDATED-PLAY-BRIDGE-TO-SERVICE-ISOLATION-V2.md
+?? docs/HANDOFF-2026-10-21-COLD-CAPTURE-RELIABILITY.md
+?? docs/HANDOFF-2026-10-21-D1-BOOT-VALIDATION.md
+?? docs/HANDOFF-2026-10-21-D1-DIAGNOSTIC-OBSERVATION.md
+?? docs/HANDOFF-2026-10-21-D1-FILESYSTEM-REALITY.md
+?? docs/HANDOFF-2026-10-21-D1-FULL-VALIDATION.md
+?? docs/HANDOFF-2026-10-21-D1-OBSERVATION-IMPLEMENTATION.md
+?? docs/HANDOFF-2026-10-21-D1-REVIEW.md
+?? docs/HANDOFF-2026-10-21-LIFECYCLE-AND-DIGESTS.md
+?? docs/HANDOFF-2026-10-21-MODULE-INSTALL-GATE.md
+?? docs/HANDOFF-2026-10-21-PROBE-HARDENING-REVALIDATION.md
+?? docs/HANDOFF-2026-10-21-PROBE-ONLY-VALIDATION.md
+?? docs/HANDOFF-2026-10-21-SIM-FIX-FULL-VALIDATION.md
+?? docs/HANDOFF-2026-10-21-USER17-LAUNCH-RELIABILITY.md
+?? docs/HANDOFF-2026-10-21-USER17-SWITCH-PATH.md
+?? docs/HANDOFF-2026-10-23-LOAD-RECORD-COMPANION.md
+?? docs/HANDOFF-2026-10-23-MODULE-LOAD-RECORD.md
+?? docs/HANDOFF-2026-10-23-REAL-APP-OBSERVATION.md
+?? docs/TEST-HARNESS-DESIGN-2026-10-16.md
+?? docs/runtime-evidence/2026-10-15-user17-root-timeout-screen.png
+?? docs/runtime-evidence/2026-10-15-user17-setup-root-timeout-24h.zip
+?? docs/runtime-evidence/2026-10-16-alpha13-run/
+?? docs/runtime-evidence/2026-10-18-205729-alpha23-physical-validation/
+?? docs/runtime-evidence/2026-10-18-210231-alpha23-physical-resume/
+?? docs/runtime-evidence/2026-10-18-211440-display-mode-reproduction/
+?? docs/runtime-evidence/2026-10-18-212333-alpha24-display-parity/
+?? docs/runtime-evidence/2026-10-18-214341-alpha24-warm-stabilization/
+?? docs/runtime-evidence/2026-10-18-215640-alpha24-host-runtime-stabilization/
+?? docs/runtime-evidence/2026-10-18-221509-alpha24-loader-lifetime/
+?? docs/runtime-evidence/2026-10-19-233634-alpha27-play-readiness/
+?? docs/runtime-evidence/2026-10-20-000008-alpha27-play-runner-fix/
+?? docs/runtime-evidence/2026-10-20-000207-alpha27-play-runner-fixed/
+?? docs/runtime-evidence/2026-10-20-000610-alpha27-play-runner-verified/
+?? docs/runtime-evidence/2026-10-20-000729-alpha27-play-runner-verified/
+?? docs/runtime-evidence/2026-10-20-225427-candidate-runtime-validation/
+?? docs/runtime-evidence/2026-10-21-222036-probe-only-validation/
+?? docs/runtime-evidence/2026-10-21-222128-probe-only-validation/
+?? docs/runtime-evidence/2026-10-21-222249-probe-only-validation/
+?? docs/runtime-evidence/2026-10-21-222424-probe-only-validation-consolidated/
+?? docs/runtime-evidence/2026-10-21-223933-probe-hardening-revalidation/
+?? docs/runtime-evidence/2026-10-21-224919-sim-fix-full-validation/
+?? docs/runtime-evidence/2026-10-21-230811-cold-capture-full-validation/
+?? docs/runtime-evidence/2026-10-21-232732-user17-launch-validation/
+?? docs/runtime-evidence/2026-10-21-234601-user17-switch-validation/
+?? docs/runtime-evidence/2026-10-22-135606-user17-fixture-ab-pending/
+?? docs/runtime-evidence/2026-10-23-003553-user17-part2-preflight/
+?? docs/runtime-evidence/2026-10-23-004710-user17-fixture-ab-validation/
+?? docs/runtime-evidence/2026-10-23-011407-module-boot-gate/
+?? docs/runtime-evidence/2026-10-23-011744-alpha27-module-boot-cycle/
+?? docs/runtime-evidence/2026-10-23-014225-alpha27-durable-load-cycle/
+?? docs/runtime-evidence/2026-10-23-020207-alpha27-root-companion-cycle/
+?? docs/runtime-evidence/2026-10-23-021436-alpha27-real-app/
+?? docs/runtime-evidence/2026-10-23-021513-alpha27-real-app/
+?? forge/tests/test_module_load_record.py
+?? schema/filesystem-observations.schema.json
+?? tools/run_standalone_probe_validation.py

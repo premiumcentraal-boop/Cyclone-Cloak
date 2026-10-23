@@ -1,0 +1,4 @@
+{
+  "files": "b8e320978d6694276278068b95b2694d829278f30560fb1eeeb77b863337b636  /data/adb/modules/cyclone_cloak/zygisk/arm64-v8a.so\nb024637002f38f8150e13e2ec3fd4b7904e9747f3255c6cf9a03b91456afde6e  /data/adb/modules/cyclone_cloak/zygisk/armeabi-v7a.so\n497adabb852cafda2285b5be8289b0288fe84937c5d17b669f4e3413209d6646  /data/adb/modules/cyclone_cloak/module.prop\n",
+  "props": "id=cyclone_cloak\nname=Cyclone Cloak\nversion=v0.11.0-alpha.27\nversionCode=51\nauthor=Cyclone Cloak contributors\ndescription=Device-profile engine for Cyclone (platform). Manage per-app profiles from the Cyclone Cloak companion app. Requires platform.\n"
+}

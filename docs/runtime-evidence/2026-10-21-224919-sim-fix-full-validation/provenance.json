@@ -1,0 +1,10 @@
+{
+  "commit": "d4f0a5cb5f4d70bacaeb0b8ecdff184eff154150",
+  "dirty_worktree": true,
+  "tracked_diff_sha256": "26eb138b2c1ec0f93bc8ada429ff948d25209fe6f940fa530901c4cd3487dbfd",
+  "apk_sha256": "0dba2f261dac5774c59945c1deba9c43b5084b63adb0078ff449791f190d2034",
+  "apk_bytes": 3644336,
+  "source": "locally built diagnostics APK with null-safe SIM expectation and prior probe hardening; no module build or release change",
+  "module_provenance": "Not inspected or changed; installed binary identity not established",
+  "permissions": "No grants, revokes, AppOps changes or runtime permission prompts requested"
+}

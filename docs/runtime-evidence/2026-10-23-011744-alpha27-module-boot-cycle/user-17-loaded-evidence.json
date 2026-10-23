@@ -1,0 +1,25 @@
+{
+  "pid": 15592,
+  "mapped_libraries": [
+    "72ccb2f000-72cccdd000 r--p 001c9000 fe:40 305215                         /data/app/~~o8lLHAadTSES0XU1Ml5ZjA==/dev.cyclone.cloak.probe.diag-c9aGTQ8mCqoImZQCxefF1A==/base.apk",
+    "72d406c000-72d407d000 r-xp 00000000 fe:40 315080                         /data/user/17/dev.cyclone.cloak.probe.diag/code_cache/cloak_hooks/libpine.so",
+    "72d407d000-72d407e000 r--p 00010000 fe:40 315080                         /data/user/17/dev.cyclone.cloak.probe.diag/code_cache/cloak_hooks/libpine.so",
+    "72d407e000-72d4080000 rw-p 00010000 fe:40 315080                         /data/user/17/dev.cyclone.cloak.probe.diag/code_cache/cloak_hooks/libpine.so",
+    "72d5e56000-72d5e68000 r-xp 00000000 fe:40 315059                         /data/user/17/dev.cyclone.cloak.probe.diag/libshadowhook.so",
+    "72d5e6b000-72d5e6c000 r--p 00011000 fe:40 315059                         /data/user/17/dev.cyclone.cloak.probe.diag/libshadowhook.so",
+    "72d5e6f000-72d5e70000 rw-p 00011000 fe:40 315059                         /data/user/17/dev.cyclone.cloak.probe.diag/libshadowhook.so",
+    "72ff0cc000-72ff126000 r-xp 0000c000 fe:40 305215                         /data/app/~~o8lLHAadTSES0XU1Ml5ZjA==/dev.cyclone.cloak.probe.diag-c9aGTQ8mCqoImZQCxefF1A==/base.apk",
+    "72ff126000-72ff12b000 r--p 00065000 fe:40 305215                         /data/app/~~o8lLHAadTSES0XU1Ml5ZjA==/dev.cyclone.cloak.probe.diag-c9aGTQ8mCqoImZQCxefF1A==/base.apk",
+    "72ff12b000-72ff12c000 rw-p 00069000 fe:40 305215                         /data/app/~~o8lLHAadTSES0XU1Ml5ZjA==/dev.cyclone.cloak.probe.diag-c9aGTQ8mCqoImZQCxefF1A==/base.apk",
+    "75afdf4000-75afe00000 r--s 00000000 fe:40 133560                         /data/user/17/dev.cyclone.cloak.probe.diag/app_webview/Default/Shared Dictionary/db",
+    "75b8df1000-75b8e18000 r--s 000bb000 fe:40 305215                         /data/app/~~o8lLHAadTSES0XU1Ml5ZjA==/dev.cyclone.cloak.probe.diag-c9aGTQ8mCqoImZQCxefF1A==/base.apk",
+    "75b8e5f000-75b8e81000 r--p 000e1000 fe:40 305215                         /data/app/~~o8lLHAadTSES0XU1Ml5ZjA==/dev.cyclone.cloak.probe.diag-c9aGTQ8mCqoImZQCxefF1A==/base.apk",
+    "75c133c000-75c1345000 r--s 00000000 fe:40 80163                          /data/user/17/dev.cyclone.cloak.probe.diag/app_webview/Default/declarative_performance_observer.db",
+    "75cca03000-75cca06000 r--s 00377000 fe:40 305215                         /data/app/~~o8lLHAadTSES0XU1Ml5ZjA==/dev.cyclone.cloak.probe.diag-c9aGTQ8mCqoImZQCxefF1A==/base.apk",
+    "75cccba000-75cccc4000 r--p 00000000 fe:40 305215                         /data/app/~~o8lLHAadTSES0XU1Ml5ZjA==/dev.cyclone.cloak.probe.diag-c9aGTQ8mCqoImZQCxefF1A==/base.apk",
+    "75cce74000-75cce77000 r--s 00377000 fe:40 305215                         /data/app/~~o8lLHAadTSES0XU1Ml5ZjA==/dev.cyclone.cloak.probe.diag-c9aGTQ8mCqoImZQCxefF1A==/base.apk",
+    "75ccf43000-75ccf45000 rwxp 00000000 00:00 0                              [anon:pine codes]",
+    "75ccf46000-75ccf47000 rwxp 00000000 00:00 0                              [anon:shadowhook-enter]"
+  ],
+  "module_log": "--------- beginning of main\n10-23 01:20:23.869 16659 16659 I CloakModule: [cloak-hook] mediadrm hook installed\n10-23 01:20:23.878 16659 16659 I CloakModule: [cloak-hook] camera hooks installed\n10-23 01:20:23.879 16659 16659 I CloakModule: [cloak-hook] display hooks installed\n10-23 01:20:23.879 16659 16659 I CloakModule: [cloak-hook] java callbacks installed\n10-23 01:20:24.075 16802 16802 I CloakModule: cloaking 17:com.google.android.gms (63 props)\n10-23 01:20:24.102 16802 16802 I CloakModule: native property hook installed\n10-23 01:20:24.105 16802 16802 I CloakModule: native property callback hook installed\n10-23 01:20:24.113 16802 16802 I CloakModule: [cloak-hook] ART runtime API 36, debuggable=false\n10-23 01:20:24.194 16847 16847 I CloakModule: cloaking 17:com.google.android.webview (63 props)\n10-23 01:20:24.222 16847 16847 I CloakModule: native property hook installed\n10-23 01:20:24.222 16847 16847 I CloakModule: native property callback hook installed\n10-23 01:20:24.235 16847 16847 I CloakModule: [cloak-hook] ART runtime API 36, debuggable=false\n10-23 01:20:24.328 16802 16802 I CloakModule: [cloak-hook] mediadrm hook installed\n10-23 01:20:24.328 16802 16802 I CloakModule: [cloak-hook] camera hooks installed\n10-23 01:20:24.328 16802 16802 I CloakModule: [cloak-hook] display hooks installed\n10-23 01:20:24.328 16802 16802 I CloakModule: [cloak-hook] java callbacks installed\n10-23 01:20:24.372 16847 16847 I CloakModule: [cloak-hook] mediadrm hook installed\n10-23 01:20:24.380 16847 16847 I CloakModule: [cloak-hook] camera hooks installed\n10-23 01:20:24.380 16847 16847 I CloakModule: [cloak-hook] display hooks installed\n10-23 01:20:24.381 16847 16847 I CloakModule: [cloak-hook] java callbacks installed\n"
+}

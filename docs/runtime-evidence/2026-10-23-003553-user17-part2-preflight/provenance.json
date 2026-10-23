@@ -1,0 +1,18 @@
+{
+  "commit": "d4f0a5cb5f4d70bacaeb0b8ecdff184eff154150",
+  "apks": [
+    {
+      "path": "C:\\Users\\Agent\\Cyclone\\cloak-repo\\android\\probe\\build\\outputs\\apk\\standard\\debug\\probe-standard-debug.apk",
+      "sha256": "bf995c0bc490c7551fe7bb6d64beb724973e2ba408154fc8f92e6999eada1844",
+      "bytes": 1878833
+    },
+    {
+      "path": "C:\\Users\\Agent\\Cyclone\\cloak-repo\\android\\probe\\build\\outputs\\apk\\diagnostics\\debug\\probe-diagnostics-debug.apk",
+      "sha256": "3f3a611307024ba2fa3bbe301df4e2358a876182616f71a23f0326fc4abfbabf",
+      "bytes": 3644336
+    }
+  ],
+  "host_tests_passed": 34,
+  "android_tests_passed": 288,
+  "device_run": false
+}

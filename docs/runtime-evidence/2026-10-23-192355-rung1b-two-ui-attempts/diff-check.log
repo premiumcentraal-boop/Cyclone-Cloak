@@ -1,0 +1,5 @@
+warning: in the working copy of 'android/app/src/test/java/dev/cyclone/cloak/forge/ProfileValidatorTest.kt', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'android/module/build.gradle', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'android/probe/src/main/java/dev/cyclone/cloak/probe/RuntimeEnvelopeReport.java', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'android/probe/tests/test_runner.py', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'forge/tests/test_runtime_contract.py', LF will be replaced by CRLF the next time Git touches it

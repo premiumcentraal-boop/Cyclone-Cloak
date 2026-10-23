@@ -1,0 +1,15 @@
+--------- beginning of main
+10-18 21:15:33.535 18895 18895 I CloakModule: cloaking 17:com.google.android.gms (63 props)
+10-18 21:15:33.574 18895 18895 I CloakModule: native property hook installed
+10-18 21:15:33.574 18895 18895 I CloakModule: native property callback hook installed
+10-18 21:15:33.674 18895 18895 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:15:33.675 18895 18895 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:15:33.675 18895 18895 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:15:33.675 18895 18895 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:15:35.899 18966 18966 I CloakModule: cloaking 17:com.google.android.gms (63 props)
+10-18 21:15:35.943 18966 18966 I CloakModule: native property hook installed
+10-18 21:15:35.943 18966 18966 I CloakModule: native property callback hook installed
+10-18 21:15:36.062 18966 18966 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:15:36.063 18966 18966 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:15:36.063 18966 18966 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:15:36.063 18966 18966 I CloakModule: [cloak-hook] java callbacks installed

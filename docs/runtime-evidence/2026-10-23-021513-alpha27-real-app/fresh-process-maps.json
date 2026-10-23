@@ -1,0 +1,15 @@
+{
+  "processes": [
+    {
+      "pid": "2280",
+      "package": "com.android.systemui",
+      "stale_module_or_hook_mappings": []
+    },
+    {
+      "pid": "14661",
+      "package": "com.android.systemui",
+      "stale_module_or_hook_mappings": []
+    }
+  ],
+  "scope": "fresh SystemUI processes after reboot; target intentionally not relaunched"
+}

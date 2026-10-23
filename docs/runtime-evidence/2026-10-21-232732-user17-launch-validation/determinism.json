@@ -1,0 +1,22 @@
+[
+  {
+    "user": 0,
+    "id": "diagnostics.filesystem.build_prop",
+    "result": "NOT_COMPARABLE"
+  },
+  {
+    "user": 0,
+    "id": "diagnostics.filesystem.proc_version",
+    "result": "NOT_COMPARABLE"
+  },
+  {
+    "user": 17,
+    "id": "diagnostics.filesystem.build_prop",
+    "result": "NOT_COMPARABLE"
+  },
+  {
+    "user": 17,
+    "id": "diagnostics.filesystem.proc_version",
+    "result": "NOT_COMPARABLE"
+  }
+]

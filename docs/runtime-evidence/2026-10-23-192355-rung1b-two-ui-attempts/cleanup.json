@@ -1,0 +1,10 @@
+{
+  "uninstall_output": "Success\n",
+  "package_paths": {
+    "0": "",
+    "17": ""
+  },
+  "probe_directories": "ABSENT:/data/user/0/dev.cyclone.cloak.probe.diag\nABSENT:/data/user_de/0/dev.cyclone.cloak.probe.diag\nABSENT:/storage/emulated/0/Android/data/dev.cyclone.cloak.probe.diag\nABSENT:/data/user/17/dev.cyclone.cloak.probe.diag\nABSENT:/data/user_de/17/dev.cyclone.cloak.probe.diag\nABSENT:/storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag\n",
+  "current_user": "0",
+  "module_unchanged": true
+}

@@ -1,0 +1,10 @@
+{
+  "resource": "com.android.permissioncontroller:id/permission_allow_button",
+  "x": 540,
+  "y": 1423,
+  "result": {
+    "stdout": "",
+    "stderr": "",
+    "exit_code": 0
+  }
+}

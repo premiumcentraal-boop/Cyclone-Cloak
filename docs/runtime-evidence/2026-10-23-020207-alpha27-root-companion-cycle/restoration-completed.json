@@ -1,0 +1,89 @@
+{
+  "users": [
+    {
+      "user": 17,
+      "rows": [
+        {
+          "id": "diagnostics.filesystem.build_prop",
+          "result": "NOT_COMPARABLE",
+          "reason": "PERMISSION_OR_API_LIMITATION",
+          "before_sha256": null,
+          "after_sha256": null,
+          "before_status": "BLOCKED",
+          "after_status": "BLOCKED"
+        },
+        {
+          "id": "diagnostics.filesystem.maps_snapshot",
+          "result": "OBSERVED",
+          "reason": "VOLATILE_PROCESS_MAPS",
+          "before_sha256": "25219a71546426f6a703fd7e120a67941242b7c409f352008f3d09f8ead35d01",
+          "after_sha256": "89800daf5a00c0a978634fac805a3c6e4212834c234713f7f4433b2dfa233461",
+          "before_status": "OBSERVED",
+          "after_status": "OBSERVED"
+        },
+        {
+          "id": "diagnostics.filesystem.proc_cpuinfo",
+          "result": "MATCH",
+          "reason": "BASELINE_DIGEST_RESTORED",
+          "before_sha256": "e29c2b53aec8cdcf40deeb7849d318ee4984daf5474b93a2302318a30905c4f3",
+          "after_sha256": "e29c2b53aec8cdcf40deeb7849d318ee4984daf5474b93a2302318a30905c4f3",
+          "before_status": "OBSERVED",
+          "after_status": "OBSERVED"
+        },
+        {
+          "id": "diagnostics.filesystem.proc_version",
+          "result": "NOT_COMPARABLE",
+          "reason": "PERMISSION_OR_API_LIMITATION",
+          "before_sha256": null,
+          "after_sha256": null,
+          "before_status": "BLOCKED",
+          "after_status": "BLOCKED"
+        }
+      ],
+      "result": "RESTORED_WITH_LIMITATIONS"
+    },
+    {
+      "user": 0,
+      "rows": [
+        {
+          "id": "diagnostics.filesystem.build_prop",
+          "result": "NOT_COMPARABLE",
+          "reason": "PERMISSION_OR_API_LIMITATION",
+          "before_sha256": null,
+          "after_sha256": null,
+          "before_status": "BLOCKED",
+          "after_status": "BLOCKED"
+        },
+        {
+          "id": "diagnostics.filesystem.maps_snapshot",
+          "result": "OBSERVED",
+          "reason": "VOLATILE_PROCESS_MAPS",
+          "before_sha256": "9211ec1df3aea64cd1ece0b84de820e58b1c59734275c0ba87c66c01a9b96a23",
+          "after_sha256": "ed948750d0e97a8d85b1ad2b9223644b72b7f5632ec3fbd4b8add573efe9cc2a",
+          "before_status": "OBSERVED",
+          "after_status": "OBSERVED"
+        },
+        {
+          "id": "diagnostics.filesystem.proc_cpuinfo",
+          "result": "MATCH",
+          "reason": "BASELINE_DIGEST_RESTORED",
+          "before_sha256": "e29c2b53aec8cdcf40deeb7849d318ee4984daf5474b93a2302318a30905c4f3",
+          "after_sha256": "e29c2b53aec8cdcf40deeb7849d318ee4984daf5474b93a2302318a30905c4f3",
+          "before_status": "OBSERVED",
+          "after_status": "OBSERVED"
+        },
+        {
+          "id": "diagnostics.filesystem.proc_version",
+          "result": "NOT_COMPARABLE",
+          "reason": "PERMISSION_OR_API_LIMITATION",
+          "before_sha256": null,
+          "after_sha256": null,
+          "before_status": "BLOCKED",
+          "after_status": "BLOCKED"
+        }
+      ],
+      "result": "RESTORED_WITH_LIMITATIONS"
+    }
+  ],
+  "at": 1792713982.8620212
+}

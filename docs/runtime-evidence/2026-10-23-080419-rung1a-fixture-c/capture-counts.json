@@ -1,0 +1,56 @@
+[
+  {
+    "user": 0,
+    "capture": 1,
+    "fixture_source": "A",
+    "report_label": "a",
+    "pid": 25968,
+    "profile_sha256": "da878a8a5c51ef62324fd977d85c06fd830fa9c3896a1060621dbfc4e02efa98",
+    "legacy": {
+      "PASS": 81,
+      "OBSERVED": 4,
+      "BLOCKED": 4
+    },
+    "envelope": {
+      "OBSERVED": 14,
+      "MISSING": 1,
+      "PASS": 1
+    }
+  },
+  {
+    "user": 17,
+    "capture": 1,
+    "fixture_source": "C",
+    "report_label": "external",
+    "pid": 26528,
+    "profile_sha256": "2f7b201e99d58322efbf34663a91d30323f160e939b10882d133c2d3a441831a",
+    "legacy": {
+      "PASS": 75,
+      "OBSERVED": 7,
+      "BLOCKED": 7
+    },
+    "envelope": {
+      "MISSING": 10,
+      "OBSERVED": 3,
+      "PASS": 3
+    }
+  },
+  {
+    "user": 17,
+    "capture": 2,
+    "fixture_source": "C",
+    "report_label": "external",
+    "pid": 31219,
+    "profile_sha256": "2f7b201e99d58322efbf34663a91d30323f160e939b10882d133c2d3a441831a",
+    "legacy": {
+      "PASS": 76,
+      "OBSERVED": 10,
+      "BLOCKED": 3
+    },
+    "envelope": {
+      "MISSING": 10,
+      "OBSERVED": 3,
+      "PASS": 3
+    }
+  }
+]

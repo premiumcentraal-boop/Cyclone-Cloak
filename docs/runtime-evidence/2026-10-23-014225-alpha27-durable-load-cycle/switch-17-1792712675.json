@@ -1,0 +1,34 @@
+[
+  {
+    "current": "17",
+    "state": "User is not started: 17"
+  },
+  {
+    "current": "17",
+    "state": "User is not started: 17"
+  },
+  {
+    "current": "17",
+    "state": "BOOTING"
+  },
+  {
+    "current": "17",
+    "state": "BOOTING"
+  },
+  {
+    "current": "17",
+    "state": "BOOTING"
+  },
+  {
+    "current": "17",
+    "state": "RUNNING_LOCKED"
+  },
+  {
+    "current": "17",
+    "state": "RUNNING_LOCKED"
+  },
+  {
+    "current": "17",
+    "state": "RUNNING_UNLOCKED"
+  }
+]

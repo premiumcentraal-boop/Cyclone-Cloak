@@ -1,0 +1,8 @@
+{
+  "immutable_equal": true,
+  "raw_changed_paths": [
+    "/data/adb/modules/cyclone_cloak/load-records.jsonl"
+  ],
+  "no_module_action": true,
+  "mutable_load_log_separate": true
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "target_user": 0,
+    "completed": true,
+    "started_state": "RUNNING_UNLOCKED",
+    "before_user": 17,
+    "switch_command": {
+      "stdout": "",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "after_user": 0
+  }
+]

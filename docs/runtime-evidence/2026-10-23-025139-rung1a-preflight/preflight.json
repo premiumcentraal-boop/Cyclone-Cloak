@@ -1,0 +1,14 @@
+{
+  "device": "device",
+  "current_user": "0",
+  "users": {
+    "0": "RUNNING_UNLOCKED",
+    "17": "RUNNING_UNLOCKED"
+  },
+  "module": "ABSENT:/data/adb/modules/cyclone_cloak\nABSENT:/data/adb/modules_update/cyclone_cloak\n",
+  "diagnostics": {
+    "0": "",
+    "17": ""
+  },
+  "head": "d4f0a5cb5f4d70bacaeb0b8ecdff184eff154150"
+}

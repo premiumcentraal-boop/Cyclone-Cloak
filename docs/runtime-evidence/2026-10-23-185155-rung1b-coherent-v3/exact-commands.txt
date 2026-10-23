@@ -1,0 +1,15 @@
+JAVA_HOME=C:/Program Files/Eclipse Adoptium/jdk-17.0.20.101-hotspot
+CLOAK_TEST_WSL=1
+%TEMP%/cloak-build/gradle-8.11.1/bin/gradle.bat -p android :app:testDebugUnitTest :module:testDebugUnitTest :probe:testDiagnosticsDebugUnitTest :probe:assembleDiagnosticsDebug --offline --no-daemon --console=plain
+uv run --offline --with pytest --with jsonschema --with cryptography -- python -X utf8 -m pytest forge/tests forge/schema_tests -q
+uv run --offline -- python -X utf8 tools/generate_reality_rules.py --check
+uv run --offline -- python -X utf8 -m unittest discover -s android/probe/tests -v
+%TEMP%/cloak-build/gradle-8.11.1/bin/gradle.bat -p android :probe:testStandardDebugUnitTest :probe:testDiagnosticsDebugUnitTest :probe:assembleDiagnosticsDebug --offline --no-daemon --console=plain
+uv run --offline --with jsonschema -- python -X utf8 docs/runtime-evidence/2026-10-23-185155-rung1b-coherent-v3/run_ops.py install
+uv run --offline --with jsonschema -- python -X utf8 docs/runtime-evidence/2026-10-23-185155-rung1b-coherent-v3/run_ops.py capture 17 0
+# Diagnostics-only reinstall after optional subscriber expectation fix: argv/hashes in commands.jsonl and optional-subscriber-reinstall.json.
+uv run --offline --with jsonschema -- python -X utf8 docs/runtime-evidence/2026-10-23-185155-rung1b-coherent-v3/run_ops.py capture 17 10
+# Read-only UI hierarchy/screenshot and one normal location-button tap; see permission-ui-observation.json.
+uv run --offline --with jsonschema -- python -X utf8 docs/runtime-evidence/2026-10-23-185155-rung1b-coherent-v3/run_ops.py cleanup
+git diff --check
+git diff --cached --check

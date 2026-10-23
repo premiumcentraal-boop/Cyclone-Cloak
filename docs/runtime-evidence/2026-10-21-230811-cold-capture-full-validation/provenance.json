@@ -1,0 +1,11 @@
+{
+  "commit": "d4f0a5cb5f4d70bacaeb0b8ecdff184eff154150",
+  "dirty_worktree": true,
+  "tracked_diff_sha256": "eedd2d866cf84732f4a590721673b708b196ef0607c0d4c0589abca1d3c97c34",
+  "apk_sha256": "fff18f960787295afb77352be819bd2dd23548a441213edd2abe435662a45679",
+  "apk_bytes": 3644336,
+  "cold_start_policy": "force-stop diagnostics package before every capture",
+  "source": "locally built diagnostics APK with cold-capture markers and existing SIM/probe hardening; no module build or release change",
+  "module_provenance": "Not inspected or changed; installed binary identity not established",
+  "permissions": "No grants, revokes, AppOps changes or runtime permission prompts requested"
+}

@@ -1,0 +1,15 @@
+{
+  "candidate_version": "v0.11.0-alpha.24",
+  "source_commit": "a93d8643c51463dff1d4fb3258a383432012f989",
+  "tag_created": false,
+  "source_checkout": "C:\\Users\\Agent\\AppData\\Local\\Temp\\cloak-alpha24-physical-clean",
+  "adapter_scope": "Only candidate commit/version pin, 13 linked rows completeness, bound linked FAIL/MISSING stop. Same permission, production, cleanup, install-once and restoration policies.",
+  "adapter_sha256": "9ef09031fb590f123dfec518f81684832aa8101c874150f36bdb756b54328f39",
+  "signed_validation_run": 39158498518,
+  "diagnostic_instrumentation_removed": true,
+  "prior_reproduction": "../2026-10-18-211440-display-mode-reproduction/",
+  "diagnostics_apk_sha256": "2e43ed4ea4129ceb60e0abd5146d9ea33ec4688958a3fc500ef7d4926fe1a9b7",
+  "diagnostics_apk_size": 2745758,
+  "diagnostics_build_command": "JAVA_HOME=JDK17 ANDROID_HOME=C:/Users/Agent/android-sdk CLOAK_TEST_WSL=1 gradle-8.11.1 -p C:\\Users\\Agent\\AppData\\Local\\Temp\\cloak-alpha24-physical-clean\\android :probe:assembleDiagnosticsDebug :probe:testDiagnosticsDebugUnitTest --offline --no-daemon --console=plain",
+  "diagnostics_tests": 109
+}

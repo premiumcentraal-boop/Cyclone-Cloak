@@ -1,0 +1,21 @@
+{
+  "signed_validation_run": 39158498518,
+  "apk_sha256": "4e45c9801d54df51ec09995f08173398a06310ee44dc81d9df98daa1c477dfb2",
+  "module_sha256": "7cf926409869b3d065f62b52cf70cc6e2fe5a309f70c8457bf6291f3be029507",
+  "module_libraries": {
+    "zygisk/arm64-v8a.so": "8a529beae4f1e164405a8956581806cd85878b30a2c1b1336639acbb6178bfcc",
+    "zygisk/armeabi-v7a.so": "e208e2093a31f2cd082f3c76b7a88307007cf44c7cff83e224dc89f85768207c"
+  },
+  "diagnostics_apk_sha256": "2e43ed4ea4129ceb60e0abd5146d9ea33ec4688958a3fc500ef7d4926fe1a9b7",
+  "embedded_module_exact_match": true,
+  "diagnostics_install_attempts": 1,
+  "companion_install_attempts": 1,
+  "diagnostics_hashes_before_install": {
+    "0": "184012b2d9fc7280a490a8295c81787df72b281f8efc619adbd87b454dff72e3",
+    "17": "184012b2d9fc7280a490a8295c81787df72b281f8efc619adbd87b454dff72e3"
+  },
+  "diagnostics_hashes_after_install": {
+    "0": "2e43ed4ea4129ceb60e0abd5146d9ea33ec4688958a3fc500ef7d4926fe1a9b7",
+    "17": "2e43ed4ea4129ceb60e0abd5146d9ea33ec4688958a3fc500ef7d4926fe1a9b7"
+  }
+}

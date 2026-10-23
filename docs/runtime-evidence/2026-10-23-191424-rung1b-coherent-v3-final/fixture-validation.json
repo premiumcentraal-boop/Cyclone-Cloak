@@ -1,0 +1,11 @@
+{
+  "schema_errors": [],
+  "findings": [
+    {
+      "severity": "warning",
+      "code": "PATCH_AFTER_BUILD",
+      "message": "device.security_patch: security patch is newer than the build date",
+      "field": "device.security_patch"
+    }
+  ]
+}

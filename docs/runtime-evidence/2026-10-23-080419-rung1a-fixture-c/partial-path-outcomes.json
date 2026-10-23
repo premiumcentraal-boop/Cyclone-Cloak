@@ -1,0 +1,633 @@
+[
+  {
+    "field_path": "reality.carrier.values.sim_state",
+    "probe_ids": [
+      "envelope.telephony.simState",
+      "envelope.telephony.simStateSlot0"
+    ],
+    "comparison": "MATCH",
+    "measurement_status": "PASS",
+    "reason": [
+      "HASH_MATCH_ONLY",
+      "HASH_MATCH_ONLY"
+    ],
+    "deterministic": true,
+    "measured_classification": "APPLIED",
+    "capture_rows": [
+      [
+        {
+          "id": "envelope.telephony.simState",
+          "expected_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+          "actual_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+          "status": "PASS",
+          "reason": "HASH_MATCH_ONLY",
+          "duration_ms": 38
+        },
+        {
+          "id": "envelope.telephony.simStateSlot0",
+          "expected_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+          "actual_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+          "status": "PASS",
+          "reason": "HASH_MATCH_ONLY",
+          "duration_ms": 27
+        }
+      ],
+      [
+        {
+          "id": "envelope.telephony.simState",
+          "expected_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+          "actual_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+          "status": "PASS",
+          "reason": "HASH_MATCH_ONLY",
+          "duration_ms": 2
+        },
+        {
+          "id": "envelope.telephony.simStateSlot0",
+          "expected_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+          "actual_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+          "status": "PASS",
+          "reason": "HASH_MATCH_ONLY",
+          "duration_ms": 4
+        }
+      ]
+    ]
+  },
+  {
+    "field_path": "reality.compute.values.gpu",
+    "probe_ids": [
+      "envelope.compute.gpuRenderer"
+    ],
+    "comparison": "NOT_DISPLAYED",
+    "measurement_status": "MISSING",
+    "reason": [
+      "PROFILE_SURFACE_UNAVAILABLE"
+    ],
+    "deterministic": true,
+    "measured_classification": "PARTIAL",
+    "capture_rows": [
+      [
+        {
+          "id": "envelope.compute.gpuRenderer",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 39
+        }
+      ],
+      [
+        {
+          "id": "envelope.compute.gpuRenderer",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 16
+        }
+      ]
+    ]
+  },
+  {
+    "field_path": "reality.memory.values.free_storage_gib",
+    "probe_ids": [
+      "envelope.storage.availableBytes"
+    ],
+    "comparison": "NOT_DISPLAYED",
+    "measurement_status": "MISSING",
+    "reason": [
+      "PROFILE_SURFACE_UNAVAILABLE"
+    ],
+    "deterministic": true,
+    "measured_classification": "PARTIAL",
+    "capture_rows": [
+      [
+        {
+          "id": "envelope.storage.availableBytes",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 0
+        }
+      ],
+      [
+        {
+          "id": "envelope.storage.availableBytes",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 0
+        }
+      ]
+    ]
+  },
+  {
+    "field_path": "reality.packages.values.installed",
+    "probe_ids": [
+      "envelope.packages.visibleVersions"
+    ],
+    "comparison": "NOT_DISPLAYED",
+    "measurement_status": "MISSING",
+    "reason": [
+      "PROFILE_SURFACE_UNAVAILABLE"
+    ],
+    "deterministic": true,
+    "measured_classification": "PARTIAL",
+    "capture_rows": [
+      [
+        {
+          "id": "envelope.packages.visibleVersions",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 1
+        }
+      ],
+      [
+        {
+          "id": "envelope.packages.visibleVersions",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 0
+        }
+      ]
+    ]
+  },
+  {
+    "field_path": "reality.packages.values.installed[].package",
+    "probe_ids": [
+      "envelope.packages.visibleVersions"
+    ],
+    "comparison": "NOT_DISPLAYED",
+    "measurement_status": "MISSING",
+    "reason": [
+      "PROFILE_SURFACE_UNAVAILABLE"
+    ],
+    "deterministic": true,
+    "measured_classification": "PARTIAL",
+    "capture_rows": [
+      [
+        {
+          "id": "envelope.packages.visibleVersions",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 1
+        }
+      ],
+      [
+        {
+          "id": "envelope.packages.visibleVersions",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 0
+        }
+      ]
+    ]
+  },
+  {
+    "field_path": "reality.packages.values.installed[].version_code",
+    "probe_ids": [
+      "envelope.packages.visibleVersions"
+    ],
+    "comparison": "NOT_DISPLAYED",
+    "measurement_status": "MISSING",
+    "reason": [
+      "PROFILE_SURFACE_UNAVAILABLE"
+    ],
+    "deterministic": true,
+    "measured_classification": "PARTIAL",
+    "capture_rows": [
+      [
+        {
+          "id": "envelope.packages.visibleVersions",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 1
+        }
+      ],
+      [
+        {
+          "id": "envelope.packages.visibleVersions",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 0
+        }
+      ]
+    ]
+  },
+  {
+    "field_path": "reality.packages.values.installed[].version_name",
+    "probe_ids": [
+      "envelope.packages.visibleVersions"
+    ],
+    "comparison": "NOT_DISPLAYED",
+    "measurement_status": "MISSING",
+    "reason": [
+      "PROFILE_SURFACE_UNAVAILABLE"
+    ],
+    "deterministic": true,
+    "measured_classification": "PARTIAL",
+    "capture_rows": [
+      [
+        {
+          "id": "envelope.packages.visibleVersions",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 1
+        }
+      ],
+      [
+        {
+          "id": "envelope.packages.visibleVersions",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 0
+        }
+      ]
+    ]
+  },
+  {
+    "field_path": "reality.sensors.values.inventory",
+    "probe_ids": [
+      "envelope.sensors.inventory"
+    ],
+    "comparison": "NOT_DISPLAYED",
+    "measurement_status": "MISSING",
+    "reason": [
+      "PROFILE_SURFACE_UNAVAILABLE"
+    ],
+    "deterministic": true,
+    "measured_classification": "PARTIAL",
+    "capture_rows": [
+      [
+        {
+          "id": "envelope.sensors.inventory",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 2
+        }
+      ],
+      [
+        {
+          "id": "envelope.sensors.inventory",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 0
+        }
+      ]
+    ]
+  },
+  {
+    "field_path": "reality.sensors.values.inventory[].max_delay_us",
+    "probe_ids": [
+      "envelope.sensors.inventory"
+    ],
+    "comparison": "NOT_DISPLAYED",
+    "measurement_status": "MISSING",
+    "reason": [
+      "PROFILE_SURFACE_UNAVAILABLE"
+    ],
+    "deterministic": true,
+    "measured_classification": "PARTIAL",
+    "capture_rows": [
+      [
+        {
+          "id": "envelope.sensors.inventory",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 2
+        }
+      ],
+      [
+        {
+          "id": "envelope.sensors.inventory",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 0
+        }
+      ]
+    ]
+  },
+  {
+    "field_path": "reality.sensors.values.inventory[].min_delay_us",
+    "probe_ids": [
+      "envelope.sensors.inventory"
+    ],
+    "comparison": "NOT_DISPLAYED",
+    "measurement_status": "MISSING",
+    "reason": [
+      "PROFILE_SURFACE_UNAVAILABLE"
+    ],
+    "deterministic": true,
+    "measured_classification": "PARTIAL",
+    "capture_rows": [
+      [
+        {
+          "id": "envelope.sensors.inventory",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 2
+        }
+      ],
+      [
+        {
+          "id": "envelope.sensors.inventory",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 0
+        }
+      ]
+    ]
+  },
+  {
+    "field_path": "reality.sensors.values.inventory[].name",
+    "probe_ids": [
+      "envelope.sensors.inventory"
+    ],
+    "comparison": "NOT_DISPLAYED",
+    "measurement_status": "MISSING",
+    "reason": [
+      "PROFILE_SURFACE_UNAVAILABLE"
+    ],
+    "deterministic": true,
+    "measured_classification": "PARTIAL",
+    "capture_rows": [
+      [
+        {
+          "id": "envelope.sensors.inventory",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 2
+        }
+      ],
+      [
+        {
+          "id": "envelope.sensors.inventory",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 0
+        }
+      ]
+    ]
+  },
+  {
+    "field_path": "reality.sensors.values.inventory[].range",
+    "probe_ids": [
+      "envelope.sensors.inventory"
+    ],
+    "comparison": "NOT_DISPLAYED",
+    "measurement_status": "MISSING",
+    "reason": [
+      "PROFILE_SURFACE_UNAVAILABLE"
+    ],
+    "deterministic": true,
+    "measured_classification": "PARTIAL",
+    "capture_rows": [
+      [
+        {
+          "id": "envelope.sensors.inventory",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 2
+        }
+      ],
+      [
+        {
+          "id": "envelope.sensors.inventory",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 0
+        }
+      ]
+    ]
+  },
+  {
+    "field_path": "reality.sensors.values.inventory[].resolution",
+    "probe_ids": [
+      "envelope.sensors.inventory"
+    ],
+    "comparison": "NOT_DISPLAYED",
+    "measurement_status": "MISSING",
+    "reason": [
+      "PROFILE_SURFACE_UNAVAILABLE"
+    ],
+    "deterministic": true,
+    "measured_classification": "PARTIAL",
+    "capture_rows": [
+      [
+        {
+          "id": "envelope.sensors.inventory",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 2
+        }
+      ],
+      [
+        {
+          "id": "envelope.sensors.inventory",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 0
+        }
+      ]
+    ]
+  },
+  {
+    "field_path": "reality.sensors.values.inventory[].type",
+    "probe_ids": [
+      "envelope.sensors.inventory"
+    ],
+    "comparison": "NOT_DISPLAYED",
+    "measurement_status": "MISSING",
+    "reason": [
+      "PROFILE_SURFACE_UNAVAILABLE"
+    ],
+    "deterministic": true,
+    "measured_classification": "PARTIAL",
+    "capture_rows": [
+      [
+        {
+          "id": "envelope.sensors.inventory",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 2
+        }
+      ],
+      [
+        {
+          "id": "envelope.sensors.inventory",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 0
+        }
+      ]
+    ]
+  },
+  {
+    "field_path": "reality.webview.values.provider",
+    "probe_ids": [
+      "envelope.webview.provider"
+    ],
+    "comparison": "NOT_DISPLAYED",
+    "measurement_status": "MISSING",
+    "reason": [
+      "PROFILE_SURFACE_UNAVAILABLE"
+    ],
+    "deterministic": true,
+    "measured_classification": "PARTIAL",
+    "capture_rows": [
+      [
+        {
+          "id": "envelope.webview.provider",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 5
+        }
+      ],
+      [
+        {
+          "id": "envelope.webview.provider",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 0
+        }
+      ]
+    ]
+  },
+  {
+    "field_path": "reality.webview.values.user_agent",
+    "probe_ids": [
+      "envelope.webview.defaultUa",
+      "envelope.webview.instanceUa"
+    ],
+    "comparison": "NOT_DISPLAYED",
+    "measurement_status": "MISSING",
+    "reason": [
+      "AndroidRuntimeException",
+      "AndroidRuntimeException"
+    ],
+    "deterministic": true,
+    "measured_classification": "PARTIAL",
+    "capture_rows": [
+      [
+        {
+          "id": "envelope.webview.defaultUa",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "AndroidRuntimeException",
+          "duration_ms": 68
+        },
+        {
+          "id": "envelope.webview.instanceUa",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "AndroidRuntimeException",
+          "duration_ms": 7
+        }
+      ],
+      [
+        {
+          "id": "envelope.webview.defaultUa",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "AndroidRuntimeException",
+          "duration_ms": 2
+        },
+        {
+          "id": "envelope.webview.instanceUa",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "AndroidRuntimeException",
+          "duration_ms": 2
+        }
+      ]
+    ]
+  },
+  {
+    "field_path": "reality.webview.values.version",
+    "probe_ids": [
+      "envelope.webview.version"
+    ],
+    "comparison": "NOT_DISPLAYED",
+    "measurement_status": "MISSING",
+    "reason": [
+      "PROFILE_SURFACE_UNAVAILABLE"
+    ],
+    "deterministic": true,
+    "measured_classification": "PARTIAL",
+    "capture_rows": [
+      [
+        {
+          "id": "envelope.webview.version",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 2
+        }
+      ],
+      [
+        {
+          "id": "envelope.webview.version",
+          "expected_sha256": null,
+          "actual_sha256": null,
+          "status": "MISSING",
+          "reason": "PROFILE_SURFACE_UNAVAILABLE",
+          "duration_ms": 0
+        }
+      ]
+    ]
+  }
+]

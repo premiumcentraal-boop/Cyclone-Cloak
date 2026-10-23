@@ -1,0 +1,9 @@
+{
+  "result": "STOPPED",
+  "reason": "REQUIRED_FIXTURE_C_ABSENT",
+  "module_artifact_verified": true,
+  "diagnostics_build": "PASS",
+  "installed": false,
+  "captures": 0,
+  "promotions": 0
+}

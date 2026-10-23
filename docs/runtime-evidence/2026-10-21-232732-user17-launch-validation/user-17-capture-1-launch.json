@@ -1,0 +1,144 @@
+{
+  "request_id": "filesystem-2026-10-21-232732-17-1",
+  "cold_start": true,
+  "before": {
+    "pidof": {
+      "stdout": "25683\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "processes": [
+      "10323 25683 dev.cyclone.cloak.probe.diag"
+    ],
+    "package_path": {
+      "stdout": "package:/data/app/~~9kZ_ajPqfYLEGRjbA64phw==/dev.cyclone.cloak.probe.diag-PADG1r59v7zBSL-pxJnQcw==/base.apk\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "target_user_state": [
+      "User 17: ceDataInode=223780 deDataInode=148718 installed=true hidden=false suspended=false appLockEnabled=false distractionFlags=0 stopped=true notLaunched=true enabled=0 instant=false virtual=false quarantined=false",
+      "User 17:"
+    ],
+    "target_uid": 1710323,
+    "run_as_identity": {
+      "stdout": "uid=1710323(u17_a323) gid=1710323(u17_a323) groups=1710323(u17_a323),1004(input),1007(log),1011(adb),1015(sdcard_rw),1028(sdcard_r),1078(ext_data_rw),1079(ext_obb_rw),3001(net_bt_admin),3002(net_bt),3003(inet),3006(net_bw_stats),3009(readproc),3011(uhid),3012(readtracefs),50323(all_a323) context=u:r:runas_app:s0:c67,c257,c529,c768\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "run_as_directory": {
+      "stdout": "/data/user/17/dev.cyclone.cloak.probe.diag\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "device_clock": "10-21 23:27:47.000"
+  },
+  "force_stop": {
+    "stdout": "",
+    "stderr": "",
+    "exit_code": 0
+  },
+  "am_start": {
+    "stdout": "Starting: Intent { cmp=dev.cyclone.cloak.probe.diag/dev.cyclone.cloak.probe.DiagnosticsProbeActivity (has extras) }\n",
+    "stderr": "",
+    "exit_code": 0
+  },
+  "immediately_after": {
+    "pidof": {
+      "stdout": "25683\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "processes": [
+      "10323 25683 dev.cyclone.cloak.probe.diag"
+    ],
+    "package_path": {
+      "stdout": "package:/data/app/~~9kZ_ajPqfYLEGRjbA64phw==/dev.cyclone.cloak.probe.diag-PADG1r59v7zBSL-pxJnQcw==/base.apk\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "target_user_state": [
+      "User 17: ceDataInode=223780 deDataInode=148718 installed=true hidden=false suspended=false appLockEnabled=false distractionFlags=0 stopped=true notLaunched=true enabled=0 instant=false virtual=false quarantined=false",
+      "User 17:"
+    ],
+    "target_uid": 1710323,
+    "run_as_identity": {
+      "stdout": "uid=1710323(u17_a323) gid=1710323(u17_a323) groups=1710323(u17_a323),1004(input),1007(log),1011(adb),1015(sdcard_rw),1028(sdcard_r),1078(ext_data_rw),1079(ext_obb_rw),3001(net_bt_admin),3002(net_bt),3003(inet),3006(net_bw_stats),3009(readproc),3011(uhid),3012(readtracefs),50323(all_a323) context=u:r:runas_app:s0:c67,c257,c529,c768\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "run_as_directory": {
+      "stdout": "/data/user/17/dev.cyclone.cloak.probe.diag\n",
+      "stderr": "",
+      "exit_code": 0
+    }
+  },
+  "after_capture_wait": {
+    "pidof": {
+      "stdout": "25683\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "processes": [
+      "10323 25683 dev.cyclone.cloak.probe.diag"
+    ],
+    "package_path": {
+      "stdout": "package:/data/app/~~9kZ_ajPqfYLEGRjbA64phw==/dev.cyclone.cloak.probe.diag-PADG1r59v7zBSL-pxJnQcw==/base.apk\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "target_user_state": [
+      "User 17: ceDataInode=223780 deDataInode=148718 installed=true hidden=false suspended=false appLockEnabled=false distractionFlags=0 stopped=true notLaunched=true enabled=0 instant=false virtual=false quarantined=false",
+      "User 17:"
+    ],
+    "target_uid": 1710323,
+    "run_as_identity": {
+      "stdout": "uid=1710323(u17_a323) gid=1710323(u17_a323) groups=1710323(u17_a323),1004(input),1007(log),1011(adb),1015(sdcard_rw),1028(sdcard_r),1078(ext_data_rw),1079(ext_obb_rw),3001(net_bt_admin),3002(net_bt),3003(inet),3006(net_bw_stats),3009(readproc),3011(uhid),3012(readtracefs),50323(all_a323) context=u:r:runas_app:s0:c67,c257,c529,c768\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "run_as_directory": {
+      "stdout": "/data/user/17/dev.cyclone.cloak.probe.diag\n",
+      "stderr": "",
+      "exit_code": 0
+    }
+  },
+  "logcat": {
+    "exit_code": 0,
+    "stderr": "",
+    "lines": [],
+    "policy": "bounded target-UID logcat since launch, no unrelated UID output"
+  },
+  "launch_system_logcat": {
+    "exit_code": 0,
+    "stderr": "",
+    "lines": [
+      "10-21 23:28:42.247  1248  1248 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:cat /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json'",
+      "10-21 23:28:42.345  1248  1248 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 cat /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json'",
+      "10-21 23:28:42.485  1248  1248 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 cat /data/user/17/dev.cyclone.cloak.probe.diag/files/report.json'",
+      "10-21 23:28:43.622  1248  1248 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:cat /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json'",
+      "10-21 23:28:43.725  1248  1248 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 cat /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json'",
+      "10-21 23:28:43.864  1248  1248 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 cat /data/user/17/dev.cyclone.cloak.probe.diag/files/report.json'",
+      "10-21 23:28:45.000  1248  1248 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:cat /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json'",
+      "10-21 23:28:45.073  1248  1248 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 cat /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json'",
+      "10-21 23:28:45.210  1248  1248 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 cat /data/user/17/dev.cyclone.cloak.probe.diag/files/report.json'",
+      "10-21 23:28:46.345  1248  1248 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:cat /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json'",
+      "10-21 23:28:46.452  1248  1248 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 cat /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json'",
+      "10-21 23:28:46.578  1248  1248 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 cat /data/user/17/dev.cyclone.cloak.probe.diag/files/report.json'",
+      "10-21 23:28:47.726  1248  1248 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:cat /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json'",
+      "10-21 23:28:47.827  1248  1248 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 cat /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json'",
+      "10-21 23:28:47.957  1248  1248 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 cat /data/user/17/dev.cyclone.cloak.probe.diag/files/report.json'",
+      "10-21 23:28:49.122  1248  1248 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:cat /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-start.json'",
+      "10-21 23:28:49.263  1248  1248 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 cat /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-start.json'",
+      "10-21 23:28:49.409  1248  1248 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 cat /data/user/17/dev.cyclone.cloak.probe.diag/files/capture-start.json'",
+      "10-21 23:28:49.523  1248  1248 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:cat /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-end.json'",
+      "10-21 23:28:49.627  1248  1248 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 cat /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-end.json'",
+      "10-21 23:28:49.762  1248  1248 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 cat /data/user/17/dev.cyclone.cloak.probe.diag/files/capture-end.json'",
+      "10-21 23:28:49.893  1248  1248 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys package dev.cyclone.cloak.probe.diag'",
+      "10-21 23:28:49.965 27087 27093 I artd    : GetBestInfo: /data/app/~~9kZ_ajPqfYLEGRjbA64phw==/dev.cyclone.cloak.probe.diag-PADG1r59v7zBSL-pxJnQcw==/base.apk has no usable artifacts",
+      "10-21 23:28:50.002  1248  1248 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:pidof dev.cyclone.cloak.probe.diag'",
+      "10-21 23:28:50.281  1248  1248 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:pm path --user 17 dev.cyclone.cloak.probe.diag'",
+      "10-21 23:28:50.433  1248  1248 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 id'",
+      "10-21 23:28:50.543  1248  1248 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 pwd'"
+    ]
+  }
+}

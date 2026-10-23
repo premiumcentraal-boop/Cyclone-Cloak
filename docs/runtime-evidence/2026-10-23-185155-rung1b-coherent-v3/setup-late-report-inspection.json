@@ -1,0 +1,248 @@
+{
+  "visibility": [
+    {
+      "transport": "lifecycle_run_as",
+      "path": "/data/user/17/dev.cyclone.cloak.probe.diag/files/report.json",
+      "state": "READABLE",
+      "exit_code": 0,
+      "stderr": ""
+    },
+    {
+      "transport": "external_shell",
+      "path": "/storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json",
+      "state": "ACCESS_DENIED_EXISTENCE_UNKNOWN",
+      "exit_code": 1,
+      "stderr": "cat: /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json: Permission denied\n"
+    },
+    {
+      "transport": "external_run_as",
+      "path": "/storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json",
+      "state": "ACCESS_DENIED_EXISTENCE_UNKNOWN",
+      "exit_code": 1,
+      "stderr": "cat: /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json: Permission denied\n"
+    },
+    {
+      "transport": "private_run_as",
+      "path": "/data/user/17/dev.cyclone.cloak.probe.diag/files/report.json",
+      "state": "READABLE",
+      "exit_code": 0,
+      "stderr": ""
+    }
+  ],
+  "report": {
+    "format": 1,
+    "fixture": "external",
+    "package": "dev.cyclone.cloak.probe.diag",
+    "uid": 1710319,
+    "pid": 32520,
+    "request_id": "bootgate-d554495b604947e3acf64b4905e32403",
+    "session_generation": 5,
+    "profile_sha256": "c78353910306cda7b0897f3310d2637a7568ec4925de8d63822645cf8a9e8f66",
+    "status": "FAIL",
+    "reason": "CAPTURE_FAILED",
+    "error": "NullPointerException",
+    "failed_row_id": "operator.simCountry",
+    "failure_details": {
+      "exception_class": "java.lang.NullPointerException",
+      "exception_message": "REDACTED_EXCEPTION_MESSAGE",
+      "message_redacted": true,
+      "failed_row_id": "operator.simCountry",
+      "stack_trace": [
+        {
+          "class": "dev.cyclone.cloak.probe.ProbeActivity$Capture",
+          "method": "collect",
+          "line": 453
+        },
+        {
+          "class": "dev.cyclone.cloak.probe.ProbeActivity$Capture",
+          "method": "run",
+          "line": 202
+        },
+        {
+          "class": "dev.cyclone.cloak.probe.ProbeActivity$$ExternalSyntheticLambda2",
+          "method": "run",
+          "line": 0
+        },
+        {
+          "class": "java.lang.Thread",
+          "method": "run",
+          "line": 1572
+        }
+      ],
+      "stack_truncated": false
+    },
+    "rows": [
+      {
+        "id": "build.MANUFACTURER"
+      },
+      {
+        "id": "build.BRAND"
+      },
+      {
+        "id": "build.MODEL"
+      },
+      {
+        "id": "build.DEVICE"
+      },
+      {
+        "id": "build.PRODUCT"
+      },
+      {
+        "id": "build.HARDWARE"
+      },
+      {
+        "id": "build.FINGERPRINT"
+      },
+      {
+        "id": "build.ID"
+      },
+      {
+        "id": "build.BOOTLOADER"
+      },
+      {
+        "id": "build.SERIAL"
+      },
+      {
+        "id": "build.getSerial"
+      },
+      {
+        "id": "build.TIME"
+      },
+      {
+        "id": "build.TYPE"
+      },
+      {
+        "id": "build.TAGS"
+      },
+      {
+        "id": "version.SDK_INT"
+      },
+      {
+        "id": "version.RELEASE"
+      },
+      {
+        "id": "version.INCREMENTAL"
+      },
+      {
+        "id": "version.SECURITY_PATCH"
+      },
+      {
+        "id": "build.getRadioVersion"
+      },
+      {
+        "id": "properties.java.ro.product.model"
+      },
+      {
+        "id": "properties.native.ro.product.model"
+      },
+      {
+        "id": "properties.java.ro.product.manufacturer"
+      },
+      {
+        "id": "properties.native.ro.product.manufacturer"
+      },
+      {
+        "id": "properties.java.ro.product.brand"
+      },
+      {
+        "id": "properties.native.ro.product.brand"
+      },
+      {
+        "id": "properties.java.ro.product.device"
+      },
+      {
+        "id": "properties.native.ro.product.device"
+      },
+      {
+        "id": "properties.java.ro.product.name"
+      },
+      {
+        "id": "properties.native.ro.product.name"
+      },
+      {
+        "id": "properties.java.ro.build.version.sdk"
+      },
+      {
+        "id": "properties.native.ro.build.version.sdk"
+      },
+      {
+        "id": "properties.java.ro.build.fingerprint"
+      },
+      {
+        "id": "properties.native.ro.build.fingerprint"
+      },
+      {
+        "id": "properties.java.ro.serialno"
+      },
+      {
+        "id": "properties.native.ro.serialno"
+      },
+      {
+        "id": "properties.java.ro.sf.lcd_density"
+      },
+      {
+        "id": "properties.native.ro.sf.lcd_density"
+      },
+      {
+        "id": "properties.java.persist.sys.timezone"
+      },
+      {
+        "id": "properties.native.persist.sys.timezone"
+      },
+      {
+        "id": "properties.nativeCallback.ro.product.model"
+      },
+      {
+        "id": "telephony.simState"
+      },
+      {
+        "id": "telephony.phoneType"
+      },
+      {
+        "id": "telephony.roaming"
+      },
+      {
+        "id": "telephony.imei0"
+      },
+      {
+        "id": "telephony.imei1"
+      },
+      {
+        "id": "telephony.deviceId"
+      },
+      {
+        "id": "telephony.simSerial"
+      },
+      {
+        "id": "telephony.phoneCount"
+      },
+      {
+        "id": "telephony.activeModemCount"
+      },
+      {
+        "id": "telephony.networkType"
+      },
+      {
+        "id": "telephony.dataNetworkType"
+      },
+      {
+        "id": "operator.networkNumeric"
+      },
+      {
+        "id": "operator.simNumeric"
+      },
+      {
+        "id": "operator.networkName"
+      },
+      {
+        "id": "operator.simName"
+      },
+      {
+        "id": "operator.networkCountry"
+      },
+      {
+        "id": "operator.simCountry"
+      }
+    ]
+  }
+}

@@ -1,0 +1,271 @@
+{
+  "request_id": "bootgate-1322cf5466be42d7b02e9581d9ef0a94",
+  "cold_start": true,
+  "user_activation": {
+    "target_user": 17,
+    "completed": true,
+    "started_state": "RUNNING_UNLOCKED",
+    "before_user": 17,
+    "after_user": 17
+  },
+  "expected_profile": {
+    "fixture": "external",
+    "fixture_source": "C",
+    "profile_sha256": "c78353910306cda7b0897f3310d2637a7568ec4925de8d63822645cf8a9e8f66",
+    "bytes": 33967,
+    "source": "exact packaged synthetic asset bytes"
+  },
+  "before": {
+    "pidof": {
+      "stdout": "28316\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "processes": [
+      "1710323 28316 dev.cyclone.cloak.probe.diag"
+    ],
+    "package_path": {
+      "stdout": "package:/data/app/~~aP-S2XHUX2kVtbqJQa9QiA==/dev.cyclone.cloak.probe.diag-Hl2P9iKuuBqbWxjBrfgdtQ==/base.apk\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "target_user_state": [
+      "User 17: ceDataInode=321669 deDataInode=321400 installed=true hidden=false suspended=false appLockEnabled=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false",
+      "User 17:"
+    ],
+    "target_uid": 1710323,
+    "run_as_identity": {
+      "stdout": "uid=1710323(u17_a323) gid=1710323(u17_a323) groups=1710323(u17_a323),1004(input),1007(log),1011(adb),1015(sdcard_rw),1028(sdcard_r),1078(ext_data_rw),1079(ext_obb_rw),3001(net_bt_admin),3002(net_bt),3003(inet),3006(net_bw_stats),3009(readproc),3011(uhid),3012(readtracefs),50323(all_a323) context=u:r:runas_app:s0:c67,c257,c529,c768\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "run_as_directory": {
+      "stdout": "/data/user/17/dev.cyclone.cloak.probe.diag\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "device_clock": "10-23 19:25:58.000"
+  },
+  "force_stop": {
+    "stdout": "",
+    "stderr": "",
+    "exit_code": 0
+  },
+  "am_start": {
+    "stdout": "Starting: Intent { flg=0x24000000 cmp=dev.cyclone.cloak.probe.diag/dev.cyclone.cloak.probe.DiagnosticsProbeActivity (has extras) }\n",
+    "stderr": "",
+    "exit_code": 0
+  },
+  "immediately_after": {
+    "pidof": {
+      "stdout": "28760\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "processes": [
+      "1710323 28760 dev.cyclone.cloak.probe.diag"
+    ],
+    "package_path": {
+      "stdout": "package:/data/app/~~aP-S2XHUX2kVtbqJQa9QiA==/dev.cyclone.cloak.probe.diag-Hl2P9iKuuBqbWxjBrfgdtQ==/base.apk\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "target_user_state": [
+      "User 17: ceDataInode=321669 deDataInode=321400 installed=true hidden=false suspended=false appLockEnabled=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false",
+      "User 17:"
+    ],
+    "target_uid": 1710323,
+    "run_as_identity": {
+      "stdout": "uid=1710323(u17_a323) gid=1710323(u17_a323) groups=1710323(u17_a323),1004(input),1007(log),1011(adb),1015(sdcard_rw),1028(sdcard_r),1078(ext_data_rw),1079(ext_obb_rw),3001(net_bt_admin),3002(net_bt),3003(inet),3006(net_bw_stats),3009(readproc),3011(uhid),3012(readtracefs),50323(all_a323) context=u:r:runas_app:s0:c67,c257,c529,c768\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "run_as_directory": {
+      "stdout": "/data/user/17/dev.cyclone.cloak.probe.diag\n",
+      "stderr": "",
+      "exit_code": 0
+    }
+  },
+  "after_capture_wait": {
+    "pidof": {
+      "stdout": "28760\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "processes": [
+      "1710323 28760 dev.cyclone.cloak.probe.diag"
+    ],
+    "package_path": {
+      "stdout": "package:/data/app/~~aP-S2XHUX2kVtbqJQa9QiA==/dev.cyclone.cloak.probe.diag-Hl2P9iKuuBqbWxjBrfgdtQ==/base.apk\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "target_user_state": [
+      "User 17: ceDataInode=321669 deDataInode=321400 installed=true hidden=false suspended=false appLockEnabled=false distractionFlags=0 stopped=false notLaunched=false enabled=0 instant=false virtual=false quarantined=false",
+      "User 17:"
+    ],
+    "target_uid": 1710323,
+    "run_as_identity": {
+      "stdout": "uid=1710323(u17_a323) gid=1710323(u17_a323) groups=1710323(u17_a323),1004(input),1007(log),1011(adb),1015(sdcard_rw),1028(sdcard_r),1078(ext_data_rw),1079(ext_obb_rw),3001(net_bt_admin),3002(net_bt),3003(inet),3006(net_bw_stats),3009(readproc),3011(uhid),3012(readtracefs),50323(all_a323) context=u:r:runas_app:s0:c67,c257,c529,c768\n",
+      "stderr": "",
+      "exit_code": 0
+    },
+    "run_as_directory": {
+      "stdout": "/data/user/17/dev.cyclone.cloak.probe.diag\n",
+      "stderr": "",
+      "exit_code": 0
+    }
+  },
+  "logcat": {
+    "exit_code": 0,
+    "stderr": "",
+    "lines": [
+      "10-23 19:25:59.653 28760 28787 I CloakProbeDiagnostics: {\"timestamp\":1792776359653,\"process\":28760,\"thread\":28787,\"field\":\"packages.visible\",\"status\":\"OBSERVED\"}",
+      "10-23 19:25:59.743 28760 28787 I CloakProbeDiagnostics: {\"timestamp\":1792776359742,\"process\":28760,\"thread\":28787,\"field\":\"runtime.loadedLibraries\",\"status\":\"OBSERVED\"}",
+      "10-23 19:25:59.744 28760 28787 I CloakProbeDiagnostics: {\"timestamp\":1792776359744,\"process\":28760,\"thread\":28787,\"field\":\"runtime.javaBridgeVisible\",\"status\":\"OBSERVED\"}",
+      "10-23 19:25:59.888 28760 28792 I DrmHalHidl: No hidl drm factories found",
+      "10-23 19:25:59.889 28760 28792 W DrmHalHidl: Failed to find passthrough drm factories",
+      "10-23 19:25:59.889 28760 28792 I DrmUtils: found IDrmFactory. Instance name:[android.hardware.drm.IDrmFactory/clearkey]",
+      "10-23 19:25:59.889 28760 28792 I DrmUtils: found IDrmFactory. Instance name:[android.hardware.drm.IDrmFactory/widevine]",
+      "10-23 19:25:59.969 28760 28769 I loak.probe.diag: Compiler allocated 5116KB to compile void android.view.ViewRootImpl.performTraversals()",
+      "10-23 19:26:00.095 28760 28792 I WebViewFactory: Loading com.google.android.webview version 155.0.8059.43 (code 805904303)",
+      "10-23 19:26:00.098 28760 28792 V ResourcesManager: The following library key has been added: ResourcesKey{ mHash=4b9a73ec mResDir=null mSplitDirs=[] mOverlayDirs=[] mLibDirs=[/data/app/~~sYhpHzKiCIiM5zEJBJy4tA==/com.google.android.webview-xI1jK1gg4o0XHpPsJu55iQ==/base.apk,/system/framework/android.test.base.jar,/system_ext/framework/androidx.window.extensions.jar] mDisplayId=0 mOverrideConfig=v36 mCompatInfo={420dpi always-compat} mLoaders=[]}",
+      "10-23 19:26:00.099 28760 28792 D ApplicationLoaders: Returning zygote-cached class loader: /system/framework/android.test.base.jar",
+      "10-23 19:26:00.099 28760 28792 D ApplicationLoaders: Returning zygote-cached class loader: /system_ext/framework/androidx.window.extensions.jar",
+      "10-23 19:26:00.100 28760 28792 W loak.probe.diag: Loading /data/app/~~sYhpHzKiCIiM5zEJBJy4tA==/com.google.android.webview-xI1jK1gg4o0XHpPsJu55iQ==/oat/arm64/base.odex non-executable as it requires an image which we failed to load",
+      "10-23 19:26:00.102 28760 28792 D nativeloader: Configuring clns-11 for other apk /data/app/~~sYhpHzKiCIiM5zEJBJy4tA==/com.google.android.webview-xI1jK1gg4o0XHpPsJu55iQ==/base.apk. target_sdk_version=37, uses_libraries=, library_path=/data/app/~~sYhpHzKiCIiM5zEJBJy4tA==/com.google.android.webview-xI1jK1gg4o0XHpPsJu55iQ==/lib/arm64:/data/app/~~sYhpHzKiCIiM5zEJBJy4tA==/com.google.android.webview-xI1jK1gg4o0XHpPsJu55iQ==/base.apk!/lib/arm64-v8a, permitted_path=/data:/mnt/expand",
+      "10-23 19:26:00.117 28760 28792 I cr_WVCFactoryProvider: version=155.0.8059.43 (805904303) minSdkVersion=29 multiprocess=true packageId=2 splits=<none>",
+      "10-23 19:26:00.125 28760 28792 D nativeloader: Load /data/app/~~sYhpHzKiCIiM5zEJBJy4tA==/com.google.android.webview-xI1jK1gg4o0XHpPsJu55iQ==/base.apk!/lib/arm64-v8a/libwebviewchromium.so using class loader ns clns-11 (caller=/data/app/~~sYhpHzKiCIiM5zEJBJy4tA==/com.google.android.webview-xI1jK1gg4o0XHpPsJu55iQ==/base.apk): ok",
+      "10-23 19:26:00.127 28760 28792 D nativeloader: Load /system/lib64/libwebviewchromium_plat_support.so using class loader ns clns-11 (caller=/data/app/~~sYhpHzKiCIiM5zEJBJy4tA==/com.google.android.webview-xI1jK1gg4o0XHpPsJu55iQ==/base.apk): ok",
+      "10-23 19:26:00.133 28760 28852 I chromium: [1023/192600.129425:INFO:android_webview/browser/variations/variations_seed_loader.cc:63] Failed to open file for reading.: No such file or directory (2)",
+      "10-23 19:26:00.139 28760 28760 I cr_LibraryLoader: Successfully loaded native library",
+      "10-23 19:26:00.140 28760 28760 I cr_CachingUmaRecorder: Flushed 41 samples from 21 histograms, 0 samples were dropped.",
+      "10-23 19:26:00.142 28760 28760 I cr_ChildProcLH: ScopedServiceBindingBatch.tryActivate: false",
+      "10-23 19:26:00.143 28760 28760 I cr_CombinedPProvider: #registerProvider() provider:WV.fj@b55548b isPolicyCacheEnabled:false policyProvidersSize:0",
+      "10-23 19:26:00.143 28760 28760 I cr_PolicyProvider: #setManagerAndSource() 0",
+      "10-23 19:26:00.145 28760 28850 I cr_policy: registerReceiver succeeded after 2ms",
+      "10-23 19:26:00.146 28760 28760 I cr_DisplayManager: Is Display Topology available: false",
+      "10-23 19:26:00.162 28760 28760 I cr_CombinedPProvider: #linkNativeInternal() 1",
+      "10-23 19:26:00.162 28760 28760 I cr_AppResProvider: #getApplicationRestrictionsFromUserManager() Bundle[EMPTY_PARCEL]",
+      "10-23 19:26:00.162 28760 28760 I cr_PolicyProvider: #notifySettingsAvailable() 0",
+      "10-23 19:26:00.162 28760 28760 I cr_CombinedPProvider: #onSettingsAvailable() 0",
+      "10-23 19:26:00.162 28760 28760 I cr_CombinedPProvider: #flushPolicies()",
+      "10-23 19:26:00.179 28760 28860 W chromium: [WARNING:net/dns/dns_config_service_android.cc:69] Failed to read DnsConfig.",
+      "10-23 19:26:00.189 28760 28760 I cr_AppResProvider: #getApplicationRestrictionsFromUserManager() Bundle[EMPTY_PARCEL]",
+      "10-23 19:26:00.189 28760 28760 I cr_PolicyProvider: #notifySettingsAvailable() 0",
+      "10-23 19:26:00.189 28760 28760 I cr_CombinedPProvider: #onSettingsAvailable() 0",
+      "10-23 19:26:00.189 28760 28760 I cr_CombinedPProvider: #flushPolicies()",
+      "10-23 19:26:00.197 28760 28792 I DrmHalHidl: No hidl drm factories found",
+      "10-23 19:26:00.197 28760 28792 W DrmHalHidl: Failed to find passthrough drm factories",
+      "10-23 19:26:00.198 28760 28792 I DrmUtils: found IDrmFactory. Instance name:[android.hardware.drm.IDrmFactory/clearkey]",
+      "10-23 19:26:00.198 28760 28792 I DrmUtils: found IDrmFactory. Instance name:[android.hardware.drm.IDrmFactory/widevine]"
+    ],
+    "policy": "bounded target-UID logcat since launch, no unrelated UID output"
+  },
+  "launch_system_logcat": {
+    "exit_code": 0,
+    "stderr": "",
+    "lines": [
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{4e9ee24 com.android.cellbroadcastservice.overlay.pixel/10002} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{2018d8d com.google.android.nfc.overlay.common/10084} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{bd86b42 com.android.devicediagnostics.auto_generated_rro_product__/10037} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{fb39fcd com.android.providers.partnerbookmarks/10122} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{fb9b082 com.shannon.imsservice/10251} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{c63f393 com.android.wallpaper.livepicker/10099} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{c85f98e com.android.providers.telephony.auto_generated_rro_product__/10031} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{8e8b5af com.android.phone.auto_generated_rro_vendor__/10076} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{177afd0 com.android.imsserviceentitlement/10176} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{2676bc9 com.google.assistant.hubui/10169} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{f6c209a com.android.traceur.auto_generated_rro_vendor__/10078} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{f5652ce com.google.android.telecomresources/10305} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{e5035ef com.google.android.healthconnect.controller/10274} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{e6ff8fc com.google.android.apps.cbrsnetworkmonitor/10159} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{5bac66 com.android.internal.display.cutout.emulation.avoidAppsInCutout/10015} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{271fb85 com.android.bookmarkprovider/10113} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{3b72854 com.google.android.overlay.pixelconfigcommon/10040} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{83df3fd com.android.systemui.accessibility.accessibilitymenu.auto_generated_rro_product__/10071} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{308cdda com.google.android.wfcactivation/10136} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{a14420b com.samsung.slsi.telephony.oemril/10248} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{641a8e8 com.google.android.settings.intelligence/10157} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{d579d49 com.google.android.projection.gearhead/10166} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{6dbcb01 com.google.android.apps.scone/10126} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{735eda6 com.google.android.apps.turbo/10148} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{4c2f3e7 com.google.android.apps.tycho/10195} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{8fc6b94 com.google.android.tetheringentitlement/10128} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{4b9163d com.google.android.apps.dreamliner/10167} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{7c33e32 com.google.android.safetycore/10327} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{7c0e783 com.google.android.uwb.resources/10283} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{5fead00 com.android.cts.ctsshim/10277} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{425d939 com.google.android.apps.wearables.maestro.companion/10185} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{7630b7e com.google.android.wifi.resources/10270} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{42078df com.google.android.apps.pixel.support/10184} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{221992c com.google.android.wifi.dialog/10271} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{901cff5 com.google.android.apps.pixel.customizationbundle/10163} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{fa0618a com.cyclone.teamworksniper.v1/10355} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{fbdc3fb com.google.android.apps.wallpaper/10235} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{4a51c18 com.google.android.odad/10189} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{b6c7671 com.google.android.apps.recorder/10129} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{cb156ee com.google.android.pixel.setupwizard.overlay.expressive/10058} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{a12b78f com.android.settings.auto_generated_rro_product__/10008} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{5ab0c56 com.google.android.apps.work.clouddpc/10205} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{81aa4d7 com.google.android.apps.carrier.carrierwifi/10125} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{6dbe1c4 com.google.android.apps.setupwizard.searchselector/10160} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{a0d3dab com.google.android.overlay.permissioncontroller.safetycenter/10051} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{daf8c08 com.android.providers.media.overlay.pixel/10019} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{6993fa1 com.android.captiveportallogin.overlay/10010} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{82955c6 com.android.companiondevicemanager.auto_generated_characteristics_rro/10066} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{c0108ad com.google.android.gms.location.history/10219} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{db560b4 com.android.internal.systemui.navbar.gestural/10000} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{fe397e2 com.google.android.apps.aiwallpapers/10214} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{6fab773 com.google.android.apps.youtube.music/10226} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{2975630 com.android.bluetoothmidiservice/10106} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{fd282a9 com.projectstripe.manager/10300} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{827502e com.google.android.cellbroadcastreceiver/10284} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{4bf57cf com.google.android.glasses.core/10141} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{b53a55c com.google.android.apps.pixel.creativeassistant/10124} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{820124c com.android.phone.auto_generated_rro_product__/10022} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{e032295 com.android.omadm.service.auto_generated_rro_vendor__/10081} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{27a065 com.google.android.retaildemo/10139} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{23ce79b android.auto_generated_rro_product__/10036} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{6dc413a com.rootdeck.app/10307} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{483a1eb com.google.android.rilextension/10236} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{e23bb48 com.google.android.GoogleCamera/10152} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{9f6dde1 com.google.android.apps.pixel.dcservice/10230} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{2bd3706 com.google.android.photopicker/10288} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{5f871c7 com.snapchat.android/10364} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{45d43f4 com.google.android.inputmethod.latin/10210} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{922771d com.deviceinfo.upfile/10372} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{165bd92 com.google.android.storagemanager/10254} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{a715349 android.auto_generated_rro_vendor__/10079} BLOCKED",
+      "10-23 19:25:59.635  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{9006363 com.google.android.apps.restore/10158} BLOCKED",
+      "10-23 19:25:59.654  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 id'",
+      "10-23 19:25:59.749  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 pwd'",
+      "10-23 19:25:59.867  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json'",
+      "10-23 19:25:59.905  1030  1030 I WVCdm-DrmFactory: [app][dev.cyclone.cloak.probe.diag] calling virtual ::ndk::ScopedAStatus wvdrm::hardware::drm::widevine::WVDrmFactory::createDrmPlugin(const Uuid &, const string &, std::shared_ptr< ::aidl::android::hardware::drm::IDrmPlugin> *)",
+      "10-23 19:25:59.947  1539  3511 I AppsFilter: interaction: PackageSetting{3b7a34a dev.cyclone.cloak.probe.diag/10323} -> PackageSetting{35944e9 com.android.chrome/10211} BLOCKED",
+      "10-23 19:25:59.985  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:cat /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json'",
+      "10-23 19:26:00.073  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 cat /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json'",
+      "10-23 19:26:00.168  1539  1770 I ActivityManager: Start proc 28856:com.google.android.webview:sandboxed_process0:org.chromium.content.app.SandboxedProcessService0:0/u17i17 for  {dev.cyclone.cloak.probe.diag/org.chromium.content.app.SandboxedProcessService0:0}",
+      "10-23 19:26:00.191  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 cat /data/user/17/dev.cyclone.cloak.probe.diag/files/report.json'",
+      "10-23 19:26:00.206  1030  1030 I WVCdm-DrmFactory: [app][dev.cyclone.cloak.probe.diag] calling virtual ::ndk::ScopedAStatus wvdrm::hardware::drm::widevine::WVDrmFactory::createDrmPlugin(const Uuid &, const string &, std::shared_ptr< ::aidl::android::hardware::drm::IDrmPlugin> *)",
+      "10-23 19:26:01.258  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json'",
+      "10-23 19:26:01.349  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:cat /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json'",
+      "10-23 19:26:01.429  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 cat /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/report.json'",
+      "10-23 19:26:01.587  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 cat /data/user/17/dev.cyclone.cloak.probe.diag/files/report.json'",
+      "10-23 19:26:01.726  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 cat files/capture-start.json'",
+      "10-23 19:26:01.858  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:cat /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-start.json'",
+      "10-23 19:26:01.969  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 cat /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-start.json'",
+      "10-23 19:26:02.101  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 cat /data/user/17/dev.cyclone.cloak.probe.diag/files/capture-start.json'",
+      "10-23 19:26:02.234  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 cat files/capture-end.json'",
+      "10-23 19:26:02.369  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:cat /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-end.json'",
+      "10-23 19:26:02.445  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 cat /storage/emulated/17/Android/data/dev.cyclone.cloak.probe.diag/files/standalone-evidence/capture-end.json'",
+      "10-23 19:26:02.567  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 cat /data/user/17/dev.cyclone.cloak.probe.diag/files/capture-end.json'",
+      "10-23 19:26:02.698  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:dumpsys package dev.cyclone.cloak.probe.diag'",
+      "10-23 19:26:02.795 27803 27805 I artd    : GetBestInfo: /data/app/~~aP-S2XHUX2kVtbqJQa9QiA==/dev.cyclone.cloak.probe.diag-Hl2P9iKuuBqbWxjBrfgdtQ==/base.apk has no usable artifacts",
+      "10-23 19:26:02.828  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:pidof dev.cyclone.cloak.probe.diag'",
+      "10-23 19:26:03.117  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:pm path --user 17 dev.cyclone.cloak.probe.diag'",
+      "10-23 19:26:03.268  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 id'",
+      "10-23 19:26:03.366  1237  1237 I adbd    : adbd service requested 'shell,v2,TERM=dumb,raw:run-as dev.cyclone.cloak.probe.diag --user 17 pwd'"
+    ]
+  }
+}

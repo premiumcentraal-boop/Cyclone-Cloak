@@ -1,0 +1,26 @@
+[
+  {
+    "android_user_id": 0,
+    "digest_source": "packaged_abi_manifest",
+    "format": 1,
+    "hook_library_path": "/data/user/0/dev.cyclone.cloak.probe.diag/code_cache/cloak_hooks/libpine.so",
+    "hook_path_state": "planned_before_postAppSpecialize",
+    "module_artifact_sha256": "d7dd105446a229f981e5cdd1aed862a13e3c7d04220f04fb08eadde175bb15c1",
+    "pid": 15193,
+    "stage": "preAppSpecialize_bound",
+    "target_package": "dev.cyclone.cloak.probe.diag",
+    "timestamp_ms": 1792775770996
+  },
+  {
+    "android_user_id": 17,
+    "digest_source": "packaged_abi_manifest",
+    "format": 1,
+    "hook_library_path": "/data/user/17/dev.cyclone.cloak.probe.diag/code_cache/cloak_hooks/libpine.so",
+    "hook_path_state": "planned_before_postAppSpecialize",
+    "module_artifact_sha256": "d7dd105446a229f981e5cdd1aed862a13e3c7d04220f04fb08eadde175bb15c1",
+    "pid": 15666,
+    "stage": "preAppSpecialize_bound",
+    "target_package": "dev.cyclone.cloak.probe.diag",
+    "timestamp_ms": 1792775778876
+  }
+]

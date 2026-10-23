@@ -1,0 +1,20 @@
+[
+  {
+    "attempt": "2026-10-21-222036-probe-only-validation",
+    "failure": "PROBE_CAPTURE_FAILED_USER_0_CAPTURE_1",
+    "probe_removed": true,
+    "production_public_snapshot_unchanged": true
+  },
+  {
+    "attempt": "2026-10-21-222128-probe-only-validation",
+    "failure": "PROBE_REPORT_TIMEOUT_USER_0_CAPTURE_2",
+    "probe_removed": true,
+    "production_public_snapshot_unchanged": true
+  },
+  {
+    "attempt": "2026-10-21-222249-probe-only-validation",
+    "failure": "PROBE_REPORT_TIMEOUT_USER_17_CAPTURE_1",
+    "probe_removed": true,
+    "production_public_snapshot_unchanged": true
+  }
+]

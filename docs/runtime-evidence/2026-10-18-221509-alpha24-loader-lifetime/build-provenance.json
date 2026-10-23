@@ -1,0 +1,10 @@
+{
+  "commit": "68ef4cbb5f068ced6305a88c3bc566a54f04ff53",
+  "version": "0.11.0-alpha.24",
+  "version_code": 48,
+  "source_checkout": "C:\\Users\\Agent\\AppData\\Local\\Temp\\cloak-alpha24-loader-clean",
+  "source_tracked_clean": true,
+  "diagnostics_apk_sha256": "2bf5b36bd9310f39b5f4e47a987d9e4dc1855fa14aaf0f6bba98684ddb719212",
+  "build_command": "JAVA_HOME=JDK17 ANDROID_HOME=android-sdk gradle-8.11.1 -p C:\\Users\\Agent\\AppData\\Local\\Temp\\cloak-alpha24-loader-clean\\android :probe:assembleDiagnosticsDebug --offline --no-daemon --console=plain",
+  "signed_validation_run": 39162456657
+}

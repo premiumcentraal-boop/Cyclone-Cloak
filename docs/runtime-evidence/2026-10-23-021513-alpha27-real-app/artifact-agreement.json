@@ -1,0 +1,18 @@
+{
+  "commit": "d4f0a5cb5f4d70bacaeb0b8ecdff184eff154150",
+  "installed_apk_sha256": "df37f86da7ea617fcd1aad65504b23c95aaad56a1f9726ca3270846f8165cffc",
+  "embedded_zip_sha256": "53649be46759c3b8ba461d122a20d214727f310ceb34ee9fa296a4a2e7454b3f",
+  "embedded_properties": "id=cyclone_cloak\nname=Cyclone Cloak\nversion=v0.11.0-alpha.27\nversionCode=51\nauthor=Cyclone Cloak contributors\ndescription=Device-profile engine for Cyclone (platform). Manage per-app profiles from the Cyclone Cloak companion app. Requires platform.\n",
+  "candidate_path": "C:\\Users\\Agent\\Cyclone\\cloak-repo\\android\\module\\build\\module\\cyclone-cloak-0.11.0-alpha.28.zip",
+  "candidate_zip_sha256": "9e7e3dad93c1650f70919371f493d115b18cc39dd4f7fddc6f890f2efb2c8298",
+  "candidate_matches_installed_app_embedded_zip": false,
+  "module_actions": [],
+  "signature_exit_code": 0,
+  "selected_zip_sha256": "b86db15b3a02598cac22985a4e93a2195f61b102403ab132d95f6a2228cb894b",
+  "selected_abi_sha256": {
+    "zygisk/arm64-v8a.so": "4425949ae374c0704721bae8b93278cd1b1476ab3918125a8ba870b0db03f002",
+    "zygisk/armeabi-v7a.so": "7f476f9b3c47367c9eac6985a21a49a7ed509adf67457e7f318f13277897254b"
+  },
+  "selection": "alpha.27/code 51 source plus root-companion load-record instrumentation only",
+  "build_source": "C:\\Users\\Agent\\AppData\\Local\\Temp\\cloak-alpha27-companion-record-20261023-020127"
+}

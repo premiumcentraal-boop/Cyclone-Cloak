@@ -1,0 +1,287 @@
+--- a/tools/run_standalone_probe_validation.py
++++ b/tools/run_standalone_probe_validation.py
+@@ -1,6 +1,7 @@
+ """Standalone, cold-only diagnostics validation for existing users 0 and 17.
+ 
+ Run: uv run --offline --with jsonschema -- python -X utf8 tools/run_standalone_probe_validation.py
++Uses the lifecycle runner user-switch path, returning to user 0 at cleanup.
+ Installs only the diagnostics APK, suppresses permission prompts, force-stops only
+ that package before each read, and uninstalls it in finally. No root or overlays.
+ User 0 receives one smoke capture; user 17 receives two captures.
+@@ -12,6 +13,7 @@
+ import hashlib
+ import json
+ import re
++import shlex
+ import subprocess
+ import time
+ import zipfile
+@@ -23,15 +25,16 @@
+ PACKAGE = 'dev.cyclone.cloak.probe.diag'
+ APK = ROOT/'android/probe/build/outputs/apk/diagnostics/debug/probe-diagnostics-debug.apk'
+ STAMP = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=2))).strftime('%Y-%m-%d-%H%M%S')
+-OUT = ROOT/'docs/runtime-evidence'/f'{STAMP}-user17-launch-validation'
++OUT = ROOT/'docs/runtime-evidence'/f'{STAMP}-user17-switch-validation'
+ COMMANDS = []
++SWITCH_EVENTS = []
+ 
+ def save(name, value):
+     (OUT/name).write_text(json.dumps(value, indent=2)+'\n', encoding='utf8')
+ 
+-def adb_result(*args, timeout=30):
++def adb_result(*args, timeout=30, data=None):
+     completed = subprocess.run([ADB, '-s', SERIAL, *args], capture_output=True, text=True,
+-                               encoding='utf8', errors='replace', timeout=timeout)
++                               encoding='utf8', errors='replace', timeout=timeout, input=data)
+     COMMANDS.append(dict(args=list(args), exit_code=completed.returncode))
+     return dict(stdout=completed.stdout, stderr=completed.stderr, exit_code=completed.returncode)
+ 
+@@ -105,6 +108,7 @@
+     selected = None
+     # Explicit per-user absolute paths; never rely on run-as's initial directory.
+     for transport, command in (
++        ('lifecycle_run_as', f'run-as {PACKAGE} --user {user} cat files/{name}'),
+         ('external_shell', f'cat {external}'),
+         ('external_run_as', f'run-as {PACKAGE} --user {user} cat {external}'),
+         ('private_run_as', f'run-as {PACKAGE} --user {user} cat {private}')):
+@@ -141,14 +145,65 @@
+         run_as_directory=adb_result('shell',f'run-as {PACKAGE} --user {user} pwd'))
+ 
+ 
++def record_switch(event):
++    SWITCH_EVENTS.append(event)
++    save('user-switches.json', SWITCH_EVENTS)
++
++
++def activate_user(user, record=None):
++    """Same command and settle loop as run_probe_reversibility.activate; never unlocks."""
++    event = dict(target_user=user, completed=False)
++    try:
++        state = shell(f'am get-started-user-state {user}', check=False)
++        event['started_state'] = state
++        if state != 'RUNNING_UNLOCKED': raise RuntimeError('USER_UNAVAILABLE_OR_LOCKED')
++        event['before_user'] = int(shell('am get-current-user'))
++        if event['before_user'] != user:
++            event['switch_command'] = adb_result('shell', f'am switch-user {user}')
++            if event['switch_command']['exit_code']: raise RuntimeError('USER_SWITCH_FAILED')
++        deadline = time.monotonic()+60
++        while time.monotonic()<deadline:
++            current = int(shell('am get-current-user'))
++            event['after_user'] = current
++            if current == user:
++                event['completed'] = True
++                return event
++            time.sleep(.3)
++        raise RuntimeError('USER_SWITCH_TIMEOUT')
++    finally:
++        if record is not None: record(event)
++
++
++def prepare_external_fixture(user):
++    # Lifecycle launch sets external_profile=true. Supply only the synthetic asset,
++    # never create a runtime binding or publish a profile body.
++    import zipfile
++    with zipfile.ZipFile(APK) as archive:
++        body = archive.read('assets/profile-a.json')
++    command = f'run-as {PACKAGE} --user {user} sh -c '+shlex.quote('mkdir -p files; cat > files/expected-profile.json')
++    result = adb_result('shell', command, data=body.decode('utf8'))
++    if result['exit_code']: raise RuntimeError('EXPECTED_PROFILE_WRITE_FAILED')
++    check = shell(f'run-as {PACKAGE} --user {user} sha256sum files/expected-profile.json')
++    digest = hashlib.sha256(body).hexdigest()
++    if check.split()[0] != digest: raise RuntimeError('EXPECTED_PROFILE_HASH_MISMATCH')
++    return dict(fixture='a', profile_sha256=digest, bytes=len(body), source='built APK synthetic asset')
++
++
++def lifecycle_launch_command(user, request, fixture='a'):
++    return (f'am start --user {user} -n {PACKAGE}/dev.cyclone.cloak.probe.DiagnosticsProbeActivity '
++        f'--activity-clear-top --activity-single-top --ez external_profile true --ez no_permission_prompt true '
++        f'--ei expected_user {user} --es fixture {fixture} --es request_id {request}')
++
++
+ def launch_with_evidence(user, request):
++    switched = activate_user(user, record_switch) if user == 17 else None
++    fixture = prepare_external_fixture(user)
+     before = launch_snapshot(user)
+     before['device_clock'] = shell("date '+%m-%d %H:%M:%S.000'")
+     stopped = adb_result('shell', f'am force-stop --user {user} {PACKAGE}')
+     if stopped['exit_code']: raise RuntimeError('DIAGNOSTICS_FORCE_STOP_FAILED')
+-    launch = adb_result('shell',f'am start --user {user} -n {PACKAGE}/dev.cyclone.cloak.probe.DiagnosticsProbeActivity '
+-        f'--es request_id {request} --es fixture a --ei expected_user {user} --ez no_permission_prompt true')
+-    return dict(request_id=request, cold_start=True, before=before, force_stop=stopped, am_start=launch,
++    launch = adb_result('shell', lifecycle_launch_command(user, request))
++    return dict(request_id=request, cold_start=True, user_activation=switched, expected_profile=fixture, before=before, force_stop=stopped, am_start=launch,
+                 immediately_after=launch_snapshot(user))
+ 
+ 
+@@ -209,6 +264,7 @@
+         assert adb('get-state') == 'device'
+         states = {str(u): shell(f'am get-started-user-state {u}') for u in (0, 17)}
+         save('user-states.json', states)
++        save('initial-current-user.json', dict(user=int(shell('am get-current-user'))))
+         if any(s != 'RUNNING_UNLOCKED' for s in states.values()):
+             raise RuntimeError('REQUIRED_USER_NOT_UNLOCKED')
+         before = package_info('dev.cyclone.cloak')
+@@ -219,7 +275,7 @@
+         save('provenance.json', dict(commit=source, dirty_worktree=True, tracked_diff_sha256=hashlib.sha256(diff).hexdigest(),
+             apk_sha256=hashlib.sha256(APK.read_bytes()).hexdigest(), apk_bytes=APK.stat().st_size,
+             cold_start_policy='force-stop diagnostics package before every capture',
+-            source='locally built diagnostics APK with cold-capture markers and existing SIM/probe hardening; no module build or release change',
++            source='locally built diagnostics APK, lifecycle user-switch launch, cold-capture markers and existing SIM/probe hardening; no module build or release change',
+             module_provenance='Not inspected or changed; installed binary identity not established',
+             permissions='No grants, revokes, AppOps changes or runtime permission prompts requested'))
+         (OUT/'source.patch').write_bytes(diff)
+@@ -281,6 +337,13 @@
+                     raise RuntimeError(f'PROBE_CAPTURE_FAILED_USER_{user}_CAPTURE_{repeat}')
+                 if report.get('package') != PACKAGE or int(report['uid'])//100000 != user:
+                     raise RuntimeError('REPORTED_USER_OR_PACKAGE_MISMATCH')
++                if report.get('fixture') != 'a' or report.get('profile_sha256') != launch['expected_profile']['profile_sha256']:
++                    raise RuntimeError('REPORT_FIXTURE_OR_PROFILE_HASH_MISMATCH')
++                ids = [row.get('id') for row in report.get('rows', [])]
++                if len(ids) != 89 or len(set(ids)) != 89 or not all(ids):
++                    raise RuntimeError('REPORT_ROWS_INCOMPLETE')
++                if any(markers[phase]['uid'] != report['uid'] or markers[phase]['pid'] != report['pid'] for phase in ('start','end')):
++                    raise RuntimeError('REPORT_MARKER_PROCESS_MISMATCH')
+                 jsonschema.validate(report.get('filesystem_observations'), schema)
+                 rows = report['filesystem_observations']['rows']
+                 results.append(dict(user=user, capture=repeat, request_id=request, pid=report['pid'],
+@@ -293,6 +356,12 @@
+         save('failure.json', dict(reason=failure))
+     finally:
+         cleanup = dict(uninstall_requested=installed)
++        try:
++            activation = activate_user(0, record_switch)
++            cleanup['returned_to_user_0'] = activation['completed']
++        except Exception as error:
++            cleanup['returned_to_user_0'] = False
++            cleanup['switch_back_error'] = type(error).__name__
+         if installed:
+             try:
+                 cleanup['uninstall_output'] = adb('uninstall', PACKAGE, timeout=120)
+@@ -310,15 +379,17 @@
+         stability = []
+         for user in (0,17):
+             captures = [r for r in results if r['user'] == user]
+-            for id in ('diagnostics.filesystem.build_prop','diagnostics.filesystem.proc_version'):
++            for id in ('diagnostics.filesystem.build_prop','diagnostics.filesystem.proc_version','diagnostics.filesystem.proc_cpuinfo','diagnostics.filesystem.maps_snapshot'):
+                 rows = [next(r for r in c['rows'] if r['id'] == id) for c in captures]
+                 measured = len(rows) == 2 and all(r['status'] == 'OBSERVED' for r in rows)
+-                stability.append(dict(user=user,id=id,result=('IDENTICAL' if rows[0]['sha256']==rows[1]['sha256'] else 'CHANGED') if measured else 'NOT_COMPARABLE'))
++                result = ('IDENTICAL' if rows[0]['sha256']==rows[1]['sha256'] else 'CHANGED') if measured else 'NOT_COMPARABLE'
++                if id.endswith('maps_snapshot'): result = 'SKIPPED_VOLATILE'
++                stability.append(dict(user=user,id=id,result=result,digests=[r.get('sha256') for r in rows]))
+         save('determinism.json', stability)
+         save('commands.json', COMMANDS)
+-        completed = not failure and len(results)==3 and cleanup.get('removed') and unchanged
++        completed = not failure and len(results)==3 and cleanup.get('removed') and cleanup.get('returned_to_user_0') and unchanged
+         completed = completed and not any(r['result']=='CHANGED' for r in stability)
+-        summary = ['# User-17 launch standalone validation', '', 'Result: '+('COMPLETE' if completed else 'INCOMPLETE'),
++        summary = ['# User-17 switch-path standalone validation', '', 'Result: '+('COMPLETE' if completed else 'INCOMPLETE'),
+             'Failure: '+str(failure), 'APK SHA-256: '+hashlib.sha256(APK.read_bytes()).hexdigest(),
+             'Production APK/version/permission snapshot unchanged: '+str(unchanged),
+             'Diagnostics uninstall confirmed: '+str(cleanup.get('removed',False)), '',
+@@ -327,7 +398,7 @@
+             summary.append(f"| {r['user']} | {r['capture']} | {r['counts'].get('OBSERVED',0)} | {r['counts'].get('BLOCKED',0)} | {r['counts'].get('MISSING',0)} |")
+         summary += ['', 'Determinism:']+[f"- user {r['user']} {r['id']}: {r['result']}" for r in stability]
+         summary += ['', 'Limits: probe-only caller-visible observations; no parity verdict or VERIFIED promotion.',
+-            'No module install, root shell, reboot, binding overlay, user switch, permission grant/reset or production app launch was performed.',
++            'No module install, root shell, reboot, binding overlay, permission grant/reset or production app launch was performed. Only the authorized user 0 to 17 to 0 round trip was used.',
+             'Private production stores/module files were not independently audited. APK/version/permission equality is not proof of private-store byte equality.',
+             'Installed module provenance was not established; the handoff alpha.28 description is not independently confirmed.',
+             'The diagnostics-only installation was globally uninstalled at cleanup; no private probe files are retained on-device.',
+--- a/android/probe/tests/test_user_visibility.py
++++ b/android/probe/tests/test_user_visibility.py
+@@ -34,13 +34,13 @@
+ 
+     def test_launch_preserves_verbatim_streams_exit_and_user(self):
+         start=dict(stdout='Starting: Intent\n',stderr='Warning: example\n',exit_code=0)
+-        with patch.object(runner,'launch_snapshot',return_value={}), patch.object(runner,'shell',return_value='10-21 12:00:00.000'), patch.object(runner,'adb_result',side_effect=[dict(stdout='',stderr='',exit_code=0),start]) as adb:
++        with patch.object(runner,'activate_user'), patch.object(runner,'prepare_external_fixture',return_value={}), patch.object(runner,'launch_snapshot',return_value={}), patch.object(runner,'shell',return_value='10-21 12:00:00.000'), patch.object(runner,'adb_result',side_effect=[dict(stdout='',stderr='',exit_code=0),start]) as adb:
+             evidence=runner.launch_with_evidence(17,'request')
+         self.assertEqual(evidence['am_start'],start)
+         self.assertIn('am start --user 17 -n '+runner.PACKAGE,adb.call_args.args[1])
+ 
+     def test_report_read_tries_explicit_per_user_paths_and_preserves_denial(self):
+-        responses=[dict(stdout='',stderr='Permission denied',exit_code=1),dict(stdout='',stderr='Permission denied',exit_code=1),dict(stdout='{"request_id":"r"}',stderr='',exit_code=0)]
++        responses=[dict(stdout='',stderr='Permission denied',exit_code=1)]*3+[dict(stdout='{"request_id":"r"}',stderr='',exit_code=0)]
+         with patch.object(runner,'adb_result',side_effect=responses) as adb:
+             report,visibility=runner.read_evidence(17,'report.json')
+         self.assertEqual(report['request_id'],'r')
+--- /dev/null
++++ b/android/probe/tests/test_user_switch_capture.py
+@@ -0,0 +1,76 @@
++import ast
++import sys
++import unittest
++from pathlib import Path
++from unittest.mock import patch
++
++sys.path.insert(0, str(Path(__file__).resolve().parents[3] / 'tools'))
++import run_standalone_probe_validation as runner
++
++
++class UserSwitchCaptureTest(unittest.TestCase):
++    def test_switch_waits_for_active_user_before_launch(self):
++        commands=[]
++        users=iter(('RUNNING_UNLOCKED','0','0','17'))
++        def shell(command, **kwargs):
++            commands.append(command)
++            return next(users)
++        def adb(*args, **kwargs):
++            commands.append(args[1]); return dict(stdout='',stderr='',exit_code=0)
++        events=[]
++        with patch.object(runner,'shell',side_effect=shell), patch.object(runner,'adb_result',side_effect=adb), patch.object(runner.time,'sleep') as sleep:
++            result=runner.activate_user(17,events.append)
++        self.assertTrue(result['completed'])
++        self.assertEqual(result['after_user'],17)
++        self.assertEqual(commands, ['am get-started-user-state 17','am get-current-user','am switch-user 17','am get-current-user','am get-current-user'])
++        sleep.assert_called_once_with(.3)
++        self.assertEqual(events,[result])
++
++    def test_switch_force_stop_launch_read_sequence(self):
++        order=[]
++        def activate(*args): order.append('switch_wait'); return dict(completed=True)
++        def prepare(*args): order.append('synthetic_expected_profile'); return {}
++        def adb(*args,**kwargs):
++            order.append(args[1]); return dict(stdout='{}',stderr='',exit_code=0)
++        with patch.object(runner,'activate_user',side_effect=activate), patch.object(runner,'prepare_external_fixture',side_effect=prepare), patch.object(runner,'launch_snapshot',return_value={}), patch.object(runner,'shell',return_value='clock'), patch.object(runner,'adb_result',side_effect=adb):
++            runner.launch_with_evidence(17,'request')
++            runner.read_evidence(17,'report.json')
++        self.assertEqual(order[:3],['switch_wait','synthetic_expected_profile',f'am force-stop --user 17 {runner.PACKAGE}'])
++        self.assertEqual(order[3],runner.lifecycle_launch_command(17,'request'))
++        self.assertEqual(order[4],f'run-as {runner.PACKAGE} --user 17 cat files/report.json')
++
++    def test_launch_command_exactly_matches_lifecycle_sequence(self):
++        command=runner.lifecycle_launch_command(17,'request')
++        self.assertEqual(command,f'am start --user 17 -n {runner.PACKAGE}/dev.cyclone.cloak.probe.DiagnosticsProbeActivity --activity-clear-top --activity-single-top --ez external_profile true --ez no_permission_prompt true --ei expected_user 17 --es fixture a --es request_id request')
++
++    def test_return_to_zero_uses_same_switch_and_wait(self):
++        with patch.object(runner,'shell',side_effect=['RUNNING_UNLOCKED','17','0']), patch.object(runner,'adb_result',return_value=dict(stdout='',stderr='',exit_code=0)) as adb:
++            event=runner.activate_user(0)
++        adb.assert_called_once_with('shell','am switch-user 0')
++        self.assertTrue(event['completed'])
++
++    def test_active_user_does_not_receive_a_second_switch(self):
++        with patch.object(runner,'shell',side_effect=['RUNNING_UNLOCKED','17','17']), patch.object(runner,'adb_result') as adb:
++            self.assertTrue(runner.activate_user(17)['completed'])
++        adb.assert_not_called()
++
++    def test_locked_user_aborts_without_switch(self):
++        with patch.object(runner,'shell',return_value='RUNNING_LOCKED'), patch.object(runner,'adb_result') as adb:
++            with self.assertRaisesRegex(RuntimeError,'USER_UNAVAILABLE_OR_LOCKED'): runner.activate_user(17)
++        adb.assert_not_called()
++
++    def test_switch_timeout_preserves_failed_event(self):
++        events=[]
++        with patch.object(runner,'shell',side_effect=['RUNNING_UNLOCKED','0']), patch.object(runner,'adb_result',return_value=dict(exit_code=0)), patch.object(runner.time,'monotonic',side_effect=[0,61]):
++            with self.assertRaisesRegex(RuntimeError,'USER_SWITCH_TIMEOUT'): runner.activate_user(17,events.append)
++        self.assertFalse(events[0]['completed'])
++
++    def test_finally_returns_to_zero_before_uninstall(self):
++        tree=ast.parse(Path(runner.__file__).read_text())
++        main=next(n for n in tree.body if isinstance(n,ast.FunctionDef) and n.name=='main')
++        cleanup=next(n for n in main.body if isinstance(n,ast.Try)).finalbody
++        source=ast.unparse(ast.Module(body=cleanup,type_ignores=[]))
++        self.assertLess(source.index('activate_user(0, record_switch)'),source.index("adb('uninstall'"))
++
++
++if __name__ == '__main__': unittest.main()

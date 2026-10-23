@@ -1,0 +1,6 @@
+CYCLE 1 OF 3
+STOP REPORT_ROWS_MISSING
+EVIDENCE C:\Users\Agent\Cyclone\cloak-repo\docs\runtime-evidence\2026-10-20-225427-candidate-runtime-validation\runtime-lifecycle\cycle-001
+RESULT FAIL
+LIFECYCLE_EVIDENCE C:\Users\Agent\Cyclone\cloak-repo\docs\runtime-evidence\2026-10-20-225427-candidate-runtime-validation\runtime-lifecycle
+LIFECYCLE_RESULT FAIL

@@ -1,0 +1,11 @@
+{
+  "result": "STOPPED",
+  "phase": "FIXTURE_AUTHORING_PREREQUISITE",
+  "reason": "EXISTING_READERS_EXPOSE_DIGESTS_ONLY_NO_AUTHORING_EXPORT",
+  "fixture_c_unchanged": true,
+  "device_mutations": [],
+  "builds": 0,
+  "captures": 0,
+  "promotions": 0,
+  "prior_evidence_preserved": true
+}

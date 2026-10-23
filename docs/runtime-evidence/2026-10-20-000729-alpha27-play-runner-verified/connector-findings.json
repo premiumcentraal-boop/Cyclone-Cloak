@@ -1,0 +1,9 @@
+{
+  "separate_issue_unresolved": true,
+  "local_binding_count": 327,
+  "remote_config_record_count": 256,
+  "installed_cyclone_apk_sha256": "4b278fa6f02dc2b680e50243ec528f90ed550175dd31166de89435180cb66e5d",
+  "installed_apk_contains_256_config_limit_message": true,
+  "observation": "Connector still shows Reconnecting and repeated BAD_REQUEST. Remote count equals the configured limit; no remote error body was captured, so this is not proof of every rejection cause.",
+  "historical_root_timeout": "Magisk currently records allow for UID 1710377; old binding timeout messages do not establish a current denial. No root repair/publication was triggered."
+}

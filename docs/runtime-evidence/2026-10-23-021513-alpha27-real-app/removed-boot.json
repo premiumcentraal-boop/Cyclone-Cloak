@@ -1,0 +1,10 @@
+{
+  "boot_completed": "1",
+  "current_user": "0",
+  "users": {
+    "0": "RUNNING_UNLOCKED",
+    "17": "User is not started: 17"
+  },
+  "boot_id": "dcbebc07-93e0-4aec-8342-2baaf5a459b3",
+  "at": 1792714672.4063709
+}

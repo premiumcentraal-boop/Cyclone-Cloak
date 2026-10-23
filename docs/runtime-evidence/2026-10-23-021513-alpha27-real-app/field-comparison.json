@@ -1,0 +1,245 @@
+{
+  "format": 1,
+  "package": "com.devicetrust.scanner",
+  "android_user": 17,
+  "rows": [
+    {
+      "path": "device.manufacturer",
+      "expected": "samsung",
+      "actual_capture_1": "samsung",
+      "actual_capture_2": "samsung",
+      "result": "MATCH",
+      "method": "visual transcription of both archived screenshots; no scan button pressed",
+      "source": "rendered initial app screen"
+    },
+    {
+      "path": "device.brand",
+      "expected": "samsung",
+      "actual_capture_1": null,
+      "actual_capture_2": null,
+      "result": "NOT_DISPLAYED",
+      "method": "visual transcription of both archived screenshots; no scan button pressed",
+      "source": "rendered initial app screen"
+    },
+    {
+      "path": "device.model",
+      "expected": "SM-S911B",
+      "actual_capture_1": "SM-S911B",
+      "actual_capture_2": "SM-S911B",
+      "result": "MATCH",
+      "method": "visual transcription of both archived screenshots; no scan button pressed",
+      "source": "rendered initial app screen"
+    },
+    {
+      "path": "device.product",
+      "expected": "beyond1q",
+      "actual_capture_1": null,
+      "actual_capture_2": null,
+      "result": "NOT_DISPLAYED",
+      "method": "visual transcription of both archived screenshots; no scan button pressed",
+      "source": "rendered initial app screen"
+    },
+    {
+      "path": "device.device",
+      "expected": "beyond1q",
+      "actual_capture_1": null,
+      "actual_capture_2": null,
+      "result": "NOT_DISPLAYED",
+      "method": "visual transcription of both archived screenshots; no scan button pressed",
+      "source": "rendered initial app screen"
+    },
+    {
+      "path": "device.hardware",
+      "expected": "exynos2200",
+      "actual_capture_1": null,
+      "actual_capture_2": null,
+      "result": "NOT_DISPLAYED",
+      "method": "visual transcription of both archived screenshots; no scan button pressed",
+      "source": "rendered initial app screen"
+    },
+    {
+      "path": "device.fingerprint",
+      "expected": "samsung/beyond1q/beyond1q:13/TP1A.220624.014/S911BXXU2AWA1:user/release-keys",
+      "actual_capture_1": null,
+      "actual_capture_2": null,
+      "result": "NOT_DISPLAYED",
+      "method": "visual transcription of both archived screenshots; no scan button pressed",
+      "source": "rendered initial app screen"
+    },
+    {
+      "path": "device.version_release",
+      "expected": "13",
+      "actual_capture_1": "13",
+      "actual_capture_2": "13",
+      "result": "MATCH",
+      "method": "visual transcription of both archived screenshots; no scan button pressed",
+      "source": "rendered initial app screen"
+    },
+    {
+      "path": "device.sdk_int",
+      "expected": 33,
+      "actual_capture_1": 33,
+      "actual_capture_2": 33,
+      "result": "MATCH",
+      "method": "visual transcription of both archived screenshots; no scan button pressed",
+      "source": "rendered initial app screen"
+    },
+    {
+      "path": "device.security_patch",
+      "expected": "2023-08-01",
+      "actual_capture_1": null,
+      "actual_capture_2": null,
+      "result": "NOT_DISPLAYED",
+      "method": "visual transcription of both archived screenshots; no scan button pressed",
+      "source": "rendered initial app screen"
+    },
+    {
+      "path": "device.build_id",
+      "expected": "TP1A.220624.014",
+      "actual_capture_1": null,
+      "actual_capture_2": null,
+      "result": "NOT_DISPLAYED",
+      "method": "visual transcription of both archived screenshots; no scan button pressed",
+      "source": "rendered initial app screen"
+    },
+    {
+      "path": "device.version_incremental",
+      "expected": "S911BXXU2AWA1",
+      "actual_capture_1": null,
+      "actual_capture_2": null,
+      "result": "NOT_DISPLAYED",
+      "method": "visual transcription of both archived screenshots; no scan button pressed",
+      "source": "rendered initial app screen"
+    },
+    {
+      "path": "device.build_date_utc",
+      "expected": 1691952000,
+      "actual_capture_1": null,
+      "actual_capture_2": null,
+      "result": "NOT_DISPLAYED",
+      "method": "visual transcription of both archived screenshots; no scan button pressed",
+      "source": "rendered initial app screen"
+    },
+    {
+      "path": "device.first_api_level",
+      "expected": 33,
+      "actual_capture_1": null,
+      "actual_capture_2": null,
+      "result": "NOT_DISPLAYED",
+      "method": "visual transcription of both archived screenshots; no scan button pressed",
+      "source": "rendered initial app screen"
+    },
+    {
+      "path": "device.bootloader",
+      "expected": "beyond1q-1.0-24551412",
+      "actual_capture_1": null,
+      "actual_capture_2": null,
+      "result": "NOT_DISPLAYED",
+      "method": "visual transcription of both archived screenshots; no scan button pressed",
+      "source": "rendered initial app screen"
+    },
+    {
+      "path": "device.baseband",
+      "expected": "S911BXXU2AWA1",
+      "actual_capture_1": null,
+      "actual_capture_2": null,
+      "result": "NOT_DISPLAYED",
+      "method": "visual transcription of both archived screenshots; no scan button pressed",
+      "source": "rendered initial app screen"
+    },
+    {
+      "path": "telephony.sim_slot_count",
+      "expected": 1,
+      "actual_capture_1": null,
+      "actual_capture_2": null,
+      "result": "NOT_DISPLAYED",
+      "method": "visual transcription of both archived screenshots; no scan button pressed",
+      "source": "rendered initial app screen"
+    },
+    {
+      "path": "telephony.carrier_name",
+      "expected": "Vodafone",
+      "actual_capture_1": null,
+      "actual_capture_2": null,
+      "result": "NOT_DISPLAYED",
+      "method": "visual transcription of both archived screenshots; no scan button pressed",
+      "source": "rendered initial app screen"
+    },
+    {
+      "path": "telephony.mcc",
+      "expected": "262",
+      "actual_capture_1": null,
+      "actual_capture_2": null,
+      "result": "NOT_DISPLAYED",
+      "method": "visual transcription of both archived screenshots; no scan button pressed",
+      "source": "rendered initial app screen"
+    },
+    {
+      "path": "telephony.mnc",
+      "expected": "02",
+      "actual_capture_1": null,
+      "actual_capture_2": null,
+      "result": "NOT_DISPLAYED",
+      "method": "visual transcription of both archived screenshots; no scan button pressed",
+      "source": "rendered initial app screen"
+    },
+    {
+      "path": "telephony.network_type",
+      "expected": "LTE",
+      "actual_capture_1": null,
+      "actual_capture_2": null,
+      "result": "NOT_DISPLAYED",
+      "method": "visual transcription of both archived screenshots; no scan button pressed",
+      "source": "rendered initial app screen"
+    },
+    {
+      "path": "display.width",
+      "expected": 1080,
+      "actual_capture_1": null,
+      "actual_capture_2": null,
+      "result": "NOT_DISPLAYED",
+      "method": "visual transcription of both archived screenshots; no scan button pressed",
+      "source": "rendered initial app screen"
+    },
+    {
+      "path": "display.height",
+      "expected": 2340,
+      "actual_capture_1": null,
+      "actual_capture_2": null,
+      "result": "NOT_DISPLAYED",
+      "method": "visual transcription of both archived screenshots; no scan button pressed",
+      "source": "rendered initial app screen"
+    },
+    {
+      "path": "display.density",
+      "expected": 420,
+      "actual_capture_1": null,
+      "actual_capture_2": null,
+      "result": "NOT_DISPLAYED",
+      "method": "visual transcription of both archived screenshots; no scan button pressed",
+      "source": "rendered initial app screen"
+    },
+    {
+      "path": "display.refresh_rate_hz",
+      "expected": 120,
+      "actual_capture_1": null,
+      "actual_capture_2": null,
+      "result": "NOT_DISPLAYED",
+      "method": "visual transcription of both archived screenshots; no scan button pressed",
+      "source": "rendered initial app screen"
+    },
+    {
+      "path": "display.screen_size_class",
+      "expected": "large",
+      "actual_capture_1": null,
+      "actual_capture_2": null,
+      "result": "NOT_DISPLAYED",
+      "method": "visual transcription of both archived screenshots; no scan button pressed",
+      "source": "rendered initial app screen"
+    }
+  ],
+  "counts": {
+    "MATCH": 4,
+    "NOT_DISPLAYED": 22
+  }
+}

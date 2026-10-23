@@ -1,0 +1,49 @@
+{
+  "app:testDebugUnitTest": {
+    "tests": 577,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "module:testDebugUnitTest": {
+    "tests": 35,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "probe:testStandardDebugUnitTest": {
+    "tests": 109,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "probe:testDiagnosticsDebugUnitTest": {
+    "tests": 109,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "forge": {
+    "tests": 594,
+    "failures": 0
+  },
+  "schema": {
+    "tests": 69,
+    "failures": 0
+  },
+  "probe_host": {
+    "tests": 7,
+    "failures": 0
+  },
+  "commands": [
+    "JAVA_HOME=JDK17 CLOAK_TEST_WSL=1 gradle-8.11.1 -p android :app:testDebugUnitTest :module:testDebugUnitTest :probe:testStandardDebugUnitTest :probe:testDiagnosticsDebugUnitTest :app:assembleDebug :app:assembleRelease :module:packageModule :probe:assembleStandardDebug :probe:assembleDiagnosticsDebug --offline --no-daemon --console=plain",
+    "gradle-8.11.1 -p android :module:testDebugUnitTest :module:packageModule --offline --no-daemon --console=plain",
+    "uv run --with pytest -- python -X utf8 -m pytest forge/tests -q",
+    "uv run --with pytest --with jsonschema -- python -X utf8 -m pytest forge/schema_tests -q",
+    "uv run -- python -X utf8 -m unittest discover -s android/probe/tests -v",
+    "uv run -- python -X utf8 tools/generate_runtime_contract.py --check",
+    "uv run -- python -X utf8 tools/verify_release.py --tag v0.11.0-alpha.24 --artifacts",
+    "git diff --check",
+    "git diff --cached --check"
+  ]
+}

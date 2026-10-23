@@ -1,0 +1,9 @@
+{
+  "args": [
+    "shell",
+    "am get-started-user-state 0"
+  ],
+  "exit_code": 0,
+  "stdout": "RUNNING_UNLOCKED\r\n",
+  "stderr": ""
+}

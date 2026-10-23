@@ -1,0 +1,7 @@
+{
+  "exact_equal": true,
+  "changed_fields": [],
+  "target_permissions_appops_equal": true,
+  "target_changed_fields": [],
+  "comparison": "persisted JSON; user17 RUNNING_UNLOCKED"
+}

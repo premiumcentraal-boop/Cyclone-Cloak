@@ -1,0 +1,8 @@
+{
+  "result": "NOT_VALIDATED",
+  "phase": "installed-bound-user17-load-evidence",
+  "reason": "MODULE_LOAD_NOT_PROVEN",
+  "note": "Installed files match and filesystem capture completed. No persistent load marker exists; retained target-PID log lacks module load line. Hook-library mappings alone do not establish exact loaded module artifact.",
+  "second_reboot": false,
+  "module_removal": false
+}

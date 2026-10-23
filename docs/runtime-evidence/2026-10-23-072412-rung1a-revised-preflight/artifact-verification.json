@@ -1,0 +1,24 @@
+{
+  "zip_sha256": "8fd58b4ad0ea60ec06460b0ecaa0b9cea8e56467437975103d04392958a68795",
+  "zip_bytes": 2022032,
+  "zip_expected": "8fd58b4ad0ea60ec06460b0ecaa0b9cea8e56467437975103d04392958a68795",
+  "packaged_files": {
+    "artifacts.sha256": "200fa6efd9cde6a16f7e6e98296244a6501480b952586dfcb5b122f92f033e81",
+    "module.prop": "73fa376f4711523d72a49490f1157776ec1c53b309052b783ca0ed04fd20a78d",
+    "zygisk/arm64-v8a.so": "d7dd105446a229f981e5cdd1aed862a13e3c7d04220f04fb08eadde175bb15c1",
+    "zygisk/armeabi-v7a.so": "6e9943f1033582eb90f9a765b80f52243b4da90a9d577e5c4e43203b2278647e"
+  },
+  "installed_files": {
+    "zygisk/arm64-v8a.so": "d7dd105446a229f981e5cdd1aed862a13e3c7d04220f04fb08eadde175bb15c1",
+    "zygisk/armeabi-v7a.so": "6e9943f1033582eb90f9a765b80f52243b4da90a9d577e5c4e43203b2278647e",
+    "artifacts.sha256": "200fa6efd9cde6a16f7e6e98296244a6501480b952586dfcb5b122f92f033e81",
+    "module.prop": "73fa376f4711523d72a49490f1157776ec1c53b309052b783ca0ed04fd20a78d",
+    "load-records.jsonl": "0582fa5df85f39b27697b9e0515e04aeab3a5c438605120820f5c6ab5edf0122"
+  },
+  "immutable_match": true,
+  "module_prop": "id=cyclone_cloak\r\nname=Cyclone Cloak\r\nversion=v0.11.0-alpha.28\r\nversionCode=52\r\nauthor=Cyclone Cloak contributors\r\ndescription=Device-profile engine for Cyclone (platform). Manage per-app profiles from the Cyclone Cloak companion app. Requires platform.\r\n",
+  "users": {
+    "0": "RUNNING_UNLOCKED",
+    "17": "RUNNING_UNLOCKED"
+  }
+}

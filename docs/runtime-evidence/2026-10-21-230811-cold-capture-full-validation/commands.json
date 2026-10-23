@@ -1,0 +1,669 @@
+[
+  {
+    "args": [
+      "get-state"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "am get-started-user-state 0"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "am get-started-user-state 17"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "dumpsys package dev.cyclone.cloak"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "pm path --user 0 dev.cyclone.cloak"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "sha256sum /data/app/~~oxxPf3k1Ggejx1aZFZie2A==/dev.cyclone.cloak-FKdzo6WgSOJ9SiRjvLslLQ==/base.apk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "pm path --user 17 dev.cyclone.cloak"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "sha256sum /data/app/~~oxxPf3k1Ggejx1aZFZie2A==/dev.cyclone.cloak-FKdzo6WgSOJ9SiRjvLslLQ==/base.apk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "dumpsys package dev.cyclone.cloak.probe.diag"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "pm path --user 0 dev.cyclone.cloak.probe.diag"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "pm path --user 17 dev.cyclone.cloak.probe.diag"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "install",
+      "--user",
+      "0",
+      "-r",
+      "C:\\Users\\Agent\\Cyclone\\cloak-repo\\android\\probe\\build\\outputs\\apk\\diagnostics\\debug\\probe-diagnostics-debug.apk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "cmd package install-existing --user 17 dev.cyclone.cloak.probe.diag"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "dumpsys package dev.cyclone.cloak.probe.diag"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "pm path --user 0 dev.cyclone.cloak.probe.diag"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "sha256sum /data/app/~~Ilf-l5fn893y01Jr4f2g9A==/dev.cyclone.cloak.probe.diag-dgqvM0CtEoFA_lwoZ2dwwg==/base.apk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "pm path --user 17 dev.cyclone.cloak.probe.diag"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "sha256sum /data/app/~~Ilf-l5fn893y01Jr4f2g9A==/dev.cyclone.cloak.probe.diag-dgqvM0CtEoFA_lwoZ2dwwg==/base.apk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "am force-stop --user 0 dev.cyclone.cloak.probe.diag"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "am start --user 0 -n dev.cyclone.cloak.probe.diag/dev.cyclone.cloak.probe.DiagnosticsProbeActivity --es request_id filesystem-2026-10-21-230811-0-1 --es fixture a --ei expected_user 0 --ez no_permission_prompt true"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 0 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 0 cat files/report.json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 0 cat files/capture-start.json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 0 cat files/capture-end.json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "am force-stop --user 0 dev.cyclone.cloak.probe.diag"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "am start --user 0 -n dev.cyclone.cloak.probe.diag/dev.cyclone.cloak.probe.DiagnosticsProbeActivity --es request_id filesystem-2026-10-21-230811-0-2 --es fixture a --ei expected_user 0 --ez no_permission_prompt true"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 0 cat files/report.json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 0 cat files/report.json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 0 cat files/capture-start.json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 0 cat files/capture-end.json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "am force-stop --user 17 dev.cyclone.cloak.probe.diag"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "am start --user 17 -n dev.cyclone.cloak.probe.diag/dev.cyclone.cloak.probe.DiagnosticsProbeActivity --es request_id filesystem-2026-10-21-230811-17-1 --es fixture a --ei expected_user 17 --ez no_permission_prompt true"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/report.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/capture-start.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "run-as dev.cyclone.cloak.probe.diag --user 17 cat files/capture-end.json"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "uninstall",
+      "dev.cyclone.cloak.probe.diag"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "pm path --user 0 dev.cyclone.cloak.probe.diag"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "pm path --user 17 dev.cyclone.cloak.probe.diag"
+    ],
+    "exit_code": 1
+  },
+  {
+    "args": [
+      "shell",
+      "dumpsys package dev.cyclone.cloak"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "pm path --user 0 dev.cyclone.cloak"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "sha256sum /data/app/~~oxxPf3k1Ggejx1aZFZie2A==/dev.cyclone.cloak-FKdzo6WgSOJ9SiRjvLslLQ==/base.apk"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "pm path --user 17 dev.cyclone.cloak"
+    ],
+    "exit_code": 0
+  },
+  {
+    "args": [
+      "shell",
+      "sha256sum /data/app/~~oxxPf3k1Ggejx1aZFZie2A==/dev.cyclone.cloak-FKdzo6WgSOJ9SiRjvLslLQ==/base.apk"
+    ],
+    "exit_code": 0
+  }
+]

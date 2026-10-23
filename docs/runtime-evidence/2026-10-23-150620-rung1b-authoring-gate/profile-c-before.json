@@ -1,0 +1,199 @@
+{
+  "schema_version": "0.4",
+  "reality": {
+    "compute": {
+      "availability": "known",
+      "source": "public reference",
+      "reason": "Google Pixel hardware specifications: https://support.google.com/pixelphone/answer/7158570",
+      "values": {
+        "soc": "Google Tensor G2"
+      }
+    },
+    "memory": {
+      "availability": "known",
+      "source": "public reference",
+      "reason": "Pixel 7 8 GB / 128 GB SKU; Google Pixel hardware specifications. Other capacities require a separate selection.",
+      "values": {
+        "ram_gib": 8,
+        "storage_gib": 128
+      }
+    },
+    "panel": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "Copied from the base template configuration; not a physical measurement.",
+      "values": {
+        "width": 1080,
+        "height": 2400,
+        "density_dpi": 420,
+        "refresh_hz": 90
+      }
+    },
+    "cameras": {
+      "availability": "unknown",
+      "source": "needs verification",
+      "reason": "No verified template value; collect read-only evidence for this field.",
+      "values": {}
+    },
+    "sensors": {
+      "availability": "unknown",
+      "source": "needs verification",
+      "reason": "No verified template value; collect read-only evidence for this field.",
+      "values": {}
+    },
+    "power": {
+      "availability": "known",
+      "source": "public reference",
+      "reason": "Typical capacity for Pixel 7; Google Pixel hardware specifications. Live power/thermal state is unknown.",
+      "values": {
+        "design_capacity_mah": 4355
+      }
+    },
+    "drm": {
+      "availability": "unknown",
+      "source": "needs verification",
+      "reason": "No verified template value; collect read-only evidence for this field.",
+      "values": {}
+    },
+    "radio": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "Local configured names only; no radio state or broadcast is changed.",
+      "values": {
+        "wifi_name": "Cloak-6b5265dd17f8",
+        "bluetooth_name": "Cloak-5750560f4104"
+      }
+    },
+    "carrier": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "Copied from the base template configuration; not a physical measurement.",
+      "values": {
+        "slots": 1,
+        "mcc": "310",
+        "mnc": "260",
+        "sim_state": "ready"
+      }
+    },
+    "packages": {
+      "availability": "unknown",
+      "source": "needs verification",
+      "reason": "No verified template value; collect read-only evidence for this field.",
+      "values": {}
+    },
+    "webview": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "User agent derived from this profile; installed provider/version remains unknown.",
+      "values": {
+        "user_agent": "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
+      }
+    },
+    "environment": {
+      "availability": "known",
+      "source": "derived",
+      "reason": "Copied from the base template configuration; not a physical measurement.",
+      "values": {
+        "language": "en",
+        "country": "US",
+        "timezone": "America/New_York"
+      }
+    },
+    "inventory_id": "9deef0e27201dd9550b5357470d39ba0194986eb6e51035f75e683e86b73c772"
+  },
+  "id": "2b1cec3d-b89b-5652-a17f-870079bf9666",
+  "name": "Reality",
+  "seed": "abababababababababababababababababababababababababababababababab",
+  "device": {
+    "manufacturer": "Google",
+    "brand": "google",
+    "model": "Pixel 7",
+    "product": "panther",
+    "device": "panther",
+    "hardware": "gs201",
+    "fingerprint": "google/panther/panther:13/TQ3A.230805.001/10193186:user/release-keys",
+    "version_release": "13",
+    "sdk_int": 33,
+    "security_patch": "2023-08-05",
+    "build_id": "TQ3A.230805.001",
+    "version_incremental": "10193186",
+    "build_date_utc": 1691712000,
+    "first_api_level": 33,
+    "bootloader": "panther-1.0-8769422",
+    "baseband": "g5123-230712-230712-B10046521"
+  },
+  "identifiers": {
+    "android_id": "3a4cf3a7fcd4e8cb",
+    "advertising_id": "d3500169-d39a-40b1-bcfa-f9d9d1739be7",
+    "app_set_id": "3d2eb31f-1124-489c-bcd6-61b985491917",
+    "mac": "1A:35:32:1E:77:25",
+    "bt_mac": "3A:B4:66:9A:D8:54",
+    "imei_primary": "472186978248637",
+    "imei_secondary": "710989943352422",
+    "sim_serial": "2622829857001513606",
+    "gsf_id": "f043b6a655d7a57a",
+    "widevine_id": "f2b9c7904bec4ec0755b7aec3eca856e1deb43ab9cbd564f038af27837d568d3",
+    "serial": "U6UV1SJBJET5"
+  },
+  "telephony": {
+    "sim_slot_count": 1,
+    "carrier_name": "T-Mobile",
+    "mcc": "310",
+    "mnc": "260",
+    "network_type": "5G"
+  },
+  "network": {
+    "egress_hint": "us-east"
+  },
+  "display": {
+    "width": 1080,
+    "height": 2400,
+    "density": 420,
+    "refresh_rate_hz": 90,
+    "screen_size_class": "large"
+  },
+  "locale": {
+    "language": "en",
+    "country": "US",
+    "timezone": "America/New_York"
+  },
+  "camera": {
+    "cameras": [
+      {
+        "facing": 1,
+        "hardware_level": 1,
+        "pixel_width": 8160,
+        "pixel_height": 6144
+      },
+      {
+        "facing": 1,
+        "hardware_level": 0,
+        "pixel_width": 4032,
+        "pixel_height": 3024
+      },
+      {
+        "facing": 0,
+        "hardware_level": 0,
+        "pixel_width": 4000,
+        "pixel_height": 3000
+      }
+    ]
+  },
+  "ua": {
+    "value": "Mozilla/5.0 (Linux; Android 13; Pixel 7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.5640.47 Safari/537.36"
+  },
+  "integrity": {
+    "verdict": "unknown",
+    "checked_at": null,
+    "keybox_tag": null
+  },
+  "health": {
+    "state": "new",
+    "last_seen": null
+  },
+  "meta": {
+    "source": "forge",
+    "forge_version": "0.2.0",
+    "template": "pixel_7"
+  }
+}

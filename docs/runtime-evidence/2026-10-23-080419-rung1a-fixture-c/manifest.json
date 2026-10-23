@@ -1,0 +1,20 @@
+{
+  "run_id": "9c31d14b54b143ffa8b7a7716b28bd82",
+  "selections": [
+    {
+      "kind": "fixture",
+      "fixture": "a",
+      "user": 0,
+      "profile_id": "0dcfc6e3-2f40-52dd-8b76-46d58e124ded",
+      "sha256": "e476b02fd308c62cf207f4fe60e97085bbd14ca6293b405c2cedb996c9555f53"
+    },
+    {
+      "kind": "fixture",
+      "fixture": "c",
+      "user": 17,
+      "profile_id": "2b1cec3d-b89b-5652-a17f-870079bf9666",
+      "sha256": "80e6b347fcff34794a377247569a0fc369c6e1d4c560e128b396ce9c12c7fc42"
+    }
+  ],
+  "overlay_active": false
+}

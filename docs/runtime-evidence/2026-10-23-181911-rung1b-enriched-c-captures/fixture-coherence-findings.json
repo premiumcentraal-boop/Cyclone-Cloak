@@ -1,0 +1,14 @@
+[
+  {
+    "severity": "error",
+    "code": "REALITY_LINK",
+    "message": "reality.packages: disagrees with the corresponding base profile field.",
+    "field": "reality.packages"
+  },
+  {
+    "severity": "error",
+    "code": "REALITY_WEBVIEW",
+    "message": "reality.webview: WebView version, package version and user agent disagree.",
+    "field": "reality.webview"
+  }
+]

@@ -1,0 +1,25 @@
+{
+  "status": "FAIL",
+  "error_type": "ValueError",
+  "report_sha256": "603f09c4125fd43d975e558635d0d4664e4faa93419dcf9fc6008c3a656cd409",
+  "rows": [],
+  "request_metadata": {
+    "request_id": "9d108358103b4c6ba900100d75e37860",
+    "android_user": 0,
+    "fixture": "a",
+    "profile_sha256": "553ddf0e6ad459157f838f0d01fc040a1ecadd3f8ecb8aba2dff2a4889f52c77",
+    "published_sha256": null,
+    "phase": "user-0-baseline-cold"
+  },
+  "profile_sha256": "553ddf0e6ad459157f838f0d01fc040a1ecadd3f8ecb8aba2dff2a4889f52c77",
+  "report_request_matches": true,
+  "fixture": "a",
+  "uid": 10273,
+  "pid": 22636,
+  "session_generation": 1,
+  "reason": "CAPTURE_FAILED",
+  "probe_error_type": "IllegalArgumentException",
+  "row_count": 0,
+  "duplicate_row_ids": [],
+  "truncated": false
+}

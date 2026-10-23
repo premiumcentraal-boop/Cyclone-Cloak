@@ -1,0 +1,51 @@
+{
+  "suites": {
+    "app_debug": {
+      "tests": 577,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "module_debug": {
+      "tests": 35,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "probe_standardDebug": {
+      "tests": 109,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "probe_diagnosticsDebug": {
+      "tests": 109,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0
+    },
+    "forge": {
+      "tests": 604,
+      "failures": 0
+    },
+    "schema": {
+      "tests": 69,
+      "failures": 0
+    },
+    "probe_host": {
+      "tests": 7,
+      "failures": 0
+    }
+  },
+  "total": 1510,
+  "android_build": "SUCCESS",
+  "android_tasks": 246,
+  "compiler_warnings": [],
+  "release_metadata": "PASS",
+  "diff_check": "PASS",
+  "focused_classifier_tests": 75,
+  "signed_validation": "Existing candidate a93d864 passed run 39158498518; no new CI dispatched after physical failure.",
+  "physical_gate": "FAIL_PROBE_CRASHED",
+  "release": "NOT_PUBLISHED",
+  "tracked_changes": "UNCOMMITTED_RUNNER_AND_TESTS_ONLY"
+}

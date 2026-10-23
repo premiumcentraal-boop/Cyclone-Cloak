@@ -1,0 +1,8 @@
+{
+  "published_sha256": "dcab867f2a35c2d4729fb70ddc1c9ea97b3bf96ffb557a904b4f63fbbf91c9dd",
+  "canonical_expected_sha256": "dcab867f2a35c2d4729fb70ddc1c9ea97b3bf96ffb557a904b4f63fbbf91c9dd",
+  "canonical_match": true,
+  "report_raw_profile_sha256": "5de89420c21c195defe179a14603c8655d0a2bcc79e4047ca7b39cba795aaeb6",
+  "fixture_source": "C",
+  "report_label": "external"
+}

@@ -1,0 +1,13 @@
+{
+  "embedded": {
+    "module.prop": "497adabb852cafda2285b5be8289b0288fe84937c5d17b669f4e3413209d6646",
+    "zygisk/arm64-v8a.so": "b8e320978d6694276278068b95b2694d829278f30560fb1eeeb77b863337b636",
+    "zygisk/armeabi-v7a.so": "b024637002f38f8150e13e2ec3fd4b7904e9747f3255c6cf9a03b91456afde6e"
+  },
+  "installed": {
+    "zygisk/arm64-v8a.so": "b8e320978d6694276278068b95b2694d829278f30560fb1eeeb77b863337b636",
+    "zygisk/armeabi-v7a.so": "b024637002f38f8150e13e2ec3fd4b7904e9747f3255c6cf9a03b91456afde6e",
+    "module.prop": "497adabb852cafda2285b5be8289b0288fe84937c5d17b669f4e3413209d6646"
+  },
+  "exact_file_hashes_match": true
+}

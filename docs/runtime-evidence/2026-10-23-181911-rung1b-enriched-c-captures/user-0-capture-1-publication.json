@@ -1,0 +1,8 @@
+{
+  "published_sha256": "e476b02fd308c62cf207f4fe60e97085bbd14ca6293b405c2cedb996c9555f53",
+  "canonical_expected_sha256": "e476b02fd308c62cf207f4fe60e97085bbd14ca6293b405c2cedb996c9555f53",
+  "canonical_match": true,
+  "report_raw_profile_sha256": "da878a8a5c51ef62324fd977d85c06fd830fa9c3896a1060621dbfc4e02efa98",
+  "fixture_source": "A",
+  "report_label": "a"
+}

@@ -1,0 +1,62 @@
+{
+  "version": "1.0-diag",
+  "version_code": 1,
+  "0": {
+    "paths": [
+      "/data/app/~~XoB2J-jUpvOuQc5Hxpu_PQ==/dev.cyclone.cloak.probe.diag-aDh9lRq-lfMAp9wo53dmpA==/base.apk"
+    ],
+    "apk_hashes": [
+      "087fcfa3afaa4d415ab327d314ab348afd81214761afa0b5034b1d41008fd259"
+    ]
+  },
+  "17": {
+    "paths": [
+      "/data/app/~~XoB2J-jUpvOuQc5Hxpu_PQ==/dev.cyclone.cloak.probe.diag-aDh9lRq-lfMAp9wo53dmpA==/base.apk"
+    ],
+    "apk_hashes": [
+      "087fcfa3afaa4d415ab327d314ab348afd81214761afa0b5034b1d41008fd259"
+    ]
+  },
+  "permissions": [
+    [
+      "android.permission.ACCESS_COARSE_LOCATION",
+      "false"
+    ],
+    [
+      "android.permission.ACCESS_COARSE_LOCATION",
+      "true"
+    ],
+    [
+      "android.permission.ACCESS_FINE_LOCATION",
+      "false"
+    ],
+    [
+      "android.permission.ACCESS_FINE_LOCATION",
+      "true"
+    ],
+    [
+      "android.permission.ACCESS_WIFI_STATE",
+      "true"
+    ],
+    [
+      "android.permission.BLUETOOTH_CONNECT",
+      "false"
+    ],
+    [
+      "android.permission.BLUETOOTH_CONNECT",
+      "true"
+    ],
+    [
+      "android.permission.NEARBY_WIFI_DEVICES",
+      "false"
+    ],
+    [
+      "android.permission.NEARBY_WIFI_DEVICES",
+      "true"
+    ],
+    [
+      "com.google.android.gms.permission.AD_ID",
+      "true"
+    ]
+  ]
+}

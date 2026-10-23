@@ -1,0 +1,12 @@
+$env:JAVA_HOME='C:/Program Files/Eclipse Adoptium/jdk-17.0.20.101-hotspot'
+$env:CLOAK_TEST_WSL='1'
+& "$env:TEMP/cloak-build/gradle-8.11.1/bin/gradle.bat" -p android :probe:testDiagnosticsDebugUnitTest :probe:assembleDiagnosticsDebug --offline --no-daemon --console=plain
+uv run --offline --with jsonschema -- python -X utf8 <evidence>/run_ops.py install
+uv run --offline --with jsonschema -- python -X utf8 <evidence>/run_ops.py capture 0 1
+uv run --offline --with jsonschema -- python -X utf8 <evidence>/run_ops.py capture 17 1
+# Normal Android dialogs: location precise/while using; nearby Allow. Screenshots retained.
+uv run --offline --with jsonschema -- python -X utf8 <evidence>/run_ops.py capture 17 2
+uv run --offline --with jsonschema -- python -X utf8 <evidence>/run_ops.py capture 17 3
+uv run --offline --with jsonschema -- python -X utf8 <evidence>/run_ops.py cleanup
+git diff --check
+git diff --cached --check

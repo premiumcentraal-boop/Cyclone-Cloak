@@ -1,0 +1,50 @@
+[
+  {
+    "android_user_id": 0,
+    "digest_source": "packaged_abi_manifest",
+    "format": 1,
+    "hook_library_path": "/data/user/0/dev.cyclone.cloak.probe.diag/code_cache/cloak_hooks/libpine.so",
+    "hook_path_state": "planned_before_postAppSpecialize",
+    "module_artifact_sha256": "d7dd105446a229f981e5cdd1aed862a13e3c7d04220f04fb08eadde175bb15c1",
+    "pid": 2376,
+    "stage": "preAppSpecialize_bound",
+    "target_package": "dev.cyclone.cloak.probe.diag",
+    "timestamp_ms": 1792772433454
+  },
+  {
+    "android_user_id": 17,
+    "digest_source": "packaged_abi_manifest",
+    "format": 1,
+    "hook_library_path": "/data/user/17/dev.cyclone.cloak.probe.diag/code_cache/cloak_hooks/libpine.so",
+    "hook_path_state": "planned_before_postAppSpecialize",
+    "module_artifact_sha256": "d7dd105446a229f981e5cdd1aed862a13e3c7d04220f04fb08eadde175bb15c1",
+    "pid": 4123,
+    "stage": "preAppSpecialize_bound",
+    "target_package": "dev.cyclone.cloak.probe.diag",
+    "timestamp_ms": 1792772449064
+  },
+  {
+    "android_user_id": 17,
+    "digest_source": "packaged_abi_manifest",
+    "format": 1,
+    "hook_library_path": "/data/user/17/dev.cyclone.cloak.probe.diag/code_cache/cloak_hooks/libpine.so",
+    "hook_path_state": "planned_before_postAppSpecialize",
+    "module_artifact_sha256": "d7dd105446a229f981e5cdd1aed862a13e3c7d04220f04fb08eadde175bb15c1",
+    "pid": 7420,
+    "stage": "preAppSpecialize_bound",
+    "target_package": "dev.cyclone.cloak.probe.diag",
+    "timestamp_ms": 1792772499252
+  },
+  {
+    "android_user_id": 17,
+    "digest_source": "packaged_abi_manifest",
+    "format": 1,
+    "hook_library_path": "/data/user/17/dev.cyclone.cloak.probe.diag/code_cache/cloak_hooks/libpine.so",
+    "hook_path_state": "planned_before_postAppSpecialize",
+    "module_artifact_sha256": "d7dd105446a229f981e5cdd1aed862a13e3c7d04220f04fb08eadde175bb15c1",
+    "pid": 7978,
+    "stage": "preAppSpecialize_bound",
+    "target_package": "dev.cyclone.cloak.probe.diag",
+    "timestamp_ms": 1792772531236
+  }
+]

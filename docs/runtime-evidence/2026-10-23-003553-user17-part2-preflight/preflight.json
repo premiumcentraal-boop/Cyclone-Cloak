@@ -1,0 +1,49 @@
+{
+  "result": "NOT_RUN_REQUIRED_USER_NOT_STARTED",
+  "observations": [
+    {
+      "args": [
+        "devices",
+        "-l"
+      ],
+      "exit_code": 0,
+      "stdout": "List of devices attached\n3B171FDJH0061G         device product:shiba model:Pixel_8 device:shiba transport_id:2\n\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "-s",
+        "3B171FDJH0061G",
+        "shell",
+        "am get-started-user-state 0"
+      ],
+      "exit_code": 0,
+      "stdout": "RUNNING_UNLOCKED\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "-s",
+        "3B171FDJH0061G",
+        "shell",
+        "am get-started-user-state 17"
+      ],
+      "exit_code": 0,
+      "stdout": "User is not started: 17\n",
+      "stderr": ""
+    },
+    {
+      "args": [
+        "-s",
+        "3B171FDJH0061G",
+        "shell",
+        "am get-current-user"
+      ],
+      "exit_code": 0,
+      "stdout": "18\n",
+      "stderr": ""
+    }
+  ],
+  "device_mutations": [],
+  "captures": []
+}

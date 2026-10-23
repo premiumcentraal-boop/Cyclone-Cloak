@@ -1,0 +1,70 @@
+{
+  "result": "FAIL",
+  "failed_cycle": 1,
+  "failed_phase": "user-0-bound-cold",
+  "reason": "LINKED_PARITY_MISMATCH",
+  "linked_parity_counts": {
+    "PASS": 11,
+    "FAIL": 2
+  },
+  "legacy_bound_counts": {
+    "PASS": 82,
+    "OBSERVED": 7
+  },
+  "failures": [
+    {
+      "id": "reality.panel.values.refresh_hz",
+      "source": "Android read-only API",
+      "expected_sha256": "69f59c273b6e669ac32a6dd5e1b2cb63333d8b004f9696447aee2d422ce63763",
+      "actual_sha256": "39fa9ec190eee7b6f4dff1100d6343e10918d044c75eac8f9e9a2596173f80c9",
+      "status": "FAIL",
+      "reason": "HASH_MISMATCH",
+      "duration_ms": 20,
+      "linked_base_path": "display.refresh_rate_hz",
+      "expected_non_sensitive_value": 90,
+      "actual_non_sensitive_value": 60
+    },
+    {
+      "id": "linked.supportedModes",
+      "source": "Android read-only API",
+      "expected_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+      "actual_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+      "status": "FAIL",
+      "reason": "HASH_MISMATCH",
+      "duration_ms": 20,
+      "aggregate_sha256": "c598012990455f0b91fa95165467502b205e0f8b07e800cdaadb5ce961bcf853",
+      "expected_non_sensitive_value": true,
+      "actual_non_sensitive_value": false
+    }
+  ],
+  "fixture": "a",
+  "profile_sha256": "e476b02fd308c62cf207f4fe60e97085bbd14ca6293b405c2cedb996c9555f53",
+  "published_sha256": "e476b02fd308c62cf207f4fe60e97085bbd14ca6293b405c2cedb996c9555f53",
+  "hashes_match": true,
+  "permission_delta": [],
+  "production_delta": [],
+  "cleanup": {
+    "0": {
+      "binding_removed": true,
+      "body_directory_removed": true,
+      "private_files_removed": true
+    },
+    "17": {
+      "binding_removed": true,
+      "body_directory_removed": true,
+      "private_files_removed": true
+    },
+    "scratch_removed": true
+  },
+  "installed_versions": {
+    "module": "v0.11.0-alpha.23",
+    "module_code": "47",
+    "app_version": "0.11.0-alpha.23",
+    "app_code": "47"
+  },
+  "additional_installations": 0,
+  "additional_reboots": 0,
+  "cycles_2_and_3": "NOT_RUN_STOP_ON_FAILURE",
+  "prior_run": "../2026-10-18-205729-alpha23-physical-validation/summary.md",
+  "local_parity_scope": "Implemented capability; measured failures remain explicit. No platform verdict."
+}

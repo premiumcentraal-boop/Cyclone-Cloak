@@ -1,0 +1,23 @@
+{
+  "provenance": {
+    "format": 1,
+    "mode": "device_user_initiated",
+    "binding": {
+      "request_id": "9f01e7a9-cd20-4396-8a77-0f6043511273",
+      "profile_id": "Cyclone_2ca4cf9432e64fbd",
+      "profile_hash": "945be161ca131ba888c649059aac897986911861627efb83219a408ad376219d",
+      "artifact_hash": "7e8803535fcd011750a5c07c283bc83e10ed335860965ddecbb05883e88d2a62",
+      "android_user_id": 17
+    },
+    "integrity_requested_by_runner": false,
+    "wait_for_user_integrity_request": false,
+    "private_access": "root",
+    "profile_source": "saved_identity_read_only",
+    "diagnostics_apk_sha256": "5e58b57e7d394ecccb4d5bb589df3e8130022df5b5abd10537dabbfcd0c08868",
+    "diagnostics_package": "dev.cyclone.cloak.playevidence"
+  },
+  "cleanup": {
+    "input_removed": true,
+    "report_removed": true
+  }
+}

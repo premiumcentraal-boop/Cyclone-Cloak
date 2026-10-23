@@ -1,0 +1,516 @@
+diff --git a/android/probe/src/main/java/dev/cyclone/cloak/probe/ProbeActivity.java b/android/probe/src/main/java/dev/cyclone/cloak/probe/ProbeActivity.java
+--- a/android/probe/src/main/java/dev/cyclone/cloak/probe/ProbeActivity.java
++++ b/android/probe/src/main/java/dev/cyclone/cloak/probe/ProbeActivity.java
+@@ -114,6 +114,9 @@
+     /** Activity services are shared; all mutable capture data belongs to this instance. */
+     private final class Capture extends ProbeCaptureSession {
+         private String fixture;
++        private String activeRead = "capture.profile";
++        private JSONObject filesystemObservations;
++        private final JSONArray filesystemFailures = new JSONArray();
+         Capture(long generation, android.content.Intent intent) {
+             super(generation, intent.getStringExtra("request_id"), intent.getStringExtra("fixture"),
+                 getPackageName().endsWith(".diag") && intent.getBooleanExtra("external_profile", false),
+@@ -161,20 +164,32 @@
+                             new String(readBytes(stream), StandardCharsets.UTF_8)), fixture);
+                     }
+                 }
++                activeRead = "capture.legacy";
+                 collect();
++                activeRead = "capture.validation";
+                 validateComplete();
++                activeRead = "capture.contract";
+                 JSONObject runtimeTable;
+                 try (java.io.InputStream stream = getAssets().open("reality-runtime-fields.json")) {
+                     runtimeTable = new JSONObject(new String(readBytes(stream), StandardCharsets.UTF_8));
+                 }
++                if (getPackageName().endsWith(".diag")) {
++                    activeRead = "capture.filesystem";
++                    filesystemObservations = FilesystemReadGuard.collect(runtimeTable, filesystemFailures);
++                }
++                activeRead = "capture.reality";
+                 JSONObject reality = RealityProbe.collect(ProbeActivity.this, profile, runtimeTable);
++                activeRead = "capture.runtime_envelope";
++                JSONObject runtimeEnvelope = RuntimeEnvelopeReport.collect(ProbeActivity.this, profile);
++                activeRead = "capture.assemble";
+                 JSONObject report = envelope().put("rows", new JSONArray(rows.toString()))
+                     .put("device_reality", reality)
+                     .put("reality_runtime", RealityRuntimeReport.build(runtimeTable, profile, reality))
+                     .put("linked_parity", reality.getJSONObject("linked_parity"))
+-                    .put("runtime_envelope", RuntimeEnvelopeReport.collect(ProbeActivity.this, profile));
++                    .put("runtime_envelope", runtimeEnvelope);
+                 if (getPackageName().endsWith(".diag"))
+-                    report.put("filesystem_observations", FilesystemObservation.collect(runtimeTable));
++                    report.put("filesystem_observations", filesystemObservations)
++                        .put("filesystem_reader_failures", filesystemFailures);
+                 StringBuilder visible = new StringBuilder("Cloak Runtime Probe\n\n");
+                 for (int i = 0; i < rows.length(); i++) {
+                     JSONObject row = rows.getJSONObject(i);
+@@ -183,10 +198,10 @@
+                         .append(row.getString("reason")).append("\n\n");
+                 }
+                 publish(report, visible.toString());
+-            } catch (Exception failure) {
++            } catch (Exception | LinkageError failure) {
+                 try {
+                     String reason = failure instanceof InvalidCapture ? ((InvalidCapture) failure).reason : "CAPTURE_FAILED";
+-                    String badId = failure instanceof InvalidCapture ? ((InvalidCapture) failure).rowId : "";
++                    String badId = failure instanceof InvalidCapture ? ((InvalidCapture) failure).rowId : activeRead;
+                     // Only fixed metadata/row IDs; never exception text or partial raw readings.
+                     JSONArray failedRows = new JSONArray();
+                     for (int i = 0; i < rows.length(); i++) {
+@@ -194,9 +209,12 @@
+                         if (row != null && EXPECTED_IDS.contains(row.optString("id")))
+                             failedRows.put(new JSONObject().put("id", row.optString("id")));
+                     }
+-                    publish(envelope().put("error", failure.getClass().getSimpleName())
++                    JSONObject failed = envelope().put("error", failure.getClass().getSimpleName())
+                         .put("status", "FAIL").put("reason", reason).put("failed_row_id", badId)
+-                        .put("rows", failedRows), "Probe failed: " + reason);
++                        .put("failure_details", ProbeFailureEvidence.describe(failure, badId)).put("rows", failedRows);
++                    if (filesystemObservations != null) failed.put("filesystem_observations", filesystemObservations)
++                        .put("filesystem_reader_failures", filesystemFailures);
++                    publish(failed, "Probe failed: " + reason);
+                 } catch (Exception ignored) { /* Host also preserves missing/unparseable output evidence. */ }
+             }
+         }
+@@ -265,10 +283,12 @@
+         }
+ 
+         private void read(String id, String path, Read operation) throws Exception {
++            activeRead = id;
+             compare(id, expected(path), operation);
+         }
+ 
+         private void compare(String id, Object expected, Read operation) throws Exception {
++            activeRead = id;
+             long started = android.os.SystemClock.elapsedRealtimeNanos();
+             JSONObject rule = diagnosticExpectations.optJSONObject(id);
+             JSONObject row = new JSONObject().put("id", id).put("source", sourceFor(id))
+@@ -292,7 +312,7 @@
+                     logDiagnosticRow(id, row);
+                     return;
+                 }
+-                Object value = operation.get();
++                Object value = ProbeReadDeadline.call(operation::get);
+                 row.put("actual", value == null ? JSONObject.NULL : value);
+                 row.put("actual_available", !DiagnosticExpectation.missing(value));
+                 if (rule != null) {
+diff --git a/android/probe/src/main/java/dev/cyclone/cloak/probe/RealityReport.java b/android/probe/src/main/java/dev/cyclone/cloak/probe/RealityReport.java
+--- a/android/probe/src/main/java/dev/cyclone/cloak/probe/RealityReport.java
++++ b/android/probe/src/main/java/dev/cyclone/cloak/probe/RealityReport.java
+@@ -24,7 +24,7 @@
+         JSONObject result = new JSONObject().put("id", id).put("source", "Android read-only API")
+             .put("expected_sha256", JSONObject.NULL).put("actual_sha256", JSONObject.NULL);
+         try {
+-            Object actual = reader == null ? null : reader.read();
++            Object actual = reader == null ? null : ProbeReadDeadline.call(reader::read);
+             boolean hasExpected = expected != null && expected != JSONObject.NULL;
+             if (hasExpected) result.put("expected_sha256", hash(expected));
+             if (actual != null && actual != JSONObject.NULL) result.put("actual_sha256", hash(actual));
+diff --git a/android/probe/src/main/java/dev/cyclone/cloak/probe/LinkedParityReport.java b/android/probe/src/main/java/dev/cyclone/cloak/probe/LinkedParityReport.java
+--- a/android/probe/src/main/java/dev/cyclone/cloak/probe/LinkedParityReport.java
++++ b/android/probe/src/main/java/dev/cyclone/cloak/probe/LinkedParityReport.java
+@@ -30,7 +30,7 @@
+         final String[] aggregate = {null};
+         boolean complete = width instanceof Number && height instanceof Number && refresh instanceof Number;
+         JSONObject supported = RealityReport.row("linked.supportedModes", complete ? true : null, modes == null ? null : () -> {
+-            Object actual = modes.read();
++            Object actual = ProbeReadDeadline.call(modes::read);
+             if (actual == null) return null;
+             if (!(actual instanceof JSONArray)) throw new IllegalArgumentException("MALFORMED_SUPPORTED_MODES");
+             JSONArray array = (JSONArray)actual; aggregate[0] = RealityReport.hash(array);
+@@ -59,7 +59,7 @@
+             JSONObject entry = new JSONObject().put("value", JSONObject.NULL);
+             RealityReport.Reader reader = readers.get("diagnostic." + name);
+             try {
+-                Object value = reader == null ? null : reader.read();
++                Object value = reader == null ? null : ProbeReadDeadline.call(reader::read);
+                 if (value != null && value != JSONObject.NULL) {
+                     if (name.equals("supported_modes")) {
+                         JSONArray values = (JSONArray)value, safe = new JSONArray();
+diff --git a/android/probe/src/main/java/dev/cyclone/cloak/probe/ProbeReportPolicy.java b/android/probe/src/main/java/dev/cyclone/cloak/probe/ProbeReportPolicy.java
+--- a/android/probe/src/main/java/dev/cyclone/cloak/probe/ProbeReportPolicy.java
++++ b/android/probe/src/main/java/dev/cyclone/cloak/probe/ProbeReportPolicy.java
+@@ -45,6 +45,7 @@
+     }
+ 
+     static String failureReason(Throwable error) {
++        if (error instanceof ProbeReadDeadline.ReadFailure) return ((ProbeReadDeadline.ReadFailure) error).reason;
+         Throwable cause = error instanceof java.lang.reflect.InvocationTargetException && error.getCause() != null
+             ? error.getCause() : error;
+         if (cause instanceof ClassNotFoundException) return "SDK_OR_API_ABSENT";
+diff --git a/android/probe/src/main/java/dev/cyclone/cloak/probe/FilesystemReadGuard.java b/android/probe/src/main/java/dev/cyclone/cloak/probe/FilesystemReadGuard.java
+new file mode 100644
+--- /dev/null
++++ b/android/probe/src/main/java/dev/cyclone/cloak/probe/FilesystemReadGuard.java
+@@ -0,0 +1,94 @@
++package dev.cyclone.cloak.probe;
++
++import org.json.JSONArray;
++import org.json.JSONObject;
++import java.io.ByteArrayInputStream;
++import java.io.ByteArrayOutputStream;
++import java.io.IOException;
++import java.io.InputStream;
++import java.nio.file.Files;
++import java.nio.file.Paths;
++import java.util.concurrent.*;
++
++/** Deadline boundary for the existing filesystem observation collector. */
++final class FilesystemReadGuard {
++    static final long TIMEOUT_MS = 3000;
++    // Native I/O may ignore interruption. Bound stranded workers across captures.
++    private static final ThreadPoolExecutor WORKERS = new ThreadPoolExecutor(0, 4, 30,
++        TimeUnit.SECONDS, new SynchronousQueue<>(), task -> {
++            Thread worker = new Thread(task, "cloak-filesystem-reader");
++            worker.setDaemon(true);
++            return worker;
++        });
++    private FilesystemReadGuard() { }
++    static JSONObject collect(JSONObject table, JSONArray failures) throws Exception {
++        return collect(table, path -> Files.newInputStream(Paths.get(path)), TIMEOUT_MS, failures);
++    }
++    static JSONObject collect(JSONObject table, FilesystemObservation.Reader reader,
++                              long timeoutMs, JSONArray failures) throws Exception {
++        if (timeoutMs <= 0 || timeoutMs > TIMEOUT_MS) throw new IllegalArgumentException("INVALID_READ_BUDGET");
++        return FilesystemObservation.collect(table, path -> {
++            Future<byte[]> work = null;
++            try {
++                work = WORKERS.submit(() -> snapshot(reader, path));
++                return new ByteArrayInputStream(work.get(timeoutMs, TimeUnit.MILLISECONDS));
++            } catch (TimeoutException timeout) {
++                record(failures, path, "READ_TIMEOUT", timeout);
++                throw new IOException();
++            } catch (RejectedExecutionException busy) {
++                record(failures, path, "READER_CAPACITY_UNAVAILABLE", busy);
++                throw new IOException();
++            } catch (InterruptedException interrupted) {
++                Thread.currentThread().interrupt();
++                record(failures, path, "READ_INTERRUPTED", interrupted);
++                throw new IOException();
++            } catch (ExecutionException failed) {
++                Throwable error = failed.getCause();
++                String reason = error instanceof ReadFault ? ((ReadFault) error).reason
++                    : error instanceof SecurityException || error instanceof java.nio.file.AccessDeniedException
++                    ? "PERMISSION_DENIED" : error instanceof IOException ? "READ_UNAVAILABLE" : "READER_EXCEPTION";
++                record(failures, path, reason, error);
++                if (error instanceof SecurityException) throw (SecurityException) error;
++                if (error instanceof java.nio.file.AccessDeniedException) throw (java.nio.file.AccessDeniedException) error;
++                throw new IOException();
++            } finally { if (work != null) work.cancel(true); }
++        });
++    }
++
++    private static byte[] snapshot(FilesystemObservation.Reader reader, String path) throws IOException {
++        if (reader == null) throw new ReadFault("NULL_READER");
++        try (InputStream stream = reader.open(path)) {
++            if (stream == null) throw new ReadFault("NULL_STREAM");
++            ByteArrayOutputStream bytes = new ByteArrayOutputStream();
++            byte[] buffer = new byte[4096];
++            while (bytes.size() <= FilesystemObservation.MAX_BYTES) {
++                if (Thread.currentThread().isInterrupted()) throw new ReadFault("READ_INTERRUPTED");
++                int requested = Math.min(buffer.length, FilesystemObservation.MAX_BYTES + 1 - bytes.size());
++                int count = stream.read(buffer, 0, requested);
++                if (count == -1) break;
++                if (count <= 0 || count > requested) throw new ReadFault("MALFORMED_STREAM");
++                bytes.write(buffer, 0, count);
++            }
++            // One extra byte lets the existing collector reject oversize content.
++            return bytes.toByteArray();
++        }
++    }
++
++    private static void record(JSONArray failures, String path, String reason, Throwable error) {
++        String id;
++        switch (path) {
++            case "/system/build.prop": id = "diagnostics.filesystem.build_prop"; break;
++            case "/proc/version": id = "diagnostics.filesystem.proc_version"; break;
++            case "/proc/cpuinfo": id = "diagnostics.filesystem.proc_cpuinfo"; break;
++            case "/proc/self/maps": id = "diagnostics.filesystem.maps_snapshot"; break;
++            default: id = "capture.filesystem";
++        }
++        try { failures.put(ProbeFailureEvidence.describe(error, id).put("reason", reason)); }
++        catch (Exception ignored) { /* Failure metadata must not block the report. */ }
++    }
++
++    private static final class ReadFault extends IOException {
++        final String reason;
++        ReadFault(String reason) { this.reason = reason; }
++    }
++}
+diff --git a/android/probe/src/main/java/dev/cyclone/cloak/probe/ProbeFailureEvidence.java b/android/probe/src/main/java/dev/cyclone/cloak/probe/ProbeFailureEvidence.java
+new file mode 100644
+--- /dev/null
++++ b/android/probe/src/main/java/dev/cyclone/cloak/probe/ProbeFailureEvidence.java
+@@ -0,0 +1,22 @@
++package dev.cyclone.cloak.probe;
++
++import org.json.JSONArray;
++import org.json.JSONObject;
++
++/** Bounded stack structure, never exception text, filenames or source contents. */
++final class ProbeFailureEvidence {
++    private ProbeFailureEvidence() { }
++    static JSONObject describe(Throwable error, String rowId) throws Exception {
++        JSONObject result = new JSONObject().put("exception_class", error.getClass().getName())
++            .put("exception_message", "REDACTED_EXCEPTION_MESSAGE").put("message_redacted", true)
++            .put("failed_row_id", rowId == null ? "capture.unknown" : rowId);
++        JSONArray stack = new JSONArray();
++        StackTraceElement[] frames = error.getStackTrace();
++        for (int i = 0; i < Math.min(32, frames.length); i++) {
++            StackTraceElement frame = frames[i];
++            stack.put(new JSONObject().put("class", frame.getClassName()).put("method", frame.getMethodName())
++                .put("line", frame.getLineNumber()));
++        }
++        return result.put("stack_trace", stack).put("stack_truncated", frames.length > 32);
++    }
++}
+diff --git a/android/probe/src/main/java/dev/cyclone/cloak/probe/ProbeReadDeadline.java b/android/probe/src/main/java/dev/cyclone/cloak/probe/ProbeReadDeadline.java
+new file mode 100644
+--- /dev/null
++++ b/android/probe/src/main/java/dev/cyclone/cloak/probe/ProbeReadDeadline.java
+@@ -0,0 +1,35 @@
++package dev.cyclone.cloak.probe;
++
++import java.io.IOException;
++import java.util.concurrent.*;
++
++/** Shared bounded executor: interrupted native reads cannot grow threads without limit. */
++final class ProbeReadDeadline {
++    private static final ThreadPoolExecutor WORKERS = new ThreadPoolExecutor(0, 4, 30,
++        TimeUnit.SECONDS, new SynchronousQueue<>(), task -> {
++            Thread thread = new Thread(task, "cloak-api-reader"); thread.setDaemon(true); return thread;
++        });
++    private ProbeReadDeadline() { }
++    static <T> T call(Callable<T> reader) throws Exception { return call(reader, 3000); }
++    static <T> T call(Callable<T> reader, long budgetMs) throws Exception {
++        if (budgetMs <= 0 || budgetMs > 3000) throw new IllegalArgumentException("INVALID_READ_BUDGET");
++        Future<T> work = null;
++        try {
++            work = WORKERS.submit(reader);
++            return work.get(budgetMs, TimeUnit.MILLISECONDS);
++        } catch (TimeoutException timeout) { throw new ReadFailure("READ_TIMEOUT"); }
++        catch (RejectedExecutionException busy) { throw new ReadFailure("READER_CAPACITY_UNAVAILABLE"); }
++        catch (InterruptedException interrupted) {
++            Thread.currentThread().interrupt(); throw new ReadFailure("READ_INTERRUPTED");
++        } catch (ExecutionException failed) {
++            Throwable cause = failed.getCause();
++            if (cause instanceof Exception) throw (Exception) cause;
++            if (cause instanceof LinkageError) throw (LinkageError) cause;
++            throw new ReadFailure("READER_EXCEPTION");
++        } finally { if (work != null) work.cancel(true); }
++    }
++    static final class ReadFailure extends IOException {
++        final String reason;
++        ReadFailure(String reason) { this.reason = reason; }
++    }
++}
+diff --git a/android/probe/src/test/java/dev/cyclone/cloak/probe/FilesystemReadGuardTest.java b/android/probe/src/test/java/dev/cyclone/cloak/probe/FilesystemReadGuardTest.java
+new file mode 100644
+--- /dev/null
++++ b/android/probe/src/test/java/dev/cyclone/cloak/probe/FilesystemReadGuardTest.java
+@@ -0,0 +1,134 @@
++package dev.cyclone.cloak.probe;
++
++import java.io.ByteArrayInputStream;
++import java.io.FileNotFoundException;
++import java.io.InputStream;
++import java.io.IOException;
++import java.util.concurrent.CountDownLatch;
++import java.util.concurrent.TimeUnit;
++import org.json.JSONArray;
++import org.json.JSONObject;
++import org.junit.Test;
++import static org.junit.Assert.*;
++
++public class FilesystemReadGuardTest {
++    private JSONObject table() throws Exception {
++        String[] ids = {"build_prop", "proc_version", "proc_cpuinfo", "maps_snapshot"};
++        String[] paths = {"/system/build.prop", "/proc/version", "/proc/cpuinfo", "/proc/self/maps"};
++        JSONArray rows = new JSONArray();
++        for (int i = 0; i < ids.length; i++) rows.put(new JSONObject()
++            .put("field_path", "diagnostics.filesystem." + ids[i]).put("surface", paths[i]));
++        return new JSONObject().put("observation_surfaces", rows);
++    }
++    @Test public void nullStreamsBecomeMissingForEverySurface() throws Exception {
++        JSONArray failures = new JSONArray();
++        JSONObject report = FilesystemReadGuard.collect(table(), path -> null, 1000, failures);
++        assertEquals(4, report.getJSONArray("rows").length());
++        for (int i = 0; i < 4; i++) {
++            assertEquals("MISSING", report.getJSONArray("rows").getJSONObject(i).getString("status"));
++            assertTrue(report.getJSONArray("rows").getJSONObject(i).isNull("sha256"));
++        }
++    }
++    @Test public void emptyStreamsRemainObservationsForEverySurface() throws Exception {
++        JSONObject report = FilesystemReadGuard.collect(table(), path -> new ByteArrayInputStream(new byte[0]),
++            1000, new JSONArray());
++        for (int i = 0; i < 4; i++) {
++            JSONObject row = report.getJSONArray("rows").getJSONObject(i);
++            assertEquals("OBSERVED", row.getString("status"));
++            assertEquals(0, row.getInt("line_count"));
++            assertEquals(0, row.getInt("byte_count"));
++        }
++    }
++    @Test public void absentStreamsRemainMissingForEverySurface() throws Exception {
++        JSONObject report = FilesystemReadGuard.collect(table(), path -> { throw new FileNotFoundException("private"); },
++            1000, new JSONArray());
++        for (int i = 0; i < 4; i++)
++            assertEquals("MISSING", report.getJSONArray("rows").getJSONObject(i).getString("status"));
++        assertFalse(report.toString().contains("private"));
++    }
++    @Test public void malformedAndThrowingReadersNeverAbortCollection() throws Exception {
++        for (int mode = 0; mode < 3; mode++) {
++            final int selected = mode;
++            JSONArray failures = new JSONArray();
++            FilesystemObservation.Reader reader = selected == 0 ? null : path -> {
++                if (selected == 1) throw new NullPointerException("secret-token");
++                return new InputStream() {
++                    public int read() { return 0; }
++                    @Override public int read(byte[] buffer, int offset, int length) { return length + 1; }
++                };
++            };
++            JSONObject report = FilesystemReadGuard.collect(table(), reader, 1000, failures);
++            assertEquals(4, failures.length());
++            assertEquals(4, report.getJSONArray("rows").length());
++            assertFalse(failures.toString().contains("secret-token"));
++        }
++    }
++    @Test public void eachSlowSurfaceTimesOutWithoutBlockingOtherRows() throws Exception {
++        String[] paths = {"/system/build.prop", "/proc/version", "/proc/cpuinfo", "/proc/self/maps"};
++        for (String slow : paths) {
++            JSONArray failures = new JSONArray();
++            JSONObject report = FilesystemReadGuard.collect(table(), path -> {
++                if (path.equals(slow)) {
++                    try { Thread.sleep(60_000); }
++                    catch (InterruptedException cancelled) { throw new IOException(); }
++                }
++                return new ByteArrayInputStream(new byte[0]);
++            }, 50, failures);
++            assertEquals(1, failures.length());
++            assertEquals("READ_TIMEOUT", failures.getJSONObject(0).getString("reason"));
++            int observed = 0;
++            for (int i = 0; i < 4; i++)
++                if (report.getJSONArray("rows").getJSONObject(i).getString("status").equals("OBSERVED")) observed++;
++            assertEquals(3, observed);
++        }
++    }
++    @Test public void readAndCloseHangsAlsoHaveDeadlines() throws Exception {
++        for (boolean close : new boolean[]{false, true}) {
++            JSONArray failures = new JSONArray();
++            JSONObject report = FilesystemReadGuard.collect(table(), path -> new ByteArrayInputStream(new byte[0]) {
++                private void delay() {
++                    try { Thread.sleep(60_000); }
++                    catch (InterruptedException expected) { Thread.currentThread().interrupt(); }
++                }
++                @Override public synchronized int read(byte[] b, int off, int len) { if (!close) delay(); return -1; }
++                @Override public void close() { if (close) delay(); }
++            }, 30, failures);
++            assertEquals(4, failures.length());
++            for (int i = 0; i < 4; i++) {
++                assertEquals("MISSING", report.getJSONArray("rows").getJSONObject(i).getString("status"));
++                assertEquals("READ_TIMEOUT", failures.getJSONObject(i).getString("reason"));
++            }
++        }
++    }
++    @Test public void lateWorkerCannotMutateReturnedReport() throws Exception {
++        CountDownLatch release = new CountDownLatch(1), closed = new CountDownLatch(1);
++        JSONArray failures = new JSONArray();
++        try {
++            JSONObject report = FilesystemReadGuard.collect(table(), path -> {
++                if (!path.equals("/system/build.prop")) return new ByteArrayInputStream(new byte[0]);
++                while (true) {
++                    try { release.await(); break; } catch (InterruptedException ignored) { }
++                }
++                return new ByteArrayInputStream(new byte[0]) {
++                    @Override public void close() { closed.countDown(); }
++                };
++            }, 40, failures);
++            String before = report.toString();
++            release.countDown();
++            assertTrue(closed.await(2, TimeUnit.SECONDS));
++            assertEquals(before, report.toString());
++            assertEquals("READ_TIMEOUT", failures.getJSONObject(0).getString("reason"));
++        } finally { release.countDown(); }
++    }
++    @Test public void permissionDenialStaysBlockedAndOversizeKeepsNoDigest() throws Exception {
++        JSONObject blocked = FilesystemReadGuard.collect(table(), path -> { throw new SecurityException("private"); },
++            1000, new JSONArray());
++        JSONObject oversize = FilesystemReadGuard.collect(table(), path -> new ByteArrayInputStream(
++            new byte[FilesystemObservation.MAX_BYTES + 1]), 1000, new JSONArray());
++        for (int i = 0; i < 4; i++) {
++            assertEquals("BLOCKED", blocked.getJSONArray("rows").getJSONObject(i).getString("status"));
++            assertEquals("READ_LIMIT_EXCEEDED", oversize.getJSONArray("rows").getJSONObject(i).getString("reason"));
++            assertTrue(oversize.getJSONArray("rows").getJSONObject(i).isNull("sha256"));
++        }
++    }
++}
+diff --git a/android/probe/src/test/java/dev/cyclone/cloak/probe/ProbeFailureEvidenceTest.java b/android/probe/src/test/java/dev/cyclone/cloak/probe/ProbeFailureEvidenceTest.java
+new file mode 100644
+--- /dev/null
++++ b/android/probe/src/test/java/dev/cyclone/cloak/probe/ProbeFailureEvidenceTest.java
+@@ -0,0 +1,30 @@
++package dev.cyclone.cloak.probe;
++
++import org.json.JSONObject;
++import org.junit.Test;
++import static org.junit.Assert.*;
++
++public class ProbeFailureEvidenceTest {
++    @Test public void typeRowAndSafeStackSurviveWithoutPrivateMessage() throws Exception {
++        JSONObject report = ProbeFailureEvidence.describe(new NullPointerException("secret-token account@example.com"),
++            "capture.reality");
++        assertEquals("java.lang.NullPointerException", report.getString("exception_class"));
++        assertEquals("capture.reality", report.getString("failed_row_id"));
++        assertTrue(report.getJSONArray("stack_trace").length() > 0);
++        assertTrue(report.getBoolean("message_redacted"));
++        assertFalse(report.toString().contains("secret-token"));
++        assertFalse(report.toString().contains("account@example.com"));
++    }
++    @Test public void stackIsBoundedAndSourcePathsAreNeverExported() throws Exception {
++        Exception error = new Exception("private");
++        StackTraceElement[] stack = new StackTraceElement[100];
++        for (int i = 0; i < stack.length; i++)
++            stack[i] = new StackTraceElement("example.Reader", "read", "/private/secret-file", 12);
++        error.setStackTrace(stack);
++        JSONObject report = ProbeFailureEvidence.describe(error, null);
++        assertEquals(32, report.getJSONArray("stack_trace").length());
++        assertTrue(report.getBoolean("stack_truncated"));
++        assertEquals("capture.unknown", report.getString("failed_row_id"));
++        assertFalse(report.toString().contains("/private/secret-file"));
++    }
++}
+diff --git a/android/probe/src/test/java/dev/cyclone/cloak/probe/ProbeReadDeadlineTest.java b/android/probe/src/test/java/dev/cyclone/cloak/probe/ProbeReadDeadlineTest.java
+new file mode 100644
+--- /dev/null
++++ b/android/probe/src/test/java/dev/cyclone/cloak/probe/ProbeReadDeadlineTest.java
+@@ -0,0 +1,29 @@
++package dev.cyclone.cloak.probe;
++
++import org.junit.Test;
++import static org.junit.Assert.*;
++
++public class ProbeReadDeadlineTest {
++    @Test public void nullAndSuccessfulValuesReturnWithoutInventingEvidence() throws Exception {
++        assertNull(ProbeReadDeadline.call(() -> null));
++        assertEquals("value", ProbeReadDeadline.call(() -> "value"));
++    }
++    @Test public void failuresKeepTheirTypeAndDenialPolicy() {
++        SecurityException error = assertThrows(SecurityException.class,
++            () -> ProbeReadDeadline.call(() -> { throw new SecurityException("private"); }));
++        assertEquals("SecurityException", ProbeReportPolicy.failureReason(error));
++    }
++    @Test public void blockedReaderTimesOutAndFollowingReaderStillCompletes() throws Exception {
++        Exception error = assertThrows(ProbeReadDeadline.ReadFailure.class,
++            () -> ProbeReadDeadline.call(() -> { Thread.sleep(60_000); return null; }, 30));
++        assertEquals("READ_TIMEOUT", ProbeReportPolicy.failureReason(error));
++        assertEquals("next", ProbeReadDeadline.call(() -> "next"));
++    }
++    @Test public void aReadFailureNeverBecomesPass() throws Exception {
++        org.json.JSONObject row = RealityReport.row("test.read", "expected", () -> {
++            throw new ProbeReadDeadline.ReadFailure("READ_TIMEOUT");
++        });
++        assertEquals("MISSING", row.getString("status"));
++        assertEquals("READ_TIMEOUT", row.getString("reason"));
++    }
++}

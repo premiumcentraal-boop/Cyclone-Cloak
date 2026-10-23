@@ -1,0 +1,1213 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "inventory_id": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 64,
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "compute": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "availability": {
+          "type": "string",
+          "enum": [
+            "known",
+            "unknown",
+            "unavailable"
+          ]
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "public reference",
+            "approximated",
+            "needs verification",
+            "derived"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+        },
+        "values": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "soc": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 96,
+              "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+            },
+            "gpu": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 96,
+              "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+            },
+            "cpu_cores": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 32
+            },
+            "abis": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": [
+                  "arm64-v8a",
+                  "armeabi-v7a",
+                  "x86",
+                  "x86_64"
+                ]
+              },
+              "maxItems": 4,
+              "uniqueItems": true
+            }
+          },
+          "required": []
+        }
+      },
+      "required": [
+        "availability",
+        "source",
+        "reason",
+        "values"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "availability": {
+                "const": "known"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "values": {
+                "minProperties": 1
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "values": {
+                "maxProperties": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "memory": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "availability": {
+          "type": "string",
+          "enum": [
+            "known",
+            "unknown",
+            "unavailable"
+          ]
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "public reference",
+            "approximated",
+            "needs verification",
+            "derived"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+        },
+        "values": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "ram_gib": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 64
+            },
+            "storage_gib": {
+              "type": "integer",
+              "minimum": 16,
+              "maximum": 2048
+            },
+            "free_storage_gib": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 2048
+            }
+          },
+          "required": []
+        }
+      },
+      "required": [
+        "availability",
+        "source",
+        "reason",
+        "values"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "availability": {
+                "const": "known"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "values": {
+                "minProperties": 1
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "values": {
+                "maxProperties": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "panel": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "availability": {
+          "type": "string",
+          "enum": [
+            "known",
+            "unknown",
+            "unavailable"
+          ]
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "public reference",
+            "approximated",
+            "needs verification",
+            "derived"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+        },
+        "values": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "width": {
+              "type": "integer",
+              "minimum": 240,
+              "maximum": 10000
+            },
+            "height": {
+              "type": "integer",
+              "minimum": 240,
+              "maximum": 10000
+            },
+            "density_dpi": {
+              "type": "integer",
+              "minimum": 72,
+              "maximum": 1000
+            },
+            "refresh_hz": {
+              "type": "number",
+              "minimum": 24,
+              "maximum": 360
+            },
+            "technology": {
+              "type": "string",
+              "enum": [
+                "OLED",
+                "LCD"
+              ]
+            },
+            "modes": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "width": {
+                    "type": "integer",
+                    "minimum": 240,
+                    "maximum": 10000
+                  },
+                  "height": {
+                    "type": "integer",
+                    "minimum": 240,
+                    "maximum": 10000
+                  },
+                  "refresh_hz": {
+                    "type": "number",
+                    "minimum": 24,
+                    "maximum": 360
+                  }
+                },
+                "required": [
+                  "width",
+                  "height",
+                  "refresh_hz"
+                ]
+              },
+              "maxItems": 32,
+              "uniqueItems": true
+            }
+          },
+          "required": []
+        }
+      },
+      "required": [
+        "availability",
+        "source",
+        "reason",
+        "values"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "availability": {
+                "const": "known"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "values": {
+                "minProperties": 1
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "values": {
+                "maxProperties": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "cameras": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "availability": {
+          "type": "string",
+          "enum": [
+            "known",
+            "unknown",
+            "unavailable"
+          ]
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "public reference",
+            "approximated",
+            "needs verification",
+            "derived"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+        },
+        "values": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "count": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 12
+            },
+            "inventory": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 32,
+                    "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+                  },
+                  "facing": {
+                    "type": "string",
+                    "enum": [
+                      "front",
+                      "back",
+                      "external"
+                    ]
+                  },
+                  "megapixels": {
+                    "type": "number",
+                    "minimum": 0.1,
+                    "maximum": 300
+                  },
+                  "hardware_level": {
+                    "type": "string",
+                    "enum": [
+                      "legacy",
+                      "limited",
+                      "full",
+                      "level3",
+                      "external"
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "facing"
+                ]
+              },
+              "maxItems": 12,
+              "uniqueItems": true
+            }
+          },
+          "required": []
+        }
+      },
+      "required": [
+        "availability",
+        "source",
+        "reason",
+        "values"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "availability": {
+                "const": "known"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "values": {
+                "minProperties": 1
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "values": {
+                "maxProperties": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "sensors": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "availability": {
+          "type": "string",
+          "enum": [
+            "known",
+            "unknown",
+            "unavailable"
+          ]
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "public reference",
+            "approximated",
+            "needs verification",
+            "derived"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+        },
+        "values": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "inventory": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "type": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "maximum": 4294967295
+                  },
+                  "name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 96,
+                    "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+                  },
+                  "min_delay_us": {
+                    "type": "integer",
+                    "minimum": -1,
+                    "maximum": 10000000
+                  },
+                  "max_delay_us": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 10000000
+                  },
+                  "range": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 3.4028234663852886e+38
+                  },
+                  "resolution": {
+                    "type": "number",
+                    "minimum": 0,
+                    "maximum": 3.4028234663852886e+38
+                  }
+                },
+                "required": [
+                  "type",
+                  "name"
+                ]
+              },
+              "maxItems": 128,
+              "uniqueItems": true
+            }
+          },
+          "required": []
+        }
+      },
+      "required": [
+        "availability",
+        "source",
+        "reason",
+        "values"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "availability": {
+                "const": "known"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "values": {
+                "minProperties": 1
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "values": {
+                "maxProperties": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "power": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "availability": {
+          "type": "string",
+          "enum": [
+            "known",
+            "unknown",
+            "unavailable"
+          ]
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "public reference",
+            "approximated",
+            "needs verification",
+            "derived"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+        },
+        "values": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "design_capacity_mah": {
+              "type": "integer",
+              "minimum": 500,
+              "maximum": 20000
+            },
+            "battery_percent": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "battery_state": {
+              "type": "string",
+              "enum": [
+                "charging",
+                "discharging",
+                "full",
+                "not_charging"
+              ]
+            },
+            "charging_source": {
+              "type": "string",
+              "enum": [
+                "none",
+                "usb",
+                "ac",
+                "wireless"
+              ]
+            },
+            "temperature_c": {
+              "type": "number",
+              "minimum": -40,
+              "maximum": 100
+            },
+            "thermal_status": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 6
+            },
+            "power_save": {
+              "type": "boolean"
+            }
+          },
+          "required": []
+        }
+      },
+      "required": [
+        "availability",
+        "source",
+        "reason",
+        "values"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "availability": {
+                "const": "known"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "values": {
+                "minProperties": 1
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "values": {
+                "maxProperties": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drm": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "availability": {
+          "type": "string",
+          "enum": [
+            "known",
+            "unknown",
+            "unavailable"
+          ]
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "public reference",
+            "approximated",
+            "needs verification",
+            "derived"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+        },
+        "values": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "security_level": {
+              "type": "string",
+              "enum": [
+                "L1",
+                "L2",
+                "L3"
+              ]
+            }
+          },
+          "required": []
+        }
+      },
+      "required": [
+        "availability",
+        "source",
+        "reason",
+        "values"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "availability": {
+                "const": "known"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "values": {
+                "minProperties": 1
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "values": {
+                "maxProperties": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "radio": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "availability": {
+          "type": "string",
+          "enum": [
+            "known",
+            "unknown",
+            "unavailable"
+          ]
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "public reference",
+            "approximated",
+            "needs verification",
+            "derived"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+        },
+        "values": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "wifi_name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 32,
+              "pattern": "^[A-Za-z0-9 _.-]+$"
+            },
+            "bluetooth_name": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 32,
+              "pattern": "^[A-Za-z0-9 _.-]+$"
+            },
+            "wifi_state": {
+              "type": "string",
+              "enum": [
+                "enabled",
+                "disabled"
+              ]
+            },
+            "bluetooth_state": {
+              "type": "string",
+              "enum": [
+                "enabled",
+                "disabled"
+              ]
+            }
+          },
+          "required": []
+        }
+      },
+      "required": [
+        "availability",
+        "source",
+        "reason",
+        "values"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "availability": {
+                "const": "known"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "values": {
+                "minProperties": 1
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "values": {
+                "maxProperties": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "carrier": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "availability": {
+          "type": "string",
+          "enum": [
+            "known",
+            "unknown",
+            "unavailable"
+          ]
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "public reference",
+            "approximated",
+            "needs verification",
+            "derived"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+        },
+        "values": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "slots": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4
+            },
+            "mcc": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 3,
+              "pattern": "^[0-9]{3}$"
+            },
+            "mnc": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 3,
+              "pattern": "^[0-9]{2,3}$"
+            },
+            "country": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2,
+              "pattern": "^[A-Z]{2}$"
+            },
+            "sim_state": {
+              "type": "string",
+              "enum": [
+                "absent",
+                "ready",
+                "pin_required",
+                "puk_required"
+              ]
+            }
+          },
+          "required": []
+        }
+      },
+      "required": [
+        "availability",
+        "source",
+        "reason",
+        "values"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "availability": {
+                "const": "known"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "values": {
+                "minProperties": 1
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "values": {
+                "maxProperties": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "packages": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "availability": {
+          "type": "string",
+          "enum": [
+            "known",
+            "unknown",
+            "unavailable"
+          ]
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "public reference",
+            "approximated",
+            "needs verification",
+            "derived"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+        },
+        "values": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "installed": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                  "package": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 160,
+                    "pattern": "^(android|[a-z][a-z0-9_]*(\\.[a-z][a-z0-9_]*)+)$"
+                  },
+                  "version_name": {
+                    "type": "string",
+                    "minLength": 1,
+                    "maxLength": 96,
+                    "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+                  },
+                  "version_code": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 9007199254740991
+                  }
+                },
+                "required": [
+                  "package",
+                  "version_name",
+                  "version_code"
+                ]
+              },
+              "maxItems": 64,
+              "uniqueItems": true
+            }
+          },
+          "required": []
+        }
+      },
+      "required": [
+        "availability",
+        "source",
+        "reason",
+        "values"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "availability": {
+                "const": "known"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "values": {
+                "minProperties": 1
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "values": {
+                "maxProperties": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "webview": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "availability": {
+          "type": "string",
+          "enum": [
+            "known",
+            "unknown",
+            "unavailable"
+          ]
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "public reference",
+            "approximated",
+            "needs verification",
+            "derived"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+        },
+        "values": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "provider": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160,
+              "pattern": "^[a-z][a-z0-9_]*(\\.[A-Za-z0-9_]+)+$"
+            },
+            "version": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 64,
+              "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+$"
+            },
+            "user_agent": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 512,
+              "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+            }
+          },
+          "required": []
+        }
+      },
+      "required": [
+        "availability",
+        "source",
+        "reason",
+        "values"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "availability": {
+                "const": "known"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "values": {
+                "minProperties": 1
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "values": {
+                "maxProperties": 0
+              }
+            }
+          }
+        }
+      ]
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "availability": {
+          "type": "string",
+          "enum": [
+            "known",
+            "unknown",
+            "unavailable"
+          ]
+        },
+        "source": {
+          "type": "string",
+          "enum": [
+            "public reference",
+            "approximated",
+            "needs verification",
+            "derived"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512,
+          "pattern": "^[^\\x00-\\x1f\\x7f]+$"
+        },
+        "values": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "language": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2,
+              "pattern": "^[a-z]{2}$"
+            },
+            "country": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 2,
+              "pattern": "^[A-Z]{2}$"
+            },
+            "timezone": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128,
+              "pattern": "^[A-Za-z0-9_+./-]+$"
+            },
+            "keyboard_layout": {
+              "type": "string",
+              "enum": [
+                "qwerty",
+                "azerty",
+                "qwertz",
+                "dvorak"
+              ]
+            },
+            "input_method": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 192,
+              "pattern": "^[a-z][A-Za-z0-9_.]+/[A-Za-z0-9_.$]+$"
+            },
+            "accessibility_enabled": {
+              "type": "boolean"
+            }
+          },
+          "required": []
+        }
+      },
+      "required": [
+        "availability",
+        "source",
+        "reason",
+        "values"
+      ],
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "availability": {
+                "const": "known"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "values": {
+                "minProperties": 1
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "values": {
+                "maxProperties": 0
+              }
+            }
+          }
+        }
+      ]
+    }
+  },
+  "required": [],
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/premiumcentraal-boop/Cyclone-Cloak/schema/device-reality.schema.json",
+  "title": "Device Reality v1 (local metadata only)"
+}

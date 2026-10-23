@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "fixture": "a",
+  "rows": {
+    "telephony.simState": {
+      "policy": "EXTERNAL_STATE",
+      "type": "integer",
+      "unavailable": [
+        {
+          "value": null,
+          "reason": "NO_VALUE"
+        },
+        {
+          "value": 0,
+          "reason": "SIM_UNKNOWN"
+        },
+        {
+          "value": 1,
+          "reason": "SIM_ABSENT"
+        },
+        {
+          "value": 6,
+          "reason": "SIM_NOT_READY"
+        }
+      ],
+      "values": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ]
+    },
+    "telephony.phoneType": {
+      "policy": "ENUM",
+      "values": [
+        0,
+        1,
+        2,
+        3
+      ]
+    },
+    "telephony.roaming": {
+      "policy": "TYPED",
+      "type": "boolean"
+    },
+    "settings.unrelatedControl": {
+      "policy": "EXTERNAL_STATE",
+      "type": "string",
+      "unavailable": [
+        {
+          "value": null,
+          "reason": "SETTING_UNAVAILABLE"
+        }
+      ],
+      "values": [
+        "0",
+        "1"
+      ]
+    },
+    "wifi.bssid": {
+      "policy": "EXTERNAL_STATE",
+      "type": "mac",
+      "unavailable": [
+        {
+          "value": null,
+          "reason": "NO_VALUE"
+        },
+        {
+          "value": "",
+          "reason": "EMPTY_VALUE"
+        },
+        {
+          "value": "02:00:00:00:00:00",
+          "reason": "BSSID_REDACTED"
+        },
+        {
+          "value": "00:00:00:00:00:00",
+          "reason": "BSSID_UNAVAILABLE"
+        }
+      ]
+    },
+    "wifi.linkSpeed": {
+      "policy": "EXTERNAL_STATE",
+      "type": "integer",
+      "unavailable": [
+        {
+          "value": null,
+          "reason": "NO_VALUE"
+        },
+        {
+          "value": -1,
+          "reason": "LINK_SPEED_UNKNOWN"
+        }
+      ],
+      "min": 0,
+      "max": 2147483647
+    },
+    "wifi.ssid": {
+      "policy": "EXTERNAL_STATE",
+      "type": "string",
+      "unavailable": [
+        {
+          "value": null,
+          "reason": "NO_VALUE"
+        },
+        {
+          "value": "",
+          "reason": "EMPTY_VALUE"
+        },
+        {
+          "value": "<unknown ssid>",
+          "reason": "SSID_REDACTED"
+        }
+      ]
+    },
+    "bluetooth.name": {
+      "policy": "EXTERNAL_STATE",
+      "type": "string",
+      "unavailable": [
+        {
+          "value": null,
+          "reason": "NAME_UNAVAILABLE"
+        },
+        {
+          "value": "",
+          "reason": "EMPTY_VALUE"
+        }
+      ]
+    },
+    "sensors.list": {
+      "policy": "TYPED",
+      "type": "sensors"
+    },
+    "packages.visible": {
+      "policy": "TYPED",
+      "type": "packages"
+    },
+    "runtime.loadedLibraries": {
+      "policy": "TYPED",
+      "type": "libraries"
+    },
+    "runtime.javaBridgeVisible": {
+      "policy": "STABLE_ACROSS_SWITCH",
+      "type": "boolean",
+      "expected_change": false
+    }
+  }
+}

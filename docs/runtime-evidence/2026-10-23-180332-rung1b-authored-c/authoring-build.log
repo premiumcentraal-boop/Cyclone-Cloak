@@ -1,0 +1,70 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/8.11.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+> Task :probe:preBuild UP-TO-DATE
+> Task :probe:preDiagnosticsDebugBuild UP-TO-DATE
+> Task :probe:javaPreCompileDiagnosticsDebug UP-TO-DATE
+> Task :probe:checkDiagnosticsDebugAarMetadata UP-TO-DATE
+> Task :probe:generateDiagnosticsDebugResValues UP-TO-DATE
+> Task :probe:mapDiagnosticsDebugSourceSetPaths UP-TO-DATE
+> Task :probe:generateDiagnosticsDebugResources UP-TO-DATE
+> Task :probe:mergeDiagnosticsDebugResources UP-TO-DATE
+> Task :probe:packageDiagnosticsDebugResources UP-TO-DATE
+> Task :probe:parseDiagnosticsDebugLocalResources UP-TO-DATE
+> Task :probe:createDiagnosticsDebugCompatibleScreenManifests UP-TO-DATE
+> Task :probe:extractDeepLinksDiagnosticsDebug UP-TO-DATE
+> Task :probe:processDiagnosticsDebugMainManifest UP-TO-DATE
+> Task :probe:processDiagnosticsDebugManifest UP-TO-DATE
+> Task :probe:processDiagnosticsDebugManifestForPackage UP-TO-DATE
+> Task :probe:processDiagnosticsDebugResources UP-TO-DATE
+> Task :probe:compileDiagnosticsDebugJavaWithJavac
+> Task :probe:preDiagnosticsDebugUnitTestBuild UP-TO-DATE
+> Task :probe:javaPreCompileDiagnosticsDebugUnitTest UP-TO-DATE
+> Task :probe:processDiagnosticsDebugJavaRes NO-SOURCE
+> Task :probe:processDiagnosticsDebugUnitTestJavaRes UP-TO-DATE
+> Task :probe:mergeDiagnosticsDebugNativeDebugMetadata NO-SOURCE
+> Task :probe:mergeDiagnosticsDebugShaders UP-TO-DATE
+> Task :probe:compileDiagnosticsDebugShaders NO-SOURCE
+> Task :probe:generateDiagnosticsDebugAssets UP-TO-DATE
+> Task :probe:mergeDiagnosticsDebugAssets UP-TO-DATE
+> Task :probe:compressDiagnosticsDebugAssets UP-TO-DATE
+> Task :probe:bundleDiagnosticsDebugClassesToCompileJar
+> Task :probe:desugarDiagnosticsDebugFileDependencies UP-TO-DATE
+> Task :probe:bundleDiagnosticsDebugClassesToRuntimeJar
+
+> Task :probe:compileDiagnosticsDebugUnitTestJavaWithJavac FAILED
+C:\Users\Agent\Cyclone\cloak-repo\android\probe\src\test\java\dev\cyclone\cloak\probe\ProbeEvidenceExportTest.java:54: error: cannot find symbol
+        JSONObject exported = new JSONObject(Files.readString(new File(directory, "authoring.json").toPath()));
+                                                  ^
+  symbol:   method readString(Path)
+  location: class Files
+C:\Users\Agent\Cyclone\cloak-repo\android\probe\src\test\java\dev\cyclone\cloak\probe\ProbeEvidenceExportTest.java:59: error: cannot find symbol
+        assertFalse(Files.readString(new File(directory, "report.json").toPath()).contains("Synthetic renderer"));
+                         ^
+  symbol:   method readString(Path)
+  location: class Files
+2 errors
+[Incubating] Problems report is available at: file:///C:/Users/Agent/Cyclone/cloak-repo/android/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':probe:compileDiagnosticsDebugUnitTestJavaWithJavac'.
+> Compilation failed; see the compiler output below.
+  C:\Users\Agent\Cyclone\cloak-repo\android\probe\src\test\java\dev\cyclone\cloak\probe\ProbeEvidenceExportTest.java:54: error: cannot find symbol
+          JSONObject exported = new JSONObject(Files.readString(new File(directory, "authoring.json").toPath()));
+                                                    ^
+    symbol:   method readString(Path)
+    location: class Files
+  C:\Users\Agent\Cyclone\cloak-repo\android\probe\src\test\java\dev\cyclone\cloak\probe\ProbeEvidenceExportTest.java:59: error: cannot find symbol
+          assertFalse(Files.readString(new File(directory, "report.json").toPath()).contains("Synthetic renderer"));
+                           ^
+    symbol:   method readString(Path)
+    location: class Files
+  2 errors
+
+* Try:
+> Check your code and dependencies to fix the compilation error(s)
+> Run with --scan to get full insights.
+
+BUILD FAILED in 18s
+24 actionable tasks: 4 executed, 20 up-to-date

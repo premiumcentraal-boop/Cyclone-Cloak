@@ -1,0 +1,17 @@
+{
+  "result": "NOT_VALIDATED",
+  "phase": "user-17-capture-10-permission-setup-retest",
+  "reason": "PROBE_REPORT_TIMEOUT",
+  "request_id": "bootgate-04dbc15d3f4f4511a793e23a1a9bf91c",
+  "current_request_start_seen": false,
+  "current_request_end_seen": false,
+  "older_markers_preserved_not_counted": true,
+  "permission_dialog_observed": "LOCATION",
+  "post_tap_dialog_still_present": true,
+  "measured_triplet_completed": 0,
+  "permission_setup_attempts": [
+    0,
+    10
+  ],
+  "no_retry_after_timeout": true
+}

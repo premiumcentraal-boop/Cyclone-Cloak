@@ -1,0 +1,381 @@
+{
+  "package": "com.devicetrust.scanner",
+  "apk_sha256": "e3b845068f3ed3d06d86aa7d7aa0cd027e6cd226f7c80fd13836f1d753b84a9a",
+  "grants": {
+    "0": {},
+    "10": {},
+    "11": {},
+    "12": {},
+    "17": {},
+    "18": {}
+  },
+  "install_grants": {
+    "android.permission.INTERNET": "true",
+    "android.permission.HIDE_OVERLAY_WINDOWS": "true",
+    "android.permission.ACCESS_NETWORK_STATE": "true",
+    "android.permission.USE_FINGERPRINT": "true",
+    "android.permission.USE_BIOMETRIC": "true"
+  },
+  "appops": {
+    "0": [
+      [
+        "ACCESS_RESTRICTED_SETTINGS",
+        "deny"
+      ],
+      [
+        "Uid mode: ACCEPT_HANDOVER",
+        "ignore"
+      ],
+      [
+        "Uid mode: ACCESS_MEDIA_LOCATION",
+        "ignore"
+      ],
+      [
+        "Uid mode: ACTIVITY_RECOGNITION",
+        "ignore"
+      ],
+      [
+        "Uid mode: ADD_VOICEMAIL",
+        "ignore"
+      ],
+      [
+        "Uid mode: ANSWER_PHONE_CALLS",
+        "ignore"
+      ],
+      [
+        "Uid mode: BLUETOOTH_ADVERTISE",
+        "ignore"
+      ],
+      [
+        "Uid mode: BLUETOOTH_CONNECT",
+        "ignore"
+      ],
+      [
+        "Uid mode: BLUETOOTH_SCAN",
+        "ignore"
+      ],
+      [
+        "Uid mode: BODY_SENSORS",
+        "ignore"
+      ],
+      [
+        "Uid mode: CALL_PHONE",
+        "ignore"
+      ],
+      [
+        "Uid mode: CAMERA",
+        "ignore"
+      ],
+      [
+        "Uid mode: COARSE_LOCATION",
+        "ignore"
+      ],
+      [
+        "Uid mode: FINE_LOCATION",
+        "ignore"
+      ],
+      [
+        "Uid mode: GET_ACCOUNTS",
+        "ignore"
+      ],
+      [
+        "Uid mode: NEARBY_WIFI_DEVICES",
+        "ignore"
+      ],
+      [
+        "Uid mode: POST_NOTIFICATION",
+        "ignore"
+      ],
+      [
+        "Uid mode: PROCESS_OUTGOING_CALLS",
+        "ignore"
+      ],
+      [
+        "Uid mode: RANGING",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_CALENDAR",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_CALL_LOG",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_CELL_BROADCASTS",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_CONTACTS",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_EXTERNAL_STORAGE",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_HEART_RATE",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_MEDIA_AUDIO",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_MEDIA_IMAGES",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_MEDIA_VIDEO",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_MEDIA_VISUAL_USER_SELECTED",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_OXYGEN_SATURATION",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_PHONE_NUMBERS",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_PHONE_STATE",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_SKIN_TEMPERATURE",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_SMS",
+        "ignore"
+      ],
+      [
+        "Uid mode: RECEIVE_MMS",
+        "ignore"
+      ],
+      [
+        "Uid mode: RECEIVE_SMS",
+        "ignore"
+      ],
+      [
+        "Uid mode: RECEIVE_WAP_PUSH",
+        "ignore"
+      ],
+      [
+        "Uid mode: RECORD_AUDIO",
+        "ignore"
+      ],
+      [
+        "Uid mode: SEND_SMS",
+        "ignore"
+      ],
+      [
+        "Uid mode: USE_SIP",
+        "ignore"
+      ],
+      [
+        "Uid mode: UWB_RANGING",
+        "ignore"
+      ],
+      [
+        "Uid mode: WRITE_CALENDAR",
+        "ignore"
+      ],
+      [
+        "Uid mode: WRITE_CALL_LOG",
+        "ignore"
+      ],
+      [
+        "Uid mode: WRITE_CONTACTS",
+        "ignore"
+      ],
+      [
+        "Uid mode: WRITE_EXTERNAL_STORAGE",
+        "ignore"
+      ]
+    ],
+    "17": [
+      [
+        "Uid mode: ACCEPT_HANDOVER",
+        "ignore"
+      ],
+      [
+        "Uid mode: ACCESS_MEDIA_LOCATION",
+        "ignore"
+      ],
+      [
+        "Uid mode: ACTIVITY_RECOGNITION",
+        "ignore"
+      ],
+      [
+        "Uid mode: ADD_VOICEMAIL",
+        "ignore"
+      ],
+      [
+        "Uid mode: ANSWER_PHONE_CALLS",
+        "ignore"
+      ],
+      [
+        "Uid mode: BLUETOOTH_ADVERTISE",
+        "ignore"
+      ],
+      [
+        "Uid mode: BLUETOOTH_CONNECT",
+        "ignore"
+      ],
+      [
+        "Uid mode: BLUETOOTH_SCAN",
+        "ignore"
+      ],
+      [
+        "Uid mode: BODY_SENSORS",
+        "ignore"
+      ],
+      [
+        "Uid mode: CALL_PHONE",
+        "ignore"
+      ],
+      [
+        "Uid mode: CAMERA",
+        "ignore"
+      ],
+      [
+        "Uid mode: COARSE_LOCATION",
+        "ignore"
+      ],
+      [
+        "Uid mode: FINE_LOCATION",
+        "ignore"
+      ],
+      [
+        "Uid mode: GET_ACCOUNTS",
+        "ignore"
+      ],
+      [
+        "Uid mode: NEARBY_WIFI_DEVICES",
+        "ignore"
+      ],
+      [
+        "Uid mode: POST_NOTIFICATION",
+        "ignore"
+      ],
+      [
+        "Uid mode: PROCESS_OUTGOING_CALLS",
+        "ignore"
+      ],
+      [
+        "Uid mode: RANGING",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_CALENDAR",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_CALL_LOG",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_CELL_BROADCASTS",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_CONTACTS",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_EXTERNAL_STORAGE",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_HEART_RATE",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_MEDIA_AUDIO",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_MEDIA_IMAGES",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_MEDIA_VIDEO",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_MEDIA_VISUAL_USER_SELECTED",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_OXYGEN_SATURATION",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_PHONE_NUMBERS",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_PHONE_STATE",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_SKIN_TEMPERATURE",
+        "ignore"
+      ],
+      [
+        "Uid mode: READ_SMS",
+        "ignore"
+      ],
+      [
+        "Uid mode: RECEIVE_MMS",
+        "ignore"
+      ],
+      [
+        "Uid mode: RECEIVE_SMS",
+        "ignore"
+      ],
+      [
+        "Uid mode: RECEIVE_WAP_PUSH",
+        "ignore"
+      ],
+      [
+        "Uid mode: RECORD_AUDIO",
+        "ignore"
+      ],
+      [
+        "Uid mode: SEND_SMS",
+        "ignore"
+      ],
+      [
+        "Uid mode: USE_SIP",
+        "ignore"
+      ],
+      [
+        "Uid mode: UWB_RANGING",
+        "ignore"
+      ],
+      [
+        "Uid mode: WRITE_CALENDAR",
+        "ignore"
+      ],
+      [
+        "Uid mode: WRITE_CALL_LOG",
+        "ignore"
+      ],
+      [
+        "Uid mode: WRITE_CONTACTS",
+        "ignore"
+      ],
+      [
+        "Uid mode: WRITE_EXTERNAL_STORAGE",
+        "ignore"
+      ]
+    ]
+  }
+}

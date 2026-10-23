@@ -1,0 +1,9 @@
+{
+  "args": [
+    "shell",
+    "pm path dev.cyclone.cloak"
+  ],
+  "exit_code": 0,
+  "stdout": "package:/data/app/~~oxxPf3k1Ggejx1aZFZie2A==/dev.cyclone.cloak-FKdzo6WgSOJ9SiRjvLslLQ==/base.apk\r\n",
+  "stderr": ""
+}

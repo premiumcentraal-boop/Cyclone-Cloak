@@ -1,0 +1,21 @@
+{
+  "result": "STOPPED",
+  "phase": "FIXTURE_AUTHORING_SCHEMA_CONFORMANCE",
+  "reason": "REAL_HOST_SENSOR_INVENTORY_NOT_REPRESENTABLE_BY_CURRENT_SCHEMA",
+  "schema_errors": 33,
+  "error_categories": {
+    "minimum": 13,
+    "maximum": 20
+  },
+  "fixture_unchanged": true,
+  "completed_normal_captures": 0,
+  "readiness_promotions": 0,
+  "diagnostics_uninstalled": true,
+  "production_equal": true,
+  "module_all_hashes_unchanged": false,
+  "no_release": true,
+  "module_immutable_files_unchanged": true,
+  "module_mutable_log_changed": true,
+  "diff_check_exit": 2,
+  "diff_check_reason": "Pre-existing ProbeReportPolicy.java new blank line at EOF, line 90; preserved."
+}

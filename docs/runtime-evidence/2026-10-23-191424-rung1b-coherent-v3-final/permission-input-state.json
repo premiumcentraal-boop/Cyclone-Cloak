@@ -1,0 +1,15 @@
+{
+  "lines": [
+    "  DispatchEnabled: true",
+    "  DispatchFrozen: false",
+    "  InputFilterEnabled: false",
+    "  FocusedDisplayId: 0",
+    "  FocusedApplications:",
+    "    displayId=0, name='ActivityRecord{107026908 u17 com.google.android.permissioncontroller/com.android.permissioncontroller.permission.ui.GrantPermissionsActivity t1700378}', dispatchingTimeout=5000ms",
+    "  FocusedWindows: <none>",
+    "    displayId=0, name='db634 com.google.android.permissioncontroller/com.android.permissioncontroller.permission.ui.GrantPermissionsActivity' result='NO_WINDOW'",
+    "    303: channelName='db634 com.google.android.permissioncontroller/com.android.permissioncontroller.permission.ui.GrantPermissionsActivity', status=NORMAL, isFocusMonitor=false, responsive=true"
+  ],
+  "scope": "Selected dispatcher state and permission-controller window only",
+  "interpretation": "WindowManager has focused permission activity; InputDispatcher reports no focused window / NO_WINDOW. No root cause inferred."
+}

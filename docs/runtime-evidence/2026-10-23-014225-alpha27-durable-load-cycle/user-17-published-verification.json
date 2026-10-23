@@ -1,0 +1,11 @@
+{
+  "entry": {
+    "cloakProfileId": "7bf62497-5c67-57db-924e-c9d80e482ab7",
+    "key": "969ecfd58ff4c10bcf66c355a96fa6483dd5edcc08c0401021945fb5738d16b3",
+    "profileId": "runtime-probe"
+  },
+  "expected_canonical_sha256": "2bb5d74138d14251f316038be1a679fb53b1aad0796e190a8d03e7bb8494482e",
+  "published_sha256": "2bb5d74138d14251f316038be1a679fb53b1aad0796e190a8d03e7bb8494482e",
+  "report_raw_asset_sha256": "2bb5d74138d14251f316038be1a679fb53b1aad0796e190a8d03e7bb8494482e",
+  "canonical_equals_published": true
+}

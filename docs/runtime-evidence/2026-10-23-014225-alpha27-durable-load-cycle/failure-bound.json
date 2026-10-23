@@ -1,0 +1,5 @@
+{
+  "phase": "bound",
+  "error_type": "RuntimeError",
+  "reason": "MODULE_DURABLE_LOAD_RECORD_ABSENT_OR_INVALID"
+}

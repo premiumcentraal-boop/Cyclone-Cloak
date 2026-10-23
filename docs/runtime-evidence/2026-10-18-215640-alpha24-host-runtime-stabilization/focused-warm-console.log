@@ -1,0 +1,7 @@
+user-0-bound-cold {"PASS": 82, "OBSERVED": 7} reused=False
+user-0-post-removal-warm-repeat-1 {"PASS": 82, "OBSERVED": 7} reused=True
+user-0-post-removal-warm-repeat-2 {"PASS": 82, "OBSERVED": 7} reused=True
+user-0-post-removal-warm-repeat-3 {"PASS": 82, "OBSERVED": 7} reused=True
+STOP PROBE_CRASHED
+EVIDENCE C:\Users\Agent\Cyclone\cloak-repo\docs\runtime-evidence\2026-10-18-215640-alpha24-host-runtime-stabilization\focused-warm
+RESULT FAIL

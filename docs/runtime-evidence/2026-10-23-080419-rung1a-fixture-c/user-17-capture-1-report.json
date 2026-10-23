@@ -1,0 +1,1859 @@
+{
+  "format": 1,
+  "fixture": "external",
+  "package": "dev.cyclone.cloak.probe.diag",
+  "uid": 1710273,
+  "pid": 26528,
+  "request_id": "bootgate-cf010045e417472abaf48bfe5007d052",
+  "session_generation": 3,
+  "profile_sha256": "2f7b201e99d58322efbf34663a91d30323f160e939b10882d133c2d3a441831a",
+  "filesystem_reader_failures": [],
+  "rows": [
+    {
+      "id": "build.MANUFACTURER",
+      "source": "android.os.Build",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 5
+    },
+    {
+      "id": "build.BRAND",
+      "source": "android.os.Build",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 6
+    },
+    {
+      "id": "build.MODEL",
+      "source": "android.os.Build",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 4
+    },
+    {
+      "id": "build.DEVICE",
+      "source": "android.os.Build",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 8
+    },
+    {
+      "id": "build.PRODUCT",
+      "source": "android.os.Build",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 17
+    },
+    {
+      "id": "build.HARDWARE",
+      "source": "android.os.Build",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 9
+    },
+    {
+      "id": "build.FINGERPRINT",
+      "source": "android.os.Build",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 15
+    },
+    {
+      "id": "build.ID",
+      "source": "android.os.Build",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 4
+    },
+    {
+      "id": "build.BOOTLOADER",
+      "source": "android.os.Build",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 2
+    },
+    {
+      "id": "build.SERIAL",
+      "source": "android.os.Build",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "build.getSerial",
+      "source": "android.os.Build",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "build.TIME",
+      "source": "android.os.Build",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "build.TYPE",
+      "source": "android.os.Build",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 2
+    },
+    {
+      "id": "build.TAGS",
+      "source": "android.os.Build",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 3
+    },
+    {
+      "id": "version.SDK_INT",
+      "source": "android.os.Build.VERSION",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "version.RELEASE",
+      "source": "android.os.Build.VERSION",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 4
+    },
+    {
+      "id": "version.INCREMENTAL",
+      "source": "android.os.Build.VERSION",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 1
+    },
+    {
+      "id": "version.SECURITY_PATCH",
+      "source": "android.os.Build.VERSION",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 1
+    },
+    {
+      "id": "build.getRadioVersion",
+      "source": "android.os.Build",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 16
+    },
+    {
+      "id": "properties.java.ro.product.model",
+      "source": "android.os.SystemProperties",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 5
+    },
+    {
+      "id": "properties.native.ro.product.model",
+      "source": "libc.__system_property_get",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.java.ro.product.manufacturer",
+      "source": "android.os.SystemProperties",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 10
+    },
+    {
+      "id": "properties.native.ro.product.manufacturer",
+      "source": "libc.__system_property_get",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 1
+    },
+    {
+      "id": "properties.java.ro.product.brand",
+      "source": "android.os.SystemProperties",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 8
+    },
+    {
+      "id": "properties.native.ro.product.brand",
+      "source": "libc.__system_property_get",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.java.ro.product.device",
+      "source": "android.os.SystemProperties",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 15
+    },
+    {
+      "id": "properties.native.ro.product.device",
+      "source": "libc.__system_property_get",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.java.ro.product.name",
+      "source": "android.os.SystemProperties",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.native.ro.product.name",
+      "source": "libc.__system_property_get",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.java.ro.build.version.sdk",
+      "source": "android.os.SystemProperties",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.native.ro.build.version.sdk",
+      "source": "libc.__system_property_get",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.java.ro.build.fingerprint",
+      "source": "android.os.SystemProperties",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.native.ro.build.fingerprint",
+      "source": "libc.__system_property_get",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.java.ro.serialno",
+      "source": "android.os.SystemProperties",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.native.ro.serialno",
+      "source": "libc.__system_property_get",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.java.ro.sf.lcd_density",
+      "source": "android.os.SystemProperties",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.native.ro.sf.lcd_density",
+      "source": "libc.__system_property_get",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.java.persist.sys.timezone",
+      "source": "android.os.SystemProperties",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.native.persist.sys.timezone",
+      "source": "libc.__system_property_get",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "properties.nativeCallback.ro.product.model",
+      "source": "libc.__system_property_read_callback",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "telephony.simState",
+      "source": "android.telephony.TelephonyManager",
+      "status": "OBSERVED",
+      "reason": "NO_PROFILE_EXPECTATION",
+      "duration_ms": 3
+    },
+    {
+      "id": "telephony.phoneType",
+      "source": "android.telephony.TelephonyManager",
+      "status": "OBSERVED",
+      "reason": "NO_PROFILE_EXPECTATION",
+      "duration_ms": 0
+    },
+    {
+      "id": "telephony.roaming",
+      "source": "android.telephony.TelephonyManager",
+      "status": "OBSERVED",
+      "reason": "NO_PROFILE_EXPECTATION",
+      "duration_ms": 3
+    },
+    {
+      "id": "telephony.imei0",
+      "source": "android.telephony.TelephonyManager",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 1
+    },
+    {
+      "id": "telephony.imei1",
+      "source": "android.telephony.TelephonyManager",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "telephony.deviceId",
+      "source": "android.telephony.TelephonyManager",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "telephony.simSerial",
+      "source": "android.telephony.TelephonyManager",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "telephony.phoneCount",
+      "source": "android.telephony.TelephonyManager",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "telephony.activeModemCount",
+      "source": "android.telephony.TelephonyManager",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "telephony.networkType",
+      "source": "android.telephony.TelephonyManager",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "telephony.dataNetworkType",
+      "source": "android.telephony.TelephonyManager",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "operator.networkNumeric",
+      "source": "android.telephony.TelephonyManager",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "operator.simNumeric",
+      "source": "android.telephony.TelephonyManager",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "operator.networkName",
+      "source": "android.telephony.TelephonyManager",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "operator.simName",
+      "source": "android.telephony.TelephonyManager",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "operator.networkCountry",
+      "source": "android.telephony.TelephonyManager",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "operator.simCountry",
+      "source": "android.telephony.TelephonyManager",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "telephony.subscriberId",
+      "source": "android.telephony.TelephonyManager",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 1
+    },
+    {
+      "id": "settings.secure.androidId",
+      "source": "android.provider.Settings.Secure",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 1
+    },
+    {
+      "id": "settings.provider.androidId",
+      "source": "android.provider.Settings.Secure",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 1
+    },
+    {
+      "id": "settings.unrelatedControl",
+      "source": "android.provider.Settings.Secure",
+      "status": "OBSERVED",
+      "reason": "NO_PROFILE_EXPECTATION",
+      "duration_ms": 5
+    },
+    {
+      "id": "wifi.objectMac",
+      "source": "android.net.wifi.WifiInfo",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "wifi.serviceMac",
+      "source": "android.net.wifi.WifiInfo",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 24
+    },
+    {
+      "id": "wifi.bssid",
+      "source": "android.net.wifi.WifiInfo",
+      "status": "BLOCKED",
+      "reason": "PERMISSION_DENIED:android.permission.ACCESS_FINE_LOCATION",
+      "duration_ms": 0
+    },
+    {
+      "id": "wifi.linkSpeed",
+      "source": "android.net.wifi.WifiInfo",
+      "status": "OBSERVED",
+      "reason": "NO_PROFILE_EXPECTATION",
+      "duration_ms": 1
+    },
+    {
+      "id": "wifi.ssid",
+      "source": "android.net.wifi.WifiInfo",
+      "status": "BLOCKED",
+      "reason": "PERMISSION_DENIED:android.permission.ACCESS_FINE_LOCATION",
+      "duration_ms": 0
+    },
+    {
+      "id": "bluetooth.address",
+      "source": "android.bluetooth.BluetoothAdapter",
+      "status": "BLOCKED",
+      "reason": "PERMISSION_DENIED:android.permission.BLUETOOTH_CONNECT",
+      "duration_ms": 0
+    },
+    {
+      "id": "bluetooth.name",
+      "source": "android.bluetooth.BluetoothAdapter",
+      "status": "BLOCKED",
+      "reason": "PERMISSION_DENIED:android.permission.BLUETOOTH_CONNECT",
+      "duration_ms": 0
+    },
+    {
+      "id": "advertising.id",
+      "source": "Android API",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 1
+    },
+    {
+      "id": "drm.deviceUniqueId",
+      "source": "android.media.MediaDrm",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 69
+    },
+    {
+      "id": "display.resources.width",
+      "source": "android.util.DisplayMetrics/Display",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "display.resources.height",
+      "source": "android.util.DisplayMetrics/Display",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 1
+    },
+    {
+      "id": "display.resources.density",
+      "source": "android.util.DisplayMetrics/Display",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "display.real.width",
+      "source": "android.util.DisplayMetrics/Display",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "display.real.height",
+      "source": "android.util.DisplayMetrics/Display",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "display.real.density",
+      "source": "android.util.DisplayMetrics/Display",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "display.refresh",
+      "source": "android.util.DisplayMetrics/Display",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 8
+    },
+    {
+      "id": "camera.characteristics",
+      "source": "android.hardware.camera2.CameraCharacteristics",
+      "status": "BLOCKED",
+      "reason": "PROFILE_SURFACE_UNAVAILABLE",
+      "duration_ms": 22
+    },
+    {
+      "id": "sensors.list",
+      "source": "Android API",
+      "status": "BLOCKED",
+      "reason": "PROFILE_SURFACE_UNAVAILABLE",
+      "duration_ms": 17
+    },
+    {
+      "id": "locale.default.language",
+      "source": "java.util.Locale/Configuration",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 1
+    },
+    {
+      "id": "locale.default.country",
+      "source": "java.util.Locale/Configuration",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 1
+    },
+    {
+      "id": "locale.resources.language",
+      "source": "java.util.Locale/Configuration",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "locale.resources.country",
+      "source": "java.util.Locale/Configuration",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "timezone.default",
+      "source": "java.util.TimeZone",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "process.uid",
+      "source": "android.os.Process",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "process.androidUser",
+      "source": "android.os.Process",
+      "status": "PASS",
+      "reason": "MATCH",
+      "duration_ms": 0
+    },
+    {
+      "id": "packages.visible",
+      "source": "android.content.pm.PackageManager (caller-visible only)",
+      "status": "BLOCKED",
+      "reason": "PROFILE_SURFACE_UNAVAILABLE",
+      "duration_ms": 23
+    },
+    {
+      "id": "runtime.loadedLibraries",
+      "source": "/proc/self/maps/ClassLoader (observation only)",
+      "status": "OBSERVED",
+      "reason": "NO_PROFILE_EXPECTATION",
+      "duration_ms": 207
+    },
+    {
+      "id": "runtime.javaBridgeVisible",
+      "source": "/proc/self/maps/ClassLoader (observation only)",
+      "status": "OBSERVED",
+      "reason": "NO_PROFILE_EXPECTATION",
+      "duration_ms": 1
+    }
+  ],
+  "filesystem_observations": {
+    "format": 1,
+    "rows": [
+      {
+        "id": "diagnostics.filesystem.build_prop",
+        "source": "/system/build.prop",
+        "status": "OBSERVED",
+        "reason": "OBSERVATION_ONLY_NO_EXPECTATION",
+        "sha256": "18e47616bc0222ed3b8ee292ec6c137709bd6929902e1f5fcd71d6e19fb272a0",
+        "byte_count": 538,
+        "line_count": 16,
+        "duration_ms": 11
+      },
+      {
+        "id": "diagnostics.filesystem.proc_version",
+        "source": "/proc/version",
+        "status": "OBSERVED",
+        "reason": "OBSERVATION_ONLY_NO_EXPECTATION",
+        "sha256": "51d496d31ba6bffa7ea40f65db558e210cf0e87d73496705bdd30797db53b7a0",
+        "byte_count": 207,
+        "line_count": 1,
+        "duration_ms": 2
+      },
+      {
+        "id": "diagnostics.filesystem.proc_cpuinfo",
+        "source": "/proc/cpuinfo",
+        "status": "OBSERVED",
+        "reason": "OBSERVATION_ONLY_NO_EXPECTATION",
+        "sha256": "66b83234d1861eb31db95a697e78ce59e085a57d86d9c183241657f398386608",
+        "byte_count": 1188,
+        "line_count": 63,
+        "duration_ms": 2
+      },
+      {
+        "id": "diagnostics.filesystem.maps_snapshot",
+        "source": "/proc/self/maps",
+        "status": "OBSERVED",
+        "reason": "OBSERVATION_ONLY_NO_EXPECTATION",
+        "sha256": "043a9664225292ebb91007fb793adfdcc7722e718b1264a70a14e0533003f3de",
+        "byte_count": 326851,
+        "line_count": 3346,
+        "duration_ms": 106
+      }
+    ]
+  },
+  "runtime_envelope": {
+    "format": 1,
+    "rows": [
+      {
+        "id": "envelope.sensors.inventory",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 2
+      },
+      {
+        "id": "envelope.camera.characteristics",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 4
+      },
+      {
+        "id": "envelope.memory.totalMem",
+        "expected_sha256": null,
+        "actual_sha256": "ccd1e77da0a9c4d25ca3c438285b9592fa2f6fcef4f30689df39faf42d1d763c",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 2
+      },
+      {
+        "id": "envelope.storage.totalBytes",
+        "expected_sha256": null,
+        "actual_sha256": "c5e3f7826a3dee48a50d87353ad1e295aa0970ace32c8dfa7f1fb4c3adab670b",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 3
+      },
+      {
+        "id": "envelope.storage.availableBytes",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 0
+      },
+      {
+        "id": "envelope.compute.schedulerProcessors",
+        "expected_sha256": null,
+        "actual_sha256": "19581e27de7ced00ff1ce50b2047e7a567c76b1cbaebabe5ef03f7c3017bb5b7",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 0
+      },
+      {
+        "id": "envelope.compute.gpuRenderer",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 39
+      },
+      {
+        "id": "envelope.packages.visibleVersions",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 1
+      },
+      {
+        "id": "envelope.webview.provider",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 5
+      },
+      {
+        "id": "envelope.webview.version",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 2
+      },
+      {
+        "id": "envelope.webview.defaultUa",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "AndroidRuntimeException",
+        "duration_ms": 68
+      },
+      {
+        "id": "envelope.webview.instanceUa",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "AndroidRuntimeException",
+        "duration_ms": 7
+      },
+      {
+        "id": "envelope.display.realSize",
+        "expected_sha256": "0515ad262fd5d7f0e4e966790693a35412119cc21fc58b904b365add87a59735",
+        "actual_sha256": "0515ad262fd5d7f0e4e966790693a35412119cc21fc58b904b365add87a59735",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 2
+      },
+      {
+        "id": "envelope.telephony.simState",
+        "expected_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+        "actual_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 38
+      },
+      {
+        "id": "envelope.telephony.simStateSlot0",
+        "expected_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+        "actual_sha256": "ef2d127de37b942baad06145e54b0c619a1f22327b2ebbcfbec78f5564afe39d",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 27
+      },
+      {
+        "id": "envelope.drm.securityLevel",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 126
+      }
+    ]
+  },
+  "linked_parity": {
+    "format": 1,
+    "rows": [
+      {
+        "id": "reality.carrier.values.mcc",
+        "expected_sha256": "0f258d53ef47ee58bc29369573d168921a5b5e389ef253c96671b2b3568e62bd",
+        "actual_sha256": "0f258d53ef47ee58bc29369573d168921a5b5e389ef253c96671b2b3568e62bd",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 5
+      },
+      {
+        "id": "reality.carrier.values.mnc",
+        "expected_sha256": "cf2aeeb62e548283233c2be134d1082e3afbb7d5110ebcdb1016e82156aa8358",
+        "actual_sha256": "cf2aeeb62e548283233c2be134d1082e3afbb7d5110ebcdb1016e82156aa8358",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 8
+      },
+      {
+        "id": "reality.carrier.values.slots",
+        "expected_sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+        "actual_sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 2
+      },
+      {
+        "id": "reality.environment.values.country",
+        "expected_sha256": "b5e86cefc9cfb8c972b2ede02131e8a270e7fbc4216e7be80bf800aea5de029b",
+        "actual_sha256": "b5e86cefc9cfb8c972b2ede02131e8a270e7fbc4216e7be80bf800aea5de029b",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 38
+      },
+      {
+        "id": "reality.environment.values.language",
+        "expected_sha256": "50eac10e7966a04e139902940a2a8e129a4597574c709cb8d01939ace56ff9c3",
+        "actual_sha256": "50eac10e7966a04e139902940a2a8e129a4597574c709cb8d01939ace56ff9c3",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 0
+      },
+      {
+        "id": "reality.environment.values.timezone",
+        "expected_sha256": "8d0e66752630c8b3461ef19761895616dfc5461e7949e8d730af61ab35ab928a",
+        "actual_sha256": "8d0e66752630c8b3461ef19761895616dfc5461e7949e8d730af61ab35ab928a",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.panel.values.density_dpi",
+        "expected_sha256": "db55da3fc3098e9c42311c6013304ff36b19ef73d12ea932054b5ad51df4f49d",
+        "actual_sha256": "db55da3fc3098e9c42311c6013304ff36b19ef73d12ea932054b5ad51df4f49d",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.panel.values.height",
+        "expected_sha256": "8350242b2df439d296a664c7c59b117507d0b3c537fa293304c84d84eb85cc43",
+        "actual_sha256": "8350242b2df439d296a664c7c59b117507d0b3c537fa293304c84d84eb85cc43",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.panel.values.refresh_hz",
+        "expected_sha256": "69f59c273b6e669ac32a6dd5e1b2cb63333d8b004f9696447aee2d422ce63763",
+        "actual_sha256": "69f59c273b6e669ac32a6dd5e1b2cb63333d8b004f9696447aee2d422ce63763",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 4
+      },
+      {
+        "id": "reality.panel.values.width",
+        "expected_sha256": "32eb1a8dafeb0873c8d00b0e9058c8c77ff6c6d9235b3236989c50ef63d8f9ba",
+        "actual_sha256": "32eb1a8dafeb0873c8d00b0e9058c8c77ff6c6d9235b3236989c50ef63d8f9ba",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 3
+      },
+      {
+        "id": "linked.simOperator",
+        "expected_sha256": "4a5f91886e5dd41b8fac7c58354ab547cf71697625f252812940c8bd68a44550",
+        "actual_sha256": "4a5f91886e5dd41b8fac7c58354ab547cf71697625f252812940c8bd68a44550",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 1
+      },
+      {
+        "id": "linked.activeModemCount",
+        "expected_sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+        "actual_sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 0
+      },
+      {
+        "id": "linked.supportedModes",
+        "expected_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+        "actual_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 3
+      }
+    ]
+  },
+  "device_reality": {
+    "format": 1,
+    "rows": [
+      {
+        "id": "reality.cameras.count",
+        "expected_sha256": null,
+        "actual_sha256": "d4735e3a265e16eee03f59718b9b5d03019c07d8b6c51f90da3a666eec13ab35",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 0
+      },
+      {
+        "id": "reality.cameras.inventory",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 7
+      },
+      {
+        "id": "reality.carrier.slots",
+        "expected_sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+        "actual_sha256": "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 8
+      },
+      {
+        "id": "reality.carrier.mcc",
+        "expected_sha256": "0f258d53ef47ee58bc29369573d168921a5b5e389ef253c96671b2b3568e62bd",
+        "actual_sha256": "0f258d53ef47ee58bc29369573d168921a5b5e389ef253c96671b2b3568e62bd",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 12
+      },
+      {
+        "id": "reality.carrier.mnc",
+        "expected_sha256": "cf2aeeb62e548283233c2be134d1082e3afbb7d5110ebcdb1016e82156aa8358",
+        "actual_sha256": "cf2aeeb62e548283233c2be134d1082e3afbb7d5110ebcdb1016e82156aa8358",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 5
+      },
+      {
+        "id": "reality.carrier.country",
+        "expected_sha256": null,
+        "actual_sha256": "b5e86cefc9cfb8c972b2ede02131e8a270e7fbc4216e7be80bf800aea5de029b",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.carrier.sim_state",
+        "expected_sha256": "40ec7f71ea684c8b976e79e8e425f87779e6de57f4821dcfc8066dbcad2defe0",
+        "actual_sha256": "40ec7f71ea684c8b976e79e8e425f87779e6de57f4821dcfc8066dbcad2defe0",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 18
+      },
+      {
+        "id": "reality.compute.soc",
+        "expected_sha256": "7d7ac0e1cacf2467b5c907bdc4e60a502782be835ed0cf3be0cbdbc92b0a178d",
+        "actual_sha256": "4312c06445981a48aa10e56b24dd467cf2ee1a35483c370c524e5fda6432dec3",
+        "status": "FAIL",
+        "reason": "HASH_MISMATCH",
+        "duration_ms": 2
+      },
+      {
+        "id": "reality.compute.gpu",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "UNMAPPED",
+        "reason": "UNMAPPED",
+        "duration_ms": 0
+      },
+      {
+        "id": "reality.compute.cpu_cores",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "UNMAPPED",
+        "reason": "UNMAPPED",
+        "duration_ms": 0
+      },
+      {
+        "id": "reality.compute.abis",
+        "expected_sha256": null,
+        "actual_sha256": "7cbed823db88eff40f9a70d266dde4300b339fcd397183b3ac6064e8971c82db",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 0
+      },
+      {
+        "id": "reality.drm.security_level",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 35
+      },
+      {
+        "id": "reality.environment.language",
+        "expected_sha256": "50eac10e7966a04e139902940a2a8e129a4597574c709cb8d01939ace56ff9c3",
+        "actual_sha256": "50eac10e7966a04e139902940a2a8e129a4597574c709cb8d01939ace56ff9c3",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.environment.country",
+        "expected_sha256": "b5e86cefc9cfb8c972b2ede02131e8a270e7fbc4216e7be80bf800aea5de029b",
+        "actual_sha256": "b5e86cefc9cfb8c972b2ede02131e8a270e7fbc4216e7be80bf800aea5de029b",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 2
+      },
+      {
+        "id": "reality.environment.timezone",
+        "expected_sha256": "8d0e66752630c8b3461ef19761895616dfc5461e7949e8d730af61ab35ab928a",
+        "actual_sha256": "8d0e66752630c8b3461ef19761895616dfc5461e7949e8d730af61ab35ab928a",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 6
+      },
+      {
+        "id": "reality.environment.keyboard_layout",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "UNMAPPED",
+        "reason": "UNMAPPED",
+        "duration_ms": 0
+      },
+      {
+        "id": "reality.environment.input_method",
+        "expected_sha256": null,
+        "actual_sha256": "61bd0a1934a0912e9294abd26bfe5af5987caf65582cbc682afc910b7c75da1a",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 6
+      },
+      {
+        "id": "reality.environment.accessibility_enabled",
+        "expected_sha256": null,
+        "actual_sha256": "b5bea41b6c623f7c09f1bf24dcae58ebab3c0cdd90ad966bc43a45b44867e12b",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 2
+      },
+      {
+        "id": "reality.memory.ram_gib",
+        "expected_sha256": "2c624232cdd221771294dfbb310aca000a0df6ac8b66b696d90ef06fdefb64a3",
+        "actual_sha256": "caabd0cb6d923d31a54bc37bb31bb0811ec01e7c2b6e588e4c6b0a7ce31f927a",
+        "status": "FAIL",
+        "reason": "HASH_MISMATCH",
+        "duration_ms": 6
+      },
+      {
+        "id": "reality.memory.storage_gib",
+        "expected_sha256": "2747b7c718564ba5f066f0523b03e17f6a496b06851333d2d59ab6d863225848",
+        "actual_sha256": null,
+        "status": "UNMAPPED",
+        "reason": "UNMAPPED",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.memory.free_storage_gib",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 6
+      },
+      {
+        "id": "reality.packages.installed",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 2
+      },
+      {
+        "id": "reality.panel.width",
+        "expected_sha256": "32eb1a8dafeb0873c8d00b0e9058c8c77ff6c6d9235b3236989c50ef63d8f9ba",
+        "actual_sha256": "32eb1a8dafeb0873c8d00b0e9058c8c77ff6c6d9235b3236989c50ef63d8f9ba",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 2
+      },
+      {
+        "id": "reality.panel.height",
+        "expected_sha256": "8350242b2df439d296a664c7c59b117507d0b3c537fa293304c84d84eb85cc43",
+        "actual_sha256": "8350242b2df439d296a664c7c59b117507d0b3c537fa293304c84d84eb85cc43",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.panel.density_dpi",
+        "expected_sha256": "db55da3fc3098e9c42311c6013304ff36b19ef73d12ea932054b5ad51df4f49d",
+        "actual_sha256": "db55da3fc3098e9c42311c6013304ff36b19ef73d12ea932054b5ad51df4f49d",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 7
+      },
+      {
+        "id": "reality.panel.refresh_hz",
+        "expected_sha256": "69f59c273b6e669ac32a6dd5e1b2cb63333d8b004f9696447aee2d422ce63763",
+        "actual_sha256": "69f59c273b6e669ac32a6dd5e1b2cb63333d8b004f9696447aee2d422ce63763",
+        "status": "PASS",
+        "reason": "HASH_MATCH_ONLY",
+        "duration_ms": 6
+      },
+      {
+        "id": "reality.panel.technology",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "UNMAPPED",
+        "reason": "UNMAPPED",
+        "duration_ms": 0
+      },
+      {
+        "id": "reality.panel.modes",
+        "expected_sha256": null,
+        "actual_sha256": "ac2cc82f1e4aa16addd35b355bb7a436ad0391b9a1cacd43595d251602691a77",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 5
+      },
+      {
+        "id": "reality.power.design_capacity_mah",
+        "expected_sha256": "5714f0813b1aeaab7c5cbb9dba6b0121e8279249ccb6d19966651ab2a221734b",
+        "actual_sha256": null,
+        "status": "UNMAPPED",
+        "reason": "UNMAPPED",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.power.battery_percent",
+        "expected_sha256": null,
+        "actual_sha256": "ad57366865126e55649ecb23ae1d48887544976efea46a48eb5d85a6eeb4d306",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 1
+      },
+      {
+        "id": "reality.power.battery_state",
+        "expected_sha256": null,
+        "actual_sha256": "f3e909536414722983a124cab80c147300686bbf59c18cb7fae81ec6a80e0d2f",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 3
+      },
+      {
+        "id": "reality.power.charging_source",
+        "expected_sha256": null,
+        "actual_sha256": "bcbf802cde612a17d6ce01c2a2a5d8eb736c53e79b099651823ce55b1cb3f3d2",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 2
+      },
+      {
+        "id": "reality.power.temperature_c",
+        "expected_sha256": null,
+        "actual_sha256": "38edf60d3275ec8152ac982192a9f84fdb3d27b3fe8fcf81cf2cc1815ed863b6",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 0
+      },
+      {
+        "id": "reality.power.thermal_status",
+        "expected_sha256": null,
+        "actual_sha256": "5feceb66ffc86f38d952786c6d696c79c2dbc239dd4e91b46729d73a27fb57e9",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 2
+      },
+      {
+        "id": "reality.power.power_save",
+        "expected_sha256": null,
+        "actual_sha256": "fcbcf165908dd18a9e49f7ff27810176db8e9f63b4352213741664245224f8aa",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 2
+      },
+      {
+        "id": "reality.radio.wifi_name",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "UNMAPPED",
+        "reason": "UNMAPPED",
+        "duration_ms": 0
+      },
+      {
+        "id": "reality.radio.bluetooth_name",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "BLOCKED",
+        "reason": "SecurityException:android.permission.BLUETOOTH_CONNECT",
+        "duration_ms": 646
+      },
+      {
+        "id": "reality.radio.wifi_state",
+        "expected_sha256": null,
+        "actual_sha256": "6e30bc5c1535567991cb179e5c19469e0c91016ca7e917f8afe2161acd506591",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 2
+      },
+      {
+        "id": "reality.radio.bluetooth_state",
+        "expected_sha256": null,
+        "actual_sha256": "f693b9deb860600fb93d749df324c55991afe7eba6300113ab381339b23d12d5",
+        "status": "OBSERVED",
+        "reason": "NO_EXPECTATION",
+        "duration_ms": 19
+      },
+      {
+        "id": "reality.sensors.inventory",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 0
+      },
+      {
+        "id": "reality.webview.provider",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 11
+      },
+      {
+        "id": "reality.webview.version",
+        "expected_sha256": null,
+        "actual_sha256": null,
+        "status": "MISSING",
+        "reason": "PROFILE_SURFACE_UNAVAILABLE",
+        "duration_ms": 8
+      },
+      {
+        "id": "reality.webview.user_agent",
+        "expected_sha256": "64a5f3669f27cc3ee59054f159550379dd4522bc9d0cf67902fbd947ac6fb6d6",
+        "actual_sha256": null,
+        "status": "UNMAPPED",
+        "reason": "UNMAPPED",
+        "duration_ms": 1
+      }
+    ]
+  },
+  "reality_runtime": {
+    "format": 1,
+    "rows": [
+      {
+        "field_path": "reality.cameras.availability",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.cameras.reason",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.cameras.source",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.cameras.values.count",
+        "surface": "android.hardware.camera2.CameraManager.getCameraIdList().length",
+        "duration_ms": 0,
+        "reason": "NO_EXPECTATION"
+      },
+      {
+        "field_path": "reality.cameras.values.inventory",
+        "surface": "android.hardware.camera2.CameraManager.getCameraCharacteristics(id)",
+        "duration_ms": 7,
+        "reason": "PROFILE_SURFACE_UNAVAILABLE"
+      },
+      {
+        "field_path": "reality.cameras.values.inventory[].facing",
+        "surface": "android.hardware.camera2.CameraManager.getCameraCharacteristics(id):facing",
+        "duration_ms": 0,
+        "reason": "Read-only host observation; Reality is not consumed by the module."
+      },
+      {
+        "field_path": "reality.cameras.values.inventory[].hardware_level",
+        "surface": "android.hardware.camera2.CameraManager.getCameraCharacteristics(id):hardware_level",
+        "duration_ms": 0,
+        "reason": "Read-only host observation; Reality is not consumed by the module."
+      },
+      {
+        "field_path": "reality.cameras.values.inventory[].id",
+        "surface": "android.hardware.camera2.CameraManager.getCameraCharacteristics(id):id",
+        "duration_ms": 0,
+        "reason": "Read-only host observation; Reality is not consumed by the module."
+      },
+      {
+        "field_path": "reality.cameras.values.inventory[].megapixels",
+        "surface": "android.hardware.camera2.CameraManager.getCameraCharacteristics(id):megapixels",
+        "duration_ms": 0,
+        "reason": "Read-only host observation; Reality is not consumed by the module."
+      },
+      {
+        "field_path": "reality.carrier.availability",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.carrier.reason",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.carrier.source",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.carrier.values.country",
+        "surface": "android.telephony.TelephonyManager.getSimCountryIso()",
+        "duration_ms": 1,
+        "reason": "NO_EXPECTATION"
+      },
+      {
+        "field_path": "reality.carrier.values.mcc",
+        "surface": "android.telephony.TelephonyManager.getSimOperator():mcc",
+        "duration_ms": 12,
+        "reason": "HASH_MATCH_ONLY"
+      },
+      {
+        "field_path": "reality.carrier.values.mnc",
+        "surface": "android.telephony.TelephonyManager.getSimOperator():mnc",
+        "duration_ms": 5,
+        "reason": "HASH_MATCH_ONLY"
+      },
+      {
+        "field_path": "reality.carrier.values.sim_state",
+        "surface": "android.telephony.TelephonyManager.getSimState()",
+        "duration_ms": 18,
+        "reason": "HASH_MATCH_ONLY"
+      },
+      {
+        "field_path": "reality.carrier.values.slots",
+        "surface": "android.telephony.TelephonyManager.getPhoneCount()",
+        "duration_ms": 8,
+        "reason": "HASH_MATCH_ONLY"
+      },
+      {
+        "field_path": "reality.compute.availability",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.compute.reason",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.compute.source",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.compute.values.abis",
+        "surface": "android.os.Build.SUPPORTED_ABIS",
+        "duration_ms": 0,
+        "reason": "NO_EXPECTATION"
+      },
+      {
+        "field_path": "reality.compute.values.abis[]",
+        "surface": "android.os.Build.SUPPORTED_ABIS:",
+        "duration_ms": 0,
+        "reason": "Read-only host observation; Reality is not consumed by the module."
+      },
+      {
+        "field_path": "reality.compute.values.cpu_cores",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "No current reader or runtime mapping; separate authorized implementation required."
+      },
+      {
+        "field_path": "reality.compute.values.gpu",
+        "surface": "android.opengl.GLES20.glGetString(GL_RENDERER)",
+        "duration_ms": 0,
+        "reason": "UNMAPPED"
+      },
+      {
+        "field_path": "reality.compute.values.soc",
+        "surface": "android.os.Build.SOC_MODEL",
+        "duration_ms": 2,
+        "reason": "HASH_MISMATCH"
+      },
+      {
+        "field_path": "reality.drm.availability",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.drm.reason",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.drm.source",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.drm.values.security_level",
+        "surface": "android.media.MediaDrm.getPropertyString(securityLevel)",
+        "duration_ms": 35,
+        "reason": "PROFILE_SURFACE_UNAVAILABLE"
+      },
+      {
+        "field_path": "reality.environment.availability",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.environment.reason",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.environment.source",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.environment.values.accessibility_enabled",
+        "surface": "android.provider.Settings.Secure:accessibility_enabled",
+        "duration_ms": 2,
+        "reason": "NO_EXPECTATION"
+      },
+      {
+        "field_path": "reality.environment.values.country",
+        "surface": "java.util.Locale.getDefault().getCountry()",
+        "duration_ms": 2,
+        "reason": "HASH_MATCH_ONLY"
+      },
+      {
+        "field_path": "reality.environment.values.input_method",
+        "surface": "android.provider.Settings.Secure:default_input_method",
+        "duration_ms": 6,
+        "reason": "NO_EXPECTATION"
+      },
+      {
+        "field_path": "reality.environment.values.keyboard_layout",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "No current reader or runtime mapping; separate authorized implementation required."
+      },
+      {
+        "field_path": "reality.environment.values.language",
+        "surface": "java.util.Locale.getDefault().getLanguage()",
+        "duration_ms": 1,
+        "reason": "HASH_MATCH_ONLY"
+      },
+      {
+        "field_path": "reality.environment.values.timezone",
+        "surface": "java.util.TimeZone.getDefault().getID()",
+        "duration_ms": 6,
+        "reason": "HASH_MATCH_ONLY"
+      },
+      {
+        "field_path": "reality.inventory_id",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.memory.availability",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.memory.reason",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.memory.source",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.memory.values.free_storage_gib",
+        "surface": "android.os.StatFs.getAvailableBytes()",
+        "duration_ms": 6,
+        "reason": "PROFILE_SURFACE_UNAVAILABLE"
+      },
+      {
+        "field_path": "reality.memory.values.ram_gib",
+        "surface": "android.app.ActivityManager.MemoryInfo.totalMem",
+        "duration_ms": 6,
+        "reason": "HASH_MISMATCH"
+      },
+      {
+        "field_path": "reality.memory.values.storage_gib",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "No current reader or runtime mapping; separate authorized implementation required."
+      },
+      {
+        "field_path": "reality.packages.availability",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.packages.reason",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.packages.source",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.packages.values.installed",
+        "surface": "android.content.pm.PackageManager.getPackageInfo(allowlisted package)",
+        "duration_ms": 2,
+        "reason": "PROFILE_SURFACE_UNAVAILABLE"
+      },
+      {
+        "field_path": "reality.packages.values.installed[].package",
+        "surface": "android.content.pm.PackageManager.getPackageInfo(allowlisted package):package",
+        "duration_ms": 0,
+        "reason": "Real package membership/name is preserved; no installation or visibility fabrication. Phase 2 implementation is locally tested; physical isolation/cold/restoration evidence is pending."
+      },
+      {
+        "field_path": "reality.packages.values.installed[].version_code",
+        "surface": "android.content.pm.PackageManager.getPackageInfo(allowlisted package):version_code",
+        "duration_ms": 0,
+        "reason": "Scoped PackageInfo copy for the fixed package allowlist. Phase 2 implementation is locally tested; physical isolation/cold/restoration evidence is pending."
+      },
+      {
+        "field_path": "reality.packages.values.installed[].version_name",
+        "surface": "android.content.pm.PackageManager.getPackageInfo(allowlisted package):version_name",
+        "duration_ms": 0,
+        "reason": "Scoped PackageInfo copy for the fixed package allowlist. Phase 2 implementation is locally tested; physical isolation/cold/restoration evidence is pending."
+      },
+      {
+        "field_path": "reality.panel.availability",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.panel.reason",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.panel.source",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.panel.values.density_dpi",
+        "surface": "android.view.Display.getRealMetrics().densityDpi",
+        "duration_ms": 7,
+        "reason": "HASH_MATCH_ONLY"
+      },
+      {
+        "field_path": "reality.panel.values.height",
+        "surface": "android.view.Display.getMode().getPhysicalHeight()",
+        "duration_ms": 1,
+        "reason": "HASH_MATCH_ONLY"
+      },
+      {
+        "field_path": "reality.panel.values.modes",
+        "surface": "android.view.Display.getSupportedModes()",
+        "duration_ms": 5,
+        "reason": "NO_EXPECTATION"
+      },
+      {
+        "field_path": "reality.panel.values.modes[].height",
+        "surface": "android.view.Display.getSupportedModes():height",
+        "duration_ms": 0,
+        "reason": "Read-only host observation; Reality is not consumed by the module."
+      },
+      {
+        "field_path": "reality.panel.values.modes[].refresh_hz",
+        "surface": "android.view.Display.getSupportedModes():refresh_hz",
+        "duration_ms": 0,
+        "reason": "Read-only host observation; Reality is not consumed by the module."
+      },
+      {
+        "field_path": "reality.panel.values.modes[].width",
+        "surface": "android.view.Display.getSupportedModes():width",
+        "duration_ms": 0,
+        "reason": "Read-only host observation; Reality is not consumed by the module."
+      },
+      {
+        "field_path": "reality.panel.values.refresh_hz",
+        "surface": "android.view.Display.getMode().getRefreshRate()",
+        "duration_ms": 6,
+        "reason": "HASH_MATCH_ONLY"
+      },
+      {
+        "field_path": "reality.panel.values.technology",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "No safe public surface with equivalent semantics; descriptive metadata only."
+      },
+      {
+        "field_path": "reality.panel.values.width",
+        "surface": "android.view.Display.getMode().getPhysicalWidth()",
+        "duration_ms": 2,
+        "reason": "HASH_MATCH_ONLY"
+      },
+      {
+        "field_path": "reality.power.availability",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.power.reason",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.power.source",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.power.values.battery_percent",
+        "surface": "android.intent.action.BATTERY_CHANGED:level/scale",
+        "duration_ms": 1,
+        "reason": "NO_EXPECTATION"
+      },
+      {
+        "field_path": "reality.power.values.battery_state",
+        "surface": "android.intent.action.BATTERY_CHANGED:status",
+        "duration_ms": 3,
+        "reason": "NO_EXPECTATION"
+      },
+      {
+        "field_path": "reality.power.values.charging_source",
+        "surface": "android.intent.action.BATTERY_CHANGED:plugged",
+        "duration_ms": 2,
+        "reason": "NO_EXPECTATION"
+      },
+      {
+        "field_path": "reality.power.values.design_capacity_mah",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "No safe public surface with equivalent semantics; descriptive metadata only."
+      },
+      {
+        "field_path": "reality.power.values.power_save",
+        "surface": "android.os.PowerManager.isPowerSaveMode()",
+        "duration_ms": 2,
+        "reason": "NO_EXPECTATION"
+      },
+      {
+        "field_path": "reality.power.values.temperature_c",
+        "surface": "android.intent.action.BATTERY_CHANGED:temperature",
+        "duration_ms": 0,
+        "reason": "NO_EXPECTATION"
+      },
+      {
+        "field_path": "reality.power.values.thermal_status",
+        "surface": "android.os.PowerManager.getCurrentThermalStatus()",
+        "duration_ms": 2,
+        "reason": "NO_EXPECTATION"
+      },
+      {
+        "field_path": "reality.radio.availability",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.radio.reason",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.radio.source",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.radio.values.bluetooth_name",
+        "surface": "android.bluetooth.BluetoothAdapter.getName()",
+        "duration_ms": 646,
+        "reason": "SecurityException:android.permission.BLUETOOTH_CONNECT"
+      },
+      {
+        "field_path": "reality.radio.values.bluetooth_state",
+        "surface": "android.bluetooth.BluetoothAdapter.isEnabled()",
+        "duration_ms": 19,
+        "reason": "NO_EXPECTATION"
+      },
+      {
+        "field_path": "reality.radio.values.wifi_name",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "No safe public surface with equivalent semantics; descriptive metadata only."
+      },
+      {
+        "field_path": "reality.radio.values.wifi_state",
+        "surface": "android.net.wifi.WifiManager.isWifiEnabled()",
+        "duration_ms": 2,
+        "reason": "NO_EXPECTATION"
+      },
+      {
+        "field_path": "reality.sensors.availability",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.sensors.reason",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.sensors.source",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.sensors.values.inventory",
+        "surface": "android.hardware.SensorManager.getSensorList(TYPE_ALL)",
+        "duration_ms": 0,
+        "reason": "PROFILE_SURFACE_UNAVAILABLE"
+      },
+      {
+        "field_path": "reality.sensors.values.inventory[].max_delay_us",
+        "surface": "android.hardware.SensorManager.getSensorList(TYPE_ALL):max_delay_us",
+        "duration_ms": 0,
+        "reason": "Scoped descriptor getter; does not change sampling or sensor events. Phase 2 implementation is locally tested; physical isolation/cold/restoration evidence is pending."
+      },
+      {
+        "field_path": "reality.sensors.values.inventory[].min_delay_us",
+        "surface": "android.hardware.SensorManager.getSensorList(TYPE_ALL):min_delay_us",
+        "duration_ms": 0,
+        "reason": "Scoped descriptor getter; does not change sampling or sensor events. Phase 2 implementation is locally tested; physical isolation/cold/restoration evidence is pending."
+      },
+      {
+        "field_path": "reality.sensors.values.inventory[].name",
+        "surface": "android.hardware.SensorManager.getSensorList(TYPE_ALL):name",
+        "duration_ms": 0,
+        "reason": "Scoped descriptor getter for a uniquely declared real sensor type. Phase 2 implementation is locally tested; physical isolation/cold/restoration evidence is pending."
+      },
+      {
+        "field_path": "reality.sensors.values.inventory[].range",
+        "surface": "android.hardware.SensorManager.getSensorList(TYPE_ALL):range",
+        "duration_ms": 0,
+        "reason": "Scoped descriptor getter; does not change measured events. Phase 2 implementation is locally tested; physical isolation/cold/restoration evidence is pending."
+      },
+      {
+        "field_path": "reality.sensors.values.inventory[].resolution",
+        "surface": "android.hardware.SensorManager.getSensorList(TYPE_ALL):resolution",
+        "duration_ms": 0,
+        "reason": "Scoped descriptor getter; does not change measured events. Phase 2 implementation is locally tested; physical isolation/cold/restoration evidence is pending."
+      },
+      {
+        "field_path": "reality.sensors.values.inventory[].type",
+        "surface": "android.hardware.SensorManager.getSensorList(TYPE_ALL):type",
+        "duration_ms": 0,
+        "reason": "Real sensor type is preserved; inventory filtering only, no type substitution. Phase 2 implementation is locally tested; physical isolation/cold/restoration evidence is pending."
+      },
+      {
+        "field_path": "reality.webview.availability",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.webview.reason",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.webview.source",
+        "surface": null,
+        "duration_ms": 0,
+        "reason": "Local provenance or inventory metadata; never runtime-applied."
+      },
+      {
+        "field_path": "reality.webview.values.provider",
+        "surface": "android.webkit.WebView.getCurrentWebViewPackage().packageName",
+        "duration_ms": 11,
+        "reason": "PROFILE_SURFACE_UNAVAILABLE"
+      },
+      {
+        "field_path": "reality.webview.values.user_agent",
+        "surface": "android.webkit.WebSettings.getUserAgentString()",
+        "duration_ms": 1,
+        "reason": "UNMAPPED"
+      },
+      {
+        "field_path": "reality.webview.values.version",
+        "surface": "android.webkit.WebView.getCurrentWebViewPackage().versionName",
+        "duration_ms": 8,
+        "reason": "PROFILE_SURFACE_UNAVAILABLE"
+      }
+    ]
+  }
+}

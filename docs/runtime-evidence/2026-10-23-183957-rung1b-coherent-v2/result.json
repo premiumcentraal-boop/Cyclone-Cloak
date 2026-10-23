@@ -1,0 +1,14 @@
+{
+  "result": "STOPPED",
+  "phase": "COHERENT_FIXTURE_VALIDATION",
+  "reason": "OBSERVED_WEBVIEW_UA_REJECTED_BY_LINKED_BASE_UA_FORMAT",
+  "authoring_complete": true,
+  "authoring_complete_log_observed": true,
+  "fixture_unchanged": true,
+  "normal_captures": 0,
+  "measurement_promotions": 0,
+  "production_equal": true,
+  "module_immutable_equal": true,
+  "no_release": true,
+  "commit": "d4f0a5cb5f4d70bacaeb0b8ecdff184eff154150"
+}

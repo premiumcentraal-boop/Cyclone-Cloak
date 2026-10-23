@@ -1,0 +1,283 @@
+{
+  "format": 1,
+  "fixture": "a",
+  "package": "dev.cyclone.cloak.probe.diag",
+  "uid": 10316,
+  "pid": 18295,
+  "request_id": "filesystem-2026-10-21-222128-0-1",
+  "session_generation": 1,
+  "profile_sha256": "da878a8a5c51ef62324fd977d85c06fd830fa9c3896a1060621dbfc4e02efa98",
+  "status": "FAIL",
+  "reason": "CAPTURE_FAILED",
+  "error": "NullPointerException",
+  "failed_row_id": "",
+  "rows": [
+    {
+      "id": "build.MANUFACTURER"
+    },
+    {
+      "id": "build.BRAND"
+    },
+    {
+      "id": "build.MODEL"
+    },
+    {
+      "id": "build.DEVICE"
+    },
+    {
+      "id": "build.PRODUCT"
+    },
+    {
+      "id": "build.HARDWARE"
+    },
+    {
+      "id": "build.FINGERPRINT"
+    },
+    {
+      "id": "build.ID"
+    },
+    {
+      "id": "build.BOOTLOADER"
+    },
+    {
+      "id": "build.SERIAL"
+    },
+    {
+      "id": "build.getSerial"
+    },
+    {
+      "id": "build.TIME"
+    },
+    {
+      "id": "build.TYPE"
+    },
+    {
+      "id": "build.TAGS"
+    },
+    {
+      "id": "version.SDK_INT"
+    },
+    {
+      "id": "version.RELEASE"
+    },
+    {
+      "id": "version.INCREMENTAL"
+    },
+    {
+      "id": "version.SECURITY_PATCH"
+    },
+    {
+      "id": "build.getRadioVersion"
+    },
+    {
+      "id": "properties.java.ro.product.model"
+    },
+    {
+      "id": "properties.native.ro.product.model"
+    },
+    {
+      "id": "properties.java.ro.product.manufacturer"
+    },
+    {
+      "id": "properties.native.ro.product.manufacturer"
+    },
+    {
+      "id": "properties.java.ro.product.brand"
+    },
+    {
+      "id": "properties.native.ro.product.brand"
+    },
+    {
+      "id": "properties.java.ro.product.device"
+    },
+    {
+      "id": "properties.native.ro.product.device"
+    },
+    {
+      "id": "properties.java.ro.product.name"
+    },
+    {
+      "id": "properties.native.ro.product.name"
+    },
+    {
+      "id": "properties.java.ro.build.version.sdk"
+    },
+    {
+      "id": "properties.native.ro.build.version.sdk"
+    },
+    {
+      "id": "properties.java.ro.build.fingerprint"
+    },
+    {
+      "id": "properties.native.ro.build.fingerprint"
+    },
+    {
+      "id": "properties.java.ro.serialno"
+    },
+    {
+      "id": "properties.native.ro.serialno"
+    },
+    {
+      "id": "properties.java.ro.sf.lcd_density"
+    },
+    {
+      "id": "properties.native.ro.sf.lcd_density"
+    },
+    {
+      "id": "properties.java.persist.sys.timezone"
+    },
+    {
+      "id": "properties.native.persist.sys.timezone"
+    },
+    {
+      "id": "properties.nativeCallback.ro.product.model"
+    },
+    {
+      "id": "telephony.simState"
+    },
+    {
+      "id": "telephony.phoneType"
+    },
+    {
+      "id": "telephony.roaming"
+    },
+    {
+      "id": "telephony.imei0"
+    },
+    {
+      "id": "telephony.imei1"
+    },
+    {
+      "id": "telephony.deviceId"
+    },
+    {
+      "id": "telephony.simSerial"
+    },
+    {
+      "id": "telephony.phoneCount"
+    },
+    {
+      "id": "telephony.activeModemCount"
+    },
+    {
+      "id": "telephony.networkType"
+    },
+    {
+      "id": "telephony.dataNetworkType"
+    },
+    {
+      "id": "operator.networkNumeric"
+    },
+    {
+      "id": "operator.simNumeric"
+    },
+    {
+      "id": "operator.networkName"
+    },
+    {
+      "id": "operator.simName"
+    },
+    {
+      "id": "operator.networkCountry"
+    },
+    {
+      "id": "operator.simCountry"
+    },
+    {
+      "id": "telephony.subscriberId"
+    },
+    {
+      "id": "settings.secure.androidId"
+    },
+    {
+      "id": "settings.provider.androidId"
+    },
+    {
+      "id": "settings.unrelatedControl"
+    },
+    {
+      "id": "wifi.objectMac"
+    },
+    {
+      "id": "wifi.serviceMac"
+    },
+    {
+      "id": "wifi.bssid"
+    },
+    {
+      "id": "wifi.linkSpeed"
+    },
+    {
+      "id": "wifi.ssid"
+    },
+    {
+      "id": "bluetooth.address"
+    },
+    {
+      "id": "bluetooth.name"
+    },
+    {
+      "id": "advertising.id"
+    },
+    {
+      "id": "drm.deviceUniqueId"
+    },
+    {
+      "id": "display.resources.width"
+    },
+    {
+      "id": "display.resources.height"
+    },
+    {
+      "id": "display.resources.density"
+    },
+    {
+      "id": "display.real.width"
+    },
+    {
+      "id": "display.real.height"
+    },
+    {
+      "id": "display.real.density"
+    },
+    {
+      "id": "display.refresh"
+    },
+    {
+      "id": "camera.characteristics"
+    },
+    {
+      "id": "sensors.list"
+    },
+    {
+      "id": "locale.default.language"
+    },
+    {
+      "id": "locale.default.country"
+    },
+    {
+      "id": "locale.resources.language"
+    },
+    {
+      "id": "locale.resources.country"
+    },
+    {
+      "id": "timezone.default"
+    },
+    {
+      "id": "process.uid"
+    },
+    {
+      "id": "process.androidUser"
+    },
+    {
+      "id": "packages.visible"
+    },
+    {
+      "id": "runtime.loadedLibraries"
+    },
+    {
+      "id": "runtime.javaBridgeVisible"
+    }
+  ]
+}

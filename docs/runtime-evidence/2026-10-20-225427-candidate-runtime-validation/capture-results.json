@@ -1,0 +1,218 @@
+[
+  {
+    "phase": "user-0-baseline-cold",
+    "android_user": 0,
+    "scenario_fixture": "A",
+    "reported_fixture": "external",
+    "profile_sha256": "553ddf0e6ad459157f838f0d01fc040a1ecadd3f8ecb8aba2dff2a4889f52c77",
+    "published_sha256": null,
+    "profile_published_match": null,
+    "pid": 25736,
+    "process_reused": false,
+    "sections": {
+      "legacy": {
+        "PASS": 32,
+        "FAIL": 37,
+        "BLOCKED": 8,
+        "OBSERVED": 12
+      },
+      "linked_parity": {
+        "FAIL": 7,
+        "PASS": 6
+      },
+      "runtime_envelope": {
+        "FAIL": 3,
+        "OBSERVED": 7,
+        "PASS": 5
+      }
+    }
+  },
+  {
+    "phase": "user-0-bound-cold",
+    "android_user": 0,
+    "scenario_fixture": "A",
+    "reported_fixture": "external",
+    "profile_sha256": "553ddf0e6ad459157f838f0d01fc040a1ecadd3f8ecb8aba2dff2a4889f52c77",
+    "published_sha256": "553ddf0e6ad459157f838f0d01fc040a1ecadd3f8ecb8aba2dff2a4889f52c77",
+    "profile_published_match": true,
+    "pid": 27124,
+    "process_reused": false,
+    "sections": {
+      "legacy": {
+        "PASS": 76,
+        "OBSERVED": 11,
+        "BLOCKED": 2
+      },
+      "linked_parity": {
+        "PASS": 13
+      },
+      "runtime_envelope": {
+        "MISSING": 8,
+        "OBSERVED": 3,
+        "PASS": 4
+      }
+    }
+  },
+  {
+    "phase": "user-0-post-removal-cold",
+    "android_user": 0,
+    "scenario_fixture": "A",
+    "reported_fixture": "external",
+    "profile_sha256": "553ddf0e6ad459157f838f0d01fc040a1ecadd3f8ecb8aba2dff2a4889f52c77",
+    "published_sha256": null,
+    "profile_published_match": null,
+    "pid": 30011,
+    "process_reused": false,
+    "sections": {
+      "legacy": {
+        "PASS": 32,
+        "FAIL": 37,
+        "BLOCKED": 8,
+        "OBSERVED": 12
+      },
+      "linked_parity": {
+        "FAIL": 7,
+        "PASS": 6
+      },
+      "runtime_envelope": {
+        "FAIL": 3,
+        "OBSERVED": 7,
+        "PASS": 5
+      }
+    }
+  },
+  {
+    "phase": "user-0-post-removal-warm",
+    "android_user": 0,
+    "scenario_fixture": "A",
+    "reported_fixture": "external",
+    "profile_sha256": "553ddf0e6ad459157f838f0d01fc040a1ecadd3f8ecb8aba2dff2a4889f52c77",
+    "published_sha256": null,
+    "profile_published_match": null,
+    "pid": 27124,
+    "process_reused": true,
+    "sections": {
+      "legacy": {
+        "PASS": 76,
+        "OBSERVED": 11,
+        "BLOCKED": 2
+      },
+      "linked_parity": {
+        "PASS": 13
+      },
+      "runtime_envelope": {
+        "MISSING": 8,
+        "OBSERVED": 3,
+        "PASS": 4
+      }
+    }
+  },
+  {
+    "phase": "user-17-baseline-cold",
+    "android_user": 17,
+    "scenario_fixture": "B",
+    "reported_fixture": "external",
+    "profile_sha256": "d954dd6f25d7cfe8c4f32f645d0ce9f0cda3116e05a936d317206fdd23a0866c",
+    "published_sha256": null,
+    "profile_published_match": null,
+    "pid": 26024,
+    "process_reused": false,
+    "sections": {
+      "legacy": {
+        "PASS": 22,
+        "FAIL": 46,
+        "BLOCKED": 12,
+        "OBSERVED": 9
+      },
+      "linked_parity": {
+        "FAIL": 7,
+        "PASS": 6
+      },
+      "runtime_envelope": {
+        "FAIL": 4,
+        "OBSERVED": 7,
+        "PASS": 4
+      }
+    }
+  },
+  {
+    "phase": "user-17-bound-cold",
+    "android_user": 17,
+    "scenario_fixture": "B",
+    "reported_fixture": "external",
+    "profile_sha256": "d954dd6f25d7cfe8c4f32f645d0ce9f0cda3116e05a936d317206fdd23a0866c",
+    "published_sha256": "d954dd6f25d7cfe8c4f32f645d0ce9f0cda3116e05a936d317206fdd23a0866c",
+    "profile_published_match": true,
+    "pid": 27789,
+    "process_reused": false,
+    "sections": {
+      "legacy": {
+        "PASS": 75,
+        "OBSERVED": 8,
+        "BLOCKED": 6
+      },
+      "linked_parity": {
+        "PASS": 13
+      },
+      "runtime_envelope": {
+        "MISSING": 8,
+        "OBSERVED": 3,
+        "PASS": 4
+      }
+    }
+  },
+  {
+    "phase": "user-17-post-removal-cold",
+    "android_user": 17,
+    "scenario_fixture": "B",
+    "reported_fixture": "external",
+    "profile_sha256": "d954dd6f25d7cfe8c4f32f645d0ce9f0cda3116e05a936d317206fdd23a0866c",
+    "published_sha256": null,
+    "profile_published_match": null,
+    "pid": 31170,
+    "process_reused": false,
+    "sections": {
+      "legacy": {
+        "PASS": 22,
+        "FAIL": 46,
+        "BLOCKED": 12,
+        "OBSERVED": 9
+      },
+      "linked_parity": {
+        "FAIL": 7,
+        "PASS": 6
+      },
+      "runtime_envelope": {
+        "FAIL": 4,
+        "OBSERVED": 7,
+        "PASS": 4
+      }
+    }
+  },
+  {
+    "phase": "user-17-post-removal-warm",
+    "android_user": 17,
+    "scenario_fixture": "B",
+    "reported_fixture": "external",
+    "profile_sha256": "d954dd6f25d7cfe8c4f32f645d0ce9f0cda3116e05a936d317206fdd23a0866c",
+    "published_sha256": null,
+    "profile_published_match": null,
+    "pid": 27789,
+    "process_reused": true,
+    "sections": {
+      "legacy": {
+        "PASS": 75,
+        "OBSERVED": 8,
+        "BLOCKED": 6
+      },
+      "linked_parity": {
+        "PASS": 13
+      },
+      "runtime_envelope": {
+        "MISSING": 8,
+        "OBSERVED": 3,
+        "PASS": 4
+      }
+    }
+  }
+]

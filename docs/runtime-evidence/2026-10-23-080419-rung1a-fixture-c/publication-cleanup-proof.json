@@ -1,0 +1,14 @@
+{
+  "users": {
+    "0": {
+      "binding_absent": true,
+      "body": "ABSENT"
+    },
+    "17": {
+      "binding_absent": true,
+      "body": "ABSENT"
+    }
+  },
+  "entries": 327,
+  "scratch": "ABSENT"
+}

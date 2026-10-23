@@ -1,0 +1,10 @@
+{
+  "candidate_version": "0.11.0-alpha.24",
+  "code": 48,
+  "commit": "57e90bccdd922350f7f070b9b6bf7102e48288e1",
+  "source_checkout": "C:\\Users\\Agent\\AppData\\Local\\Temp\\cloak-alpha24-host-runtime-clean",
+  "source_tracked_clean": true,
+  "diagnostics_apk_sha256": "f8c4fdb5b40405153c4d29e468680c675b53800445b6496fac8bc8c584ea5b4e",
+  "build_command": "$env:JAVA_HOME=\"C:/Program Files/Eclipse Adoptium/jdk-17.0.20.101-hotspot\"; $env:ANDROID_HOME=\"C:/Users/Agent/android-sdk\"; & \"$env:TEMP/cloak-build/gradle-8.11.1/bin/gradle.bat\" -p \"$env:TEMP/cloak-alpha24-host-runtime-clean/android\" :probe:assembleDiagnosticsDebug --offline --no-daemon --console=plain",
+  "release_tag_exists": false
+}

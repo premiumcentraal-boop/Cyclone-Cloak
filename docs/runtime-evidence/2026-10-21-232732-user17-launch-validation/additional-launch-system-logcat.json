@@ -1,0 +1,6 @@
+{
+  "exit_code": 0,
+  "stderr": "",
+  "lines": [],
+  "policy": "read-only bounded ActivityManager/ActivityTaskManager window, diagnostics package only"
+}

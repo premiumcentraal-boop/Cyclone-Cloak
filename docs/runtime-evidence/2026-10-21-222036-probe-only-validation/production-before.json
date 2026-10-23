@@ -1,0 +1,21 @@
+{
+  "version": "0.11.0-alpha.27",
+  "version_code": 51,
+  "0": {
+    "paths": [
+      "/data/app/~~oxxPf3k1Ggejx1aZFZie2A==/dev.cyclone.cloak-FKdzo6WgSOJ9SiRjvLslLQ==/base.apk"
+    ],
+    "apk_hashes": [
+      "df37f86da7ea617fcd1aad65504b23c95aaad56a1f9726ca3270846f8165cffc"
+    ]
+  },
+  "17": {
+    "paths": [
+      "/data/app/~~oxxPf3k1Ggejx1aZFZie2A==/dev.cyclone.cloak-FKdzo6WgSOJ9SiRjvLslLQ==/base.apk"
+    ],
+    "apk_hashes": [
+      "df37f86da7ea617fcd1aad65504b23c95aaad56a1f9726ca3270846f8165cffc"
+    ]
+  },
+  "permissions": []
+}

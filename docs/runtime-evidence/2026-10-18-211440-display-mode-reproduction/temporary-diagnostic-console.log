@@ -1,0 +1,8 @@
+CYCLE 1 OF 1
+user-0-baseline-cold {"PASS": 27, "FAIL": 47, "BLOCKED": 8, "OBSERVED": 7} reused=False
+user-17-baseline-cold {"FAIL": 58, "BLOCKED": 12, "PASS": 15, "OBSERVED": 4} reused=False
+STOP LINKED_PARITY_MISMATCH
+EVIDENCE C:\Users\Agent\Cyclone\cloak-repo\docs\runtime-evidence\2026-10-18-211440-display-mode-reproduction\temporary-diagnostic-cycle
+RESULT FAIL
+LIFECYCLE_EVIDENCE C:\Users\Agent\Cyclone\cloak-repo\docs\runtime-evidence\2026-10-18-211440-display-mode-reproduction\temporary-diagnostic-cycle
+LIFECYCLE_RESULT FAIL

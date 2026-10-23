@@ -1,0 +1,24 @@
+{
+  "capture1_vs2": {
+    "common_pass_rows": 108,
+    "different_values": [],
+    "new_pass_rows_in2": [
+      "device_reality:reality.packages.installed",
+      "legacy:bluetooth.address"
+    ],
+    "no_longer_pass_in2": [],
+    "common_pass_rows_with_comparable_digests": 33,
+    "different_comparable_digests": [],
+    "legacy_value_limitation": "Legacy raw values/digests are not retained by redaction; compare their PASS states/counts, not absent values."
+  },
+  "capture2_vs3": {
+    "common_pass_rows": 110,
+    "different_values": [],
+    "new_pass_rows_in3": [],
+    "no_longer_pass_in3": [],
+    "common_pass_rows_with_comparable_digests": 34,
+    "different_comparable_digests": [],
+    "legacy_value_limitation": "Legacy raw values/digests are not retained by redaction; compare their PASS states/counts, not absent values."
+  },
+  "legacy_counts_2_equal_3": true
+}

@@ -1,0 +1,14 @@
+{
+  "result": "NOT_VALIDATED",
+  "phase": "user-17-permission-setup",
+  "reason": "PERMISSION_UI_NOT_INTERACTIVE",
+  "location_dialog_remained": true,
+  "normal_ui_tap_attempts": 1,
+  "alternate_taps": 0,
+  "forced_close": 0,
+  "shell_grants": 0,
+  "user17_measured_captures": 0,
+  "permission_setup_not_time_bounded": true,
+  "gateway_control": "DEVICE_DISCONNECTED while ADB remains reachable; no alternate control mutation attempted",
+  "no_code_or_fixture_change_in_resume": true
+}

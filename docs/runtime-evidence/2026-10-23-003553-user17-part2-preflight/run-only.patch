@@ -1,0 +1,134 @@
+--- a/tools/run_standalone_probe_validation.py
++++ b/tools/run_standalone_probe_validation.py
+@@ -25,7 +25,7 @@
+ PACKAGE = 'dev.cyclone.cloak.probe.diag'
+ APK = ROOT/'android/probe/build/outputs/apk/diagnostics/debug/probe-diagnostics-debug.apk'
+ STAMP = datetime.datetime.now(datetime.timezone(datetime.timedelta(hours=2))).strftime('%Y-%m-%d-%H%M%S')
+-OUT = ROOT/'docs/runtime-evidence'/f'{STAMP}-user17-switch-validation'
++OUT = ROOT/'docs/runtime-evidence'/f'{STAMP}-user17-fixture-ab-validation'
+ COMMANDS = []
+ SWITCH_EVENTS = []
+ 
+@@ -80,8 +80,7 @@
+ def cold_launch(shell_command, user, request):
+     """Only stop the diagnostics package in the selected existing user."""
+     shell_command(f'am force-stop --user {user} {PACKAGE}')
+-    return shell_command(f'am start --user {user} -n {PACKAGE}/dev.cyclone.cloak.probe.DiagnosticsProbeActivity '
+-        f'--es request_id {request} --es fixture a --ei expected_user {user} --ez no_permission_prompt true')
++    return shell_command(lifecycle_launch_command(user, request))
+ 
+ 
+ def evidence_paths(user, name):
+@@ -174,22 +173,30 @@
+         if record is not None: record(event)
+ 
+ 
++def fixture_for_user(user):
++    if type(user) is not int or user not in (0, 17):
++        raise ValueError('UNSUPPORTED_STANDALONE_USER')
++    return 'a' if user == 0 else 'b'
++
++
+ def prepare_external_fixture(user):
+     # Lifecycle launch sets external_profile=true. Supply only the synthetic asset,
+     # never create a runtime binding or publish a profile body.
+     import zipfile
++    fixture = fixture_for_user(user)
+     with zipfile.ZipFile(APK) as archive:
+-        body = archive.read('assets/profile-a.json')
++        body = archive.read(f'assets/profile-{fixture}.json')
+     command = f'run-as {PACKAGE} --user {user} sh -c '+shlex.quote('mkdir -p files; cat > files/expected-profile.json')
+     result = adb_result('shell', command, data=body.decode('utf8'))
+     if result['exit_code']: raise RuntimeError('EXPECTED_PROFILE_WRITE_FAILED')
+     check = shell(f'run-as {PACKAGE} --user {user} sha256sum files/expected-profile.json')
+     digest = hashlib.sha256(body).hexdigest()
+     if check.split()[0] != digest: raise RuntimeError('EXPECTED_PROFILE_HASH_MISMATCH')
+-    return dict(fixture='a', profile_sha256=digest, bytes=len(body), source='built APK synthetic asset')
+-
+-
+-def lifecycle_launch_command(user, request, fixture='a'):
++    return dict(fixture=fixture, profile_sha256=digest, bytes=len(body), source='built APK synthetic asset')
++
++
++def lifecycle_launch_command(user, request):
++    fixture = fixture_for_user(user)
+     return (f'am start --user {user} -n {PACKAGE}/dev.cyclone.cloak.probe.DiagnosticsProbeActivity '
+         f'--activity-clear-top --activity-single-top --ez external_profile true --ez no_permission_prompt true '
+         f'--ei expected_user {user} --es fixture {fixture} --es request_id {request}')
+@@ -337,7 +344,7 @@
+                     raise RuntimeError(f'PROBE_CAPTURE_FAILED_USER_{user}_CAPTURE_{repeat}')
+                 if report.get('package') != PACKAGE or int(report['uid'])//100000 != user:
+                     raise RuntimeError('REPORTED_USER_OR_PACKAGE_MISMATCH')
+-                if report.get('fixture') != 'a' or report.get('profile_sha256') != launch['expected_profile']['profile_sha256']:
++                if report.get('fixture') != fixture_for_user(user) or report.get('profile_sha256') != launch['expected_profile']['profile_sha256']:
+                     raise RuntimeError('REPORT_FIXTURE_OR_PROFILE_HASH_MISMATCH')
+                 ids = [row.get('id') for row in report.get('rows', [])]
+                 if len(ids) != 89 or len(set(ids)) != 89 or not all(ids):
+@@ -389,7 +396,7 @@
+         save('commands.json', COMMANDS)
+         completed = not failure and len(results)==3 and cleanup.get('removed') and cleanup.get('returned_to_user_0') and unchanged
+         completed = completed and not any(r['result']=='CHANGED' for r in stability)
+-        summary = ['# User-17 switch-path standalone validation', '', 'Result: '+('COMPLETE' if completed else 'INCOMPLETE'),
++        summary = ['# User-17 switch-path fixture A/B standalone validation', '', 'Result: '+('COMPLETE' if completed else 'INCOMPLETE'),
+             'Failure: '+str(failure), 'APK SHA-256: '+hashlib.sha256(APK.read_bytes()).hexdigest(),
+             'Production APK/version/permission snapshot unchanged: '+str(unchanged),
+             'Diagnostics uninstall confirmed: '+str(cleanup.get('removed',False)), '',
+--- a/android/probe/tests/test_user_switch_capture.py
++++ b/android/probe/tests/test_user_switch_capture.py
+@@ -1,6 +1,9 @@
+ import ast
++import hashlib
+ import sys
++import tempfile
+ import unittest
++import zipfile
+ from pathlib import Path
+ from unittest.mock import patch
+ 
+@@ -9,6 +12,37 @@
+ 
+ 
+ class UserSwitchCaptureTest(unittest.TestCase):
++    def test_per_user_fixture_is_shared_by_asset_and_launch_selection(self):
++        for user, fixture in ((0, 'a'), (17, 'b')):
++            self.assertEqual(runner.fixture_for_user(user), fixture)
++            self.assertIn(f'--es fixture {fixture} ', runner.lifecycle_launch_command(user, 'request'))
++        for user in (True, -1, 18):
++            with self.assertRaises(ValueError): runner.fixture_for_user(user)
++
++    def test_fixture_staging_uses_matching_apk_asset_and_hash(self):
++        with tempfile.TemporaryDirectory() as directory:
++            apk = Path(directory) / 'probe.apk'
++            with zipfile.ZipFile(apk, 'w') as archive:
++                archive.writestr('assets/profile-a.json', '{"synthetic":"a"}')
++                archive.writestr('assets/profile-b.json', '{"synthetic":"b"}')
++            for user, fixture in ((0, 'a'), (17, 'b')):
++                body = '{"synthetic":"' + fixture + '"}'
++                digest = hashlib.sha256(body.encode()).hexdigest()
++                with patch.object(runner, 'APK', apk), patch.object(runner, 'adb_result', return_value=dict(exit_code=0)) as adb, patch.object(runner, 'shell', return_value=digest + '  files/expected-profile.json'):
++                    staged = runner.prepare_external_fixture(user)
++                self.assertEqual(staged['fixture'], fixture)
++                self.assertEqual(staged['profile_sha256'], digest)
++                self.assertEqual(adb.call_args.kwargs['data'], body)
++                self.assertIn(f'--user {user} ', adb.call_args.args[1])
++
++    def test_missing_user17_asset_does_not_fall_back_to_fixture_a(self):
++        with tempfile.TemporaryDirectory() as directory:
++            apk = Path(directory) / 'probe.apk'
++            with zipfile.ZipFile(apk, 'w') as archive: archive.writestr('assets/profile-a.json', '{}')
++            with patch.object(runner, 'APK', apk), patch.object(runner, 'adb_result') as adb:
++                with self.assertRaises(KeyError): runner.prepare_external_fixture(17)
++            adb.assert_not_called()
++
+     def test_switch_waits_for_active_user_before_launch(self):
+         commands=[]
+         users=iter(('RUNNING_UNLOCKED','0','0','17'))
+@@ -41,7 +75,7 @@
+ 
+     def test_launch_command_exactly_matches_lifecycle_sequence(self):
+         command=runner.lifecycle_launch_command(17,'request')
+-        self.assertEqual(command,f'am start --user 17 -n {runner.PACKAGE}/dev.cyclone.cloak.probe.DiagnosticsProbeActivity --activity-clear-top --activity-single-top --ez external_profile true --ez no_permission_prompt true --ei expected_user 17 --es fixture a --es request_id request')
++        self.assertEqual(command,f'am start --user 17 -n {runner.PACKAGE}/dev.cyclone.cloak.probe.DiagnosticsProbeActivity --activity-clear-top --activity-single-top --ez external_profile true --ez no_permission_prompt true --ei expected_user 17 --es fixture b --es request_id request')
+ 
+     def test_return_to_zero_uses_same_switch_and_wait(self):
+         with patch.object(runner,'shell',side_effect=['RUNNING_UNLOCKED','17','0']), patch.object(runner,'adb_result',return_value=dict(stdout='',stderr='',exit_code=0)) as adb:

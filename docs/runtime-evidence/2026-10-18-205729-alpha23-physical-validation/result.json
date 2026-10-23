@@ -1,0 +1,70 @@
+{
+  "result": "STOPPED",
+  "failed_phase": "post-update-production-preservation-audit",
+  "reason": "NEWLY_ACCESSIBLE_BINDING_STORE_NOT_IN_BEFORE_AUDIT",
+  "production_delta": [
+    {
+      "path": [
+        "binding_stores",
+        "count"
+      ],
+      "change": "changed",
+      "before": 1,
+      "after": 2
+    },
+    {
+      "path": [
+        "binding_stores",
+        "files",
+        "4c489272062feb8619282bd0a565fb756cc6ffcbc711bcd7c4933e318d1cfb44"
+      ],
+      "change": "added",
+      "after": "49cd6eb8faf3d0360158deec052360749e106df4f3ad4078dc0700d846994f7b"
+    },
+    {
+      "path": [
+        "binding_stores",
+        "sha256"
+      ],
+      "change": "changed",
+      "before": "986dd5865f772575a9780df5a3ab75171887530ec0c2e40fade8d25608d71d88",
+      "after": "8d97707ca5269f849bff1ada4c9de13a4d282ce4b6fcf846716bef13bc76bcf2"
+    }
+  ],
+  "permission_delta": [],
+  "unchanged_components": [
+    "production_entry_count",
+    "index_sha256",
+    "index_bytes_sha256",
+    "entry_hashes",
+    "published_bodies",
+    "publisher_shares",
+    "module_files"
+  ],
+  "binding_store_metadata": {
+    "0": {
+      "path_sha256": "5c2183bf755c04d7fc4b78c92fd60e011dbbdaca6a8df82501528d5d19e9c409",
+      "mtime_size_and_content_sha256": "1791994703 90150\nfbd3d7a751a4371c92151fe5a24c9113ac03d07b8d4b8f79afd089583210c24c  /data/user/0/dev.cyclone.cloak/no_backup/cloak-bindings-v1.json"
+    },
+    "17": {
+      "path_sha256": "4c489272062feb8619282bd0a565fb756cc6ffcbc711bcd7c4933e318d1cfb44",
+      "mtime_size_and_content_sha256": "1792106489 90150\n49cd6eb8faf3d0360158deec052360749e106df4f3ad4078dc0700d846994f7b  /data/user/17/dev.cyclone.cloak/no_backup/cloak-bindings-v1.json"
+    }
+  },
+  "cleanup": {
+    "probe_captures_started": false,
+    "temporary_bindings_created": false,
+    "temporary_profile_bodies_created": false,
+    "temporary_private_files_created": false,
+    "diagnostics_entries_absent": {
+      "0": true,
+      "17": true
+    },
+    "module_install_scratch_removed": true,
+    "reboot_count_requested": 1
+  },
+  "physical_parity": "NOT_RUN",
+  "lifecycle_cycles_completed": 0,
+  "limitation": "User 17 was stopped during before-audit. Its credential-encrypted binding store became accessible after unlock; no before content hash exists, so unchanged contents cannot be proved. No binding writer or temporary overlay was run.",
+  "platform_verdict": false
+}

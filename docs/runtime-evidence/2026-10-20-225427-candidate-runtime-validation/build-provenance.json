@@ -1,0 +1,30 @@
+{
+  "format": 1,
+  "source_commit": "1c9ce900930b7c52d3d7130b8ca8a741e183b73a",
+  "source": "current main candidate, not alpha.27 release binaries",
+  "release_metadata": "0.11.0-alpha.27 / 51 retained",
+  "artifacts": {
+    "companion_debug": {
+      "path": "android/app/build/outputs/apk/debug/app-debug.apk",
+      "sha256": "dd38497831a362cd011831376feaae0ea4e1073b76a1f26946c4007ce00fb588",
+      "size": 62202582
+    },
+    "module": {
+      "path": "android/module/build/module/cyclone-cloak-0.11.0-alpha.27.zip",
+      "sha256": "e0bfd222d65f648be73895280e457cb8cf428d0d5c8e38d7c34b88e5692612fd",
+      "size": 1809719
+    },
+    "play_debug": {
+      "path": "android/playEvidence/build/outputs/apk/debug/playEvidence-debug.apk",
+      "sha256": "ba342e05d495f640700893161cb2c20d61e1b7dca50c50877f6cad7d121ebd8c",
+      "size": 4145534
+    },
+    "probe_diagnostics": {
+      "path": "android/probe/build/outputs/apk/diagnostics/debug/probe-diagnostics-debug.apk",
+      "sha256": "e4f6d3d13a810f1e17ef4d3ae0317e01e78d9cdc37bbb8d483f1565bf1f4e9d8",
+      "size": 3644336
+    }
+  },
+  "installed_companion_certificate_sha256": "17ca3617b0cbaf250d2ef03e945b319e57695de6d977c652ded243ad5656f553",
+  "local_debug_certificate_sha256": "a9def4d3cebaf49f69f97f99b2159422f58a1c4cf85dbc22bef412bedb35b2a3"
+}

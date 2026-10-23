@@ -1,0 +1,611 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/premiumcentraal-boop/Cyclone-Cloak/schema/filesystem-observations.schema.json",
+  "title": "Filesystem observations format 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "format",
+    "rows"
+  ],
+  "properties": {
+    "format": {
+      "const": 1
+    },
+    "rows": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "oneOf": [
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "source",
+              "status",
+              "reason",
+              "sha256",
+              "byte_count",
+              "line_count",
+              "duration_ms"
+            ],
+            "properties": {
+              "id": {
+                "const": "diagnostics.filesystem.build_prop"
+              },
+              "source": {
+                "const": "/system/build.prop"
+              },
+              "status": {
+                "enum": [
+                  "OBSERVED",
+                  "BLOCKED",
+                  "MISSING"
+                ]
+              },
+              "reason": {
+                "enum": [
+                  "OBSERVATION_ONLY_NO_EXPECTATION",
+                  "PERMISSION_DENIED",
+                  "READ_UNAVAILABLE",
+                  "READ_LIMIT_EXCEEDED"
+                ]
+              },
+              "sha256": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "byte_count": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 0,
+                "maximum": 1048576
+              },
+              "line_count": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 0,
+                "maximum": 1048576
+              },
+              "duration_ms": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "status": {
+                      "const": "OBSERVED"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "reason": {
+                      "const": "OBSERVATION_ONLY_NO_EXPECTATION"
+                    },
+                    "sha256": {
+                      "type": "string"
+                    },
+                    "byte_count": {
+                      "type": "integer"
+                    },
+                    "line_count": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "else": {
+                  "properties": {
+                    "sha256": {
+                      "const": null
+                    },
+                    "byte_count": {
+                      "const": null
+                    },
+                    "line_count": {
+                      "const": null
+                    }
+                  },
+                  "allOf": [
+                    {
+                      "if": {
+                        "properties": {
+                          "status": {
+                            "const": "BLOCKED"
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "reason": {
+                            "const": "PERMISSION_DENIED"
+                          }
+                        }
+                      },
+                      "else": {
+                        "properties": {
+                          "reason": {
+                            "enum": [
+                              "READ_UNAVAILABLE",
+                              "READ_LIMIT_EXCEEDED"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "source",
+              "status",
+              "reason",
+              "sha256",
+              "byte_count",
+              "line_count",
+              "duration_ms"
+            ],
+            "properties": {
+              "id": {
+                "const": "diagnostics.filesystem.proc_version"
+              },
+              "source": {
+                "const": "/proc/version"
+              },
+              "status": {
+                "enum": [
+                  "OBSERVED",
+                  "BLOCKED",
+                  "MISSING"
+                ]
+              },
+              "reason": {
+                "enum": [
+                  "OBSERVATION_ONLY_NO_EXPECTATION",
+                  "PERMISSION_DENIED",
+                  "READ_UNAVAILABLE",
+                  "READ_LIMIT_EXCEEDED"
+                ]
+              },
+              "sha256": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "byte_count": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 0,
+                "maximum": 1048576
+              },
+              "line_count": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 0,
+                "maximum": 1048576
+              },
+              "duration_ms": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "status": {
+                      "const": "OBSERVED"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "reason": {
+                      "const": "OBSERVATION_ONLY_NO_EXPECTATION"
+                    },
+                    "sha256": {
+                      "type": "string"
+                    },
+                    "byte_count": {
+                      "type": "integer"
+                    },
+                    "line_count": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "else": {
+                  "properties": {
+                    "sha256": {
+                      "const": null
+                    },
+                    "byte_count": {
+                      "const": null
+                    },
+                    "line_count": {
+                      "const": null
+                    }
+                  },
+                  "allOf": [
+                    {
+                      "if": {
+                        "properties": {
+                          "status": {
+                            "const": "BLOCKED"
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "reason": {
+                            "const": "PERMISSION_DENIED"
+                          }
+                        }
+                      },
+                      "else": {
+                        "properties": {
+                          "reason": {
+                            "enum": [
+                              "READ_UNAVAILABLE",
+                              "READ_LIMIT_EXCEEDED"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "source",
+              "status",
+              "reason",
+              "sha256",
+              "byte_count",
+              "line_count",
+              "duration_ms"
+            ],
+            "properties": {
+              "id": {
+                "const": "diagnostics.filesystem.proc_cpuinfo"
+              },
+              "source": {
+                "const": "/proc/cpuinfo"
+              },
+              "status": {
+                "enum": [
+                  "OBSERVED",
+                  "BLOCKED",
+                  "MISSING"
+                ]
+              },
+              "reason": {
+                "enum": [
+                  "OBSERVATION_ONLY_NO_EXPECTATION",
+                  "PERMISSION_DENIED",
+                  "READ_UNAVAILABLE",
+                  "READ_LIMIT_EXCEEDED"
+                ]
+              },
+              "sha256": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "byte_count": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 0,
+                "maximum": 1048576
+              },
+              "line_count": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 0,
+                "maximum": 1048576
+              },
+              "duration_ms": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "status": {
+                      "const": "OBSERVED"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "reason": {
+                      "const": "OBSERVATION_ONLY_NO_EXPECTATION"
+                    },
+                    "sha256": {
+                      "type": "string"
+                    },
+                    "byte_count": {
+                      "type": "integer"
+                    },
+                    "line_count": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "else": {
+                  "properties": {
+                    "sha256": {
+                      "const": null
+                    },
+                    "byte_count": {
+                      "const": null
+                    },
+                    "line_count": {
+                      "const": null
+                    }
+                  },
+                  "allOf": [
+                    {
+                      "if": {
+                        "properties": {
+                          "status": {
+                            "const": "BLOCKED"
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "reason": {
+                            "const": "PERMISSION_DENIED"
+                          }
+                        }
+                      },
+                      "else": {
+                        "properties": {
+                          "reason": {
+                            "enum": [
+                              "READ_UNAVAILABLE",
+                              "READ_LIMIT_EXCEEDED"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "id",
+              "source",
+              "status",
+              "reason",
+              "sha256",
+              "byte_count",
+              "line_count",
+              "duration_ms"
+            ],
+            "properties": {
+              "id": {
+                "const": "diagnostics.filesystem.maps_snapshot"
+              },
+              "source": {
+                "const": "/proc/self/maps"
+              },
+              "status": {
+                "enum": [
+                  "OBSERVED",
+                  "BLOCKED",
+                  "MISSING"
+                ]
+              },
+              "reason": {
+                "enum": [
+                  "OBSERVATION_ONLY_NO_EXPECTATION",
+                  "PERMISSION_DENIED",
+                  "READ_UNAVAILABLE",
+                  "READ_LIMIT_EXCEEDED"
+                ]
+              },
+              "sha256": {
+                "type": [
+                  "string",
+                  "null"
+                ],
+                "pattern": "^[0-9a-f]{64}$"
+              },
+              "byte_count": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 0,
+                "maximum": 1048576
+              },
+              "line_count": {
+                "type": [
+                  "integer",
+                  "null"
+                ],
+                "minimum": 0,
+                "maximum": 1048576
+              },
+              "duration_ms": {
+                "type": "integer",
+                "minimum": 0
+              }
+            },
+            "allOf": [
+              {
+                "if": {
+                  "properties": {
+                    "status": {
+                      "const": "OBSERVED"
+                    }
+                  }
+                },
+                "then": {
+                  "properties": {
+                    "reason": {
+                      "const": "OBSERVATION_ONLY_NO_EXPECTATION"
+                    },
+                    "sha256": {
+                      "type": "string"
+                    },
+                    "byte_count": {
+                      "type": "integer"
+                    },
+                    "line_count": {
+                      "type": "integer"
+                    }
+                  }
+                },
+                "else": {
+                  "properties": {
+                    "sha256": {
+                      "const": null
+                    },
+                    "byte_count": {
+                      "const": null
+                    },
+                    "line_count": {
+                      "const": null
+                    }
+                  },
+                  "allOf": [
+                    {
+                      "if": {
+                        "properties": {
+                          "status": {
+                            "const": "BLOCKED"
+                          }
+                        }
+                      },
+                      "then": {
+                        "properties": {
+                          "reason": {
+                            "const": "PERMISSION_DENIED"
+                          }
+                        }
+                      },
+                      "else": {
+                        "properties": {
+                          "reason": {
+                            "enum": [
+                              "READ_UNAVAILABLE",
+                              "READ_LIMIT_EXCEEDED"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      },
+      "allOf": [
+        {
+          "contains": {
+            "properties": {
+              "id": {
+                "const": "diagnostics.filesystem.build_prop"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "properties": {
+              "id": {
+                "const": "diagnostics.filesystem.proc_version"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "properties": {
+              "id": {
+                "const": "diagnostics.filesystem.proc_cpuinfo"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        },
+        {
+          "contains": {
+            "properties": {
+              "id": {
+                "const": "diagnostics.filesystem.maps_snapshot"
+              }
+            },
+            "required": [
+              "id"
+            ]
+          },
+          "minContains": 1,
+          "maxContains": 1
+        }
+      ]
+    }
+  }
+}

@@ -1,0 +1,704 @@
+--------- beginning of main
+10-18 21:19:53.982 22612 22612 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:19:53.982 22612 22612 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:19:53.983 22612 22612 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:19:53.983 22612 22612 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:19:54.565 22713 22713 I CloakModule: native property hook installed
+10-18 21:19:54.565 22713 22713 I CloakModule: native property callback hook installed
+10-18 21:19:54.629 22712 22712 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:19:54.630 22712 22712 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:19:54.630 22712 22712 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:19:54.631 22712 22712 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:19:54.648 22713 22713 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:19:54.648 22713 22713 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:19:54.649 22713 22713 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:19:54.649 22713 22713 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:19:54.900 22760 22760 I CloakModule: cloaking 17:com.google.omadm.trigger (63 props)
+10-18 21:19:54.924 22760 22760 I CloakModule: native hook: dlopen failed
+10-18 21:19:54.936 22760 22760 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getImei failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.937 22760 22760 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getImei failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.937 22760 22760 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getMeid failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.938 22760 22760 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getMeid failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.938 22760 22760 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getDeviceId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.939 22760 22760 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getDeviceId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.939 22760 22760 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSimSerialNumber failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.940 22760 22760 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSimSerialNumber failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.940 22760 22760 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSubscriberId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.941 22760 22760 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSubscriberId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.941 22760 22760 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getNetworkOperatorName failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.942 22760 22760 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getNetworkOperatorName failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.943 22760 22760 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getNetworkOperator failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.943 22760 22760 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getNetworkOperator failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.944 22760 22760 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSimOperatorName failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.944 22760 22760 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSimOperatorName failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.945 22760 22760 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSimOperator failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.945 22760 22760 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSimOperator failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.946 22760 22760 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getNetworkCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.946 22760 22760 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getNetworkCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.947 22760 22760 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSimCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.948 22760 22760 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSimCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.948 22760 22760 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getPhoneCount failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.949 22760 22760 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getActiveModemCount failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.950 22760 22760 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getNetworkType failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.950 22760 22760 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getNetworkType failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.951 22760 22760 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getDataNetworkType failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.951 22760 22760 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getDataNetworkType failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.952 22760 22760 I CloakModule: [cloak-hook] hook android.provider.Settings$Secure.getString failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.952 22760 22760 I CloakModule: [cloak-hook] hook android.provider.Settings$Secure.getStringForUser failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.953 22760 22760 I CloakModule: [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.954 22760 22760 I CloakModule: [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.954 22760 22760 I CloakModule: [cloak-hook] hook android.content.res.Resources.getConfiguration failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.955 22760 22760 I CloakModule: [cloak-hook] hook java.util.TimeZone.getDefault failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.956 22760 22760 I CloakModule: [cloak-hook] hook android.net.wifi.WifiInfo.getMacAddress failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.956 22760 22760 I CloakModule: [cloak-hook] hook android.bluetooth.BluetoothAdapter.getAddress failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.957 22760 22760 I CloakModule: [cloak-hook] hook android.os.Build.getSerial failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.957 22760 22760 I CloakModule: [cloak-hook] hook android.webkit.WebView.getSettings failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.958 22760 22760 I CloakModule: [cloak-hook] hook android.media.MediaDrm.getPropertyByteArray failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.958 22760 22760 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:19:54.959 22760 22760 I CloakModule: [cloak-hook] hook android.hardware.camera2.CameraManager.getCameraCharacteristics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.960 22760 22760 I CloakModule: [cloak-hook] hook android.hardware.camera2.CameraCharacteristics.get failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.960 22760 22760 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:19:54.960 22760 22760 I CloakModule: [cloak-hook] hook android.content.res.Resources.getDisplayMetrics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.961 22760 22760 I CloakModule: [cloak-hook] hook android.view.Display.getMetrics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.961 22760 22760 I CloakModule: [cloak-hook] hook android.view.Display.getRealMetrics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.962 22760 22760 I CloakModule: [cloak-hook] hook android.view.Display.getRefreshRate failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.962 22760 22760 I CloakModule: [cloak-hook] hook android.view.Display.getMode failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.963 22760 22760 I CloakModule: [cloak-hook] hook android.view.Display.getSupportedModes failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.963 22760 22760 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:19:54.964 22760 22760 I CloakModule: [cloak-hook] hook android.app.Instrumentation.callApplicationOnCreate failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.964 22760 22760 I CloakModule: [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.965 22760 22760 I CloakModule: [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.google.omadm.trigger/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:54.965 22760 22760 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:19:55.083 22798 22798 I CloakModule: cloaking 17:com.verizon.mips.services (63 props)
+10-18 21:19:55.107 22798 22798 I CloakModule: native property hook installed
+10-18 21:19:55.107 22798 22798 I CloakModule: native property callback hook installed
+10-18 21:19:55.205 22798 22798 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:19:55.205 22798 22798 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:19:55.205 22798 22798 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:19:55.205 22798 22798 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:19:55.804 22897 22897 I CloakModule: cloaking 17:com.google.android.apps.wellbeing (63 props)
+10-18 21:19:55.833 22897 22897 I CloakModule: native property hook installed
+10-18 21:19:55.833 22897 22897 I CloakModule: native property callback hook installed
+10-18 21:19:55.931 22897 22897 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:19:55.931 22897 22897 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:19:55.931 22897 22897 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:19:55.932 22897 22897 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:19:56.221 22935 22935 I CloakModule: cloaking 17:com.google.android.photopicker (63 props)
+10-18 21:19:56.245 22935 22935 I CloakModule: native property hook installed
+10-18 21:19:56.245 22935 22935 I CloakModule: native property callback hook installed
+10-18 21:19:56.333 22935 22935 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:19:56.333 22935 22935 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:19:56.334 22935 22935 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:19:56.334 22935 22935 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:19:56.489 22958 22958 I CloakModule: cloaking 17:com.google.android.apps.messaging (63 props)
+10-18 21:19:56.532 22958 22958 I CloakModule: native property hook installed
+10-18 21:19:56.532 22958 22958 I CloakModule: native property callback hook installed
+10-18 21:19:56.639 22958 22958 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:19:56.639 22958 22958 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:19:56.640 22958 22958 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:19:56.640 22958 22958 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:19:57.027 22993 22993 I CloakModule: cloaking 17:com.android.externalstorage (63 props)
+10-18 21:19:57.048 22993 22993 I CloakModule: native hook: dlopen failed
+10-18 21:19:57.058 22993 22993 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getImei failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.059 22993 22993 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getImei failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.061 22993 22993 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getMeid failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.061 22993 22993 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getMeid failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.062 22993 22993 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getDeviceId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.062 22993 22993 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getDeviceId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.063 22993 22993 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSimSerialNumber failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.063 22993 22993 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSimSerialNumber failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.065 22993 22993 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSubscriberId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.065 22993 22993 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSubscriberId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.066 22993 22993 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getNetworkOperatorName failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.066 22993 22993 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getNetworkOperatorName failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.067 22993 22993 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getNetworkOperator failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.067 22993 22993 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getNetworkOperator failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.068 22993 22993 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSimOperatorName failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.068 22993 22993 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSimOperatorName failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.068 22993 22993 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSimOperator failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.069 22993 22993 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSimOperator failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.069 22993 22993 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getNetworkCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.070 22993 22993 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getNetworkCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.070 22993 22993 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSimCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.071 22993 22993 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSimCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.071 22993 22993 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getPhoneCount failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.072 22993 22993 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getActiveModemCount failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.072 22993 22993 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getNetworkType failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.073 22993 22993 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getNetworkType failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.073 22993 22993 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getDataNetworkType failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.074 22993 22993 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getDataNetworkType failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.074 22993 22993 I CloakModule: [cloak-hook] hook android.provider.Settings$Secure.getString failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.075 22993 22993 I CloakModule: [cloak-hook] hook android.provider.Settings$Secure.getStringForUser failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.075 22993 22993 I CloakModule: [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.076 22993 22993 I CloakModule: [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.076 22993 22993 I CloakModule: [cloak-hook] hook android.content.res.Resources.getConfiguration failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.077 22993 22993 I CloakModule: [cloak-hook] hook java.util.TimeZone.getDefault failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.077 22993 22993 I CloakModule: [cloak-hook] hook android.net.wifi.WifiInfo.getMacAddress failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.078 22993 22993 I CloakModule: [cloak-hook] hook android.bluetooth.BluetoothAdapter.getAddress failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.079 22993 22993 I CloakModule: [cloak-hook] hook android.os.Build.getSerial failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.079 22993 22993 I CloakModule: [cloak-hook] hook android.webkit.WebView.getSettings failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.080 22993 22993 I CloakModule: [cloak-hook] hook android.media.MediaDrm.getPropertyByteArray failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.080 22993 22993 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:19:57.080 22993 22993 I CloakModule: [cloak-hook] hook android.hardware.camera2.CameraManager.getCameraCharacteristics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.081 22993 22993 I CloakModule: [cloak-hook] hook android.hardware.camera2.CameraCharacteristics.get failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.081 22993 22993 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:19:57.081 22993 22993 I CloakModule: [cloak-hook] hook android.content.res.Resources.getDisplayMetrics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.082 22993 22993 I CloakModule: [cloak-hook] hook android.view.Display.getMetrics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.082 22993 22993 I CloakModule: [cloak-hook] hook android.view.Display.getRealMetrics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.083 22993 22993 I CloakModule: [cloak-hook] hook android.view.Display.getRefreshRate failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.083 22993 22993 I CloakModule: [cloak-hook] hook android.view.Display.getMode failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.084 22993 22993 I CloakModule: [cloak-hook] hook android.view.Display.getSupportedModes failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.084 22993 22993 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:19:57.084 22993 22993 I CloakModule: [cloak-hook] hook android.app.Instrumentation.callApplicationOnCreate failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.085 22993 22993 I CloakModule: [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.085 22993 22993 I CloakModule: [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user/17/com.android.externalstorage/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:19:57.085 22993 22993 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:19:57.220 23009 23009 I CloakModule: cloaking 17:com.google.android.apps.carrier.carrierwifi (63 props)
+10-18 21:19:57.239 23009 23009 I CloakModule: native property hook installed
+10-18 21:19:57.239 23009 23009 I CloakModule: native property callback hook installed
+10-18 21:19:57.359 23009 23009 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:19:57.360 23009 23009 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:19:57.360 23009 23009 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:19:57.361 23009 23009 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:19:57.552 23031 23031 I CloakModule: cloaking 17:com.google.android.cellbroadcastreceiver (63 props)
+10-18 21:19:57.576 23031 23031 I CloakModule: native property hook installed
+10-18 21:19:57.576 23031 23031 I CloakModule: native property callback hook installed
+10-18 21:19:57.656 23031 23031 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:19:57.657 23031 23031 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:19:57.657 23031 23031 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:19:57.657 23031 23031 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:19:57.877 23066 23066 I CloakModule: cloaking 17:com.google.android.apps.pixel.dcservice (63 props)
+10-18 21:19:57.902 23066 23066 I CloakModule: native property hook installed
+10-18 21:19:57.902 23066 23066 I CloakModule: native property callback hook installed
+10-18 21:19:57.990 23066 23066 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:19:57.990 23066 23066 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:19:57.990 23066 23066 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:19:57.991 23066 23066 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:19:59.408 23198 23198 I CloakModule: cloaking 17:com.google.android.apps.turbo (63 props)
+10-18 21:19:59.437 23198 23198 I CloakModule: native property hook installed
+10-18 21:19:59.437 23198 23198 I CloakModule: native property callback hook installed
+10-18 21:19:59.525 23198 23198 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:19:59.525 23198 23198 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:19:59.526 23198 23198 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:19:59.526 23198 23198 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:19:59.745 23238 23238 I CloakModule: cloaking 17:com.google.assistant.hubui (63 props)
+10-18 21:19:59.772 23238 23238 I CloakModule: native property hook installed
+10-18 21:19:59.772 23238 23238 I CloakModule: native property callback hook installed
+10-18 21:19:59.862 23238 23238 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:19:59.863 23238 23238 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:19:59.863 23238 23238 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:19:59.863 23238 23238 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:00.207 23333 23333 I CloakModule: cloaking 17:com.google.android.apps.weather (63 props)
+10-18 21:20:00.234 23333 23333 I CloakModule: native property hook installed
+10-18 21:20:00.234 23333 23333 I CloakModule: native property callback hook installed
+10-18 21:20:00.318 23333 23333 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:00.318 23333 23333 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:00.318 23333 23333 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:00.318 23333 23333 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:01.033 23392 23392 I CloakModule: cloaking 17:com.android.vending (63 props)
+10-18 21:20:01.052 23392 23392 I CloakModule: native property hook installed
+10-18 21:20:01.052 23392 23392 I CloakModule: native property callback hook installed
+10-18 21:20:01.148 23392 23392 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:01.148 23392 23392 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:01.148 23392 23392 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:01.149 23392 23392 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:02.176 23517 23517 I CloakModule: cloaking 17:com.google.android.as (63 props)
+10-18 21:20:02.202 23517 23517 I CloakModule: native property hook installed
+10-18 21:20:02.202 23517 23517 I CloakModule: native property callback hook installed
+10-18 21:20:02.287 23517 23517 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:02.287 23517 23517 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:02.287 23517 23517 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:02.287 23517 23517 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:02.978 23685 23685 I CloakModule: cloaking 17:com.google.android.gms (63 props)
+10-18 21:20:03.015 23685 23685 I CloakModule: native property hook installed
+10-18 21:20:03.015 23685 23685 I CloakModule: native property callback hook installed
+10-18 21:20:03.135 23685 23685 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:03.135 23685 23685 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:03.135 23685 23685 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:03.136 23685 23685 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:05.425 23862 23862 I CloakModule: cloaking 17:com.google.android.apps.messaging (63 props)
+10-18 21:20:05.455 23865 23865 I CloakModule: cloaking 17:com.google.android.apps.tips (63 props)
+10-18 21:20:05.462 23862 23862 I CloakModule: native property hook installed
+10-18 21:20:05.462 23862 23862 I CloakModule: native property callback hook installed
+10-18 21:20:05.494 23865 23865 I CloakModule: native property hook installed
+10-18 21:20:05.494 23865 23865 I CloakModule: native property callback hook installed
+10-18 21:20:05.544 23862 23862 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:05.544 23862 23862 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:05.545 23862 23862 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:05.545 23862 23862 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:05.576 23865 23865 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:05.576 23865 23865 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:05.577 23865 23865 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:05.577 23865 23865 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:06.504 24075 24075 I CloakModule: cloaking 17:com.google.android.as (63 props)
+10-18 21:20:06.523 24075 24075 I CloakModule: native property hook installed
+10-18 21:20:06.523 24075 24075 I CloakModule: native property callback hook installed
+10-18 21:20:06.603 24075 24075 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:06.604 24075 24075 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:06.604 24075 24075 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:06.604 24075 24075 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:08.905 24473 24473 I CloakModule: cloaking 17:com.google.android.as (63 props)
+10-18 21:20:08.927 24473 24473 I CloakModule: native property hook installed
+10-18 21:20:08.927 24473 24473 I CloakModule: native property callback hook installed
+10-18 21:20:09.009 24473 24473 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:09.009 24473 24473 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:09.009 24473 24473 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:09.010 24473 24473 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:09.264 24545 24545 I CloakModule: cloaking 17:com.google.android.apps.messaging (63 props)
+10-18 21:20:09.284 24545 24545 I CloakModule: native property hook installed
+10-18 21:20:09.284 24545 24545 I CloakModule: native property callback hook installed
+10-18 21:20:09.368 24545 24545 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:09.368 24545 24545 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:09.368 24545 24545 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:09.368 24545 24545 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:12.768 24814 24814 I CloakModule: cloaking 17:com.google.android.gms (63 props)
+10-18 21:20:12.799 24814 24814 I CloakModule: native property hook installed
+10-18 21:20:12.799 24814 24814 I CloakModule: native property callback hook installed
+10-18 21:20:12.876 24814 24814 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:12.877 24814 24814 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:12.877 24814 24814 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:12.877 24814 24814 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:14.118 25001 25001 I CloakModule: cloaking 17:com.android.chrome (63 props)
+10-18 21:20:14.145 25001 25001 I CloakModule: native property hook installed
+10-18 21:20:14.145 25001 25001 I CloakModule: native property callback hook installed
+10-18 21:20:14.222 25001 25001 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:14.223 25001 25001 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:14.223 25001 25001 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:14.223 25001 25001 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:15.680 25168 25168 I CloakModule: cloaking 17:com.android.vending (63 props)
+10-18 21:20:15.705 25168 25168 I CloakModule: native property hook installed
+10-18 21:20:15.705 25168 25168 I CloakModule: native property callback hook installed
+10-18 21:20:15.785 25168 25168 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:15.786 25168 25168 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:15.786 25168 25168 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:15.786 25168 25168 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:16.179 25263 25263 I CloakModule: cloaking 17:com.google.android.apps.messaging (63 props)
+10-18 21:20:16.209 25263 25263 I CloakModule: native property hook installed
+10-18 21:20:16.209 25263 25263 I CloakModule: native property callback hook installed
+10-18 21:20:16.299 25263 25263 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:16.300 25263 25263 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:16.300 25263 25263 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:16.300 25263 25263 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:16.305 25279 25279 I CloakModule: cloaking 17:com.google.android.configupdater (63 props)
+10-18 21:20:16.324 25279 25279 I CloakModule: native property hook installed
+10-18 21:20:16.324 25279 25279 I CloakModule: native property callback hook installed
+10-18 21:20:16.411 25279 25279 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:16.411 25279 25279 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:16.412 25279 25279 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:16.412 25279 25279 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:19.179 25553 25553 I CloakModule: cloaking 17:com.google.android.gms (63 props)
+10-18 21:20:19.211 25553 25553 I CloakModule: native property hook installed
+10-18 21:20:19.211 25553 25553 I CloakModule: native property callback hook installed
+10-18 21:20:19.305 25553 25553 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:19.305 25553 25553 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:19.305 25553 25553 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:19.306 25553 25553 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:19.848 25644 25644 I CloakModule: cloaking 17:com.google.android.apps.nexuslauncher (63 props)
+10-18 21:20:19.873 25646 25646 I CloakModule: cloaking 17:com.google.android.as (63 props)
+10-18 21:20:19.890 25644 25644 I CloakModule: native property hook installed
+10-18 21:20:19.890 25644 25644 I CloakModule: native property callback hook installed
+10-18 21:20:19.891 25646 25646 I CloakModule: native property hook installed
+10-18 21:20:19.891 25646 25646 I CloakModule: native property callback hook installed
+10-18 21:20:20.036 25646 25646 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:20.037 25646 25646 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:20.037 25646 25646 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:20.037 25646 25646 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:20.145 25644 25644 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:20.146 25644 25644 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:20.146 25644 25644 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:20.146 25644 25644 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:20.611 25738 25738 I CloakModule: cloaking 17:com.android.vending (63 props)
+10-18 21:20:20.644 25738 25738 I CloakModule: native property hook installed
+10-18 21:20:20.644 25738 25738 I CloakModule: native property callback hook installed
+10-18 21:20:20.842 25738 25738 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:20.842 25738 25738 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:20.842 25738 25738 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:20.842 25738 25738 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:21.565 25838 25838 I CloakModule: cloaking 17:com.google.android.bluetooth (63 props)
+10-18 21:20:21.595 25838 25838 I CloakModule: native hook: dlopen failed
+10-18 21:20:21.610 25838 25838 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getImei failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.614 25838 25838 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getImei failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.620 25838 25838 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getMeid failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.629 25838 25838 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getMeid failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.630 25838 25838 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getDeviceId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.631 25838 25838 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getDeviceId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.632 25838 25838 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSimSerialNumber failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.633 25838 25838 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSimSerialNumber failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.634 25838 25838 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSubscriberId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.635 25838 25838 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSubscriberId failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.635 25838 25838 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getNetworkOperatorName failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.636 25838 25838 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getNetworkOperatorName failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.636 25838 25838 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getNetworkOperator failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.637 25838 25838 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getNetworkOperator failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.637 25838 25838 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSimOperatorName failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.637 25838 25838 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSimOperatorName failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.638 25838 25838 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSimOperator failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.644 25838 25838 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSimOperator failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.645 25838 25838 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getNetworkCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.645 25838 25838 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getNetworkCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.645 25838 25838 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSimCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.646 25838 25838 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getSimCountryIso failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.646 25838 25838 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getPhoneCount failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.647 25838 25838 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getActiveModemCount failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.647 25838 25838 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getNetworkType failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.653 25838 25838 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getNetworkType failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.653 25838 25838 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getDataNetworkType failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.654 25838 25838 I CloakModule: [cloak-hook] hook android.telephony.TelephonyManager.getDataNetworkType failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.654 25838 25838 I CloakModule: [cloak-hook] hook android.provider.Settings$Secure.getString failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.655 25838 25838 I CloakModule: [cloak-hook] hook android.provider.Settings$Secure.getStringForUser failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.658 25838 25838 I CloakModule: [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.659 25838 25838 I CloakModule: [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.659 25838 25838 I CloakModule: [cloak-hook] hook android.content.res.Resources.getConfiguration failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.660 25838 25838 I CloakModule: [cloak-hook] hook java.util.TimeZone.getDefault failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.668 25838 25838 I CloakModule: [cloak-hook] hook android.net.wifi.WifiInfo.getMacAddress failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.669 25838 25838 I CloakModule: [cloak-hook] hook android.bluetooth.BluetoothAdapter.getAddress failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.670 25838 25838 I CloakModule: [cloak-hook] hook android.os.Build.getSerial failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.672 25838 25838 I CloakModule: [cloak-hook] hook android.webkit.WebView.getSettings failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.676 25838 25838 I CloakModule: [cloak-hook] hook android.media.MediaDrm.getPropertyByteArray failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.676 25838 25838 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:21.677 25838 25838 I CloakModule: [cloak-hook] hook android.hardware.camera2.CameraManager.getCameraCharacteristics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.678 25838 25838 I CloakModule: [cloak-hook] hook android.hardware.camera2.CameraCharacteristics.get failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.678 25838 25838 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:21.681 25838 25838 I CloakModule: [cloak-hook] hook android.content.res.Resources.getDisplayMetrics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.682 25838 25838 I CloakModule: [cloak-hook] hook android.view.Display.getMetrics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.689 25838 25838 I CloakModule: [cloak-hook] hook android.view.Display.getRealMetrics failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.691 25838 25838 I CloakModule: [cloak-hook] hook android.view.Display.getRefreshRate failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.694 25838 25838 I CloakModule: [cloak-hook] hook android.view.Display.getMode failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.695 25838 25838 I CloakModule: [cloak-hook] hook android.view.Display.getSupportedModes failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.695 25838 25838 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:21.703 25838 25838 I CloakModule: [cloak-hook] hook android.app.Instrumentation.callApplicationOnCreate failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.703 25838 25838 I CloakModule: [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.704 25838 25838 I CloakModule: [cloak-hook] hook android.content.ContentResolver.query failed: java.lang.UnsatisfiedLinkError: dlopen failed: couldn't map "/data/user_de/17/com.google.android.bluetooth/code_cache/cloak_hooks/libpine.so" segment 1: Permission denied
+10-18 21:20:21.704 25838 25838 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:21.864 25880 25880 I CloakModule: cloaking 17:com.google.android.gms (63 props)
+10-18 21:20:21.913 25880 25880 I CloakModule: native property hook installed
+10-18 21:20:21.913 25880 25880 I CloakModule: native property callback hook installed
+10-18 21:20:22.130 25912 25912 I CloakModule: cloaking 17:com.google.android.apps.turbo (63 props)
+10-18 21:20:22.190 25912 25912 I CloakModule: native property hook installed
+10-18 21:20:22.190 25912 25912 I CloakModule: native property callback hook installed
+10-18 21:20:22.227 25880 25880 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:22.227 25880 25880 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:22.228 25880 25880 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:22.228 25880 25880 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:22.326 25912 25912 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:22.326 25912 25912 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:22.326 25912 25912 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:22.327 25912 25912 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:22.824 26062 26062 I CloakModule: cloaking 17:com.google.android.inputmethod.latin (63 props)
+10-18 21:20:22.873 26062 26062 I CloakModule: native property hook installed
+10-18 21:20:22.873 26062 26062 I CloakModule: native property callback hook installed
+10-18 21:20:22.992 26098 26098 I CloakModule: cloaking 17:com.google.android.gms (63 props)
+10-18 21:20:23.069 26062 26062 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:23.069 26062 26062 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:23.070 26062 26062 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:23.070 26062 26062 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:23.113 26098 26098 I CloakModule: native property hook installed
+10-18 21:20:23.113 26098 26098 I CloakModule: native property callback hook installed
+10-18 21:20:23.270 26166 26166 I CloakModule: cloaking 17:com.google.android.googlequicksearchbox (63 props)
+10-18 21:20:23.293 26098 26098 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:23.293 26098 26098 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:23.294 26098 26098 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:23.294 26098 26098 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:23.326 26166 26166 I CloakModule: native property hook installed
+10-18 21:20:23.326 26166 26166 I CloakModule: native property callback hook installed
+10-18 21:20:23.489 26166 26166 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:23.489 26166 26166 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:23.490 26166 26166 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:23.490 26166 26166 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:29.270 27216 27216 I CloakModule: cloaking 17:com.google.android.as (63 props)
+10-18 21:20:29.324 27216 27216 I CloakModule: native property hook installed
+10-18 21:20:29.324 27216 27216 I CloakModule: native property callback hook installed
+10-18 21:20:29.490 27216 27216 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:29.490 27216 27216 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:29.491 27216 27216 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:29.491 27216 27216 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:30.195 27356 27356 I CloakModule: cloaking 0:dev.cyclone.cloak.probe.diag (61 props)
+10-18 21:20:30.242 27356 27356 I CloakModule: native property hook installed
+10-18 21:20:30.242 27356 27356 I CloakModule: native property callback hook installed
+10-18 21:20:30.358 27356 27356 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:30.358 27356 27356 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:30.358 27356 27356 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:30.358 27356 27356 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:30.557 27356 27356 I CloakModule: [cloak-hook] display mode construction unavailable: java.lang.NoSuchMethodException: android.view.Display$Mode.<init> [int, int, int, float]
+10-18 21:20:30.557 27356 27356 W CloakModeDiagnostic: MODE_CONSTRUCTION_FAILED:NoSuchMethodException
+10-18 21:20:30.557 27356 27356 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,float)
+10-18 21:20:30.557 27356 27356 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float)
+10-18 21:20:30.557 27356 27356 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float,float[],int[])
+10-18 21:20:30.557 27356 27356 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float[],int[])
+10-18 21:20:30.557 27356 27356 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,int,int,float,float,float[],int[])
+10-18 21:20:30.557 27356 27356 W CloakModeDiagnostic: private android.view.Display$Mode(android.os.Parcel)
+10-18 21:20:30.557 27356 27356 W CloakModeDiagnostic: android.view.Display$Mode(android.os.Parcel,android.view.Display-IA)
+10-18 21:20:30.557 27356 27356 I CloakModule: [cloak-hook] display mode construction unavailable: java.lang.NoSuchMethodException: android.view.Display$Mode.<init> [int, int, int, float]
+10-18 21:20:30.557 27356 27356 W CloakModeDiagnostic: MODE_CONSTRUCTION_FAILED:NoSuchMethodException
+10-18 21:20:30.558 27356 27356 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,float)
+10-18 21:20:30.558 27356 27356 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float)
+10-18 21:20:30.558 27356 27356 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float,float[],int[])
+10-18 21:20:30.558 27356 27356 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float[],int[])
+10-18 21:20:30.558 27356 27356 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,int,int,float,float,float[],int[])
+10-18 21:20:30.558 27356 27356 W CloakModeDiagnostic: private android.view.Display$Mode(android.os.Parcel)
+10-18 21:20:30.558 27356 27356 W CloakModeDiagnostic: android.view.Display$Mode(android.os.Parcel,android.view.Display-IA)
+10-18 21:20:30.558 27356 27356 I CloakModule: [cloak-hook] display mode construction unavailable: java.lang.NoSuchMethodException: android.view.Display$Mode.<init> [int, int, int, float]
+10-18 21:20:30.558 27356 27356 W CloakModeDiagnostic: MODE_CONSTRUCTION_FAILED:NoSuchMethodException
+10-18 21:20:30.558 27356 27356 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,float)
+10-18 21:20:30.558 27356 27356 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float)
+10-18 21:20:30.558 27356 27356 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float,float[],int[])
+10-18 21:20:30.558 27356 27356 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float[],int[])
+10-18 21:20:30.558 27356 27356 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,int,int,float,float,float[],int[])
+10-18 21:20:30.558 27356 27356 W CloakModeDiagnostic: private android.view.Display$Mode(android.os.Parcel)
+10-18 21:20:30.558 27356 27356 W CloakModeDiagnostic: android.view.Display$Mode(android.os.Parcel,android.view.Display-IA)
+10-18 21:20:31.169 27356 27409 I CloakModule: [cloak-hook] widevine identity served
+10-18 21:20:31.872 27557 27557 I CloakModule: cloaking 17:com.google.android.as (63 props)
+10-18 21:20:31.912 27557 27557 I CloakModule: native property hook installed
+10-18 21:20:31.912 27557 27557 I CloakModule: native property callback hook installed
+10-18 21:20:32.228 27557 27557 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:32.228 27557 27557 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:32.228 27557 27557 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:32.228 27557 27557 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:32.382 27356 27409 I CloakModule: [cloak-hook] display mode construction unavailable: java.lang.NoSuchMethodException: android.view.Display$Mode.<init> [int, int, int, float]
+10-18 21:20:32.382 27356 27409 W CloakModeDiagnostic: MODE_CONSTRUCTION_FAILED:NoSuchMethodException
+10-18 21:20:32.382 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,float)
+10-18 21:20:32.382 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float)
+10-18 21:20:32.382 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float,float[],int[])
+10-18 21:20:32.382 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float[],int[])
+10-18 21:20:32.382 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,int,int,float,float,float[],int[])
+10-18 21:20:32.382 27356 27409 W CloakModeDiagnostic: private android.view.Display$Mode(android.os.Parcel)
+10-18 21:20:32.382 27356 27409 W CloakModeDiagnostic: android.view.Display$Mode(android.os.Parcel,android.view.Display-IA)
+10-18 21:20:32.399 27356 27409 I CloakModule: [cloak-hook] display mode construction unavailable: java.lang.NoSuchMethodException: android.view.Display$Mode.<init> [int, int, int, float]
+10-18 21:20:32.399 27356 27409 W CloakModeDiagnostic: MODE_CONSTRUCTION_FAILED:NoSuchMethodException
+10-18 21:20:32.399 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,float)
+10-18 21:20:32.399 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float)
+10-18 21:20:32.399 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float,float[],int[])
+10-18 21:20:32.399 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float[],int[])
+10-18 21:20:32.399 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,int,int,float,float,float[],int[])
+10-18 21:20:32.399 27356 27409 W CloakModeDiagnostic: private android.view.Display$Mode(android.os.Parcel)
+10-18 21:20:32.399 27356 27409 W CloakModeDiagnostic: android.view.Display$Mode(android.os.Parcel,android.view.Display-IA)
+10-18 21:20:32.425 27356 27409 I CloakModule: [cloak-hook] display mode construction unavailable: java.lang.NoSuchMethodException: android.view.Display$Mode.<init> [int, int, int, float]
+10-18 21:20:32.425 27356 27409 W CloakModeDiagnostic: MODE_CONSTRUCTION_FAILED:NoSuchMethodException
+10-18 21:20:32.425 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,float)
+10-18 21:20:32.425 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float)
+10-18 21:20:32.425 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float,float[],int[])
+10-18 21:20:32.425 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float[],int[])
+10-18 21:20:32.425 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,int,int,float,float,float[],int[])
+10-18 21:20:32.425 27356 27409 W CloakModeDiagnostic: private android.view.Display$Mode(android.os.Parcel)
+10-18 21:20:32.425 27356 27409 W CloakModeDiagnostic: android.view.Display$Mode(android.os.Parcel,android.view.Display-IA)
+10-18 21:20:32.449 27356 27409 I CloakModule: [cloak-hook] display mode construction unavailable: java.lang.NoSuchMethodException: android.view.Display$Mode.<init> [int, int, int, float]
+10-18 21:20:32.449 27356 27409 W CloakModeDiagnostic: MODE_CONSTRUCTION_FAILED:NoSuchMethodException
+10-18 21:20:32.449 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,float)
+10-18 21:20:32.449 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float)
+10-18 21:20:32.449 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float,float[],int[])
+10-18 21:20:32.449 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float[],int[])
+10-18 21:20:32.449 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,int,int,float,float,float[],int[])
+10-18 21:20:32.449 27356 27409 W CloakModeDiagnostic: private android.view.Display$Mode(android.os.Parcel)
+10-18 21:20:32.449 27356 27409 W CloakModeDiagnostic: android.view.Display$Mode(android.os.Parcel,android.view.Display-IA)
+10-18 21:20:32.452 27356 27409 I CloakModule: [cloak-hook] display mode construction unavailable: java.lang.NoSuchMethodException: android.view.Display$Mode.<init> [int, int, int, float]
+10-18 21:20:32.452 27356 27409 W CloakModeDiagnostic: MODE_CONSTRUCTION_FAILED:NoSuchMethodException
+10-18 21:20:32.452 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,float)
+10-18 21:20:32.452 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float)
+10-18 21:20:32.452 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float,float[],int[])
+10-18 21:20:32.452 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float[],int[])
+10-18 21:20:32.452 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,int,int,float,float,float[],int[])
+10-18 21:20:32.452 27356 27409 W CloakModeDiagnostic: private android.view.Display$Mode(android.os.Parcel)
+10-18 21:20:32.452 27356 27409 W CloakModeDiagnostic: android.view.Display$Mode(android.os.Parcel,android.view.Display-IA)
+10-18 21:20:32.595 27356 27409 I CloakModule: [cloak-hook] display mode construction unavailable: java.lang.NoSuchMethodException: android.view.Display$Mode.<init> [int, int, int, float]
+10-18 21:20:32.595 27356 27409 W CloakModeDiagnostic: MODE_CONSTRUCTION_FAILED:NoSuchMethodException
+10-18 21:20:32.595 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,float)
+10-18 21:20:32.595 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float)
+10-18 21:20:32.595 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float,float[],int[])
+10-18 21:20:32.595 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float[],int[])
+10-18 21:20:32.595 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,int,int,float,float,float[],int[])
+10-18 21:20:32.595 27356 27409 W CloakModeDiagnostic: private android.view.Display$Mode(android.os.Parcel)
+10-18 21:20:32.595 27356 27409 W CloakModeDiagnostic: android.view.Display$Mode(android.os.Parcel,android.view.Display-IA)
+10-18 21:20:32.597 27356 27409 I CloakModule: [cloak-hook] display mode construction unavailable: java.lang.NoSuchMethodException: android.view.Display$Mode.<init> [int, int, int, float]
+10-18 21:20:32.597 27356 27409 W CloakModeDiagnostic: MODE_CONSTRUCTION_FAILED:NoSuchMethodException
+10-18 21:20:32.597 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,float)
+10-18 21:20:32.597 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float)
+10-18 21:20:32.597 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float,float[],int[])
+10-18 21:20:32.597 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float[],int[])
+10-18 21:20:32.597 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,int,int,float,float,float[],int[])
+10-18 21:20:32.597 27356 27409 W CloakModeDiagnostic: private android.view.Display$Mode(android.os.Parcel)
+10-18 21:20:32.597 27356 27409 W CloakModeDiagnostic: android.view.Display$Mode(android.os.Parcel,android.view.Display-IA)
+10-18 21:20:32.599 27356 27409 I CloakModule: [cloak-hook] display mode construction unavailable: java.lang.NoSuchMethodException: android.view.Display$Mode.<init> [int, int, int, float]
+10-18 21:20:32.599 27356 27409 W CloakModeDiagnostic: MODE_CONSTRUCTION_FAILED:NoSuchMethodException
+10-18 21:20:32.599 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,float)
+10-18 21:20:32.599 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float)
+10-18 21:20:32.599 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float,float[],int[])
+10-18 21:20:32.599 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float[],int[])
+10-18 21:20:32.599 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,int,int,float,float,float[],int[])
+10-18 21:20:32.599 27356 27409 W CloakModeDiagnostic: private android.view.Display$Mode(android.os.Parcel)
+10-18 21:20:32.599 27356 27409 W CloakModeDiagnostic: android.view.Display$Mode(android.os.Parcel,android.view.Display-IA)
+10-18 21:20:32.605 27356 27409 I CloakModule: [cloak-hook] display mode construction unavailable: java.lang.NoSuchMethodException: android.view.Display$Mode.<init> [int, int, int, float]
+10-18 21:20:32.606 27356 27409 W CloakModeDiagnostic: MODE_CONSTRUCTION_FAILED:NoSuchMethodException
+10-18 21:20:32.606 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,float)
+10-18 21:20:32.606 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float)
+10-18 21:20:32.606 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float,float[],int[])
+10-18 21:20:32.606 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float[],int[])
+10-18 21:20:32.606 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,int,int,float,float,float[],int[])
+10-18 21:20:32.606 27356 27409 W CloakModeDiagnostic: private android.view.Display$Mode(android.os.Parcel)
+10-18 21:20:32.606 27356 27409 W CloakModeDiagnostic: android.view.Display$Mode(android.os.Parcel,android.view.Display-IA)
+10-18 21:20:32.606 27356 27409 I CloakModule: [cloak-hook] display mode construction unavailable: java.lang.NoSuchMethodException: android.view.Display$Mode.<init> [int, int, int, float]
+10-18 21:20:32.606 27356 27409 W CloakModeDiagnostic: MODE_CONSTRUCTION_FAILED:NoSuchMethodException
+10-18 21:20:32.606 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,float)
+10-18 21:20:32.606 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float)
+10-18 21:20:32.606 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float,float[],int[])
+10-18 21:20:32.606 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float[],int[])
+10-18 21:20:32.606 27356 27409 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,int,int,float,float,float[],int[])
+10-18 21:20:32.606 27356 27409 W CloakModeDiagnostic: private android.view.Display$Mode(android.os.Parcel)
+10-18 21:20:32.606 27356 27409 W CloakModeDiagnostic: android.view.Display$Mode(android.os.Parcel,android.view.Display-IA)
+10-18 21:20:32.925 27728 27728 I CloakModule: cloaking 17:com.google.android.projection.gearhead (63 props)
+10-18 21:20:32.953 27728 27728 I CloakModule: native property hook installed
+10-18 21:20:32.953 27728 27728 I CloakModule: native property callback hook installed
+10-18 21:20:33.101 27356 27736 I CloakModule: [cloak-hook] widevine identity served
+10-18 21:20:33.178 27728 27728 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:33.178 27728 27728 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:33.178 27728 27728 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:33.178 27728 27728 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:33.256 27356 27736 I CloakModule: [cloak-hook] display mode construction unavailable: java.lang.NoSuchMethodException: android.view.Display$Mode.<init> [int, int, int, float]
+10-18 21:20:33.256 27356 27736 W CloakModeDiagnostic: MODE_CONSTRUCTION_FAILED:NoSuchMethodException
+10-18 21:20:33.256 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,float)
+10-18 21:20:33.256 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float)
+10-18 21:20:33.256 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float,float[],int[])
+10-18 21:20:33.256 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float[],int[])
+10-18 21:20:33.256 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,int,int,float,float,float[],int[])
+10-18 21:20:33.256 27356 27736 W CloakModeDiagnostic: private android.view.Display$Mode(android.os.Parcel)
+10-18 21:20:33.256 27356 27736 W CloakModeDiagnostic: android.view.Display$Mode(android.os.Parcel,android.view.Display-IA)
+10-18 21:20:33.258 27356 27736 I CloakModule: [cloak-hook] display mode construction unavailable: java.lang.NoSuchMethodException: android.view.Display$Mode.<init> [int, int, int, float]
+10-18 21:20:33.260 27356 27736 W CloakModeDiagnostic: MODE_CONSTRUCTION_FAILED:NoSuchMethodException
+10-18 21:20:33.260 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,float)
+10-18 21:20:33.260 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float)
+10-18 21:20:33.260 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float,float[],int[])
+10-18 21:20:33.260 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float[],int[])
+10-18 21:20:33.260 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,int,int,float,float,float[],int[])
+10-18 21:20:33.260 27356 27736 W CloakModeDiagnostic: private android.view.Display$Mode(android.os.Parcel)
+10-18 21:20:33.260 27356 27736 W CloakModeDiagnostic: android.view.Display$Mode(android.os.Parcel,android.view.Display-IA)
+10-18 21:20:33.262 27356 27736 I CloakModule: [cloak-hook] display mode construction unavailable: java.lang.NoSuchMethodException: android.view.Display$Mode.<init> [int, int, int, float]
+10-18 21:20:33.262 27356 27736 W CloakModeDiagnostic: MODE_CONSTRUCTION_FAILED:NoSuchMethodException
+10-18 21:20:33.262 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,float)
+10-18 21:20:33.262 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float)
+10-18 21:20:33.262 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float,float[],int[])
+10-18 21:20:33.262 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float[],int[])
+10-18 21:20:33.262 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,int,int,float,float,float[],int[])
+10-18 21:20:33.262 27356 27736 W CloakModeDiagnostic: private android.view.Display$Mode(android.os.Parcel)
+10-18 21:20:33.262 27356 27736 W CloakModeDiagnostic: android.view.Display$Mode(android.os.Parcel,android.view.Display-IA)
+10-18 21:20:33.263 27356 27736 I CloakModule: [cloak-hook] display mode construction unavailable: java.lang.NoSuchMethodException: android.view.Display$Mode.<init> [int, int, int, float]
+10-18 21:20:33.263 27356 27736 W CloakModeDiagnostic: MODE_CONSTRUCTION_FAILED:NoSuchMethodException
+10-18 21:20:33.263 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,float)
+10-18 21:20:33.263 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float)
+10-18 21:20:33.263 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float,float[],int[])
+10-18 21:20:33.263 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float[],int[])
+10-18 21:20:33.263 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,int,int,float,float,float[],int[])
+10-18 21:20:33.263 27356 27736 W CloakModeDiagnostic: private android.view.Display$Mode(android.os.Parcel)
+10-18 21:20:33.263 27356 27736 W CloakModeDiagnostic: android.view.Display$Mode(android.os.Parcel,android.view.Display-IA)
+10-18 21:20:33.263 27356 27736 I CloakModule: [cloak-hook] display mode construction unavailable: java.lang.NoSuchMethodException: android.view.Display$Mode.<init> [int, int, int, float]
+10-18 21:20:33.263 27356 27736 W CloakModeDiagnostic: MODE_CONSTRUCTION_FAILED:NoSuchMethodException
+10-18 21:20:33.263 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,float)
+10-18 21:20:33.263 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float)
+10-18 21:20:33.263 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float,float[],int[])
+10-18 21:20:33.263 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float[],int[])
+10-18 21:20:33.263 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,int,int,float,float,float[],int[])
+10-18 21:20:33.263 27356 27736 W CloakModeDiagnostic: private android.view.Display$Mode(android.os.Parcel)
+10-18 21:20:33.263 27356 27736 W CloakModeDiagnostic: android.view.Display$Mode(android.os.Parcel,android.view.Display-IA)
+10-18 21:20:33.439 27356 27736 I CloakModule: [cloak-hook] display mode construction unavailable: java.lang.NoSuchMethodException: android.view.Display$Mode.<init> [int, int, int, float]
+10-18 21:20:33.439 27356 27736 W CloakModeDiagnostic: MODE_CONSTRUCTION_FAILED:NoSuchMethodException
+10-18 21:20:33.439 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,float)
+10-18 21:20:33.439 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float)
+10-18 21:20:33.439 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float,float[],int[])
+10-18 21:20:33.439 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float[],int[])
+10-18 21:20:33.439 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,int,int,float,float,float[],int[])
+10-18 21:20:33.439 27356 27736 W CloakModeDiagnostic: private android.view.Display$Mode(android.os.Parcel)
+10-18 21:20:33.439 27356 27736 W CloakModeDiagnostic: android.view.Display$Mode(android.os.Parcel,android.view.Display-IA)
+10-18 21:20:33.441 27356 27736 I CloakModule: [cloak-hook] display mode construction unavailable: java.lang.NoSuchMethodException: android.view.Display$Mode.<init> [int, int, int, float]
+10-18 21:20:33.441 27356 27736 W CloakModeDiagnostic: MODE_CONSTRUCTION_FAILED:NoSuchMethodException
+10-18 21:20:33.441 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,float)
+10-18 21:20:33.441 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float)
+10-18 21:20:33.441 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float,float[],int[])
+10-18 21:20:33.441 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float[],int[])
+10-18 21:20:33.441 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,int,int,float,float,float[],int[])
+10-18 21:20:33.441 27356 27736 W CloakModeDiagnostic: private android.view.Display$Mode(android.os.Parcel)
+10-18 21:20:33.441 27356 27736 W CloakModeDiagnostic: android.view.Display$Mode(android.os.Parcel,android.view.Display-IA)
+10-18 21:20:33.447 27356 27736 I CloakModule: [cloak-hook] display mode construction unavailable: java.lang.NoSuchMethodException: android.view.Display$Mode.<init> [int, int, int, float]
+10-18 21:20:33.447 27356 27736 W CloakModeDiagnostic: MODE_CONSTRUCTION_FAILED:NoSuchMethodException
+10-18 21:20:33.447 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,float)
+10-18 21:20:33.447 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float)
+10-18 21:20:33.447 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float,float[],int[])
+10-18 21:20:33.447 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float[],int[])
+10-18 21:20:33.447 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,int,int,float,float,float[],int[])
+10-18 21:20:33.447 27356 27736 W CloakModeDiagnostic: private android.view.Display$Mode(android.os.Parcel)
+10-18 21:20:33.447 27356 27736 W CloakModeDiagnostic: android.view.Display$Mode(android.os.Parcel,android.view.Display-IA)
+10-18 21:20:33.452 27356 27736 I CloakModule: [cloak-hook] display mode construction unavailable: java.lang.NoSuchMethodException: android.view.Display$Mode.<init> [int, int, int, float]
+10-18 21:20:33.452 27356 27736 W CloakModeDiagnostic: MODE_CONSTRUCTION_FAILED:NoSuchMethodException
+10-18 21:20:33.452 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,float)
+10-18 21:20:33.452 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float)
+10-18 21:20:33.452 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float,float[],int[])
+10-18 21:20:33.452 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float[],int[])
+10-18 21:20:33.452 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,int,int,float,float,float[],int[])
+10-18 21:20:33.452 27356 27736 W CloakModeDiagnostic: private android.view.Display$Mode(android.os.Parcel)
+10-18 21:20:33.452 27356 27736 W CloakModeDiagnostic: android.view.Display$Mode(android.os.Parcel,android.view.Display-IA)
+10-18 21:20:33.452 27356 27736 I CloakModule: [cloak-hook] display mode construction unavailable: java.lang.NoSuchMethodException: android.view.Display$Mode.<init> [int, int, int, float]
+10-18 21:20:33.452 27356 27736 W CloakModeDiagnostic: MODE_CONSTRUCTION_FAILED:NoSuchMethodException
+10-18 21:20:33.452 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,float)
+10-18 21:20:33.452 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float)
+10-18 21:20:33.452 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float,float[],int[])
+10-18 21:20:33.452 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,float,float[],int[])
+10-18 21:20:33.452 27356 27736 W CloakModeDiagnostic: public android.view.Display$Mode(int,int,int,int,int,float,float,float[],int[])
+10-18 21:20:33.452 27356 27736 W CloakModeDiagnostic: private android.view.Display$Mode(android.os.Parcel)
+10-18 21:20:33.452 27356 27736 W CloakModeDiagnostic: android.view.Display$Mode(android.os.Parcel,android.view.Display-IA)
+10-18 21:20:33.764 27897 27897 I CloakModule: cloaking 17:com.android.vending (63 props)
+10-18 21:20:33.789 27897 27897 I CloakModule: native property hook installed
+10-18 21:20:33.789 27897 27897 I CloakModule: native property callback hook installed
+10-18 21:20:33.888 27913 27913 I CloakModule: cloaking 17:com.verizon.mips.services (63 props)
+10-18 21:20:33.908 27913 27913 I CloakModule: native property hook installed
+10-18 21:20:33.909 27913 27913 I CloakModule: native property callback hook installed
+10-18 21:20:33.923 27924 27924 I CloakModule: cloaking 17:com.cyclone.mobile (63 props)
+10-18 21:20:33.934 27897 27897 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:33.935 27897 27897 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:33.935 27897 27897 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:33.935 27897 27897 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:33.954 27924 27924 I CloakModule: native property hook installed
+10-18 21:20:33.954 27924 27924 I CloakModule: native property callback hook installed
+10-18 21:20:34.300 27924 27924 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:34.301 27924 27924 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:34.301 27924 27924 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:34.306 27924 27924 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:34.398 27913 27913 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:34.399 27913 27913 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:34.399 27913 27913 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:34.399 27913 27913 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:35.622 28338 28338 I CloakModule: cloaking 17:com.google.android.as (63 props)
+10-18 21:20:35.675 28338 28338 I CloakModule: native property hook installed
+10-18 21:20:35.675 28338 28338 I CloakModule: native property callback hook installed
+10-18 21:20:35.895 28338 28338 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:35.900 28338 28338 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:35.900 28338 28338 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:35.900 28338 28338 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:37.405 28650 28650 I CloakModule: cloaking 17:com.google.android.apps.turbo (63 props)
+10-18 21:20:37.429 28650 28650 I CloakModule: native property hook installed
+10-18 21:20:37.429 28650 28650 I CloakModule: native property callback hook installed
+10-18 21:20:37.517 28650 28650 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:37.518 28650 28650 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:37.518 28650 28650 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:37.518 28650 28650 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:37.688 28681 28681 I CloakModule: cloaking 17:com.google.android.inputmethod.latin (63 props)
+10-18 21:20:37.723 28681 28681 I CloakModule: native property hook installed
+10-18 21:20:37.724 28681 28681 I CloakModule: native property callback hook installed
+10-18 21:20:37.831 28681 28681 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:37.832 28681 28681 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:37.832 28681 28681 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:37.833 28681 28681 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:38.019 28720 28720 I CloakModule: cloaking 17:com.google.android.gms (63 props)
+10-18 21:20:38.051 28720 28720 I CloakModule: native property hook installed
+10-18 21:20:38.051 28720 28720 I CloakModule: native property callback hook installed
+10-18 21:20:38.138 28720 28720 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:38.139 28720 28720 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:38.139 28720 28720 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:38.139 28720 28720 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:38.622 28805 28805 I CloakModule: cloaking 17:com.google.android.apps.photos (63 props)
+10-18 21:20:38.648 28805 28805 I CloakModule: native property hook installed
+10-18 21:20:38.648 28805 28805 I CloakModule: native property callback hook installed
+10-18 21:20:38.729 28805 28805 I CloakModule: [cloak-hook] mediadrm hook installed
+10-18 21:20:38.729 28805 28805 I CloakModule: [cloak-hook] camera hooks installed
+10-18 21:20:38.730 28805 28805 I CloakModule: [cloak-hook] display hooks installed
+10-18 21:20:38.730 28805 28805 I CloakModule: [cloak-hook] java callbacks installed
+10-18 21:20:40.364 29032 29032 I CloakModule: cloaking 17:com.google.android.apps.setupwizard.searchselector (63 props)
+10-18 21:20:40.417 29032 29032 I CloakModule: native property hook installed
+10-18 21:20:40.417 29032 29032 I CloakModule: native property callback hook installed
+10-18 21:20:40.520 29032 29032 I CloakModule:

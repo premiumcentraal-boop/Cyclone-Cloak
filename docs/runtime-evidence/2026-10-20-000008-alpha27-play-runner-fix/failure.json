@@ -1,0 +1,5 @@
+{
+  "status": "FAILED",
+  "reason": "INVALID_EVIDENCE_OR_DEVICE_ERROR",
+  "error_type": "TimeoutExpired"
+}

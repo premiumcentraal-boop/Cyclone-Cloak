@@ -1,0 +1,12 @@
+{
+  "probe_captures_started": false,
+  "temporary_bindings_created": false,
+  "temporary_profile_bodies_created": false,
+  "temporary_private_files_created": false,
+  "diagnostics_entries_absent": {
+    "0": true,
+    "17": true
+  },
+  "module_install_scratch_removed": true,
+  "reboot_count_requested": 1
+}
