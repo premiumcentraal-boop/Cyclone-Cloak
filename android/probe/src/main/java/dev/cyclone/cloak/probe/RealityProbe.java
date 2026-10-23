@@ -138,6 +138,54 @@ final class RealityProbe {
             return installed.length() == 0 ? null : installed;
         });
         readers.put("webview.provider", () -> WebView.getCurrentWebViewPackage() == null ? null : WebView.getCurrentWebViewPackage().packageName);
+        readers.put("masked.package_list", () -> {
+            android.content.pm.PackageManager pm = activity.getPackageManager();
+            try {
+                for (android.content.pm.PackageInfo entry : pm.getInstalledPackages(0)) {
+                    if (entry != null && entry.packageName != null
+                            && entry.packageName.startsWith("dev.cyclone.cloak")) {
+                        return "FOUND:" + entry.packageName;
+                    }
+                }
+            } catch (RuntimeException denied) {
+                return "DENIED:" + denied.getClass().getSimpleName();
+            }
+            return "NOT_PRESENT";
+        });
+        readers.put("masked.maps", () -> {
+            try (java.io.BufferedReader reader = new java.io.BufferedReader(
+                    new java.io.FileReader("/proc/self/maps"))) {
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    String lower = line.toLowerCase(java.util.Locale.ROOT);
+                    if (lower.contains("cyclone_cloak") || lower.contains("libhook")) {
+                        return "FOUND:" + line;
+                    }
+                }
+            } catch (java.io.IOException denied) {
+                return "DENIED:" + denied.getClass().getSimpleName();
+            }
+            return "NOT_PRESENT";
+        });
+        readers.put("masked.services", () -> {
+            java.lang.Process process;
+            try {
+                process = Runtime.getRuntime().exec(new String[]{"sh", "-c", "dumpsys service --user 0 | grep -ci cloak || true"});
+            } catch (java.io.IOException denied) {
+                return "DENIED:" + denied.getClass().getSimpleName();
+            }
+            try (java.io.BufferedReader out = new java.io.BufferedReader(new java.io.InputStreamReader(process.getInputStream()))) {
+                StringBuilder listing = new StringBuilder();
+                String line;
+                while ((line = out.readLine()) != null) listing.append(line);
+                process.waitFor();
+                String value = listing.toString().trim();
+                if (!value.isEmpty() && !value.equals("0")) return "FOUND:" + value;
+                return "NOT_PRESENT";
+            } catch (java.lang.InterruptedException | java.io.IOException ioError) {
+                return "DENIED:" + ioError.getClass().getSimpleName();
+            }
+        });
         readers.put("webview.version", () -> WebView.getCurrentWebViewPackage() == null ? null : WebView.getCurrentWebViewPackage().versionName);
         readers.put("webview.default_ua", () -> android.webkit.WebSettings.getDefaultUserAgent(activity));
         readers.put("device.fingerprint", () -> Build.FINGERPRINT);
