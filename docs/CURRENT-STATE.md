@@ -14,14 +14,20 @@ S5 checked source commit `c475c254be1d52ead39d64372cb1e72134a41816`:
 | Standard probe unit tests | 148 passed; 0 failed, errors or skipped |
 | Diagnostics probe unit tests | 148 passed; 0 failed, errors or skipped |
 | Schema tests | 192 passed |
-| Forge tests | Blocked: 4 collection errors; no tests executed |
+| Forge tests | 1,134 passed on dependency-complete rerun |
 | Debug APK, release APK and module packaging | Passed |
 | `git diff --check` | Passed |
 
-The supplied forge command included pytest but omitted `cryptography` and
-`jsonschema`, required by four test modules. The complete local gate is therefore
-**not green**. No source fix was attempted. No compiler warnings were reported.
-Release signing/CI validation and RC device smoke testing have not been performed.
+The original forge command omitted `cryptography` and `jsonschema`, causing four
+collection errors. On 2026-10-24 the dependency-complete rerun passed all 1,134
+forge tests: `uv run --with pytest --with jsonschema --with cryptography -- python
+-X utf8 -m pytest forge/tests -q`. Combined with the results above, **S5 is green**.
+No source fix was needed. No compiler warnings were reported. Release signing/CI
+validation and RC device smoke testing have not been performed.
+
+S7 preflight: the owner-selected release commit `7f3fc29` does not contain
+`docs/RELEASE_1.0.0-rc.1.md`, which the unchanged release verifier requires.
+Publication remains blocked until release notes exist on the selected tag target.
 
 Rung-2 filesystem parity and masking rows are **closed for the engineering
 handoff only**; physical confirmation is tracked separately in S8 and remains
