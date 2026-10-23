@@ -36,7 +36,7 @@ _TIMEZONE_RE = re.compile(r"^(?:UTC|GMT|GMT0|GMT[+-]0|Greenwich|UCT|Universal|Zu
 
 _UA_RE = re.compile(
     r"^Mozilla/5\.0 \(Linux; Android [0-9.]+; [^()]+\) AppleWebKit/537\.36 "
-    r"\(KHTML, like Gecko\) Chrome/[0-9]+\.0\.[0-9]+\.[0-9]+ (Mobile )?Safari/537\.36$"
+    r"\(KHTML, like Gecko\) (?:Version/4\.0 )?Chrome/[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+ (Mobile )?Safari/537\.36$"
 )
 
 _FINGERPRINT_RE = re.compile(
@@ -408,7 +408,10 @@ def _validate_ua(findings: list[Finding], ua: Mapping[str, Any], device: Mapping
         return
     model = str(device["model"])
     release = str(device["version_release"])
-    if f"; {model})" not in value:
+    webview_model = "Version/4.0 Chrome/" in value and re.search(
+        r"; " + re.escape(model) + r"(?: Build/[^();\s]+)?(?:; wv)?\)", value
+    ) is not None
+    if f"; {model})" not in value and not webview_model:
         _add(findings, ERROR, "UA_MODEL_MISMATCH", "ua.value model disagrees with device.model")
     if f"Android {release};" not in value:
         _add(findings, ERROR, "UA_RELEASE_MISMATCH", "ua.value Android release disagrees with device.version_release")

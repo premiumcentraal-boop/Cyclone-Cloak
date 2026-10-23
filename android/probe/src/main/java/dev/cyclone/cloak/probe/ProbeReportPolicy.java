@@ -7,6 +7,29 @@ import org.json.JSONObject;
 final class ProbeReportPolicy {
     private ProbeReportPolicy() { }
 
+    static Object expectedAt(JSONObject profile, String path) {
+        if (path == null) return null;
+        Object value = profile;
+        for (String part : path.split("\\.")) {
+            if (!(value instanceof JSONObject)) return null;
+            value = ((JSONObject) value).opt(part);
+            if (value == null || value == JSONObject.NULL) return null;
+        }
+        return value;
+    }
+
+    static String subscriberExpectation(JSONObject profile) {
+        Object mcc = expectedAt(profile, "telephony.mcc");
+        Object mnc = expectedAt(profile, "telephony.mnc");
+        Object serial = expectedAt(profile, "identifiers.sim_serial");
+        if (!(mcc instanceof String) || !(mnc instanceof String) || !(serial instanceof String)) return null;
+        String operator = (String) mcc + (String) mnc;
+        int suffixLength = 15 - operator.length();
+        String digits = (String) serial;
+        if (suffixLength <= 0 || digits.length() < suffixLength) return null;
+        return operator + digits.substring(digits.length() - suffixLength);
+    }
+
     static String status(boolean hasExpectation, boolean missing, boolean matches) {
         if (!hasExpectation) return "OBSERVED";
         return missing ? "MISSING" : matches ? "PASS" : "FAIL";
@@ -45,11 +68,19 @@ final class ProbeReportPolicy {
     }
 
     static String failureReason(Throwable error) {
+        if (error instanceof ProbeReadDeadline.ReadFailure) return ((ProbeReadDeadline.ReadFailure) error).reason;
         Throwable cause = error instanceof java.lang.reflect.InvocationTargetException && error.getCause() != null
             ? error.getCause() : error;
         if (cause instanceof ClassNotFoundException) return "SDK_OR_API_ABSENT";
-          if (cause.getClass().getName().equals("dev.cyclone.cloak.hook.RuntimeEnvelope$Unavailable"))
-              return "PROFILE_SURFACE_UNAVAILABLE";
+        if (cause.getClass().getName().equals("dev.cyclone.cloak.hook.RuntimeEnvelope$Unavailable"))
+            return "PROFILE_SURFACE_UNAVAILABLE";
+        if (cause.getClass().getName().equals("android.content.pm.PackageManager.NameNotFoundException")) return "SDK_OR_API_ABSENT";
+        if (cause.getClass().getName().equals("android.util.AndroidRuntimeException")) {
+            // Keep the exact cause chain for the WebView readers' diagnostics;
+            // the message often names the missing application context.
+            android.util.Log.i("ProbeReportPolicy", "reader failure", cause);
+            return "RUNTIME_EXCEPTION:" + cause.getClass().getSimpleName();
+        }
         String reason = cause.getClass().getSimpleName();
         // Record only a permission name, never exception text or identifier data.
         if (cause instanceof SecurityException && cause.getMessage() != null) {

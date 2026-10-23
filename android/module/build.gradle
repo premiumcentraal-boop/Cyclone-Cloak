@@ -74,6 +74,15 @@ tasks.register("packageModule") {
                 }
             }
         }
+        // Hash the completed ABI libraries, avoiding a circular embedded ZIP hash.
+        def manifest = abis.collect { abi ->
+            def library = new File(stage, "zygisk/${abi}.so")
+            if (!library.isFile()) throw new GradleException("Missing packaged ABI: ${abi}")
+            def digest = java.security.MessageDigest.getInstance("SHA-256").digest(library.bytes)
+                    .collect { String.format("%02x", it & 0xff) }.join()
+            "${digest}  zygisk/${abi}.so\n"
+        }.join()
+        new File(stage, "artifacts.sha256").setText(manifest, "UTF-8")
         def zipName = "cyclone-cloak-${moduleVersion}.zip"
         ant.zip(destfile: new File(outDir, zipName), basedir: stage)
         println "module zip: ${outDir}/${zipName}"

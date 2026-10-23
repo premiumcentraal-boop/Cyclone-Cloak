@@ -139,6 +139,13 @@ final class RealityProbe {
         });
         readers.put("webview.provider", () -> WebView.getCurrentWebViewPackage() == null ? null : WebView.getCurrentWebViewPackage().packageName);
         readers.put("webview.version", () -> WebView.getCurrentWebViewPackage() == null ? null : WebView.getCurrentWebViewPackage().versionName);
+        readers.put("webview.default_ua", () -> android.webkit.WebSettings.getDefaultUserAgent(activity));
+        readers.put("device.fingerprint", () -> Build.FINGERPRINT);
+        readers.put("device.version_release", () -> Build.VERSION.RELEASE);
+        readers.put("device.version_incremental", () -> Build.VERSION.INCREMENTAL);
+        readers.put("device.build_date_utc", () -> Build.TIME);
+        readers.put("device.bootloader", () -> Build.VERSION.SDK_INT >= 14 ? Build.BOOTLOADER : null);
+        readers.put("device.baseband", () -> Build.RADIO == null ? null : Build.RADIO);
         readers.put("environment.language", () -> Locale.getDefault().getLanguage());
         readers.put("environment.country", () -> Locale.getDefault().getCountry());
         readers.put("environment.timezone", () -> TimeZone.getDefault().getID());
@@ -198,5 +205,98 @@ final class RealityProbe {
     }
     private static String numeric(String operator, boolean mcc) {
         return operator != null && operator.matches("[0-9]{5,6}") ? mcc ? operator.substring(0, 3) : operator.substring(3) : null;
+    }
+
+    /**
+     * Authoring-only snapshot: run every reader once and keep the raw value.
+     * This is uncensored-side tooling for fixture authoring; it does not
+     * replace the digest-only validation report and must never be used in
+     * place of one. Result shape: {reader_id: raw_value, ...} plus
+     * captured_at_ms and reader provenance.
+     */
+    @android.annotation.SuppressLint("MissingPermission")
+    static JSONObject authoringSnapshot(Activity activity) throws Exception {
+        Map<String, RealityReport.Reader> readers = new HashMap<>();
+        readers.put("device.manufacturer", () -> Build.MANUFACTURER);
+        readers.put("device.brand", () -> Build.BRAND);
+        readers.put("device.model", () -> Build.MODEL);
+        readers.put("device.product", () -> Build.PRODUCT);
+        readers.put("device.device", () -> Build.DEVICE);
+        readers.put("device.hardware", () -> Build.HARDWARE);
+        readers.put("device.fingerprint", () -> Build.FINGERPRINT);
+        readers.put("device.version_release", () -> Build.VERSION.RELEASE);
+        readers.put("device.sdk_int", () -> Build.VERSION.SDK_INT);
+        readers.put("device.security_patch", () -> Build.VERSION.SECURITY_PATCH);
+        readers.put("device.build_id", () -> Build.ID);
+        readers.put("device.version_incremental", () -> Build.VERSION.INCREMENTAL);
+        readers.put("device.build_date_utc", () -> Build.TIME / 1000);
+        readers.put("device.first_api_level", () -> Integer.parseInt(ProbeActivity.authoringProperty("ro.product.first_api_level")));
+        readers.put("device.bootloader", () -> Build.BOOTLOADER);
+        readers.put("device.baseband", Build::getRadioVersion);
+        readers.put("identifiers.android_id", () -> Settings.Secure.getString(activity.getContentResolver(), Settings.Secure.ANDROID_ID));
+        readers.put("identifiers.serial", Build::getSerial);
+        TelephonyManager authoringTelephony = activity.getSystemService(TelephonyManager.class);
+        readers.put("telephony.sim_slot_count", authoringTelephony::getPhoneCount);
+        readers.put("telephony.carrier_name", authoringTelephony::getSimOperatorName);
+        readers.put("telephony.mcc", () -> numeric(authoringTelephony.getSimOperator(), true));
+        readers.put("telephony.mnc", () -> numeric(authoringTelephony.getSimOperator(), false));
+        readers.put("telephony.network_type_property", () -> ProbeActivity.authoringProperty("gsm.network.type"));
+        Display authoringDisplay = activity.getWindowManager().getDefaultDisplay();
+        readers.put("display.width", () -> authoringDisplay.getMode().getPhysicalWidth());
+        readers.put("display.height", () -> authoringDisplay.getMode().getPhysicalHeight());
+        readers.put("display.refresh_rate_hz", () -> authoringDisplay.getMode().getRefreshRate());
+        readers.put("display.density", () -> {
+            android.util.DisplayMetrics metrics = new android.util.DisplayMetrics();
+            authoringDisplay.getRealMetrics(metrics); return metrics.densityDpi;
+        });
+        readers.put("locale.language", () -> Locale.getDefault().getLanguage());
+        readers.put("locale.country", () -> Locale.getDefault().getCountry());
+        readers.put("locale.timezone", () -> TimeZone.getDefault().getID());
+        readers.put("webview.default_ua", () -> android.webkit.WebSettings.getDefaultUserAgent(activity));
+        readers.put("compute.gpu", () -> {
+            // Real GL context required for GL_RENDERER; borrow the pbuffer path used by RuntimeEnvelopeReport.
+            return RuntimeEnvelopeReport.gpu();
+        });
+        readers.put("memory.free_storage_gib", () -> new StatFs(activity.getFilesDir().getPath()).getAvailableBytes() / 1073741824.0);
+        readers.put("sensors.inventory", () -> {
+            JSONArray sensors = new JSONArray();
+            for (Sensor s : activity.getSystemService(SensorManager.class).getSensorList(Sensor.TYPE_ALL))
+                sensors.put(new JSONObject().put("type", s.getType()).put("name", s.getName()).put("min_delay_us", s.getMinDelay())
+                    .put("max_delay_us", s.getMaxDelay()).put("range", s.getMaximumRange()).put("resolution", s.getResolution()));
+            return sensors;
+        });
+        readers.put("packages.installed", () -> {
+            JSONArray installed = new JSONArray();
+            for (String name : new String[]{"android", "com.android.vending", "com.google.android.gms", "com.google.android.gsf", "com.google.android.webview", "com.android.chrome"}) {
+                try {
+                    android.content.pm.PackageInfo info = activity.getPackageManager().getPackageInfo(name, 0);
+                    installed.put(new JSONObject().put("package", name).put("version_name", info.versionName).put("version_code", info.getLongVersionCode()));
+                } catch (android.content.pm.PackageManager.NameNotFoundException ignored) { /* Caller visibility only. */ }
+            }
+            return installed.length() == 0 ? null : installed;
+        });
+        readers.put("webview.provider", () -> WebView.getCurrentWebViewPackage() == null ? null : WebView.getCurrentWebViewPackage().packageName);
+        readers.put("webview.version", () -> WebView.getCurrentWebViewPackage() == null ? null : WebView.getCurrentWebViewPackage().versionName);
+        readers.put("webview.user_agent", () -> {
+            WebView v = new WebView(activity);
+            try { return v.getSettings().getUserAgentString(); } finally { v.destroy(); }
+        });
+        JSONObject values = new JSONObject();
+        for (Map.Entry<String, RealityReport.Reader> entry : readers.entrySet()) {
+            Object raw;
+            try { raw = entry.getValue().read(); }
+            catch (Throwable error) {
+                values.put(entry.getKey(), new JSONObject().put("error", ProbeReportPolicy.failureReason(error)));
+                continue;
+            }
+            values.put(entry.getKey(), raw);
+        }
+        return new JSONObject()
+            .put("format", "authoring-raw")
+            .put("captured_at_ms", System.currentTimeMillis())
+            .put("captured_sdk_int", Build.VERSION.SDK_INT)
+            .put("captured_host_fingerprint", Build.FINGERPRINT)
+            .put("captured_host_version_release", Build.VERSION.RELEASE)
+            .put("values", values);
     }
 }

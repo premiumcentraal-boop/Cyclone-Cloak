@@ -19,6 +19,7 @@
 #include <cstdlib>
 #include "zygisk.hpp"
 #include "runtime_scope.hpp"
+#include "module_load_record.hpp"
 
 #include <android/log.h>
 #include <android/api-level.h>
@@ -590,6 +591,7 @@ std::string read_all_and_filter(int fd) {
 }
 
 constexpr uint32_t kStateRequestMagic = 0x434C4B31;  // CLK1
+constexpr uint32_t kLoadRecordRequestMagic = 0x434C4B32;  // CLK2; private companion IPC only
 constexpr size_t kMaxProfileBytes = 1024 * 1024;
 
 struct StateRequest {
@@ -688,6 +690,29 @@ std::string read_profile_state(const std::string &user, const std::string &pkg) 
 void companion_handler(int socket) {
     StateRequest request{};
     if (!read_exact(socket, &request, sizeof(request))) return;
+    if (request.magic == kLoadRecordRequestMagic) {
+        // Existing root companion owns the write; zygote never opens the log.
+        struct timeval timeout{3, 0};
+        setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
+        const auto user = bounded_string(request.user, sizeof(request.user));
+        const auto pkg = bounded_string(request.packageName, sizeof(request.packageName));
+        uint32_t size = 0;
+        auto result = cloak_load_evidence::Result::INVALID;
+        if (valid_request(user, pkg) && read_exact(socket, &size, sizeof(size)) &&
+            size > 0 && size <= cloak_load_evidence::kMaxRecord) {
+            std::string payload(size, '\0');
+            if (read_exact(socket, payload.data(), payload.size()) && !read_profile_state(user, pkg).empty()) {
+                const int directory = open("/data/adb/modules/cyclone_cloak",
+                                           O_RDONLY | O_DIRECTORY | O_CLOEXEC | O_NOFOLLOW);
+                result = cloak_load_evidence::persist(directory, payload, pkg, user);
+                if (directory >= 0) close(directory);
+            }
+        }
+        const uint32_t reply = static_cast<uint32_t>(result);
+        if (result != cloak_load_evidence::Result::OK) LOGI("companion load record status=%u", reply);
+        write_exact(socket, &reply, sizeof(reply));  // ack only after fdatasync
+        return;
+    }
     if (request.magic != kStateRequestMagic) {
         const uint32_t empty = 0;
         write_exact(socket, &empty, sizeof(empty));
@@ -704,6 +729,30 @@ void companion_handler(int socket) {
         : 0;
     if (!write_exact(socket, &size, sizeof(size))) return;
     if (size > 0) write_exact(socket, profileJson.data(), size);
+}
+
+cloak_load_evidence::Result send_load_record(Api *api, const std::string &user,
+                                           const std::string &pkg, const std::string &payload) {
+    if (!api || !valid_request(user, pkg) || payload.empty() ||
+        payload.size() > cloak_load_evidence::kMaxRecord) return cloak_load_evidence::Result::INVALID;
+    const int socket = api->connectCompanion();
+    if (socket < 0) return cloak_load_evidence::Result::TRANSPORT;
+    struct timeval timeout{3, 0};
+    setsockopt(socket, SOL_SOCKET, SO_RCVTIMEO, &timeout, sizeof(timeout));
+    setsockopt(socket, SOL_SOCKET, SO_SNDTIMEO, &timeout, sizeof(timeout));
+    StateRequest request{};
+    request.magic = kLoadRecordRequestMagic;
+    memcpy(request.user, user.c_str(), user.size() + 1);
+    memcpy(request.packageName, pkg.c_str(), pkg.size() + 1);
+    const uint32_t size = payload.size();
+    uint32_t reply = static_cast<uint32_t>(cloak_load_evidence::Result::TRANSPORT);
+    const bool received = write_exact(socket, &request, sizeof(request)) &&
+        write_exact(socket, &size, sizeof(size)) && write_exact(socket, payload.data(), payload.size()) &&
+        read_exact(socket, &reply, sizeof(reply));
+    close(socket);
+    if (!received || reply > static_cast<uint32_t>(cloak_load_evidence::Result::TRANSPORT))
+        return cloak_load_evidence::Result::TRANSPORT;
+    return static_cast<cloak_load_evidence::Result>(reply);
 }
 
 bool load_profile_for(Api *api, const std::string &user, const std::string &pkg) {
@@ -1301,6 +1350,12 @@ public:
             access("/data/adb/modules/cyclone_cloak/disable_native_hook", F_OK) != 0;
         g_active = load_profile_for(api, userId, g_active_package);
         if (g_active) {
+            const int module_directory = api->getModuleDir();
+            const auto payload = cloak_load_evidence::assemble(module_directory, g_active_package, userId, g_app_data_dir);
+            if (module_directory >= 0) close(module_directory);
+            const auto result = send_load_record(api, userId, g_active_package, payload);
+            if (result != cloak_load_evidence::Result::OK)
+                LOGI("load record status=%u", static_cast<uint32_t>(result));
             LOGI("cloaking %s (%zu props)", g_active_key.c_str(), g_props.size());
         }
     }

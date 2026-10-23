@@ -469,7 +469,7 @@
                   "type": {
                     "type": "integer",
                     "minimum": 1,
-                    "maximum": 65535
+                    "maximum": 4294967295
                   },
                   "name": {
                     "type": "string",
@@ -479,7 +479,7 @@
                   },
                   "min_delay_us": {
                     "type": "integer",
-                    "minimum": 0,
+                    "minimum": -1,
                     "maximum": 10000000
                   },
                   "max_delay_us": {
@@ -489,13 +489,13 @@
                   },
                   "range": {
                     "type": "number",
-                    "minimum": 1e-06,
-                    "maximum": 1000000
+                    "minimum": 0,
+                    "maximum": 3.4028234663852886e+38
                   },
                   "resolution": {
                     "type": "number",
-                    "minimum": 1e-06,
-                    "maximum": 1000000
+                    "minimum": 0,
+                    "maximum": 3.4028234663852886e+38
                   }
                 },
                 "required": [

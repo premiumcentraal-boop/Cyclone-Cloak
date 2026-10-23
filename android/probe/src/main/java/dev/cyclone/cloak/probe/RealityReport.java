@@ -24,7 +24,7 @@ final class RealityReport {
         JSONObject result = new JSONObject().put("id", id).put("source", "Android read-only API")
             .put("expected_sha256", JSONObject.NULL).put("actual_sha256", JSONObject.NULL);
         try {
-            Object actual = reader == null ? null : reader.read();
+            Object actual = reader == null ? null : ProbeReadDeadline.call(reader::read);
             boolean hasExpected = expected != null && expected != JSONObject.NULL;
             if (hasExpected) result.put("expected_sha256", hash(expected));
             if (actual != null && actual != JSONObject.NULL) result.put("actual_sha256", hash(actual));

@@ -132,6 +132,14 @@ final class RuntimeEnvelopeReport {
             PackageInfo p = WebView.getCurrentWebViewPackage(); return p == null ? null : p.versionName;
         }));
         rows.put(row("envelope.webview.defaultUa", expected(profile, "webview", "user_agent"), () -> android.webkit.WebSettings.getDefaultUserAgent(activity)));
+        rows.put(row("envelope.webview.instanceUa", expected(profile, "webview", "user_agent"), () -> {
+            android.webkit.WebView v = new android.webkit.WebView(activity);
+            try {
+                return v.getSettings().getUserAgentString();
+            } finally {
+                v.destroy();
+            }
+        }));
         rows.put(row("envelope.display.realSize", baseSize(profile), () -> {
             android.graphics.Point size = new android.graphics.Point();
             activity.getWindowManager().getDefaultDisplay().getRealSize(size);
@@ -139,7 +147,7 @@ final class RuntimeEnvelopeReport {
         }));
         TelephonyManager telephony = activity.getSystemService(TelephonyManager.class);
         Object state = expected(profile, "carrier", "sim_state");
-        Integer expectedState = "absent".equals(state) ? 1 : "pin_required".equals(state) ? 2 : "puk_required".equals(state) ? 3 : "ready".equals(state) ? 5 : null;
+        Integer expectedState = simStateExpectation(state);
         rows.put(row("envelope.telephony.simState", expectedState, telephony::getSimState));
         rows.put(row("envelope.telephony.simStateSlot0", expectedState, () -> telephony.getSimState(0)));
         rows.put(row("envelope.drm.securityLevel", expected(profile, "drm", "security_level"), () -> {
@@ -150,13 +158,21 @@ final class RuntimeEnvelopeReport {
         return report(rows);
     }
 
+    static Integer simStateExpectation(Object state) {
+        if ("absent".equals(state)) return Integer.valueOf(1);
+        if ("pin_required".equals(state)) return Integer.valueOf(2);
+        if ("puk_required".equals(state)) return Integer.valueOf(3);
+        if ("ready".equals(state)) return Integer.valueOf(5);
+        return null;
+    }
+
     private static Object baseSize(JSONObject profile) {
         JSONObject display = profile.optJSONObject("display");
         return display == null || !display.has("width") || !display.has("height") ? null
             : new JSONArray().put(display.opt("width")).put(display.opt("height"));
     }
 
-    private static String gpu() {
+    static String gpu() {
         // A private 1x1 pbuffer supplies a real GL context; restore the caller's context on every path.
         android.opengl.EGLDisplay previousDisplay = android.opengl.EGL14.eglGetCurrentDisplay();
         android.opengl.EGLContext previousContext = android.opengl.EGL14.eglGetCurrentContext();

@@ -279,3 +279,130 @@ a physical alpha.28 release validation. Blocked and external-state rows remain
 limitations. No contract status is promoted by this harness-only correction.
 [Summary](runtime-evidence/2026-10-20-235457-restoration-follow-up/summary.md) and
 [diagnosis/commands](HANDOFF-2026-10-21-RESTORATION-HARNESS-FOLLOW-UP.md).
+
+
+## Rung 1a preflight — 2026-10-23
+
+[Evidence](runtime-evidence/2026-10-23-025139-rung1a-preflight/summary.md): **STOPPED** before captures.
+The device had no installed or pending Cloak module after the prior authorized
+removal cycle; module installation is outside this measurement sprint. All 17
+PARTIAL paths remain PARTIAL. New physical measurements: **0**; verified promotions:
+**0**. Production before/after snapshots matched; no device state changed.
+
+
+## Rung 1a revised preflight — 2026-10-23
+
+[Evidence](runtime-evidence/2026-10-23-072412-rung1a-revised-preflight/summary.md): candidate alpha.28 ZIP and
+installed immutable libraries match the supplied hashes; diagnostics build passed.
+**STOPPED** before installation/capture: required schema-0.4 fixture C is absent
+from the checkout and rebuilt APK. All **17 PARTIAL** paths remain PARTIAL; new
+measured rows **0**, promotions **0**. Production before/after snapshots match.
+
+
+## Rung 1a fixture C measurement — 2026-10-23
+
+[Evidence](runtime-evidence/2026-10-23-080419-rung1a-fixture-c/summary.md) identifies candidate ZIP
+`8fd58b4ad0ea60ec06460b0ecaa0b9cea8e56467437975103d04392958a68795`
+and matching installed ARM64 file
+`d7dd105446a229f981e5cdd1aed862a13e3c7d04220f04fb08eadde175bb15c1`.
+User0/A smoke: **81 PASS / 4 OBSERVED / 4 BLOCKED** legacy rows. User17/C
+cold captures: **75/7/7**, then **76/10/3** after normal diagnostics UI grants;
+all legacy FAIL counts zero. Full legacy equality is not claimed across grants.
+
+Of the 17 PARTIAL contract paths, **1 measured APPLIED / 16 remain PARTIAL**
+in this evidence ledger: `reality.carrier.values.sim_state` matched ready=5
+in both getSimState readers on two distinct cold user17 processes. No generated
+contract status changed and **zero VERIFIED promotions**. C envelope counts each:
+**3 PASS / 3 OBSERVED / 10 MISSING / 0 FAIL**. Missing GPU/free-space/package/
+sensor/provider/version facts stay unavailable. Both C WebView UA reads returned
+AndroidRuntimeException; user-agent remains PARTIAL. External report label is
+`external`, with fixture C source/hash explicitly recorded. Production snapshots
+matched; temporary entries/bodies/scratch and both users' probe state removed.
+No module changes or platform verdict; manager-installed candidate remains loaded.
+
+
+### 2026-10-23 Rung 1b enriched fixture C — no status promotion
+
+Four cold captures completed under the unchanged alpha28 candidate. User-17 settled repeats each measured legacy 76 PASS / 11 OBSERVED / 2 BLOCKED and envelope 7 PASS / 3 OBSERVED / 6 MISSING. Hashes/markers and production cleanup audit matched; settled retained PASS digests were deterministic. The enriched fixture passes the relaxed schema but fails full coherence (Android package version 16 versus base release 13; WebView 155 versus base UA Chrome 122). Therefore this run is NOT_VALIDATED and makes no new APPLIED/VERIFIED promotion. UA underlying cause remains unavailable. See [evidence summary](runtime-evidence/2026-10-23-181911-rung1b-enriched-c-captures/summary.md). No module change, reboot, release or platform verdict.
+
+
+### 2026-10-23 Rung 1b coherent v2 — authoring contract gate
+
+An unbound v2 host export completed with a genuine default WebView UA and base facts. Full profile validation still rejects the exact linked WebView UA as UA_FORMAT under the browser-only base grammar. No proposed fixture applied; comparison captures NOT RUN, no APPLIED/VERIFIED promotion. Diagnostics uninstalled and production audit equal; module unchanged. See [stop evidence](runtime-evidence/2026-10-23-183957-rung1b-coherent-v2/summary.md). Existing measured counts remain historical, not relabelled.
+
+### 2026-10-23 Rung 1b coherent v3 — capture gate stop
+
+Shared Python/Kotlin/schema validation now accepts genuine Android WebView UA
+syntax without changing existing Chrome profile support. Host-authored fixture C
+passes full schema/coherence validation (one real-date PATCH_AFTER_BUILD warning).
+The initial permission-setup capture failed while deriving a subscriber expectation
+from an absent optional SIM serial. The completed optional-expectation fix passes
+both probe unit suites. Its one device retest timed out with the normal location
+permission dialog pending; only older-request markers were readable. The three
+measured captures and post-grants determinism comparison were NOT RUN.
+
+**NOT_VALIDATED; zero new APPLIED/VERIFIED promotions.** Instance-UA ledger state
+is UNVERIFIED; no new instance-UA stack was reached and historical raw reports are
+unchanged. Production snapshots match exactly, temporary overlay/probe files were
+removed, and user 0 restored. Loaded module immutable files unchanged; mutable
+load-log observations are recorded separately. No module action/reboot/release or
+platform verdict. See [v3 stop evidence](runtime-evidence/2026-10-23-185155-rung1b-coherent-v3/summary.md).
+
+### 2026-10-23 Rung 1b coherent v3 final — permission UI blocker
+
+The explicitly authorized resume separated UI setup from the report timeout.
+User 0 normal location/nearby grants resolved and its cold A smoke completed:
+**82 PASS / 7 OBSERVED / 0 FAIL / 0 BLOCKED** legacy; **13 linked PASS**.
+User 17's location hierarchy remained after one observed While-using-app tap
+and subsequent waits. WindowManager named its permission activity focused, while
+InputDispatcher reported **FocusedWindows: none / NO_WINDOW**. No alternate taps,
+force-close, shell grants, new code fix or module action was attempted.
+
+**NOT_VALIDATED**: the coherent-C triplet and determinism comparison were NOT RUN;
+zero new APPLIED/VERIFIED promotions. User-0 instance-UA remains raw MISSING with
+reason `RuntimeException`; no full RUNTIME_EXCEPTION stack was retained. The ledger
+keeps that surface UNVERIFIED. Production before/after snapshots match, temporary
+overlays and diagnostics state were removed, and user 0 restored. This is not a
+platform verdict. See [final-resume evidence](runtime-evidence/2026-10-23-191424-rung1b-coherent-v3-final/summary.md).
+
+### 2026-10-23 Rung 1b coherent v3 — completed measured triplet
+
+The next explicitly authorized UI attempt cleared location in 2.71 seconds;
+nearby Allow also resolved normally. No second location attempt or shell grant
+was needed. Three coherent-C cold captures completed under the unchanged loaded
+alpha.28 candidate (PIDs 28316, 28760, 29223). Each recorded:
+
+- Legacy: **62 PASS / 25 OBSERVED / 2 BLOCKED / 0 FAIL**.
+- Runtime envelope: **8 PASS / 3 OBSERVED / 5 MISSING / 0 FAIL**.
+- Device Reality: **14 PASS / 17 OBSERVED / 4 MISSING / 8 UNMAPPED**.
+- Linked parity: **13 PASS / 0 FAIL**.
+
+Retained PASS digests were identical across all three captures: 8 envelope,
+14 Reality and 13 linked rows. All 62 legacy PASS rows used exact MATCH against
+the same fixture expectations; raw legacy actuals are redacted, so independent
+raw-value hash retention is not claimed. **User-17 legacy determinism: CONFIRMED
+post-grants.** No report row was relabelled. The larger OBSERVED count reflects
+the coherent fixture deliberately omitting unreadable identifiers and unsupported
+expectations, rather than filling them with synthetic host claims.
+
+In this artifact-scoped evidence ledger, **8 of the original 17 PARTIAL paths are
+measured APPLIED (7 new, SIM state reaffirmed); 9 remain PARTIAL**:
+
+| Paths | Evidence-ledger state | Measured evidence |
+| --- | --- | --- |
+| `reality.carrier.values.sim_state` | APPLIED, reaffirmed | both SIM-state envelope readers PASS x3 |
+| `reality.compute.values.gpu` | APPLIED | concrete EGL/GLES renderer envelope PASS x3; generic Reality row stays UNMAPPED |
+| `reality.packages.values.installed` and `[].package`, `[].version_code`, `[].version_name` | APPLIED | full canonical package/version aggregate PASS x3 |
+| `reality.webview.values.provider`, `.version` | APPLIED | corresponding envelope and Reality readers PASS x3 |
+| `reality.sensors.values.inventory` and its six child paths | PARTIAL | PROFILE_SURFACE_UNAVAILABLE; no promotion |
+| `reality.memory.values.free_storage_gib` | PARTIAL | PROFILE_SURFACE_UNAVAILABLE; no promotion |
+| `reality.webview.values.user_agent` | PARTIAL; instance reader UNVERIFIED | default-UA PASS x3, instance-UA MISSING/RuntimeException x3 |
+
+This ledger does not change the generated contract table or prove distinct-value
+override/isolation from host-authored equality alone. **Zero VERIFIED promotions**.
+All fixture/report/published-body checks passed with correct user 17 and external
+fixture C provenance. Three durable records match PID/package/user/installed ABI
+digest. Production snapshots match exactly; temporary entries/bodies/probe files
+removed, user 0 restored. Module immutable files unchanged; load-log bytes recorded
+as mutable evidence. No release, reboot, module action or platform verdict.
+See [completed triplet evidence](runtime-evidence/2026-10-23-192355-rung1b-two-ui-attempts/summary.md).

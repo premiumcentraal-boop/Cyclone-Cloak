@@ -63,7 +63,7 @@ object ProfileValidator {
     private val MNC = Regex("^[0-9]{2,3}$")
     private val UA = Regex(
         "^Mozilla/5\\.0 \\(Linux; Android [0-9.]+; [^()]+\\) AppleWebKit/537\\.36 " +
-            "\\(KHTML, like Gecko\\) Chrome/[0-9]+\\.0\\.[0-9]+\\.[0-9]+ (Mobile )?Safari/537\\.36$",
+            "\\(KHTML, like Gecko\\) (?:Version/4\\.0 )?Chrome/[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+ (Mobile )?Safari/537\\.36$",
     )
 
     /** brand/product/device:release/build_id/incremental:build_type/tags */
@@ -317,7 +317,10 @@ object ProfileValidator {
             findings.error("UA_FORMAT", "ua.value must be a Chrome-on-Android user agent string", "ua.value")
             return
         }
-        if ("; ${device.text("model")})" !in value) {
+        val webviewModel = "Version/4.0 Chrome/" in value && Regex(
+            "; " + Regex.escape(device.text("model")) + "(?: Build/[^();\\s]+)?(?:; wv)?\\)"
+        ).containsMatchIn(value)
+        if ("; ${device.text("model")})" !in value && !webviewModel) {
             findings.error("UA_MODEL_MISMATCH", "ua.value model disagrees with device.model", "ua.value")
         }
         if ("Android ${device.text("version_release")};" !in value) {

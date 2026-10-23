@@ -75,6 +75,7 @@ public class ProbeActivity extends Activity {
     static { System.loadLibrary("probe"); }
     private static native String nativeProperty(String key);
     private static native String nativePropertyCallback(String key);
+    static String authoringProperty(String key) { return nativeProperty(key); }
 
     @Override public void onCreate(Bundle state) {
         super.onCreate(state);
@@ -102,7 +103,28 @@ public class ProbeActivity extends Activity {
     protected void prepareReads(Runnable ready) { ready.run(); }
     protected String permissionFailure(String id) { return null; }
 
+    /**
+     * Authoring export: one-shot raw host reads for fixture authoring.
+     * Triggered by the authoring_export boolean intent extra on
+     * ProbeActivity; the output lands in the diagnostics external
+     * evidence directory and carries reader IDs plus captured-at times,
+     * but never replaces report.json or the normal validation path.
+     */
     private void beginCapture(android.content.Intent intent) {
+        if (intent.getBooleanExtra("authoring_export", false)) {
+            new Thread(() -> {
+                try {
+                    JSONObject reality = RealityProbe.authoringSnapshot(ProbeActivity.this);
+                    ProbeEvidenceExport.write(
+                        ProbeEvidenceExport.directory(getExternalFilesDir(null)),
+                        "authoring.json", reality);
+                    android.util.Log.i("CloakProbeAuthoring", "authoring_export COMPLETE");
+                } catch (Throwable error) {
+                    android.util.Log.i("CloakProbeAuthoring", "authoring_export FAILED", error);
+                }
+            }, "cloak-probe-authoring").start();
+            return;
+        }
         Capture capture = new Capture(CAPTURES.begin(), intent);
         activeCapture = capture;
         prepareReads(() -> {
@@ -114,6 +136,9 @@ public class ProbeActivity extends Activity {
     /** Activity services are shared; all mutable capture data belongs to this instance. */
     private final class Capture extends ProbeCaptureSession {
         private String fixture;
+        private String activeRead = "capture.profile";
+        private JSONObject filesystemObservations;
+        private final JSONArray filesystemFailures = new JSONArray();
         Capture(long generation, android.content.Intent intent) {
             super(generation, intent.getStringExtra("request_id"), intent.getStringExtra("fixture"),
                 getPackageName().endsWith(".diag") && intent.getBooleanExtra("external_profile", false),
@@ -135,6 +160,9 @@ public class ProbeActivity extends Activity {
                     Files.write(partial.toPath(), report.toString(2).getBytes(StandardCharsets.UTF_8));
                     Files.move(partial.toPath(), new File(getFilesDir(), "report.json").toPath(),
                         java.nio.file.StandardCopyOption.ATOMIC_MOVE, java.nio.file.StandardCopyOption.REPLACE_EXISTING);
+                    if (getPackageName().endsWith(".diag"))
+                        ProbeEvidenceExport.write(ProbeEvidenceExport.directory(getExternalFilesDir(null)), "report.json", report);
+                    marker("end", "FAIL".equals(report.optString("status")) ? "FAILED" : "COMPLETED");
                 } finally { Files.deleteIfExists(partial.toPath()); }
             });
             runOnUiThread(() -> {
@@ -143,8 +171,17 @@ public class ProbeActivity extends Activity {
             });
         }
 
+        private void marker(String phase, String outcome) throws Exception {
+            JSONObject marker = CaptureMarkers.write(getFilesDir(), requestId, generation,
+                android.os.Process.myUid(), android.os.Process.myPid(), phase, outcome);
+            if (getPackageName().endsWith(".diag"))
+                ProbeEvidenceExport.write(ProbeEvidenceExport.directory(getExternalFilesDir(null)),
+                    "capture-" + phase + ".json", marker);
+        }
+
         void run() {
             try {
+                CAPTURES.commit(generation, () -> marker("start", "STARTED"));
                 try (java.io.InputStream stream = external
                         ? Files.newInputStream(new File(getFilesDir(), "expected-profile.json").toPath())
                         : getAssets().open("profile-" + fixture + ".json")) {
@@ -161,18 +198,32 @@ public class ProbeActivity extends Activity {
                             new String(readBytes(stream), StandardCharsets.UTF_8)), fixture);
                     }
                 }
+                activeRead = "capture.legacy";
                 collect();
+                activeRead = "capture.validation";
                 validateComplete();
+                activeRead = "capture.contract";
                 JSONObject runtimeTable;
                 try (java.io.InputStream stream = getAssets().open("reality-runtime-fields.json")) {
                     runtimeTable = new JSONObject(new String(readBytes(stream), StandardCharsets.UTF_8));
                 }
+                if (getPackageName().endsWith(".diag")) {
+                    activeRead = "capture.filesystem";
+                    filesystemObservations = FilesystemReadGuard.collect(runtimeTable, filesystemFailures);
+                }
+                activeRead = "capture.reality";
                 JSONObject reality = RealityProbe.collect(ProbeActivity.this, profile, runtimeTable);
+                activeRead = "capture.runtime_envelope";
+                JSONObject runtimeEnvelope = RuntimeEnvelopeReport.collect(ProbeActivity.this, profile);
+                activeRead = "capture.assemble";
                 JSONObject report = envelope().put("rows", new JSONArray(rows.toString()))
                     .put("device_reality", reality)
                     .put("reality_runtime", RealityRuntimeReport.build(runtimeTable, profile, reality))
                     .put("linked_parity", reality.getJSONObject("linked_parity"))
-                    .put("runtime_envelope", RuntimeEnvelopeReport.collect(ProbeActivity.this, profile));
+                    .put("runtime_envelope", runtimeEnvelope);
+                if (getPackageName().endsWith(".diag"))
+                    report.put("filesystem_observations", filesystemObservations)
+                        .put("filesystem_reader_failures", filesystemFailures);
                 StringBuilder visible = new StringBuilder("Cloak Runtime Probe\n\n");
                 for (int i = 0; i < rows.length(); i++) {
                     JSONObject row = rows.getJSONObject(i);
@@ -181,10 +232,10 @@ public class ProbeActivity extends Activity {
                         .append(row.getString("reason")).append("\n\n");
                 }
                 publish(report, visible.toString());
-            } catch (Exception failure) {
+            } catch (Exception | LinkageError failure) {
                 try {
                     String reason = failure instanceof InvalidCapture ? ((InvalidCapture) failure).reason : "CAPTURE_FAILED";
-                    String badId = failure instanceof InvalidCapture ? ((InvalidCapture) failure).rowId : "";
+                    String badId = failure instanceof InvalidCapture ? ((InvalidCapture) failure).rowId : activeRead;
                     // Only fixed metadata/row IDs; never exception text or partial raw readings.
                     JSONArray failedRows = new JSONArray();
                     for (int i = 0; i < rows.length(); i++) {
@@ -192,9 +243,12 @@ public class ProbeActivity extends Activity {
                         if (row != null && EXPECTED_IDS.contains(row.optString("id")))
                             failedRows.put(new JSONObject().put("id", row.optString("id")));
                     }
-                    publish(envelope().put("error", failure.getClass().getSimpleName())
+                    JSONObject failed = envelope().put("error", failure.getClass().getSimpleName())
                         .put("status", "FAIL").put("reason", reason).put("failed_row_id", badId)
-                        .put("rows", failedRows), "Probe failed: " + reason);
+                        .put("failure_details", ProbeFailureEvidence.describe(failure, badId)).put("rows", failedRows);
+                    if (filesystemObservations != null) failed.put("filesystem_observations", filesystemObservations)
+                        .put("filesystem_reader_failures", filesystemFailures);
+                    publish(failed, "Probe failed: " + reason);
                 } catch (Exception ignored) { /* Host also preserves missing/unparseable output evidence. */ }
             }
         }
@@ -255,18 +309,16 @@ public class ProbeActivity extends Activity {
         }
 
         private Object expected(String path) throws Exception {
-            if (path == null) return null;
-            String[] parts = path.split("\\.");
-            Object value = profile;
-            for (String part : parts) value = ((JSONObject) value).get(part);
-            return value;
+            return ProbeReportPolicy.expectedAt(profile, path);
         }
 
         private void read(String id, String path, Read operation) throws Exception {
+            activeRead = id;
             compare(id, expected(path), operation);
         }
 
         private void compare(String id, Object expected, Read operation) throws Exception {
+            activeRead = id;
             long started = android.os.SystemClock.elapsedRealtimeNanos();
             JSONObject rule = diagnosticExpectations.optJSONObject(id);
             JSONObject row = new JSONObject().put("id", id).put("source", sourceFor(id))
@@ -290,7 +342,7 @@ public class ProbeActivity extends Activity {
                     logDiagnosticRow(id, row);
                     return;
                 }
-                Object value = operation.get();
+                Object value = ProbeReadDeadline.call(operation::get);
                 row.put("actual", value == null ? JSONObject.NULL : value);
                 row.put("actual_available", !DiagnosticExpectation.missing(value));
                 if (rule != null) {
@@ -398,8 +450,7 @@ public class ProbeActivity extends Activity {
             String country = expected("locale.country").toString().toLowerCase(Locale.ROOT);
             compare("operator.networkCountry", country, tm::getNetworkCountryIso);
             compare("operator.simCountry", country, tm::getSimCountryIso);
-            String serial = expected("identifiers.sim_serial").toString();
-            compare("telephony.subscriberId", operator + serial.substring(serial.length() - (15 - operator.length())), tm::getSubscriberId);
+            compare("telephony.subscriberId", ProbeReportPolicy.subscriberExpectation(profile), tm::getSubscriberId);
             read("settings.secure.androidId", "identifiers.android_id",
                 () -> Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID));
             read("settings.provider.androidId", "identifiers.android_id", () -> {

@@ -1,5 +1,6 @@
 """Host-only regression checks for partial evidence and package isolation."""
 import argparse
+import json
 import sys
 import unittest
 from pathlib import Path
@@ -11,6 +12,24 @@ from render_runtime_matrix import classify, render
 
 
 class RunnerTest(unittest.TestCase):
+    def test_filesystem_observations_are_unverified_and_not_profile_paths(self):
+        root = Path(__file__).resolve().parents[3]
+        source = json.loads((root/'catalog/reality-runtime-fields.json').read_text())
+        generated = json.loads((root/'android/probe/src/main/assets/reality-runtime-fields.json').read_text())
+        self.assertEqual(source, generated)
+        self.assertEqual(len(source['fields']), 97)
+        observations = source['observation_surfaces']
+        self.assertEqual(len(observations), 4)
+        self.assertEqual({r['surface'] for r in observations},
+                         {'/system/build.prop', '/proc/version', '/proc/cpuinfo', '/proc/self/maps'})
+        for row in observations:
+            self.assertTrue(row['field_path'].startswith('diagnostics.filesystem.'))
+            self.assertEqual(row['status'], 'DIAGNOSTIC_ONLY')
+            self.assertIs(row['runtime_covered'], False)
+        schema = json.loads((root/'schema/filesystem-observations.schema.json').read_text())
+        for variant in schema['properties']['rows']['items']['oneOf']:
+            self.assertEqual(variant['properties']['status']['enum'], ['OBSERVED', 'BLOCKED', 'MISSING'])
+
     def test_diagnostics_permissions_and_sdk_are_isolated(self):
         probe = Path(__file__).resolve().parents[1]
         attr = '{http://schemas.android.com/apk/res/android}name'

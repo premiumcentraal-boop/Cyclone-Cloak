@@ -1262,5 +1262,59 @@
       "parity_requirement": "NONE",
       "runtime_covered": false
     }
+  ],
+  "observation_surfaces": [
+    {
+      "field_path": "diagnostics.filesystem.build_prop",
+      "surface": "/system/build.prop",
+      "status": "DIAGNOSTIC_ONLY",
+      "safe_representation": false,
+      "requires_future_runtime_work": false,
+      "metadata_only": false,
+      "reason": "Observation surface; physical evidence pending. No parity expectation.",
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
+    },
+    {
+      "field_path": "diagnostics.filesystem.proc_version",
+      "surface": "/proc/version",
+      "status": "DIAGNOSTIC_ONLY",
+      "safe_representation": false,
+      "requires_future_runtime_work": false,
+      "metadata_only": false,
+      "reason": "Observation surface; physical evidence pending. No parity expectation.",
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
+    },
+    {
+      "field_path": "diagnostics.filesystem.proc_cpuinfo",
+      "surface": "/proc/cpuinfo",
+      "status": "DIAGNOSTIC_ONLY",
+      "safe_representation": false,
+      "requires_future_runtime_work": false,
+      "metadata_only": false,
+      "reason": "Observation surface; physical evidence pending. No parity expectation.",
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
+    },
+    {
+      "field_path": "diagnostics.filesystem.maps_snapshot",
+      "surface": "/proc/self/maps",
+      "status": "DIAGNOSTIC_ONLY",
+      "safe_representation": false,
+      "requires_future_runtime_work": false,
+      "metadata_only": false,
+      "reason": "Observation surface; physical evidence pending. No parity expectation.",
+      "reader_key": null,
+      "linked_base_path": null,
+      "parity_requirement": "NONE",
+      "runtime_covered": false
+    }
   ]
 }

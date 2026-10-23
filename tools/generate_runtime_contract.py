@@ -9,6 +9,19 @@ ROOT = Path(__file__).resolve().parents[1]
 def generate():
     table = json.loads((ROOT / 'catalog/reality-runtime-fields.json').read_text(encoding='utf8'))
     rows = table['fields']
+    observations = table.get('observation_surfaces', [])
+    expected_observations = {
+        'diagnostics.filesystem.build_prop': '/system/build.prop',
+        'diagnostics.filesystem.proc_version': '/proc/version',
+        'diagnostics.filesystem.proc_cpuinfo': '/proc/cpuinfo',
+        'diagnostics.filesystem.maps_snapshot': '/proc/self/maps',
+    }
+    assert len(observations) == len(expected_observations)
+    assert {r['field_path']: r['surface'] for r in observations} == expected_observations
+    for row in observations:
+        assert row['status'] == 'DIAGNOSTIC_ONLY' and row['runtime_covered'] is False
+        assert row['linked_base_path'] is None and row['parity_requirement'] == 'NONE'
+        assert row['reader_key'] is None and row['safe_representation'] is False and row['reason']
     assert len({r['field_path'] for r in rows}) == len(rows)
     surfaces = [r['surface'] for r in rows if r['surface'] is not None]
     assert len(set(surfaces)) == len(surfaces)
@@ -55,6 +68,35 @@ def generate():
         'android/probe/src/main/assets/reality-runtime-fields.json': json.dumps(table, indent=2) + '\n',
         'schema/reality-runtime.contract.json': json.dumps(schema, indent=2) + '\n',
     }
+    # Separate diagnostics namespace: never add non-profile paths to the 97-field contract.
+    observation_variants = []
+    for row in observations:
+        props = dict(id={'const': row['field_path']}, source={'const': row['surface']},
+                     status={'enum': ['OBSERVED', 'BLOCKED', 'MISSING']},
+                     reason={'enum': ['OBSERVATION_ONLY_NO_EXPECTATION', 'PERMISSION_DENIED', 'READ_UNAVAILABLE', 'READ_LIMIT_EXCEEDED']},
+                     sha256={'type': ['string', 'null'], 'pattern': '^[0-9a-f]{64}$'},
+                     byte_count={'type': ['integer', 'null'], 'minimum': 0, 'maximum': 1048576},
+                     line_count={'type': ['integer', 'null'], 'minimum': 0, 'maximum': 1048576},
+                     duration_ms={'type': 'integer', 'minimum': 0})
+        observation_variants.append(dict(type='object', additionalProperties=False,
+            required=list(props), properties=props, allOf=[{
+                'if': {'properties': {'status': {'const': 'OBSERVED'}}},
+                'then': {'properties': {'reason': {'const': 'OBSERVATION_ONLY_NO_EXPECTATION'},
+                    'sha256': {'type': 'string'}, 'byte_count': {'type': 'integer'}, 'line_count': {'type': 'integer'}}},
+                'else': {'properties': {'sha256': {'const': None}, 'byte_count': {'const': None}, 'line_count': {'const': None}},
+                    'allOf': [{'if': {'properties': {'status': {'const': 'BLOCKED'}}},
+                               'then': {'properties': {'reason': {'const': 'PERMISSION_DENIED'}}},
+                               'else': {'properties': {'reason': {'enum': ['READ_UNAVAILABLE', 'READ_LIMIT_EXCEEDED']}}}}]}
+            }]))
+    observation_schema = {'$schema': 'https://json-schema.org/draft/2020-12/schema',
+        '$id': 'https://github.com/premiumcentraal-boop/Cyclone-Cloak/schema/filesystem-observations.schema.json',
+        'title': 'Filesystem observations format 1', 'type': 'object', 'additionalProperties': False,
+        'required': ['format', 'rows'], 'properties': {'format': {'const': 1}, 'rows': {
+            'type': 'array', 'minItems': len(observations), 'maxItems': len(observations),
+            'items': {'oneOf': observation_variants},
+            'allOf': [{'contains': {'properties': {'id': {'const': r['field_path']}}, 'required': ['id']},
+                       'minContains': 1, 'maxContains': 1} for r in observations]}}}
+    outputs['schema/filesystem-observations.schema.json'] = json.dumps(observation_schema, indent=2) + '\n'
     sys.path.insert(0, str(ROOT / 'forge'))
     from cloak_forge.runtime_contract import generate_contract
     profile = json.loads((ROOT / 'forge/tests/vectors/reality.json').read_text(encoding='utf8'))['profile']

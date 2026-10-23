@@ -7,6 +7,46 @@ import org.junit.Test
 class ProfileValidatorTest {
     private fun profile() = CloakForge.forgeProfile("Validation test", "ab".repeat(32), TestPhones["pixel_7"])
 
+    @Test fun androidWebViewUserAgentPreservesExactValueAndCoherence() {
+        for (suffix in listOf("", "; wv", " Build/TQ3A.230805.001", " Build/TQ3A.230805.001; wv")) {
+            val profile = profile()
+            val value = "Mozilla/5.0 (Linux; Android 13; Pixel 7$suffix) AppleWebKit/537.36 " +
+                "(KHTML, like Gecko) Version/4.0 Chrome/155.0.8059.43 Mobile Safari/537.36"
+            profile.put("ua", JSONObject().put("value", value))
+            assertFalse(ProfileValidator.validateProfile(profile).any { it.isError })
+            assertEquals(value, profile.getJSONObject("ua").getString("value"))
+        }
+    }
+
+    @Test fun webViewStillChecksModelReleaseAndSyntax() {
+        val value = "Mozilla/5.0 (Linux; Android 13; Pixel 7 Build/TQ3A.230805.001; wv) AppleWebKit/537.36 " +
+            "(KHTML, like Gecko) Version/4.0 Chrome/155.0.8059.43 Mobile Safari/537.36"
+        for ((replacement, code) in listOf(
+            ("Pixel 7" to "Pixel 8") to "UA_MODEL_MISMATCH",
+            ("Android 13" to "Android 16") to "UA_RELEASE_MISMATCH",
+            ("Version/4.0" to "Version/broken") to "UA_FORMAT",
+        )) {
+            val profile = profile().put("ua", JSONObject().put("value", value.replace(replacement.first, replacement.second)))
+            assertTrue(ProfileValidator.validateProfile(profile).any { it.code == code })
+        }
+    }
+
+    @Test fun webViewRealityAndVendorSensorsUseTheSharedSchema() {
+        val profile = CloakForge.forgeProfile("Synthetic host syntax", "ab".repeat(32), TestPhones["pixel_7"], "0.4")
+        val value = "Mozilla/5.0 (Linux; Android 13; Pixel 7 Build/TQ3A.230805.001; wv) AppleWebKit/537.36 " +
+            "(KHTML, like Gecko) Version/4.0 Chrome/155.0.8059.43 Mobile Safari/537.36"
+        profile.put("ua", JSONObject().put("value", value))
+        val reality = profile.getJSONObject("reality")
+        reality.getJSONObject("webview").getJSONObject("values")
+            .put("user_agent", value).put("version", "155.0.8059.43")
+        reality.put("sensors", JSONObject().put("availability", "known").put("source", "derived")
+            .put("reason", "Synthetic descriptor checks the shared real-API bounds, not hardware evidence.")
+            .put("values", JSONObject().put("inventory", org.json.JSONArray().put(JSONObject()
+                .put("type", 131073).put("name", "Synthetic vendor sensor").put("min_delay_us", -1)
+                .put("max_delay_us", 0).put("range", Float.MAX_VALUE.toDouble()).put("resolution", 0)))))
+        assertFalse(ProfileValidator.validateProfile(profile).any { it.isError })
+    }
+
     @Test
     fun invalidApiTypesHaveMachineReadableFieldReasons() {
         for (value in listOf(true, "33", 33.5)) {

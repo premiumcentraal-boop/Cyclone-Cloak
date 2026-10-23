@@ -30,7 +30,7 @@ final class LinkedParityReport {
         final String[] aggregate = {null};
         boolean complete = width instanceof Number && height instanceof Number && refresh instanceof Number;
         JSONObject supported = RealityReport.row("linked.supportedModes", complete ? true : null, modes == null ? null : () -> {
-            Object actual = modes.read();
+            Object actual = ProbeReadDeadline.call(modes::read);
             if (actual == null) return null;
             if (!(actual instanceof JSONArray)) throw new IllegalArgumentException("MALFORMED_SUPPORTED_MODES");
             JSONArray array = (JSONArray)actual; aggregate[0] = RealityReport.hash(array);
@@ -59,7 +59,7 @@ final class LinkedParityReport {
             JSONObject entry = new JSONObject().put("value", JSONObject.NULL);
             RealityReport.Reader reader = readers.get("diagnostic." + name);
             try {
-                Object value = reader == null ? null : reader.read();
+                Object value = reader == null ? null : ProbeReadDeadline.call(reader::read);
                 if (value != null && value != JSONObject.NULL) {
                     if (name.equals("supported_modes")) {
                         JSONArray values = (JSONArray)value, safe = new JSONArray();
