@@ -1,0 +1,545 @@
+{
+  "format": 1,
+  "generated_at": "2026-10-23T18:41:20.259773+00:00",
+  "source_commit": "d4f0a5cb5f4d70bacaeb0b8ecdff184eff154150",
+  "source_tree_dirty": true,
+  "measurement_mode": "ARCHIVED_CAPTURE_REPLAY_NO_DEVICE_WRITES",
+  "artifact_digest": "d7dd105446a229f981e5cdd1aed862a13e3c7d04220f04fb08eadde175bb15c1",
+  "artifact_digest_kind": "installed_arm64_library_sha256_archived_load_record_match",
+  "artifact": {
+    "version": "0.11.0-alpha.28",
+    "version_code": 52,
+    "original_candidate_zip_sha256": "8fd58b4ad0ea60ec06460b0ecaa0b9cea8e56467437975103d04392958a68795",
+    "installed_files": {
+      "/data/adb/modules/cyclone_cloak/zygisk/arm64-v8a.so": "d7dd105446a229f981e5cdd1aed862a13e3c7d04220f04fb08eadde175bb15c1",
+      "/data/adb/modules/cyclone_cloak/zygisk/armeabi-v7a.so": "6e9943f1033582eb90f9a765b80f52243b4da90a9d577e5c4e43203b2278647e",
+      "/data/adb/modules/cyclone_cloak/artifacts.sha256": "200fa6efd9cde6a16f7e6e98296244a6501480b952586dfcb5b122f92f033e81"
+    },
+    "device_check": "READ_ONLY_INSTALLED_FILE_HASHES_NOT_MEMORY_ATTESTATION"
+  },
+  "fixture_sha256": "c78353910306cda7b0897f3310d2637a7568ec4925de8d63822645cf8a9e8f66",
+  "sources": [
+    {
+      "capture_id": "bootgate-27ec69b718f04e89a9868dd556a90560",
+      "android_user_id": 17,
+      "captured_at": "2026-10-23T17:25:43.713000+00:00",
+      "report_path": "docs/runtime-evidence/2026-10-23-192355-rung1b-two-ui-attempts/user-17-capture-1-report.json",
+      "report_sha256": "aec0138fb2f68df94affc0e2f4414d22b0c400a8551bed7f61983ed068d051e2",
+      "markers_sha256": "10caf87f959ceaa202eb9b44e236ecd0690feb09c73e6860de01ac67d704e037"
+    },
+    {
+      "capture_id": "bootgate-1322cf5466be42d7b02e9581d9ef0a94",
+      "android_user_id": 17,
+      "captured_at": "2026-10-23T17:25:59.486000+00:00",
+      "report_path": "docs/runtime-evidence/2026-10-23-192355-rung1b-two-ui-attempts/user-17-capture-2-report.json",
+      "report_sha256": "b905210fa033b25adf513b9e46a3cbed0ef586968cf8691d59fd9f4539899fc3",
+      "markers_sha256": "237e538013c5a4cecbe4c81b484e546dc307a1dc89c32dfca3c4998a4a42ec80"
+    },
+    {
+      "capture_id": "bootgate-19bec72a6d9a445998ffbba5683dc78f",
+      "android_user_id": 17,
+      "captured_at": "2026-10-23T17:26:26.323000+00:00",
+      "report_path": "docs/runtime-evidence/2026-10-23-192355-rung1b-two-ui-attempts/user-17-capture-3-report.json",
+      "report_sha256": "7ed212ecfad86f55bb071b0d66af1dee89bf866a14bcc2c3abf80403ad640276",
+      "markers_sha256": "f7df0497dd7958df73e95c18da2a6548454290b755b5ae484aa3a163f805d8a4"
+    }
+  ],
+  "rows": [
+    {
+      "row_id": "reality.memory.values.free_storage_gib",
+      "host_sha256": null,
+      "fixture_expectation_sha256": "198211617b7c624ed22919c6facc6d5cd7823e66ddee1581c51b712ca0c6b448",
+      "fixture_digest_projection": "direct_profile_field",
+      "fixture_digest_algorithm": "sha256/catalog_provenance.canonical-v1",
+      "classification": "PARTIAL",
+      "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+      "evidence_scope": "unavailable_direct_reader",
+      "observations": [
+        {
+          "capture_id": "bootgate-27ec69b718f04e89a9868dd556a90560",
+          "probe_row_id": "envelope.storage.availableBytes",
+          "probe_status": "MISSING",
+          "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+          "actual_sha256": null,
+          "expected_sha256": null
+        },
+        {
+          "capture_id": "bootgate-1322cf5466be42d7b02e9581d9ef0a94",
+          "probe_row_id": "envelope.storage.availableBytes",
+          "probe_status": "MISSING",
+          "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+          "actual_sha256": null,
+          "expected_sha256": null
+        },
+        {
+          "capture_id": "bootgate-19bec72a6d9a445998ffbba5683dc78f",
+          "probe_row_id": "envelope.storage.availableBytes",
+          "probe_status": "MISSING",
+          "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+          "actual_sha256": null,
+          "expected_sha256": null
+        }
+      ]
+    },
+    {
+      "row_id": "reality.sensors.values.inventory",
+      "host_sha256": null,
+      "fixture_expectation_sha256": "f7fb7afe01807b14232e9a08bd84900806779dcb4635aec9c7f6d76ad5655e84",
+      "fixture_digest_projection": "direct_profile_field",
+      "fixture_digest_algorithm": "sha256/catalog_provenance.canonical-v1",
+      "classification": "PARTIAL",
+      "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+      "evidence_scope": "unavailable_direct_reader",
+      "observations": [
+        {
+          "capture_id": "bootgate-27ec69b718f04e89a9868dd556a90560",
+          "probe_row_id": "envelope.sensors.inventory",
+          "probe_status": "MISSING",
+          "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+          "actual_sha256": null,
+          "expected_sha256": null
+        },
+        {
+          "capture_id": "bootgate-1322cf5466be42d7b02e9581d9ef0a94",
+          "probe_row_id": "envelope.sensors.inventory",
+          "probe_status": "MISSING",
+          "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+          "actual_sha256": null,
+          "expected_sha256": null
+        },
+        {
+          "capture_id": "bootgate-19bec72a6d9a445998ffbba5683dc78f",
+          "probe_row_id": "envelope.sensors.inventory",
+          "probe_status": "MISSING",
+          "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+          "actual_sha256": null,
+          "expected_sha256": null
+        }
+      ]
+    },
+    {
+      "row_id": "reality.sensors.values.inventory[].max_delay_us",
+      "host_sha256": null,
+      "fixture_expectation_sha256": "8cf8d2d249a14d79ca673aeeac3f6ae55d4806c7c62c2022c8185597eea5efae",
+      "fixture_digest_projection": "ordered_inventory_field_projection",
+      "fixture_digest_algorithm": "sha256/catalog_provenance.canonical-v1",
+      "classification": "PARTIAL",
+      "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+      "evidence_scope": "unavailable_aggregate_no_child_measurement",
+      "observations": [
+        {
+          "capture_id": "bootgate-27ec69b718f04e89a9868dd556a90560",
+          "probe_row_id": "envelope.sensors.inventory",
+          "probe_status": "MISSING",
+          "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+          "actual_sha256": null,
+          "expected_sha256": null
+        },
+        {
+          "capture_id": "bootgate-1322cf5466be42d7b02e9581d9ef0a94",
+          "probe_row_id": "envelope.sensors.inventory",
+          "probe_status": "MISSING",
+          "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+          "actual_sha256": null,
+          "expected_sha256": null
+        },
+        {
+          "capture_id": "bootgate-19bec72a6d9a445998ffbba5683dc78f",
+          "probe_row_id": "envelope.sensors.inventory",
+          "probe_status": "MISSING",
+          "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+          "actual_sha256": null,
+          "expected_sha256": null
+        }
+      ]
+    },
+    {
+      "row_id": "reality.sensors.values.inventory[].min_delay_us",
+      "host_sha256": null,
+      "fixture_expectation_sha256": "72934a4e12321df9d6c76cba0448bfc0f833dc44ca00747ba205667e5d0c7209",
+      "fixture_digest_projection": "ordered_inventory_field_projection",
+      "fixture_digest_algorithm": "sha256/catalog_provenance.canonical-v1",
+      "classification": "PARTIAL",
+      "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+      "evidence_scope": "unavailable_aggregate_no_child_measurement",
+      "observations": [
+        {
+          "capture_id": "bootgate-27ec69b718f04e89a9868dd556a90560",
+          "probe_row_id": "envelope.sensors.inventory",
+          "probe_status": "MISSING",
+          "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+          "actual_sha256": null,
+          "expected_sha256": null
+        },
+        {
+          "capture_id": "bootgate-1322cf5466be42d7b02e9581d9ef0a94",
+          "probe_row_id": "envelope.sensors.inventory",
+          "probe_status": "MISSING",
+          "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+          "actual_sha256": null,
+          "expected_sha256": null
+        },
+        {
+          "capture_id": "bootgate-19bec72a6d9a445998ffbba5683dc78f",
+          "probe_row_id": "envelope.sensors.inventory",
+          "probe_status": "MISSING",
+          "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+          "actual_sha256": null,
+          "expected_sha256": null
+        }
+      ]
+    },
+    {
+      "row_id": "reality.sensors.values.inventory[].name",
+      "host_sha256": null,
+      "fixture_expectation_sha256": "de287015cd2261f302086b466c144c003a73ae34aa9cd0215ca4c102a5786853",
+      "fixture_digest_projection": "ordered_inventory_field_projection",
+      "fixture_digest_algorithm": "sha256/catalog_provenance.canonical-v1",
+      "classification": "PARTIAL",
+      "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+      "evidence_scope": "unavailable_aggregate_no_child_measurement",
+      "observations": [
+        {
+          "capture_id": "bootgate-27ec69b718f04e89a9868dd556a90560",
+          "probe_row_id": "envelope.sensors.inventory",
+          "probe_status": "MISSING",
+          "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+          "actual_sha256": null,
+          "expected_sha256": null
+        },
+        {
+          "capture_id": "bootgate-1322cf5466be42d7b02e9581d9ef0a94",
+          "probe_row_id": "envelope.sensors.inventory",
+          "probe_status": "MISSING",
+          "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+          "actual_sha256": null,
+          "expected_sha256": null
+        },
+        {
+          "capture_id": "bootgate-19bec72a6d9a445998ffbba5683dc78f",
+          "probe_row_id": "envelope.sensors.inventory",
+          "probe_status": "MISSING",
+          "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+          "actual_sha256": null,
+          "expected_sha256": null
+        }
+      ]
+    },
+    {
+      "row_id": "reality.sensors.values.inventory[].range",
+      "host_sha256": null,
+      "fixture_expectation_sha256": "e3d6a317b161e0f09d006b3ace1bf780faefaf2833da9b10d4b266cb124f7627",
+      "fixture_digest_projection": "ordered_inventory_field_projection",
+      "fixture_digest_algorithm": "sha256/catalog_provenance.canonical-v1",
+      "classification": "PARTIAL",
+      "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+      "evidence_scope": "unavailable_aggregate_no_child_measurement",
+      "observations": [
+        {
+          "capture_id": "bootgate-27ec69b718f04e89a9868dd556a90560",
+          "probe_row_id": "envelope.sensors.inventory",
+          "probe_status": "MISSING",
+          "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+          "actual_sha256": null,
+          "expected_sha256": null
+        },
+        {
+          "capture_id": "bootgate-1322cf5466be42d7b02e9581d9ef0a94",
+          "probe_row_id": "envelope.sensors.inventory",
+          "probe_status": "MISSING",
+          "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+          "actual_sha256": null,
+          "expected_sha256": null
+        },
+        {
+          "capture_id": "bootgate-19bec72a6d9a445998ffbba5683dc78f",
+          "probe_row_id": "envelope.sensors.inventory",
+          "probe_status": "MISSING",
+          "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+          "actual_sha256": null,
+          "expected_sha256": null
+        }
+      ]
+    },
+    {
+      "row_id": "reality.sensors.values.inventory[].resolution",
+      "host_sha256": null,
+      "fixture_expectation_sha256": "9201a5fe692a9ff8f105f782ec07309130d0a15a59855fc4523b653b65474f9a",
+      "fixture_digest_projection": "ordered_inventory_field_projection",
+      "fixture_digest_algorithm": "sha256/catalog_provenance.canonical-v1",
+      "classification": "PARTIAL",
+      "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+      "evidence_scope": "unavailable_aggregate_no_child_measurement",
+      "observations": [
+        {
+          "capture_id": "bootgate-27ec69b718f04e89a9868dd556a90560",
+          "probe_row_id": "envelope.sensors.inventory",
+          "probe_status": "MISSING",
+          "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+          "actual_sha256": null,
+          "expected_sha256": null
+        },
+        {
+          "capture_id": "bootgate-1322cf5466be42d7b02e9581d9ef0a94",
+          "probe_row_id": "envelope.sensors.inventory",
+          "probe_status": "MISSING",
+          "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+          "actual_sha256": null,
+          "expected_sha256": null
+        },
+        {
+          "capture_id": "bootgate-19bec72a6d9a445998ffbba5683dc78f",
+          "probe_row_id": "envelope.sensors.inventory",
+          "probe_status": "MISSING",
+          "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+          "actual_sha256": null,
+          "expected_sha256": null
+        }
+      ]
+    },
+    {
+      "row_id": "reality.sensors.values.inventory[].type",
+      "host_sha256": null,
+      "fixture_expectation_sha256": "51cf674774e766eee4553095decc76954df1be06ef8cd3b99f4efb4956a1b456",
+      "fixture_digest_projection": "ordered_inventory_field_projection",
+      "fixture_digest_algorithm": "sha256/catalog_provenance.canonical-v1",
+      "classification": "PARTIAL",
+      "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+      "evidence_scope": "unavailable_aggregate_no_child_measurement",
+      "observations": [
+        {
+          "capture_id": "bootgate-27ec69b718f04e89a9868dd556a90560",
+          "probe_row_id": "envelope.sensors.inventory",
+          "probe_status": "MISSING",
+          "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+          "actual_sha256": null,
+          "expected_sha256": null
+        },
+        {
+          "capture_id": "bootgate-1322cf5466be42d7b02e9581d9ef0a94",
+          "probe_row_id": "envelope.sensors.inventory",
+          "probe_status": "MISSING",
+          "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+          "actual_sha256": null,
+          "expected_sha256": null
+        },
+        {
+          "capture_id": "bootgate-19bec72a6d9a445998ffbba5683dc78f",
+          "probe_row_id": "envelope.sensors.inventory",
+          "probe_status": "MISSING",
+          "reason_code": "PROFILE_SURFACE_UNAVAILABLE",
+          "actual_sha256": null,
+          "expected_sha256": null
+        }
+      ]
+    },
+    {
+      "row_id": "reality.webview.values.user_agent",
+      "host_sha256": null,
+      "fixture_expectation_sha256": "70e7be8ef4470023f797b83eb9c45de04768786022ac7ea5bb107947586ce7dd",
+      "fixture_digest_projection": "direct_profile_field",
+      "fixture_digest_algorithm": "sha256/catalog_provenance.canonical-v1",
+      "classification": "UNVERIFIED",
+      "reason_code": "RuntimeException",
+      "evidence_scope": "unavailable_direct_reader",
+      "observations": [
+        {
+          "capture_id": "bootgate-27ec69b718f04e89a9868dd556a90560",
+          "probe_row_id": "envelope.webview.instanceUa",
+          "probe_status": "MISSING",
+          "reason_code": "RuntimeException",
+          "actual_sha256": null,
+          "expected_sha256": null
+        },
+        {
+          "capture_id": "bootgate-1322cf5466be42d7b02e9581d9ef0a94",
+          "probe_row_id": "envelope.webview.instanceUa",
+          "probe_status": "MISSING",
+          "reason_code": "RuntimeException",
+          "actual_sha256": null,
+          "expected_sha256": null
+        },
+        {
+          "capture_id": "bootgate-19bec72a6d9a445998ffbba5683dc78f",
+          "probe_row_id": "envelope.webview.instanceUa",
+          "probe_status": "MISSING",
+          "reason_code": "RuntimeException",
+          "actual_sha256": null,
+          "expected_sha256": null
+        }
+      ]
+    }
+  ],
+  "applied_review": [
+    {
+      "row_id": "reality.carrier.values.sim_state",
+      "probe_row_ids": [
+        "envelope.telephony.simState",
+        "envelope.telephony.simStateSlot0"
+      ],
+      "regressed": false,
+      "source": "archived_three_capture_replay",
+      "statuses": [
+        [
+          "PASS",
+          "PASS"
+        ],
+        [
+          "PASS",
+          "PASS"
+        ],
+        [
+          "PASS",
+          "PASS"
+        ]
+      ]
+    },
+    {
+      "row_id": "reality.compute.values.gpu",
+      "probe_row_ids": [
+        "envelope.compute.gpuRenderer"
+      ],
+      "regressed": false,
+      "source": "archived_three_capture_replay",
+      "statuses": [
+        [
+          "PASS"
+        ],
+        [
+          "PASS"
+        ],
+        [
+          "PASS"
+        ]
+      ]
+    },
+    {
+      "row_id": "reality.packages.values.installed",
+      "probe_row_ids": [
+        "envelope.packages.visibleVersions"
+      ],
+      "regressed": false,
+      "source": "archived_three_capture_replay",
+      "statuses": [
+        [
+          "PASS"
+        ],
+        [
+          "PASS"
+        ],
+        [
+          "PASS"
+        ]
+      ]
+    },
+    {
+      "row_id": "reality.packages.values.installed[].package",
+      "probe_row_ids": [
+        "envelope.packages.visibleVersions"
+      ],
+      "regressed": false,
+      "source": "archived_three_capture_replay",
+      "statuses": [
+        [
+          "PASS"
+        ],
+        [
+          "PASS"
+        ],
+        [
+          "PASS"
+        ]
+      ]
+    },
+    {
+      "row_id": "reality.packages.values.installed[].version_code",
+      "probe_row_ids": [
+        "envelope.packages.visibleVersions"
+      ],
+      "regressed": false,
+      "source": "archived_three_capture_replay",
+      "statuses": [
+        [
+          "PASS"
+        ],
+        [
+          "PASS"
+        ],
+        [
+          "PASS"
+        ]
+      ]
+    },
+    {
+      "row_id": "reality.packages.values.installed[].version_name",
+      "probe_row_ids": [
+        "envelope.packages.visibleVersions"
+      ],
+      "regressed": false,
+      "source": "archived_three_capture_replay",
+      "statuses": [
+        [
+          "PASS"
+        ],
+        [
+          "PASS"
+        ],
+        [
+          "PASS"
+        ]
+      ]
+    },
+    {
+      "row_id": "reality.webview.values.provider",
+      "probe_row_ids": [
+        "envelope.webview.provider"
+      ],
+      "regressed": false,
+      "source": "archived_three_capture_replay",
+      "statuses": [
+        [
+          "PASS"
+        ],
+        [
+          "PASS"
+        ],
+        [
+          "PASS"
+        ]
+      ]
+    },
+    {
+      "row_id": "reality.webview.values.version",
+      "probe_row_ids": [
+        "envelope.webview.version"
+      ],
+      "regressed": false,
+      "source": "archived_three_capture_replay",
+      "statuses": [
+        [
+          "PASS"
+        ],
+        [
+          "PASS"
+        ],
+        [
+          "PASS"
+        ]
+      ]
+    }
+  ],
+  "applied_regressions": [],
+  "notes": [
+    "No fresh device capture: the documented flow installs, writes overlays/reports and switches users, prohibited in this read-only sprint.",
+    "generated_at is the export time; sources[].captured_at is the historical physical capture time. Local parity suites are rerun; raw evidence is not relabelled.",
+    "The generated runtime table still has 17 PARTIAL paths; the Rung 1 artifact-scoped ledger has 8 APPLIED and 9 outstanding. Ledger classifications do not change capability-contract statuses.",
+    "All requested host hashes are null because authoritative readers returned no value. Null is not a hash of null, an empty string, a host fallback or a fabricated value.",
+    "Fixture expectation hashes use existing catalog_provenance.canonical bytes of the schema-unit field/projection, not probe envelope canonicalization or its byte conversion. They are not directly compared across algorithms.",
+    "Source report expected_sha256 remains null on reader failure. Independent fixture expectation hashes do not turn unavailable observations into PASS.",
+    "Sensor child values were not individually captured; the aggregate failure is retained as provenance, never projected into fabricated child measurements.",
+    "Default WebView UA PASS does not establish the concrete instance-UA surface. Its exact retained reason is RuntimeException; no retained full stack or underlying cause is invented.",
+    "No APPLIED regression observed within the archived three captures; no fresh physical regression conclusion is asserted.",
+    "Historical APPLIED package-child ledger entries use aggregate hashes and do not prove independent child measurements or distinct-value runtime enforcement.",
+    "No platform verdict, VERIFIED promotion, production code edit, permission write, install, launch, user switch or release."
+  ]
+}
