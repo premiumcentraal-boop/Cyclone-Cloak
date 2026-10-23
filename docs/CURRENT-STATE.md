@@ -25,9 +25,10 @@ forge tests: `uv run --with pytest --with jsonschema --with cryptography -- pyth
 No source fix was needed. No compiler warnings were reported. Release signing/CI
 validation and RC device smoke testing have not been performed.
 
-S7 preflight: the owner-selected release commit `7f3fc29` does not contain
-`docs/RELEASE_1.0.0-rc.1.md`, which the unchanged release verifier requires.
-Publication remains blocked until release notes exist on the selected tag target.
+S7 preflight initially found missing release notes on `7f3fc29`. The owner
+approved a later documentation-only tag target with
+[RC release notes](RELEASE_1.0.0-rc.1.md). Signed release workflow and published
+artifact checks remain required before device work.
 
 Rung-2 filesystem parity and masking rows are **closed for the engineering
 handoff only**; physical confirmation is tracked separately in S8 and remains
