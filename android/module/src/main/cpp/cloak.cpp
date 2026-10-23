@@ -640,6 +640,42 @@ bool valid_request(const std::string &user, const std::string &pkg) {
            std::string::npos;
 }
 
+// Optional per-profile denylist integration. When the profile enables it,
+// the root companion writes the bound package path into Magisk's denylist
+// config so Shamiko (or stock MagiskDenyList enforcement) hides root from
+// that process at the kernel layer. The in-process needle filter stays as
+// a fallback for KernelSU or when the write fails.
+constexpr uint32_t kDenyListRequestMagic = 0x434C4B33;  // CLK3; companion IPC only
+constexpr size_t kDenyListMax = 8;
+
+struct DenyListRequest {
+    uint32_t magic;
+    char user[16];
+    char packageName[256];
+};
+
+// Called from the root companion with an already-validated request.
+// Returns 1 when the denylist entry exists after the call, 0 when skipped.
+bool ensure_denylist_entry(const std::string &user, const std::string &pkg) {
+    // Magisk denylist config: one path per line under
+    // /data/adb/magisk/<classic denylist>/... The canonical location is
+    // managed by the magisk binary itself, so the safest write is a marker
+    // file the companion shell can apply with `magisk --denylist add`.
+    // We execute it from the companion (root) context once per profile+pkg.
+    std::string command = "magisk --denylist add " + pkg;
+    const int rc = system(command.c_str());
+    return rc == 0;
+}
+
+bool write_denylist_entry(const std::string &user, const std::string &pkg) {
+    if (user.empty() || pkg.empty()) return false;
+    // Only run when Magisk is present; on KernelSU or plain, skip silently.
+    if (access("/proc/self/ns/mnt", F_OK) != 0 || access("/data/adb/magisk", F_OK) != 0) {
+        return false;
+    }
+    return ensure_denylist_entry(user, pkg);
+}
+
 std::string read_profile_state(const std::string &user, const std::string &pkg) {
     const std::string base = "/data/adb/cyclone_cloak/state-v1";
     std::string stateKey;
@@ -723,6 +759,18 @@ void companion_handler(int socket) {
     std::string profileJson;
     if (valid_request(user, pkg)) {
         profileJson = read_profile_state(user, pkg);
+        // Denylist integration: only after a valid profile is loaded and
+        // only when the profile requests it via cloak.denylist_enabled.
+        if (!profileJson.empty()) {
+            json parsed = json::parse(profileJson, nullptr, false);
+            if (!parsed.is_discarded() && parsed.is_object()) {
+                auto cloakObj = parsed.find("cloak");
+                if (cloakObj != parsed.end() && cloakObj->is_object() &&
+                    cloakObj->value("denylist_enabled", false) == true) {
+                    write_denylist_entry(user, pkg);
+                }
+            }
+        }
     }
     const uint32_t size = profileJson.size() <= kMaxProfileBytes
         ? static_cast<uint32_t>(profileJson.size())

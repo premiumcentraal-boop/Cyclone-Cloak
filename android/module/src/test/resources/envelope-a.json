@@ -1,5 +1,8 @@
 {
   "schema_version": "0.4",
+  "cloak": {
+    "denylist_enabled": true
+  },
   "display": {
     "width": 1080,
     "height": 2400
@@ -95,3 +98,4 @@
     }
   }
 }
+

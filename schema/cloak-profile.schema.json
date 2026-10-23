@@ -44,6 +44,16 @@
     "display": {
       "$ref": "#/$defs/display"
     },
+    "cloak": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "denylist_enabled": {
+          "type": "boolean",
+          "default": false
+        }
+      }
+    },
     "health": {
       "$ref": "#/$defs/health"
     },
