@@ -32,10 +32,16 @@ signer before installing. Package weights: module zip 2,050,661 bytes, app 44,70
 1. Install the RC2 app and module. Module via `su --mount-master -c 'magisk --install-module <zip>'`.
 2. Record installer exit code and output, then reboot once.
 3. Confirm both users are unlocked and that installed module/app report `rc.2` / `61`.
-4. Verify the installed zygisk `.so` hash equals `45a2788dee10f66431ac6996d21618ac171a2b658a271243d8707cf9d978e5de`
-   (arm64) from `artifacts.sha256`. An installed-module file hash is not in-process proof.
+4. Pin the **CI-built** arm64 zygisk hash from that signed run. The local build hash
+   `45a2788d…` did not reproduce in CI (`5b4c6d01…`), so the local value is not authoritative;
+   differences include both native libraries, not just ZIP timestamps. `--expected-module-hash`
+   now enforces the pin in the runner instead of leaving it in prose. An installed-module file
+   hash is still not in-process binary proof.
 
-Only then rerun S8, with `--expected-version v1.0.0-rc.2:61`.
+Only then rerun S8, with `--expected-version v1.0.0-rc.2:61 --expected-module-hash <CI arm64 sha256>`.
+
+The version pair takes the tag with its `v`; the runner strips it for the app `versionName`, which
+carries no prefix. The module `version` in `module.prop` does keep the `v`.
 
 ## Expected result
 

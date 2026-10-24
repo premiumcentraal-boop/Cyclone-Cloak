@@ -462,6 +462,7 @@ def parse_args(argv=None):
     p.add_argument('--cycles', type=int, default=1, help='Full lifecycle repetitions (default: 1)')
     p.add_argument('--candidate-commit', help='Explicit source commit for installed candidate; metadata does not prove provenance')
     p.add_argument('--expected-version', help='Explicit expected version for the installed candidate, overriding the built-in alpha.27 candidate expectations; still requires the RC tag/code pair to match exactly.')
+    p.add_argument('--expected-module-hash', help='Required sha256 of the installed arm64 zygisk artifact. Stops the run when the installed module is not the measured candidate.')
     args = p.parse_args(argv)
     if args.cycles < 1:
         p.error('--cycles must be at least 1')
@@ -705,7 +706,8 @@ def run_cycle(args):
                 if not re.match(r'^\d+$', code_override):
                     raise ValueError('UNSUPPORTED_EXPECTED_VERSION')
                 expected_versions = dict(module=tag_override, module_code=code_override,
-                    app_version=tag_override, app_code=code_override)
+                    # Android versionName carries no tag 'v' prefix; the module.prop version does.
+                    app_version=tag_override.lstrip('v'), app_code=code_override)
             elif not re.match(r'^v1\.0\.0-rc\.1$', expected_override):
                 raise ValueError('UNSUPPORTED_EXPECTED_VERSION')
             else:
@@ -715,6 +717,17 @@ def run_cycle(args):
         else:
             expected_versions = dict(module=TAG, module_code='42', app_version='0.11.0-alpha.18', app_code='42')
         if m['installed_versions'] != expected_versions: raise ValueError('INSTALLED_VERSION_MISMATCH')
+        expected_module_hash = getattr(args, 'expected_module_hash', None)
+        if expected_module_hash:
+            if not re.fullmatch(r'[0-9a-f]{64}', expected_module_hash):
+                raise ValueError('INVALID_EXPECTED_MODULE_HASH')
+            installed_module_hash = d.root(
+                'sha256sum /data/adb/modules/cyclone_cloak/zygisk/arm64-v8a.so').stdout.split()[0]
+            m['expected_module_hash'] = expected_module_hash
+            m['installed_module_hash'] = installed_module_hash
+            # Version metadata can match across rebuilds; the binary is what actually runs.
+            if installed_module_hash != expected_module_hash:
+                raise ValueError('CANDIDATE_MODULE_HASH_MISMATCH')
         aapt = Path(args.adb).resolve().parents[1]/'build-tools/35.0.0/aapt.exe'
         badging = subprocess.check_output([str(aapt),'dump','badging',str(apk)], text=True)
         if not re.search(r"^package: name='dev\.cyclone\.cloak\.probe\.diag'",badging,re.M): raise ValueError('WRONG_APK')
