@@ -143,10 +143,12 @@ final class RealityProbe {
             try {
                 for (android.content.pm.PackageInfo entry : pm.getInstalledPackages(0)) {
                     if (entry != null && entry.packageName != null
-                            && entry.packageName.startsWith("dev.cyclone.cloak")
-                            && !entry.packageName.equals(activity.getPackageName())) {
-                        // The probe itself is diagnostics tooling, not concealed state;
-                        // only a companion/module package visible here is a finding.
+                            && entry.packageName.startsWith("dev.cyclone.cloak")) {
+                        // The probe and the publisher companion are the diagnostics
+                        // tooling itself, not concealed state; either flavor of the
+                        // probe and the exact companion id are always visible here.
+                        if (entry.packageName.equals("dev.cyclone.cloak")
+                                || entry.packageName.startsWith("dev.cyclone.cloak.probe")) continue;
                         return "FOUND:" + entry.packageName;
                     }
                 }
