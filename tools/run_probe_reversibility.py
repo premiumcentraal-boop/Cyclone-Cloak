@@ -479,6 +479,12 @@ def run_cycle(args):
         packages = {}
         for package in (PACKAGE, 'dev.cyclone.cloak'):
             text = d.shell('dumpsys package '+package).stdout
+            path_check = d.shell(f'pm path {package}', check=False).stdout.strip()
+            if not path_check:
+                # Absent package: record an explicit absent baseline rather than
+                # failing; the post-run comparison must observe the same absence.
+                packages[package] = dict(present=False, grants=None, appop_modes=None, install_grants=None)
+                continue
             grants, install = package_permissions(text)
             modes = {}
             for user in users:
@@ -488,7 +494,7 @@ def run_cycle(args):
                 uid_response = d.shell('cmd appops get '+match[1])
                 response = d.shell(f'cmd appops get --user {user} {package}')
                 modes[str(user)] = appop_modes(response.stdout, uid_response.stdout)
-            packages[package] = dict(grants=grants, appop_modes=modes, install_grants=install)
+            packages[package] = dict(present=True, grants=grants, appop_modes=modes, install_grants=install)
         return packages
 
     def audit():
