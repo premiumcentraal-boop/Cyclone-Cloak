@@ -696,9 +696,20 @@ def run_cycle(args):
             app_version=re.search(r'versionName=(\S+)',app).group(1), app_code=re.search(r'versionCode=(\d+)',app).group(1))
         expected_override = getattr(args, 'expected_version', None)
         if expected_override:
-            if not re.match(r'^v1\.0\.0-rc\.1$', expected_override):
+            # Accept an explicit "version:code" pair so a candidate build can be tested without
+            # hardcoding every release here. A bare tag still resolves to the rc.1 pair.
+            if ':' in expected_override:
+                tag_override, code_override = expected_override.split(':', 1)
+                if not re.match(r'^v\d+\.\d+\.\d+(-[0-9a-z.\-]+)?$', tag_override):
+                    raise ValueError('UNSUPPORTED_EXPECTED_VERSION')
+                if not re.match(r'^\d+$', code_override):
+                    raise ValueError('UNSUPPORTED_EXPECTED_VERSION')
+                expected_versions = dict(module=tag_override, module_code=code_override,
+                    app_version=tag_override, app_code=code_override)
+            elif not re.match(r'^v1\.0\.0-rc\.1$', expected_override):
                 raise ValueError('UNSUPPORTED_EXPECTED_VERSION')
-            expected_versions = dict(module='v1.0.0-rc.1', module_code='60', app_version='1.0.0-rc.1', app_code='60')
+            else:
+                expected_versions = dict(module='v1.0.0-rc.1', module_code='60', app_version='1.0.0-rc.1', app_code='60')
         elif candidate:
             expected_versions = dict(module='v0.11.0-alpha.27', module_code='51', app_version='0.11.0-alpha.27', app_code='51')
         else:
