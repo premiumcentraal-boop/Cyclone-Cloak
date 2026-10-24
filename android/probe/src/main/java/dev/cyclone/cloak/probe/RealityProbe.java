@@ -231,6 +231,10 @@ final class RealityProbe {
                 rows.put(RealityReport.row("reality." + key, value, readers.get(key)));
             }
         }
+        // Self-visibility diagnostics are always collected, never allowlist-gated:
+        // a missing row proves nothing, so these three are appended unconditionally.
+        for (String masked : new String[] {"masked.package_list", "masked.maps", "masked.services"})
+            if (readers.containsKey(masked)) rows.put(RealityReport.row("reality." + masked, null, readers.get(masked)));
         Map<String, RealityReport.Reader> linked = new HashMap<>();
         for (int i = 0; i < contractFields.length(); i++) {
             JSONObject field = contractFields.getJSONObject(i);

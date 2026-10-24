@@ -38,4 +38,18 @@ public class RealityReportTest {
         assertEquals(RealityReport.hash(120), RealityReport.hash(120.0d));
     }
 
+    @Test public void maskedCompletenessRowsAlwaysProduceAResult() throws Exception {
+        // Completeness gate: the three self-visibility rows must always be emitted.
+        for (String id : new String[] {"reality.masked.package_list", "reality.masked.maps", "reality.masked.services"}) {
+            JSONObject present = RealityReport.row(id, null, () -> "NOT_PRESENT");
+            assertEquals("OBSERVED", present.getString("status"));
+            assertEquals(id, present.getString("id"));
+            JSONObject found = RealityReport.row(id, null, () -> "FOUND:x");
+            assertEquals("OBSERVED", found.getString("status"));
+            assertFalse(found.toString().contains("FOUND:x"));
+            JSONObject denied = RealityReport.row(id, null, () -> { throw new SecurityException("private"); });
+            assertEquals("BLOCKED", denied.getString("status"));
+        }
+    }
+
 }
