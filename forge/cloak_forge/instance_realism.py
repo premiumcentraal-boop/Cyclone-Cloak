@@ -23,6 +23,8 @@ def anchor(profile):
              ('device', 'display', 'camera', 'telephony', 'locale', 'network', 'reality') if k in profile}
     reality = facts.get('reality', {})
     reality.pop('inventory_id', None)
+    # Wholly derived from device and webview facts, so it must not invalidate the anchor.
+    reality.pop('packages', None)
     for section, keys in (('radio', ('wifi_name', 'bluetooth_name')), ('webview', ('user_agent',))):
         for key in keys:
             reality.get(section, {}).get('values', {}).pop(key, None)

@@ -253,10 +253,23 @@
         "reality.memory.source": "approximated",
         "reality.memory.values.ram_gib": 8,
         "reality.memory.values.storage_gib": 128,
-        "reality.packages.availability": null,
-        "reality.packages.reason": null,
-        "reality.packages.source": null,
-        "reality.packages.values": null,
+        "reality.packages.availability": "known",
+        "reality.packages.reason": "Framework and WebView versions derived from this profile; other packages remain host-read.",
+        "reality.packages.source": "derived",
+        "reality.packages.values": {
+          "installed": [
+            {
+              "package": "android",
+              "version_name": "14",
+              "version_code": 34
+            },
+            {
+              "package": "com.google.android.webview",
+              "version_name": "126.0.6478.122",
+              "version_code": 647812200
+            }
+          ]
+        },
         "reality.sensors.availability": "known",
         "reality.sensors.reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
         "reality.sensors.source": "approximated",
@@ -776,7 +789,7 @@
       "template_id": "pixel_6",
       "evidence": "catalog-phones",
       "iccid_prefix": null,
-      "anchor": "a0f786718f20afb0b420ae327c9a7328d735ca432ae9877fe28632cb55aaaa2d",
+      "anchor": "15b6969220f6262323c344860351a8208287688d25e4ac42aa6ce75abec31bf9",
       "originals": {
         "camera.cameras": [
           {
@@ -839,10 +852,18 @@
         "reality.memory.source": "needs verification",
         "reality.memory.values.ram_gib": null,
         "reality.memory.values.storage_gib": null,
-        "reality.packages.availability": "unknown",
-        "reality.packages.reason": "No verified template value; collect read-only evidence for this field.",
-        "reality.packages.source": "needs verification",
-        "reality.packages.values": {},
+        "reality.packages.availability": "known",
+        "reality.packages.reason": "Framework and WebView versions derived from this profile; other packages remain host-read.",
+        "reality.packages.source": "derived",
+        "reality.packages.values": {
+          "installed": [
+            {
+              "package": "android",
+              "version_name": "14",
+              "version_code": 34
+            }
+          ]
+        },
         "reality.sensors.availability": "unknown",
         "reality.sensors.reason": "No verified template value; collect read-only evidence for this field.",
         "reality.sensors.source": "needs verification",
@@ -1144,10 +1165,23 @@
         "reality.memory.source": "approximated",
         "reality.memory.values.ram_gib": 6,
         "reality.memory.values.storage_gib": 128,
-        "reality.packages.availability": null,
-        "reality.packages.reason": null,
-        "reality.packages.source": null,
-        "reality.packages.values": null,
+        "reality.packages.availability": "known",
+        "reality.packages.reason": "Framework and WebView versions derived from this profile; other packages remain host-read.",
+        "reality.packages.source": "derived",
+        "reality.packages.values": {
+          "installed": [
+            {
+              "package": "android",
+              "version_name": "14",
+              "version_code": 34
+            },
+            {
+              "package": "com.google.android.webview",
+              "version_name": "126.0.6478.122",
+              "version_code": 647812200
+            }
+          ]
+        },
         "reality.sensors.availability": "known",
         "reality.sensors.reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
         "reality.sensors.source": "approximated",
@@ -1253,7 +1287,7 @@
       "template_id": "pixel_6a",
       "evidence": "catalog-phones",
       "iccid_prefix": null,
-      "anchor": "70689c2c5dcc2d577b625085fef5471cb88a2de7d96137a25375d620e08cb814",
+      "anchor": "2c9f9508b6b839ef8e0f513cd348b0dc0148d3c06f09c9a33f21862921e8a1f2",
       "originals": {
         "camera.cameras": [
           {
@@ -1316,10 +1350,18 @@
         "reality.memory.source": "needs verification",
         "reality.memory.values.ram_gib": null,
         "reality.memory.values.storage_gib": null,
-        "reality.packages.availability": "unknown",
-        "reality.packages.reason": "No verified template value; collect read-only evidence for this field.",
-        "reality.packages.source": "needs verification",
-        "reality.packages.values": {},
+        "reality.packages.availability": "known",
+        "reality.packages.reason": "Framework and WebView versions derived from this profile; other packages remain host-read.",
+        "reality.packages.source": "derived",
+        "reality.packages.values": {
+          "installed": [
+            {
+              "package": "android",
+              "version_name": "14",
+              "version_code": 34
+            }
+          ]
+        },
         "reality.sensors.availability": "unknown",
         "reality.sensors.reason": "No verified template value; collect read-only evidence for this field.",
         "reality.sensors.source": "needs verification",
@@ -1489,10 +1531,23 @@
         "reality.memory.source": "approximated",
         "reality.memory.values.ram_gib": 12,
         "reality.memory.values.storage_gib": 128,
-        "reality.packages.availability": null,
-        "reality.packages.reason": null,
-        "reality.packages.source": null,
-        "reality.packages.values": null,
+        "reality.packages.availability": "known",
+        "reality.packages.reason": "Framework and WebView versions derived from this profile; other packages remain host-read.",
+        "reality.packages.source": "derived",
+        "reality.packages.values": {
+          "installed": [
+            {
+              "package": "android",
+              "version_name": "14",
+              "version_code": 34
+            },
+            {
+              "package": "com.google.android.webview",
+              "version_name": "126.0.6478.122",
+              "version_code": 647812200
+            }
+          ]
+        },
         "reality.sensors.availability": "known",
         "reality.sensors.reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
         "reality.sensors.source": "approximated",
@@ -2276,7 +2331,7 @@
       "template_id": "pixel_6_pro",
       "evidence": "catalog-phones",
       "iccid_prefix": null,
-      "anchor": "13b95bd07ee49cd214f7389197860b847ad21db21be569c088ace85b79644261",
+      "anchor": "6e70604cd1f80d43bdf1eed1b69342f2f0b976541e2bd79a9491c6ecd139debc",
       "originals": {
         "camera.cameras": [
           {
@@ -2345,10 +2400,18 @@
         "reality.memory.source": "needs verification",
         "reality.memory.values.ram_gib": null,
         "reality.memory.values.storage_gib": null,
-        "reality.packages.availability": "unknown",
-        "reality.packages.reason": "No verified template value; collect read-only evidence for this field.",
-        "reality.packages.source": "needs verification",
-        "reality.packages.values": {},
+        "reality.packages.availability": "known",
+        "reality.packages.reason": "Framework and WebView versions derived from this profile; other packages remain host-read.",
+        "reality.packages.source": "derived",
+        "reality.packages.values": {
+          "installed": [
+            {
+              "package": "android",
+              "version_name": "14",
+              "version_code": 34
+            }
+          ]
+        },
         "reality.sensors.availability": "unknown",
         "reality.sensors.reason": "No verified template value; collect read-only evidence for this field.",
         "reality.sensors.source": "needs verification",
@@ -2650,10 +2713,23 @@
         "reality.memory.source": "approximated",
         "reality.memory.values.ram_gib": 8,
         "reality.memory.values.storage_gib": 128,
-        "reality.packages.availability": null,
-        "reality.packages.reason": null,
-        "reality.packages.source": null,
-        "reality.packages.values": null,
+        "reality.packages.availability": "known",
+        "reality.packages.reason": "Framework and WebView versions derived from this profile; other packages remain host-read.",
+        "reality.packages.source": "derived",
+        "reality.packages.values": {
+          "installed": [
+            {
+              "package": "android",
+              "version_name": "13",
+              "version_code": 33
+            },
+            {
+              "package": "com.google.android.webview",
+              "version_name": "126.0.6478.122",
+              "version_code": 647812200
+            }
+          ]
+        },
         "reality.sensors.availability": "known",
         "reality.sensors.reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
         "reality.sensors.source": "approximated",
@@ -3173,7 +3249,7 @@
       "template_id": "pixel_7",
       "evidence": "catalog-phones",
       "iccid_prefix": null,
-      "anchor": "03fadb4dff468882038a7571b651a9c10580082ac3f50ada9b8368989e237390",
+      "anchor": "df695114c36848c180a29d9691c9ede1471b3e5108ac85a8caf0e348feedb134",
       "originals": {
         "camera.cameras": [
           {
@@ -3236,10 +3312,18 @@
         "reality.memory.source": "public reference",
         "reality.memory.values.ram_gib": 8,
         "reality.memory.values.storage_gib": 128,
-        "reality.packages.availability": "unknown",
-        "reality.packages.reason": "No verified template value; collect read-only evidence for this field.",
-        "reality.packages.source": "needs verification",
-        "reality.packages.values": {},
+        "reality.packages.availability": "known",
+        "reality.packages.reason": "Framework and WebView versions derived from this profile; other packages remain host-read.",
+        "reality.packages.source": "derived",
+        "reality.packages.values": {
+          "installed": [
+            {
+              "package": "android",
+              "version_name": "13",
+              "version_code": 33
+            }
+          ]
+        },
         "reality.sensors.availability": "unknown",
         "reality.sensors.reason": "No verified template value; collect read-only evidence for this field.",
         "reality.sensors.source": "needs verification",
@@ -3769,10 +3853,23 @@
         "reality.memory.source": "approximated",
         "reality.memory.values.ram_gib": 8,
         "reality.memory.values.storage_gib": 128,
-        "reality.packages.availability": null,
-        "reality.packages.reason": null,
-        "reality.packages.source": null,
-        "reality.packages.values": null,
+        "reality.packages.availability": "known",
+        "reality.packages.reason": "Framework and WebView versions derived from this profile; other packages remain host-read.",
+        "reality.packages.source": "derived",
+        "reality.packages.values": {
+          "installed": [
+            {
+              "package": "android",
+              "version_name": "14",
+              "version_code": 34
+            },
+            {
+              "package": "com.google.android.webview",
+              "version_name": "126.0.6478.122",
+              "version_code": 647812200
+            }
+          ]
+        },
         "reality.sensors.availability": "known",
         "reality.sensors.reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
         "reality.sensors.source": "approximated",
@@ -4028,7 +4125,7 @@
       "template_id": "pixel_7a",
       "evidence": "catalog-phones",
       "iccid_prefix": null,
-      "anchor": "98ef19b8dd67e42fcbf1d3c1019b36e10746463460cc41fb2c5d9e8c793ed158",
+      "anchor": "a430565a3eaf8ee2d515c7e07b262a2af962df50fee0ba0fd70a77f281949368",
       "originals": {
         "camera.cameras": [
           {
@@ -4091,10 +4188,18 @@
         "reality.memory.source": "needs verification",
         "reality.memory.values.ram_gib": null,
         "reality.memory.values.storage_gib": null,
-        "reality.packages.availability": "unknown",
-        "reality.packages.reason": "No verified template value; collect read-only evidence for this field.",
-        "reality.packages.source": "needs verification",
-        "reality.packages.values": {},
+        "reality.packages.availability": "known",
+        "reality.packages.reason": "Framework and WebView versions derived from this profile; other packages remain host-read.",
+        "reality.packages.source": "derived",
+        "reality.packages.values": {
+          "installed": [
+            {
+              "package": "android",
+              "version_name": "14",
+              "version_code": 34
+            }
+          ]
+        },
         "reality.sensors.availability": "unknown",
         "reality.sensors.reason": "No verified template value; collect read-only evidence for this field.",
         "reality.sensors.source": "needs verification",
@@ -4408,10 +4513,23 @@
         "reality.memory.source": "approximated",
         "reality.memory.values.ram_gib": 12,
         "reality.memory.values.storage_gib": 128,
-        "reality.packages.availability": null,
-        "reality.packages.reason": null,
-        "reality.packages.source": null,
-        "reality.packages.values": null,
+        "reality.packages.availability": "known",
+        "reality.packages.reason": "Framework and WebView versions derived from this profile; other packages remain host-read.",
+        "reality.packages.source": "derived",
+        "reality.packages.values": {
+          "installed": [
+            {
+              "package": "android",
+              "version_name": "14",
+              "version_code": 34
+            },
+            {
+              "package": "com.google.android.webview",
+              "version_name": "126.0.6478.122",
+              "version_code": 647812200
+            }
+          ]
+        },
         "reality.sensors.availability": "known",
         "reality.sensors.reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
         "reality.sensors.source": "approximated",
@@ -5195,7 +5313,7 @@
       "template_id": "pixel_7_pro",
       "evidence": "catalog-phones",
       "iccid_prefix": null,
-      "anchor": "da11247c76856fd0f91ae40af3dc7a8eef4231ddf3eb959347d7e171f7c4df08",
+      "anchor": "44402b49c024d255a19a79011905797710457cd781cb2acc01e1cc144e3d7319",
       "originals": {
         "camera.cameras": [
           {
@@ -5264,10 +5382,18 @@
         "reality.memory.source": "needs verification",
         "reality.memory.values.ram_gib": null,
         "reality.memory.values.storage_gib": null,
-        "reality.packages.availability": "unknown",
-        "reality.packages.reason": "No verified template value; collect read-only evidence for this field.",
-        "reality.packages.source": "needs verification",
-        "reality.packages.values": {},
+        "reality.packages.availability": "known",
+        "reality.packages.reason": "Framework and WebView versions derived from this profile; other packages remain host-read.",
+        "reality.packages.source": "derived",
+        "reality.packages.values": {
+          "installed": [
+            {
+              "package": "android",
+              "version_name": "14",
+              "version_code": 34
+            }
+          ]
+        },
         "reality.sensors.availability": "unknown",
         "reality.sensors.reason": "No verified template value; collect read-only evidence for this field.",
         "reality.sensors.source": "needs verification",
@@ -5569,10 +5695,23 @@
         "reality.memory.source": "approximated",
         "reality.memory.values.ram_gib": 8,
         "reality.memory.values.storage_gib": 128,
-        "reality.packages.availability": null,
-        "reality.packages.reason": null,
-        "reality.packages.source": null,
-        "reality.packages.values": null,
+        "reality.packages.availability": "known",
+        "reality.packages.reason": "Framework and WebView versions derived from this profile; other packages remain host-read.",
+        "reality.packages.source": "derived",
+        "reality.packages.values": {
+          "installed": [
+            {
+              "package": "android",
+              "version_name": "14",
+              "version_code": 34
+            },
+            {
+              "package": "com.google.android.webview",
+              "version_name": "126.0.6478.122",
+              "version_code": 647812200
+            }
+          ]
+        },
         "reality.sensors.availability": "known",
         "reality.sensors.reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
         "reality.sensors.source": "approximated",
@@ -6092,7 +6231,7 @@
       "template_id": "pixel_8",
       "evidence": "catalog-phones",
       "iccid_prefix": null,
-      "anchor": "e9b90b8a6c864212905840342a1745404f2967eb79546c26d596120dbca62bda",
+      "anchor": "6fbf373af1433a32cca7b60fdf5d73725d406eb82891d91116806afd268d1128",
       "originals": {
         "camera.cameras": [
           {
@@ -6155,10 +6294,18 @@
         "reality.memory.source": "needs verification",
         "reality.memory.values.ram_gib": null,
         "reality.memory.values.storage_gib": null,
-        "reality.packages.availability": "unknown",
-        "reality.packages.reason": "No verified template value; collect read-only evidence for this field.",
-        "reality.packages.source": "needs verification",
-        "reality.packages.values": {},
+        "reality.packages.availability": "known",
+        "reality.packages.reason": "Framework and WebView versions derived from this profile; other packages remain host-read.",
+        "reality.packages.source": "derived",
+        "reality.packages.values": {
+          "installed": [
+            {
+              "package": "android",
+              "version_name": "14",
+              "version_code": 34
+            }
+          ]
+        },
         "reality.sensors.availability": "unknown",
         "reality.sensors.reason": "No verified template value; collect read-only evidence for this field.",
         "reality.sensors.source": "needs verification",
@@ -6460,10 +6607,23 @@
         "reality.memory.source": "approximated",
         "reality.memory.values.ram_gib": 8,
         "reality.memory.values.storage_gib": 128,
-        "reality.packages.availability": null,
-        "reality.packages.reason": null,
-        "reality.packages.source": null,
-        "reality.packages.values": null,
+        "reality.packages.availability": "known",
+        "reality.packages.reason": "Framework and WebView versions derived from this profile; other packages remain host-read.",
+        "reality.packages.source": "derived",
+        "reality.packages.values": {
+          "installed": [
+            {
+              "package": "android",
+              "version_name": "14",
+              "version_code": 34
+            },
+            {
+              "package": "com.google.android.webview",
+              "version_name": "126.0.6478.122",
+              "version_code": 647812200
+            }
+          ]
+        },
         "reality.sensors.availability": "known",
         "reality.sensors.reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
         "reality.sensors.source": "approximated",
@@ -6983,7 +7143,7 @@
       "template_id": "pixel_8a",
       "evidence": "catalog-phones",
       "iccid_prefix": null,
-      "anchor": "6a0a2dc6eeaaeb877898da7291b2f5ef0ea2a238bf52c88e3e54f9032927416c",
+      "anchor": "c7294074a2d2eace658e0a2f2652037c226932526c6e260ae05e1680c2fc9af1",
       "originals": {
         "camera.cameras": [
           {
@@ -7046,10 +7206,18 @@
         "reality.memory.source": "needs verification",
         "reality.memory.values.ram_gib": null,
         "reality.memory.values.storage_gib": null,
-        "reality.packages.availability": "unknown",
-        "reality.packages.reason": "No verified template value; collect read-only evidence for this field.",
-        "reality.packages.source": "needs verification",
-        "reality.packages.values": {},
+        "reality.packages.availability": "known",
+        "reality.packages.reason": "Framework and WebView versions derived from this profile; other packages remain host-read.",
+        "reality.packages.source": "derived",
+        "reality.packages.values": {
+          "installed": [
+            {
+              "package": "android",
+              "version_name": "14",
+              "version_code": 34
+            }
+          ]
+        },
         "reality.sensors.availability": "unknown",
         "reality.sensors.reason": "No verified template value; collect read-only evidence for this field.",
         "reality.sensors.source": "needs verification",
@@ -7363,10 +7531,23 @@
         "reality.memory.source": "approximated",
         "reality.memory.values.ram_gib": 12,
         "reality.memory.values.storage_gib": 128,
-        "reality.packages.availability": null,
-        "reality.packages.reason": null,
-        "reality.packages.source": null,
-        "reality.packages.values": null,
+        "reality.packages.availability": "known",
+        "reality.packages.reason": "Framework and WebView versions derived from this profile; other packages remain host-read.",
+        "reality.packages.source": "derived",
+        "reality.packages.values": {
+          "installed": [
+            {
+              "package": "android",
+              "version_name": "14",
+              "version_code": 34
+            },
+            {
+              "package": "com.google.android.webview",
+              "version_name": "126.0.6478.122",
+              "version_code": 647812200
+            }
+          ]
+        },
         "reality.sensors.availability": "known",
         "reality.sensors.reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
         "reality.sensors.source": "approximated",
@@ -8150,7 +8331,7 @@
       "template_id": "pixel_8_pro",
       "evidence": "catalog-phones",
       "iccid_prefix": null,
-      "anchor": "f13ba4408a2d4b3bcf8b80d96b1ab46286998fb867771616ddfd9b7969a31ec7",
+      "anchor": "7c542b5fbac7c86e0f96e5b49e9fbb8302b8333b8e01d03da6db03b3dd92b7db",
       "originals": {
         "camera.cameras": [
           {
@@ -8219,10 +8400,18 @@
         "reality.memory.source": "needs verification",
         "reality.memory.values.ram_gib": null,
         "reality.memory.values.storage_gib": null,
-        "reality.packages.availability": "unknown",
-        "reality.packages.reason": "No verified template value; collect read-only evidence for this field.",
-        "reality.packages.source": "needs verification",
-        "reality.packages.values": {},
+        "reality.packages.availability": "known",
+        "reality.packages.reason": "Framework and WebView versions derived from this profile; other packages remain host-read.",
+        "reality.packages.source": "derived",
+        "reality.packages.values": {
+          "installed": [
+            {
+              "package": "android",
+              "version_name": "14",
+              "version_code": 34
+            }
+          ]
+        },
         "reality.sensors.availability": "unknown",
         "reality.sensors.reason": "No verified template value; collect read-only evidence for this field.",
         "reality.sensors.source": "needs verification",
@@ -8524,10 +8713,23 @@
         "reality.memory.source": "approximated",
         "reality.memory.values.ram_gib": 12,
         "reality.memory.values.storage_gib": 128,
-        "reality.packages.availability": null,
-        "reality.packages.reason": null,
-        "reality.packages.source": null,
-        "reality.packages.values": null,
+        "reality.packages.availability": "known",
+        "reality.packages.reason": "Framework and WebView versions derived from this profile; other packages remain host-read.",
+        "reality.packages.source": "derived",
+        "reality.packages.values": {
+          "installed": [
+            {
+              "package": "android",
+              "version_name": "14",
+              "version_code": 34
+            },
+            {
+              "package": "com.google.android.webview",
+              "version_name": "126.0.6478.122",
+              "version_code": 647812200
+            }
+          ]
+        },
         "reality.sensors.availability": "known",
         "reality.sensors.reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
         "reality.sensors.source": "approximated",
@@ -8783,7 +8985,7 @@
       "template_id": "pixel_9",
       "evidence": "catalog-phones",
       "iccid_prefix": null,
-      "anchor": "a6c91d46a9964114836e3c74872037221e8fb947999400fa71cd7fbd1ed6974d",
+      "anchor": "4823c01408131d5a0da4e1822f8aa71d9b72a0007a7b6c384228aa35de0aa4ae",
       "originals": {
         "camera.cameras": [
           {
@@ -8846,10 +9048,18 @@
         "reality.memory.source": "needs verification",
         "reality.memory.values.ram_gib": null,
         "reality.memory.values.storage_gib": null,
-        "reality.packages.availability": "unknown",
-        "reality.packages.reason": "No verified template value; collect read-only evidence for this field.",
-        "reality.packages.source": "needs verification",
-        "reality.packages.values": {},
+        "reality.packages.availability": "known",
+        "reality.packages.reason": "Framework and WebView versions derived from this profile; other packages remain host-read.",
+        "reality.packages.source": "derived",
+        "reality.packages.values": {
+          "installed": [
+            {
+              "package": "android",
+              "version_name": "14",
+              "version_code": 34
+            }
+          ]
+        },
         "reality.sensors.availability": "unknown",
         "reality.sensors.reason": "No verified template value; collect read-only evidence for this field.",
         "reality.sensors.source": "needs verification",
@@ -9163,10 +9373,23 @@
         "reality.memory.source": "approximated",
         "reality.memory.values.ram_gib": 16,
         "reality.memory.values.storage_gib": 128,
-        "reality.packages.availability": null,
-        "reality.packages.reason": null,
-        "reality.packages.source": null,
-        "reality.packages.values": null,
+        "reality.packages.availability": "known",
+        "reality.packages.reason": "Framework and WebView versions derived from this profile; other packages remain host-read.",
+        "reality.packages.source": "derived",
+        "reality.packages.values": {
+          "installed": [
+            {
+              "package": "android",
+              "version_name": "14",
+              "version_code": 34
+            },
+            {
+              "package": "com.google.android.webview",
+              "version_name": "126.0.6478.122",
+              "version_code": 647812200
+            }
+          ]
+        },
         "reality.sensors.availability": "known",
         "reality.sensors.reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
         "reality.sensors.source": "approximated",
@@ -9422,7 +9645,7 @@
       "template_id": "pixel_9_pro",
       "evidence": "catalog-phones",
       "iccid_prefix": null,
-      "anchor": "46e7ca71c5809ee5e83b71e0be0606e2c7c29c9c362cf54b6ffe983185911ee6",
+      "anchor": "27e06d7d06ed4de5544851878fb180aeb3025d5a2bd358729ae958dd9abb4785",
       "originals": {
         "camera.cameras": [
           {
@@ -9491,10 +9714,18 @@
         "reality.memory.source": "needs verification",
         "reality.memory.values.ram_gib": null,
         "reality.memory.values.storage_gib": null,
-        "reality.packages.availability": "unknown",
-        "reality.packages.reason": "No verified template value; collect read-only evidence for this field.",
-        "reality.packages.source": "needs verification",
-        "reality.packages.values": {},
+        "reality.packages.availability": "known",
+        "reality.packages.reason": "Framework and WebView versions derived from this profile; other packages remain host-read.",
+        "reality.packages.source": "derived",
+        "reality.packages.values": {
+          "installed": [
+            {
+              "package": "android",
+              "version_name": "14",
+              "version_code": 34
+            }
+          ]
+        },
         "reality.sensors.availability": "unknown",
         "reality.sensors.reason": "No verified template value; collect read-only evidence for this field.",
         "reality.sensors.source": "needs verification",
@@ -9808,10 +10039,23 @@
         "reality.memory.source": "approximated",
         "reality.memory.values.ram_gib": 8,
         "reality.memory.values.storage_gib": 128,
-        "reality.packages.availability": null,
-        "reality.packages.reason": null,
-        "reality.packages.source": null,
-        "reality.packages.values": null,
+        "reality.packages.availability": "known",
+        "reality.packages.reason": "Framework and WebView versions derived from this profile; other packages remain host-read.",
+        "reality.packages.source": "derived",
+        "reality.packages.values": {
+          "installed": [
+            {
+              "package": "android",
+              "version_name": "13",
+              "version_code": 33
+            },
+            {
+              "package": "com.google.android.webview",
+              "version_name": "126.0.6478.122",
+              "version_code": 647812200
+            }
+          ]
+        },
         "reality.sensors.availability": "known",
         "reality.sensors.reason": "Canonical compatibility class; firmware and HAL details require runtime evidence.",
         "reality.sensors.source": "approximated",
@@ -10067,7 +10311,7 @@
       "template_id": "galaxy_s23",
       "evidence": "catalog-phones",
       "iccid_prefix": null,
-      "anchor": "729143e238717bf677af9b1f42d4130607da741b2247cfb1b340bfbeb3ae7a4c",
+      "anchor": "b6e31fbd329a236be33b532f834f10b6be70e354b930712343cc586e3b3214ee",
       "originals": {
         "camera.cameras": [
           {
@@ -10136,10 +10380,18 @@
         "reality.memory.source": "needs verification",
         "reality.memory.values.ram_gib": null,
         "reality.memory.values.storage_gib": null,
-        "reality.packages.availability": "unknown",
-        "reality.packages.reason": "No verified template value; collect read-only evidence for this field.",
-        "reality.packages.source": "needs verification",
-        "reality.packages.values": {},
+        "reality.packages.availability": "known",
+        "reality.packages.reason": "Framework and WebView versions derived from this profile; other packages remain host-read.",
+        "reality.packages.source": "derived",
+        "reality.packages.values": {
+          "installed": [
+            {
+              "package": "android",
+              "version_name": "13",
+              "version_code": 33
+            }
+          ]
+        },
         "reality.sensors.availability": "unknown",
         "reality.sensors.reason": "No verified template value; collect read-only evidence for this field.",
         "reality.sensors.source": "needs verification",

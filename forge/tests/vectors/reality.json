@@ -76,10 +76,18 @@
         }
       },
       "packages": {
-        "availability": "unknown",
-        "source": "needs verification",
-        "reason": "No verified template value; collect read-only evidence for this field.",
-        "values": {}
+        "availability": "known",
+        "source": "derived",
+        "reason": "Framework and WebView versions derived from this profile; other packages remain host-read.",
+        "values": {
+          "installed": [
+            {
+              "package": "android",
+              "version_name": "13",
+              "version_code": 33
+            }
+          ]
+        }
       },
       "webview": {
         "availability": "known",

@@ -28,7 +28,7 @@ object CloakForge {
         val ua = if (schemaVersion == "0.4") DeviceReality.userAgent(phone.reality, baseUa) else baseUa
         return JSONObject()
             .put("schema_version", schemaVersion)
-            .also { require(schemaVersion in setOf("0.2", "0.3", "0.4")); if (schemaVersion == "0.4") it.put("reality", DeviceReality.generate(phone.reality, seed, ua)) }
+            .also { require(schemaVersion in setOf("0.2", "0.3", "0.4")); if (schemaVersion == "0.4") it.put("reality", DeviceReality.generate(phone.reality, seed, ua, device)) }
             .put("id", uuid5("https://cloak.cyclone.dev/$seed/$name"))
             .put("name", name)
             .put("seed", seed)

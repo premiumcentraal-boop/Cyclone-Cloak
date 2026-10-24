@@ -115,10 +115,20 @@ class RuntimeEnvelopeTest {
         assertEquals("101.0.0.0", (result[0] as PackageInfo).versionName)
         assertEquals("host", source[0].versionName)
     }
-    @Test fun missingAllowlistedVersionFailsClosed() {
-        val call = frame("com.google.android.gms", 0); call.setResult(host("com.google.android.gms"))
+    @Test fun allowlistedPackageWithoutDeclaredVersionKeepsTheHostCopy() {
+        // An allowlisted package the profile says nothing about is not a contradiction: the host
+        // value is already right for this phone, so the real result must survive untouched.
+        val single = host("com.google.android.gms")
+        val call = frame("com.google.android.gms", 0); call.setResult(single)
         RuntimeEnvelopeHooks.packageHook(envelope()).afterCall(call)
-        assertTrue(call.throwable is RuntimeEnvelope.Unavailable)
+        assertNull(call.throwable); assertSame(single, call.result)
+
+        val undeclared = host("com.google.android.gms")
+        val list = frame(0); list.setResult(listOf(undeclared, host("android")))
+        RuntimeEnvelopeHooks.packageListHook(envelope()).afterCall(list)
+        assertNull(list.throwable)
+        assertSame(undeclared, (list.result as List<*>)[0])
+        assertEquals("host", undeclared.versionName)
     }
     @Test fun webViewRequiresActualProviderAndConsistentPackageVersionAndUa() {
         for (id in listOf("a", "b")) {

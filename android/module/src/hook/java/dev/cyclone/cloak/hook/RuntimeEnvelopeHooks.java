@@ -162,7 +162,7 @@ final class RuntimeEnvelopeHooks {
             String requested = frame.args != null && frame.args.length > 0 && frame.args[0] instanceof String
                 ? (String) frame.args[0] : null;
             if (requested == null || !requested.equals(host.packageName) || !RuntimeEnvelope.allowlisted(requested)) return host;
-            return packageCopy(host, envelope.packageVersion(requested));
+            return declaredOrHost(envelope, host, requested);
         });
     }
 
@@ -172,11 +172,23 @@ final class RuntimeEnvelopeHooks {
             List<PackageInfo> result = new ArrayList<>();
             for (Object entry : (List<?>) frame.getResult()) {
                 PackageInfo host = (PackageInfo) entry;
-                result.add(RuntimeEnvelope.allowlisted(host.packageName)
-                    ? packageCopy(host, envelope.packageVersion(host.packageName)) : host);
+                result.add(RuntimeEnvelope.allowlisted(host.packageName) && host.packageName != null
+                    ? declaredOrHost(envelope, host, host.packageName) : host);
             }
             return result;
         });
+    }
+
+    /**
+     * An allowlisted package without a declared version is not a contradiction: the host value is
+     * already correct for this phone. Returning it keeps the real list working instead of throwing.
+     */
+    static PackageInfo declaredOrHost(RuntimeEnvelope envelope, PackageInfo host, String name) {
+        try {
+            JSONObject version = envelope.packageVersion(name);
+            return version == null ? host : packageCopy(host, version);
+        }
+        catch (RuntimeEnvelope.Unavailable absent) { return host; }
     }
 
     static PackageInfo packageCopy(PackageInfo host, JSONObject version) {

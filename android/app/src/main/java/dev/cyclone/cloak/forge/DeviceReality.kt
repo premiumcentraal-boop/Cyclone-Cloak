@@ -17,7 +17,7 @@ object DeviceReality {
         return if (at(template, "webview.availability") == "known" && version != null && Regex("[0-9]+\\.[0-9]+\\.[0-9]+\\.[0-9]+").matches(version))
             ua.replace(Regex("Chrome/[0-9.]+"), "Chrome/$version") else ua
     }
-    fun generate(template: JSONObject, seed: String, ua: String): JSONObject {
+    fun generate(template: JSONObject, seed: String, ua: String, device: JSONObject? = null): JSONObject {
         val reality = JSONObject(template.toString()).put("inventory_id", token(seed, "inventory"))
         if (at(reality, "radio.availability") != "unavailable") {
             val values = at(reality, "radio.values")
@@ -34,7 +34,37 @@ object DeviceReality {
                     else "Provider/version retained from template; user agent derived from profile."))
             }
         }
+        packages(device, reality)?.let { reality.put("packages", it) }
         return reality
+    }
+
+    /** Chromium release-code scheme: build*100000 + patch*100 + branch. */
+    private fun webviewVersionCode(version: String): Long? {
+        val parts = version.split('.')
+        if (parts.size < 4) return null
+        val build = parts[2].toIntOrNull() ?: return null
+        val patch = parts[3].toIntOrNull() ?: return null
+        val branch = parts[1].toIntOrNull() ?: return null
+        return build.toLong() * 100000 + patch.toLong() * 100 + branch
+    }
+
+    /** Only package versions this template can prove; everything else stays host-read. */
+    private fun packages(device: JSONObject?, reality: JSONObject): JSONObject? {
+        val installed = org.json.JSONArray()
+        val release = device?.optString("version_release")?.takeIf { it.isNotEmpty() }
+        val sdk = device?.opt("sdk_int") as? Number
+        if (release != null && sdk != null) installed.put(JSONObject().put("package", "android")
+            .put("version_name", release).put("version_code", sdk.toLong()))
+        if (at(reality, "webview.availability") == "known") {
+            val provider = at(reality, "webview.values.provider") as? String
+            val version = at(reality, "webview.values.version") as? String
+            val code = version?.let { webviewVersionCode(it) }
+            if (provider != null && version != null && code != null)
+                installed.put(JSONObject().put("package", provider).put("version_name", version).put("version_code", code))
+        }
+        if (installed.length() == 0) return null
+        return known(JSONObject().put("installed", installed),
+            "Framework and WebView versions derived from this profile; other packages remain host-read.")
     }
     private fun known(values: JSONObject, reason: String) = JSONObject().put("availability", "known").put("source", "derived").put("reason", reason).put("values", values)
 

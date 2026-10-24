@@ -42,6 +42,28 @@ def test_legacy_no_migration(version):
 def test_generation_parity_vector():
     assert VECTOR["profile"]==forge_profile("Reality","ab"*32,"pixel_7",schema_version="0.4")
 
+
+def test_packages_only_carry_versions_the_profile_can_prove():
+    """A generated profile must never ship an empty packages block.
+
+    The runtime hook throws on a declared-but-unusable section, so an empty one silently
+    broke every package read for bound apps.
+    """
+    reality = forge_profile("Packages", "cd"*32, "pixel_7", schema_version="0.4")["reality"]
+    packages = reality.get("packages")
+    assert packages is not None, "packages section missing from generated profile"
+    assert packages["availability"] == "known" and packages["values"]["installed"]
+    entries = {e["package"]: e for e in packages["values"]["installed"]}
+    device = reality.get("panel") and forge_profile("Packages", "cd"*32, "pixel_7", schema_version="0.4")
+    assert entries["android"]["version_name"] == device["device"]["version_release"]
+    assert entries["android"]["version_code"] == device["device"]["sdk_int"]
+    webview = reality["webview"]["values"]
+    if "provider" in webview:
+        entry = entries[webview["provider"]]
+        assert entry["version_name"] == webview["version"]
+        assert entry["version_code"] > 0
+    assert not validate(forge_profile("Packages", "cd"*32, "pixel_7", schema_version="0.4"))
+
 def test_extended_uniqueness_and_retries_preserve_library():
     request=dict(name="Reality",seed="ab"*32,template="pixel_7",schema_version="0.4")
     a=generate_unique(request,[])["profile"]; other=copy.deepcopy(a);other["id"]="other";other["identifiers"]={}

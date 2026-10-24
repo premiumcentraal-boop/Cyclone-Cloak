@@ -54,7 +54,38 @@ def generate(template, seed, ua):
             reality['webview'] = dict(availability='known', source='derived',
                 reason='User agent derived from this profile; installed provider/version remains unknown.' if 'version' not in web and 'provider' not in web
                     else 'Provider/version retained from template; user agent derived from profile.', values=web)
+    packages = _packages(template, reality)
+    if packages: reality['packages'] = packages
     return reality
+
+
+def _webview_version_code(version):
+    """Chromium release-code scheme: build*100000 + patch*100 + branch."""
+    parts = version.split('.')
+    try:
+        build, patch, branch = int(parts[2]), int(parts[3]), int(parts[1])
+    except (IndexError, ValueError):
+        return None
+    return build * 100000 + patch * 100 + branch
+
+
+def _packages(template, reality):
+    """Only package versions this template can prove; everything else stays host-read."""
+    release = at(template, 'device.version_release')
+    sdk = at(template, 'device.sdk_int')
+    installed = []
+    if isinstance(release, str) and type(sdk) is int:
+        installed.append({'package': 'android', 'version_name': release, 'version_code': sdk})
+    if at(reality, 'webview.availability') == 'known':
+        provider = at(reality, 'webview.values.provider')
+        version = at(reality, 'webview.values.version')
+        code = _webview_version_code(version) if isinstance(version, str) else None
+        if isinstance(provider, str) and isinstance(version, str) and code is not None:
+            installed.append({'package': provider, 'version_name': version, 'version_code': code})
+    if not installed: return None
+    return dict(availability='known', source='derived',
+        reason='Framework and WebView versions derived from this profile; other packages remain host-read.',
+        values={'installed': installed})
 
 
 def user_agent(reality, ua):

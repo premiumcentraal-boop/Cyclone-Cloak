@@ -39,6 +39,8 @@ object InstanceRealism {
         }
         facts.optJSONObject("reality")?.let { reality ->
             reality.remove("inventory_id")
+            // Wholly derived from device and webview facts, so it must not invalidate the anchor.
+            reality.remove("packages")
             for ((section, fields) in listOf("radio" to listOf("wifi_name", "bluetooth_name"), "webview" to listOf("user_agent"))) {
                 fields.forEach { reality.optJSONObject(section)?.optJSONObject("values")?.remove(it) }
             }
