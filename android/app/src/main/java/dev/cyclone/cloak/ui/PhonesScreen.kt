@@ -50,8 +50,7 @@ internal fun PhonesScreen(state: CloakState, vm: CloakViewModel) {
         item {
             CloakHeroCard(
                 title = "Phones",
-                body = "Every identity copies a phone: its model, build, carrier, screen and locale. Use a built-in phone, " +
-                    "build your own, or import one from a real phone's build.prop or `adb shell getprop` output.",
+                body = "Choose a starting point for your next device profile.",
             )
         }
         item {
@@ -60,7 +59,7 @@ internal fun PhonesScreen(state: CloakState, vm: CloakViewModel) {
         }
         item {
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                CloakActionButton("Build a phone", Icons.Rounded.Build, vm::newPhone, Modifier.weight(1f))
+                CloakActionButton("Build a phone", Icons.Rounded.Build, vm::newPhone, Modifier.weight(1f), outlined = true)
                 CloakActionButton("Import", Icons.Rounded.FileOpen, { importer.launch(arrayOf("*/*")) }, Modifier.weight(1f), outlined = true)
             }
         }

@@ -59,6 +59,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.unit.dp
@@ -329,16 +330,17 @@ internal fun CloakBindingCard(
             Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp), verticalAlignment = Alignment.CenterVertically) {
                 CloakIconBadge(Icons.Rounded.Apps, if (binding.enabled) null else CloakStatusTone.PENDING)
                 Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-                    Text(binding.packageName, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold)
+                    Text(binding.packageName, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold,
+                        maxLines = 1, overflow = TextOverflow.Ellipsis)
                     Text("$profileLabel · user ${binding.androidUserId}", style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant)
                 }
-                CloakStatusPill(binding.state, when (binding.state) {
-                    "ready" -> CloakStatusTone.READY
-                    "disabled", "pending", "unknown" -> CloakStatusTone.PENDING
-                    else -> CloakStatusTone.ERROR
-                })
             }
+            CloakStatusPill(binding.state, when (binding.state) {
+                "ready" -> CloakStatusTone.READY
+                "disabled", "pending", "unknown" -> CloakStatusTone.PENDING
+                else -> CloakStatusTone.ERROR
+            })
             Text("Cloak: $identityLabel", style = MaterialTheme.typography.bodySmall)
             if (mirrored) {
                 Text("managed by Cloak in Main", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)

@@ -42,6 +42,7 @@ internal fun HealthScreen(state: CloakState, vm: CloakViewModel) {
         Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp, vertical = 14.dp),
         verticalArrangement = Arrangement.spacedBy(CloakSpace.item),
     ) {
+        CloakHeroCard("Health", "Local readiness, clear reasons, and a way forward.")
         CloakNotice("Local diagnostics. These checks run on this device and are kept apart from saved identities and bindings.")
         DeveloperDiagnosticsEntry(state.rootDoctor.moduleVersion)
         CloakSectionHeader("Check and repair")

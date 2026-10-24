@@ -23,7 +23,7 @@ internal fun CompatibleDeviceScreen(workshop: BatchWorkshopState, phones: List<P
     var device by rememberSaveable { mutableStateOf<String?>(null) }
     var target by rememberSaveable { mutableStateOf<String?>(null) }
     BackHandler(enabled = !busy, onBack = onClose)
-    Surface(Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background, contentColor = MaterialTheme.colorScheme.onBackground) {
+    Surface(Modifier.fillMaxSize(), color = androidx.compose.ui.graphics.Color.Transparent, contentColor = MaterialTheme.colorScheme.onBackground) {
     Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(16.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
         Text("New compatible device", style = MaterialTheme.typography.titleLarge)
         if (busy) LinearProgressIndicator(Modifier.fillMaxWidth())

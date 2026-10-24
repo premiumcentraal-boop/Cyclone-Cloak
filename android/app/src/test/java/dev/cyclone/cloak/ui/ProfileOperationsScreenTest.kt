@@ -63,7 +63,7 @@ class ProfileOperationsScreenTest {
         val draft = initial.copy(reviewStamp = BindingFlow.stamp(initial, input))
         compose.setContent { CloakTheme { BindingFlowScreen(draft, input, emptyList(), false, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}, {}) } }
         compose.onNodeWithText(reason, substring = true).performScrollTo().assertIsDisplayed()
-        compose.onNodeWithText("Confirm binding").performScrollTo().assertIsNotEnabled()
+        compose.onNodeWithText("Confirm binding").assertIsDisplayed().assertIsNotEnabled()
     }
     @Test fun missingUserExplainsSetupAndBlocksBinding() = blockedTarget(profile.copy(androidUserId = null), "This profile has no Android user assignment.")
     @Test fun missingAppsExplainsSelectionAndBlocksBinding() = blockedTarget(profile.copy(packages = null), "Choose at least one app or select All apps.")
@@ -108,10 +108,10 @@ class ProfileOperationsScreenTest {
             { state.value = state.value.copy(acknowledged = it) }, { confirms++ }, {}, {}, {}) } }
         compose.onNodeWithText("Before: Old phone: com.example.one").performScrollTo().assertIsDisplayed()
         compose.onNodeWithText("After: New phone for 1 apps").performScrollTo().assertIsDisplayed()
-        compose.onNodeWithText("Confirm replacement").performScrollTo().assertIsNotEnabled()
+        compose.onNodeWithText("Confirm replacement").assertIsDisplayed().assertIsNotEnabled()
         assertEquals(0, confirms)
         compose.onNode(isToggleable()).performScrollTo().performClick()
-        compose.onNodeWithText("Confirm replacement").performScrollTo().assertIsEnabled().performClick()
+        compose.onNodeWithText("Confirm replacement").assertIsDisplayed().assertIsEnabled().performClick()
         assertEquals(1, confirms)
     }
     @Test fun readinessActionsAndHistoryExportAreReachable() {

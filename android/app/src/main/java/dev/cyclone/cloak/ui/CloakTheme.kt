@@ -9,6 +9,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.background
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -17,93 +21,89 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.lightColorScheme
+import androidx.compose.material3.darkColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.dp
 
-/** Cyclone Mobile's V3.2 palette and shape scale, kept local so Cloak stays lightweight. */
-private val CloakColors = lightColorScheme(
-    primary = Color(0xFF6675E8),
-    onPrimary = Color.White,
-    primaryContainer = Color(0xFFDDE3FF),
-    onPrimaryContainer = Color(0xFF20295E),
-    secondary = Color(0xFF397B67),
-    onSecondary = Color.White,
-    secondaryContainer = Color(0xFFCFF4DF),
-    onSecondaryContainer = Color(0xFF153B30),
-    tertiary = Color(0xFF805B15),
-    onTertiary = Color.White,
-    tertiaryContainer = Color(0xFFFFE6A7),
-    onTertiaryContainer = Color(0xFF3B2B08),
-    error = Color(0xFFBA4052),
-    onError = Color.White,
-    errorContainer = Color(0xFFFFD9DE),
-    onErrorContainer = Color(0xFF5B1420),
-    background = Color(0xFFF5F6FC),
-    onBackground = Color(0xFF182038),
-    surface = Color.White,
-    onSurface = Color(0xFF182038),
-    surfaceVariant = Color(0xFFEEF0FA),
-    onSurfaceVariant = Color(0xFF69708A),
-    outline = Color(0xFFB8BDD0),
-    outlineVariant = Color(0xFFDDE0EB),
+/** Static calm-glass colors from Cyclone's R6 profile kit. No blur or animated backdrop. */
+internal object CloakGlass {
+    val ink = Color(0xFFF5FFFFFF)
+    val muted = Color(0xFFBFC5E3)
+    val ready = Color(0xFF34C759)
+    val waiting = Color(0xFFFFB340)
+    val destructive = Color(0xFFFF6B5E)
+    val backdrop = Brush.verticalGradient(listOf(Color(0xFF2B3BF2), Color(0xFF1B28C9),
+        Color(0xFF111A86), Color(0xFF0C1150), Color(0xFF090C2B)))
+}
+
+private val CloakColors = darkColorScheme(
+    primary = Color.White, onPrimary = Color(0xFF0B1040),
+    primaryContainer = Color(0xFF303B8B), onPrimaryContainer = CloakGlass.ink,
+    secondary = CloakGlass.ready, onSecondary = Color(0xFF092A16),
+    secondaryContainer = Color(0xFF153D38), onSecondaryContainer = Color(0xFF8DE5A5),
+    tertiary = CloakGlass.waiting, onTertiary = Color(0xFF332000),
+    tertiaryContainer = Color(0xFF483A35), onTertiaryContainer = Color(0xFFFFD28B),
+    error = CloakGlass.destructive, onError = Color(0xFF3D0D0A),
+    errorContainer = Color(0xFF4E243A), onErrorContainer = Color(0xFFFFB4AA),
+    background = Color(0xFF090C2B), onBackground = CloakGlass.ink,
+    surface = Color(0xFF171E59), onSurface = CloakGlass.ink,
+    surfaceVariant = Color(0xFF293271), onSurfaceVariant = CloakGlass.muted,
+    outline = Color(0xFF7F88B4), outlineVariant = Color(0xFF414A83),
+    surfaceContainer = Color(0xFF171E59), surfaceContainerHigh = Color(0xFF222B67),
 )
 
 private val CloakShapes = Shapes(
     extraSmall = RoundedCornerShape(12.dp),
-    small = RoundedCornerShape(16.dp),
-    medium = RoundedCornerShape(20.dp),
-    large = RoundedCornerShape(26.dp),
+    small = RoundedCornerShape(24.dp),
+    medium = RoundedCornerShape(22.dp),
+    large = RoundedCornerShape(22.dp),
     extraLarge = RoundedCornerShape(32.dp),
 )
 
 @Composable
 fun CloakTheme(content: @Composable () -> Unit) {
-    MaterialTheme(colorScheme = CloakColors, shapes = CloakShapes, content = content)
+    MaterialTheme(colorScheme = CloakColors, shapes = CloakShapes) {
+        CompositionLocalProvider(LocalContentColor provides CloakGlass.ink) {
+            Box(Modifier.fillMaxSize().background(CloakGlass.backdrop)) { content() }
+        }
+    }
 }
 
 enum class CloakStatusTone { READY, PENDING, ERROR }
 
 @Composable
 fun CloakStatusPill(label: String, tone: CloakStatusTone = CloakStatusTone.READY) {
-    val (container, content) = tone.colors()
-    Surface(shape = CircleShape, color = container, contentColor = content) {
-        Text(label, modifier = Modifier.padding(horizontal = 11.dp, vertical = 7.dp), style = MaterialTheme.typography.labelMedium, fontWeight = FontWeight.SemiBold)
+    val color = when (tone) {
+        CloakStatusTone.READY -> CloakGlass.ready
+        CloakStatusTone.PENDING -> CloakGlass.waiting
+        CloakStatusTone.ERROR -> CloakGlass.destructive
+    }
+    Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(7.dp)) {
+        Box(Modifier.size(7.dp).background(color, CircleShape))
+        Text(label, color = CloakGlass.ink, style = MaterialTheme.typography.labelMedium,
+            fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }
 }
 
 @Composable
 fun CloakHeroCard(title: String, body: String) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = MaterialTheme.shapes.extraLarge,
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
-        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp),
-    ) {
-        Row(
-            Modifier.fillMaxWidth().padding(20.dp),
-            horizontalArrangement = Arrangement.spacedBy(14.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Surface(shape = CircleShape, color = MaterialTheme.colorScheme.primary, contentColor = MaterialTheme.colorScheme.onPrimary) {
-                Box(Modifier.size(48.dp), contentAlignment = Alignment.Center) {
-                    Text("C", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Black)
-                }
-            }
-            Column(verticalArrangement = Arrangement.spacedBy(5.dp)) {
-                Text(title, style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold, color = MaterialTheme.colorScheme.onPrimaryContainer)
-                Text(body, style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.onPrimaryContainer.copy(alpha = 0.78f))
-            }
-        }
+    Column(Modifier.fillMaxWidth().padding(top = 12.dp, bottom = 16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
+        Text(title, fontSize = 34.sp, lineHeight = 39.sp, fontWeight = FontWeight.Bold, color = CloakGlass.ink)
+        Text(body, fontSize = 16.sp, lineHeight = 23.sp, color = CloakGlass.muted)
     }
 }
 
@@ -143,17 +143,18 @@ fun CloakActionButton(
     if (outlined) {
         OutlinedButton(
             onClick = onClick,
-            modifier = modifier,
+            modifier = modifier.heightIn(min = 50.dp),
             enabled = enabled,
-            shape = MaterialTheme.shapes.small,
+            shape = CircleShape,
+            border = BorderStroke(1.dp, Color(0x38FFFFFF)),
             colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.primary),
         ) { CloakActionButtonContent(label, icon) }
     } else {
         Button(
             onClick = onClick,
-            modifier = modifier,
+            modifier = modifier.heightIn(min = 50.dp),
             enabled = enabled,
-            shape = MaterialTheme.shapes.small,
+            shape = CircleShape,
         ) { CloakActionButtonContent(label, icon) }
     }
 }
@@ -163,6 +164,6 @@ private fun CloakActionButtonContent(label: String, icon: ImageVector) {
     Row(horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
         Icon(icon, contentDescription = null, modifier = Modifier.size(18.dp))
         Spacer(Modifier.width(8.dp))
-        Text(label, fontWeight = FontWeight.SemiBold)
+        Text(label, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
     }
 }

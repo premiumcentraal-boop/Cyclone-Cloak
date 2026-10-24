@@ -71,12 +71,19 @@ internal fun profileReadiness(state: CloakState, profile: CycloneProfile, appVer
 internal fun ProfileReadinessCard(facts: ProfileReadiness, enabled: Boolean, onBindAll: () -> Unit, onReplace: () -> Unit, onHistory: () -> Unit) {
     Column(Modifier.fillMaxWidth().padding(12.dp), verticalArrangement = Arrangement.spacedBy(6.dp)) {
         CloakStatusPill(if (facts.ready) "Local checks ready" else "Needs attention", if (facts.ready) CloakStatusTone.READY else CloakStatusTone.PENDING)
-        facts.rows.forEach { (label, value) -> Text("$label: $value", style = MaterialTheme.typography.bodySmall) }
         Text("Next: ${facts.next}", style = MaterialTheme.typography.bodySmall)
-        Row {
-            TextButton(onClick = onBindAll, enabled = enabled) { Text("Bind all apps") }
-            TextButton(onClick = onReplace, enabled = enabled) { Text("Replace device profile") }
+        Button(onClick = onBindAll, enabled = enabled, modifier = Modifier.fillMaxWidth()) { Text("Bind all apps") }
+        CloakGroup {
+            CloakDisclosure("Readiness details", supporting = "${facts.rows.size} local checks") {
+                facts.rows.forEach { (label, value) ->
+                    Text(label, style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    Text(value, style = MaterialTheme.typography.bodyMedium)
+                }
+            }
+            CloakGroupDivider()
+            CloakRow("Replace device profile", onClick = if (enabled) onReplace else null, showChevron = enabled)
+            CloakGroupDivider()
+            CloakRow("Run history", onClick = onHistory)
         }
-        TextButton(onClick = onHistory) { Text("Run history") }
     }
 }

@@ -4,10 +4,23 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Badge
 import androidx.compose.material.icons.rounded.CheckCircle
+import androidx.compose.material.icons.rounded.ChevronRight
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material.icons.rounded.ErrorOutline
 import androidx.compose.material.icons.rounded.HealthAndSafety
 import androidx.compose.material.icons.rounded.Layers
@@ -46,6 +59,28 @@ internal fun HomeScreen(state: CloakState, onNavigate: (CloakDestination) -> Uni
                     else -> "Tap an item to go where it can be fixed."
                 },
             )
+        }
+
+        if (state.registry.isNotEmpty()) item {
+            LazyRow(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                items(state.registry.filter { it.state != "in_trash" }, key = { it.id }) { profile ->
+                    Card(onClick = { onNavigate(CloakDestination.PROFILES) },
+                        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
+                        shape = MaterialTheme.shapes.large) {
+                        Column(Modifier.width(248.dp).padding(20.dp), verticalArrangement = Arrangement.spacedBy(10.dp)) {
+                            Text(if (profile.id == state.ownProfileId) "Profile · In use" else "Cyclone profile",
+                                style = MaterialTheme.typography.labelMedium, color = CloakGlass.muted)
+                            CloakProfileAvatar(profile.id, profile.label, profile.id == state.ownProfileId, profile.state != "ready")
+                            Text(profile.label, fontSize = 32.sp, lineHeight = 36.sp, fontWeight = FontWeight.Bold)
+                            Text("${profile.packages?.size ?: 0} apps", color = CloakGlass.muted)
+                        }
+                    }
+                }
+            }
+        }
+        if (next != null) item {
+            CloakActionButton(next.title, Icons.Rounded.ChevronRight, { onNavigate(next.destination) },
+                modifier = Modifier.fillMaxWidth())
         }
 
         item { CloakSectionHeader("Needs attention", attention.size.takeIf { !loading }) }

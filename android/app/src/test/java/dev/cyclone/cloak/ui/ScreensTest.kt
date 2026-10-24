@@ -82,7 +82,7 @@ class ScreensTest {
     /** The app's background, as the Scaffold gives it in the app. */
     @Composable
     private fun Screen(content: @Composable () -> Unit) = CloakTheme {
-        Box(Modifier.fillMaxSize().background(MaterialTheme.colorScheme.background)) { content() }
+        Box(Modifier.fillMaxSize()) { content() }
     }
 
     private val vm by lazy { CloakViewModel(RuntimeEnvironment.getApplication()) }
@@ -132,8 +132,11 @@ class ScreensTest {
     @Test
     fun profiles() {
         compose.setContent { Screen { ProfilesScreen(state(), vm) } }
-        compose.onNodeWithText("Rooted !").assertIsDisplayed()
+        compose.onNodeWithText("Work").assertIsDisplayed()
         shot("3-profiles")
+        compose.onNodeWithText("Work").performClick()
+        compose.onNodeWithText("Rooted !").assertIsDisplayed()
+        shot("3-profile-detail")
     }
 
     @Test

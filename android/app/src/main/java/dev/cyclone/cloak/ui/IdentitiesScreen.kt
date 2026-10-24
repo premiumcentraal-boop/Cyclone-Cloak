@@ -71,6 +71,7 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
+        item { CloakHeroCard("Identities", "Your saved device profiles. Choose one to review or bind.") }
         item {
             Button(onClick = vm::newCompatibleDevice, enabled = state.busy == null,
                 modifier = Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.small) { Text("New compatible device") }

@@ -12,15 +12,16 @@ Runtime inspection coverage is partial; the [evidence matrix](docs/RUNTIME-COVER
 records which reads were verified on the measured binary. Creating a profile does
 not prove that every inspection API sees it.
 
-## Status: v1.0.0-rc.1 (release candidate; unpublished)
+## Status: v1.0.0-rc.3 (prerelease)
 
-App/module metadata is `1.0.0-rc.1` / code `60`. The candidate adds an optional
+App/module metadata is `1.0.0-rc.3` / code `62`. The release includes an optional
 denylist configuration, a per-profile integrity configuration section and three
 diagnostics self-visibility readers. These are configuration and measurement
 capabilities, not evidence of platform certification or a successful verdict.
 
-The Android test/build and schema gates passed. The full local gate remains
-blocked by missing Python test dependencies; RC physical confirmation is pending.
+The local [calm-glass redesign](docs/UI-CALM-GLASS.md) follows Cyclone's profile
+design language and is included in RC3. Device evidence remains tied to the
+specific measured artifacts, not to a visual redesign.
 See [current state](docs/CURRENT-STATE.md) and [changelog](CHANGELOG.md).
 
 ### Previous alpha.28 baseline

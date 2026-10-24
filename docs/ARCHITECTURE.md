@@ -1,9 +1,18 @@
 # Cyclone Cloak Architecture
 
-Current candidate source: **1.0.0-rc.1 / code 60** (unpublished). RC local
-verification is incomplete because the supplied forge test environment lacks
-required dependencies; physical confirmation remains a separate gate.
+RC3 candidate: **1.0.0-rc.3 / code 62**. The calm-glass UI update
+does not change runtime, connector, publication or storage logic.
 See [current verification results](CURRENT-STATE.md).
+
+## Calm-glass presentation layer
+
+`CloakTheme` owns the static blue backdrop, dark surfaces, typography colors and
+shape scale. `CloakDesign` supplies grouped rows, icon tiles, notices and
+expandable details; `CloakProfileGallery` provides display-only profile faces.
+The existing five destinations and view-model callbacks remain in place.
+Profile sheets reveal readiness and evidence actions without creating another
+profile manager. The binding flow keeps its validation model and confirmation
+stamp, with its actions in a fixed footer. See [UI scope and checks](UI-CALM-GLASS.md).
 
 ## RC configuration integration layers
 
