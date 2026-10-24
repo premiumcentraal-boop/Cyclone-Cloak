@@ -6,6 +6,14 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class RuntimeEnvelopeReportTest {
+    @Test public void mainThreadRunsTheReaderAndPropagatesFailures() throws Exception {
+        // WebView needs a Looper thread; the capture runs on a plain worker.
+        assertEquals("ua", RuntimeEnvelopeReport.mainThread(() -> "ua"));
+        Exception failure = assertThrows(IllegalStateException.class,
+            () -> RuntimeEnvelopeReport.mainThread(() -> { throw new IllegalStateException("boom"); }));
+        assertEquals("boom", failure.getMessage());
+    }
+
     @Test public void declaredPackageVersionsOverrideOnlyThePackagesTheyName() throws Exception {
         JSONArray visible = new JSONArray()
             .put(new JSONObject().put("package", "android").put("version_name", "14").put("version_code", 34))

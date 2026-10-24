@@ -17,6 +17,8 @@ import org.json.JSONObject;
 /** Optional format 1 extension. Only digests, fixed reasons and timing leave each reader. */
 @SuppressWarnings("deprecation")
 final class RuntimeEnvelopeReport {
+    /** Bounded so a wedged WebView cannot stall the capture indefinitely. */
+    private static final long MAIN_THREAD_TIMEOUT_MS = 5000;
     private RuntimeEnvelopeReport() { }
     static Object normalize(Object value) throws Exception {
         if (value instanceof Number) return new java.math.BigDecimal(value.toString()).stripTrailingZeros();
@@ -105,6 +107,36 @@ final class RuntimeEnvelopeReport {
         }
         return result;
     }
+
+    /**
+     * WebView refuses to initialise off a Looper thread, while captures run on a plain worker
+     * thread. Pop the work onto the main looper and wait for it, bounded so a stuck WebView
+     * cannot hang the whole capture.
+     */
+    static Object mainThread(RealityReport.Reader reader) throws Exception {
+        android.os.Looper looper;
+        try {
+            looper = android.os.Looper.getMainLooper();
+        } catch (RuntimeException notMocked) {
+            // Plain JVM tests have no Android runtime; the caller's thread is all there is.
+            return reader.read();
+        }
+        if (looper == null) return reader.read();
+        java.util.concurrent.FutureTask<Object> task = new java.util.concurrent.FutureTask<>(() -> {
+            try { return reader.read(); } catch (Exception failure) { throw failure; }
+        });
+        new android.os.Handler(looper).post(task);
+        try {
+            return task.get(MAIN_THREAD_TIMEOUT_MS, java.util.concurrent.TimeUnit.MILLISECONDS);
+        } catch (java.util.concurrent.TimeoutException expired) {
+            task.cancel(true);
+            throw new android.util.AndroidRuntimeException("MAIN_THREAD_TIMEOUT");
+        } catch (java.util.concurrent.ExecutionException failed) {
+            Throwable cause = failed.getCause();
+            if (cause instanceof Exception) throw (Exception) cause;
+            throw new android.util.AndroidRuntimeException(String.valueOf(cause));
+        }
+    }
     static JSONObject report(JSONArray rows) throws Exception {
         java.util.Set<String> ids = new java.util.HashSet<>();
         for (int i = 0; i < rows.length(); i++) {
@@ -176,15 +208,17 @@ final class RuntimeEnvelopeReport {
         rows.put(row("envelope.webview.version", expected(profile, "webview", "version"), () -> {
             PackageInfo p = WebView.getCurrentWebViewPackage(); return p == null ? null : p.versionName;
         }));
-        rows.put(row("envelope.webview.defaultUa", expected(profile, "webview", "user_agent"), () -> android.webkit.WebSettings.getDefaultUserAgent(activity)));
-        rows.put(row("envelope.webview.instanceUa", expected(profile, "webview", "user_agent"), () -> {
-            android.webkit.WebView v = new android.webkit.WebView(activity);
-            try {
-                return v.getSettings().getUserAgentString();
-            } finally {
-                v.destroy();
-            }
-        }));
+        rows.put(row("envelope.webview.defaultUa", expected(profile, "webview", "user_agent"),
+            () -> mainThread(() -> android.webkit.WebSettings.getDefaultUserAgent(activity))));
+        rows.put(row("envelope.webview.instanceUa", expected(profile, "webview", "user_agent"),
+            () -> mainThread(() -> {
+                android.webkit.WebView v = new android.webkit.WebView(activity);
+                try {
+                    return v.getSettings().getUserAgentString();
+                } finally {
+                    v.destroy();
+                }
+            })));
         rows.put(row("envelope.display.realSize", baseSize(profile), () -> {
             android.graphics.Point size = new android.graphics.Point();
             activity.getWindowManager().getDefaultDisplay().getRealSize(size);
