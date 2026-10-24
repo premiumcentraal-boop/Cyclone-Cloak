@@ -79,18 +79,12 @@ def bootcheck():
  if any(actual.get(k)!=v for k,v in expected.items()):raise RuntimeError('INSTALLED_MODULE_HASH_MISMATCH')
  after=snapshot('post-install-audit.json');before=json.loads((O/'pre-install-audit.json').read_text())
  check=dict(production_files_unchanged=before['production_files']==after['production_files'],entries_unchanged=before['entries']==after['entries'],permissions_appops_unchanged=before['packages']==after['packages'])
- save('installation-audit-comparison.json',check)
-  if not all(check.values()):raise RuntimeError('INSTALLATION_AUDIT_CHANGED')
-  def norm(v):
-   if isinstance(v,list):
-    return [norm(x) for x in v]
-   if isinstance(v,tuple):
-    return [norm(x) for x in v]
-   if isinstance(v,dict):
-    return {k:norm(x) for k,x in v.items()}
-   return v
-  same=norm(before['packages'])==norm(after['packages'])
-  if not same:raise RuntimeError('INSTALLATION_AUDIT_CHANGED')
+ def norm(v):
+  if isinstance(v,(list,tuple)):return [norm(x) for x in v]
+  if isinstance(v,dict):return {k:norm(x) for k,x in v.items()}
+  return v
+  if not all(check.values()) or norm(before['packages'])!=norm(after['packages']):raise RuntimeError('INSTALLATION_AUDIT_CHANGED')
+  if not all(check.values()) or norm(before['packages'])!=norm(after['packages']):raise RuntimeError('INSTALLATION_AUDIT_CHANGED')
  print('BOOT_AND_INSTALLATION_AUDIT_PASSED',flush=True)
 try:
  {'preflight':preflight,'update':update,'bootcheck':bootcheck}[sys.argv[1]]()
