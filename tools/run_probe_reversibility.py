@@ -181,9 +181,14 @@ def effective_permission_state(before, after):
         additions = [entry for entry in after_entries if entry not in before_entries]
         if any(name not in expected or expected[name] != mode for name, mode in additions):
             return False
-        if after_entries[:len(before_entries)] != before_entries:
+        # Multiset comparison: additions may appear in any order, not appended.
+        from collections import Counter
+        if len(after_entries) != len(before_entries) + len(additions):
             return False
-        if after_entries[len(before_entries):] != sorted(additions):
+        before_counts, after_counts = Counter(before_entries), Counter(after_entries)
+        if any(after_counts[name] < count for name, count in before_counts.items()):
+            return False
+        if after_counts - before_counts != Counter(additions):
             return False
     return True
 
