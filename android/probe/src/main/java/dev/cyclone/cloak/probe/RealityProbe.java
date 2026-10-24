@@ -205,6 +205,10 @@ final class RealityProbe {
             JSONObject field = contractFields.getJSONObject(i);
             if (!field.isNull("surface") && !field.isNull("reader_key")) allowedReaders.add(field.getString("reader_key"));
         }
+        // Self-visibility readers survive the allowlist filter: a missing row
+        // proves nothing, so their three reader entries are never removed.
+        for (String masked : new String[] {"masked.package_list", "masked.maps", "masked.services"})
+            allowedReaders.add(masked);
         readers.keySet().retainAll(allowedReaders);
         JSONObject fields;
         try (java.io.InputStream stream = activity.getAssets().open("reality-fields.json")) {
@@ -231,10 +235,10 @@ final class RealityProbe {
                 rows.put(RealityReport.row("reality." + key, value, readers.get(key)));
             }
         }
-        // Self-visibility diagnostics are always collected, never allowlist-gated:
-        // a missing row proves nothing, so these three are appended unconditionally.
+        // Emitted after contract rows so the report shows masked results last;
+        // each row is always OBSERVED (value) or BLOCKED (denial), never absent.
         for (String masked : new String[] {"masked.package_list", "masked.maps", "masked.services"})
-            if (readers.containsKey(masked)) rows.put(RealityReport.row("reality." + masked, null, readers.get(masked)));
+            rows.put(RealityReport.row("reality." + masked, null, readers.get(masked)));
         Map<String, RealityReport.Reader> linked = new HashMap<>();
         for (int i = 0; i < contractFields.length(); i++) {
             JSONObject field = contractFields.getJSONObject(i);
