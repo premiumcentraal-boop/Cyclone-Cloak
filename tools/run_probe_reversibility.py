@@ -238,9 +238,10 @@ def ensure_diagnostics_apk(device, users, apk, expected_hash, install_state, evi
             raise ValueError('DIAGNOSTICS_INSTALL_ALREADY_ATTEMPTED')
         install_state['install_attempts'] += 1
         evidence.update(installation_skipped=False, install_attempted=True)
-        result = device.run('install', '--user', missing[0], '-r', apk, timeout=120)
-        if 'Success' not in result.stdout:
-            raise ValueError('DIAGNOSTICS_INSTALL_FAILED')
+        for user in missing:
+            result = device.run('install', '--user', user, '-r', apk, timeout=120)
+            if 'Success' not in result.stdout:
+                raise ValueError('DIAGNOSTICS_INSTALL_FAILED')
         hashes, missing = inspect('after-install')
         if missing:
             raise ValueError('DIAGNOSTICS_NOT_INSTALLED_FOR_USER')
