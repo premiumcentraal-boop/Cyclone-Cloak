@@ -672,7 +672,6 @@ def run_cycle(args):
                         extra = r.get(section, {}).get('rows', [])
                         if len(extra) != count or any(x['status'] == 'FAIL' for x in extra):
                             raise ValueError('CANDIDATE_SECTION_FAILED_OR_INCOMPLETE')
-                pc.save(out/(phase+'.json'), r)
                 reports.append(r)
                 print(phase, json.dumps(dict(Counter(row['status'] for row in r['rows']))), 'reused='+str(r['process_reused']), flush=True)
                 return
