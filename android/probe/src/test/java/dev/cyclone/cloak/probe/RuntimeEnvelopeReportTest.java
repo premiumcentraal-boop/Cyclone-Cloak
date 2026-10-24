@@ -6,6 +6,24 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class RuntimeEnvelopeReportTest {
+    @Test public void declaredPackageVersionsOverrideOnlyThePackagesTheyName() throws Exception {
+        JSONArray visible = new JSONArray()
+            .put(new JSONObject().put("package", "android").put("version_name", "14").put("version_code", 34))
+            .put(new JSONObject().put("package", "com.android.chrome").put("version_name", "host").put("version_code", 1))
+            .put(new JSONObject().put("package", "com.google.android.gms").put("version_name", "host").put("version_code", 2));
+        JSONArray declared = new JSONArray()
+            .put(new JSONObject().put("package", "android").put("version_name", "13").put("version_code", 33));
+
+        JSONArray merged = RuntimeEnvelopeReport.mergePackages(visible, declared);
+        // Declared wins, undeclared stay host, membership and order are untouched.
+        assertEquals("13", merged.getJSONObject(0).getString("version_name"));
+        assertEquals(33, merged.getJSONObject(0).getLong("version_code"));
+        assertEquals("host", merged.getJSONObject(1).getString("version_name"));
+        assertEquals(1, merged.getJSONObject(1).getLong("version_code"));
+        assertEquals("host", merged.getJSONObject(2).getString("version_name"));
+        assertEquals(3, merged.length());
+    }
+
     @Test public void equalNestedNumbersAndInventoryOrderingDoNotProduceFalseFailures() throws Exception {
         JSONArray expected = new JSONArray("[{\"type\":1,\"range\":10},{\"type\":2,\"range\":20}]");
         JSONArray actual = new JSONArray("[{\"range\":20.0,\"type\":2},{\"range\":10.0,\"type\":1}]");

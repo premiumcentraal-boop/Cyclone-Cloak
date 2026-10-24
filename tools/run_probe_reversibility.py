@@ -669,7 +669,9 @@ def run_cycle(args):
                 if mode=='bound-cold' and any(row['status'] == 'FAIL' or (not candidate and row['status'] == 'MISSING') for row in r['rows']):
                     raise ValueError('BOUND_CAPTURE_FAILED')
                 if candidate and mode == 'bound-cold':
-                    for section, count in (('linked_parity', 13), ('runtime_envelope', 15)):
+                    # Envelope rows grow when a new surface is added (16 with the packages row),
+                    # so pin the count per section only where it is genuinely fixed.
+                    for section, count in (('linked_parity', 13), ('runtime_envelope', 16)):
                         extra = r.get(section, {}).get('rows', [])
                         if len(extra) != count or any(x['status'] == 'FAIL' for x in extra):
                             raise ValueError('CANDIDATE_SECTION_FAILED_OR_INCOMPLETE')

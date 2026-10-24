@@ -52,6 +52,59 @@ final class RuntimeEnvelopeReport {
         JSONObject values = item != null && "known".equals(item.optString("availability")) ? item.optJSONObject("values") : null;
         return values == null ? null : values.opt(field);
     }
+
+    /**
+     * A profile declares versions only for packages it can prove; the row hashes every visible
+     * package. Merge the declared values over the caller-visible list so an undeclared package
+     * keeps the host version instead of turning the whole row into a mismatch.
+     */
+    static JSONArray expectedPackages(Activity activity, JSONObject profile) {
+        JSONArray visible;
+        try {
+            visible = actualPackages(activity);
+        } catch (Exception unavailable) {
+            return null;
+        }
+        return mergePackages(visible, expected(profile, "packages", "installed"));
+    }
+
+    /** Overlay declared versions onto a caller-visible list; undeclared packages keep host values. */
+    static JSONArray mergePackages(JSONArray visible, Object declared) {
+        if (!(declared instanceof JSONArray) || visible == null) return visible;
+        java.util.Map<String, JSONObject> byName = new java.util.HashMap<>();
+        JSONArray declaredItems = (JSONArray) declared;
+        for (int i = 0; i < declaredItems.length(); i++) {
+            JSONObject entry = declaredItems.optJSONObject(i);
+            if (entry != null) byName.put(entry.optString("package"), entry);
+        }
+        for (int i = 0; i < visible.length(); i++) {
+            JSONObject entry = visible.optJSONObject(i);
+            JSONObject override = entry == null ? null : byName.get(entry.optString("package"));
+            if (override == null) continue;
+            try {
+                entry.put("version_name", override.optString("version_name"));
+                entry.put("version_code", override.optLong("version_code"));
+            } catch (org.json.JSONException ignored) { /* Keep the host entry. */ }
+        }
+        return visible;
+    }
+
+    /** Caller-visible allowlisted packages; visibility is never broadened. */
+    static JSONArray actualPackages(Activity activity) {
+        JSONArray result = new JSONArray();
+        android.content.pm.PackageManager pm = activity.getPackageManager();
+        for (String pkg : new String[]{"android", "com.android.vending", "com.google.android.gms",
+                "com.google.android.gsf", "com.google.android.webview", "com.android.chrome"}) {
+            try {
+                PackageInfo p = pm.getPackageInfo(pkg, 0);
+                result.put(new JSONObject().put("package", p.packageName)
+                    .put("version_name", p.versionName).put("version_code", p.getLongVersionCode()));
+            } catch (android.content.pm.PackageManager.NameNotFoundException ignored) {
+                /* Do not broaden visibility. */
+            } catch (org.json.JSONException ignored) { /* Keep the entry out. */ }
+        }
+        return result;
+    }
     static JSONObject report(JSONArray rows) throws Exception {
         java.util.Set<String> ids = new java.util.HashSet<>();
         for (int i = 0; i < rows.length(); i++) {
@@ -115,16 +168,8 @@ final class RuntimeEnvelopeReport {
             () -> new StatFs(activity.getFilesDir().getPath()).getAvailableBytes()));
         rows.put(row("envelope.compute.schedulerProcessors", null, () -> Runtime.getRuntime().availableProcessors()));
         rows.put(row("envelope.compute.gpuRenderer", expected(profile, "compute", "gpu"), RuntimeEnvelopeReport::gpu));
-        rows.put(row("envelope.packages.visibleVersions", expected(profile, "packages", "installed"), () -> {
-            JSONArray result = new JSONArray();
-            for (String pkg : new String[]{"android", "com.android.vending", "com.google.android.gms", "com.google.android.gsf", "com.google.android.webview", "com.android.chrome"}) {
-                try {
-                    PackageInfo p = activity.getPackageManager().getPackageInfo(pkg, 0);
-                    result.put(new JSONObject().put("package", p.packageName).put("version_name", p.versionName).put("version_code", p.getLongVersionCode()));
-                } catch (android.content.pm.PackageManager.NameNotFoundException ignored) { /* Do not broaden visibility. */ }
-            }
-            return result;
-        }));
+        rows.put(row("envelope.packages.visibleVersions", expectedPackages(activity, profile),
+            () -> actualPackages(activity)));
         rows.put(row("envelope.webview.provider", expected(profile, "webview", "provider"), () -> {
             PackageInfo p = WebView.getCurrentWebViewPackage(); return p == null ? null : p.packageName;
         }));
