@@ -491,7 +491,10 @@ def run_cycle(args):
             for user in users:
                 lookup = d.shell(f'pm list packages --user {user} -U {package}').stdout
                 match = re.search(r'^package:'+re.escape(package)+r' uid:(\d+)$', lookup, re.M)
-                if not match: raise ValueError('APPOP_UID_MISSING')
+                if not match:
+                    # Per-user absent: record explicitly so before/after stay comparable.
+                    modes[str(user)] = dict(absent=True)
+                    continue
                 uid_response = d.shell('cmd appops get '+match[1])
                 response = d.shell(f'cmd appops get --user {user} {package}')
                 modes[str(user)] = appop_modes(response.stdout, uid_response.stdout)
