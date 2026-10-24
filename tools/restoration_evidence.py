@@ -100,10 +100,19 @@ def confirmed_host_control(before, after):
 
 
 def semantic_audit(value):
-    """Only serialization observations are non-gating; all other fields still gate."""
+    """Retain raw evidence; only the exact durable load log is mutable module data."""
     if value is None:
         return None
-    return {k: v for k, v in value.items() if k not in ('index_bytes_sha256', 'index_bytes_size')}
+    result = copy.deepcopy({k: v for k, v in value.items() if k not in ('index_bytes_sha256', 'index_bytes_size')})
+    module = result.get('module_files', {})
+    path = '/data/adb/modules/cyclone_cloak/load-records.jsonl'
+    key = hashlib.sha256(path.encode()).hexdigest()
+    if module.get('file_details', {}).get(key, {}).get('path') == path:
+        module['file_details'].pop(key)
+        module['files'].pop(key)
+        module['count'] = len(module['files'])
+        module['sha256'] = canonical_digest(module['files'])
+    return result
 
 
 def audit_comparison(before, after):

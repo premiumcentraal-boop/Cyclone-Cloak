@@ -161,12 +161,19 @@ def effective_permission_state(before, after):
     if production != after['dev.cyclone.cloak']:
         return False
     old, new = before[PACKAGE], after[PACKAGE]
+    if old.get('present') is False or new.get('present') is False:
+        absent = dict(present=False, grants=None, appop_modes=None, install_grants=None)
+        return old == new == absent
     if set(old) != set(new) or old.get('grants') != new.get('grants') or old.get('install_grants') != new.get('install_grants'):
         return False
     if set(old.get('appop_modes', {})) != set(new.get('appop_modes', {})):
         return False
     expected = dict(EXPECTED_DIAGNOSTIC_APPOP_ADDITIONS)
     for user in old.get('appop_modes', {}):
+        if old['appop_modes'][user] == {'absent': True} or new['appop_modes'][user] == {'absent': True}:
+            if old['appop_modes'][user] != new['appop_modes'][user]:
+                return False
+            continue
         before_entries = [_appop_entry(entry) for entry in old['appop_modes'][user]]
         after_entries = [_appop_entry(entry) for entry in new['appop_modes'][user]]
         if len(before_entries) != len(set(before_entries)) or len(after_entries) != len(set(after_entries)):
@@ -190,6 +197,49 @@ def _appop_entry(value):
     if not isinstance(mode, str) or not re.fullmatch(r'[a-z]+', mode):
         raise ValueError('INVALID_APPOP_ENTRY')
     return name, mode
+
+
+def install_permission_baseline(before, after, missing_users):
+    """Validate newly installed diagnostics users; never rebase existing users."""
+    expected = copy.deepcopy(before)
+    old, new = expected[PACKAGE], after[PACKAGE]
+    allowed = {'android.permission.' + name for name in (
+        'ACCESS_FINE_LOCATION', 'ACCESS_COARSE_LOCATION', 'BLUETOOTH_CONNECT', 'NEARBY_WIFI_DEVICES')}
+    for user in map(str, missing_users):
+        if old['appop_modes'].get(user) != {'absent': True}:
+            raise ValueError('INVALID_BOOTSTRAP_USER')
+        grants = new['grants'].get(user, {})
+        if set(grants) != allowed or any(v != dict(granted=False, flags=[
+                'USER_SENSITIVE_WHEN_DENIED', 'USER_SENSITIVE_WHEN_GRANTED']) for v in grants.values()):
+            raise ValueError('INSTALL_CHANGED_PERMISSIONS')
+        modes = [_appop_entry(v) for v in new['appop_modes'].get(user, [])]
+        host_defaults = {_appop_entry(v) for v in before['dev.cyclone.cloak']['appop_modes'].get(user, [])}
+        if len(modes) != len(set(modes)) or any(not (
+                name.startswith('Uid mode: ') and mode == 'ignore' and (name, mode) in host_defaults
+                or name == 'SMS_FINANCIAL_TRANSACTIONS' and mode == 'default') for name, mode in modes):
+            raise ValueError('INSTALL_CHANGED_PERMISSIONS')
+        old['grants'][user] = copy.deepcopy(grants)
+        old['appop_modes'][user] = copy.deepcopy(new['appop_modes'][user])
+    if expected != after:
+        raise ValueError('INSTALL_CHANGED_PERMISSIONS')
+    return after
+
+
+def masked_results(report):
+    """Require affirmative absence digests; observations alone never prove absence."""
+    rows = report.get('device_reality', {}).get('rows', [])
+    expected = hashlib.sha256(b'"NOT_PRESENT"').hexdigest()
+    result = {}
+    for surface in ('package_list', 'maps', 'services'):
+        key = 'reality.masked.' + surface
+        matches = [r for r in rows if r.get('id') == key]
+        if len(matches) != 1:
+            raise ValueError('MASKED_ROWS_INCOMPLETE')
+        row = matches[0]
+        if row.get('status') not in ('OBSERVED', 'PASS') or row.get('actual_sha256') != expected:
+            raise ValueError('MASKED_SURFACE_NOT_ABSENT')
+        result[key] = dict(result='NOT_PRESENT', actual_sha256=expected)
+    return result
 
 
 def cycle_plan(users, cycles=1):
@@ -608,6 +658,8 @@ def run_cycle(args):
                          interpretation='fixture expectation results' if mode=='bound-cold' else 'unbound actual-value observation; fixture mismatches are expected')
                 check_metadata(r, item, cold, ids)
                 pc.save(out/(phase+'.json'), r)
+                if getattr(args, 'expected_version', None):
+                    pc.save(out/(phase+'-masked.json'), masked_results(r))
                 if mode=='bound-cold' and any(row['status'] == 'FAIL' or (not candidate and row['status'] == 'MISSING') for row in r['rows']):
                     raise ValueError('BOUND_CAPTURE_FAILED')
                 if candidate and mode == 'bound-cold':
@@ -653,7 +705,15 @@ def run_cycle(args):
         if not re.search(r"^package: name='dev\.cyclone\.cloak\.probe\.diag'",badging,re.M): raise ValueError('WRONG_APK')
         m['installed_apk_hashes'] = ensure_diagnostics_apk(d, users, apk, apk_hash,
             getattr(args, 'apk_install_state', dict(install_attempts=0)), m['apk_install'])
-        if permission_state() != permissions_before: raise ValueError('INSTALL_CHANGED_PERMISSIONS')
+        installed_permissions = permission_state()
+        if installed_permissions != permissions_before:
+            missing = [c['android_user'] for c in m['apk_install']['checks']
+                       if c['stage'] == 'before-cycle' and c['status'] == 'MISSING']
+            pc.save(out/'permissions-pre-install.json', permissions_before)
+            permissions_before = install_permission_baseline(permissions_before, installed_permissions, missing)
+            pc.save(out/'permissions-before.json', permissions_before)
+            m['bootstrap_permission_baseline'] = dict(users=missing,
+                reason='DENIED_DIAGNOSTICS_INSTALL_DEFAULTS', pre_install_snapshot='permissions-pre-install.json')
         for u,f in [(0,'a'),(args.secondary,'b')]:
             item = dict(user=u,fixture='external' if candidate else f,scenario_fixture=f,kind='fixture',target_count=1)
             body = h.body(item); item.update(sha256=pc.digest(body),profile_id=body['id']); selections.append(item)

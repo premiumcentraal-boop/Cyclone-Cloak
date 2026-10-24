@@ -444,3 +444,63 @@ def test_probe_failure_rejects_unrelated_or_insufficient_evidence(change):
     if change=='malformed': text='unparseable'
     result=probe_failure_evidence(text,0,9999999999 if change=='stale' else 1792351800,12996,'invalid' if change=='offset' else '+0200')
     assert result==dict(reason_code='PROBE_REPORT_TIMEOUT',matched_exit=None)
+
+
+def test_bootstrap_install_preserves_existing_users_and_only_accepts_denied_defaults():
+    from run_probe_reversibility import install_permission_baseline
+    before=state_with_allowed_entries([])
+    before[PACKAGE]['appop_modes']['17']={'absent':True}
+    before[PACKAGE]['grants']['17']={}
+    before['dev.cyclone.cloak']['appop_modes']['17']=[('Uid mode: CAMERA','ignore')]
+    after=copy.deepcopy(before)
+    after[PACKAGE]['appop_modes']['17']=[('Uid mode: CAMERA','ignore')]
+    after[PACKAGE]['grants']['17']={'android.permission.'+name:dict(granted=False,flags=[
+        'USER_SENSITIVE_WHEN_DENIED','USER_SENSITIVE_WHEN_GRANTED']) for name in
+        ('ACCESS_FINE_LOCATION','ACCESS_COARSE_LOCATION','BLUETOOTH_CONNECT','NEARBY_WIFI_DEVICES')}
+    assert install_permission_baseline(before,after,[17])==after
+    for mutation in ('grant','existing','allow','production'):
+        bad=copy.deepcopy(after)
+        if mutation=='grant':bad[PACKAGE]['grants']['17']['android.permission.BLUETOOTH_CONNECT']['granted']=True
+        if mutation=='existing':bad[PACKAGE]['appop_modes']['0']=[('CAMERA','allow')]
+        if mutation=='allow':bad[PACKAGE]['appop_modes']['17']=[('CAMERA','allow')]
+        if mutation=='production':bad['dev.cyclone.cloak']['grants']['0']={'changed':True}
+        with pytest.raises(ValueError,match='INSTALL_CHANGED_PERMISSIONS'):
+            install_permission_baseline(before,bad,[17])
+
+
+def test_absent_permission_snapshots_compare_without_becoming_present():
+    before=state_with_allowed_entries([])
+    before[PACKAGE]=dict(present=False,grants=None,appop_modes=None,install_grants=None)
+    assert effective_permission_state(before,copy.deepcopy(before))
+    assert not effective_permission_state(before,state_with_allowed_entries([]))
+    before=state_with_allowed_entries([])
+    before[PACKAGE]['appop_modes']['17']={'absent':True}
+    assert effective_permission_state(before,copy.deepcopy(before))
+    assert not effective_permission_state(before,state_with_allowed_entries([]))
+
+
+def test_only_exact_module_load_log_is_non_gating_but_still_retained():
+    from restoration_evidence import semantic_audit,canonical_digest
+    path='/data/adb/modules/cyclone_cloak/load-records.jsonl'
+    key=hashlib.sha256(path.encode()).hexdigest()
+    before={'module_files':dict(count=2,files={key:'a'*64,'library':'b'*64},sha256='a'*64,
+        file_details={key:dict(path=path,sha256='a'*64,bytes=10),'library':dict(path='zygisk/arm64-v8a.so',sha256='b'*64)})}
+    after=copy.deepcopy(before)
+    after['module_files']['files'][key]='c'*64
+    after['module_files']['file_details'][key].update(sha256='c'*64,bytes=20)
+    after['module_files']['sha256']='c'*64
+    assert before!=after and semantic_audit(before)==semantic_audit(after)
+    after['module_files']['files']['library']='d'*64
+    assert semantic_audit(before)!=semantic_audit(after)
+    assert key in before['module_files']['files']
+
+
+def test_masked_rows_require_all_three_absence_digests():
+    from run_probe_reversibility import masked_results
+    report={'device_reality':{'rows':[dict(id='reality.masked.'+s,status='OBSERVED',
+        actual_sha256=hashlib.sha256(b'"NOT_PRESENT"').hexdigest()) for s in ('package_list','maps','services')]}}
+    assert len(masked_results(report))==3
+    report['device_reality']['rows'][0]['actual_sha256']=hashlib.sha256(b'"FOUND:example"').hexdigest()
+    with pytest.raises(ValueError,match='MASKED_SURFACE_NOT_ABSENT'):masked_results(report)
+    report['device_reality']['rows'].pop()
+    with pytest.raises(ValueError):masked_results(report)
