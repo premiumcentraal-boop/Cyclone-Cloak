@@ -6,6 +6,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.*
+import dev.cyclone.cloak.cyclone.ConnectionState
 import dev.cyclone.cloak.cyclone.ConnectionStatus
 import java.time.Instant
 import java.time.ZoneId
@@ -15,7 +16,13 @@ import java.time.format.DateTimeFormatter
 internal fun ConnectionStatusChip(state: ConnectionStatus, onRetry: () -> Unit) {
     var details by remember { mutableStateOf(false) }
     Column {
-        TextButton(onClick = { details = true }) { Text(state.label, style = MaterialTheme.typography.labelSmall) }
+        TextButton(onClick = { details = true }) {
+            CloakStatusPill(state.label, when (state.state) {
+                ConnectionState.CONNECTED -> CloakStatusTone.READY
+                ConnectionState.FAILED -> CloakStatusTone.ERROR
+                else -> CloakStatusTone.PENDING
+            })
+        }
         state.cached?.let {
             Text("Last seen " + DateTimeFormatter.ofPattern("MM-dd HH:mm").withZone(ZoneId.systemDefault())
                 .format(Instant.ofEpochMilli(it.seenAt)), style = MaterialTheme.typography.labelSmall)

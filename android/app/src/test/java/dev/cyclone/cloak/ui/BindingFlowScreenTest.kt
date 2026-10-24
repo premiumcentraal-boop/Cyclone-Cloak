@@ -61,7 +61,7 @@ class BindingFlowScreenTest {
         compose.onAllNodes(isToggleable()).fetchSemanticsNodes().takeIf { it.isNotEmpty() }?.let {
             compose.onNode(isToggleable()).performScrollTo().performClick()
         }
-        compose.onNodeWithText("Confirm binding").performScrollTo().assertIsEnabled().performClick()
+        compose.onNodeWithText("Confirm binding").assertIsDisplayed().assertIsEnabled().performClick()
         compose.onNodeWithText("Binding ready").assertIsDisplayed()
         assertEquals(1, confirmed)
     }
@@ -75,9 +75,9 @@ class BindingFlowScreenTest {
         }
         compose.onNodeWithText("identity: This compatibility profile is already bound elsewhere. Choose or generate another profile for separate identities, or acknowledge sharing it.")
             .performScrollTo().assertIsDisplayed()
-        compose.onNodeWithText("Confirm binding").performScrollTo().assertIsNotEnabled()
+        compose.onNodeWithText("Confirm binding").assertIsDisplayed().assertIsNotEnabled()
         compose.onNode(isToggleable()).performScrollTo().performClick()
-        compose.onNodeWithText("Confirm binding").performScrollTo().assertIsEnabled().performClick()
+        compose.onNodeWithText("Confirm binding").assertIsDisplayed().assertIsEnabled().performClick()
         assertEquals(1, confirmed)
     }
     @Test fun unreadyProfileShowsReasonAndBlocksConfirmation() {
@@ -88,7 +88,7 @@ class BindingFlowScreenTest {
         }
         compose.onNodeWithText("profile: This profile has no Android user assignment. Finish setup in Cyclone, then refresh.")
             .performScrollTo().assertIsDisplayed()
-        compose.onNodeWithText("Confirm binding").performScrollTo().assertIsNotEnabled()
+        compose.onNodeWithText("Confirm binding").assertIsDisplayed().assertIsNotEnabled()
         assertEquals(0, confirmed)
     }
     @Test fun savedFailureOffersRetryAndDoesNotConfirmAgain() {
@@ -113,9 +113,9 @@ class BindingFlowScreenTest {
                 { draft.value = draft.value.copy(reviewStamp = BindingFlow.stamp(draft.value, input.value), acknowledged = false) },
                 {}, {}, {}, {}, {}, {}) }
         }
-        compose.onNodeWithText("Confirm binding").performScrollTo().assertIsNotEnabled()
+        compose.onNodeWithText("Confirm binding").assertIsDisplayed().assertIsNotEnabled()
         compose.runOnIdle { draft.value = draft.value.copy(running = false); input.value = original.copy(profiles = listOf(profile.copy(androidUserId = 21))) }
-        compose.onNodeWithText("Confirm binding").performScrollTo().assertIsNotEnabled()
+        compose.onNodeWithText("Confirm binding").assertIsDisplayed().assertIsNotEnabled()
         compose.onNodeWithText("Review latest summary").performScrollTo().performClick()
         compose.onNodeWithText("Android user: 21").performScrollTo().assertIsDisplayed()
     }
@@ -137,7 +137,7 @@ class BindingFlowScreenTest {
         compose.onNodeWithText("Continue").performClick()
         compose.onNodeWithText("Step 3 of 5 · Choose device profile").assertIsDisplayed()
         compose.onNodeWithText("Selected device profile: Pixel profile").assertIsDisplayed()
-        compose.onNodeWithText("Continue").performScrollTo().performClick()
+        compose.onNodeWithText("Continue").assertIsDisplayed().performClick()
         compose.onNodeWithText("All apps (2)").assertIsDisplayed()
         compose.onNodeWithText("App package: com.example.app").assertIsDisplayed()
         compose.onNodeWithText("App package: com.example.other").assertIsDisplayed()

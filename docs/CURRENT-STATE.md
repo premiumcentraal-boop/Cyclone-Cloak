@@ -1,7 +1,9 @@
 # Current state
 
-Updated 2026-10-24. Current source **v1.0.0-rc.1 / versionCode 60**;
-release candidate only, not tagged or published.
+Updated 2026-10-24. Current version: **v1.0.0-rc.3 / versionCode 62** (previous baseline: RC2).
+The local [calm-glass redesign](UI-CALM-GLASS.md) is the RC3 UI update;
+app/module packaging metadata match. Existing runtime behavior is unchanged. The historical
+verification entries below retain the artifacts and dates they measured.
 
 ## RC local verification and remaining gates
 

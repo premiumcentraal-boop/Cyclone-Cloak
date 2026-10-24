@@ -8,6 +8,7 @@ package dev.cyclone.cloak.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +21,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.ChevronRight
@@ -58,6 +60,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 
 /** Spacing scale shared by every screen. */
 internal object CloakSpace {
@@ -93,10 +96,10 @@ internal fun CloakSectionHeader(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            title.uppercase(),
-            style = MaterialTheme.typography.labelMedium,
-            fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary,
+            title,
+            fontSize = 15.sp,
+            fontWeight = FontWeight.Medium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         if (count != null) {
             Surface(shape = CircleShape, color = MaterialTheme.colorScheme.surfaceVariant, contentColor = MaterialTheme.colorScheme.onSurfaceVariant) {
@@ -115,17 +118,18 @@ internal fun CloakGroup(modifier: Modifier = Modifier, content: @Composable Colu
         modifier = modifier.fillMaxWidth(),
         shape = MaterialTheme.shapes.large,
         color = MaterialTheme.colorScheme.surface,
+        border = BorderStroke(1.dp, Color(0x1FFFFFFF)),
     ) { Column(Modifier.fillMaxWidth(), content = content) }
 }
 
 @Composable
-internal fun CloakGroupDivider() = HorizontalDivider(Modifier.padding(start = 16.dp), color = MaterialTheme.colorScheme.outlineVariant)
+internal fun CloakGroupDivider() = HorizontalDivider(Modifier.padding(start = 60.dp), color = MaterialTheme.colorScheme.outlineVariant)
 
 /** Round tinted icon used at the start of rows and headers. */
 @Composable
 internal fun CloakIconBadge(icon: ImageVector, tone: CloakStatusTone? = null, size: Int = 36) {
     val (container, content) = tone.colors()
-    Surface(shape = CircleShape, color = container, contentColor = content) {
+    Surface(shape = RoundedCornerShape((size * 0.3f).dp), color = container, contentColor = content) {
         Box(Modifier.size(size.dp), contentAlignment = Alignment.Center) { Icon(icon, null, Modifier.size((size * 0.52f).dp)) }
     }
 }
@@ -153,7 +157,7 @@ internal fun CloakRow(
     ) {
         if (icon != null) CloakIconBadge(icon, tone)
         Column(Modifier.weight(1f), verticalArrangement = Arrangement.spacedBy(2.dp)) {
-            Text(title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, maxLines = 2, overflow = TextOverflow.Ellipsis)
+            Text(title, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.SemiBold, maxLines = 1, overflow = TextOverflow.Ellipsis)
             if (!supporting.isNullOrBlank()) {
                 Text(supporting, style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }

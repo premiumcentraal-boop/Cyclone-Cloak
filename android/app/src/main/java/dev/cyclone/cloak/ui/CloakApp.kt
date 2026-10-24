@@ -43,6 +43,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.graphics.Color
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -102,12 +104,12 @@ fun CloakApp(vm: CloakViewModel) {
     }
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = Color.Transparent,
         snackbarHost = { SnackbarHost(snackbar) },
         topBar = {
             Column {
                 TopAppBar(
-                    colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
+                    colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Transparent),
                     title = {
                         Row(horizontalArrangement = Arrangement.spacedBy(11.dp), verticalAlignment = Alignment.CenterVertically) {
                             Surface(shape = CircleShape, color = MaterialTheme.colorScheme.primary, contentColor = MaterialTheme.colorScheme.onPrimary) {
@@ -116,20 +118,20 @@ fun CloakApp(vm: CloakViewModel) {
                                 }
                             }
                             Column(verticalArrangement = Arrangement.spacedBy(1.dp)) {
-                                Text("Cyclone Cloak", style = MaterialTheme.typography.titleMedium, fontWeight = FontWeight.Bold)
-                                Text(CloakDestination.entries[tab].label.uppercase(), style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+                                Text("Cloak", style = MaterialTheme.typography.titleLarge, fontWeight = FontWeight.Bold, maxLines = 1)
+                                Text("by Cyclone", style = MaterialTheme.typography.labelSmall, color = MaterialTheme.colorScheme.onSurfaceVariant, maxLines = 1)
                             }
                         }
                     },
                     actions = {
-                        ConnectionStatusChip(state.connection, vm::refresh)
+                        Box(Modifier.widthIn(max = 170.dp)) { ConnectionStatusChip(state.connection, vm::refresh) }
                     },
                 )
                 if (state.busy != null || state.syncing) LinearProgressIndicator(Modifier.fillMaxWidth())
             }
         },
         bottomBar = {
-            NavigationBar {
+            NavigationBar(containerColor = Color(0xED0B1038), tonalElevation = 0.dp) {
                 CloakDestination.entries.forEach { item ->
                     NavigationBarItem(
                         selected = tab == item.ordinal,

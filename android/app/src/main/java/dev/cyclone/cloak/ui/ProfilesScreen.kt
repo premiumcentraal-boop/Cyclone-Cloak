@@ -18,6 +18,15 @@ import androidx.compose.material.icons.rounded.Link
 import androidx.compose.material.icons.automirrored.rounded.OpenInNew
 import androidx.compose.material.icons.rounded.Refresh
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberModalBottomSheetState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -34,13 +43,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import dev.cyclone.cloak.cyclone.bindingKey
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
-    val pills = state.pills
     val openTargets = state.openTargets
     val mainTarget = openTargets.firstOrNull { it.isOwner }
     var profileFilter by rememberSaveable { mutableStateOf<String?>(null) }
     var packageQuery by rememberSaveable { mutableStateOf("") }
+    var selectedProfile by rememberSaveable { mutableStateOf<String?>(null) }
     var historyProfile by rememberSaveable { mutableStateOf<String?>(null) }
     var playTarget by rememberSaveable { mutableStateOf<String?>(null) }
     var integrityTarget by rememberSaveable { mutableStateOf<String?>(null) }
@@ -73,8 +83,8 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
         item {
             CloakHeroCard(
                 title = if (state.ownProfileId == null) "Cyclone profiles" else "This Cyclone profile",
-                body = state.report?.message?.takeIf { it.isNotBlank() }
-                    ?: "Each Cyclone profile is its own Android user. Choose a device profile and select the apps to bind, or choose All apps.",
+                body = state.ownProfileId?.let { id -> profiles[id]?.label?.let { "You're in $it" } }
+                    ?: "Choose a space. Review its apps and device profile.",
             )
         }
         item {
@@ -112,42 +122,28 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
                 )
             }
         }
-        if (state.registry.isNotEmpty()) item { CloakGroup { state.registry.forEachIndexed { index, profile ->
-            if (index > 0) CloakGroupDivider()
-            val appCount = profile.packages?.size ?: 0
-            val where = when {
-                profile.state == "in_trash" -> "in Recently deleted"
-                profile.state != "ready" -> "setting up"
-                profile.androidUserId == null -> "no Android user yet"
-                else -> "user ${profile.androidUserId}"
-            }
-            val identity = state.bindings.firstOrNull { it.profileId == profile.id && it.enabled }?.cloakProfileId
-                ?.let { id -> state.identities.firstOrNull { it.first == id }?.second?.optString("name") ?: id }
-            val managedElsewhere = state.ownProfileId != null && state.ownProfileId != profile.id
-            CloakProfileCard(
-                title = profile.label,
-                subtitle = listOfNotNull(
-                    "$appCount ${if (appCount == 1) "app" else "apps"} · $where",
-                    identity?.let { "as $it" },
-                    if (managedElsewhere) "bound from Cloak in Main" else null,
-                ).joinToString(" · "),
-                pill = pills[profile.id],
-                selected = false,
-                canOpen = openTargets.any { it.id == profile.id } && !state.opening,
-                onClick = {},
-                onOpen = { vm.openInCyclone(profile) },
-            )
-            if (!profile.isOwner) ProfileReadinessCard(profileReadiness(state, profile, appVersion, runs),
-                state.busy == null && !state.syncing && !managedElsewhere,
-                { vm.profileOperation(profile.id, ProfileAction.BIND_ALL) },
-                { vm.profileOperation(profile.id, ProfileAction.REPLACE) }, { historyProfile = profile.id })
-            PlayReadinessCard(state.playReadiness[profile.id] ?: dev.cyclone.cloak.play.PlayReadinessCardState(),
-                state.identities.map { (id, body) -> id to body.optString("name", id) },
-                state.busy == null && !managedElsewhere && profile.state == "ready",
-                state.playErrors[profile.id], { profiles[it]?.label ?: it },
-                { vm.selectPlayIdentity(profile.id, it) }, { playTarget = profile.id; playImporter.launch(arrayOf("application/json")) },
-                { integrityTarget = profile.id; integrityImporter.launch(arrayOf("application/json")) })
-        } } }
+        if (state.registry.isNotEmpty()) item {
+            CloakProfileGallery(
+                state.registry.filter { it.state != "in_trash" }
+                    .sortedWith(compareByDescending<dev.cyclone.cloak.cyclone.CycloneProfile> { it.id == state.ownProfileId }
+                        .thenByDescending { it.isOwner }.thenBy { it.label.lowercase(java.util.Locale.ROOT) })
+                    .map { profile -> CloakProfileFace(profile.id, profile.label,
+                        when {
+                            profile.id == state.ownProfileId -> "In use"
+                            profile.state != "ready" -> "Setting up"
+                            profile.androidUserId == null -> "Needs review"
+                            else -> "${profile.packages?.size ?: 0} apps"
+                        }, profile.id == state.ownProfileId, profile.state == "ready") },
+                selectedProfile, { selectedProfile = it })
+        }
+        val trashed = state.registry.filter { it.state == "in_trash" }
+        if (trashed.isNotEmpty()) item {
+            CloakGroup { CloakDisclosure("Recently deleted", supporting = "${trashed.size} profiles · managed in Cyclone") {
+                trashed.forEach { profile ->
+                    CloakRow(profile.label, supporting = "Bindings retained for review", onClick = { selectedProfile = profile.id })
+                }
+            } }
+        }
 
         historyProfile?.let { id -> item {
             CloakGroup { Column(Modifier.fillMaxWidth()) {
@@ -200,6 +196,55 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
                 onToggle = vm::toggleBinding,
                 onRemove = vm::removeBinding,
             )
+        }
+    }
+    profiles[selectedProfile]?.let { profile ->
+        val managedElsewhere = state.ownProfileId != null && state.ownProfileId != profile.id
+        ModalBottomSheet(onDismissRequest = { selectedProfile = null },
+            sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+            containerColor = MaterialTheme.colorScheme.surface) {
+            Column(Modifier.fillMaxWidth().verticalScroll(rememberScrollState()).padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)) {
+                Column(Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                    CloakProfileAvatar(profile.id, profile.label, profile.id == state.ownProfileId,
+                        profile.state != "ready", 104)
+                    Text(profile.label, fontSize = 32.sp, fontWeight = FontWeight.Bold)
+                    Text("${profile.packages?.size ?: 0} apps · ${profile.androidUserId?.let { "Android user $it" } ?: "No Android user yet"}",
+                        color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    state.pills[profile.id]?.let { pill ->
+                        CloakStatusPill(pill.label, when (pill.tone) {
+                            dev.cyclone.cloak.cyclone.CloakPillTone.READY -> CloakStatusTone.READY
+                            dev.cyclone.cloak.cyclone.CloakPillTone.ATTENTION -> CloakStatusTone.ERROR
+                            else -> CloakStatusTone.PENDING
+                        })
+                        pill.reason?.takeIf(String::isNotBlank)?.let { CloakNotice(it, CloakStatusTone.PENDING) }
+                    }
+                }
+                if (managedElsewhere) CloakNotice("Bindings managed from Cloak in Main.")
+                if (!profile.isOwner) ProfileReadinessCard(profileReadiness(state, profile, appVersion, runs),
+                    state.busy == null && !state.syncing && !managedElsewhere,
+                    { vm.profileOperation(profile.id, ProfileAction.BIND_ALL) },
+                    { vm.profileOperation(profile.id, ProfileAction.REPLACE) },
+                    { historyProfile = profile.id; selectedProfile = null })
+                CloakGroup {
+                    CloakDisclosure("Play & Google evidence", supporting = "Local readiness and account-slot review") {
+                        PlayReadinessCard(state.playReadiness[profile.id] ?: dev.cyclone.cloak.play.PlayReadinessCardState(),
+                            state.identities.map { (id, body) -> id to body.optString("name", id) },
+                            state.busy == null && !managedElsewhere && profile.state == "ready",
+                            state.playErrors[profile.id], { profiles[it]?.label ?: it },
+                            { vm.selectPlayIdentity(profile.id, it) },
+                            { playTarget = profile.id; selectedProfile = null; playImporter.launch(arrayOf("application/json")) },
+                            { integrityTarget = profile.id; selectedProfile = null; integrityImporter.launch(arrayOf("application/json")) })
+                    }
+                    if (openTargets.any { it.id == profile.id }) {
+                        CloakGroupDivider()
+                        CloakRow("Open in Cyclone", icon = Icons.AutoMirrored.Rounded.OpenInNew,
+                            onClick = { if (!state.opening) vm.openInCyclone(profile) })
+                    }
+                }
+                TextButton(onClick = { selectedProfile = null }, modifier = Modifier.fillMaxWidth()) { Text("Close") }
+            }
         }
     }
 }

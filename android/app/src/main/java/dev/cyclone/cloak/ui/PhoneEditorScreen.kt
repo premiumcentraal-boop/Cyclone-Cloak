@@ -55,7 +55,7 @@ internal fun PhoneEditorScreen(
     val canSave = findings.none { it.isError } && !busy
 
     Scaffold(
-        containerColor = MaterialTheme.colorScheme.background,
+        containerColor = androidx.compose.ui.graphics.Color.Transparent,
         topBar = {
             TopAppBar(
                 title = { Text(if (editor.isNew) "Build a phone" else "Edit ${d.label.ifBlank { "phone" }}") },

@@ -9,6 +9,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.sp
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import dev.cyclone.cloak.forge.PhoneTemplate
 import dev.cyclone.cloak.forge.ProfileValidator
@@ -28,10 +32,37 @@ internal fun BindingFlowScreen(
     val findings = BindingFlow.findings(draft, input)
     val field = when (draft.step) { BindingStep.PROFILE -> "profile"; BindingStep.APP -> "app"; BindingStep.IDENTITY -> "identity"; else -> "" }
     val visible = findings.filter { field.isEmpty() || it.field.orEmpty().startsWith(field) }
-    Scaffold { padding ->
+    Scaffold(containerColor = Color.Transparent, bottomBar = {
+        Surface(color = Color(0xF20B1038)) {
+            Column(Modifier.fillMaxWidth().navigationBarsPadding().imePadding().padding(horizontal = 16.dp, vertical = 10.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp)) {
+                when (draft.step) {
+                    BindingStep.REVIEW -> Button(onClick = onConfirm,
+                        enabled = !locked && BindingFlow.canConfirm(draft, input),
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 50.dp)) {
+                        Text(if (draft.action == ProfileAction.REPLACE) "Confirm replacement" else "Confirm binding", maxLines = 1, overflow = TextOverflow.Ellipsis)
+                    }
+                    BindingStep.RESULT -> {
+                        val outcome = draft.outcome
+                        if (outcome != null && !outcome.ready) Button(onClick = onRetry, enabled = !locked,
+                            modifier = Modifier.fillMaxWidth().heightIn(min = 50.dp)) {
+                            Text(if (outcome.saved) "Retry reconciliation" else "Retry binding", maxLines = 1)
+                        }
+                        if (outcome?.ready != true) TextButton(onClick = onBack, enabled = !locked) { Text("Return to review") }
+                    }
+                    else -> Button(onClick = onNext, enabled = !locked && BindingFlow.canAdvance(draft, input),
+                        modifier = Modifier.fillMaxWidth().heightIn(min = 50.dp)) { Text("Continue") }
+                }
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+                    if (draft.step != BindingStep.RESULT) TextButton(onClick = onBack, enabled = !locked) { Text("Back") }
+                    TextButton(onClick = onClose, enabled = !locked) { Text(if (draft.outcome?.ready == true) "Done" else "Close") }
+                }
+            }
+        }
+    }) { padding ->
         Column(Modifier.fillMaxSize().padding(padding).verticalScroll(rememberScrollState()).padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)) {
-            Text(if (draft.action == ProfileAction.REPLACE) "Replace device profile" else if (draft.action == ProfileAction.BIND_ALL) "Bind all apps" else "Bind a device profile", style = MaterialTheme.typography.headlineSmall)
+            Text(if (draft.action == ProfileAction.REPLACE) "Replace device profile" else if (draft.action == ProfileAction.BIND_ALL) "Bind all apps" else "Bind a device profile", fontSize = 34.sp, lineHeight = 39.sp, fontWeight = FontWeight.Bold)
             Text("Choose a Cyclone profile and apps, then select the device profile to bind.", style = MaterialTheme.typography.bodySmall)
             Text("Step ${draft.step.ordinal + 1} of 5 · ${when (draft.step) {
                 BindingStep.PROFILE -> "Choose Cyclone profile"; BindingStep.APP -> "App selection"
@@ -126,21 +157,13 @@ internal fun BindingFlowScreen(
                         Text("The target or library changed. Review the latest summary before confirming.")
                         TextButton(onClick = onNext, enabled = !locked) { Text("Review latest summary") }
                     }
-                    Button(onClick = onConfirm, enabled = !locked && BindingFlow.canConfirm(draft, input)) { Text(if (draft.action == ProfileAction.REPLACE) "Confirm replacement" else "Confirm binding") }
-                } else Button(onClick = onNext, enabled = !locked && BindingFlow.canAdvance(draft, input)) { Text("Continue") }
+                }
             } else {
                 val outcome = draft.outcome
                 Text(if (outcome?.ready == true) "Binding ready" else if (outcome?.saved == true) "Saved · needs attention" else "Binding not completed",
                     style = MaterialTheme.typography.titleMedium)
                 Text(outcome?.message ?: "Saving and checking the binding…")
-                if (outcome != null && !outcome.ready) Button(onClick = onRetry, enabled = !locked) {
-                    Text(if (outcome.saved) "Retry reconciliation" else "Retry binding")
-                }
-                if (outcome?.ready != true) TextButton(onClick = onBack, enabled = !locked) { Text("Return to review") }
-            }
-            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                if (draft.step != BindingStep.RESULT) TextButton(onClick = onBack, enabled = !locked) { Text("Back") }
-                TextButton(onClick = onClose, enabled = !locked) { Text(if (draft.outcome?.ready == true) "Done" else "Close") }
+
             }
         }
     }
