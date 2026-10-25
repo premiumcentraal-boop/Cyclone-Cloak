@@ -4,6 +4,27 @@ RC3 candidate: **1.0.0-rc.3 / code 62**. The calm-glass UI update
 does not change runtime, connector, publication or storage logic.
 See [current verification results](CURRENT-STATE.md).
 
+## Spaces (unreleased)
+
+Cloak can create its own managed Android users, called spaces, without Cyclone. A space's id is `Cloak_<16 hex>`
+and doubles as the Android user name. Existing `Cyclone_` profile ids are unchanged, and Cyclone profiles keep being
+read from the connector. The flows live in `root/SpacePlan.kt` (fixed commands and parsers), `root/SpaceFlows.kt`
+(create, open and delete sequences over an injectable shell) and `root/SpaceRuntime.kt` (one `PrivilegedSession`
+per action, identity seeding, `LauncherApps` launch). Records live in `cloak-spaces-v1.json` in `noBackupFilesDir`.
+
+- **Create:** the record is saved as `creating` before any Android command. The user is found by name first, so a
+  retry never creates a second one. The user is started and verified as `RUNNING_UNLOCKED`, each app is installed
+  and listed, and only then is the identity seeded. The record becomes `ready` last.
+- **Open:** starts the space and launches the app through `LauncherApps` in the space's profile. The foreground is
+  then confirmed with `dumpsys activity activities` on display 0. Unclear output is a failure.
+- **Delete:** the space is marked `deleting`, its bindings are removed, the published state is rebuilt, and only then is
+  the managed user removed. Each step can be repeated.
+- **Publishing and reconciliation:** Main publishes every local binding, so space bindings need no separate share.
+  Reconciliation skips space bindings, because Cyclone cannot see them.
+
+Limits: spaces run only from Main, on a rooted phone, on Android 13 and up. Binding an app to a space's identity is
+not wired into the binding flow yet. Nothing here has been measured on a phone.
+
 ## Calm-glass presentation layer
 
 `CloakTheme` owns the static blue backdrop, dark surfaces, typography colors and

@@ -1,6 +1,7 @@
 package dev.cyclone.cloak.ui
 
 import dev.cyclone.cloak.cyclone.CloakPillTone
+import dev.cyclone.cloak.data.CloakSpace
 import dev.cyclone.cloak.root.RootDoctorCode
 
 /** The app's top-level destinations. Home answers "what needs attention?"; the rest are the working screens. */
@@ -42,7 +43,7 @@ internal object HomeAttention {
                 notReady.map { it.state }.distinct().joinToString(", "), CloakStatusTone.PENDING, CloakDestination.PROFILES))
         }
         val known = report?.snapshot?.registry?.map { it.id }?.toSet()
-        val orphaned = state.bindings.count { bindingProfileMissing(it.profileId, known) }
+        val orphaned = state.bindings.count { !CloakSpace.isSpaceId(it.profileId) && bindingProfileMissing(it.profileId, known) }
         if (orphaned > 0) add(AttentionItem(plural(orphaned, "binding points to a missing Cyclone profile", "bindings point to a missing Cyclone profile"),
             null, CloakStatusTone.PENDING, CloakDestination.PROFILES))
         val duplicates = state.uniqueness.duplicates.size

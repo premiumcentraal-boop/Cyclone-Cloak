@@ -104,6 +104,7 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
+        item { SpacesSection() }
         mainTarget?.let { main ->
             item {
                 CloakGroup {

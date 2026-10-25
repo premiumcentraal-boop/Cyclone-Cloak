@@ -47,7 +47,8 @@ object ReconcilePlanner {
         summaryFor: (CloakBinding) -> JSONObject,
     ): Plan {
         val inScope = when (placement) {
-            is Placement.Main -> bindings.filter { it.origin == CloakBinding.ORIGIN_LOCAL }
+            // Spaces are Cloak's own Android users. Cyclone never lists them, so they are not reconciled with it.
+            is Placement.Main -> bindings.filter { it.origin == CloakBinding.ORIGIN_LOCAL && !CloakSpace.isSpaceId(it.profileId) }
             is Placement.InProfile -> bindings.filter { it.profileId == placement.profile.id }
         }
         val moves = mutableMapOf<String, Int>()

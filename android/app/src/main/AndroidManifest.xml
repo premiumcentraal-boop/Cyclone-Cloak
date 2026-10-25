@@ -5,6 +5,11 @@
     <queries>
         <package android:name="com.cyclone.mobile" />
         <package android:name="com.topjohnwu.magisk" />
+        <!-- Lists the launchable apps a space can be given. A query, not a permission. -->
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
     </queries>
 
     <application

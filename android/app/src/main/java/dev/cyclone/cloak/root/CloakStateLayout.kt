@@ -17,7 +17,7 @@ object CloakStateLayout {
     /** One install's share of the index: the members of `entries`, without the braces (see CloakRootDoctor). */
     const val INDEX_PART_FILE = "index.part"
 
-    private val profileIdRegex = Regex("^Cyclone_[a-f0-9]{16}$")
+    private val profileIdRegex = Regex("^(Cyclone|Cloak)_[a-f0-9]{16}$")
     private val packageRegex = Regex("^[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z][A-Za-z0-9_]*)+$")
 
     fun key(profileId: String, androidUserId: Int, packageName: String): String =

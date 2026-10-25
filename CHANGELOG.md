@@ -1,5 +1,16 @@
 # Changelog
 
+## Unreleased — spaces
+
+- Added spaces: Cloak can now create its own managed Android user, seed an identity for it through the existing
+  forge, install selected apps into it, open an app inside it, and remove it. Creation and removal run only from
+  Main, need root, and reuse the existing Magisk session. Spaces use the `Cloak_<16 hex>` id shape. Cyclone is not
+  needed for them, and the connector contract, scopes and Cyclone profiles are unchanged.
+- Removing a space unbinds its apps and republishes before the Android user is removed, so no published binding can
+  point at a missing user. A failed run keeps the record and can be retried without creating a second user.
+- Space bindings are kept out of Cyclone reconciliation and out of the "missing Cyclone profile" health count.
+- Not yet verified on a phone. Binding an app to a space's identity is not wired into the binding flow yet.
+
 ## v1.0.0-rc.1 — unreleased
 
 Changes since `v0.11.0-alpha.28`:

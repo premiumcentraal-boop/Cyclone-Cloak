@@ -14,7 +14,7 @@ enum class RunOutcome(val label: String) { READY("ready"), FAILED("failed"), NEE
 
 object RunPrivacy {
     fun reference(value: String): String = value.takeIf {
-        it.matches(Regex("Cyclone_[a-f0-9]{16}|[a-fA-F0-9-]{16,64}|ref-[a-f0-9]{16}"))
+        it.matches(Regex("(Cyclone|Cloak)_[a-f0-9]{16}|[a-fA-F0-9-]{16,64}|ref-[a-f0-9]{16}"))
     } ?: "ref-" + sha256(value).take(16)
     fun sha256(value: String): String = MessageDigest.getInstance("SHA-256").digest(value.toByteArray(Charsets.UTF_8))
         .joinToString("") { "%02x".format(it) }
