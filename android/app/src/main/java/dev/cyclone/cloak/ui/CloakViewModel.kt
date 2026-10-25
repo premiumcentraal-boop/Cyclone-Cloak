@@ -1182,7 +1182,6 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         return packages.size
     }
 
-    /** Publishes for the module, then tells Cyclone (values and health). Runs inside [work]. */
     /** Rebuilds Cloak's published state only. Spaces use this path, because they never reach Cyclone. */
     private fun publishOnly(): RootDoctorResult {
         val result = CloakResolver.rebuildIndexDetailed(app)
@@ -1191,6 +1190,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         checkpointRun?.invoke()
         return result
     }
+    /** Publishes for the module, then tells Cyclone (values and health). Runs inside [work]. */
     private fun publishAndSync(): RootDoctorResult {
         var finalResult = publishOnly()
         val report = CycloneBridge.sync(app, foreground = true, onPublication = { publication ->

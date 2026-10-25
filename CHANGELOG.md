@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased — space binding
+## v1.1.0-alpha.2 — space binding
 
 - Creating a space now leads straight into binding: the binding flow opens with the space's apps and its own device
   profile preselected. Resuming an unfinished space does the same.

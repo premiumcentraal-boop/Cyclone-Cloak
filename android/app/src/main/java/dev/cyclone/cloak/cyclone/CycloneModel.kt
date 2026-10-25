@@ -41,8 +41,8 @@ data class CycloneProfile(
 ) {
     val isOwner: Boolean get() = kind == "owner" && id == OWNER
     /** A Cyclone profile Cloak may bind apps in: never Main, only ready, with a known Android user number. */
-    val bindable: Boolean get() = kind == "profile" && state == "ready" && androidUserId != null && PROFILE_ID.matches(id) ||
-        isSpace && state == "ready" && androidUserId != null && CloakSpace.isSpaceId(id)
+    val bindable: Boolean get() = (kind == "profile" && state == "ready" && androidUserId != null && PROFILE_ID.matches(id)) ||
+        (isSpace && state == "ready" && androidUserId != null && CloakSpace.isSpaceId(id))
     /** Cloak's own space, offered as a binding target. Never part of Cyclone's registry, so never sent to Cyclone. */
     val isSpace: Boolean get() = kind == "space"
 
