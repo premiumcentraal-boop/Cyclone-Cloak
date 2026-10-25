@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased — spaces
+## v1.1.0-alpha.1 — spaces
 
 - Added spaces: Cloak can now create its own managed Android user, seed an identity for it through the existing
   forge, install selected apps into it, open an app inside it, and remove it. Creation and removal run only from

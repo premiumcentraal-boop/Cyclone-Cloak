@@ -12,9 +12,11 @@ Runtime inspection coverage is partial; the [evidence matrix](docs/RUNTIME-COVER
 records which reads were verified on the measured binary. Creating a profile does
 not prove that every inspection API sees it.
 
-## Status: v1.0.0-rc.3 (prerelease)
+## Status: v1.1.0-alpha.1 (prerelease)
 
-App/module metadata is `1.0.0-rc.3` / code `62`. The release includes an optional
+App/module metadata is `1.1.0-alpha.1` / code `63`. Spaces are new in this release
+and have not been run on a phone; see [the release notes](docs/RELEASE_1.1.0-alpha.1.md).
+Release 1.0.0-rc.3 included an optional
 denylist configuration, a per-profile integrity configuration section and three
 diagnostics self-visibility readers. These are configuration and measurement
 capabilities, not evidence of platform certification or a successful verdict.
