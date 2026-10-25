@@ -93,7 +93,7 @@ fun CloakApp(vm: CloakViewModel) {
         Column {
             ConnectionStatusChip(state.connection, vm::refresh)
             Box(Modifier.weight(1f)) {
-                BindingFlowScreen(flow, BindingInputs(state.registry, state.identities, state.bindings, state.canBind, state.ownProfileId),
+                BindingFlowScreen(flow, BindingInputs(state.registry + BindingFlow.spaceProfiles(state.spaces), state.identities, state.bindings, state.canBind, state.ownProfileId),
             state.phones, state.busy != null || state.syncing,
             vm::chooseBindingProfile, vm::chooseBindingApps, vm::chooseBindingIdentity, vm::generateBindingProfile,
             vm::nextBindingStep, vm::backBindingStep, vm::acknowledgeBinding, vm::confirmBindingFlow,

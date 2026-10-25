@@ -31,6 +31,8 @@ import dev.cyclone.cloak.cyclone.Placement
 import dev.cyclone.cloak.cyclone.SyncReport
 import dev.cyclone.cloak.data.CloakBinding
 import dev.cyclone.cloak.data.CloakBindingStore
+import dev.cyclone.cloak.data.CloakSpace
+import dev.cyclone.cloak.data.CloakSpaceStore
 import dev.cyclone.cloak.data.CloakStore
 import dev.cyclone.cloak.data.EngineMetadataStore
 import dev.cyclone.cloak.data.PostureRecord
@@ -106,6 +108,7 @@ data class CloakState(
     val diagnosticsReview: DiagnosticsReview? = null,
     val engineCoverage: Map<String, String> = emptyMap(),
     val bindings: List<CloakBinding> = emptyList(),
+    val spaces: List<CloakSpace> = emptyList(),
     val report: SyncReport? = null,
     val syncing: Boolean = false,
     val connection: ConnectionStatus = ConnectionStatus(),
@@ -236,7 +239,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
                 engineMetadata = identities.mapNotNull { (id, profile) -> engineMetadataStore.read(profile)?.let { id to it } }.toMap(),
                 postures = identities.mapNotNull { (id, _) -> postureStore.read(id)?.let { id to it } }.toMap(),
                 currentArtifactDigest = bundledArtifactDigest,
-                unreadableIdentityIds = unreadable, bindings = CloakBindingStore.all(app),
+                unreadableIdentityIds = unreadable, bindings = CloakBindingStore.all(app), spaces = readSpaces(),
                 backups = backupDirectory().all().mapNotNull { (id, value) -> value.optJSONObject("manifest")?.let { manifest -> id to manifest } })
         }
         loadPlayReadiness()
@@ -865,8 +868,25 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
     }
     private fun bindingInputs(freshLocal: Boolean = false): BindingInputs {
         val state = _state.value
-        return BindingInputs(state.registry, if (freshLocal) CloakStore.all(app) else state.identities,
+        val spaces = if (freshLocal) readSpaces() else state.spaces
+        return BindingInputs(state.registry + BindingFlow.spaceProfiles(spaces), if (freshLocal) CloakStore.all(app) else state.identities,
             if (freshLocal) CloakBindingStore.all(app) else state.bindings, state.canBind, state.ownProfileId)
+    }
+    private fun readSpaces(): List<CloakSpace> = runCatching { CloakSpaceStore.all(app) }.getOrDefault(emptyList())
+    /** Re-reads the saved spaces after the spaces card creates, resumes or removes one. */
+    fun reloadSpaces() {
+        _state.update { it.copy(spaces = readSpaces()) }
+    }
+    /**
+     * Opens the binding flow with a space's apps and its own identity already chosen. A space never reaches Cyclone,
+     * so the owner reviews and confirms, and nothing else is asked.
+     */
+    fun startSpaceBinding(spaceId: String) {
+        if (_state.value.busy != null || _state.value.bindingFlow?.running == true) return
+        loadLocal()
+        val space = _state.value.spaces.firstOrNull { it.id == spaceId && it.ready } ?: return
+        _state.update { it.copy(bindingFlow = BindingDraft(step = BindingStep.APP, profileId = space.id,
+            packageNames = space.packages.toSet(), identityId = space.identityId)) }
     }
     private fun changeBinding(transform: (BindingDraft) -> BindingDraft) {
         _state.update { state -> state.copy(bindingFlow = state.bindingFlow?.let { if (it.running) it else transform(it) }) }
@@ -963,6 +983,12 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
     private fun finishBindingFlow(draft: BindingDraft) {
+        if (BindingFlow.isSpaceTarget(draft.profileId)) {
+            val root = publishOnly()
+            val result = BindingFlow.spaceCompletion(draft, root, CloakBindingStore.all(app))
+            _state.update { it.copy(bindingFlow = draft.copy(step = BindingStep.RESULT, running = false, outcome = result, note = null)) }
+            return
+        }
         val root = publishAndSync()
         val result = BindingFlow.completion(draft, root, _state.value.report, CloakBindingStore.all(app))
         _state.update { it.copy(bindingFlow = draft.copy(step = BindingStep.RESULT, running = false, outcome = result, note = null)) }
@@ -1101,7 +1127,7 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     private fun draftTargets(draft: BindingDraft): List<RunTarget> = listOf(RunTarget(draft.profileId.orEmpty(),
-        _state.value.registry.firstOrNull { it.id == draft.profileId }?.androidUserId,
+        bindingInputs().profiles.firstOrNull { it.id == draft.profileId }?.androidUserId,
         draft.packageNames.sorted(), draft.identityId.orEmpty(), previousDeviceProfiles =
             _state.value.bindings.filter { it.profileId == draft.profileId && it.packageName in draft.packageNames }
                 .associate { it.packageName to it.cloakProfileId }))
@@ -1157,12 +1183,16 @@ class CloakViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     /** Publishes for the module, then tells Cyclone (values and health). Runs inside [work]. */
-    private fun publishAndSync(): RootDoctorResult {
+    /** Rebuilds Cloak's published state only. Spaces use this path, because they never reach Cyclone. */
+    private fun publishOnly(): RootDoctorResult {
         val result = CloakResolver.rebuildIndexDetailed(app)
         currentRun?.root = result
         _state.update { it.copy(rootDoctor = result) }
         checkpointRun?.invoke()
-        var finalResult = result
+        return result
+    }
+    private fun publishAndSync(): RootDoctorResult {
+        var finalResult = publishOnly()
         val report = CycloneBridge.sync(app, foreground = true, onPublication = { publication ->
             finalResult = publication
             currentRun?.root = publication

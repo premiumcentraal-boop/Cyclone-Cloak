@@ -1,5 +1,6 @@
 package dev.cyclone.cloak.cyclone
 
+import dev.cyclone.cloak.data.CloakSpace
 import org.json.JSONArray
 import org.json.JSONObject
 
@@ -40,11 +41,17 @@ data class CycloneProfile(
 ) {
     val isOwner: Boolean get() = kind == "owner" && id == OWNER
     /** A Cyclone profile Cloak may bind apps in: never Main, only ready, with a known Android user number. */
-    val bindable: Boolean get() = kind == "profile" && state == "ready" && androidUserId != null && PROFILE_ID.matches(id)
+    val bindable: Boolean get() = kind == "profile" && state == "ready" && androidUserId != null && PROFILE_ID.matches(id) ||
+        isSpace && state == "ready" && androidUserId != null && CloakSpace.isSpaceId(id)
+    /** Cloak's own space, offered as a binding target. Never part of Cyclone's registry, so never sent to Cyclone. */
+    val isSpace: Boolean get() = kind == "space"
 
     companion object {
         const val OWNER = "owner"
         val PROFILE_ID = Regex("^Cyclone_[a-f0-9]{16}$")
+
+        fun forSpace(space: CloakSpace): CycloneProfile =
+            CycloneProfile(space.id, space.label, "space", "ready", space.androidUserId, space.packages)
     }
 }
 

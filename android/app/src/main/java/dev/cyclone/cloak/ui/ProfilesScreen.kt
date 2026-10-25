@@ -69,7 +69,7 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
     val runs by journal.runs.collectAsState()
     @Suppress("DEPRECATION")
     val appVersion = remember(context) { context.packageManager.getPackageInfo(context.packageName, 0).versionName ?: "unknown" }
-    val profiles = state.registry.associateBy { it.id }
+    val profiles = (state.registry + BindingFlow.spaceProfiles(state.spaces)).associateBy { it.id }
     val knownProfileIds = state.report?.snapshot?.registry?.map { it.id }?.toSet()
     state.playImportReview?.let { review -> PlayEvidenceReviewDialog(review, state.busy == null,
         state.playErrors[review.target.profileId], { profiles[it]?.label ?: it }, vm::savePlayEvidence, vm::dismissPlayEvidence) }
@@ -104,7 +104,7 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
             )
         }
-        item { SpacesSection() }
+        item { SpacesSection(vm, state) }
         mainTarget?.let { main ->
             item {
                 CloakGroup {

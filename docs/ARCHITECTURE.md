@@ -21,9 +21,13 @@ per action, identity seeding, `LauncherApps` launch). Records live in `cloak-spa
   the managed user removed. Each step can be repeated.
 - **Publishing and reconciliation:** Main publishes every local binding, so space bindings need no separate share.
   Reconciliation skips space bindings, because Cyclone cannot see them.
+- **Binding:** a ready space is a target in the binding flow, with its own device profile and apps. Creating or resuming
+  a space leads straight into that flow with the apps and identity preselected. A space is a profile-shaped record
+  (`CycloneProfile.forSpace`, kind `space`) that the existing review and validation use. It is never part of Cyclone's
+  registry. Confirming publishes Cloak's state only, with no connector call. Completion and run history do not apply
+  connector reasons to a space-only run.
 
-Limits: spaces run only from Main, on a rooted phone, on Android 13 and up. Binding an app to a space's identity is
-not wired into the binding flow yet. Nothing here has been measured on a phone.
+Limits: spaces run only from Main, on a rooted phone, on Android 13 and up. Nothing here has been measured on a phone.
 
 ## Calm-glass presentation layer
 

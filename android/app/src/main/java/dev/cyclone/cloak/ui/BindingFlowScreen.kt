@@ -65,7 +65,7 @@ internal fun BindingFlowScreen(
             Text(if (draft.action == ProfileAction.REPLACE) "Replace device profile" else if (draft.action == ProfileAction.BIND_ALL) "Bind all apps" else "Bind a device profile", fontSize = 34.sp, lineHeight = 39.sp, fontWeight = FontWeight.Bold)
             Text("Choose a Cyclone profile and apps, then select the device profile to bind.", style = MaterialTheme.typography.bodySmall)
             Text("Step ${draft.step.ordinal + 1} of 5 · ${when (draft.step) {
-                BindingStep.PROFILE -> "Choose Cyclone profile"; BindingStep.APP -> "App selection"
+                BindingStep.PROFILE -> "Choose profile or space"; BindingStep.APP -> "App selection"
                 BindingStep.IDENTITY -> "Choose device profile"; BindingStep.REVIEW -> "Review summary"
                 BindingStep.RESULT -> "Binding result"
             }}", style = MaterialTheme.typography.titleMedium)
@@ -77,12 +77,14 @@ internal fun BindingFlowScreen(
                     if (input.profiles.isEmpty()) Text("No profiles available. Refresh and check connector approval.")
                     input.profiles.forEach { p ->
                         OutlinedButton(onClick = { onProfile(p.id) }, enabled = !locked, modifier = Modifier.fillMaxWidth()) {
-                            Text("${if (p.id == draft.profileId) "✓ " else ""}${p.label} · ${p.androidUserId?.let { "user $it" } ?: "no Android user"} · ${p.state}")
+                            val detail = if (p.isSpace) "space · ${p.packages?.size ?: 0} apps"
+                                else "${p.androidUserId?.let { "user $it" } ?: "no Android user"} · ${p.state}"
+                            Text("${if (p.id == draft.profileId) "✓ " else ""}${p.label} · $detail")
                         }
                     }
                 }
                 BindingStep.APP -> {
-                    Text("Cyclone profile: ${profile?.label ?: "Unavailable"}")
+                    Text(if (profile?.isSpace == true) "Space: ${profile?.label}" else "Cyclone profile: ${profile?.label ?: "Unavailable"}")
                     if (profile?.packages.isNullOrEmpty()) Text("No app list available. Add an app in Cyclone, then refresh.")
                     val packages = profile?.packages.orEmpty().toSet()
                     Row(Modifier.fillMaxWidth().toggleable(

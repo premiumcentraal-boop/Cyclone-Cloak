@@ -6,6 +6,7 @@ import dev.cyclone.cloak.cyclone.CloakHealth
 import dev.cyclone.cloak.cyclone.SyncReport
 import dev.cyclone.cloak.cyclone.bindingKey
 import dev.cyclone.cloak.data.CloakBinding
+import dev.cyclone.cloak.data.CloakSpace
 import dev.cyclone.cloak.root.RootDoctorResult
 
 fun bindingRunTarget(b: CloakBinding) = RunTarget(b.profileId, b.androidUserId, listOf(b.packageName), b.cloakProfileId)
@@ -39,8 +40,10 @@ class BindingRunResult {
         report?.reconcile?.stoppedBy?.let { reasons += it }
         if (root == null) reasons += "PUBLICATION_NOT_RUN"
         if (exception) reasons += "ACTION_FAILED"
-        if (report?.headline != "Connected" || report?.gate?.bindings != true) reasons += "CONNECTOR_NOT_READY"
-        if (report?.reconcile == null) reasons += "RECONCILIATION_NOT_VERIFIED"
+        // A run that only touches spaces never reaches Cyclone, so connector reasons do not apply to it.
+        val spacesOnly = targets.isNotEmpty() && targets.all { CloakSpace.isSpaceId(it.profileId) }
+        if (!spacesOnly && (report?.headline != "Connected" || report?.gate?.bindings != true)) reasons += "CONNECTOR_NOT_READY"
+        if (!spacesOnly && report?.reconcile == null) reasons += "RECONCILIATION_NOT_VERIFIED"
         if (targets.isEmpty() || targets.all { it.packages.isEmpty() }) reasons += "NO_TARGETS"
         for (target in targets) for (pkg in target.packages) {
             val records = current.filter { RunPrivacy.reference(it.profileId) == RunPrivacy.reference(target.profileId) && it.packageName == pkg }

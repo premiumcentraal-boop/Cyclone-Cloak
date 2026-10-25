@@ -3,6 +3,7 @@ package dev.cyclone.cloak.ui
 import dev.cyclone.cloak.cyclone.*
 import dev.cyclone.cloak.data.CloakBinding
 import dev.cyclone.cloak.data.CloakBindingStore
+import dev.cyclone.cloak.data.CloakSpace
 import dev.cyclone.cloak.forge.ProfileUniqueness
 import dev.cyclone.cloak.forge.ProfileValidator
 import dev.cyclone.cloak.root.RootDoctorResult
@@ -39,7 +40,8 @@ object BindingFlow {
             out += ProfileValidator.Finding(if (warning) ProfileValidator.WARNING else ProfileValidator.ERROR, code, message, field)
         }
         val profile = input.profiles.firstOrNull { it.id == draft.profileId }
-        if (!input.canBind) issue("profile", "CONNECTOR_NOT_READY", "Refresh and approve profile settings in Cyclone → Settings → Connectors.")
+        // A space never reaches Cyclone, so the connector approval is not needed to bind it.
+        if (!input.canBind && !isSpaceTarget(draft.profileId)) issue("profile", "CONNECTOR_NOT_READY", "Refresh and approve profile settings in Cyclone → Settings → Connectors.")
         if (profile == null) issue("profile", "PROFILE_MISSING", "Choose a Cyclone profile from the latest synchronized list. Refresh if it is missing.")
         else {
             if (!profile.bindable) issue("profile", "PROFILE_NOT_READY", "This profile is not ready. Restore it or finish setup in Cyclone, then refresh.")
@@ -138,6 +140,23 @@ object BindingFlow {
                     it.androidUserId == draft.originalUser else it.enabled) && it.cloakProfileId == draft.identityId && it.origin == CloakBinding.ORIGIN_LOCAL
             } == true
         }
+    fun isSpaceTarget(profileId: String?): Boolean = profileId != null && CloakSpace.isSpaceId(profileId)
+
+    /** The spaces that can take bindings now, as profile-shaped targets for the same review and validation. */
+    fun spaceProfiles(spaces: List<CloakSpace>): List<CycloneProfile> = spaces.filter { it.ready }.map(CycloneProfile::forSpace)
+
+    /**
+     * A space has no Cyclone side. Its bindings are complete once Cloak's publication has accepted them and every
+     * enabled app reports ready. No connector check applies.
+     */
+    fun spaceCompletion(draft: BindingDraft, root: RootDoctorResult, records: List<CloakBinding>): BindingOutcome {
+        if (!saved(draft, records)) return BindingOutcome(false, false, "The saved target changed or is unavailable. Return to review; retry will not overwrite it.")
+        if (!root.published) return BindingOutcome(false, true, "Binding saved locally. ${root.title}: ${root.message}")
+        val held = records.filter { it.profileId == draft.profileId && it.packageName in draft.packageNames && it.enabled }
+        return if (held.all { CloakHealth.cycloneState(it.state) == CloakHealth.READY }) BindingOutcome(true, true, "Apps are bound. Open them from the space.")
+        else BindingOutcome(false, true, "Binding saved and published, but not every app reports ready. Check Health and retry.")
+    }
+
     fun completion(draft: BindingDraft, root: RootDoctorResult, report: SyncReport?, records: List<CloakBinding>): BindingOutcome {
         val held = records.filter { it.profileId == draft.profileId && it.packageName in draft.packageNames }
         val saved = saved(draft, records)

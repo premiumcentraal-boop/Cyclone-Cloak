@@ -1,5 +1,13 @@
 # Changelog
 
+## Unreleased — space binding
+
+- Creating a space now leads straight into binding: the binding flow opens with the space's apps and its own device
+  profile preselected. Resuming an unfinished space does the same.
+- Spaces are binding targets in the binding flow, and a ready space has a "Bind apps" action on its card.
+- Binding a space publishes Cloak's state only. It does not use the Cyclone connector, so it works without Cyclone.
+- The spaces card shows how many apps are bound to each space.
+
 ## v1.1.0-alpha.1 — spaces
 
 - Added spaces: Cloak can now create its own managed Android user, seed an identity for it through the existing

@@ -34,15 +34,19 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
-/** Cloak's own spaces, listed above the Cyclone profiles. Creating and removing them is limited to Main. */
+/**
+ * Cloak's own spaces, listed above the Cyclone profiles. Creating a space leads straight into binding its apps to its
+ * own device profile, so the two steps read as one flow. Creating and removing spaces is limited to Main.
+ */
 @Composable
-internal fun SpacesSection() {
+internal fun SpacesSection(vm: CloakViewModel, state: CloakState) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val status by SpaceRuntime.status.collectAsState()
     val spaces = remember(status) { runCatching { SpaceRuntime.spaces(context) }.getOrDefault(emptyList()) }
     val current = remember(status) { SpaceRuntime.current(context) }
     val available = SpaceRuntime.available()
+    val idle = !status.busy && state.busy == null
     var creating by rememberSaveable { mutableStateOf(false) }
     var deleting by rememberSaveable { mutableStateOf<String?>(null) }
 
@@ -51,7 +55,11 @@ internal fun SpacesSection() {
     }
 
     fun resumeSpace(id: String) {
-        scope.launch(Dispatchers.IO) { SpaceRuntime.resume(context, id) }
+        scope.launch(Dispatchers.IO) {
+            SpaceRuntime.resume(context, id)
+            vm.reloadSpaces()
+            vm.startSpaceBinding(id)
+        }
     }
 
     CloakSectionHeader("Spaces", spaces.size)
@@ -60,15 +68,22 @@ internal fun SpacesSection() {
         CloakNotice(status.message, tone = if (status.busy) CloakStatusTone.PENDING else null)
     }
     CloakActionButton("New space", Icons.Rounded.Add, { creating = true }, Modifier.fillMaxWidth(),
-        enabled = available && !status.busy)
+        enabled = available && idle)
     if (current != null) {
         CloakActionButton("Back to Main", Icons.Rounded.Home, { runCatching { SpaceRuntime.backToMain(context) } },
-            Modifier.fillMaxWidth(), outlined = true, enabled = !status.busy)
+            Modifier.fillMaxWidth(), outlined = true, enabled = idle)
     }
     spaces.forEach { space ->
         CloakGroup {
-            CloakDisclosure(title = space.label, supporting = spaceSupporting(space)) {
+            CloakDisclosure(title = space.label, supporting = spaceSupporting(space, state.bindings.count {
+                it.profileId == space.id && it.enabled })) {
                 if (space.ready) {
+                    CloakRow(
+                        title = "Bind apps",
+                        supporting = "Choose this space's device profile and apps",
+                        onClick = if (idle && available) ({ vm.startSpaceBinding(space.id) }) else null,
+                        showChevron = false,
+                    )
                     space.packages.forEach { packageName ->
                         CloakRow(
                             title = appLabel(context, packageName),
@@ -80,19 +95,19 @@ internal fun SpacesSection() {
                     CloakRow(
                         title = "Delete space",
                         tone = CloakStatusTone.ERROR,
-                        onClick = if (status.busy || !available) null else ({ deleting = space.id }),
+                        onClick = if (!idle || !available) null else ({ deleting = space.id }),
                         showChevron = false,
                     )
                 } else if (space.state == CloakSpace.STATE_CREATING) {
                     CloakRow(
                         title = "Finish setup",
                         supporting = "Picks up where setup stopped. Nothing is created twice.",
-                        onClick = if (status.busy || !available) null else ({ resumeSpace(space.id) }),
+                        onClick = if (!idle || !available) null else ({ resumeSpace(space.id) }),
                         showChevron = false,
                     )
                 } else {
                     CloakRow(title = "Removal did not finish", supporting = "Try deleting it again.",
-                        onClick = if (status.busy || !available) null else ({ deleting = space.id }), showChevron = false)
+                        onClick = if (!idle || !available) null else ({ deleting = space.id }), showChevron = false)
                 }
             }
         }
@@ -104,7 +119,12 @@ internal fun SpacesSection() {
             onDismiss = { creating = false },
             onCreate = { label, packages ->
                 creating = false
-                scope.launch(Dispatchers.IO) { SpaceRuntime.create(context, label, packages) }
+                scope.launch(Dispatchers.IO) {
+                    val id = SpaceRuntime.create(context, label, packages)
+                    vm.reloadSpaces()
+                    // Straight into binding: the space's apps and its own device profile are already chosen.
+                    id?.let(vm::startSpaceBinding)
+                }
             },
         )
     }
@@ -116,7 +136,10 @@ internal fun SpacesSection() {
             confirmButton = {
                 TextButton(onClick = {
                     deleting = null
-                    scope.launch(Dispatchers.IO) { SpaceRuntime.delete(context, id) }
+                    scope.launch(Dispatchers.IO) {
+                        SpaceRuntime.delete(context, id)
+                        vm.reloadSpaces()
+                    }
                 }) { Text("Delete") }
             },
             dismissButton = { TextButton(onClick = { deleting = null }) { Text("Cancel") } },
@@ -178,8 +201,8 @@ private fun SpaceCreateDialog(suggestedLabel: String, onDismiss: () -> Unit, onC
     )
 }
 
-private fun spaceSupporting(space: CloakSpace): String = when {
-    space.ready -> "${space.packages.size} apps · Android user ${space.androidUserId}"
+private fun spaceSupporting(space: CloakSpace, bound: Int): String = when {
+    space.ready -> "${space.packages.size} apps · $bound bound · Android user ${space.androidUserId}"
     space.state == CloakSpace.STATE_CREATING -> "Setup unfinished"
     else -> "Removal unfinished"
 }
