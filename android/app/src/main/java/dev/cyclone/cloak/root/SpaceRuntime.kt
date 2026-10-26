@@ -50,17 +50,25 @@ object SpaceRuntime {
         .distinctBy { it.packageName }
         .sortedBy { it.label.lowercase() }
 
-    /** Starts a new space with [packages]. Returns its id, or null when it could not start. */
+    /** The apps every new space installs without being picked: Cloak, and Cyclone when this phone has it. */
+    fun essentials(context: Context): List<String> = CornerstoneApps.essentials { installed(context, it) }
+
+    /** Starts a new space with [packages] plus the essentials. Returns its id, or null when it could not start. */
     fun create(context: Context, label: String, packages: List<String>): String? {
         synchronized(lock) {
             if (!claim()) return null
+            val apps = CornerstoneApps.plan(packages) { installed(context, it) }
+            if (apps.size > CloakSpace.PACKAGES_MAX) {
+                _status.value = SpaceStatus(message = "A space holds up to ${CloakSpace.PACKAGES_MAX} apps. Pick fewer.")
+                return null
+            }
             val space = try {
                 val now = System.currentTimeMillis()
                 CloakSpace(
                     id = CloakSpace.newId(),
                     label = label.trim(),
                     androidUserId = 0,
-                    packages = packages,
+                    packages = apps,
                     identityId = null,
                     state = CloakSpace.STATE_CREATING,
                     createdAt = now,
@@ -208,6 +216,10 @@ object SpaceRuntime {
 
     private fun failure(error: Exception): String =
         (error as? SpaceException)?.message ?: "Cloak couldn’t finish that. Try again."
+
+    @Suppress("DEPRECATION")
+    private fun installed(context: Context, packageName: String): Boolean =
+        runCatching { context.packageManager.getPackageInfo(packageName, 0) }.isSuccess
 
     private fun prefs(context: Context) = context.getSharedPreferences("cloak_spaces", Context.MODE_PRIVATE)
 

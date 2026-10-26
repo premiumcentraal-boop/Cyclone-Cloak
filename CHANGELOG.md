@@ -1,5 +1,20 @@
 # Changelog
 
+## Unreleased — home, identities and search
+
+- Home has quick actions: New profile, New identity, Repair (runs the root check and repair) and Refresh. The two "New"
+  actions open their screen with the matching dialog already up.
+- Phones are merged into Identities. Phone profiles, built-in and your own, sit on the Identities page, and the
+  separate Phones tab is gone. The tabs are Home, Identities, Profiles and Health.
+- Profiles has one search field. As you type it filters Cyclone profiles, spaces and identities; tapping a matching
+  identity opens the binding flow for it.
+- New spaces include Cyclone Cloak, and Cyclone when it is installed, as essentials. They are shown locked in the
+  create dialog and count toward the app limit.
+- Creating a space or identity does not remove or rewrite Main's identities, phones or bindings. Main's phone list is
+  the full list. A space's own Cloak does not see that list.
+
+Not verified on a phone. The layout is checked only by the Robolectric screen tests.
+
 ## v1.1.0-alpha.2 — space binding
 
 - Creating a space now leads straight into binding: the binding flow opens with the space's apps and its own device

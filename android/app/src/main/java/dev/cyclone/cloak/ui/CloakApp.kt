@@ -17,7 +17,6 @@ import androidx.compose.material.icons.rounded.Badge
 import androidx.compose.material.icons.rounded.HealthAndSafety
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.Layers
-import androidx.compose.material.icons.rounded.PhoneAndroid
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -37,6 +36,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
@@ -51,7 +51,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 
 private val CloakDestination.icon: ImageVector get() = when (this) {
     CloakDestination.HOME -> Icons.Rounded.Home
-    CloakDestination.PHONES -> Icons.Rounded.PhoneAndroid
     CloakDestination.IDENTITIES -> Icons.Rounded.Badge
     CloakDestination.PROFILES -> Icons.Rounded.Layers
     CloakDestination.HEALTH -> Icons.Rounded.HealthAndSafety
@@ -63,6 +62,16 @@ fun CloakApp(vm: CloakViewModel) {
     val state by vm.state.collectAsStateWithLifecycle()
     val snackbar = remember { SnackbarHostState() }
     var tab by rememberSaveable { mutableIntStateOf(CloakDestination.HOME.ordinal) }
+    // A Home action that opens a screen leaves its request here until that screen has acted on it.
+    var quick by rememberSaveable { mutableStateOf<QuickAction?>(null) }
+    fun runQuick(action: QuickAction) {
+        when (action) {
+            QuickAction.NEW_PROFILE -> { quick = action; tab = CloakDestination.PROFILES.ordinal }
+            QuickAction.NEW_IDENTITY -> { quick = action; tab = CloakDestination.IDENTITIES.ordinal }
+            QuickAction.REPAIR -> vm.runRootDoctor()
+            QuickAction.REFRESH -> vm.refresh()
+        }
+    }
     LaunchedEffect(vm) { vm.messages.collect { snackbar.showSnackbar(it) } }
 
     state.workshop?.let { workshop ->
@@ -146,10 +155,9 @@ fun CloakApp(vm: CloakViewModel) {
         Box(Modifier.fillMaxSize().padding(inner)) {
             if (CloakDestination.entries[tab] != CloakDestination.HOME) BackHandler { tab = CloakDestination.HOME.ordinal }
             when (CloakDestination.entries[tab]) {
-                CloakDestination.HOME -> HomeScreen(state, onNavigate = { tab = it.ordinal }, onRefresh = vm::refresh)
-                CloakDestination.PHONES -> PhonesScreen(state, vm)
-                CloakDestination.IDENTITIES -> IdentitiesScreen(state, vm)
-                CloakDestination.PROFILES -> ProfilesScreen(state, vm)
+                CloakDestination.HOME -> HomeScreen(state, onNavigate = { tab = it.ordinal }, onQuick = ::runQuick)
+                CloakDestination.IDENTITIES -> IdentitiesScreen(state, vm, quick = quick, onQuickHandled = { quick = null })
+                CloakDestination.PROFILES -> ProfilesScreen(state, vm, quick = quick, onQuickHandled = { quick = null })
                 CloakDestination.HEALTH -> HealthScreen(state, vm)
             }
         }

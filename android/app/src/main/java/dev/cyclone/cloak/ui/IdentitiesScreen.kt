@@ -33,14 +33,18 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import dev.cyclone.cloak.data.EngineMetadataStore
+import dev.cyclone.cloak.forge.PhoneTemplate
 import dev.cyclone.cloak.forge.RuntimeEvidence
 
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
-internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
+internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel, quick: QuickAction? = null, onQuickHandled: () -> Unit = {}) {
     var diagnosticsTarget by rememberSaveable { mutableStateOf<String?>(null) }
     val diagnosticsImporter = rememberLauncherForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
         val target = diagnosticsTarget
@@ -60,6 +64,22 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
         if (uri != null && target != null) vm.importPostureReport(uri, target)
     }
     var coverageId by rememberSaveable { mutableStateOf<String?>(null) }
+    // Phone profiles live on this page too: pick one to make an identity, or manage the phone itself.
+    var pickingPhone by rememberSaveable { mutableStateOf(false) }
+    var makingPhone by remember { mutableStateOf<PhoneTemplate?>(null) }
+    var deletingPhone by remember { mutableStateOf<PhoneTemplate?>(null) }
+    var phoneExporting by remember { mutableStateOf<PhoneTemplate?>(null) }
+    val phoneExporter = rememberLauncherForActivityResult(ActivityResultContracts.CreateDocument("application/json")) { uri ->
+        val phone = phoneExporting
+        if (uri != null && phone != null) vm.exportPhone(phone, uri)
+        phoneExporting = null
+    }
+    LaunchedEffect(quick) {
+        if (quick == QuickAction.NEW_IDENTITY) {
+            pickingPhone = true
+            onQuickHandled()
+        }
+    }
     var exportTarget by remember { mutableStateOf<String?>(null) }
     var exporting by remember { mutableStateOf(false) }
     var includeIdentity by rememberSaveable { mutableStateOf(false) }
@@ -67,11 +87,15 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
 
 
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().testTag("identities-list"),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
-        item { CloakHeroCard("Identities", "Your saved device profiles. Choose one to review or bind.") }
+        item { CloakHeroCard("Identities", "Saved device identities, and the phone profiles they start from.") }
+        item {
+            CloakActionButton("New identity", Icons.Rounded.Add, { pickingPhone = true }, Modifier.fillMaxWidth(),
+                enabled = state.busy == null)
+        }
         item {
             Button(onClick = vm::newCompatibleDevice, enabled = state.busy == null,
                 modifier = Modifier.fillMaxWidth(), shape = MaterialTheme.shapes.small) { Text("New compatible device") }
@@ -181,11 +205,51 @@ internal fun IdentitiesScreen(state: CloakState, vm: CloakViewModel) {
                 }
             }
         }
+        phoneProfileItems(
+            state = state,
+            vm = vm,
+            onMake = { makingPhone = it },
+            onExport = { phoneExporting = it; phoneExporter.launch("${it.id}.cloak-phone.json") },
+            onDelete = { deletingPhone = it },
+            onImport = { importer.launch(arrayOf("*/*")) },
+        )
     }
 
     state.diagnosticsReview?.let { review ->
         DiagnosticsPostureDialog(review.preview, state.busy != null, vm::saveDiagnosticsPosture, vm::dismissDiagnosticsPosture,
             state.postureErrors[review.diagnostics.report.profileId])
+    }
+    if (pickingPhone) AlertDialog(
+        onDismissRequest = { pickingPhone = false },
+        title = { Text("New identity from a phone") },
+        text = {
+            LazyColumn(Modifier.heightIn(max = 360.dp)) {
+                items(state.phones, key = { it.id }) { phone ->
+                    TextButton(onClick = { pickingPhone = false; makingPhone = phone }, modifier = Modifier.fillMaxWidth()) {
+                        Text(phone.label, modifier = Modifier.fillMaxWidth())
+                    }
+                }
+            }
+        },
+        confirmButton = { TextButton(onClick = { pickingPhone = false }) { Text("Cancel") } },
+    )
+    makingPhone?.let { phone ->
+        NameDialog(
+            title = "New identity from ${phone.label}",
+            hint = "For example, Work Pixel",
+            confirm = "Create",
+            onConfirm = { name -> vm.createIdentity(name, phone.id); makingPhone = null },
+            onDismiss = { makingPhone = null },
+        )
+    }
+    deletingPhone?.let { phone ->
+        AlertDialog(
+            onDismissRequest = { deletingPhone = null },
+            title = { Text("Delete ${phone.label}?") },
+            text = { Text("Identities already made from it keep their own copy and keep working.") },
+            confirmButton = { TextButton(onClick = { vm.deletePhone(phone); deletingPhone = null }) { Text("Delete") } },
+            dismissButton = { TextButton(onClick = { deletingPhone = null }) { Text("Cancel") } },
+        )
     }
     renaming?.let { (id, profile) ->
         NameDialog(

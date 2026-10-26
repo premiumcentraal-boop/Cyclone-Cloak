@@ -99,7 +99,7 @@ class ScreensTest {
 
     @Test
     fun home() {
-        compose.setContent { Screen { HomeScreen(state(), onNavigate = {}, onRefresh = {}) } }
+        compose.setContent { Screen { HomeScreen(state(), onNavigate = {}, onQuick = {}) } }
         compose.onNodeWithText("Root Doctor: Reboot required").assertIsDisplayed()
         compose.onNodeWithText("1 bound app isn't ready").assertIsDisplayed()
         shot("0-home")
@@ -108,17 +108,26 @@ class ScreensTest {
     @Test
     fun homeNavigatesToTheFix() {
         var went: CloakDestination? = null
-        compose.setContent { Screen { HomeScreen(state(), onNavigate = { went = it }, onRefresh = {}) } }
+        compose.setContent { Screen { HomeScreen(state(), onNavigate = { went = it }, onQuick = {}) } }
         compose.onNodeWithText("Root Doctor: Reboot required").performClick()
         org.junit.Assert.assertEquals(CloakDestination.HEALTH, went)
     }
 
     @Test
-    fun phones() {
-        compose.setContent { Screen { PhonesScreen(state(), vm) } }
-        compose.onNodeWithText("Generate profile").assertIsDisplayed()
-        shot("1-phones")
-        compose.onNodeWithTag("phones-list").performScrollToNode(hasTestTag("phone-card/galaxy_de"))
+    fun homeQuickActionsAreOneTapAway() {
+        var asked: QuickAction? = null
+        compose.setContent { Screen { HomeScreen(state(), onNavigate = {}, onQuick = { asked = it }) } }
+        compose.onNodeWithTag("quick-new_profile").assertIsDisplayed().performClick()
+        org.junit.Assert.assertEquals(QuickAction.NEW_PROFILE, asked)
+        compose.onNodeWithTag("quick-repair").performClick()
+        org.junit.Assert.assertEquals(QuickAction.REPAIR, asked)
+    }
+
+    /** Phone profiles live on the Identities page, so a phone of the owner's own is reachable there. */
+    @Test
+    fun phoneProfilesLiveInIdentities() {
+        compose.setContent { Screen { IdentitiesScreen(state(), vm) } }
+        compose.onNodeWithTag("identities-list").performScrollToNode(hasTestTag("phone-card/galaxy_de"))
         compose.onNode(hasText("Galaxy S23 Germany") and hasAnyAncestor(hasTestTag("phone-card/galaxy_de"))).assertIsDisplayed()
     }
 

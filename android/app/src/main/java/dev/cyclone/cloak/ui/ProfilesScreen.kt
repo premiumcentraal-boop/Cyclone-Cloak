@@ -16,7 +16,12 @@ import androidx.compose.material.icons.rounded.CheckCircle
 import androidx.compose.material.icons.rounded.Layers
 import androidx.compose.material.icons.rounded.Link
 import androidx.compose.material.icons.automirrored.rounded.OpenInNew
+import androidx.compose.material.icons.rounded.Badge
+import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Refresh
+import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -40,14 +45,20 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import dev.cyclone.cloak.cyclone.bindingKey
 
+/**
+ * The working profiles as cards, with one search field above them. Typing filters Cyclone profiles, spaces and
+ * identities at once. [quick] opens the new-space dialog when Home's "New profile" was tapped.
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
+internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel, quick: QuickAction? = null, onQuickHandled: () -> Unit = {}) {
     val openTargets = state.openTargets
     val mainTarget = openTargets.firstOrNull { it.isOwner }
+    var query by rememberSaveable { mutableStateOf("") }
     var profileFilter by rememberSaveable { mutableStateOf<String?>(null) }
     var packageQuery by rememberSaveable { mutableStateOf("") }
     var selectedProfile by rememberSaveable { mutableStateOf<String?>(null) }
@@ -75,37 +86,78 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
         state.playErrors[review.target.profileId], { profiles[it]?.label ?: it }, vm::savePlayEvidence, vm::dismissPlayEvidence) }
     val visibleBindings = filterBindings(state.bindings, profileFilter, packageQuery)
     val profileChoices = (profiles.keys + state.bindings.map { it.profileId }).sorted()
+    val searching = query.isNotBlank()
+    val matchingProfiles = state.registry
+        .filter { it.state != "in_trash" && CloakSearch.profile(query, it) }
+        .sortedWith(compareByDescending<dev.cyclone.cloak.cyclone.CycloneProfile> { it.id == state.ownProfileId }
+            .thenByDescending { it.isOwner }.thenBy { it.label.lowercase(java.util.Locale.ROOT) })
+    val matchingIdentities = state.identities.filter { (id, identity) ->
+        CloakSearch.identity(query, id, identity.optString("name"), identity.optJSONObject("device")?.optString("model"))
+    }
     LazyColumn(
-        modifier = Modifier.fillMaxSize(),
+        modifier = Modifier.fillMaxSize().testTag("profiles-list"),
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 14.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         item {
-            CloakHeroCard(
-                title = if (state.ownProfileId == null) "Cyclone profiles" else "This Cyclone profile",
-                body = state.ownProfileId?.let { id -> profiles[id]?.label?.let { "You're in $it" } }
-                    ?: "Choose a space. Review its apps and device profile.",
+            OutlinedTextField(
+                value = query,
+                onValueChange = { query = it },
+                modifier = Modifier.fillMaxWidth().testTag("profiles-search"),
+                label = { Text("Search profiles and identities") },
+                leadingIcon = { Icon(Icons.Rounded.Search, contentDescription = null) },
+                trailingIcon = {
+                    if (searching) IconButton(onClick = { query = "" }) { Icon(Icons.Rounded.Close, contentDescription = "Clear search") }
+                },
+                singleLine = true,
             )
         }
-        item {
-            CloakActionButton("Bind a device profile", Icons.Rounded.Link, { vm.startBinding() }, Modifier.fillMaxWidth(),
-                enabled = state.busy == null && !state.syncing)
-        }
-        item {
-            Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-                CloakActionButton("Refresh", Icons.Rounded.Refresh, vm::refresh, Modifier.weight(1f), outlined = true)
-                CloakActionButton("Assign fleet", Icons.Rounded.Layers, vm::bulkBind, Modifier.weight(1f), outlined = true)
+        if (searching) {
+            item { CloakSectionHeader("Identities", matchingIdentities.size) }
+            if (matchingIdentities.isEmpty()) item {
+                Text("No identities match \"${query.trim()}\".", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+            } else item {
+                CloakGroup {
+                    matchingIdentities.forEachIndexed { index, (id, identity) ->
+                        if (index > 0) CloakGroupDivider()
+                        val bound = state.bindingsOf(id).size
+                        CloakRow(identity.optString("name").ifBlank { id },
+                            supporting = "$bound bound · tap to bind apps",
+                            icon = Icons.Rounded.Badge,
+                            onClick = if (state.busy == null && !state.syncing) ({ vm.startBinding(id) }) else null)
+                    }
+                }
+            }
+        } else {
+            item {
+                CloakHeroCard(
+                    title = if (state.ownProfileId == null) "Cyclone profiles" else "This Cyclone profile",
+                    body = state.ownProfileId?.let { id -> profiles[id]?.label?.let { "You're in $it" } }
+                        ?: "Choose a space. Review its apps and device profile.",
+                )
+            }
+            item {
+                CloakActionButton("Bind a device profile", Icons.Rounded.Link, { vm.startBinding() }, Modifier.fillMaxWidth(),
+                    enabled = state.busy == null && !state.syncing)
+            }
+            item {
+                Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
+                    CloakActionButton("Refresh", Icons.Rounded.Refresh, vm::refresh, Modifier.weight(1f), outlined = true)
+                    CloakActionButton("Assign fleet", Icons.Rounded.Layers, vm::bulkBind, Modifier.weight(1f), outlined = true)
+                }
+            }
+            item {
+                Text(
+                    "Assign fleet gives every ready profile without bindings the next unused identity.",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
             }
         }
         item {
-            Text(
-                "Assign fleet gives every ready profile without bindings the next unused identity.",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-            )
+            SpacesSection(vm, state, query = query, openCreate = quick == QuickAction.NEW_PROFILE, onCreateOpened = onQuickHandled)
         }
-        item { SpacesSection(vm, state) }
-        mainTarget?.let { main ->
+        mainTarget?.takeUnless { searching }?.let { main ->
             item {
                 CloakGroup {
                     CloakRow("Open ${main.label} in Cyclone", icon = Icons.AutoMirrored.Rounded.OpenInNew, onClick = { if (!state.opening) vm.openInCyclone(main) })
@@ -113,7 +165,7 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
             }
         }
 
-        item { CloakSectionHeader("Profiles", state.registry.size) }
+        item { CloakSectionHeader("Profiles", if (searching) matchingProfiles.size else state.registry.size) }
         if (state.registry.isEmpty()) {
             item {
                 CloakEmptyState(
@@ -123,11 +175,12 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
                 )
             }
         }
-        if (state.registry.isNotEmpty()) item {
+        if (searching && state.registry.isNotEmpty() && matchingProfiles.isEmpty()) item {
+            Text("No profiles match \"${query.trim()}\".", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        }
+        if (matchingProfiles.isNotEmpty()) item {
             CloakProfileGallery(
-                state.registry.filter { it.state != "in_trash" }
-                    .sortedWith(compareByDescending<dev.cyclone.cloak.cyclone.CycloneProfile> { it.id == state.ownProfileId }
-                        .thenByDescending { it.isOwner }.thenBy { it.label.lowercase(java.util.Locale.ROOT) })
+                matchingProfiles
                     .map { profile -> CloakProfileFace(profile.id, profile.label,
                         when {
                             profile.id == state.ownProfileId -> "In use"
@@ -138,7 +191,7 @@ internal fun ProfilesScreen(state: CloakState, vm: CloakViewModel) {
                 selectedProfile, { selectedProfile = it })
         }
         val trashed = state.registry.filter { it.state == "in_trash" }
-        if (trashed.isNotEmpty()) item {
+        if (trashed.isNotEmpty() && !searching) item {
             CloakGroup { CloakDisclosure("Recently deleted", supporting = "${trashed.size} profiles · managed in Cyclone") {
                 trashed.forEach { profile ->
                     CloakRow(profile.label, supporting = "Bindings retained for review", onClick = { selectedProfile = profile.id })

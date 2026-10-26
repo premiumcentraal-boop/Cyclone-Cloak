@@ -5,7 +5,7 @@ import dev.cyclone.cloak.data.CloakSpace
 import dev.cyclone.cloak.root.RootDoctorCode
 
 /** The app's top-level destinations. Home answers "what needs attention?"; the rest are the working screens. */
-internal enum class CloakDestination(val label: String) { HOME("Home"), PHONES("Phones"), IDENTITIES("Identities"), PROFILES("Profiles"), HEALTH("Health") }
+internal enum class CloakDestination(val label: String) { HOME("Home"), IDENTITIES("Identities"), PROFILES("Profiles"), HEALTH("Health") }
 
 internal data class AttentionItem(val title: String, val detail: String?, val tone: CloakStatusTone, val destination: CloakDestination)
 
@@ -54,7 +54,7 @@ internal object HomeAttention {
     }
 
     fun steps(state: CloakState): List<SetupStep> = listOf(
-        SetupStep("Pick or build a phone", state.phones.isNotEmpty(), CloakDestination.PHONES),
+        SetupStep("Pick or build a phone", state.phones.isNotEmpty(), CloakDestination.IDENTITIES),
         SetupStep("Create an identity from it", state.identities.isNotEmpty(), CloakDestination.IDENTITIES),
         SetupStep("Bind it to apps in a Cyclone profile", state.bindings.isNotEmpty(), CloakDestination.PROFILES),
     )

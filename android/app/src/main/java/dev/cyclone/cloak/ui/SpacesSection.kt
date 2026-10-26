@@ -10,12 +10,15 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.Lock
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,16 +42,30 @@ import kotlinx.coroutines.withContext
  * own device profile, so the two steps read as one flow. Creating and removing spaces is limited to Main.
  */
 @Composable
-internal fun SpacesSection(vm: CloakViewModel, state: CloakState) {
+internal fun SpacesSection(
+    vm: CloakViewModel,
+    state: CloakState,
+    query: String = "",
+    openCreate: Boolean = false,
+    onCreateOpened: () -> Unit = {},
+) {
     val context = LocalContext.current
     val scope = rememberCoroutineScope()
     val status by SpaceRuntime.status.collectAsState()
     val spaces = remember(status) { runCatching { SpaceRuntime.spaces(context) }.getOrDefault(emptyList()) }
+    val shown = spaces.filter { CloakSearch.matches(query, it.label, *it.packages.toTypedArray()) }
     val current = remember(status) { SpaceRuntime.current(context) }
     val available = SpaceRuntime.available()
     val idle = !status.busy && state.busy == null
     var creating by rememberSaveable { mutableStateOf(false) }
     var deleting by rememberSaveable { mutableStateOf<String?>(null) }
+    // Home's "New profile" arrives as openCreate. Open the dialog once, then clear the request.
+    LaunchedEffect(openCreate) {
+        if (openCreate) {
+            if (available) creating = true
+            onCreateOpened()
+        }
+    }
 
     fun openSpace(id: String, packageName: String) {
         scope.launch(Dispatchers.IO) { SpaceRuntime.open(context, id, packageName) }
@@ -73,7 +90,7 @@ internal fun SpacesSection(vm: CloakViewModel, state: CloakState) {
         CloakActionButton("Back to Main", Icons.Rounded.Home, { runCatching { SpaceRuntime.backToMain(context) } },
             Modifier.fillMaxWidth(), outlined = true, enabled = idle)
     }
-    spaces.forEach { space ->
+    shown.forEach { space ->
         CloakGroup {
             CloakDisclosure(title = space.label, supporting = spaceSupporting(space, state.bindings.count {
                 it.profileId == space.id && it.enabled })) {
@@ -153,6 +170,9 @@ private fun SpaceCreateDialog(suggestedLabel: String, onDismiss: () -> Unit, onC
     var label by rememberSaveable { mutableStateOf(suggestedLabel) }
     var query by rememberSaveable { mutableStateOf("") }
     var selected by remember { mutableStateOf(setOf<String>()) }
+    // Cloak and, when installed, Cyclone come with every space. They are shown locked and count against the app limit.
+    val essentials = remember(context) { SpaceRuntime.essentials(context) }
+    val room = CloakSpace.PACKAGES_MAX - essentials.size
     val apps by produceState(initialValue = emptyList<SpaceApp>()) {
         value = withContext(Dispatchers.IO) { SpaceRuntime.launchableApps(context) }
     }
@@ -168,6 +188,20 @@ private fun SpaceCreateDialog(suggestedLabel: String, onDismiss: () -> Unit, onC
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                 )
+                Text("Essentials · added to every space", style = MaterialTheme.typography.labelMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                CloakGroup {
+                    essentials.forEachIndexed { index, packageName ->
+                        if (index > 0) CloakGroupDivider()
+                        CloakRow(
+                            title = appLabel(context, packageName),
+                            supporting = "Always included",
+                            icon = Icons.Rounded.Lock,
+                            showChevron = false,
+                            trailing = { Checkbox(checked = true, onCheckedChange = null, enabled = false) },
+                        )
+                    }
+                }
                 OutlinedTextField(
                     value = query,
                     onValueChange = { query = it },
@@ -175,9 +209,14 @@ private fun SpaceCreateDialog(suggestedLabel: String, onDismiss: () -> Unit, onC
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth(),
                 )
-                Text("${selected.size} selected · separate accounts · fresh app data")
+                Text(
+                    if (selected.size > room) "A space holds up to ${CloakSpace.PACKAGES_MAX} apps, Essentials included."
+                    else "${selected.size} selected · separate accounts · fresh app data",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = if (selected.size > room) MaterialTheme.colorScheme.error else MaterialTheme.colorScheme.onSurfaceVariant,
+                )
                 LazyColumn(modifier = Modifier.fillMaxWidth().height(260.dp)) {
-                    items(apps.filter { it.label.contains(query, ignoreCase = true) }, key = { it.packageName }) { app ->
+                    items(apps.filter { it.packageName !in essentials && it.label.contains(query, ignoreCase = true) }, key = { it.packageName }) { app ->
                         CloakRow(
                             title = app.label,
                             supporting = app.packageName,
@@ -194,7 +233,7 @@ private fun SpaceCreateDialog(suggestedLabel: String, onDismiss: () -> Unit, onC
         confirmButton = {
             TextButton(
                 onClick = { onCreate(label.trim(), apps.map { it.packageName }.filter { it in selected }) },
-                enabled = label.isNotBlank() && selected.isNotEmpty() && selected.size <= CloakSpace.PACKAGES_MAX,
+                enabled = label.isNotBlank() && selected.isNotEmpty() && selected.size <= room,
             ) { Text("Create space") }
         },
         dismissButton = { TextButton(onClick = onDismiss) { Text("Cancel") } },

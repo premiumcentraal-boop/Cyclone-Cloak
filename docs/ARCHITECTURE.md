@@ -12,6 +12,9 @@ read from the connector. The flows live in `root/SpacePlan.kt` (fixed commands a
 (create, open and delete sequences over an injectable shell) and `root/SpaceRuntime.kt` (one `PrivilegedSession`
 per action, identity seeding, `LauncherApps` launch). Records live in `cloak-spaces-v1.json` in `noBackupFilesDir`.
 
+- **Essentials:** every space installs `dev.cyclone.cloak`, and `com.cyclone.mobile` when this phone has Cyclone
+  (`root/CornerstoneApps.kt`). They are added to the picked apps, shown locked in the create dialog, and count toward
+  the 50-app limit. Cyclone's full essentials list lives on another branch and is not in this checkout.
 - **Create:** the record is saved as `creating` before any Android command. The user is found by name first, so a
   retry never creates a second one. The user is started and verified as `RUNNING_UNLOCKED`, each app is installed
   and listed, and only then is the identity seeded. The record becomes `ready` last.
@@ -407,9 +410,9 @@ may import all lower layers.
 
 | Tab | Current behavior |
 | --- | --- |
-| Phones | Built-in/custom templates; one-click validated profile generation; build, import, clone, edit and share |
-| Identities | Seeded generation, fleet creation, values, rename, guarded deletion, binding and import/export |
-| Profiles | Cyclone profiles, guided multi-app binding, filtered bindings, health pills, bulk binding and open requests |
+| Home | Quick actions (New profile, New identity, Repair, Refresh), working profile cards, attention items, setup steps and library shortcuts. The two "New" actions open their screen with the matching dialog already up |
+| Identities | Phone profiles first (built-in and your own: one-click validated generation, build, import, clone, edit and share), then saved identities: seeded generation, fleet creation, values, rename, guarded deletion, binding and import/export |
+| Profiles | One search field over Cyclone profiles, spaces and identities, matched word by word as you type. Then spaces, Cyclone profiles, guided multi-app binding, filtered bindings, health pills, bulk binding and open requests |
 | Health | Readiness Doctor v3 readiness/checks, redacted clipboard diagnostics, existing repair/reconnect actions and bundled compatibility coverage |
 
 Editing a phone does not change the snapshot already stored in an identity.
