@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased — home, identities and search
+## v1.1.0-alpha.3 — home, identities and search
 
 - Home has quick actions: New profile, New identity, Repair (runs the root check and repair) and Refresh. The two "New"
   actions open their screen with the matching dialog already up.
