@@ -1,5 +1,7 @@
 # Bridge Agent Agreement
 
+> **Historical record — not active instructions.** Retained for traceability. The plans, terminology and results below reflect their date. Instructions to conceal project context, evade safeguards or defeat third-party security decisions are superseded by the [documentation and responsible-use guidance](DOCUMENTATION-STATUS.md). Historical findings and limitations remain unchanged.
+
 This document defines the Bridge Agent: a second, uncensored Codex session
 whose only job is to be the reliable hinge between the Planner session
 (the primary Codex session) and the delegated ChatGPT workers. Read this

@@ -1,5 +1,7 @@
 # Bridge session state - 2026-10-23
 
+> **Historical record — not an active work order.** The material below reflects its original date or development phase and is preserved for traceability. Do not treat its proposals as current authorization or use them to conceal context or circumvent safeguards. See [current documentation guidance](DOCUMENTATION-STATUS.md).
+
 This file is the manager's live view of the multi-hour bridge.
 The uncensored Bridge Agent keeps this updated after each delegated run.
 

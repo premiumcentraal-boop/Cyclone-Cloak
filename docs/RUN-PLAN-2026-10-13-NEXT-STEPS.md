@@ -1,5 +1,7 @@
 # Cyclone Cloak next run plan — 2026-10-13
 
+> **Historical record — not active instructions.** Retained for traceability. The plans, terminology and results below reflect their date. Instructions to conceal project context, evade safeguards or defeat third-party security decisions are superseded by the [documentation and responsible-use guidance](DOCUMENTATION-STATUS.md). Historical findings and limitations remain unchanged.
+
 ## Operating split
 
 Keep two lanes separate:

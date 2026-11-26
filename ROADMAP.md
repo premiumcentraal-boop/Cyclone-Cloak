@@ -1,5 +1,7 @@
 # Cyclone Cloak Roadmap
 
+> **Historical record — not an active work order.** The material below reflects its original date or development phase and is preserved for traceability. Do not treat its proposals as current authorization or use them to conceal context or circumvent safeguards. See [current documentation guidance](docs/DOCUMENTATION-STATUS.md).
+
 ## Working pattern
 
 - **Schema first.** `schema/cloak-profile.schema.json` is the contract. Code that reads or writes

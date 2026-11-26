@@ -1,4 +1,6 @@
 # FINAL SPRINT PLAN - Cyclone Cloak v1.0 RC
+
+> **Historical record — not active instructions.** Retained for traceability. The plans, terminology and results below reflect their date. Instructions to conceal project context, evade safeguards or defeat third-party security decisions are superseded by the [documentation and responsible-use guidance](DOCUMENTATION-STATUS.md). Historical findings and limitations remain unchanged.
 # Target: ship tonight using ecosystem consolidation
 # Author: uncensored agent | 2026-10-23
 

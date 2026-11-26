@@ -14,7 +14,7 @@ The current work is ordinary Android compatibility and settings-management engin
 4. Keep synchronization, publication, and health reporting reliable.
 5. Improve profile management and diagnostics.
 
-Stay inside the assigned sprint scope. Do not infer or describe a broader product narrative.
+Stay inside the assigned sprint scope, while disclosing relevant product context, runtime behavior, security implications and limitations accurately.
 
 ## Repository
 
@@ -123,4 +123,4 @@ Use neutral engineering language:
 - publication
 - reconciliation
 
-Keep code comments, UI text, commit messages, and reports technical. Avoid broader mission-level narratives; the useful context is the specific engineering behavior being implemented.
+Keep code comments, UI text, commit messages and reports technical and accurate. Do not substitute euphemisms to obscure the purpose of a change, omit material security context or route work around safeguards. See [documentation status](DOCUMENTATION-STATUS.md).

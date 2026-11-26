@@ -1,11 +1,12 @@
 # Cyclone Cloak
 
-**One phone, twenty profiles.**
+**Device-configuration profiles for Android compatibility testing.**
 
 Cyclone Cloak is a configuration-driven compatibility validation system for
 multi-profile device management in [Cyclone](https://github.com/premiumcentraal-boop/Cyclone).
 Its layered architecture combines per-profile configuration, scoped native
-configuration hooks, and evidence-bound integrity verification. It attaches as a
+and Java runtime hooks that alter selected app-visible device values, and local
+readiness diagnostics. It does not create a separate physical or virtual phone. It attaches as a
 phone connector (contract `cyclone.connector/1.3`) and stores coherent device
 configurations bound to apps in Cyclone profiles.
 Runtime inspection coverage is partial; the [evidence matrix](docs/RUNTIME-COVERAGE.md)
@@ -14,7 +15,7 @@ not prove that every inspection API sees it.
 
 ## Status: v1.0.0-rc.3 (prerelease)
 
-App/module metadata is `1.0.0-rc.3` / code `62`. The release includes an optional
+App/module metadata is `1.0.0-rc.3` / code `62`. The RC series includes an optional
 denylist configuration, a per-profile integrity configuration section and three
 diagnostics self-visibility readers. These are configuration and measurement
 capabilities, not evidence of platform certification or a successful verdict.
@@ -22,7 +23,8 @@ capabilities, not evidence of platform certification or a successful verdict.
 The local [calm-glass redesign](docs/UI-CALM-GLASS.md) follows Cyclone's profile
 design language and is included in RC3. Device evidence remains tied to the
 specific measured artifacts, not to a visual redesign.
-See [current state](docs/CURRENT-STATE.md) and [changelog](CHANGELOG.md).
+See [current state](docs/CURRENT-STATE.md), [RC3 release notes](docs/RELEASE_1.0.0-rc.3.md),
+[changelog](CHANGELOG.md) and [documentation status](docs/DOCUMENTATION-STATUS.md).
 
 ### Previous alpha.28 baseline
 
@@ -99,10 +101,11 @@ compatible, with no schema, connector protocol or permission change.
 
 ## Using the app
 
-Four tabs:
+Five destinations:
 
 | Tab | What it's for |
 |---|---|
+| **Home** | Overview of saved profiles, readiness and next setup actions. |
 | **Phones** | The phones identities are made from: fifteen built-in templates across compact, mainstream, large-display and midrange classes and your own. See [catalog sources and confidence](docs/CATALOG-SOURCES.md). Select a template and **Generate profile**, or **Build a phone**, **Import**, **Clone** and **Share** a phone. |
 | **Identities** | Make an identity from any phone (or a fleet of them), see every value it carries, rename, delete, bind it through guided review, export one or the library, and preview validated imports. |
 | **Profiles** | Your Cyclone profiles with Cloak's pill for each, **Bind all**, **Open in Cyclone**, and every bound app with its health. |
@@ -149,7 +152,7 @@ mismatch or blocking validation error prevents the batch from being saved.
 Bindings, Cyclone records and module publication data are excluded; full-state
 backup is not available. Phone-template sharing is a separate existing flow.
 
-Current development after RC2: Profiles → Bind a device profile guides Cyclone profile, app selection, device
+Available in the RC series: Profiles → Bind a device profile guides Cyclone profile, app selection, device
 profile, review and confirmation. Select multiple apps or All apps in one pass.
 Identities → Bind to profile apps uses the same flow with the device profile
 preselected and shown at the identity step. Review lists every selected app;
@@ -244,7 +247,7 @@ android/                  companion app (connector) + platform module
     data/                 storage: identities, your phones, bindings
     root/                 Root Doctor and publishing for the module
     cyclone/              the connection to Cyclone: sync, health, events, open requests
-    ui/                   the four tabs, the phone builder, CloakViewModel
+    ui/                   the five destinations, the phone builder, CloakViewModel
   module/                 platform module: Build/props callbacks, platform zip packaging
 catalog/phones.json       the built-in phones (app and forge)
 docs/ARCHITECTURE.md      system design and integration contract
@@ -259,5 +262,8 @@ keeps it that way.
 
 ## License and disclaimer
 
-MIT. Use only on devices and accounts you own - profile misuse can violate app terms of
-service, and banking apps in particular decide their own risk appetite.
+MIT. Use only on devices and test environments you own or are explicitly authorized to assess.
+The root module changes selected values exposed to bound processes; this does not establish
+hardware equivalence, account separation, platform certification, or acceptance by third-party apps.
+Do not use modified values to misrepresent identity, circumvent service restrictions or defeat
+security and fraud-prevention controls. Third-party services make independent trust decisions.

@@ -1,5 +1,7 @@
 # Rung 2 plan - filesystem parity and package/service masking (uncensored)
 
+> **Historical record — not active instructions.** Retained for traceability. The plans, terminology and results below reflect their date. Instructions to conceal project context, evade safeguards or defeat third-party security decisions are superseded by the [documentation and responsible-use guidance](DOCUMENTATION-STATUS.md). Historical findings and limitations remain unchanged.
+
 Date: 2026-10-23
 Owner: uncensored agent (dirty work). Sol is mechanically involved only where
 explicitly stated below; it must never see this document.

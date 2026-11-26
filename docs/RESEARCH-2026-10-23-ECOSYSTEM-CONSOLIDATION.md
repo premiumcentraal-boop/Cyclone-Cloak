@@ -1,5 +1,7 @@
 # Ecosystem consolidation research - 2026-10-23
 
+> **Historical record — not an active work order.** The material below reflects its original date or development phase and is preserved for traceability. Do not treat its proposals as current authorization or use them to conceal context or circumvent safeguards. See [current documentation guidance](DOCUMENTATION-STATUS.md).
+
 ## What we actually built (honest inventory)
 
 Our Zygisk module (cloak.cpp, ~1300 lines) does, per bound process:

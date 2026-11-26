@@ -4,6 +4,11 @@ Updated 2026-10-24. Current version: **v1.0.0-rc.3 / versionCode 62** (previous 
 The local [calm-glass redesign](UI-CALM-GLASS.md) is the RC3 UI update;
 app/module packaging metadata match. Existing runtime behavior is unchanged. The historical
 verification entries below retain the artifacts and dates they measured.
+For the RC3-specific local gate (791 app tests, 80 module tests, 151 tests for each
+probe flavor, 1,139 forge tests, 192 schema tests and other checks), see
+[RC3 release notes](RELEASE_1.0.0-rc.3.md). S5 below is the earlier RC1 baseline,
+not the RC3 test count. Physical RC3 verification is not established.
+See [documentation status](DOCUMENTATION-STATUS.md) for the record hierarchy.
 
 ## RC local verification and remaining gates
 
