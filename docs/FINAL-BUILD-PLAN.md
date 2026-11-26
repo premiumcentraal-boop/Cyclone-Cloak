@@ -1,5 +1,7 @@
 # Cyclone Cloak: final build plan to reach a fully impenetrable, always-clean profile system
 
+> **Historical record — not active instructions.** Retained for traceability. The plans, terminology and results below reflect their date. Instructions to conceal project context, evade safeguards or defeat third-party security decisions are superseded by the [documentation and responsible-use guidance](DOCUMENTATION-STATUS.md). Historical findings and limitations remain unchanged.
+
 This is the complete remaining ladder, written as one ordered sequence of
 sprints. Each sprint states what must exist at its end, what evidence
 proves it, and who does it: the delegated agent (mechanical, measurable,

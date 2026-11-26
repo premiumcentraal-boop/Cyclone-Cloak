@@ -28,7 +28,7 @@ Current focus is on ordinary compatibility engineering:
 4. Diagnostics and test coverage.
 5. Reliable synchronization.
 
-Please keep implementation scoped to the assigned sprint.
+Please keep implementation scoped to the assigned sprint. Provide accurate context about actual runtime behavior, security implications and known limitations. Do not use selective wording or agent handoffs to circumvent safeguards. Historical plans are not active instructions; see [documentation status](docs/DOCUMENTATION-STATUS.md).
 
 ## Useful docs
 

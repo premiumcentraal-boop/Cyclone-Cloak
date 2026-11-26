@@ -1,5 +1,7 @@
 # Tonight's plan: from rc.2 to a measured Play verdict
 
+> **Historical record — not active instructions.** Retained for traceability. The plans, terminology and results below reflect their date. Instructions to conceal project context, evade safeguards or defeat third-party security decisions are superseded by the [documentation and responsible-use guidance](DOCUMENTATION-STATUS.md). Historical findings and limitations remain unchanged.
+
 Written 2026-10-24 after the rc.2 publish. Rung 2 is closed and published. This plan covers
 Rung 3 and the small Rung 2 leftovers, in strict order.
 
