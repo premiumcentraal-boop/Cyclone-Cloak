@@ -1,5 +1,7 @@
 # Cyclone Cloak Mission Runs
 
+> **Historical record — not an active work order.** The material below reflects its original date or development phase and is preserved for traceability. Do not treat its proposals as current authorization or use them to conceal context or circumvent safeguards. See [current documentation guidance](DOCUMENTATION-STATUS.md).
+
 Use this file with `AGENT-BRIEF.md`. Give the assigned agent one run at a time. Each prompt is intentionally scoped so it can be completed without broader product context.
 
 ## Run order

@@ -1,5 +1,7 @@
 # Cyclone Cloak - working summary and 0.2 plan
 
+> **Historical record — not an active work order.** The material below reflects its original date or development phase and is preserved for traceability. Do not treat its proposals as current authorization or use them to conceal context or circumvent safeguards. See [current documentation guidance](docs/DOCUMENTATION-STATUS.md).
+
 ## What this is
 
 A short, current-state summary of the Cyclone Cloak project and the 0.2 plan we have been shaping. This is the build plan we researched and agreed on so far.

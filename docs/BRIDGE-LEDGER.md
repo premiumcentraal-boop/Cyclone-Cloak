@@ -1,5 +1,7 @@
 # Bridge Agent Ledger
 
+> **Historical record — not an active work order.** The material below reflects its original date or development phase and is preserved for traceability. Do not treat its proposals as current authorization or use them to conceal context or circumvent safeguards. See [current documentation guidance](DOCUMENTATION-STATUS.md).
+
 | Date | Sprint | Worker | Outcome | Evidence | Next decision |
 |---|---|---|---|---|---|
 | 2026-10-23 03:30 | alpha27-root-companion-cycle | delegated-sol | COMPLETE_WITH_LIMITATIONS; durable load records matched both users, removal clean, production unchanged | docs/runtime-evidence/2026-10-23-020207-alpha27-root-companion-cycle/summary.md | Dispatch real-app observation V2 on proven companion-record mechanism |

@@ -1,5 +1,7 @@
 # Phase B1 scope — RC3 runtime repair (2026-10-13)
 
+> **Historical record — not an active work order.** The material below reflects its original date or development phase and is preserved for traceability. Do not treat its proposals as current authorization or use them to conceal context or circumvent safeguards. See [current documentation guidance](DOCUMENTATION-STATUS.md).
+
 ## Where we stand
 
 Phase A (RC2 device baseline) is complete and pushed (`05393f7`):

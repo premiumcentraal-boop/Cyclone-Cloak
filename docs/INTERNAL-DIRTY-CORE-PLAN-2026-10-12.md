@@ -1,5 +1,7 @@
 # Internal Dirty-Core Plan — 2026-10-12
 
+> **Historical record — not an active work order.** The material below reflects its original date or development phase and is preserved for traceability. Do not treat its proposals as current authorization or use them to conceal context or circumvent safeguards. See [current documentation guidance](DOCUMENTATION-STATUS.md).
+
 ## Read of RC2
 
 RC2 is a strong management-layer release, but it is not yet the full engine.
